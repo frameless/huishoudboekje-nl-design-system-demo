@@ -18,7 +18,7 @@ banktransactie_id = 100
 alarm = Alarm(
     id=alarm_id,
     isActive=True,
-    afspraakId=19,
+    afspraakId=afspraak_id,
     startDate="2021-12-06",
     datumMargin=1,
     bedrag=12000,
@@ -30,7 +30,7 @@ alarm = Alarm(
 alarm_inactive = Alarm(
     id=alarm_id,
     isActive=False,
-    afspraakId=19,
+    afspraakId=afspraak_id,
     startDate="2021-12-06",
     datumMargin=1,
     bedrag=12000,
@@ -42,7 +42,7 @@ alarm_inactive = Alarm(
 nextAlarm = Alarm(
     id="33738845-7f23-4c8f-8424-2b560a944884",
     isActive=True,
-    afspraakId=19,
+    afspraakId=afspraak_id,
     startDate="2021-12-08",
     datumMargin=1,
     bedrag=12000,
@@ -63,6 +63,7 @@ afspraak = {
         "start_date": "2019-01-01"
     },
     "burger_id": 2,
+    "alarm_id": nextAlarm.id,
     "credit": False,
     "journaalposten": [journaalpost_id]
 }
@@ -73,19 +74,20 @@ journaalpost = {
     "is_automatisch_geboekt": True,
     "transaction_id": banktransactie_id
 }
-banktransactie = {
-    "id": banktransactie_id,
-    "bedrag": 12000,
-    "customer_statement_message_id": 15,
-    "information_to_account_owner": "NL83ABNA1927261899               Leefgeld ZOEKTERMPERSONA2 januari 2019",
-    "is_credit": False,
-    "is_geboekt": True,
-    "statement_line": "190101D-1195.20NMSC028",
-    "tegen_rekening": "NL83ABNA1927261899",
-    "transactie_datum": "2021-12-05"
-}
+banktransactie = BankTransaction(
+    id=banktransactie_id,
+    bedrag=12000,
+    customer_statement_message_id=15,
+    information_to_account_owner="NL83ABNA1927261899               Leefgeld ZOEKTERMPERSONA2 januari 2019",
+    is_credit=False,
+    is_geboekt=True,
+    statement_line="190101D-1195.20NMSC028",
+    tegen_rekening="NL83ABNA1927261899",
+    transactie_datum="2021-12-06"
+)
+signal_id = "e2b282d9-b31f-451e-9242-11f86c902b35"
 signaal = {
-    "id": "e2b282d9-b31f-451e-9242-11f86c902b35",
+    "id": signal_id,
     "alarmId": alarm_id,
     "isActive": True,
     "type": "default",
@@ -262,34 +264,107 @@ def test_should_check_alarm_false():
 
 
 @freeze_time("2021-12-08")
-async def test_should_create_next_alarm_success():
+def test_should_create_next_alarm_success(mocker):
     """This tests if the next alarm is created."""
-    alarm_result = await EvaluateAlarm.should_create_next_alarm(alarm, date(2021, 12, 8), [alarm])
-    assert alarm_result == nextAlarm
+    with requests_mock.Mocker() as rm:
+        fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
+        get_afspraak = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids={afspraak_id}", json={"data": [afspraak]})
+        post_afspraak = rm.post(f"{settings.HHB_SERVICES_URL}/afspraken/{afspraak_id}", json={"data":afspraak}, status_code=200)
+        post_alarm = rm.post(f"{settings.ALARMENSERVICE_URL}/alarms/", json={"data": nextAlarm}, status_code=201)
+        
+        # Mock feature flag "signalen" to be enabled
+        mocker.patch('hhb_backend.feature_flags.Unleash.is_enabled', mock_feature_flag("signalen", True))
+
+        alarm_result = EvaluateAlarm.should_create_next_alarm(alarm, date(2021, 12, 8), [alarm])
+        assert fallback.call_count == 0
+        assert get_afspraak.call_count == 1
+        assert post_afspraak.call_count == 1
+        assert post_alarm.call_count == 1
+        assert alarm_result == nextAlarm
 
 @freeze_time("2021-12-08")
-async def test_should_create_next_alarm_already_exists():
+def test_should_create_next_alarm_no_alarm_because_already_exists():
     """This tests if the next alarm already exists, no new alarm is created."""
-    alarm_result = await EvaluateAlarm.should_create_next_alarm(alarm, date(2021, 12, 8), [alarm, nextAlarm])
+    alarm_result = EvaluateAlarm.should_create_next_alarm(alarm, date(2021, 12, 8), [alarm, nextAlarm])
     assert alarm_result == None
+
+@freeze_time("2021-12-08")
+def test_should_create_next_alarm_no_alarm_end_date_before_next_alarm():
+    """This tests that the next alarm is not created, since the current one has and end date before the next date."""
+    with requests_mock.Mocker() as rm:
+        fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
+        get_afspraak = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids={afspraak_id}", json={"data": [afspraak]})
+        
+        alarm.endDate = "2021-12-07"
+        alarm_result = EvaluateAlarm.should_create_next_alarm(alarm, date(2021, 12, 8), [alarm])
+        alarm.endDate = None
+
+        fallback.call_count == 0
+        get_afspraak.call_count == 1
+        assert alarm_result == None
+
 
 @freeze_time("2021-12-06")
-async def test_should_create_next_alarm_still_active():
-    """This tests if the next alarm is not created, because the current one is still active."""
-    alarm_result = await EvaluateAlarm.should_create_next_alarm(alarm, date(2021, 12, 8), [alarm])
-    assert alarm_result == None
+def test_should_create_signaal_no_signal():
+    """This tests if no signal is created with a banktransaction 
+       on the date of the alarm with the right amount."""
+    signaal = EvaluateAlarm.should_create_signaal(alarm, [banktransactie])
+    assert signaal == None
 
-@freeze_time("2021-12-08")
-async def test_should_create_next_alarm_end_date():
-    """This tests if the next alarm is not created, since the current one has and end date before the next date."""
-    alarm.endDate = "2021-12-08"
-    alarm_result = await EvaluateAlarm.should_create_next_alarm(alarm, date(2021, 12, 8), [alarm])
-    alarm.endDate = None
-    assert alarm_result == None
+def test_should_create_signaal_monetary_signal(mocker):
+    """This tests if a signal is created with a banktransaction 
+       on the date of the alarm with an amount outside window."""
+    with requests_mock.Mocker() as rm:
+        fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
+        post_signal = rm.post(f"{settings.SIGNALENSERVICE_URL}/signals/", json=post_echo_with_str_id(signal_id), status_code=201)
+        update_alarm = rm.put(f"{settings.ALARMENSERVICE_URL}/alarms/{alarm_id}", json=post_echo_with_str_id(alarm_id))
+        banktransactie.bedrag = 8000
 
+        # Mock feature flag "signalen" to be enabled
+        mocker.patch('hhb_backend.feature_flags.Unleash.is_enabled', mock_feature_flag("signalen", True))
 
-# should_create_signaal()
+        signaal = EvaluateAlarm.should_create_signaal(alarm, [banktransactie])
+        
+        # restore banktransactie
+        banktransactie.bedrag = 12000
 
+        assert fallback.call_count == 0
+        assert post_signal.call_count == 1
+        assert update_alarm.call_count == 1
+
+        assert signaal != None
+        assert signaal.alarmId == alarm_id
+        assert signaal.banktransactieIds == [banktransactie_id]
+        assert signaal.bedragDifference == "40.00"
+        assert alarm.signaalId == signaal.id
+
+        #restore alarm
+        alarm.signaalId = None
+
+def test_should_create_signaal_no_banktransactie(mocker):
+    """This tests if a signal is created without a banktransaction."""
+    with requests_mock.Mocker() as rm:
+        fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
+        post_signal = rm.post(f"{settings.SIGNALENSERVICE_URL}/signals/", json=post_echo_with_str_id(signal_id), status_code=201)
+        update_alarm = rm.put(f"{settings.ALARMENSERVICE_URL}/alarms/{alarm_id}", json=post_echo_with_str_id(alarm_id))
+
+        # Mock feature flag "signalen" to be enabled
+        mocker.patch('hhb_backend.feature_flags.Unleash.is_enabled', mock_feature_flag("signalen", True))
+
+        signaal = EvaluateAlarm.should_create_signaal(alarm, [])
+
+        assert fallback.call_count == 0
+        assert post_signal.call_count == 1
+        assert update_alarm.call_count == 1
+
+        assert signaal != None
+        assert signaal.alarmId == alarm_id
+        assert signaal.banktransactieIds == []
+        assert signaal.bedragDifference == "120.00"
+        assert alarm.signaalId == signaal.id
+
+        #restore alarm
+        alarm.signaalId = None
 
 # @freeze_time("2021-12-08")
 # def test_evaluate_alarm_illegal_betaalinstructie_combination(client, mocker):

@@ -45,12 +45,12 @@ class EvaluateAlarms(graphene.Mutation):
 
     @staticmethod
     @log_gebruikers_activiteit
-    async def mutate(_root, _info, ids):
+    def mutate(_root, _info, ids):
         """ Mutatie voor de evaluatie van een alarm wat kan resulteren in een signaal en/of een nieuw alarm in de reeks. """
         if not Unleash().is_enabled("signalen"):
             raise GraphQLError("Feature signalen is disabled")
 
-        triggered_alarms = await evaluate_alarms(ids)
+        triggered_alarms = evaluate_alarms(ids)
         return EvaluateAlarms(alarmTriggerResult=triggered_alarms)
 
 
@@ -71,16 +71,16 @@ class EvaluateAlarm(graphene.Mutation):
 
     @staticmethod
     @log_gebruikers_activiteit
-    async def mutate(_root, _info, id):
+    def mutate(_root, _info, id):
         """ Mutatie voor de evaluatie van een alarm wat kan resulteren in een signaal en/of een nieuw alarm in de reeks. """
         if not Unleash().is_enabled("signalen"):
             raise GraphQLError("Feature signalen is disabled")
 
-        evaluated_alarm = await evaluate_one_alarm(id)
+        evaluated_alarm = evaluate_one_alarm(id)
         return EvaluateAlarm(alarmTriggerResult=evaluated_alarm)
 
 
-async def evaluate_alarms(ids: list[String] = [], journaalposten = []) -> list:
+def evaluate_alarms(ids: list[String] = [], journaalposten = []) -> list:
     logging.info(f"Evaluating alarms")
     triggered_alarms = []
     active_alarms = get_active_alarms()
@@ -88,15 +88,15 @@ async def evaluate_alarms(ids: list[String] = [], journaalposten = []) -> list:
         alarms = hhb_dataloader().alarms.load(ids)
         for alarm in alarms:
             if alarm.isActive:
-                triggered_alarms.append(await _evaluate_alarm(alarm, active_alarms, journaalposten))
+                triggered_alarms.append(_evaluate_alarm(alarm, active_alarms, journaalposten))
     else: 
         for alarm in active_alarms:
-            triggered_alarms.append(await _evaluate_alarm(alarm, active_alarms, journaalposten))
+            triggered_alarms.append(_evaluate_alarm(alarm, active_alarms, journaalposten))
 
     return triggered_alarms
 
 # not used at the moment
-async def evaluate_one_alarm(id: String) -> list:
+def evaluate_one_alarm(id: String) -> list:
     evaluated_alarm = None
     active_alarms = get_active_alarms()
     alarm_ = get_alarm(id)
@@ -106,7 +106,7 @@ async def evaluate_one_alarm(id: String) -> list:
 
     alarm_status: bool = alarm_.isActive
     if alarm_status:
-        evaluated_alarm = await _evaluate_alarm(alarm_, active_alarms, [])
+        evaluated_alarm = _evaluate_alarm(alarm_, active_alarms, [])
 
     if evaluated_alarm is None:
         return []
@@ -114,7 +114,7 @@ async def evaluate_one_alarm(id: String) -> list:
     return [evaluated_alarm]
 
 
-async def _evaluate_alarm(alarm_: Alarm, active_alarms: list[Alarm], journaalposten: list[dict]):
+def _evaluate_alarm(alarm_: Alarm, active_alarms: list[Alarm], journaalposten: list[dict]):
     logging.debug(f"Evaluating alarm {alarm_}")
     # get data from afspraak and transactions (by journaalpost reference)
     journaalposten_alarm = [journaalpost for journaalpost in journaalposten if journaalpost["afspraak_id"] == alarm_.afspraakId]
@@ -127,8 +127,8 @@ async def _evaluate_alarm(alarm_: Alarm, active_alarms: list[Alarm], journaalpos
     next_alarm = None
     created_signaal = None
     if should_check_alarm(alarm_):
-        next_alarm = await should_create_next_alarm(alarm_, alarm_check_date, active_alarms)
-        created_signaal = await should_create_signaal(alarm_, transactions)
+        next_alarm = should_create_next_alarm(alarm_, alarm_check_date, active_alarms)
+        created_signaal = should_create_signaal(alarm_, transactions)
 
     return {
         "alarm": alarm_,
@@ -156,7 +156,7 @@ def does_next_alarm_exist(next_alarm_date: date, alarm: Alarm, alarms: list[Alar
     return False
 
 
-async def should_create_next_alarm(alarm: Alarm, alarm_check_date: date, active_alarms: list[Alarm]) -> Optional[Alarm]:
+def should_create_next_alarm(alarm: Alarm, alarm_check_date: date, active_alarms: list[Alarm]) -> Optional[Alarm]:
     # only generate next alarm if byDay, byMonth, and/or byMonthDay is present
     if alarm.byDay or alarm.byMonth or alarm.byMonthDay:
         # generate next alarm in the sequence
@@ -171,13 +171,13 @@ async def should_create_next_alarm(alarm: Alarm, alarm_check_date: date, active_
         # add new alarm in sequence if it does not exist yet
         next_alarm_already_exists = does_next_alarm_exist(next_alarm_date, alarm, active_alarms)
         if not next_alarm_already_exists:
-            return await create_alarm(alarm)
+            return create_alarm(alarm)
 
     return None
 
 
-async def create_alarm(alarm: Alarm) -> Optional[Alarm]:
-    result = await AlarmHelper.create({
+def create_alarm(alarm: Alarm) -> Optional[Alarm]:
+    result = AlarmHelper.create({
         "isActive": True,
         "afspraakId": int(alarm.get("afspraakId")),
         "endDate": alarm.get("endDate"),
@@ -225,7 +225,7 @@ def get_banktransactions_by_journaalposten(journaalposten) -> list[BankTransacti
     return hhb_dataloader().bank_transactions.load(transaction_ids)
 
 
-async def should_create_signaal(alarm: Alarm, transacties: list[BankTransaction]) -> Optional[Signaal]:
+def should_create_signaal(alarm: Alarm, transacties: list[BankTransaction]) -> Optional[Signaal]:
     createSignal, difference, monetary_deviated_transaction_ids = get_bedrag_difference(alarm, transacties)
     if createSignal:
         alarm_id = alarm.id
@@ -237,16 +237,16 @@ async def should_create_signaal(alarm: Alarm, transacties: list[BankTransaction]
             "bedragDifference": difference
         }
 
-        new_signal = await create_signaal(new_signal)
-        new_signal_id = new_signal.id
+        new_signal_response = create_signaal(new_signal)
+        new_signal_id = new_signal_response.id
         update_alarm_signal_id(alarm, new_signal_id)
 
-        return new_signal
+        return new_signal_response
     else:
         return None
 
 
-async def create_signaal(new_signal) -> Signaal:
+def create_signaal(new_signal) -> Signaal:
     return (SignaalHelper.create(new_signal)).signaal
 
 

@@ -51,7 +51,7 @@ class CreateJournaalpostAfspraak(graphene.Mutation):
 
     @staticmethod
     @log_gebruikers_activiteit
-    async def mutate(_root, _info, input: List[CreateJournaalpostAfspraakInput]):
+    def mutate(_root, _info, input: List[CreateJournaalpostAfspraakInput]):
         """ Create the new Journaalpost """
         # Validate that the references exist
         if len(input) == 0:
@@ -153,7 +153,7 @@ class CreateJournaalpostGrootboekrekening(graphene.Mutation):
 
     @staticmethod
     @log_gebruikers_activiteit
-    async def mutate(_root, _info, input, **_kwargs):
+    def mutate(_root, _info, input, **_kwargs):
         """ Create the new Journaalpost """
         # Validate that the references exist
         transaction = hhb_dataloader().bank_transactions.load_one(input.transaction_id)
