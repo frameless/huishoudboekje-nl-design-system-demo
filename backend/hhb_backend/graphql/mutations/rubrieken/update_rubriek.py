@@ -1,11 +1,11 @@
 """ GraphQL mutation for updating a Rubriek """
 
-import json
-
 import graphene
+import json
 import requests
 from graphql import GraphQLError
 
+from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.models.rubriek import Rubriek
@@ -25,23 +25,10 @@ class UpdateRubriek(graphene.Mutation):
     rubriek = graphene.Field(lambda: Rubriek)
     previous = graphene.Field(lambda: Rubriek)
 
-    def gebruikers_activiteit(self, _root, info, *_args, **_kwargs):
-        return dict(
-            action=info.field_name,
-            entities=gebruikers_activiteit_entities(
-                entity_type="rubriek", result=self, key="rubriek"
-            ),
-            before=dict(rubriek=self.rubriek),
-            after=dict(rubriek=self.rubriek),
-        )
-
     @staticmethod
-    @log_gebruikers_activiteit
-    def mutate(_root, _info, **kwargs):
+    def mutate(root, info, id, **kwargs):
         """ Update a Rubriek """
-        rubriek_id = kwargs.pop("id")
-
-        previous = hhb_dataloader().rubrieken.load_one(rubriek_id)
+        previous = hhb_dataloader().rubrieken.load_one(id)
         if (
             kwargs["grootboekrekening_id"]
             and hhb_dataloader().grootboekrekeningen.load_one(kwargs['grootboekrekening_id']) is None
@@ -50,12 +37,21 @@ class UpdateRubriek(graphene.Mutation):
                 f"Grootboekrekening id [{kwargs['grootboekrekening_id']}] not found."
             )
         post_response = requests.post(
-            f"{settings.HHB_SERVICES_URL}/rubrieken/{rubriek_id}",
+            f"{settings.HHB_SERVICES_URL}/rubrieken/{id}",
             data=json.dumps(kwargs),
             headers={"Content-type": "application/json"},
         )
         if not post_response.ok:
             raise GraphQLError(f"Upstream API responded: {post_response.text}")
         rubriek = post_response.json()["data"]
+
+        AuditLogging.create(
+            action=info.field_name,
+            entities=gebruikers_activiteit_entities(
+                entity_type="rubriek", result=rubriek
+            ),
+            before=dict(rubriek=rubriek),  # Todo: this doesn't seem §§right (07-11-2022)
+            after=dict(rubriek=rubriek),  # Todo: this doesn't seem §right (07-11-2022)
+        )
 
         return UpdateRubriek(rubriek=rubriek, previous=previous, ok=True)

@@ -5,6 +5,7 @@ import logging
 from graphql import GraphQLError
 from typing import List, Dict
 
+from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.feature_flags import Unleash
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.datawriters import hhb_datawriter
@@ -38,20 +39,8 @@ class CreateJournaalpostAfspraak(graphene.Mutation):
     ok = graphene.Boolean()
     journaalposten = graphene.List(lambda: Journaalpost)
 
-    def gebruikers_activiteit(self, _root, info, *_args, **_kwargs):
-        return dict(
-            action=info.field_name,
-            entities=[dict(entity_type="journaalpost", entity_id=j["id"]) for j in self.journaalposten]
-                     + [dict(entity_type="afspraak", entity_id=j["afspraak"]["id"]) for j in self.journaalposten]
-                     + [dict(entity_type="burger", entity_id=j["afspraak"]["burger_id"])
-                        for j in self.journaalposten],
-            after=dict(journaalpost=self.journaalposten),
-
-        )
-
     @staticmethod
-    @log_gebruikers_activiteit
-    def mutate(_root, _info, input: List[CreateJournaalpostAfspraakInput]):
+    def mutate(root, info, input: List[CreateJournaalpostAfspraakInput]):
         """ Create the new Journaalpost """
         # Validate that the references exist
         if len(input) == 0:
@@ -88,6 +77,15 @@ class CreateJournaalpostAfspraak(graphene.Mutation):
             json.append({**item, "grootboekrekening_id": rubriek.grootboekrekening_id})
 
         journaalposten = create_journaalposten(json, afspraken, transactions)
+
+        AuditLogging.create(
+            action=info.field_name,
+            entities=[dict(entity_type="journaalpost", entity_id=j["id"]) for j in journaalposten]
+                     + [dict(entity_type="afspraak", entity_id=j["afspraak"]["id"]) for j in journaalposten]
+                     + [dict(entity_type="burger", entity_id=j["afspraak"]["burger_id"])
+                        for j in journaalposten],
+            after=dict(journaalpost=journaalposten),
+        )
 
         return CreateJournaalpostAfspraak(journaalposten=journaalposten, ok=True)
 
@@ -134,26 +132,8 @@ class CreateJournaalpostGrootboekrekening(graphene.Mutation):
     ok = graphene.Boolean()
     journaalpost = graphene.Field(lambda: Journaalpost)
 
-    def gebruikers_activiteit(self, _root, info, *_args, **_kwargs):
-        return dict(
-            action=info.field_name,
-            entities=gebruikers_activiteit_entities(
-                entity_type="journaalpost", result=self, key="journaalpost"
-            )
-                     + gebruikers_activiteit_entities(
-                entity_type="transaction", result=self.journaalpost, key="transaction"
-            )
-                     + gebruikers_activiteit_entities(
-                entity_type="grootboekrekening",
-                result=self.journaalpost,
-                key="grootboekrekening_id",
-            ),
-            after=dict(journaalpost=self.journaalpost),
-        )
-
     @staticmethod
-    @log_gebruikers_activiteit
-    def mutate(_root, _info, input, **_kwargs):
+    def mutate(root, info, input, **_kwargs):
         """ Create the new Journaalpost """
         # Validate that the references exist
         transaction = hhb_dataloader().bank_transactions.load_one(input.transaction_id)
@@ -171,5 +151,19 @@ class CreateJournaalpostGrootboekrekening(graphene.Mutation):
         journaalpost = hhb_datawriter().journaalposten.post(input)
 
         update_transaction_service_is_geboekt(transaction, is_geboekt=True)
+
+        AuditLogging.create(
+            action=info.field_name,
+            entities=gebruikers_activiteit_entities(
+                entity_type="journaalpost", result=journaalpost
+            ) + gebruikers_activiteit_entities(
+                entity_type="transaction", result=journaalpost, key="transaction"
+            ) + gebruikers_activiteit_entities(
+                entity_type="grootboekrekening",
+                result=journaalpost,
+                key="grootboekrekening_id",
+            ),
+            after=dict(journaalpost=journaalpost),
+        )
 
         return CreateJournaalpostGrootboekrekening(journaalpost=journaalpost, ok=True)

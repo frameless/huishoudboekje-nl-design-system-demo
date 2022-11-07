@@ -8,6 +8,7 @@ from datetime import datetime
 from graphql import GraphQLError
 
 import hhb_backend.graphql.models.journaalpost as journaalpost
+from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.camtParser import parser
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.models.customer_statement_message import (
@@ -30,27 +31,10 @@ class CreateCustomerStatementMessage(graphene.Mutation):
         file = Upload(required=True)
 
     ok = graphene.Boolean()
-    customerStatementMessage = graphene. List(lambda: CustomerStatementMessage)
+    customerStatementMessage = graphene.List(lambda: CustomerStatementMessage)
     journaalposten = graphene.List(lambda: journaalpost.Journaalpost)
 
-    def gebruikers_activiteit(self, _root, info, *_args, **_kwargs):
-        return dict(
-            action=info.field_name,
-            entities=gebruikers_activiteit_entities(
-                entity_type="customerStatementMessage",
-                result=self,
-                key="customerStatementMessage",
-            )
-            + gebruikers_activiteit_entities(
-                entity_type="transaction",
-                result=self.customerStatementMessage,
-                key="bank_transactions",
-            ),
-            after=dict(customerStatementMessage=self.customerStatementMessage),
-        )
-
     @staticmethod
-    @log_gebruikers_activiteit
     def mutate(_root, _info, file):
         content = file.stream.read()
 
@@ -66,7 +50,6 @@ class CreateCustomerStatementMessage(graphene.Mutation):
             csm_files = parser.CamtParser().parse(content)
         else:
             csm_files = [mt940.parse(content)]
-
 
         csm = []
         journaalposten = []
@@ -85,7 +68,8 @@ class CreateCustomerStatementMessage(graphene.Mutation):
 
             # csmServiceModel.related_reference = csm_file.data['??']
             if not csm_file.data.get("account_identification"):
-                raise GraphQLError(f"Incorrect file, missing tag 25 account identification or misplaced/missing IBAN tag")
+                raise GraphQLError(
+                    f"Incorrect file, missing tag 25 account identification or misplaced/missing IBAN tag")
             csm_model.account_identification = csm_file.data["account_identification"]
 
             if csm_file.data.get("sequence_number"):
@@ -134,6 +118,20 @@ class CreateCustomerStatementMessage(graphene.Mutation):
             if journaalpostentemp:
                 journaalposten.extend(journaalpostentemp)
 
+        AuditLogging.create(
+            action=info.field_name,
+            entities=gebruikers_activiteit_entities(
+                entity_type="customerStatementMessage",
+                result=customerStatementMessage,
+            ) + gebruikers_activiteit_entities(
+                entity_type="transaction",
+                result=customerStatementMessage,
+                key="bank_transactions",
+            ),
+            after=dict(customerStatementMessage=customerStatementMessage),
+
+        )
+
         return CreateCustomerStatementMessage(
             journaalposten=journaalposten,
             customerStatementMessage=csm,
@@ -142,7 +140,7 @@ class CreateCustomerStatementMessage(graphene.Mutation):
 
 
 def retrieve_iban(transaction_details: dict) -> str:
-    if transaction_details.get('tegen_rekening',False):
+    if transaction_details.get('tegen_rekening', False):
         result = transaction_details['tegen_rekening']
     else:
         result = re.search(IBAN_REGEX, transaction_details['transaction_details'])

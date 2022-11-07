@@ -3,6 +3,7 @@ import graphene
 import requests
 from graphql import GraphQLError
 
+from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 import hhb_backend.graphql.models.afdeling as graphene_afdeling
@@ -16,7 +17,6 @@ class UpdateAfdeling(graphene.Mutation):
     class Arguments:
         # hhb_service elements
         id = graphene.Int(required=True)
-        
 
         # org_service elements
         naam = graphene.String()
@@ -26,19 +26,8 @@ class UpdateAfdeling(graphene.Mutation):
     afdeling = graphene.Field(lambda: graphene_afdeling.Afdeling)
     previous = graphene.Field(lambda: graphene_afdeling.Afdeling)
 
-    def gebruikers_activiteit(self, _root, info, *_args, **_kwargs):
-        return dict(
-            action=info.field_name,
-            entities=gebruikers_activiteit_entities(
-                entity_type="afdeling", result=self, key="afdeling"
-            ),
-            before=dict(postadres=self.previous),
-            after=dict(afdeling=self.afdeling),
-        )
-
     @staticmethod
-    @log_gebruikers_activiteit
-    def mutate(_root, _info, id, **kwargs):
+    def mutate(root, info, id, **kwargs):
         """ Update the current Afdeling """
         previous = hhb_dataloader().afdelingen.load_one(id)
         if not previous:
@@ -70,5 +59,14 @@ class UpdateAfdeling(graphene.Mutation):
             )
 
         afdeling = org_service_response.json()["data"]
+
+        AuditLogging.create(
+            action=info.field_name,
+            entities=gebruikers_activiteit_entities(
+                entity_type="afdeling", result=afdeling, key="afdeling"
+            ),
+            before=dict(postadres=previous),
+            after=dict(afdeling=afdeling),
+        )
 
         return UpdateAfdeling(afdeling=afdeling, previous=previous, ok=True)

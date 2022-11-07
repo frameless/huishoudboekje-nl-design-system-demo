@@ -4,6 +4,7 @@ import graphene
 import requests
 from graphql import GraphQLError
 
+from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.models.huishouden import Huishouden
@@ -28,20 +29,9 @@ class CreateHuishouden(graphene.Mutation):
     ok = graphene.Boolean()
     huishouden = graphene.Field(lambda: Huishouden)
 
-    def gebruikers_activiteit(self, _root, info, *_args, **_kwargs):
-        return dict(
-            action=info.field_name,
-            entities=gebruikers_activiteit_entities(
-                entity_type="huishouden", result=self, key="huishouden"
-            ),
-            after=dict(afspraak=self.huishouden),
-        )
-
     @staticmethod
-    @log_gebruikers_activiteit
-    def mutate(_root, _info, input: CreateHuishoudenInput):
-        """Create the new Huishouden"""
-
+    def mutate(root, info, input: CreateHuishoudenInput):
+        """Create a new Huishouden"""
         response = requests.post(
             f"{settings.HHB_SERVICES_URL}/huishoudens/", json=input
         )
@@ -58,5 +48,13 @@ class CreateHuishouden(graphene.Mutation):
             update_burger = {'id': burger_id, 'huishouden_id': created_huishouden.id}
 
             update_existing_burger(burger=update_burger)
+
+        AuditLogging.create(
+            action=info.field_name,
+            entities=gebruikers_activiteit_entities(
+                entity_type="huishouden", result=huishouden
+            ),
+            after=dict(afspraak=huishouden),
+        )
 
         return CreateHuishouden(huishouden=created_huishouden, ok=True)

@@ -1,11 +1,11 @@
 """ GraphQL mutation for creating a new Rubriek """
 
-import json
-
 import graphene
+import json
 import requests
 from graphql import GraphQLError
 
+from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.models.rubriek import Rubriek
@@ -23,18 +23,8 @@ class CreateRubriek(graphene.Mutation):
     ok = graphene.Boolean()
     rubriek = graphene.Field(lambda: Rubriek)
 
-    def gebruikers_activiteit(self, _root, info, *_args, **_kwargs):
-        return dict(
-            action=info.field_name,
-            entities=gebruikers_activiteit_entities(
-                entity_type="rubriek", result=self, key="rubriek"
-            ),
-            after=dict(rubriek=self.rubriek),
-        )
-
     @staticmethod
-    @log_gebruikers_activiteit
-    def mutate(_root, _info, **kwargs):
+    def mutate(root, info, **kwargs):
         """ Create the new Rubriek """
         if (
             kwargs["grootboekrekening_id"]
@@ -50,4 +40,13 @@ class CreateRubriek(graphene.Mutation):
         )
         if post_response.status_code != 201:
             raise GraphQLError(f"Upstream API responded: {post_response.json()}")
+
+        AuditLogging.create(
+            action=info.field_name,
+            entities=gebruikers_activiteit_entities(
+                entity_type="rubriek", result=rubriek
+            ),
+            after=dict(rubriek=rubriek),
+        )
+
         return CreateRubriek(rubriek=post_response.json()["data"], ok=True)

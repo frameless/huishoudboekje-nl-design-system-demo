@@ -1,9 +1,9 @@
-from typing import List
-
 import graphene
 import requests
 from graphql import GraphQLError
+from typing import List
 
+from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.models import burger
@@ -27,22 +27,8 @@ class DeleteHuishoudenBurger(graphene.Mutation):
     previous = graphene.Field(lambda: huishouden.Huishouden)
     burgerIds = graphene.List(lambda: burger.Burger)
 
-    def gebruikers_activiteit(self, _root, info, *_args, **_kwargs):
-        return dict(
-            action=info.field_name,
-            entities=gebruikers_activiteit_entities(
-                entity_type="burger", result=self.burgerIds, key="burgers"
-            )
-            + gebruikers_activiteit_entities(
-                entity_type="huishouden", result=self.previous["id"], key="huishouden"
-            ),
-            before=dict(huishouden=self.previous),
-            after=dict(huishouden=self.huishouden),
-        )
-
     @staticmethod
-    @log_gebruikers_activiteit
-    def mutate(_root, _info, huishouden_id: int, burger_ids: List[int]):
+    def mutate(root, info, huishouden_id: int, burger_ids: List[int]):
         """Move given burgers to new huishoudens"""
         previous = hhb_dataloader().huishoudens.load_one(huishouden_id)
 
@@ -64,6 +50,17 @@ class DeleteHuishoudenBurger(graphene.Mutation):
             if not response.ok:
                 raise GraphQLError(f"Upstream API responded: {response.text}")
             new_huishoudens.append(new_huishouden)
+
+        AuditLogging.create(
+            action=info.field_name,
+            entities=gebruikers_activiteit_entities(
+                entity_type="burger", result=burgerIds, key="burgers"
+            ) + gebruikers_activiteit_entities(
+                entity_type="huishouden", result=previous["id"], key="huishouden"
+            ),
+            before=dict(huishouden=previous),
+            after=dict(huishouden=huishouden),
+        )
 
         return DeleteHuishoudenBurger(
             ok=True,

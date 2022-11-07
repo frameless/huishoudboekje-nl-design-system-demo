@@ -21,23 +21,7 @@ class DeleteAfspraak(graphene.Mutation):
 
     previous = graphene.Field(lambda: graphene_afspraak.Afspraak)
 
-    def gebruikers_activiteit(self, _root, info, *_args, **_kwargs):
-        return dict(
-            action=info.field_name,
-            entities=gebruikers_activiteit_entities(
-                entity_type="afspraak", result=self, key="previous"
-            )
-            + gebruikers_activiteit_entities(
-                entity_type="burger", result=self.previous, key="burger_id"
-            )
-            + gebruikers_activiteit_entities(
-                entity_type="afdeling", result=self.previous, key="afdeling_id"
-            ),
-            before=dict(afspraak=self.previous),
-        )
-
     @staticmethod
-    @log_gebruikers_activiteit
     def mutate(_root, _info, id):
         """ Delete current afspraak """
         previous = hhb_dataloader().afspraken.load_one(id)
@@ -51,5 +35,17 @@ class DeleteAfspraak(graphene.Mutation):
         response = requests.delete(f"{settings.HHB_SERVICES_URL}/afspraken/{id}")
         if response.status_code != 204:
             raise GraphQLError(f"Upstream API responded: {response.text}")
+
+        AuditLogging.create(
+            action=info.field_name,
+            entities=gebruikers_activiteit_entities(
+                entity_type="afspraak", result=self, key="previous"
+            ) + gebruikers_activiteit_entities(
+                entity_type="burger", result=previous, key="burger_id"
+            ) + gebruikers_activiteit_entities(
+                entity_type="afdeling", result=previous, key="afdeling_id"
+            ),
+            before=dict(afspraak=self.previous),
+        )
 
         return DeleteAfspraak(ok=True, previous=dict(previous))

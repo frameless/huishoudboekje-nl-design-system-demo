@@ -4,6 +4,7 @@ import graphene
 import requests
 from graphql import GraphQLError
 
+from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 import hhb_backend.graphql.models.afspraak as graphene_afspraak
@@ -14,6 +15,7 @@ from hhb_backend.service.model.afspraak import Afspraak
 
 class DeleteAfspraakZoekterm(graphene.Mutation):
     """Mutatie om een zoekterm bij een afspraak te verwijderen."""
+
     class Arguments:
         afspraak_id = graphene.Int(required=True)
         zoekterm = graphene.String(required=True)
@@ -23,21 +25,7 @@ class DeleteAfspraakZoekterm(graphene.Mutation):
     previous = graphene.Field(lambda: graphene_afspraak.Afspraak)
     matching_afspraken = graphene.List(lambda: graphene_afspraak.Afspraak)
 
-    def gebruikers_activiteit(self, _root, info, *_args, **_kwargs):
-        return dict(
-            action=info.field_name,
-            entities=gebruikers_activiteit_entities(
-                entity_type="afspraak", result=self, key="afspraak"
-            )
-            + gebruikers_activiteit_entities(
-                entity_type="burger", result=self.afspraak, key="burger_id"
-            ),
-            before=dict(afspraak=self.previous),
-            after=dict(afspraak=self.afspraak),
-        )
-
     @staticmethod
-    @log_gebruikers_activiteit
     def mutate(_root, _info, afspraak_id: int, zoekterm):
         """ Delete zoekterm to afspraak """
 
@@ -67,4 +55,17 @@ class DeleteAfspraakZoekterm(graphene.Mutation):
 
         matching_afspraken = find_matching_afspraken_by_afspraak(afspraak)
 
-        return DeleteAfspraakZoekterm(afspraak=afspraak, previous=previous, matching_afspraken=matching_afspraken, ok=True)
+        AuditLogging.create(
+            action=info.field_name,
+            entities=gebruikers_activiteit_entities(
+                entity_type="afspraak", result=self, key="afspraak"
+            )
+                     + gebruikers_activiteit_entities(
+                entity_type="burger", result=afspraak, key="burger_id"
+            ),
+            before=dict(afspraak=previous),
+            after=dict(afspraak=afspraak),
+        )
+
+        return DeleteAfspraakZoekterm(afspraak=afspraak, previous=previous, matching_afspraken=matching_afspraken,
+                                      ok=True)

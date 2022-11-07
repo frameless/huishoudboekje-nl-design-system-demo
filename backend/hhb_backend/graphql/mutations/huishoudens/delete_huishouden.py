@@ -4,6 +4,7 @@ import graphene
 import requests
 from graphql import GraphQLError
 
+from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.models.huishouden import Huishouden
@@ -21,18 +22,8 @@ class DeleteHuishouden(graphene.Mutation):
     ok = graphene.Boolean()
     previous = graphene.Field(lambda: Huishouden)
 
-    def gebruikers_activiteit(self, _root, info, *_args, **_kwargs):
-        return dict(
-            action=info.field_name,
-            entities=gebruikers_activiteit_entities(
-                entity_type="huishouden", result=self, key="previous"
-            ),
-            before=dict(huishouden=self.previous),
-        )
-
     @staticmethod
-    @log_gebruikers_activiteit
-    def mutate(_root, _info, id):
+    def mutate(root, info, id):
         """ Delete current huishouden """
 
         previous = hhb_dataloader().huishoudens.load_one(id)
@@ -43,4 +34,11 @@ class DeleteHuishouden(graphene.Mutation):
         if response.status_code != 204:
             raise GraphQLError(f"Upstream API responded: {response.json()}")
 
+        AuditLogging.create(
+            action=info.field_name,
+            entities=gebruikers_activiteit_entities(
+                entity_type="huishouden", result=previous
+            ),
+            before=dict(huishouden=previous),
+        )
         return DeleteHuishouden(ok=True, previous=previous)

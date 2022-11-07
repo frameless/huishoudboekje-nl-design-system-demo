@@ -1,12 +1,12 @@
 """ GraphQL mutation for creating a new Burger """
-import json
-
 import graphene
+import json
 import requests
 from graphql import GraphQLError
 
 import hhb_backend.graphql.mutations.huishoudens.huishouden_input as huishouden_input
 import hhb_backend.graphql.mutations.rekeningen.rekening_input as rekening_input
+from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql import settings
 import hhb_backend.graphql.models.burger as graphene_burger
 from hhb_backend.graphql.mutations.huishoudens.utils import create_huishouden_if_not_exists
@@ -34,6 +34,7 @@ class CreateBurgerInput(graphene.InputObjectType):
     rekeningen = graphene.List(lambda: rekening_input.RekeningInput)
     huishouden = graphene.Field(huishouden_input.HuishoudenInput)
 
+
 class CreateBurger(graphene.Mutation):
     class Arguments:
         input = graphene.Argument(CreateBurgerInput)
@@ -41,21 +42,8 @@ class CreateBurger(graphene.Mutation):
     ok = graphene.Boolean()
     burger = graphene.Field(lambda: graphene_burger.Burger)
 
-    def gebruikers_activiteit(self, _root, info, *_args, **_kwargs):
-        return dict(
-            action=info.field_name,
-            entities=gebruikers_activiteit_entities(
-                entity_type="burger", result=self, key="burger"
-            )
-            + gebruikers_activiteit_entities(
-                entity_type="rekening", result=self.burger, key="rekeningen"
-            ),
-            after=dict(burger=self.burger),
-        )
-
     @staticmethod
-    @log_gebruikers_activiteit
-    def mutate(_root, _info, input):
+    def mutate(root, info, input):
         """ Create the new Gebruiker/Burger """
 
         graphene_burger.Burger.bsn_length(input.get('bsn'))
@@ -82,4 +70,13 @@ class CreateBurger(graphene.Mutation):
                 for rekening in rekeningen
             ]
 
+        AuditLogging.create(
+            action=info.field_name,
+            entities=gebruikers_activiteit_entities(
+                entity_type="burger", result=burger
+            ) + gebruikers_activiteit_entities(
+                entity_type="rekening", result=burger, key="rekeningen"
+            ),
+            after=dict(burger=burger),
+        )
         return CreateBurger(ok=True, burger=created_burger)

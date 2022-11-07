@@ -2,6 +2,7 @@ import graphene
 import requests
 from graphql import GraphQLError
 
+from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.models.configuratie import Configuratie
@@ -23,24 +24,22 @@ class CreateConfiguratie(graphene.Mutation):
     ok = graphene.Boolean()
     configuratie = graphene.Field(lambda: Configuratie)
 
-    def gebruikers_activiteit(self, _root, info, *_args, **_kwargs):
-        return dict(
-            action=info.field_name,
-            entities=gebruikers_activiteit_entities(
-                entity_type="configuratie", result=self, key="configuratie"
-            ),
-            after=dict(configuratie=self.configuratie),
-        )
-
     @staticmethod
-    @log_gebruikers_activiteit
-    def mutate(_root, _info, input):
+    def mutate(root, info, input):
         post_response = requests.post(
             f"{settings.HHB_SERVICES_URL}/configuratie",
             json=input,
         )
         if not post_response.ok:
             raise GraphQLError(f"Upstream API responded: {post_response.text}")
+
+        AuditLogging.create(
+            action=info.field_name,
+            entities=gebruikers_activiteit_entities(
+                entity_type="configuratie", result=configuratie
+            ),
+            after=dict(configuratie=configuratie),
+        )
 
         return CreateConfiguratie(configuratie=post_response.json()["data"], ok=True)
 
@@ -53,19 +52,8 @@ class UpdateConfiguratie(graphene.Mutation):
     configuratie = graphene.Field(lambda: Configuratie)
     previous = graphene.Field(lambda: Configuratie)
 
-    def gebruikers_activiteit(self, _root, info, *_args, **_kwargs):
-        return dict(
-            action=info.field_name,
-            entities=gebruikers_activiteit_entities(
-                entity_type="configuratie", result=self, key="configuratie"
-            ),
-            before=dict(configuratie=self.previous),
-            after=dict(configuratie=self.configuratie),
-        )
-
     @staticmethod
-    @log_gebruikers_activiteit
-    def mutate(_root, _info, input, **_kwargs):
+    def mutate(root, info, input, **_kwargs):
         previous = hhb_dataloader().configuraties.load_one(input.id)
 
         response = requests.post(
@@ -77,6 +65,15 @@ class UpdateConfiguratie(graphene.Mutation):
 
         configuratie = response.json()["data"]
 
+        AuditLogging.create(
+            action=info.field_name,
+            entities=gebruikers_activiteit_entities(
+                entity_type="configuratie", result=configuratie
+            ),
+            before=dict(configuratie=previous),
+            after=dict(configuratie=configuratie),
+        )
+
         return UpdateConfiguratie(ok=True, configuratie=configuratie, previous=previous)
 
 
@@ -87,22 +84,20 @@ class DeleteConfiguratie(graphene.Mutation):
     ok = graphene.Boolean()
     previous = graphene.Field(lambda: Configuratie)
 
-    def gebruikers_activiteit(self, _root, info, id, *_args, **_kwargs):
-        return dict(
-            action=info.field_name,
-            entities=gebruikers_activiteit_entities(
-                entity_type="configuratie", result=self, key="previous"
-            ),
-            before=dict(configuratie=self.previous),
-        )
-
     @staticmethod
-    @log_gebruikers_activiteit
-    def mutate(_root, _info, id):
+    def mutate(root, info, id):
         previous = hhb_dataloader().configuraties.load_one(id)
 
         response = requests.delete(f"{settings.HHB_SERVICES_URL}/configuratie/{id}")
         if not response.ok:
             raise GraphQLError(f"Upstream API responded: {response.text}")
+
+        AuditLogging.create(
+            action=info.field_name,
+            entities=gebruikers_activiteit_entities(
+                entity_type="configuratie", result=previous
+            ),
+            before=dict(configuratie=previous),
+        )
 
         return DeleteConfiguratie(ok=True, previous=previous)

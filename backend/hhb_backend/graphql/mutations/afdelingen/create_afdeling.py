@@ -5,6 +5,7 @@ from graphql import GraphQLError
 
 import hhb_backend.graphql.mutations.postadressen.create_postadres as create_postadres
 import hhb_backend.graphql.mutations.rekeningen.rekening_input as rekening_input
+from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 import hhb_backend.graphql.models.afdeling as graphene_afdeling

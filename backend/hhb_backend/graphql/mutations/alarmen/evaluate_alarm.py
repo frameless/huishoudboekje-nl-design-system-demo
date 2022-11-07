@@ -5,6 +5,8 @@ from datetime import *
 from graphql import GraphQLError
 from tokenize import String
 from typing import Optional
+
+from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.feature_flags import Unleash
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
@@ -32,23 +34,21 @@ class EvaluateAlarms(graphene.Mutation):
 
     alarmTriggerResult = graphene.List(lambda: AlarmTriggerResult)
 
-    def gebruikers_activiteit(self, _root, info, *_args, **_kwargs):
-        return dict(
-            action=info.field_name,
-            entities=gebruikers_activiteit_entities(
-                entity_type="alarm", result=self, key="alarm"
-            ),
-            after=dict(),
-        )
-
     @staticmethod
-    @log_gebruikers_activiteit
-    def mutate(_root, _info, ids):
+    def mutate(root, info, ids):
         """ Mutatie voor de evaluatie van een alarm wat kan resulteren in een signaal en/of een nieuw alarm in de reeks. """
         if not Unleash().is_enabled("signalen"):
             raise GraphQLError("Feature signalen is disabled")
 
         triggered_alarms = evaluate_alarms(ids)
+        AuditLogging.create(
+            action=info.field_name,
+            entities=gebruikers_activiteit_entities(
+                entity_type="alarm", result=alarm
+            ),
+            after=dict(),
+        )
+
         return EvaluateAlarms(alarmTriggerResult=triggered_alarms)
 
 
@@ -58,23 +58,21 @@ class EvaluateAlarm(graphene.Mutation):
 
     alarmTriggerResult = graphene.List(lambda: AlarmTriggerResult)
 
-    def gebruikers_activiteit(self, _root, info, *_args, **_kwargs):
-        return dict(
-            action=info.field_name,
-            entities=gebruikers_activiteit_entities(
-                entity_type="alarm", result=self, key="alarm"
-            ),
-            after=dict(),
-        )
-
     @staticmethod
-    @log_gebruikers_activiteit
     def mutate(_root, _info, id):
         """ Mutatie voor de evaluatie van een alarm wat kan resulteren in een signaal en/of een nieuw alarm in de reeks. """
         if not Unleash().is_enabled("signalen"):
             raise GraphQLError("Feature signalen is disabled")
 
         evaluated_alarm = evaluate_one_alarm(id)
+
+        AuditLogging.create(
+            action=info.field_name,
+            entities=gebruikers_activiteit_entities(
+                entity_type="alarm", result=alarm
+            ),
+            after=dict(),
+        )
         return EvaluateAlarm(alarmTriggerResult=evaluated_alarm)
 
 

@@ -3,6 +3,7 @@ import logging
 import requests
 from graphql import GraphQLError
 
+from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.models import afspraak
@@ -38,21 +39,8 @@ class UpdateAfspraakBetaalinstructie(graphene.Mutation):
     afspraak = graphene.Field(lambda: afspraak.Afspraak)
     previous = graphene.Field(lambda: afspraak.Afspraak)
 
-    def gebruikers_activiteit(self, _root, info, *_args, **_kwargs):
-        return dict(
-            action=info.field_name,
-            entities=gebruikers_activiteit_entities(
-                entity_type="afspraak", result=self, key="afspraak"
-            ) + gebruikers_activiteit_entities(
-                entity_type="burger", result=self.afspraak, key="burger_id"
-            ),
-            before=dict(afspraak=self.previous),
-            after=dict(afspraak=self.afspraak),
-        )
-
     @staticmethod
-    @log_gebruikers_activiteit
-    def mutate(_root, _info, afspraak_id: int, betaalinstructie: BetaalinstructieInput):
+    def mutate(self, info, afspraak_id: int, betaalinstructie: BetaalinstructieInput):
         """ Update the Afspraak """
         previous = hhb_dataloader().afspraken.load_one(afspraak_id)
 
@@ -80,6 +68,17 @@ class UpdateAfspraakBetaalinstructie(graphene.Mutation):
             **input
         }
 
+        AuditLogging.create(
+            action=info.field_name,
+            entities=gebruikers_activiteit_entities(
+                entity_type="afspraak", result=self, key="afspraak"
+            ) + gebruikers_activiteit_entities(
+                entity_type="burger", result=new_afspraak, key="burger_id"
+            ),
+            before=dict(afspraak=previous),
+            after=dict(afspraak=new_afspraak),
+        )
+
         return UpdateAfspraakBetaalinstructie(afspraak=new_afspraak, previous=previous, ok=True)
 
 
@@ -93,3 +92,4 @@ def validate_afspraak_betaalinstructie(is_credit: bool, betaalinstructie: Betaal
         raise GraphQLError("Betaalinstructie: 'by_day' or 'by_month_day' is required.")
     if betaalinstructie.end_date and betaalinstructie.end_date < betaalinstructie.start_date:
         raise GraphQLError("StartDate has to be before endDate.")
+        
