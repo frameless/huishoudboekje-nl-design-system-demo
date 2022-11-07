@@ -136,7 +136,6 @@ def test_generateNextAlarmDate_illegal_combination():
     try:
         generate_alarm_date(illegal_alarm, alarm_date)
     except GraphQLError as e:
-        print(e)
         assert e.message == f"This combination of intructions is not supported. isWeekly:False isMonthly:False byDay:['Monday'] byMonth:[1] byMonthDay:[1]"
 
 
@@ -378,49 +377,33 @@ def test_should_create_signaal_no_banktransactie(mocker):
         #restore alarm
         alarm.signaalId = None
 
+def test_evaluate_alarms_no_active_alarms(mocker):
+    """Tests if there are no triggered alarms when there are no active alarms.
+       Test 1 is for evaluate_alarms()
+       Test 2 is for evaluate_one_alarm()"""
+    with requests_mock.Mocker() as rm:
+        fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
+        get_alarm = rm.get(f"{settings.ALARMENSERVICE_URL}/alarms/", json={"data": [alarm_inactive]})
+        get_active_alarms = rm.get(f"{settings.ALARMENSERVICE_URL}/alarms/?filter_active=true", json={"data": []})
+        
+        # Mock feature flag "signalen" to be enabled
+        mocker.patch('hhb_backend.feature_flags.Unleash.is_enabled', mock_feature_flag("signalen", True))
 
-# @freeze_time("2021-12-08")
-# def test_evaluate_alarm_inactive(client, mocker):
-#     """This tests the evaluation of an alarm that is not active."""
-#     with requests_mock.Mocker() as rm:
-#         # arrange
-#         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
-#         rm1 = rm.get(f"{settings.ALARMENSERVICE_URL}/alarms/?filter_active=true", json={'data': []})
-#         rm2 = rm.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=201)
-#         expected = {'data': {'evaluateAlarms': {'alarmTriggerResult': []}}}
+        # Test 1
+        triggered_alarms = EvaluateAlarm.evaluate_alarms([alarm_id])
 
-#         # Mock feature flag "signalen" to be enabled
-#         mocker.patch('hhb_backend.feature_flags.Unleash.is_enabled', mock_feature_flag("signalen", True))
+        assert fallback.call_count == 0
+        assert get_alarm.call_count == 1
+        assert get_active_alarms.call_count == 1
+        assert triggered_alarms == []
 
-#         # act
-#         response = client.post(
-#             "/graphql",
-#             json={
-#                 "query": '''
-#                     mutation test {
-#                         evaluateAlarms {
-#                             alarmTriggerResult {
-#                                 alarm {
-#                                     id
-#                                 }
-#                                 nextAlarm{
-#                                     id
-#                                 }
-#                                 signaal{
-#                                     id
-#                                 }
-#                             }
-#                         }
-#                     }''',
-#             },
-#             content_type='application/json'
-#         )
+        # Test 2
+        triggered_alarms = EvaluateAlarm.evaluate_one_alarm(alarm_id)
 
-#         # assert
-#         assert rm1.call_count == 1
-#         assert rm2.call_count == 1
-#         assert fallback.call_count == 0
-#         assert response.json == expected
+        assert fallback.call_count == 0             # still zero
+        assert get_alarm.call_count == 2            # +1 on previous call count
+        assert get_active_alarms.call_count == 2    # +1 on previous call count
+        assert triggered_alarms == []               # still empty list
 
 
 # @freeze_time("2021-12-08")
