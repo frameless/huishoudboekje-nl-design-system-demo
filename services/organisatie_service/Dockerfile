@@ -4,18 +4,18 @@ FROM ${DOCKER_PROXY}bitnami/python:3.10.7
 
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get -y install tzdata
-ENV TZ Europe/Amsterdam
+ENV TZ=Europe/Amsterdam
 
 WORKDIR /app
 
 COPY organisatie_service/setup.py /app
-RUN mkdir -p core_service organisatie_service models && \
-    python3 setup.py install
+RUN mkdir -p core_service organisatie_service models
+RUN pip install .
 
 COPY ./organisatie_service /app
 COPY ./core_service/core_service /app/core_service
 
-RUN python3 setup.py install
+RUN pip install .
 
 ENV GUNICORN_PORT="8000" \
     GUNICORN_WORKERS="2" \
