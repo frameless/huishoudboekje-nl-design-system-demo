@@ -59,7 +59,7 @@ class UpdateAfspraak(graphene.Mutation):
 
         previous = hhb_dataloader().afspraken.load_one(id)
         if not previous:
-            raise GraphQLError("afpraak not found")
+            raise GraphQLError("afspraak not found")
 
         # check burger_id - optional
         burger_id = input.get("burger_id")
