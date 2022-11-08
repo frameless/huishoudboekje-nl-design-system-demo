@@ -1,5 +1,6 @@
 """ GraphQL mutation for creating a new Afspraak """
 import graphene
+import logging
 import requests
 from datetime import datetime
 from graphql import GraphQLError
@@ -10,6 +11,8 @@ from hhb_backend.graphql.models.afdeling import Afdeling
 from hhb_backend.graphql.models.afspraak import Afspraak
 from hhb_backend.graphql.models.alarm import Alarm
 from hhb_backend.graphql.models.postadres import Postadres
+from hhb_backend.graphql.mutations.afspraken.update_afspraak_betaalinstructie import BetaalinstructieInput
+from hhb_backend.graphql.mutations.afspraken.update_afspraak_betaalinstructie import validate_afspraak_betaalinstructie
 from hhb_backend.graphql.scalars.bedrag import Bedrag
 from hhb_backend.graphql.utils.gebruikersactiviteiten import (
     log_gebruikers_activiteit,
@@ -30,6 +33,7 @@ class CreateAfspraakInput(graphene.InputObjectType):
     valid_from = graphene.String()
     valid_through = graphene.String()
     zoektermen = graphene.List(graphene.String)
+    betaalinstructie = graphene.Argument(lambda: BetaalinstructieInput)
 
 
 class CreateAfspraak(graphene.Mutation):
@@ -97,6 +101,15 @@ class CreateAfspraak(graphene.Mutation):
             alarm: Alarm = hhb_dataloader().alarms.load_one(alarm_id)
             if not alarm:
                 raise GraphQLError("alarm not found")
+
+        # Check betaalinstructie - optional
+        betaalinstructie = input.get("betaalinstructie")
+        if betaalinstructie is not None:
+            try:
+                validate_afspraak_betaalinstructie(input.get("credit"), input.betaalinstructie)
+            except Exception as e:
+                logging.info(f"Invalid betaalinstructie {e}")
+                raise e
 
         # final create call
         response = requests.post(f"{settings.HHB_SERVICES_URL}/afspraken/", json=input)
