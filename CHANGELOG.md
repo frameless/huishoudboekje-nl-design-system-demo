@@ -1,5 +1,82 @@
 # Huishoudboekje Changelog
 
+## 1.3.0
+
+Deze versie omvat verbeteringen van snelheid en een voorbereiding op aankomende functionaliteit.
+
+### Minor Changes
+
+- 54274588: All services that use Prisma now include the generated PrismaClient. It is no longer required to generate the PrismaClient on runtime.
+- d30a14ee: Fixed #1092: Added the ability to use feature flags in the backend.
+- 448db072: Updated to Flask 2.
+
+  ## Migration guide
+
+  The way that services migrate their databases has changed.
+  In your deployment scripts, please find every instance of the following command:
+
+  ```shell
+  python manage.py db upgrade
+  ```
+
+  And change it to the following command:
+
+  ```shell
+  flask db upgrade
+  ```
+
+  To see the exact change in the context of a Kubernetes configuration file, please see `/k8s/base/organisatieservice/deployment.yaml`, lines 69-70.
+- d0bc03e8: #1076: A cronjob that checks alarms has been added.
+
+  ## Migration guide
+
+  > ⚠️ This feature has not been officially released yet. These instructions are a draft, and not required for this release to work if you don't use the alarms feature.
+  > A later release will include a reference to these instructions in the release notes.
+
+  Please add the cronjob to your deployments. It should be scheduled to be executed some time at night, for example at 3am.
+  The container for the cronjob requires the same environment variables as the container for the backend.
+
+  ```shell
+  HHB_SERVICE_URL="http://hhb-huishoudboekjeservice"
+  ORGANISATIE_SERVICE_URL="http://hhb-organisatieservice"
+  TRANSACTIE_SERVICE_URL="http://hhb-banktransactieservice"
+  GROOTBOEK_SERVICE_URL="http://hhb-grootboekservice"
+  LOG_SERVICE_URL="http://hhb-logservice"
+  POSTADRESSENSERVICE_URL="http://hhb-postadressenservice"
+  ALARMENSERVICE_URL="http://hhb-alarmenservice"
+  SIGNALENSERVICE_URL="http://hhb-signalenservice"
+  ```
+
+  As the command inside the cronjob is a background job, no authorization is required. Authorization is disabled by adding the following environment variable to the container:
+
+  ```shell
+  REQUIRE_AUTH="0"
+  ```
+
+  See `k8s/base/backend/cronjob.yaml` in this repository for an example.
+
+### Patch Changes
+
+- e406a0f2: Performance improvements by only fetching fields we actually need.
+- a847c731: Fixed #1113: Feature flags are now fetched only once upon page load.
+- e5864c08: Fixed #1106: The upload modal now stays open after all uploads have finished.
+- bee17715: Fixed #1023: Connection errors are now better readable.
+- da541262: Fixed #1047: Form for configuratie is now also visible when there are no results.
+- 64a0cf04: Added runtime validation for the theme file. This makes it easier to verify if the theme file has all the required settings, and if it doesn't, a more verbose error will now be visible.
+- 019f84e5: Fixed #371: Improved error handling.
+- 1375a342: Fixes 1066: Added support for saving Dates as Timestamp without timezone.
+- 2707b181: Fixed #996: It is now possible to click through to the details of a transaction from a signaal.
+- 4f9b14bb: Fixed #1043: It is now possible to click through to a burger and afspraak on audit logs for alarms.
+- dbec1807: Fixed #1040: Optimalizations for data requests to services.
+- 579bd2f4: Fixed #1051: Time to reload the data after creating an alarm has been improved.
+- 1cc8f27f: Fixed #1032: Updated Python to 3.10.7
+- 53d8971e: Fixes #1068: Date to DateTime in banktransactieservice
+- 5e73ad91: Fixed #1104: Fixed a problem where removing a zoekterm did not work as expected.
+- ad873905: Fixed #1067: Added support for timestamp without timezone fields in Postgres.
+- 09988cc3: Fixed #1105: Fixed some issues that caused errors when alarmen feature was disabled.
+- e59a70be: Fixes #1001: Test for brieven export
+- 48cfb52c: Fixed #1017: Improved consistency in error messages.
+
 ## 1.2.3
 
 ### Patch Changes
