@@ -9,23 +9,35 @@ afspraak = {
     'credit': True,
     'valid_from': "2020-10-01",
     'valid_through': "2020-10-01",
-
     'rubriek_id': 1,
     'burger_id': 1,
     'tegen_rekening_id': 1,
-    'zoektermen': [],
+    'zoektermen': ["test1", "test2"],
 }
 
 def test_update_afspraak(client):
     with requests_mock.Mocker() as rm:
         # arrange
-        expected = {'data': {'updateAfspraak': {'ok': True, 'afspraak': {'omschrijving': 'something', 'bedrag': None, 'credit': True, 'validFrom': '2020-10-01', 'validThrough': '2020-10-01'}}}}
+        expected = {'data': {
+            'updateAfspraak': {
+                'ok': True,
+                'afspraak': {
+                    'omschrijving': 'something',
+                    'bedrag': None,
+                    'credit': True,
+                    'validFrom': '2020-10-01',
+                    'validThrough': '2020-10-01',
+                    'zoektermen': ["test1", "test2"]
+                }
+            }
+        }}
         afspraakId = 1
         input = {
             "omschrijving": "gewijzigde omschrijving",
             "bedrag":"543.21",
             "credit": False,
-            "validThrough": ""
+            "validThrough": "",
+            "zoektermen": ["test1", "test2"]
         }
         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
         rm1 = rm.post(f"{settings.HHB_SERVICES_URL}/afspraken/1", status_code=200, json={ "data": afspraak})
@@ -46,6 +58,7 @@ def test_update_afspraak(client):
                                 credit
                                 validFrom
                                 validThrough
+                                zoektermen
                             }
                         }
                     }

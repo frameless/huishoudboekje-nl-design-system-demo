@@ -10,6 +10,7 @@ from hhb_backend.graphql.models.afspraak import Afspraak
 from hhb_backend.graphql.models.alarm import Alarm
 from hhb_backend.graphql.scalars.bedrag import Bedrag
 from hhb_backend.graphql.utils.gebruikersactiviteiten import (gebruikers_activiteit_entities, log_gebruikers_activiteit)
+from hhb_backend.graphql.utils.upstream_error_handler import UpstreamError
 
 
 class UpdateAfspraakInput(graphene.InputObjectType):
@@ -23,6 +24,7 @@ class UpdateAfspraakInput(graphene.InputObjectType):
     credit = graphene.Boolean()
     bedrag = graphene.Argument(Bedrag)
     valid_through = graphene.String()
+    zoektermen = graphene.List(graphene.String)
 
 
 class UpdateAfspraak(graphene.Mutation):
@@ -54,6 +56,10 @@ class UpdateAfspraak(graphene.Mutation):
     @log_gebruikers_activiteit
     async def mutate(_root, _info, id: int, input: UpdateAfspraakInput):
         """ Update the Afspraak """
+
+        previous = hhb_dataloader().afspraken.load_one(id)
+        if not previous:
+            raise GraphQLError("afspraak not found")
 
         # check burger_id - optional
         burger_id = input.get("burger_id")
@@ -100,9 +106,8 @@ class UpdateAfspraak(graphene.Mutation):
         # final update call
         response = requests.post(f"{settings.HHB_SERVICES_URL}/afspraken/{id}", json=input)
         if not response.ok:
-            raise GraphQLError(f"Upstream API responded: {response.text}")
+            raise UpstreamError(response, "updating afspraak failed")
 
         afspraak = response.json()["data"]
-        previous = hhb_dataloader().afspraken.load_one(id)
 
         return UpdateAfspraak(afspraak=afspraak, previous=previous, ok=True)
