@@ -2,7 +2,7 @@
 
 ## 1.3.0
 
-In deze release is gewerkt aan het optimaliseren van snelheid en performance. Daarnaast is in voorbereiding op de functionalieit "Signalering" een cronjob toegevoegd.
+Deze versie omvat verbeteringen van snelheid en een voorbereiding op aankomende functionaliteit.
 
 ### Minor Changes
 
