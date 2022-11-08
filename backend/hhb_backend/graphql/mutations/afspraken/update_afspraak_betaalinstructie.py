@@ -1,4 +1,5 @@
 import graphene
+import logging
 import requests
 from graphql import GraphQLError
 
@@ -7,6 +8,7 @@ from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.models import afspraak
 from hhb_backend.graphql.scalars.day_of_week import DayOfWeek
 from hhb_backend.graphql.utils.gebruikersactiviteiten import (gebruikers_activiteit_entities, log_gebruikers_activiteit)
+from hhb_backend.graphql.utils.upstream_error_handler import UpstreamError
 
 
 class BetaalinstructieInput(graphene.InputObjectType):
@@ -27,6 +29,7 @@ class BetaalinstructieInput(graphene.InputObjectType):
 
 class UpdateAfspraakBetaalinstructie(graphene.Mutation):
     """Mutatie voor het instellen van een nieuwe betaalinstructie voor een afspraak."""
+
     class Arguments:
         afspraak_id = graphene.Int(required=True)
         betaalinstructie = graphene.Argument(lambda: BetaalinstructieInput, required=True)
@@ -40,8 +43,7 @@ class UpdateAfspraakBetaalinstructie(graphene.Mutation):
             action=info.field_name,
             entities=gebruikers_activiteit_entities(
                 entity_type="afspraak", result=self, key="afspraak"
-            )
-                     + gebruikers_activiteit_entities(
+            ) + gebruikers_activiteit_entities(
                 entity_type="burger", result=self.afspraak, key="burger_id"
             ),
             before=dict(afspraak=self.previous),
@@ -52,30 +54,42 @@ class UpdateAfspraakBetaalinstructie(graphene.Mutation):
     @log_gebruikers_activiteit
     async def mutate(_root, _info, afspraak_id: int, betaalinstructie: BetaalinstructieInput):
         """ Update the Afspraak """
-
         previous = hhb_dataloader().afspraken.load_one(afspraak_id)
 
         if previous is None:
             raise GraphQLError("Afspraak not found")
 
-        if previous.credit:
-            raise GraphQLError("Betaalinstructie is only possible for expenses.")
-        if (betaalinstructie.by_day and betaalinstructie.by_month_day) or (not betaalinstructie.by_day and not betaalinstructie.by_month_day):
-            raise GraphQLError("Betaalinstructie: 'by_day' or 'by_month_day' is required.")
-        if betaalinstructie.end_date and betaalinstructie.end_date < betaalinstructie.start_date:
-            raise GraphQLError("StartDate has to be before endDate.")
-
         input = {
             "betaalinstructie": betaalinstructie
         }
+        try:
+            validate_afspraak_betaalinstructie(previous.credit, betaalinstructie)
+        except Exception as e:
+            logging.info(f"Invalid betaalinstructie {e}")
+            raise e
 
         response = requests.post(
             f"{settings.HHB_SERVICES_URL}/afspraken/{afspraak_id}",
             json=input,
         )
         if not response.ok:
-            raise GraphQLError(f"Upstream API responded: {response.text}")
+            raise UpstreamError(response, "Failed to update afspraak")
 
-        afspraak = response.json()["data"]
+        new_afspraak = {
+            **previous,
+            **input
+        }
 
-        return UpdateAfspraakBetaalinstructie(afspraak=afspraak, previous=previous, ok=True)
+        return UpdateAfspraakBetaalinstructie(afspraak=new_afspraak, previous=previous, ok=True)
+
+
+def validate_afspraak_betaalinstructie(is_credit: bool, betaalinstructie: BetaalinstructieInput):
+    """Update the Afspraak"""
+
+    if is_credit:
+        raise GraphQLError("Betaalinstructie is only possible for expenses.")
+    if (betaalinstructie.by_day and betaalinstructie.by_month_day) or (
+        not betaalinstructie.by_day and not betaalinstructie.by_month_day):
+        raise GraphQLError("Betaalinstructie: 'by_day' or 'by_month_day' is required.")
+    if betaalinstructie.end_date and betaalinstructie.end_date < betaalinstructie.start_date:
+        raise GraphQLError("StartDate has to be before endDate.")
