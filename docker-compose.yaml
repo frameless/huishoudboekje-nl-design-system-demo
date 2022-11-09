@@ -156,7 +156,7 @@ services:
       - db
 
   sampledata:
-    image: registry.gitlab.com/commonground/huishoudboekje/data-importer/data-importer:latest
+    image: registry.gitlab.com/commonground/huishoudboekje/data-importer/data-importer:1.1.0
     container_name: sampledata
     environment:
       GRAPHQL_API_URL: http://backend:8000/graphql
@@ -364,4 +364,3 @@ services:
       LOG_LEVEL: DEBUG
     ports:
       - 8010:8080
-
