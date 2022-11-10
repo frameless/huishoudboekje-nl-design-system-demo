@@ -270,6 +270,7 @@ export type CreateAfspraakInput = {
   afdelingId?: InputMaybe<Scalars['Int']>;
   alarmId?: InputMaybe<Scalars['String']>;
   bedrag: Scalars['Bedrag'];
+  betaalinstructie?: InputMaybe<BetaalinstructieInput>;
   burgerId: Scalars['Int'];
   credit: Scalars['Boolean'];
   omschrijving: Scalars['String'];
@@ -278,6 +279,7 @@ export type CreateAfspraakInput = {
   tegenRekeningId: Scalars['Int'];
   validFrom?: InputMaybe<Scalars['String']>;
   validThrough?: InputMaybe<Scalars['String']>;
+  zoektermen?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
 export type CreateAlarm = {
@@ -1012,6 +1014,12 @@ export type RootMutationEvaluateAlarmArgs = {
 
 
 /** The root of all mutations  */
+export type RootMutationEvaluateAlarmsArgs = {
+  ids?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+};
+
+
+/** The root of all mutations  */
 export type RootMutationUpdateAfdelingArgs = {
   id: Scalars['Int'];
   naam?: InputMaybe<Scalars['String']>;
@@ -1461,6 +1469,7 @@ export type UpdateAfspraakInput = {
   rubriekId?: InputMaybe<Scalars['Int']>;
   tegenRekeningId?: InputMaybe<Scalars['Int']>;
   validThrough?: InputMaybe<Scalars['String']>;
+  zoektermen?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
 export type UpdateAlarm = {
@@ -2075,7 +2084,7 @@ export type GetHuishoudenQueryVariables = Exact<{
 }>;
 
 
-export type GetHuishoudenQuery = { huishouden?: { id?: number, burgers?: Array<{ id?: number, bsn?: number, email?: string, telefoonnummer?: string, voorletters?: string, voornamen?: string, achternaam?: string, geboortedatum?: any, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }>, afspraken?: Array<{ id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, validFrom?: any, validThrough?: any, betaalinstructie?: { byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string }, burger?: { id?: number, bsn?: number, voornamen?: string, voorletters?: string, achternaam?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, alarm?: { id?: string, isActive?: boolean, bedrag?: any, bedragMargin?: any, startDate?: string, endDate?: string, datumMargin?: number, byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, afspraak?: { id?: number }, signaal?: { id?: string } }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, postadres?: { id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string }, rubriek?: { id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } }, matchingAfspraken?: Array<{ id?: number, credit?: boolean, zoektermen?: Array<string>, bedrag?: any, omschrijving?: string, burger?: { voorletters?: string, voornamen?: string, achternaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string } }> }>, huishouden?: { id?: number, burgers?: Array<{ id?: number }> } }> } };
+export type GetHuishoudenQuery = { huishouden?: { id?: number, burgers?: Array<{ id?: number, voorletters?: string, voornamen?: string, achternaam?: string }> } };
 
 export type GetHuishoudensQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -4917,10 +4926,16 @@ export type GetGebeurtenissenQueryResult = Apollo.QueryResult<GetGebeurtenissenQ
 export const GetHuishoudenDocument = gql`
     query getHuishouden($id: Int!) {
   huishouden(id: $id) {
-    ...Huishouden
+    id
+    burgers {
+      id
+      voorletters
+      voornamen
+      achternaam
+    }
   }
 }
-    ${HuishoudenFragmentDoc}`;
+    `;
 
 /**
  * __useGetHuishoudenQuery__
