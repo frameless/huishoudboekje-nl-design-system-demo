@@ -103,6 +103,10 @@ async def transactie_suggesties(transactie_ids: Union[List[int], int]) -> Dict[i
 
 def match_zoekterm(afspraak, target_text: str):
     return afspraak.get("zoektermen") and all([
-        re.search(zoekterm, target_text, re.IGNORECASE)
+        re.search(
+            re.escape(zoekterm),
+            target_text,
+            re.IGNORECASE
+        )
         for zoekterm in afspraak.get("zoektermen")
     ])
