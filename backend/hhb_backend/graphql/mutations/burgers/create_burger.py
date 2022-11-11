@@ -8,7 +8,7 @@ from graphql import GraphQLError
 import hhb_backend.graphql.mutations.huishoudens.huishouden_input as huishouden_input
 import hhb_backend.graphql.mutations.rekeningen.rekening_input as rekening_input
 from hhb_backend.graphql import settings
-from hhb_backend.graphql.models.burger import Burger
+import hhb_backend.graphql.models.burger as graphene_burger
 from hhb_backend.graphql.mutations.huishoudens.utils import create_huishouden_if_not_exists
 from hhb_backend.graphql.mutations.rekeningen.utils import create_burger_rekening
 from hhb_backend.graphql.utils.gebruikersactiviteiten import (
@@ -39,7 +39,7 @@ class CreateBurger(graphene.Mutation):
         input = graphene.Argument(CreateBurgerInput)
 
     ok = graphene.Boolean()
-    burger = graphene.Field(lambda: Burger)
+    burger = graphene.Field(lambda: graphene_burger.Burger)
 
     def gebruikers_activiteit(self, _root, info, *_args, **_kwargs):
         return dict(
@@ -58,8 +58,8 @@ class CreateBurger(graphene.Mutation):
     async def mutate(_root, _info, input):
         """ Create the new Gebruiker/Burger """
 
-        Burger.bsn_length(input.get('bsn'))
-        Burger.bsn_elf_proef(input.get('bsn'))
+        graphene_burger.Burger.bsn_length(input.get('bsn'))
+        graphene_burger.Burger.bsn_elf_proef(input.get('bsn'))
 
         rekeningen = input.pop("rekeningen", None)
 

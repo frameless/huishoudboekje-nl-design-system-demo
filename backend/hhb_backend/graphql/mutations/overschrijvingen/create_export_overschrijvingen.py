@@ -9,7 +9,7 @@ from graphql import GraphQLError
 
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
-from hhb_backend.graphql.models.export import Export
+import hhb_backend.graphql.models.export as graphene_export
 from hhb_backend.graphql.utils.gebruikersactiviteiten import (
     gebruikers_activiteit_entities,
     log_gebruikers_activiteit
@@ -44,7 +44,7 @@ class CreateExportOverschrijvingen(graphene.Mutation):
         eindDatum = graphene.String()
 
     ok = graphene.Boolean()
-    export = graphene.Field(lambda: Export)
+    export = graphene.Field(lambda: graphene_export.Export)
 
     def gebruikers_activiteit(self, _root, info, *_args, **_kwargs):
         return dict(

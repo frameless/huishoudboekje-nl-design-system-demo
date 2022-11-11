@@ -7,9 +7,9 @@ from graphql import GraphQLError
 
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
-from hhb_backend.graphql.models.afdeling import Afdeling
-from hhb_backend.graphql.models.afspraak import Afspraak
-from hhb_backend.graphql.models.alarm import Alarm
+import hhb_backend.graphql.models.afdeling as graphene_afdeling
+import hhb_backend.graphql.models.afspraak as graphene_afspraak
+import hhb_backend.graphql.models.alarm as graphene_alarm
 from hhb_backend.graphql.models.postadres import Postadres
 from hhb_backend.graphql.mutations.afspraken.update_afspraak_betaalinstructie import BetaalinstructieInput
 from hhb_backend.graphql.mutations.afspraken.update_afspraak_betaalinstructie import validate_afspraak_betaalinstructie
@@ -41,7 +41,7 @@ class CreateAfspraak(graphene.Mutation):
         input = graphene.Argument(CreateAfspraakInput, required=True)
 
     ok = graphene.Boolean()
-    afspraak = graphene.Field(lambda: Afspraak)
+    afspraak = graphene.Field(lambda: graphene_afspraak.Afspraak)
 
     def gebruikers_activiteit(self, _root, info, *_args, **_kwargs):
         return dict(
@@ -84,8 +84,8 @@ class CreateAfspraak(graphene.Mutation):
         # check afdeling_id - optional
         afdeling_id = input.get("afdeling_id")
         if afdeling_id is not None:
-            afdeling: Afdeling = hhb_dataloader().afdelingen.load_one(afdeling_id)
-            if not afdeling:
+            afdeling_result: graphene_afdeling.Afdeling = hhb_dataloader().afdelingen.load_one(afdeling_id)
+            if not afdeling_result:
                 raise GraphQLError("afdeling not found")
 
         # Check postadres_id - optional
@@ -98,8 +98,8 @@ class CreateAfspraak(graphene.Mutation):
         # Check alarm_id - optional
         alarm_id = input.get("alarm_id")
         if alarm_id is not None:
-            alarm: Alarm = hhb_dataloader().alarms.load_one(alarm_id)
-            if not alarm:
+            alarm_result: graphene_alarm.Alarm = hhb_dataloader().alarms.load_one(alarm_id)
+            if not alarm_result:
                 raise GraphQLError("alarm not found")
 
         # Check betaalinstructie - optional

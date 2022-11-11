@@ -7,7 +7,7 @@ import hhb_backend.graphql.mutations.postadressen.create_postadres as create_pos
 import hhb_backend.graphql.mutations.rekeningen.rekening_input as rekening_input
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
-from hhb_backend.graphql.models.afdeling import Afdeling
+import hhb_backend.graphql.models.afdeling as graphene_afdeling
 from hhb_backend.graphql.mutations.postadressen.utils import create_afdeling_postadres
 from hhb_backend.graphql.mutations.rekeningen.utils import create_afdeling_rekening
 from hhb_backend.graphql.utils.gebruikersactiviteiten import (
@@ -32,7 +32,7 @@ class CreateAfdeling(graphene.Mutation):
         input = graphene.Argument(CreateAfdelingInput)
 
     ok = graphene.Boolean()
-    afdeling = graphene.Field(lambda: Afdeling)
+    afdeling = graphene.Field(lambda: graphene_afdeling.Afdeling)
 
     def gebruikers_activiteit(self, _root, info, *_args, **_kwargs):
         return dict(

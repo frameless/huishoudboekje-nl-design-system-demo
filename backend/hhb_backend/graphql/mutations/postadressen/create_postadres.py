@@ -5,8 +5,8 @@ from graphql import GraphQLError
 
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
-from hhb_backend.graphql.models.afdeling import Afdeling
-from hhb_backend.graphql.models.postadres import Postadres
+import hhb_backend.graphql.models.afdeling as graphene_afdeling
+import hhb_backend.graphql.models.postadres as graphene_postadres
 from hhb_backend.graphql.utils.gebruikersactiviteiten import (
     gebruikers_activiteit_entities,
     log_gebruikers_activiteit,
@@ -27,8 +27,8 @@ class CreatePostadres(graphene.Mutation):
         input = graphene.Argument(CreatePostadresInput)
 
     ok = graphene.Boolean()
-    postadres = graphene.Field(lambda: Postadres)
-    afdeling = graphene.Field(lambda: Afdeling)
+    postadres = graphene.Field(lambda: graphene_postadres.Postadres)
+    afdeling = graphene.Field(lambda: graphene_afdeling.Afdeling)
 
     def gebruikers_activiteit(self, _root, info, *_args, **_kwargs):
         return dict(
