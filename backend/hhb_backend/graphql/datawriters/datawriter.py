@@ -11,7 +11,7 @@ class DataWriter:
 
     def post(self, input):
         try:
-            response = requests.post(f"{self.service}/{self.model}", 
+            response = requests.post(f"{self.service}/{self.model}/", 
                         data=json.dumps(input),
                         headers={"Content-type": "application/json"},
                        )
