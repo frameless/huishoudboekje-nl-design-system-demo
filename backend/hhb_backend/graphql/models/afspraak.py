@@ -12,12 +12,12 @@ import hhb_backend.graphql.models.rubriek as rubriek
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.scalars.bedrag import Bedrag
 from hhb_backend.graphql.scalars.day_of_week import DayOfWeek
-from hhb_backend.processen.automatisch_boeken import match_zoekterm
 from hhb_backend.processen.overschrijvingen_planner import (
     PlannedOverschrijvingenInput,
     get_planned_overschrijvingen,
 )
-from hhb_backend.graphql.utils.dates import afspraken_intersect, to_date
+from hhb_backend.graphql.utils.dates import to_date
+from hhb_backend.graphql.utils.find_matching_afspraken import find_matching_afspraken_by_afspraak
 
 
 class Interval(graphene.ObjectType):
@@ -145,35 +145,3 @@ class Afspraak(graphene.ObjectType):
 
     async def resolve_matching_afspraken(self, info):
         return await find_matching_afspraken_by_afspraak(self)
-
-async def find_matching_afspraken_by_afspraak(main_afspraak: Afspraak):
-    matching_afspraken = list()
-    if not main_afspraak.get("zoektermen"):
-        return matching_afspraken
-
-    afspraken = hhb_dataloader().afspraken.by_rekening(main_afspraak.get("tegen_rekening_id"))
-
-    zoektermen_main = ' '.join(main_afspraak.get("zoektermen"))
-    main_afspraak_valid_from = to_date(main_afspraak.get("valid_from"))
-    main_afspraak_valid_through = to_date(main_afspraak.get("valid_through"))
-
-    for afspraak in afspraken:
-        if afspraak.zoektermen:
-            zoektermen_afspraak = ' '.join(afspraak.zoektermen)
-
-            not_main_afspraak = (afspraak.id != main_afspraak.get("id"))
-            matching_zoekterm = match_zoekterm(afspraak, zoektermen_main) or match_zoekterm(main_afspraak, zoektermen_afspraak)
-
-            afspraak_valid_from = to_date(afspraak.valid_from)
-            afspraak_valid_through = to_date(afspraak.valid_through)
-            afspraken_overlap = afspraken_intersect(
-                valid_from1=main_afspraak_valid_from,
-                valid_from2=afspraak_valid_from,
-                valid_through1=main_afspraak_valid_through,
-                valid_through2=afspraak_valid_through
-            )
-
-            if not_main_afspraak and matching_zoekterm and afspraken_overlap:
-                matching_afspraken.append(afspraak)
-
-    return matching_afspraken

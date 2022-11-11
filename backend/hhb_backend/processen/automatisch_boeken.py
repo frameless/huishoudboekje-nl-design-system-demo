@@ -3,10 +3,11 @@ import re
 from collections import Counter
 from typing import List, Union, Dict
 
-import hhb_backend.graphql as graphql
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.utils.dates import to_date, valid_afspraak
+from hhb_backend.graphql.utils.find_matching_afspraken import match_zoekterm
 from hhb_backend.service.model.afspraak import Afspraak
+from hhb_backend.graphql.mutations.journaalposten.create_journaalpost import create_journaalposten
 
 
 async def automatisch_boeken(customer_statement_message_id: int = None):
@@ -21,42 +22,34 @@ async def automatisch_boeken(customer_statement_message_id: int = None):
         transactions = hhb_dataloader().bank_transactions.by_is_geboekt(False)
 
     suggesties = await transactie_suggesties([t.id for t in transactions])
+    _afspraken = {}
+    _automatische_transacties = []
+    for transactie_id, afspraken in suggesties.items():
+        if len(afspraken) == 1 and afspraken[0].zoektermen:
+            _afspraken[afspraken[0].id] = afspraken[0]
+            _automatische_transacties.append({"transactionId": transactie_id, "afspraakId": afspraken[0].id, "isAutomatischGeboekt": True})
 
-    automatische_transacties = [
-        {"transactionId": transactie_id, "afspraakId": afspraken[0].id, "isAutomatischGeboekt": True}
-        for transactie_id, afspraken in suggesties.items()
-        if len(afspraken) == 1 and afspraken[0].zoektermen
-    ]
-
+    print(f"afspraken dict: {_afspraken}")
     stats = Counter(len(s) for s in suggesties.values())
     logging.info(
         f"automatisch_boeken: {', '.join([f'{transactions_count} transactions with {suggestion_count} suggestions' for suggestion_count, transactions_count in stats.items() if suggestion_count != 1])} were not processed.")
 
-    if not automatische_transacties:
+    if not _automatische_transacties:
         return None
 
-    result = await graphql.schema.execute("""
-mutation AutomatischBoeken($input: [CreateJournaalpostAfspraakInput!]!) {
-  createJournaalpostAfspraak(input: $input) {
-    ok
-    journaalposten {
-      id
-      afspraak {
-        id
-      }
-      transaction {
-        id
-      }
-      isAutomatischGeboekt
-    }
-  }
-}
-""", variables={"input": automatische_transacties}, return_promise=True)
-    if result.errors is not None:
-        logging.warning(f"create journaalposten failed: {result.errors}")
-        return None
+    rubrieken = hhb_dataloader().rubrieken.load(
+        [afspraak.rubriek_id for afspraak in _afspraken.values()],
+        return_indexed="id"
+    )
 
-    journaalposten_ = result.data['createJournaalpostAfspraak']['journaalposten']
+    json = []
+    for item in _automatische_transacties:
+        afspraak = _afspraken[item["afspraakId"]]
+        rubriek = rubrieken[afspraak.rubriek_id]
+        json.append({**item, "grootboekrekening_id": rubriek.grootboekrekening_id})
+    
+    journaalposten_ = await create_journaalposten(json, _afspraken, transactions)
+    
     logging.info(f"automatisch boeken completed with {len(journaalposten_)}")
     return journaalposten_
 
@@ -99,14 +92,3 @@ async def transactie_suggesties(transactie_ids: Union[List[int], int]) -> Dict[i
         ]
 
     return transactie_ids_with_afspraken
-
-
-def match_zoekterm(afspraak, target_text: str):
-    return afspraak.get("zoektermen") and all([
-        re.search(
-            re.escape(zoekterm),
-            target_text,
-            re.IGNORECASE
-        )
-        for zoekterm in afspraak.get("zoektermen")
-    ])
