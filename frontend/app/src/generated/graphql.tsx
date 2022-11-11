@@ -2014,12 +2014,19 @@ export type GetAlarmenQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetAlarmenQuery = { alarmen?: Array<{ id?: string, isActive?: boolean, bedrag?: any, bedragMargin?: any, startDate?: string, endDate?: string, datumMargin?: number, byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, afspraak?: { id?: number }, signaal?: { id?: string } }> };
 
-export type GetBurgerQueryVariables = Exact<{
+export type GetBurgerDetailsQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type GetBurgerQuery = { burger?: { id?: number, bsn?: number, email?: string, telefoonnummer?: string, voorletters?: string, voornamen?: string, achternaam?: string, geboortedatum?: any, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }>, afspraken?: Array<{ id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, validFrom?: any, validThrough?: any, betaalinstructie?: { byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string }, burger?: { id?: number, bsn?: number, voornamen?: string, voorletters?: string, achternaam?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, alarm?: { id?: string, isActive?: boolean, bedrag?: any, bedragMargin?: any, startDate?: string, endDate?: string, datumMargin?: number, byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, afspraak?: { id?: number }, signaal?: { id?: string } }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, postadres?: { id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string }, rubriek?: { id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } }, matchingAfspraken?: Array<{ id?: number, credit?: boolean, zoektermen?: Array<string>, bedrag?: any, omschrijving?: string, burger?: { voorletters?: string, voornamen?: string, achternaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string } }> }>, huishouden?: { id?: number, burgers?: Array<{ id?: number }> } } };
+export type GetBurgerDetailsQuery = { burger?: { id?: number, voorletters?: string, voornamen?: string, achternaam?: string, huishouden?: { id?: number }, afspraken?: Array<{ id?: number, bedrag?: any, credit?: boolean, omschrijving?: string, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string } }> } };
+
+export type GetBurgerPersonalDetailsQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type GetBurgerPersonalDetailsQuery = { burger?: { id?: number, bsn?: number, voorletters?: string, voornamen?: string, achternaam?: string, geboortedatum?: any, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string, telefoonnummer?: string, email?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> } };
 
 export type GetBurgerAfsprakenQueryVariables = Exact<{
   id: Scalars['Int'];
@@ -4538,41 +4545,109 @@ export function useGetAlarmenLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions
 export type GetAlarmenQueryHookResult = ReturnType<typeof useGetAlarmenQuery>;
 export type GetAlarmenLazyQueryHookResult = ReturnType<typeof useGetAlarmenLazyQuery>;
 export type GetAlarmenQueryResult = Apollo.QueryResult<GetAlarmenQuery, GetAlarmenQueryVariables>;
-export const GetBurgerDocument = gql`
-    query getBurger($id: Int!) {
+export const GetBurgerDetailsDocument = gql`
+    query getBurgerDetails($id: Int!) {
   burger(id: $id) {
-    ...Burger
+    id
+    voorletters
+    voornamen
+    achternaam
+    huishouden {
+      id
+    }
+    afspraken {
+      id
+      bedrag
+      credit
+      omschrijving
+      tegenRekening {
+        id
+        iban
+        rekeninghouder
+      }
+    }
   }
 }
-    ${BurgerFragmentDoc}`;
+    `;
 
 /**
- * __useGetBurgerQuery__
+ * __useGetBurgerDetailsQuery__
  *
- * To run a query within a React component, call `useGetBurgerQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetBurgerQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetBurgerDetailsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetBurgerDetailsQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetBurgerQuery({
+ * const { data, loading, error } = useGetBurgerDetailsQuery({
  *   variables: {
  *      id: // value for 'id'
  *   },
  * });
  */
-export function useGetBurgerQuery(baseOptions: Apollo.QueryHookOptions<GetBurgerQuery, GetBurgerQueryVariables>) {
+export function useGetBurgerDetailsQuery(baseOptions: Apollo.QueryHookOptions<GetBurgerDetailsQuery, GetBurgerDetailsQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetBurgerQuery, GetBurgerQueryVariables>(GetBurgerDocument, options);
+        return Apollo.useQuery<GetBurgerDetailsQuery, GetBurgerDetailsQueryVariables>(GetBurgerDetailsDocument, options);
       }
-export function useGetBurgerLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetBurgerQuery, GetBurgerQueryVariables>) {
+export function useGetBurgerDetailsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetBurgerDetailsQuery, GetBurgerDetailsQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetBurgerQuery, GetBurgerQueryVariables>(GetBurgerDocument, options);
+          return Apollo.useLazyQuery<GetBurgerDetailsQuery, GetBurgerDetailsQueryVariables>(GetBurgerDetailsDocument, options);
         }
-export type GetBurgerQueryHookResult = ReturnType<typeof useGetBurgerQuery>;
-export type GetBurgerLazyQueryHookResult = ReturnType<typeof useGetBurgerLazyQuery>;
-export type GetBurgerQueryResult = Apollo.QueryResult<GetBurgerQuery, GetBurgerQueryVariables>;
+export type GetBurgerDetailsQueryHookResult = ReturnType<typeof useGetBurgerDetailsQuery>;
+export type GetBurgerDetailsLazyQueryHookResult = ReturnType<typeof useGetBurgerDetailsLazyQuery>;
+export type GetBurgerDetailsQueryResult = Apollo.QueryResult<GetBurgerDetailsQuery, GetBurgerDetailsQueryVariables>;
+export const GetBurgerPersonalDetailsDocument = gql`
+    query getBurgerPersonalDetails($id: Int!) {
+  burger(id: $id) {
+    id
+    bsn
+    voorletters
+    voornamen
+    achternaam
+    geboortedatum
+    straatnaam
+    huisnummer
+    postcode
+    plaatsnaam
+    telefoonnummer
+    email
+    rekeningen {
+      id
+      iban
+      rekeninghouder
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetBurgerPersonalDetailsQuery__
+ *
+ * To run a query within a React component, call `useGetBurgerPersonalDetailsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetBurgerPersonalDetailsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetBurgerPersonalDetailsQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetBurgerPersonalDetailsQuery(baseOptions: Apollo.QueryHookOptions<GetBurgerPersonalDetailsQuery, GetBurgerPersonalDetailsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetBurgerPersonalDetailsQuery, GetBurgerPersonalDetailsQueryVariables>(GetBurgerPersonalDetailsDocument, options);
+      }
+export function useGetBurgerPersonalDetailsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetBurgerPersonalDetailsQuery, GetBurgerPersonalDetailsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetBurgerPersonalDetailsQuery, GetBurgerPersonalDetailsQueryVariables>(GetBurgerPersonalDetailsDocument, options);
+        }
+export type GetBurgerPersonalDetailsQueryHookResult = ReturnType<typeof useGetBurgerPersonalDetailsQuery>;
+export type GetBurgerPersonalDetailsLazyQueryHookResult = ReturnType<typeof useGetBurgerPersonalDetailsLazyQuery>;
+export type GetBurgerPersonalDetailsQueryResult = Apollo.QueryResult<GetBurgerPersonalDetailsQuery, GetBurgerPersonalDetailsQueryVariables>;
 export const GetBurgerAfsprakenDocument = gql`
     query getBurgerAfspraken($id: Int!) {
   burger(id: $id) {

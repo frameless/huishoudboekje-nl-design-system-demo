@@ -1,16 +1,16 @@
 import {Box, Grid, GridItem, Stack} from "@chakra-ui/react";
 import "@gemeente-denhaag/design-tokens-components";
+import Divider from "@gemeente-denhaag/divider";
 import {Heading2, Heading3, Heading5, Paragraph} from "@gemeente-denhaag/typography";
 import React from "react";
-import {useGetBurgerQuery} from "../../../generated/graphql";
-import PrettyIban from "../PrettyIban";
+import {useGetBurgerDetailsQuery} from "../../../generated/graphql";
 import Queryable from "../../utils/Queryable";
 import BackButton from "../BackButton";
-import Divider from "@gemeente-denhaag/divider";
+import PrettyIban from "../PrettyIban";
 
 
-const DetailBurgerView: React.FC<{ bsn: number }> = ({bsn}) => {
-	const $burger = useGetBurgerQuery({
+const DetailBurgerView: React.FC<{bsn: number}> = ({bsn}) => {
+	const $burger = useGetBurgerDetailsQuery({
 		variables: {bsn},
 	});
 

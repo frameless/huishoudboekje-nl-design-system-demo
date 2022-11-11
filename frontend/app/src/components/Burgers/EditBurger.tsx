@@ -2,7 +2,14 @@ import React, {useState} from "react";
 import {useTranslation} from "react-i18next";
 import {Navigate, useNavigate, useParams} from "react-router-dom";
 import {AppRoutes} from "../../config/routes";
-import {CreateBurgerMutationVariables, GetBurgerDocument, GetBurgersDocument, GetBurgersSearchDocument, useGetBurgerQuery, useUpdateBurgerMutation} from "../../generated/graphql";
+import {
+	CreateBurgerMutationVariables,
+	GetBurgerDetailsDocument,
+	GetBurgersDocument,
+	GetBurgersSearchDocument,
+	useGetBurgerPersonalDetailsQuery,
+	useUpdateBurgerMutation,
+} from "../../generated/graphql";
 import useStore from "../../store";
 import Queryable from "../../utils/Queryable";
 import {formatBurgerName} from "../../utils/things";
@@ -41,12 +48,12 @@ const EditBurger = () => {
 
 	const [updateBurger, $updateBurger] = useUpdateBurgerMutation({
 		refetchQueries: [
-			{query: GetBurgerDocument, variables: {id: parseInt(id)}},
+			{query: GetBurgerDetailsDocument, variables: {id: parseInt(id)}},
 			{query: GetBurgersDocument},
 			{query: GetBurgersSearchDocument, variables: {search: burgerSearch}},
 		],
 	});
-	const $burger = useGetBurgerQuery({
+	const $burger = useGetBurgerPersonalDetailsQuery({
 		variables: {id: parseInt(id)},
 	});
 

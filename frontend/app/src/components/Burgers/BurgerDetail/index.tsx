@@ -5,13 +5,13 @@ import {NavLink, useNavigate, useParams} from "react-router-dom";
 import {AppRoutes} from "../../../config/routes";
 import {
 	Burger,
-	GetBurgerDocument,
+	GetBurgerDetailsDocument,
 	GetBurgersDocument,
 	GetBurgersSearchDocument,
 	GetHuishoudensDocument,
 	useDeleteBurgerMutation,
 	useDeleteHuishoudenBurgerMutation,
-	useGetBurgerQuery,
+	useGetBurgerDetailsQuery,
 } from "../../../generated/graphql";
 import useStore from "../../../store";
 import {useFeatureFlag} from "../../../utils/features";
@@ -36,7 +36,7 @@ const BurgerDetailPage = () => {
 	const deleteAlert = useDisclosure();
 	const deleteHuishoudenBurgerAlert = useDisclosure();
 	const burgerSearch = useStore(store => store.burgerSearch);
-	const $burger = useGetBurgerQuery({
+	const $burger = useGetBurgerDetailsQuery({
 		variables: {
 			id: parseInt(id),
 		},
@@ -45,7 +45,7 @@ const BurgerDetailPage = () => {
 		refetchQueries: [
 			{query: GetBurgersSearchDocument, variables: {search: burgerSearch}},
 			{query: GetBurgersDocument},
-			{query: GetBurgerDocument, variables: {id: parseInt(id)}},
+			{query: GetBurgerDetailsDocument, variables: {id: parseInt(id)}},
 			{query: GetHuishoudensDocument},
 		],
 	});

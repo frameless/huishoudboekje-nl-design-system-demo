@@ -2,7 +2,7 @@ import React from "react";
 import {useTranslation} from "react-i18next";
 import SaveBurgerRekeningErrorHandler from "../../errorHandlers/SaveBurgerRekeningErrorHandler";
 import useMutationErrorHandler from "../../errorHandlers/useMutationErrorHandler";
-import {Burger, GetBurgerDocument, useCreateBurgerRekeningMutation} from "../../generated/graphql";
+import {Burger, GetBurgerDetailsDocument, useCreateBurgerRekeningMutation} from "../../generated/graphql";
 import {formatBurgerName} from "../../utils/things";
 import useToaster from "../../utils/useToaster";
 import Modal from "../shared/Modal";
@@ -19,7 +19,7 @@ const AddBurgerRekeningModal: React.FC<AddBurgerRekeningModalProps> = ({burger, 
 	const handleSaveBurgerRekening = useMutationErrorHandler(SaveBurgerRekeningErrorHandler);
 	const [createBurgerRekening] = useCreateBurgerRekeningMutation({
 		refetchQueries: [
-			{query: GetBurgerDocument, variables: {id: burger.id}},
+			{query: GetBurgerDetailsDocument, variables: {id: burger.id}},
 		],
 	});
 
