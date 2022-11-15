@@ -18,7 +18,7 @@ class DataWriter:
         except requests.exceptions.ConnectionError:
             raise GraphQLError(f"Failed to connect to service {self.service}")
 
-        if response.status_code != 201:
+        if not response.ok:
             raise UpstreamError(response, f"Could not POST to {self.model}. [{response.status_code}] {response.text}")
 
         return response.json()["data"]

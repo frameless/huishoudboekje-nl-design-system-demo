@@ -1,12 +1,12 @@
 import logging
-import re
 from collections import Counter
-from typing import List, Union, Dict
+from typing import List, Tuple, Dict
 
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.utils.dates import to_date, valid_afspraak
 from hhb_backend.graphql.utils.find_matching_afspraken import match_zoekterm
 from hhb_backend.service.model.afspraak import Afspraak
+from hhb_backend.service.model.bank_transaction import BankTransaction
 from hhb_backend.graphql.mutations.journaalposten.create_journaalpost import create_journaalposten
 
 
@@ -21,13 +21,15 @@ async def automatisch_boeken(customer_statement_message_id: int = None):
     else:
         transactions = hhb_dataloader().bank_transactions.by_is_geboekt(False)
 
-    suggesties = await transactie_suggesties([t.id for t in transactions])
+    suggesties = await transactie_suggesties(transactions=transactions)
     _afspraken = {}
     _automatische_transacties = []
+    _transaction_ids = []
     for transactie_id, afspraken in suggesties.items():
         if len(afspraken) == 1 and afspraken[0].zoektermen:
             _afspraken[afspraken[0].id] = afspraken[0]
-            _automatische_transacties.append({"transactionId": transactie_id, "afspraakId": afspraken[0].id, "isAutomatischGeboekt": True})
+            _automatische_transacties.append({"transaction_id": transactie_id, "afspraak_id": afspraken[0].id, "isAutomatischGeboekt": True})
+            _transaction_ids.append(transactie_id)
 
     print(f"afspraken dict: {_afspraken}")
     stats = Counter(len(s) for s in suggesties.values())
@@ -44,24 +46,31 @@ async def automatisch_boeken(customer_statement_message_id: int = None):
 
     json = []
     for item in _automatische_transacties:
-        afspraak = _afspraken[item["afspraakId"]]
+        afspraak = _afspraken[item["afspraak_id"]]
         rubriek = rubrieken[afspraak.rubriek_id]
         json.append({**item, "grootboekrekening_id": rubriek.grootboekrekening_id})
+
+    _transactions = [t for t in transactions if t.id in _transaction_ids]
     
-    journaalposten_ = await create_journaalposten(json, _afspraken, transactions)
+    journaalposten_ = await create_journaalposten(json, _afspraken, _transactions)
     
     logging.info(f"automatisch boeken completed with {len(journaalposten_)}")
     return journaalposten_
 
 
-async def transactie_suggesties(transactie_ids: Union[List[int], int]) -> Dict[int, List[Afspraak]]:
-    if type(transactie_ids) != list:
-        transactie_ids = [transactie_ids]
+async def transactie_suggesties(transactie_ids: List[int] = None, transactions: List[BankTransaction] = None) -> Dict[int, List[Afspraak]]:
+    if transactie_ids:
+        if type(transactie_ids) != list:
+            transactie_ids = [transactie_ids]
 
     # fetch transactions
-    transactions = hhb_dataloader().bank_transactions.load(transactie_ids)
     if not transactions:
-        return {key: [] for key in transactie_ids}
+        transactions = hhb_dataloader().bank_transactions.load(transactie_ids)
+        if not transactions:
+            return {key: [] for key in transactie_ids}
+    
+    if transactions and not transactie_ids:
+        transactie_ids = [transactie.id for transactie in transactions]
 
     # Rekeningen ophalen adhv iban
     rekening_ibans = [t.tegen_rekening for t in transactions]
