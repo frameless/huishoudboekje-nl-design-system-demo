@@ -24,12 +24,12 @@ async def automatisch_boeken(customer_statement_message_id: int = None):
     suggesties = await transactie_suggesties(transactions=transactions)
     _afspraken = {}
     _automatische_transacties = []
-    _transaction_ids = []
+    _matching_transaction_ids = []
     for transactie_id, afspraken in suggesties.items():
         if len(afspraken) == 1 and afspraken[0].zoektermen:
             _afspraken[afspraken[0].id] = afspraken[0]
             _automatische_transacties.append({"transaction_id": transactie_id, "afspraak_id": afspraken[0].id, "is_automatisch_geboekt": True})
-            _transaction_ids.append(transactie_id)
+            _matching_transaction_ids.append(transactie_id)
 
     stats = Counter(len(s) for s in suggesties.values())
     logging.info(
@@ -49,9 +49,9 @@ async def automatisch_boeken(customer_statement_message_id: int = None):
         rubriek = rubrieken[afspraak.rubriek_id]
         json.append({**item, "grootboekrekening_id": rubriek.grootboekrekening_id})
 
-    _transactions = [t for t in transactions if t.id in _transaction_ids]
+    _matching_transactions = [t for t in transactions if t.id in _matching_transaction_ids]
     
-    journaalposten_ = await create_journaalposten(json, _afspraken, _transactions)
+    journaalposten_ = await create_journaalposten(json, _afspraken, _matching_transactions)
     
     logging.info(f"automatisch boeken completed with {len(journaalposten_)}")
     return journaalposten_

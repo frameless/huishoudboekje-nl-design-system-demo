@@ -92,6 +92,18 @@ class CreateJournaalpostAfspraak(graphene.Mutation):
         return CreateJournaalpostAfspraak(journaalposten=journaalposten, ok=True)
 
 async def create_journaalposten(input, afspraken, transactions):
+    transaction_ids = [t.id for t in transactions]
+    previous = hhb_dataloader().journaalposten.by_transactions(transaction_ids)
+    if previous:
+        for p in previous:
+            p.pop('id')
+            input.remove(p)
+
+    if not input:
+        # update transactions to is_geboekt=True since they are already in a journaalpost.
+        update_transaction_service_is_geboekt(transactions, is_geboekt=True)
+        return []
+
     journaalposten = hhb_datawriter().journaalposten.post(input)
     
     alarm_ids = []
