@@ -513,7 +513,7 @@ def test_create_journaalpost_per_afspraak(client, mocker):
         assert adapters["afspraken"].call_count == 3
         assert adapters["afspraken_post"].call_count == 0
         assert adapters["transacties"].call_count == 3
-        assert adapters["transacties_update"].call_count == 2
+        assert adapters["transacties_update"].call_count == 1
         assert adapters["grootboekrekeningen"].call_count == 0
         assert adapters["rubrieken"].call_count == 1
         assert adapters["journaalposten"].call_count == 1

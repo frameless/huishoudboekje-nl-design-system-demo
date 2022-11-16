@@ -31,7 +31,6 @@ async def automatisch_boeken(customer_statement_message_id: int = None):
             _automatische_transacties.append({"transaction_id": transactie_id, "afspraak_id": afspraken[0].id, "is_automatisch_geboekt": True})
             _transaction_ids.append(transactie_id)
 
-    print(f"afspraken dict: {_afspraken}")
     stats = Counter(len(s) for s in suggesties.values())
     logging.info(
         f"automatisch_boeken: {', '.join([f'{transactions_count} transactions with {suggestion_count} suggestions' for suggestion_count, transactions_count in stats.items() if suggestion_count != 1])} were not processed.")
