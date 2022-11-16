@@ -1,11 +1,11 @@
 import pytest
-import re
 import requests_mock
 from pytest_mock import MockerFixture
 
 from hhb_backend.graphql import settings
 from hhb_backend.processen.automatisch_boeken import automatisch_boeken
 from hhb_backend.service.model.afspraak import Afspraak
+from hhb_backend.graphql.utils.upstream_error_handler import UpstreamError
 from tests.utils.mock_utils import get_by_filter, mock_feature_flag
 
 
@@ -54,7 +54,7 @@ def get_afspraken(request, _context):
 
 
 @pytest.mark.asyncio
-async def test_automatisch_boeken_no_csm_no_transactions(test_request_context, mocker: MockerFixture):
+async def test_automatisch_boeken_no_csm_no_transactions(mocker: MockerFixture):
     with requests_mock.Mocker() as mock:
         get_any = mock.get(requests_mock.ANY, json={"data": []})
         post_any = mock.post(requests_mock.ANY, json=post_echo)
@@ -77,7 +77,7 @@ async def test_automatisch_boeken_no_csm_no_transactions(test_request_context, m
 
 
 @pytest.mark.asyncio
-async def test_automatisch_boeken_no_csm_no_suggestions(test_request_context, mocker: MockerFixture):
+async def test_automatisch_boeken_no_csm_no_suggestions(mocker: MockerFixture):
     with requests_mock.Mocker() as mock:
         get_any = mock.get(requests_mock.ANY, json={"data": []})
         post_any = mock.post(requests_mock.ANY, json=post_echo)
@@ -100,7 +100,7 @@ async def test_automatisch_boeken_no_csm_no_suggestions(test_request_context, mo
 
 
 @pytest.mark.asyncio
-async def test_automatisch_boeken_no_csm_success_single(test_request_context, mocker: MockerFixture):
+async def test_automatisch_boeken_no_csm_success_single(mocker: MockerFixture):
     with requests_mock.Mocker() as mock:
         get_any = mock.get(requests_mock.ANY, status_code=404)
         post_any = mock.post(requests_mock.ANY, status_code=404)
@@ -153,7 +153,7 @@ async def test_automatisch_boeken_no_csm_success_single(test_request_context, mo
 
 
 @pytest.mark.asyncio
-async def test_automatisch_boeken_no_csm_success_multiple(test_request_context, mocker: MockerFixture):
+async def test_automatisch_boeken_no_csm_success_multiple(mocker: MockerFixture):
     with requests_mock.Mocker() as mock:
         get_any = mock.get(requests_mock.ANY, status_code=404)
         post_any = mock.post(requests_mock.ANY, status_code=404)
@@ -209,7 +209,7 @@ async def test_automatisch_boeken_no_csm_success_multiple(test_request_context, 
 
 
 @pytest.mark.asyncio
-async def test_automatisch_boeken_csm_success_multiple( mocker: MockerFixture):
+async def test_automatisch_boeken_csm_success_multiple(mocker: MockerFixture):
     with requests_mock.Mocker() as mock:
         get_any = mock.get(requests_mock.ANY, status_code=404)
         post_any = mock.post(requests_mock.ANY, status_code=404)
@@ -259,7 +259,6 @@ async def test_automatisch_boeken_csm_success_multiple( mocker: MockerFixture):
 
 @pytest.mark.asyncio
 async def test_automatisch_boeken_no_csm_failure_journaalpost_exists(mocker: MockerFixture):
-    # TODO word dit op de juiste manier getest? 
     with requests_mock.Mocker() as mock:
         get_any = mock.get(requests_mock.ANY, status_code=404)
         post_any = mock.post(requests_mock.ANY, status_code=404)
@@ -281,10 +280,6 @@ async def test_automatisch_boeken_no_csm_failure_journaalpost_exists(mocker: Moc
             f"{settings.HHB_SERVICES_URL}/rubrieken/?filter_ids=21",
             json={"data": [{"id": 21, "grootboekrekening_id": "test"}]}
         )
-                
-        # def journaalposten_post_echo(request, _):
-        #     jp_id = 30
-        #     return {"data": [{**jp, "id": (jp_id := jp_id + 1)} for jp in request.json()]}
 
         journaalposten_post = mock.post(
             f"{settings.HHB_SERVICES_URL}/journaalposten/", 
@@ -297,16 +292,18 @@ async def test_automatisch_boeken_no_csm_failure_journaalpost_exists(mocker: Moc
             json=post_echo
         )
 
-        result = await automatisch_boeken()
+        with pytest.raises(UpstreamError) as excinfo:
+            await automatisch_boeken()
+            
+        assert "Could not POST to journaalposten." in str(excinfo.value)
 
-        # No leftover calls
+        # Check if everything is mocked
         assert not post_any.called
         assert not get_any.called
 
-        assert result == None
         assert journaalposten_post.call_count == 1
         assert journaalposten_post.last_request.json() == [
-            {"afspraak_id": 11, "grootboekrekening_id": "test", "is_automatisch_geboekt": True, "transaction_id": 1}
+            {"afspraak_id": 11, "grootboekrekening_id": "test", "isAutomatischGeboekt": True, "transaction_id": 1}
         ]
         assert transactions_post.call_count == 0
 
