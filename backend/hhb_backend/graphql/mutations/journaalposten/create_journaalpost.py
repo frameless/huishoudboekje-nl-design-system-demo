@@ -101,7 +101,6 @@ async def create_journaalposten(input, afspraken, transactions):
         if afspraak.alarm_id:
             alarm_ids.append(afspraak.alarm_id)
 
-    # TODO kijken of alle transacties tegelijk kunnen worden geupdated.
     update_transaction_service_is_geboekt(transactions, is_geboekt=True)
 
     # Feature flag: signalen
