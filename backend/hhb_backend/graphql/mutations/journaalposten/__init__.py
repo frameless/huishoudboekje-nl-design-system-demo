@@ -21,7 +21,12 @@ def update_transaction_service_is_geboekt(transactions: Union[List[BankTransacti
 
 
 def process_transaction(transactions: List[BankTransaction], _transaction_ids):
-    ids = ",".join(_transaction_ids)
+    if len(transactions) == 1:
+        ids = _transaction_ids[0]
+        transactions = transactions[0]
+    else:
+        ids = ",".join(_transaction_ids)
+
     transaction_response = requests.post(
         f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/{ids}",
         json=transactions
