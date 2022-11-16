@@ -139,11 +139,11 @@ async def test_automatisch_boeken_no_csm_success_single(mocker: MockerFixture):
         assert not post_any.called
         assert not get_any.called
 
-        assert result == [{'afspraak': {'id': 11, 'rubriek_id': 21, 'zoektermen': 'test'}, 'afspraak_id': 11, 'id': 31, "grootboekrekening_id": "test", 'isAutomatischGeboekt': True, 'transaction_id': 1}]
+        assert result == [{'afspraak': {'id': 11, 'rubriek_id': 21, 'zoektermen': 'test'}, 'afspraak_id': 11, 'id': 31, "grootboekrekening_id": "test", 'is_automatisch_geboekt': True, 'transaction_id': 1}]
         
         assert journaalposten_post.call_count == 1
         assert journaalposten_post.last_request.json() == [
-            {"afspraak_id": 11, "grootboekrekening_id": "test", "isAutomatischGeboekt": True, "transaction_id": 1}
+            {"afspraak_id": 11, "grootboekrekening_id": "test", "is_automatisch_geboekt": True, "transaction_id": 1}
         ]
         assert transactions_post.call_count == 1
         assert transactions_post.last_request.json() == {"id": 1, "is_geboekt": True}
@@ -191,13 +191,13 @@ async def test_automatisch_boeken_no_csm_success_multiple(mocker: MockerFixture)
         assert not get_any.called
 
         assert result == [
-            {'afspraak': {'id': 11, 'rubriek_id': 21, 'zoektermen': "test"}, 'afspraak_id': 11, 'id': 31, 'grootboekrekening_id': 'test', 'isAutomatischGeboekt': True, 'transaction_id': 1},
-            {'afspraak': {'id': 12, 'rubriek_id': 21, 'zoektermen': "test"}, 'afspraak_id': 12, 'id': 32, 'grootboekrekening_id': 'test', 'isAutomatischGeboekt': True, 'transaction_id': 2}
+            {'afspraak': {'id': 11, 'rubriek_id': 21, 'zoektermen': "test"}, 'afspraak_id': 11, 'id': 31, 'grootboekrekening_id': 'test', 'is_automatisch_geboekt': True, 'transaction_id': 1},
+            {'afspraak': {'id': 12, 'rubriek_id': 21, 'zoektermen': "test"}, 'afspraak_id': 12, 'id': 32, 'grootboekrekening_id': 'test', 'is_automatisch_geboekt': True, 'transaction_id': 2}
         ]
         assert journaalposten_post.called_once
         assert journaalposten_post.last_request.json() == [
-            {"afspraak_id": 11, "grootboekrekening_id": "test", "isAutomatischGeboekt": True, "transaction_id": 1},
-            {"afspraak_id": 12, "grootboekrekening_id": "test", "isAutomatischGeboekt": True, "transaction_id": 2},
+            {"afspraak_id": 11, "grootboekrekening_id": "test", "is_automatisch_geboekt": True, "transaction_id": 1},
+            {"afspraak_id": 12, "grootboekrekening_id": "test", "is_automatisch_geboekt": True, "transaction_id": 2},
         ]
         assert transactions_post.call_count == 1
         assert transactions_post.last_request.json() == {"id": 1, "is_geboekt": True}
@@ -244,11 +244,11 @@ async def test_automatisch_boeken_csm_success_multiple(mocker: MockerFixture):
         assert not post_any.called
         assert not get_any.called
 
-        assert result == [{'afspraak': {'id': 11, 'rubriek_id': 21, 'zoektermen': 'test', 'valid_through':'2020-12-31'}, 'id': 31, 'grootboekrekening_id': 'test', 'isAutomatischGeboekt': True, 'transaction_id': 1, 'afspraak_id': 11}]
+        assert result == [{'afspraak': {'id': 11, 'rubriek_id': 21, 'zoektermen': 'test', 'valid_through':'2020-12-31'}, 'id': 31, 'grootboekrekening_id': 'test', 'is_automatisch_geboekt': True, 'transaction_id': 1, 'afspraak_id': 11}]
         
         assert journaalposten_post.call_count == 1
         assert journaalposten_post.last_request.json() == [
-            {"afspraak_id": 11, "grootboekrekening_id": "test", "isAutomatischGeboekt": True, "transaction_id": 1},
+            {"afspraak_id": 11, "grootboekrekening_id": "test", "is_automatisch_geboekt": True, "transaction_id": 1},
         ]
         assert transactions_post.call_count == 1
         assert transactions_post.last_request.json() == {"id": 1, "customer_statement_message_id": 1, "is_geboekt": True, "transactie_datum": '2020-10-10'}
@@ -303,7 +303,7 @@ async def test_automatisch_boeken_no_csm_failure_journaalpost_exists(mocker: Moc
 
         assert journaalposten_post.call_count == 1
         assert journaalposten_post.last_request.json() == [
-            {"afspraak_id": 11, "grootboekrekening_id": "test", "isAutomatischGeboekt": True, "transaction_id": 1}
+            {"afspraak_id": 11, "grootboekrekening_id": "test", "is_automatisch_geboekt": True, "transaction_id": 1}
         ]
         assert transactions_post.call_count == 0
 
@@ -357,13 +357,13 @@ async def test_automatisch_boeken_no_csm_multiple_suggesties(mocker: MockerFixtu
         assert get_any.call_count == 0
 
         assert result == [
-            {'afspraak': {'id': 11, 'rubriek_id': 21, 'zoektermen': 'test'}, 'id': 31, 'isAutomatischGeboekt': True, 'transaction_id': 1, 'afspraak_id': 11, 'grootboekrekening_id': 'test'},
-            {'afspraak': {'id': 12, 'rubriek_id': 21, 'zoektermen': 'test'}, 'id': 32, 'isAutomatischGeboekt': True, 'transaction_id': 2, 'afspraak_id': 12, 'grootboekrekening_id': 'test'},
+            {'afspraak': {'id': 11, 'rubriek_id': 21, 'zoektermen': 'test'}, 'id': 31, 'is_automatisch_geboekt': True, 'transaction_id': 1, 'afspraak_id': 11, 'grootboekrekening_id': 'test'},
+            {'afspraak': {'id': 12, 'rubriek_id': 21, 'zoektermen': 'test'}, 'id': 32, 'is_automatisch_geboekt': True, 'transaction_id': 2, 'afspraak_id': 12, 'grootboekrekening_id': 'test'},
         ]
         assert journaalposten_post.called_once
         assert journaalposten_post.last_request.json() == [
-            {"afspraak_id": 11, "grootboekrekening_id": "test", "isAutomatischGeboekt": True, "transaction_id": 1},
-            {"afspraak_id": 12, "grootboekrekening_id": "test", "isAutomatischGeboekt": True, "transaction_id": 2},
+            {"afspraak_id": 11, "grootboekrekening_id": "test", "is_automatisch_geboekt": True, "transaction_id": 1},
+            {"afspraak_id": 12, "grootboekrekening_id": "test", "is_automatisch_geboekt": True, "transaction_id": 2},
         ]
         assert transactions_post.call_count == 1
         assert transactions_post.last_request.json() == {"id": 1, "is_geboekt": True}

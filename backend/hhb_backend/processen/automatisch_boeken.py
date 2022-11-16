@@ -28,7 +28,7 @@ async def automatisch_boeken(customer_statement_message_id: int = None):
     for transactie_id, afspraken in suggesties.items():
         if len(afspraken) == 1 and afspraken[0].zoektermen:
             _afspraken[afspraken[0].id] = afspraken[0]
-            _automatische_transacties.append({"transaction_id": transactie_id, "afspraak_id": afspraken[0].id, "isAutomatischGeboekt": True})
+            _automatische_transacties.append({"transaction_id": transactie_id, "afspraak_id": afspraken[0].id, "is_automatisch_geboekt": True})
             _transaction_ids.append(transactie_id)
 
     print(f"afspraken dict: {_afspraken}")
