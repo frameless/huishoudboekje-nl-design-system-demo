@@ -21,6 +21,7 @@ alarm = Alarm(
     isActive=True,
     afspraakId=afspraak_id,
     startDate="2021-12-06",
+    endDate=None,
     datumMargin=1,
     bedrag=12000,
     bedragMargin=1000,
@@ -33,6 +34,7 @@ alarm_inactive = Alarm(
     isActive=False,
     afspraakId=afspraak_id,
     startDate="2021-12-06",
+    endDate=None,
     datumMargin=1,
     bedrag=12000,
     bedragMargin=1000,
@@ -45,6 +47,7 @@ nextAlarm = Alarm(
     isActive=True,
     afspraakId=afspraak_id,
     startDate="2021-12-08",
+    endDate=None,
     datumMargin=1,
     bedrag=12000,
     bedragMargin=1000,
@@ -90,6 +93,7 @@ signal_id = "e2b282d9-b31f-451e-9242-11f86c902b35"
 signaal = {
     "id": signal_id,
     "alarmId": alarm_id,
+    "banktransactieIds": [],
     "isActive": True,
     "type": "default",
     "actions": [],
@@ -242,7 +246,7 @@ def test_get_banktransactions_by_journaalposten_no_journaalposten():
 
 
 @freeze_time("2021-12-08")
-def test_disable_alarm():
+def test_disable_alarm_success():
     """This tests if an alarm gets disabled."""
     with requests_mock.Mocker() as rm:
         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
@@ -296,13 +300,13 @@ def test_should_create_next_alarm_success(mocker):
         assert alarm_result == nextAlarm
 
 @freeze_time("2021-12-08")
-def test_should_create_next_alarm_no_alarm_because_already_exists():
+def test_should_create_next_alarm_no_alarm_created_because_already_exists():
     """This tests when the next alarm already exists, no new alarm is created."""
     alarm_result = EvaluateAlarm.should_create_next_alarm(alarm, date(2021, 12, 8), [alarm, nextAlarm])
     assert alarm_result == None
 
 @freeze_time("2021-12-08")
-def test_should_create_next_alarm_no_alarm_end_date_before_next_alarm():
+def test_should_create_next_alarm_no_alarm_created_because_end_date_before_next_alarm():
     """This tests that the next alarm is not created, since the current one has an end date before the next alarm date."""
     with requests_mock.Mocker() as rm:
         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
@@ -405,626 +409,339 @@ def test_evaluate_alarms_no_active_alarms(mocker):
         assert get_active_alarms.call_count == 2    # +1 on previous call count
         assert triggered_alarms == []               # still empty list
 
+@freeze_time("2021-12-08")
+def test_evaluate_alarms_one_active_alarm(mocker):
+    """Tests if there is one triggered alarm, that created an new alarm and a signal 
+    when there is one active alarm and no journaalposten.
+    Test 1 is for evaluate_alarms()
+    Test 2 is for evaluate_one_alarm()"""
+    with requests_mock.Mocker() as rm:
+        fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
+        get_alarm = rm.get(f"{settings.ALARMENSERVICE_URL}/alarms/", json={"data": [alarm]})
+        get_active_alarms = rm.get(f"{settings.ALARMENSERVICE_URL}/alarms/?filter_active=true", json={"data": [alarm]})
+        post_alarm = rm.post(f"{settings.ALARMENSERVICE_URL}/alarms/", json=post_echo_with_str_id(nextAlarm.id), status_code=201)
+        post_signal = rm.post(f"{settings.SIGNALENSERVICE_URL}/signals/", json=post_echo_with_str_id(signal_id), status_code=201)
+        update_alarm = rm.put(f"{settings.ALARMENSERVICE_URL}/alarms/{alarm_id}", json=post_echo_with_str_id(alarm_id))
+        get_afspraak = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids={afspraak_id}", json={"data": [afspraak]})
+        post_afspraak = rm.post(f"{settings.HHB_SERVICES_URL}/afspraken/{afspraak_id}", json={"data":afspraak}, status_code=200)
+        
+        # Mock feature flag "signalen" to be enabled
+        mocker.patch('hhb_backend.feature_flags.Unleash.is_enabled', mock_feature_flag("signalen", True))
 
-# @freeze_time("2021-12-08")
-# def test_evaluate_alarm_no_signal(client, mocker):
-#     """This tests the evaluation of an alarm that should not result in a signaal"""
-#     with requests_mock.Mocker() as rm:
-#         # arrange
-#         expected = {'data': {'evaluateAlarms': {'alarmTriggerResult': [
-#             {'alarm': {'id': '00943958-8b93-4617-aa43-669a9016aad9'},
-#              'nextAlarm': {'id': '33738845-7f23-4c8f-8424-2b560a944884'}, 'signaal': None}]}}}
-#         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
-#         rm1 = rm.get(f"{settings.ALARMENSERVICE_URL}/alarms/?filter_active=true", json={'data': [alarm]})
-#         rm2 = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids={afspraak_id}", json={"data": [afspraak]})
-#         rm3 = rm.get(
-#             f"{settings.HHB_SERVICES_URL}/journaalposten/?filter_ids={journaalpost_id}",
-#             json={"data": [journaalpost]}
-#         )
-#         rm4 = rm.get(
-#             f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/?filter_ids={banktransactie_id}",
-#             json={"data": [banktransactie]}
-#         )
-#         rm5 = rm.post(f"{settings.ALARMENSERVICE_URL}/alarms/", status_code=201, json={"ok": True, "data": nextAlarm})
-#         rm6 = rm.post(f"{settings.HHB_SERVICES_URL}/afspraken/{afspraak_id}")
-#         rm7 = rm.put(f"{settings.ALARMENSERVICE_URL}/alarms/{alarm_id}", json={"ok": True, "data": alarm_inactive})
-#         rm8 = rm.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=201)
+        # Test 1
+        triggered_alarms = EvaluateAlarm.evaluate_alarms([alarm_id])
 
-#         # Mock feature flag "signalen" to be enabled
-#         mocker.patch('hhb_backend.feature_flags.Unleash.is_enabled', mock_feature_flag("signalen", True))
+        expected_signal = {
+            "id": signal_id,
+            "alarmId": alarm_id,
+            "banktransactieIds": [],
+            "isActive": True,
+            "type": "default",
+            "bedragDifference": '120.00'
+        }
+        alarm_inactive["signaalId"] = signal_id
+        expected = [{
+            "alarm": alarm_inactive, 
+            "nextAlarm": nextAlarm, 
+            "signaal": expected_signal
+        }]
 
-#         # act
-#         response = client.post(
-#             "/graphql",
-#             json={
-#                 "query": '''
-#                     mutation test {
-#                         evaluateAlarms {
-#                             alarmTriggerResult {
-#                                 alarm {
-#                                     id
-#                                 }
-#                                 nextAlarm{
-#                                     id
-#                                 }
-#                                 signaal{
-#                                     id
-#                                 }
-#                             }
-#                         }
-#                     }''',
-#             },
-#             content_type='application/json'
-#         )
+        assert fallback.call_count == 0
+        assert get_alarm.call_count == 1
+        assert get_active_alarms.call_count == 1
+        assert post_alarm.call_count == 1
+        assert post_signal.call_count == 1
+        assert update_alarm.call_count == 2
+        assert get_afspraak.call_count == 1
+        assert post_afspraak.call_count == 1
+        assert triggered_alarms == expected
 
-#         print(f">> >> >> response: {response.json} ")
+        # Test 2
+        triggered_alarms = EvaluateAlarm.evaluate_one_alarm(alarm_id)
 
-#         # assert
-#         assert rm1.call_count == 1
-#         assert rm2.call_count == 2
-#         assert rm3.call_count == 1
-#         assert rm4.call_count == 1
-#         assert rm5.call_count == 1
-#         assert rm6.call_count == 1
-#         assert rm7.call_count == 1
-#         assert rm8.call_count == 1
-#         assert fallback.call_count == 0
-#         assert response.json == expected
+        assert fallback.call_count == 0             # still zero
+        # the rest # *2 on previous call count
+        assert get_alarm.call_count == 2
+        assert get_active_alarms.call_count == 2
+        assert post_alarm.call_count == 2
+        assert post_signal.call_count == 2
+        assert update_alarm.call_count == 4
+        assert get_afspraak.call_count == 2
+        assert post_afspraak.call_count == 2
+        assert triggered_alarms == expected
 
+        # restore alarm_inactive
+        alarm_inactive["signaalId"] = None
 
-# @freeze_time("2021-12-08")
-# def test_evaluate_alarm_signal_date(client, mocker):
-#     """Todo: what does this test do?"""
-#     with requests_mock.Mocker() as rm:
-#         # arrange
-#         banktransactie = {
-#             "id": banktransactie_id,
-#             "bedrag": 15000,
-#             "customer_statement_message_id": 15,
-#             "information_to_account_owner": "NL83ABNA1927261899               Leefgeld ZOEKTERMPERSONA2 januari 2019",
-#             "is_credit": False,
-#             "is_geboekt": True,
-#             "statement_line": "190101D-1195.20NMSC028",
-#             "tegen_rekening": "NL83ABNA1927261899",
-#             "transactie_datum": "2021-11-11"
-#         }
-#         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
-#         rm1 = rm.get(f"{settings.ALARMENSERVICE_URL}/alarms/?filter_active=true", json={'data': [alarm]})
-#         rm2 = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids={afspraak_id}", json={"data": [afspraak]})
-#         rm3 = rm.get(
-#             f"{settings.HHB_SERVICES_URL}/journaalposten/?filter_ids={journaalpost_id}",
-#             json={"data": [journaalpost]}
-#         )
-#         rm4 = rm.get(
-#             f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/?filter_ids={banktransactie_id}",
-#             json={"data": [banktransactie]}
-#         )
-#         rm5 = rm.post(f"{settings.ALARMENSERVICE_URL}/alarms/", status_code=201, json={"ok": True, "data": nextAlarm})
-#         rm6 = rm.post(f"{settings.SIGNALENSERVICE_URL}/signals/", status_code=201, json={"data": signaal})
-#         rm7 = rm.put(f"{settings.ALARMENSERVICE_URL}/alarms/{alarm_id}", json={"ok": True, "data": alarm_inactive})
-#         rm8 = rm.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=201)
-#         rm9 = rm.post(f"{settings.HHB_SERVICES_URL}/afspraken/{afspraak_id}")
+@freeze_time("2021-12-08")
+def test_evaluate_alarms_multiple_alarms(mocker):
+    """Tests if there is two triggered alarm, that created one new alarm and two signals 
+    when there is two active alarm and no journaalposten."""
+    with requests_mock.Mocker() as rm:
+        alarm2 = Alarm(
+            id=alarm_id,
+            isActive=True,
+            afspraakId=afspraak_id,
+            startDate="2021-12-06",
+            endDate="2021-12-07",
+            datumMargin=1,
+            bedrag=12000,
+            bedragMargin=1000,
+            byDay=["Wednesday", "Friday"],
+            byMonth=[],
+            byMonthDay=[]
+        )
+        expected_signal = {
+            "id": signal_id,
+            "alarmId": alarm_id,
+            "banktransactieIds": [],
+            "isActive": True,
+            "type": "default",
+            "bedragDifference": '120.00'
+        }
 
-#         # Mock feature flag "signalen" to be enabled
-#         mocker.patch('hhb_backend.feature_flags.Unleash.is_enabled', mock_feature_flag("signalen", True))
+        fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
+        get_alarms = rm.get(f"{settings.ALARMENSERVICE_URL}/alarms/", json={"data": [alarm, alarm2]})
+        get_active_alarms = rm.get(f"{settings.ALARMENSERVICE_URL}/alarms/?filter_active=true", json={"data": [alarm, alarm2]})
+        post_alarm = rm.post(f"{settings.ALARMENSERVICE_URL}/alarms/", json=post_echo_with_str_id(nextAlarm.id), status_code=201)
+        post_signal = rm.post(f"{settings.SIGNALENSERVICE_URL}/signals/", json=post_echo_with_str_id(signal_id), status_code=201)
+        update_alarm = rm.put(f"{settings.ALARMENSERVICE_URL}/alarms/{alarm_id}", json=post_echo_with_str_id(alarm_id))
+        get_afspraak = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids={afspraak_id}", json={"data": [afspraak]})
+        post_afspraak = rm.post(f"{settings.HHB_SERVICES_URL}/afspraken/{afspraak_id}", json={"data":afspraak}, status_code=200)
+        
+        # Mock feature flag "signalen" to be enabled
+        mocker.patch('hhb_backend.feature_flags.Unleash.is_enabled', mock_feature_flag("signalen", True))
 
-#         # act
-#         response = client.post(
-#             "/graphql",
-#             json={
-#                 "query": '''
-#                     mutation test {
-#                         evaluateAlarms {
-#                             alarmTriggerResult {
-#                                 alarm {
-#                                     id
-#                                 }
-#                                 nextAlarm{
-#                                     id
-#                                 }
-#                                 signaal{
-#                                     id
-#                                 }
-#                             }
-#                         }
-#                     }''',
-#             },
-#             content_type='application/json'
-#         )
+        # Test 1
+        triggered_alarms = EvaluateAlarm.evaluate_alarms([alarm_id])
 
-#         # assert
-#         assert rm1.call_count == 1
-#         assert rm2.call_count == 2
-#         assert rm3.call_count == 1
-#         assert rm4.call_count == 1
-#         assert rm5.call_count == 1
-#         assert rm6.call_count == 1
-#         assert rm7.call_count == 2
-#         assert rm8.call_count == 1
-#         assert rm9.call_count == 1
-#         assert fallback.call_count == 0
-#         assert response.json == {'data': {
-#             'evaluateAlarms': {
-#                 'alarmTriggerResult': [{
-#                     'alarm': {'id': '00943958-8b93-4617-aa43-669a9016aad9'},
-#                     'nextAlarm': {'id': '33738845-7f23-4c8f-8424-2b560a944884'},
-#                     'signaal': {'id': 'e2b282d9-b31f-451e-9242-11f86c902b35'}
-#                 }]
-#             }
-#         }}
+        alarm_inactive["signaalId"] = signal_id
+        alarm2["signaalId"] = signal_id
+        alarm2["isActive"] = False
+        expected = [{
+            "alarm": alarm_inactive, 
+            "nextAlarm": nextAlarm, 
+            "signaal": expected_signal
+        },
+        {
+            "alarm": alarm2, 
+            "nextAlarm": None, 
+            "signaal": expected_signal
+        }]
 
+        assert fallback.call_count == 0
+        assert get_alarms.call_count == 1
+        assert get_active_alarms.call_count == 1
+        assert post_alarm.call_count == 1
+        assert post_signal.call_count == 2
+        assert update_alarm.call_count == 4
+        assert get_afspraak.call_count == 1
+        assert post_afspraak.call_count == 1
+        assert triggered_alarms == expected
+        
+        # restore alarm_inactive
+        alarm_inactive["signaalId"] = None
 
-# @freeze_time("2021-12-08")
-# def test_evaluate_multiple_alarms(client, mocker):
-#     """This tests if evaluating multiple alarms works as expected."""
-#     with requests_mock.Mocker() as rm:
-#         # arrange
-#         alarm1 = Alarm(
-#             id="9b205557-4c6a-468e-94f8-ed4bad90bd3f",
-#             isActive=True,
-#             afspraakId=19,
-#             startDate="2021-12-07",
-#             datumMargin=0,
-#             bedrag=8000,
-#             bedragMargin=1000,
-#             byDay=["Wednesday", "Friday"],
-#             byMonth=[],
-#             byMonthDay=[]
-#         )
-#         alarm1_inactive = Alarm(
-#             id="9b205557-4c6a-468e-94f8-ed4bad90bd3f",
-#             isActive=False,
-#             afspraakId=19,
-#             startDate="2021-12-07",
-#             datumMargin=0,
-#             bedrag=8000,
-#             bedragMargin=1000,
-#             byDay=["Wednesday", "Friday"],
-#             byMonth=[],
-#             byMonthDay=[]
-#         )
-#         signaal1 = {
-#             "id": "e2b282d9-b31f-451e-9242-11f86c902b35",
-#             "alarmId": alarm1.id,
-#             "isActive": True,
-#             "type": "default",
-#             "actions": [],
-#             "context": None,
-#             "timeCreated": "2021-12-13T13:20:40.784Z"
-#         }
-#         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
-#         rm1 = rm.get(f"{settings.ALARMENSERVICE_URL}/alarms/?filter_active=true",
-#                      json={'data': [alarm, alarm1, nextAlarm]})
-#         rm2 = rm.get(f"{settings.ALARMENSERVICE_URL}/alarms/?filter_ids={alarm_id},{alarm1.id}",
-#                      json={'data': [alarm, alarm1]})
-#         rm3 = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids={afspraak_id}", json={"data": [afspraak]})
-#         rm4 = rm.get(
-#             f"{settings.HHB_SERVICES_URL}/journaalposten/?filter_ids={journaalpost_id}",
-#             json={"data": [journaalpost]}
-#         )
-#         rm5 = rm.get(
-#             f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/?filter_ids={banktransactie_id}",
-#             json={"data": [banktransactie]}
-#         )
-#         rm6 = rm.post(f"{settings.SIGNALENSERVICE_URL}/signals/", status_code=201, json={"data": signaal1})
-#         rm7 = rm.put(f"{settings.ALARMENSERVICE_URL}/alarms/{alarm_id}", json={"ok": True, "data": alarm_inactive})
-#         rm8 = rm.put(f"{settings.ALARMENSERVICE_URL}/alarms/{alarm1.id}", json={"ok": True, "data": alarm1_inactive})
-#         rm9 = rm.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=201)
+@freeze_time("2021-12-08")
+def test_evaluate_alarms_one_alarm_no_signal_everything_alright(mocker):
+    """Tests if there is one triggered alarm, that created an new alarm but no signal 
+    when there is one active alarm and one journaalpost.
+    Test 1 is for evaluate_alarms()
+    Test 2 is for evaluate_one_alarm()"""
+    with requests_mock.Mocker() as rm:
+        fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
+        get_alarm = rm.get(f"{settings.ALARMENSERVICE_URL}/alarms/", json={"data": [alarm]})
+        get_active_alarms = rm.get(f"{settings.ALARMENSERVICE_URL}/alarms/?filter_active=true", json={"data": [alarm]})
+        post_alarm = rm.post(f"{settings.ALARMENSERVICE_URL}/alarms/", json=post_echo_with_str_id(nextAlarm.id), status_code=201)
+        update_alarm = rm.put(f"{settings.ALARMENSERVICE_URL}/alarms/{alarm_id}", json=post_echo_with_str_id(alarm_id))
+        get_afspraak = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids={afspraak_id}", json={"data": [afspraak]})
+        post_afspraak = rm.post(f"{settings.HHB_SERVICES_URL}/afspraken/{afspraak_id}", json={"data":afspraak}, status_code=200)
+        get_banktransactie = rm.get(f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/?filter_ids={banktransactie_id}", json={"data": [banktransactie]})
+        
+        # Mock feature flag "signalen" to be enabled
+        mocker.patch('hhb_backend.feature_flags.Unleash.is_enabled', mock_feature_flag("signalen", True))
 
-#         # Mock feature flag "signalen" to be enabled
-#         mocker.patch('hhb_backend.feature_flags.Unleash.is_enabled', mock_feature_flag("signalen", True))
+        # Test 1
+        triggered_alarms = EvaluateAlarm.evaluate_alarms([alarm_id], [journaalpost])
 
-#         # act
-#         response = client.post(
-#             "/graphql",
-#             json={
-#                 "query": '''
-#                     mutation test($ids: [String]) {
-#                         evaluateAlarms(ids: $ids) {
-#                             alarmTriggerResult {
-#                                 alarm {
-#                                     id
-#                                 }
-#                                 nextAlarm{
-#                                     id
-#                                 }
-#                                 signaal{
-#                                     id
-#                                 }
-#                             }
-#                         }
-#                     }''', "variables": {"ids": [alarm_id, alarm1.id]}
-#             },
-#             content_type='application/json'
-#         )
+        expected = [{
+            "alarm": alarm_inactive, 
+            "nextAlarm": nextAlarm, 
+            "signaal": None
+        }]
 
-#         print(f">>> response: {response.json}")
+        assert fallback.call_count == 0
+        assert get_alarm.call_count == 1
+        assert get_active_alarms.call_count == 1
+        assert post_alarm.call_count == 1
+        assert update_alarm.call_count == 1
+        assert get_afspraak.call_count == 1
+        assert post_afspraak.call_count == 1
+        assert get_banktransactie.call_count == 1
+        assert triggered_alarms == expected
 
-#         # assert
-#         assert rm1.call_count == 1
-#         assert rm2.call_count == 1
-#         assert rm3.call_count == 2  # one call per alarm
-#         assert rm4.call_count == 2  # one call per alarm
-#         assert rm5.call_count == 2  # one call per alarm
-#         assert rm6.call_count == 1
-#         assert rm7.call_count == 1
-#         assert rm8.call_count == 2  # update to inactive, update with signal
-#         assert rm9.call_count == 1  # evaluate alarms
-#         assert fallback.call_count == 0
-#         assert response.json == {'data': {
-#             'evaluateAlarms': {
-#                 'alarmTriggerResult': [{
-#                     'alarm': {'id': '00943958-8b93-4617-aa43-669a9016aad9'},
-#                     'nextAlarm': None,
-#                     'signaal': None
-#                 },
-#                     {
-#                         'alarm': {'id': "9b205557-4c6a-468e-94f8-ed4bad90bd3f"},
-#                         'nextAlarm': None,
-#                         'signaal': {'id': 'e2b282d9-b31f-451e-9242-11f86c902b35'}
-#                     }]
-#             }
-#         }}
+        # Test 2
+        triggered_alarms = EvaluateAlarm.evaluate_one_alarm(alarm_id, journaalpost)
+
+        assert fallback.call_count == 0             # still zero
+        # the rest # *2 on previous call count
+        assert get_alarm.call_count == 2
+        assert get_active_alarms.call_count == 2
+        assert post_alarm.call_count == 2
+        assert update_alarm.call_count == 2
+        assert get_afspraak.call_count == 2
+        assert post_afspraak.call_count == 2
+        assert get_banktransactie.call_count == 2
+        assert triggered_alarms == expected
+
+        # restore alarm_inactive
+        alarm_inactive["signaalId"] = None
 
 
-# @freeze_time("2021-12-08")
-# def test_evaluate_multiple_alarms_one_inactive(client, mocker):
-#     """This tests if evaluating multiple alarms including one that is not active works as expected."""
-#     with requests_mock.Mocker() as rm:
-#         # arrange
-#         alarm1 = Alarm(
-#             id="9b205557-4c6a-468e-94f8-ed4bad90bd3f",
-#             isActive=False,
-#             afspraakId=19,
-#             startDate="2021-12-07",
-#             datumMargin=0,
-#             bedrag=8000,
-#             bedragMargin=1000,
-#             byDay=["Wednesday", "Friday"],
-#             byMonth=[],
-#             byMonthDay=[]
-#         )
-#         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
-#         rm1 = rm.get(f"{settings.ALARMENSERVICE_URL}/alarms/?filter_active=true", json={'data': [alarm, nextAlarm]})
-#         rm2 = rm.get(f"{settings.ALARMENSERVICE_URL}/alarms/?filter_ids={alarm_id},{alarm1.id}",
-#                      json={'data': [alarm, alarm1]})
-#         rm3 = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids={afspraak_id}", json={"data": [afspraak]})
-#         rm4 = rm.get(
-#             f"{settings.HHB_SERVICES_URL}/journaalposten/?filter_ids={journaalpost_id}",
-#             json={"data": [journaalpost]}
-#         )
-#         rm5 = rm.get(
-#             f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/?filter_ids={banktransactie_id}",
-#             json={"data": [banktransactie]}
-#         )
-#         rm6 = rm.put(f"{settings.ALARMENSERVICE_URL}/alarms/{alarm_id}", json={"ok": True, "data": alarm_inactive})
-#         rm7 = rm.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=201)
+@freeze_time("2021-12-08")
+def test_evaluate_alarms_via_schema(client, mocker):
+    """This tests the evaluation of alarms via the schema, it should create a new alarm and a signal.
+    The schema does not look for journaalposten, so this is an evaluation for alarms that did not get a 
+    journaalpost/banktransactie during the day."""
+    with requests_mock.Mocker() as rm:
+        fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
+        get_active_alarms = rm.get(f"{settings.ALARMENSERVICE_URL}/alarms/?filter_active=true", json={'data': [alarm]})
+        get_afspraken = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids={afspraak_id}", json={"data": [afspraak]})
+        post_alarm = rm.post(f"{settings.ALARMENSERVICE_URL}/alarms/", status_code=201, json={"ok": True, "data": nextAlarm})
+        post_signal = rm.post(f"{settings.SIGNALENSERVICE_URL}/signals/", status_code=201,
+                      json=post_echo_with_str_id(signaal["id"]))
+        update_alarm = rm.put(f"{settings.ALARMENSERVICE_URL}/alarms/{alarm_id}", json={"ok": True, "data": alarm_inactive})
+        post_afspraak = rm.post(f"{settings.HHB_SERVICES_URL}/afspraken/{afspraak_id}")
+        post_gebruikersactiviteit = rm.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=201)
 
-#         # Mock feature flag "signalen" to be enabled
-#         mocker.patch('hhb_backend.feature_flags.Unleash.is_enabled', mock_feature_flag("signalen", True))
+        # Mock feature flag "signalen" to be enabled
+        mocker.patch('hhb_backend.feature_flags.Unleash.is_enabled', mock_feature_flag("signalen", True))
 
-#         # act
-#         response = client.post(
-#             "/graphql",
-#             json={
-#                 "query": '''
-#                     mutation test($ids: [String]) {
-#                         evaluateAlarms(ids: $ids) {
-#                             alarmTriggerResult {
-#                                 alarm {
-#                                     id
-#                                 }
-#                                 nextAlarm{
-#                                     id
-#                                 }
-#                                 signaal{
-#                                     id
-#                                 }
-#                             }
-#                         }
-#                     }''', "variables": {"ids": [alarm_id, alarm1.id]}
-#             },
-#             content_type='application/json'
-#         )
+        # act
+        response = client.post(
+            "/graphql",
+            json={
+                "query": '''
+                    mutation test {
+                        evaluateAlarms {
+                            alarmTriggerResult {
+                                alarm {
+                                    id
+                                }
+                                nextAlarm{
+                                    id
+                                }
+                                signaal{
+                                    id
+                                    bankTransactions {
+                                        id
+                                    }
+                                    bedragDifference
+                                }
+                            }
+                        }
+                    }''',
+            },
+            content_type='application/json'
+        )
 
-#         print(f">>> response: {response.json}")
+        print(f">>> response: {response.json}")
 
-#         # assert
-#         assert rm1.call_count == 1
-#         assert rm2.call_count == 1
-#         assert rm3.call_count == 1  # one call per active alarm
-#         assert rm4.call_count == 1  # one call per active alarm
-#         assert rm5.call_count == 1  # one call per active alarm
-#         assert rm6.call_count == 1
-#         assert rm7.call_count == 1  # evaluate alarms
-#         assert fallback.call_count == 0
-#         assert response.json == {'data': {
-#             'evaluateAlarms': {
-#                 'alarmTriggerResult': [{
-#                     'alarm': {'id': '00943958-8b93-4617-aa43-669a9016aad9'},
-#                     'nextAlarm': None,
-#                     'signaal': None
-#                 }]
-#             }
-#         }}
+        # assert
+        assert fallback.call_count == 0
+        assert response.json == {'data': {
+            'evaluateAlarms': {
+                'alarmTriggerResult': [{
+                    'alarm': {'id': '00943958-8b93-4617-aa43-669a9016aad9'},
+                    'nextAlarm': {'id': '33738845-7f23-4c8f-8424-2b560a944884'},
+                    'signaal': {
+                        'id': 'e2b282d9-b31f-451e-9242-11f86c902b35',
+                        'bankTransactions': None,
+                        'bedragDifference': '120.00'
+                    }
+                }]
+            }
+        }}
+        assert get_active_alarms.call_count == 1
+        assert get_afspraken.call_count == 1
+        assert post_alarm.call_count == 1
+        assert post_signal.call_count == 1
+        assert post_afspraak.call_count == 1
+        assert update_alarm.call_count == 2
+        assert post_gebruikersactiviteit.call_count == 1
 
 
-# @freeze_time("2021-12-08")
-# def test_evaluate_alarm_transaction_outside_date_window_gives_signal_without_transaction(client, mocker):
-#     """This tests if when a transaction outside the date window was found, creates a signal without this transaction in it."""
-#     with requests_mock.Mocker() as rm:
-#         # arrange
-#         banktransactie = {
-#             "id": banktransactie_id,
-#             "bedrag": 12000,
-#             "customer_statement_message_id": 15,
-#             "information_to_account_owner": "NL83ABNA1927261899               Leefgeld ZOEKTERMPERSONA2 januari 2019",
-#             "is_credit": False,
-#             "is_geboekt": True,
-#             "statement_line": "190101D-1195.20NMSC028",
-#             "tegen_rekening": "NL83ABNA1927261899",
-#             "transactie_datum": "2021-12-04"
-#         }
-#         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
-#         rm1 = rm.get(f"{settings.ALARMENSERVICE_URL}/alarms/?filter_active=true", json={'data': [alarm]})
-#         rm2 = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids={afspraak_id}", json={"data": [afspraak]})
-#         rm3 = rm.get(
-#             f"{settings.HHB_SERVICES_URL}/journaalposten/?filter_ids={journaalpost_id}",
-#             json={"data": [journaalpost]}
-#         )
-#         rm4 = rm.get(
-#             f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/?filter_ids={banktransactie_id}",
-#             json={"data": [banktransactie]}
-#         )
-#         rm5 = rm.post(f"{settings.ALARMENSERVICE_URL}/alarms/", status_code=201, json={"ok": True, "data": nextAlarm})
-#         rm6 = rm.post(f"{settings.SIGNALENSERVICE_URL}/signals/", status_code=201,
-#                       json=post_echo_with_str_id(signaal["id"]))
-#         rm7 = rm.put(f"{settings.ALARMENSERVICE_URL}/alarms/{alarm_id}", json={"ok": True, "data": alarm_inactive})
-#         rm8 = rm.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=201)
-#         rm9 = rm.post(f"{settings.HHB_SERVICES_URL}/afspraken/{afspraak_id}")
 
-#         # Mock feature flag "signalen" to be enabled
-#         mocker.patch('hhb_backend.feature_flags.Unleash.is_enabled', mock_feature_flag("signalen", True))
+@freeze_time("2021-12-08")
+def test_evaluate_one_alarm_via_schema(client, mocker):
+    """This tests the evaluation of one alarm via the schema, it should create a new alarm and a signal.
+    The schema does not look for journaalposten, so this is an evaluation for alarms that did not get a 
+    journaalpost/banktransactie during the day."""
+    with requests_mock.Mocker() as rm:
+        fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
+        get_alarm = rm.get(f"{settings.ALARMENSERVICE_URL}/alarms/?filter_ids={alarm_id}", json={'data': [alarm]})
+        get_active_alarms = rm.get(f"{settings.ALARMENSERVICE_URL}/alarms/?filter_active=true", json={'data': [alarm]})
+        get_afspraken = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids={afspraak_id}", json={"data": [afspraak]})
+        post_alarm = rm.post(f"{settings.ALARMENSERVICE_URL}/alarms/", status_code=201, json={"ok": True, "data": nextAlarm})
+        post_signal = rm.post(f"{settings.SIGNALENSERVICE_URL}/signals/", status_code=201,
+                      json=post_echo_with_str_id(signaal["id"]))
+        update_alarm = rm.put(f"{settings.ALARMENSERVICE_URL}/alarms/{alarm_id}", json={"ok": True, "data": alarm_inactive})
+        post_afspraak = rm.post(f"{settings.HHB_SERVICES_URL}/afspraken/{afspraak_id}")
+        post_gebruikersactiviteit = rm.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=201)
 
-#         # act
-#         response = client.post(
-#             "/graphql",
-#             json={
-#                 "query": '''
-#                     mutation test {
-#                         evaluateAlarms {
-#                             alarmTriggerResult {
-#                                 alarm {
-#                                     id
-#                                 }
-#                                 nextAlarm{
-#                                     id
-#                                 }
-#                                 signaal{
-#                                     id
-#                                     bankTransactions {
-#                                         id
-#                                     }
-#                                     bedragDifference
-#                                 }
-#                             }
-#                         }
-#                     }''',
-#             },
-#             content_type='application/json'
-#         )
+        # Mock feature flag "signalen" to be enabled
+        mocker.patch('hhb_backend.feature_flags.Unleash.is_enabled', mock_feature_flag("signalen", True))
 
-#         print(f">>> response: {response.json}")
+        # act
+        response = client.post(
+            "/graphql",
+            json={
+                "query": '''
+                    mutation test($id: String!) {
+                        evaluateAlarm(id: $id) {
+                            alarmTriggerResult {
+                                alarm {
+                                    id
+                                }
+                                nextAlarm{
+                                    id
+                                }
+                                signaal{
+                                    id
+                                    bankTransactions {
+                                        id
+                                    }
+                                    bedragDifference
+                                }
+                            }
+                        }
+                    }''', "variables":{"id":alarm_id}
+            },
+            content_type='application/json'
+        )
 
-#         # assert
-#         assert rm1.call_count == 1
-#         assert rm2.call_count == 2
-#         assert rm3.call_count == 1
-#         assert rm4.call_count == 1
-#         assert rm5.call_count == 1
-#         assert rm6.call_count == 1
-#         assert rm7.call_count == 2
-#         assert rm8.call_count == 1
-#         assert rm9.call_count == 1
-#         assert fallback.call_count == 0
-#         assert response.json == {'data': {
-#             'evaluateAlarms': {
-#                 'alarmTriggerResult': [{
-#                     'alarm': {'id': '00943958-8b93-4617-aa43-669a9016aad9'},
-#                     'nextAlarm': {'id': '33738845-7f23-4c8f-8424-2b560a944884'},
-#                     'signaal': {
-#                         'id': 'e2b282d9-b31f-451e-9242-11f86c902b35',
-#                         'bankTransactions': None,
-#                         'bedragDifference': '120.00'
-#                     }
-#                 }]
-#             }
-#         }}
+        print(f">>> response: {response.json}")
 
-
-# @freeze_time("2021-12-13")
-# def test_evaluate_alarm_disabled_because_its_in_the_past(client, mocker):
-#     """This tests if an alarm in the past gets disabled and still creates a next in sequence alarm."""
-#     with requests_mock.Mocker() as rm:
-#         # arrange
-#         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
-#         rm1 = rm.get(f"{settings.ALARMENSERVICE_URL}/alarms/?filter_active=true", json={'data': [alarm]})
-#         rm2 = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids={afspraak_id}", json={"data": [afspraak]})
-#         rm3 = rm.get(
-#             f"{settings.HHB_SERVICES_URL}/journaalposten/?filter_ids={journaalpost_id}",
-#             json={"data": [journaalpost]}
-#         )
-#         rm4 = rm.get(
-#             f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/?filter_ids={banktransactie_id}",
-#             json={"data": [banktransactie]}
-#         )
-#         rm5 = rm.post(f"{settings.ALARMENSERVICE_URL}/alarms/", status_code=201, json={"ok": True, "data": nextAlarm})
-#         rm6 = rm.put(f"{settings.ALARMENSERVICE_URL}/alarms/{alarm_id}", status_code=200,
-#                      json={"ok": True, "data": alarm_inactive})
-#         rm7 = rm.post(f"{settings.HHB_SERVICES_URL}/afspraken/{afspraak_id}")
-#         rm8 = rm.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=201)
-
-#         # Mock feature flag "signalen" to be enabled
-#         mocker.patch('hhb_backend.feature_flags.Unleash.is_enabled', mock_feature_flag("signalen", True))
-
-#         # act
-#         response = client.post(
-#             "/graphql",
-#             json={
-#                 "query": '''
-#                     mutation test {
-#                         evaluateAlarms {
-#                             alarmTriggerResult {
-#                                 alarm {
-#                                     isActive
-#                                     startDate
-#                                     datumMargin
-#                                     bedrag
-#                                     bedragMargin
-#                                     byDay
-#                                 }
-#                                 nextAlarm{
-#                                     isActive
-#                                     startDate
-#                                     datumMargin
-#                                     bedrag
-#                                     bedragMargin
-#                                     byDay
-#                                 }
-#                                 signaal{
-#                                     id
-#                                 }
-#                             }
-#                         }
-#                     }''',
-#             },
-#             content_type='application/json'
-#         )
-
-#         print(f">> >> >> response {response.json} ")
-
-#         # assert
-#         assert rm1.call_count == 1
-#         assert rm2.call_count == 2
-#         assert rm3.call_count == 1
-#         assert rm4.call_count == 1
-#         assert rm5.call_count == 1
-#         assert rm6.call_count == 1
-#         assert rm7.call_count == 1
-#         assert rm8.call_count == 1
-#         assert fallback.call_count == 0
-#         assert response.json == {'data': {
-#             'evaluateAlarms': {
-#                 'alarmTriggerResult': [{
-#                     'alarm': {
-#                         'isActive': False, 'startDate': '2021-12-06', 'datumMargin': 1,
-#                         'bedrag': '120.00', 'bedragMargin': '10.00', 'byDay': ['Wednesday', 'Friday']
-#                     },
-#                     'nextAlarm': {
-#                         'isActive': True, 'startDate': '2021-12-08', 'datumMargin': 1, 'bedrag': '120.00',
-#                         'bedragMargin': '10.00', 'byDay': ['Wednesday', 'Friday']
-#                     },
-#                     'signaal': None
-#                 }]
-#             }
-#         }}
-
-
-# @freeze_time("2021-12-13")
-# def test_evaluate_alarm_in_the_past(client, mocker):
-#     """This tests if an alarm in the past gets disabled, still creates a next in sequence alarm, and creates a signal."""
-#     with requests_mock.Mocker() as rm:
-#         # arrange
-#         banktransactie = {
-#             "id": banktransactie_id,
-#             "bedrag": 12000,
-#             "customer_statement_message_id": 15,
-#             "information_to_account_owner": "NL83ABNA1927261899               Leefgeld ZOEKTERMPERSONA2 januari 2019",
-#             "is_credit": False,
-#             "is_geboekt": True,
-#             "statement_line": "190101D-1195.20NMSC028",
-#             "tegen_rekening": "NL83ABNA1927261899",
-#             "transactie_datum": "2021-12-01"
-#         }
-#         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
-#         rm1 = rm.get(f"{settings.ALARMENSERVICE_URL}/alarms/?filter_active=true", json={'data': [alarm]})
-#         rm2 = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids={afspraak_id}", json={"data": [afspraak]})
-#         rm3 = rm.get(
-#             f"{settings.HHB_SERVICES_URL}/journaalposten/?filter_ids={journaalpost_id}",
-#             json={"data": [journaalpost]}
-#         )
-#         rm4 = rm.get(
-#             f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/?filter_ids={banktransactie_id}",
-#             json={"data": [banktransactie]}
-#         )
-#         rm5 = rm.post(f"{settings.ALARMENSERVICE_URL}/alarms/", status_code=201, json={"ok": True, "data": nextAlarm})
-#         rm6 = rm.post(f"{settings.SIGNALENSERVICE_URL}/signals/", status_code=201, json={"data": signaal})
-#         rm7 = rm.put(f"{settings.ALARMENSERVICE_URL}/alarms/{alarm_id}", json={"ok": True, "data": nextAlarm})
-#         rm8 = rm.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=201)
-#         rm9 = rm.post(f"{settings.HHB_SERVICES_URL}/afspraken/{afspraak_id}")
-
-#         # Mock feature flag "signalen" to be enabled
-#         mocker.patch('hhb_backend.feature_flags.Unleash.is_enabled', mock_feature_flag("signalen", True))
-
-#         # act
-#         response = client.post(
-#             "/graphql",
-#             json={
-#                 "query": '''
-#                     mutation test {
-#                         evaluateAlarms {
-#                             alarmTriggerResult {
-#                                 alarm {
-#                                     isActive
-#                                     startDate
-#                                     datumMargin
-#                                     bedrag
-#                                     bedragMargin
-#                                     byDay
-#                                 }
-#                                 nextAlarm{
-#                                     isActive
-#                                     startDate
-#                                     datumMargin
-#                                     bedrag
-#                                     bedragMargin
-#                                     byDay
-#                                 }
-#                                 signaal{
-#                                     id
-#                                 }
-#                             }
-#                         }
-#                     }''',
-#             },
-#             content_type='application/json'
-#         )
-
-#         print(f">> >> >> response {response.json} ")
-
-#         # assert
-#         assert rm1.call_count == 1
-#         assert rm2.call_count == 2
-#         assert rm3.call_count == 1
-#         assert rm4.call_count == 1
-#         assert rm5.call_count == 1
-#         assert rm6.call_count == 1
-#         assert rm7.call_count == 2
-#         assert rm8.call_count == 1
-#         assert rm9.call_count == 1
-#         assert fallback.call_count == 0
-#         assert response.json == {'data': {
-#             'evaluateAlarms': {
-#                 'alarmTriggerResult': [{
-#                     'alarm': {
-#                         'isActive': False, 'startDate': '2021-12-06', 'datumMargin': 1, 'bedrag': '120.00',
-#                         'bedragMargin': '10.00', 'byDay': ['Wednesday', 'Friday']
-#                     },
-#                     'nextAlarm': {
-#                         'isActive': True, 'startDate': '2021-12-08', 'datumMargin': 1, 'bedrag': '120.00',
-#                         'bedragMargin': '10.00', 'byDay': ['Wednesday', 'Friday']
-#                     },
-#                     'signaal': {'id': 'e2b282d9-b31f-451e-9242-11f86c902b35'}
-#                 }]
-#             }
-#         }}
+        # assert
+        assert fallback.call_count == 0
+        assert response.json == {'data': {
+            'evaluateAlarm': {
+                'alarmTriggerResult': [{
+                    'alarm': {'id': '00943958-8b93-4617-aa43-669a9016aad9'},
+                    'nextAlarm': {'id': '33738845-7f23-4c8f-8424-2b560a944884'},
+                    'signaal': {
+                        'id': 'e2b282d9-b31f-451e-9242-11f86c902b35',
+                        'bankTransactions': None,
+                        'bedragDifference': '120.00'
+                    }
+                }]
+            }
+        }}
+        assert get_alarm.call_count == 1
+        assert get_active_alarms.call_count == 1
+        assert get_afspraken.call_count == 1
+        assert post_alarm.call_count == 1
+        assert post_signal.call_count == 1
+        assert post_afspraak.call_count == 1
+        assert update_alarm.call_count == 2
+        assert post_gebruikersactiviteit.call_count == 1

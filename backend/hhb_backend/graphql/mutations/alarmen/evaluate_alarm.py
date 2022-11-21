@@ -1,4 +1,3 @@
-import dateutil.parser
 import graphene
 import logging
 import requests
@@ -6,7 +5,6 @@ from datetime import *
 from graphql import GraphQLError
 from tokenize import String
 from typing import Optional
-
 from hhb_backend.feature_flags import Unleash
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
@@ -96,7 +94,7 @@ def evaluate_alarms(ids: list[String] = [], journaalposten = []) -> list:
     return triggered_alarms
 
 # not used at the moment
-def evaluate_one_alarm(id: String) -> list:
+def evaluate_one_alarm(id: String, journaalpost = None) -> list:
     evaluated_alarm = None
     active_alarms = get_active_alarms()
     alarm_ = get_alarm(id)
@@ -104,9 +102,14 @@ def evaluate_one_alarm(id: String) -> list:
     if alarm_ is None:
         return []
 
+    if journaalpost:
+        journaalposten = [journaalpost]
+    else: 
+        journaalposten = []
+        
     alarm_status: bool = alarm_.isActive
     if alarm_status:
-        evaluated_alarm = _evaluate_alarm(alarm_, active_alarms, [])
+        evaluated_alarm = _evaluate_alarm(alarm_, active_alarms, journaalposten)
 
     if evaluated_alarm is None:
         return []
