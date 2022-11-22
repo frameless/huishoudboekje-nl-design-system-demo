@@ -20,7 +20,8 @@ def update_transaction_service_is_geboekt(transactions: Union[List[BankTransacti
     process_transaction(transactions, _transaction_ids)
 
 
-def process_transaction(transactions: List[BankTransaction], _transaction_ids):
+def update_transactions_geboekt(transactions: List[BankTransaction], _transaction_ids):
+    """ Sets the is_geboekt flag to true for all transactions """
     if len(transactions) == 1:
         ids = _transaction_ids[0]
         transactions = transactions[0]
