@@ -2,14 +2,13 @@
 
 import graphene
 import logging
-import requests
 from graphql import GraphQLError
 from typing import List, Dict
 
 from hhb_backend.feature_flags import Unleash
-from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
-from hhb_backend.graphql.models.afspraak import Afspraak
+from hhb_backend.graphql.datawriters import hhb_datawriter
+import hhb_backend.graphql.models.afspraak as graphene_afspraak
 from hhb_backend.graphql.models.journaalpost import Journaalpost
 from hhb_backend.graphql.mutations.alarmen.evaluate_alarm import evaluate_alarms
 from hhb_backend.graphql.mutations.journaalposten import update_transaction_service_is_geboekt
@@ -68,7 +67,7 @@ class CreateJournaalpostAfspraak(graphene.Mutation):
         if previous:
             raise GraphQLError(f"(some) journaalposten already exist")
 
-        afspraken: Dict[int, Afspraak] = hhb_dataloader().afspraken.load(
+        afspraken: Dict[int, graphene_afspraak.Afspraak] = hhb_dataloader().afspraken.load(
             [j.afspraak_id for j in input],
             return_indexed="id"
         )
@@ -88,32 +87,43 @@ class CreateJournaalpostAfspraak(graphene.Mutation):
             rubriek = rubrieken[afspraak.rubriek_id]
             json.append({**item, "grootboekrekening_id": rubriek.grootboekrekening_id})
 
-        response = requests.post(
-            f"{settings.HHB_SERVICES_URL}/journaalposten/", json=json
-        )
-        if not response.ok:
-            raise GraphQLError(f"Upstream API responded: {response.text}")
-
-        alarm_ids = []
-        journaalposten = response.json()["data"]
-        for post in journaalposten:
-            afspraak = afspraken[journaalpost.Journaalpost(post).afspraak_id]
-            post["afspraak"] = afspraak
-            if afspraak.alarm_id:
-                alarm_ids.append(afspraak.alarm_id)
-
-        update_transaction_service_is_geboekt(transactions, is_geboekt=True)
-
-        # Feature flag: signalen
-        if Unleash().is_enabled("signalen"):
-            logging.info("create_journaalpost mutation: Evaluating alarms...")
-            if alarm_ids:
-                await evaluate_alarms(alarm_ids)
-        else:
-            logging.info("create_journaalpost mutation: Skipping alarm evaluation.")
+        journaalposten = create_journaalposten(json, afspraken, transactions)
 
         return CreateJournaalpostAfspraak(journaalposten=journaalposten, ok=True)
 
+async def create_journaalposten(input, afspraken, transactions):
+    transaction_ids = [t.id for t in transactions]
+    previous = hhb_dataloader().journaalposten.by_transactions(transaction_ids)
+    if previous:
+        for p in previous:
+            p.pop('id')
+            input.remove(p)
+
+    if not input:
+        # update transactions to is_geboekt=True since they are already in a journaalpost.
+        update_transaction_service_is_geboekt(transactions, is_geboekt=True)
+        return []
+
+    journaalposten = hhb_datawriter().journaalposten.post(input)
+    
+    alarm_ids = []
+    for post in journaalposten:
+        afspraak = afspraken[journaalpost.Journaalpost(post).afspraak_id]
+        post["afspraak"] = afspraak
+        if afspraak.alarm_id:
+            alarm_ids.append(afspraak.alarm_id)
+
+    update_transaction_service_is_geboekt(transactions, is_geboekt=True)
+
+    # Feature flag: signalen
+    if Unleash().is_enabled("signalen"):
+        logging.info("create_journaalpost mutation: Evaluating alarms...")
+        if alarm_ids:
+            await evaluate_alarms(alarm_ids)
+    else:
+        logging.info("create_journaalpost mutation: Skipping alarm evaluation.")
+    
+    return journaalposten
 
 class CreateJournaalpostGrootboekrekening(graphene.Mutation):
     """Mutatie om een banktransactie af te letteren op een grootboekrekening."""
@@ -158,13 +168,7 @@ class CreateJournaalpostGrootboekrekening(graphene.Mutation):
         if previous:
             raise GraphQLError(f"Journaalpost already exists for Transaction")
 
-        response = requests.post(
-            f"{settings.HHB_SERVICES_URL}/journaalposten/",
-            json=input,
-        )
-        if not response.ok:
-            raise GraphQLError(f"Upstream API responded: {response.text}")
-        journaalpost = response.json()["data"]
+        journaalpost = hhb_datawriter().journaalposten.post(input)
 
         update_transaction_service_is_geboekt(transaction, is_geboekt=True)
 

@@ -2,7 +2,7 @@
 
 import graphene
 
-import hhb_backend.graphql.models.rekening as rekening
+import hhb_backend.graphql.models.rekening as graphene_rekening
 import hhb_backend.graphql.mutations.rekeningen.rekening_input as rekening_input
 from hhb_backend.graphql.mutations.rekeningen.utils import create_afdeling_rekening
 from hhb_backend.graphql.utils.gebruikersactiviteiten import (
@@ -20,7 +20,7 @@ class CreateAfdelingRekening(graphene.Mutation):
         )
 
     ok = graphene.Boolean()
-    rekening = graphene.Field(rekening.Rekening)
+    rekening = graphene.Field(lambda: graphene_rekening.Rekening)
 
     def gebruikers_activiteit(self, _root, info, afdeling_id, *_args, **_kwargs):
         return dict(

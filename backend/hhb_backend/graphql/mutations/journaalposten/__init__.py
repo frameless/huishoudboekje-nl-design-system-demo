@@ -12,18 +12,28 @@ def update_transaction_service_is_geboekt(transactions: Union[List[BankTransacti
     if type(transactions) is not list:
         transactions = [transactions]
 
+    _transaction_ids = []
     for transaction in transactions:
         transaction.is_geboekt = is_geboekt
-        process_transaction(transaction)
+        _transaction_ids.append(str(transaction.id))
+        
+    update_transactions_geboekt(transactions, _transaction_ids)
 
 
-def process_transaction(transaction: BankTransaction):
+def update_transactions_geboekt(transactions: List[BankTransaction], _transaction_ids):
+    """ Sets the is_geboekt flag to true for all transactions """
+    if len(transactions) == 1:
+        ids = _transaction_ids[0]
+        transactions = transactions[0]
+    else:
+        ids = ",".join(_transaction_ids)
+
     transaction_response = requests.post(
-        f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/{transaction.id}",
-        json=transaction
+        f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/{ids}",
+        json=transactions
     )
     if not transaction_response.ok:
         logging.warning(
-            f"Failed to save is_geboekt on transaction {transaction.id}: {transaction_response.text}")
+            f"Failed to save is_geboekt on transactions {_transaction_ids}: {transaction_response.text}")
 
 

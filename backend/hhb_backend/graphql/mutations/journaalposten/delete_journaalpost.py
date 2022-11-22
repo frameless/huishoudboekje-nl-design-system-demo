@@ -4,7 +4,7 @@ from graphql import GraphQLError
 
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
-from hhb_backend.graphql.models.journaalpost import Journaalpost
+import hhb_backend.graphql.models.journaalpost as graphene_journaalpost
 from hhb_backend.graphql.mutations.journaalposten import update_transaction_service_is_geboekt
 from hhb_backend.graphql.utils.gebruikersactiviteiten import (gebruikers_activiteit_entities, log_gebruikers_activiteit)
 
@@ -15,7 +15,7 @@ class DeleteJournaalpost(graphene.Mutation):
         id = graphene.Int(required=True)
 
     ok = graphene.Boolean()
-    previous = graphene.Field(lambda: Journaalpost)
+    previous = graphene.Field(lambda: graphene_journaalpost.Journaalpost)
 
     def gebruikers_activiteit(self, _root, info, *_args, **_kwargs):
         return dict(

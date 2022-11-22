@@ -5,7 +5,7 @@ from graphql import GraphQLError
 
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
-from hhb_backend.graphql.models.afdeling import Afdeling
+import hhb_backend.graphql.models.afdeling as graphene_afdeling
 from hhb_backend.graphql.utils.gebruikersactiviteiten import (
     gebruikers_activiteit_entities,
     log_gebruikers_activiteit,
@@ -20,7 +20,7 @@ class DeleteAfdeling(graphene.Mutation):
         id = graphene.Int(required=True)
 
     ok = graphene.Boolean()
-    previous = graphene.Field(lambda: Afdeling)
+    previous = graphene.Field(lambda: graphene_afdeling.Afdeling)
 
     def gebruikers_activiteit(self, _root, info, *_args, **_kwargs):
         return dict(

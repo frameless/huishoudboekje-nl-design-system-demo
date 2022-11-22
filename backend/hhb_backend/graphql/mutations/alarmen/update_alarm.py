@@ -1,7 +1,7 @@
 """ GraphQl Mutatie voor het aanpassen van een Alarm """
 import graphene
 
-from hhb_backend.graphql.models.alarm import Alarm
+import hhb_backend.graphql.models.alarm as graphene_alarm
 from hhb_backend.graphql.mutations.alarmen.alarm import AlarmHelper, UpdateAlarmInput
 from hhb_backend.graphql.utils.gebruikersactiviteiten import log_gebruikers_activiteit, gebruikers_activiteit_entities
 
@@ -12,8 +12,8 @@ class UpdateAlarm(graphene.Mutation):
         input = graphene.Argument(UpdateAlarmInput, required=True)
 
     ok = graphene.Boolean()
-    alarm = graphene.Field(lambda: Alarm)
-    previous = graphene.Field(lambda: Alarm)
+    alarm = graphene.Field(lambda: graphene_alarm.Alarm)
+    previous = graphene.Field(lambda: graphene_alarm.Alarm)
     burger_id = graphene.String(default_value="")
 
     def gebruikers_activiteit(self, _root, _info, *_args, **_kwargs):

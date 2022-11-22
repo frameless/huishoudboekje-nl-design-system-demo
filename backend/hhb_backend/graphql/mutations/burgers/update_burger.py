@@ -7,7 +7,7 @@ from graphql import GraphQLError
 
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
-from hhb_backend.graphql.models.burger import Burger
+import hhb_backend.graphql.models.burger as graphene_burger
 from hhb_backend.graphql.mutations.huishoudens import huishouden_input as huishouden_input
 from hhb_backend.graphql.utils.gebruikersactiviteiten import (
     gebruikers_activiteit_entities,
@@ -34,8 +34,8 @@ class UpdateBurger(graphene.Mutation):
         huishouden = graphene.Argument(lambda: huishouden_input.HuishoudenInput)
 
     ok = graphene.Boolean()
-    burger = graphene.Field(lambda: Burger)
-    previous = graphene.Field(lambda: Burger)
+    burger = graphene.Field(lambda: graphene_burger.Burger)
+    previous = graphene.Field(lambda: graphene_burger.Burger)
 
     def gebruikers_activiteit(self, _root, info, *_args, **_kwargs):
         return dict(
@@ -57,8 +57,8 @@ class UpdateBurger(graphene.Mutation):
         previous = hhb_dataloader().burgers.load_one(id)
 
         bsn = kwargs.get("bsn")
-        Burger.bsn_length(bsn)
-        Burger.bsn_elf_proef(bsn)
+        graphene_burger.Burger.bsn_length(bsn)
+        graphene_burger.Burger.bsn_elf_proef(bsn)
 
         response = requests.post(
             f"{settings.HHB_SERVICES_URL}/burgers/{id}",

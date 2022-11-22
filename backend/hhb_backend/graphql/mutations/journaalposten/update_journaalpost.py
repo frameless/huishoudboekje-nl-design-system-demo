@@ -5,7 +5,7 @@ from graphql import GraphQLError
 
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
-from hhb_backend.graphql.models.journaalpost import Journaalpost
+import hhb_backend.graphql.models.journaalpost as graphene_journaalpost
 from hhb_backend.graphql.utils.gebruikersactiviteiten import (gebruikers_activiteit_entities, log_gebruikers_activiteit)
 
 
@@ -20,8 +20,8 @@ class UpdateJournaalpostGrootboekrekening(graphene.Mutation):
         input = graphene.Argument(UpdateJournaalpostGrootboekrekeningInput)
 
     ok = graphene.Boolean()
-    journaalpost = graphene.Field(lambda: Journaalpost)
-    previous = graphene.Field(lambda: Journaalpost)
+    journaalpost = graphene.Field(lambda: graphene_journaalpost.Journaalpost)
+    previous = graphene.Field(lambda: graphene_journaalpost.Journaalpost)
 
     def gebruikers_activiteit(self, _root, info, *_args, **_kwargs):
         return dict(

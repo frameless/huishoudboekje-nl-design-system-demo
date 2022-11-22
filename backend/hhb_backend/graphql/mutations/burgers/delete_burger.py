@@ -8,7 +8,7 @@ from graphql import GraphQLError
 
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
-from hhb_backend.graphql.models.burger import Burger
+import hhb_backend.graphql.models.burger as graphene_burger
 from hhb_backend.graphql.utils.gebruikersactiviteiten import (
     gebruikers_activiteit_entities,
     log_gebruikers_activiteit,
@@ -21,7 +21,7 @@ class DeleteBurger(graphene.Mutation):
         id = graphene.Int(required=True)
 
     ok = graphene.Boolean()
-    previous = graphene.Field(lambda: Burger)
+    previous = graphene.Field(lambda: graphene_burger.Burger)
 
     def gebruikers_activiteit(self, _root, info, *_args, **_kwargs):
         return dict(

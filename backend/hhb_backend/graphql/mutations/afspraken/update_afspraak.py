@@ -6,8 +6,8 @@ from graphql import GraphQLError
 
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
-from hhb_backend.graphql.models.afspraak import Afspraak
-from hhb_backend.graphql.models.alarm import Alarm
+import hhb_backend.graphql.models.afspraak as graphene_afspraak
+import hhb_backend.graphql.models.alarm as graphene_alarm
 from hhb_backend.graphql.scalars.bedrag import Bedrag
 from hhb_backend.graphql.utils.gebruikersactiviteiten import (gebruikers_activiteit_entities, log_gebruikers_activiteit)
 from hhb_backend.graphql.utils.upstream_error_handler import UpstreamError
@@ -33,8 +33,8 @@ class UpdateAfspraak(graphene.Mutation):
         input = graphene.Argument(UpdateAfspraakInput, required=True)
 
     ok = graphene.Boolean()
-    afspraak = graphene.Field(lambda: Afspraak)
-    previous = graphene.Field(lambda: Afspraak)
+    afspraak = graphene.Field(lambda: graphene_afspraak.Afspraak)
+    previous = graphene.Field(lambda: graphene_afspraak.Afspraak)
 
     def gebruikers_activiteit(self, _root, info, *_args, **_kwargs):
         return dict(
@@ -99,8 +99,8 @@ class UpdateAfspraak(graphene.Mutation):
         # check alarm_id - optional
         alarm_id = input.get("alarm_id")
         if alarm_id is not None:
-            alarm: Alarm = hhb_dataloader().alarms.load_one(alarm_id)
-            if not alarm:
+            alarm_result: graphene_alarm.Alarm = hhb_dataloader().alarms.load_one(alarm_id)
+            if not alarm_result:
                 raise GraphQLError("alarm not found")
 
         # final update call

@@ -1,11 +1,11 @@
 import pytest
-import re
 import requests_mock
 from pytest_mock import MockerFixture
 
 from hhb_backend.graphql import settings
 from hhb_backend.processen.automatisch_boeken import automatisch_boeken
 from hhb_backend.service.model.afspraak import Afspraak
+from hhb_backend.graphql.utils.upstream_error_handler import UpstreamError
 from tests.utils.mock_utils import get_by_filter, mock_feature_flag
 
 
@@ -54,7 +54,7 @@ def get_afspraken(request, _context):
 
 
 @pytest.mark.asyncio
-async def test_automatisch_boeken_no_csm_no_transactions(test_request_context, mocker: MockerFixture):
+async def test_automatisch_boeken_no_csm_no_transactions(mocker: MockerFixture):
     with requests_mock.Mocker() as mock:
         get_any = mock.get(requests_mock.ANY, json={"data": []})
         post_any = mock.post(requests_mock.ANY, json=post_echo)
@@ -69,7 +69,7 @@ async def test_automatisch_boeken_no_csm_no_transactions(test_request_context, m
         result = await automatisch_boeken()
 
         assert result is None
-        assert transactions_is_geboekt.called_once
+        assert transactions_is_geboekt.call_count == 1
 
         # No leftover calls
         assert not post_any.called
@@ -77,7 +77,7 @@ async def test_automatisch_boeken_no_csm_no_transactions(test_request_context, m
 
 
 @pytest.mark.asyncio
-async def test_automatisch_boeken_no_csm_no_suggestions(test_request_context, mocker: MockerFixture):
+async def test_automatisch_boeken_no_csm_no_suggestions(mocker: MockerFixture):
     with requests_mock.Mocker() as mock:
         get_any = mock.get(requests_mock.ANY, json={"data": []})
         post_any = mock.post(requests_mock.ANY, json=post_echo)
@@ -92,7 +92,7 @@ async def test_automatisch_boeken_no_csm_no_suggestions(test_request_context, mo
 
         assert result is None
 
-        assert transactions_is_geboekt.called_once
+        assert transactions_is_geboekt.call_count == 1
 
         # No leftover calls
         assert not post_any.called
@@ -100,7 +100,7 @@ async def test_automatisch_boeken_no_csm_no_suggestions(test_request_context, mo
 
 
 @pytest.mark.asyncio
-async def test_automatisch_boeken_no_csm_success_single(test_request_context, mocker: MockerFixture):
+async def test_automatisch_boeken_no_csm_success_single(mocker: MockerFixture):
     with requests_mock.Mocker() as mock:
         get_any = mock.get(requests_mock.ANY, status_code=404)
         post_any = mock.post(requests_mock.ANY, status_code=404)
@@ -111,36 +111,25 @@ async def test_automatisch_boeken_no_csm_success_single(test_request_context, mo
         )
         mocker.patch(
             'hhb_backend.processen.automatisch_boeken.transactie_suggesties',
-            return_value={1: [Afspraak(id=11, zoektermen="test")]}
+            return_value={1: [Afspraak(id=11, rubriek_id=21, zoektermen="test")]}
         )
         mocker.patch(
             'hhb_backend.feature_flags.Unleash.is_enabled',
             mock_feature_flag("signalen", True)
         )
 
-        transactions_by_id = mock.get(
-            f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/?filter_ids=1",
-            json={"data": [{"id": 1, "is_geboekt": False}]}
-        )
-        journaalposten_by_transaction = mock.get(
-            f"{settings.HHB_SERVICES_URL}/journaalposten/?filter_transactions=1",
-            json={"data": []}
-        )
-        afspraken_by_id = mock.get(
-            f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids=11",
-            json={"data": [{"id": 11, "rubriek_id": 21, "burger_id": 41, "zoektermen": "test"}]}
-        )
         rubrieken_by_id = mock.get(
             f"{settings.HHB_SERVICES_URL}/rubrieken/?filter_ids=21",
             json={"data": [{"id": 21, "grootboekrekening_id": "test"}]}
         )
+
+        journaalpost_by_transaction = mock.get(f"{settings.HHB_SERVICES_URL}/journaalposten/?filter_transactions=1", json={"data": []})
 
         def journaalposten_post_echo(request, _):
             jp_id = 30
             return {"data": [{**jp, "id": (jp_id := jp_id + 1)} for jp in request.json()]}
 
         journaalposten_post = mock.post(f"{settings.HHB_SERVICES_URL}/journaalposten/", json=journaalposten_post_echo)
-        log_post = mock.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", json={"data": {"id": 1}})
         transactions_post = mock.post(
             f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/1",
             json=post_echo
@@ -148,28 +137,26 @@ async def test_automatisch_boeken_no_csm_success_single(test_request_context, mo
 
         result = await automatisch_boeken()
 
-        assert result == [{'afspraak': {'id': 11}, 'id': 31, 'isAutomatischGeboekt': True, 'transaction': {'id': 1}}]
-        assert journaalposten_post.called_once
-        assert journaalposten_post.last_request.json() == [
-            {"afspraak_id": 11, "grootboekrekening_id": "test", "is_automatisch_geboekt": True, "transaction_id": 1}
-        ]
-        assert transactions_post.called_once
-        assert transactions_post.last_request.json() == {"id": 1, "is_geboekt": True}
-
-        assert transactions_is_geboekt.called_once
-        assert transactions_by_id.call_count == 2
-        assert journaalposten_by_transaction.called_once
-        assert afspraken_by_id.call_count == 2
-        assert rubrieken_by_id.called_once
-
-        assert log_post.called_once
-        # No leftover calls
+        # check if everything is mocked
         assert not post_any.called
         assert not get_any.called
 
+        assert result == [{'afspraak': {'id': 11, 'rubriek_id': 21, 'zoektermen': 'test'}, 'afspraak_id': 11, 'id': 31, "grootboekrekening_id": "test", 'is_automatisch_geboekt': True, 'transaction_id': 1}]
+        
+        assert journaalposten_post.call_count == 1
+        assert journaalposten_post.last_request.json() == [
+            {"afspraak_id": 11, "grootboekrekening_id": "test", "is_automatisch_geboekt": True, "transaction_id": 1}
+        ]
+        assert transactions_post.call_count == 1
+        assert transactions_post.last_request.json() == {"id": 1, "is_geboekt": True}
+
+        assert transactions_is_geboekt.call_count == 1
+        assert rubrieken_by_id.call_count == 1
+        assert journaalpost_by_transaction.call_count == 1
+
 
 @pytest.mark.asyncio
-async def test_automatisch_boeken_no_csm_success_multiple(test_request_context, mocker: MockerFixture):
+async def test_automatisch_boeken_no_csm_success_multiple(mocker: MockerFixture):
     with requests_mock.Mocker() as mock:
         get_any = mock.get(requests_mock.ANY, status_code=404)
         post_any = mock.post(requests_mock.ANY, status_code=404)
@@ -181,8 +168,8 @@ async def test_automatisch_boeken_no_csm_success_multiple(test_request_context, 
         mocker.patch(
             'hhb_backend.processen.automatisch_boeken.transactie_suggesties',
             return_value={
-                1: [Afspraak(id=11, zoektermen="test")],
-                2: [Afspraak(id=12, zoektermen="test")]
+                1: [Afspraak(id=11, rubriek_id= 21, zoektermen="test")],
+                2: [Afspraak(id=12, rubriek_id= 21, zoektermen="test")]
             }
         )
         mocker.patch(
@@ -190,58 +177,41 @@ async def test_automatisch_boeken_no_csm_success_multiple(test_request_context, 
             mock_feature_flag("signalen", True)
         )
 
-        transactions_by_id = mock.get(
-            re.compile(f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/\\?filter_ids=.*"),
-            json=get_transactions
-        )
-        journaalposten_by_transaction = mock.get(
-            f"{settings.HHB_SERVICES_URL}/journaalposten/?filter_transactions=1,2",
-            json={"data": []}
-        )
-        afspraken_by_id = mock.get(
-            re.compile(f"{settings.HHB_SERVICES_URL}/afspraken/\\?filter_ids=.*"),
-            json=get_afspraken
-        )
         rubrieken_by_id = mock.get(
             f"{settings.HHB_SERVICES_URL}/rubrieken/?filter_ids=21",
             json={"data": [{"id": 21, "grootboekrekening_id": "test"}]}
         )
 
+        journaalpost_by_transaction = mock.get(f"{settings.HHB_SERVICES_URL}/journaalposten/?filter_transactions=1,2", json={"data": []})
+
         journaalposten_post = mock.post(f"{settings.HHB_SERVICES_URL}/journaalposten/", json=post_echo_multi(30))
-        log_post = mock.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", json=post_echo_single(50))
-        transactions_post = mock.post(f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/1", json=post_echo)
-        transactions_post2 = mock.post(f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/2", json=post_echo)
+        transactions_post = mock.post(f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/1,2", json=post_echo)
 
         result = await automatisch_boeken()
 
+        # Check if everything are mocked
+        assert not post_any.called
+        assert not get_any.called
+
         assert result == [
-            {'afspraak': {'id': 11}, 'id': 31, 'isAutomatischGeboekt': True, 'transaction': {'id': 1}},
-            {'afspraak': {'id': 12}, 'id': 32, 'isAutomatischGeboekt': True, 'transaction': {'id': 2}},
+            {'afspraak': {'id': 11, 'rubriek_id': 21, 'zoektermen': "test"}, 'afspraak_id': 11, 'id': 31, 'grootboekrekening_id': 'test', 'is_automatisch_geboekt': True, 'transaction_id': 1},
+            {'afspraak': {'id': 12, 'rubriek_id': 21, 'zoektermen': "test"}, 'afspraak_id': 12, 'id': 32, 'grootboekrekening_id': 'test', 'is_automatisch_geboekt': True, 'transaction_id': 2}
         ]
-        assert journaalposten_post.called_once
+        assert journaalposten_post.call_count == 1
         assert journaalposten_post.last_request.json() == [
             {"afspraak_id": 11, "grootboekrekening_id": "test", "is_automatisch_geboekt": True, "transaction_id": 1},
             {"afspraak_id": 12, "grootboekrekening_id": "test", "is_automatisch_geboekt": True, "transaction_id": 2},
         ]
         assert transactions_post.call_count == 1
-        assert transactions_post.last_request.json() == {"id": 1, "is_geboekt": True}
-        assert transactions_post2.call_count == 1
-        assert transactions_post2.last_request.json() == {"id": 2, "is_geboekt": True}
+        assert transactions_post.last_request.json() == [{"id": 1, "is_geboekt": True}, {"id": 2, "is_geboekt": True}]
 
-        assert transactions_is_geboekt.called_once
-        assert transactions_by_id.call_count == 3
-        assert journaalposten_by_transaction.called_once
-        assert afspraken_by_id.call_count == 3
-        assert rubrieken_by_id.called_once
-
-        assert log_post.called_once
-        # No leftover calls
-        assert not post_any.called
-        assert not get_any.called
+        assert transactions_is_geboekt.call_count == 1
+        assert rubrieken_by_id.call_count == 1
+        assert journaalpost_by_transaction.call_count == 1
 
 
 @pytest.mark.asyncio
-async def test_automatisch_boeken_csm_success_multiple(test_request_context, mocker: MockerFixture):
+async def test_automatisch_boeken_csm_success_multiple(mocker: MockerFixture):
     with requests_mock.Mocker() as mock:
         get_any = mock.get(requests_mock.ANY, status_code=404)
         post_any = mock.post(requests_mock.ANY, status_code=404)
@@ -255,60 +225,45 @@ async def test_automatisch_boeken_csm_success_multiple(test_request_context, moc
         )
         mocker.patch(
             'hhb_backend.processen.automatisch_boeken.transactie_suggesties',
-            return_value={1: [Afspraak(id=11, zoektermen="test", valid_through='2020-12-31')]}
+            return_value={1: [Afspraak(id=11, rubriek_id= 21, zoektermen="test", valid_through='2020-12-31')]}
         )
         mocker.patch(
             'hhb_backend.feature_flags.Unleash.is_enabled',
             mock_feature_flag("signalen", True)
         )
 
-        transactions_by_id = mock.get(
-            f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/?filter_ids=1",
-            json={"data": [{"id": 1, "is_geboekt": False}]}
-        )
-        journaalposten_by_transaction = mock.get(
-            f"{settings.HHB_SERVICES_URL}/journaalposten/?filter_transactions=1",
-            json={"data": []}
-        )
-        afspraken_by_id = mock.get(
-            f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids=11",
-            json={"data": [
-                {"id": 11, "rubriek_id": 21, "burger_id": 41, "zoektermen": "test", "valid_through": '2020-12-31'},
-            ]}
-        )
         rubrieken_by_id = mock.get(
             f"{settings.HHB_SERVICES_URL}/rubrieken/?filter_ids=21",
             json={"data": [{"id": 21, "grootboekrekening_id": "test"}]}
         )
 
+        journaalpost_by_transaction = mock.get(f"{settings.HHB_SERVICES_URL}/journaalposten/?filter_transactions=1", json={"data": []})
+
         journaalposten_post = mock.post(f"{settings.HHB_SERVICES_URL}/journaalposten/", json=post_echo_multi(30))
-        log_post = mock.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", json=post_echo_single(50))
         transactions_post = mock.post(f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/1", json=post_echo)
 
         result = await automatisch_boeken(1)
 
-        assert result == [{'afspraak': {'id': 11}, 'id': 31, 'isAutomatischGeboekt': True, 'transaction': {'id': 1}}]
-        assert journaalposten_post.called_once
+        # check if everything is mocked
+        assert not post_any.called
+        assert not get_any.called
+
+        assert result == [{'afspraak': {'id': 11, 'rubriek_id': 21, 'zoektermen': 'test', 'valid_through':'2020-12-31'}, 'id': 31, 'grootboekrekening_id': 'test', 'is_automatisch_geboekt': True, 'transaction_id': 1, 'afspraak_id': 11}]
+        
+        assert journaalposten_post.call_count == 1
         assert journaalposten_post.last_request.json() == [
             {"afspraak_id": 11, "grootboekrekening_id": "test", "is_automatisch_geboekt": True, "transaction_id": 1},
         ]
         assert transactions_post.call_count == 1
-        assert transactions_post.last_request.json() == {"id": 1, "is_geboekt": True}
+        assert transactions_post.last_request.json() == {"id": 1, "customer_statement_message_id": 1, "is_geboekt": True, "transactie_datum": '2020-10-10'}
 
-        assert bank_transactions_by_csm.called_once
-        assert transactions_by_id.call_count == 2
-        assert journaalposten_by_transaction.called_once
-        assert afspraken_by_id.call_count == 2
-        assert rubrieken_by_id.called_once
-
-        assert log_post.called_once
-        # No leftover calls
-        assert not post_any.called
-        assert not get_any.called
+        assert bank_transactions_by_csm.call_count == 1
+        assert rubrieken_by_id.call_count == 1
+        assert journaalpost_by_transaction.call_count == 1
 
 
 @pytest.mark.asyncio
-async def test_automatisch_boeken_no_csm_failure_journaalpost_exists(test_request_context, mocker: MockerFixture):
+async def test_automatisch_boeken_no_csm_failure_journaalpost_exists(mocker: MockerFixture):
     with requests_mock.Mocker() as mock:
         get_any = mock.get(requests_mock.ANY, status_code=404)
         post_any = mock.post(requests_mock.ANY, status_code=404)
@@ -319,35 +274,29 @@ async def test_automatisch_boeken_no_csm_failure_journaalpost_exists(test_reques
         )
         mocker.patch(
             'hhb_backend.processen.automatisch_boeken.transactie_suggesties',
-            return_value={1: [Afspraak(id=11, zoektermen="test")]}
+            return_value={1: [Afspraak(id=11, rubriek_id= 21, zoektermen="test")]}
+        )
+        mocker.patch(
+            'hhb_backend.feature_flags.Unleash.is_enabled',
+            mock_feature_flag("signalen", True)
         )
 
-        transactions_by_id = mock.get(
-            f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/?filter_ids=1",
-            json={"data": [{"id": 1, "is_geboekt": False}]}
-        )
-        journaalposten_by_transaction = mock.get(
-            f"{settings.HHB_SERVICES_URL}/journaalposten/?filter_transactions=1",
-            json={"data": []}
-        )
-        afspraken_by_id = mock.get(
-            f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids=11",
-            json={"data": [{"id": 11, "rubriek_id": 21, "burger_id": 41, "zoektermen": "test"}]}
-        )
         rubrieken_by_id = mock.get(
             f"{settings.HHB_SERVICES_URL}/rubrieken/?filter_ids=21",
             json={"data": [{"id": 21, "grootboekrekening_id": "test"}]}
         )
-
-        def journaalposten_post_echo(request, _):
-            jp_id = 30
-            return {"data": [{**jp, "id": (jp_id := jp_id + 1)} for jp in request.json()]}
+        
+        journaalpost_by_transaction = mock.get(
+            f"{settings.HHB_SERVICES_URL}/journaalposten/?filter_transactions=1", 
+            json={"data": [{"id": 30, "afspraak_id": 11, "grootboekrekening_id": "test", "is_automatisch_geboekt": True, "transaction_id": 1}]}
+        )
 
         journaalposten_post = mock.post(
-            f"{settings.HHB_SERVICES_URL}/journaalposten/", status_code=409,
-            text="journaalpost"
+            f"{settings.HHB_SERVICES_URL}/journaalposten/", 
+            text="journaalpost",
+            status_code=409
         )
-        log_post = mock.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", json={"data": {"id": 1}})
+       
         transactions_post = mock.post(
             f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/1",
             json=post_echo
@@ -355,28 +304,22 @@ async def test_automatisch_boeken_no_csm_failure_journaalpost_exists(test_reques
 
         result = await automatisch_boeken()
 
-        assert result == None
-        assert journaalposten_post.called_once
-        assert journaalposten_post.last_request.json() == [
-            {"afspraak_id": 11, "grootboekrekening_id": "test", "is_automatisch_geboekt": True, "transaction_id": 1}
-        ]
-        assert not transactions_post.called
-
-        assert transactions_is_geboekt.called_once
-        assert transactions_by_id.called_once
-        assert journaalposten_by_transaction.called_once
-        assert afspraken_by_id.called_once
-        assert rubrieken_by_id.called_once
-
-        assert not log_post.called
-
-        # No leftover calls
+        # Check if everything is mocked
         assert not post_any.called
         assert not get_any.called
 
+        assert result == []
+
+        assert journaalposten_post.call_count == 0
+        assert transactions_post.call_count == 1
+
+        assert transactions_is_geboekt.call_count == 1
+        assert rubrieken_by_id.call_count == 1
+        assert journaalpost_by_transaction.call_count == 1
+
 
 @pytest.mark.asyncio
-async def test_automatisch_boeken_no_csm_multiple_suggesties(test_request_context, mocker: MockerFixture):
+async def test_automatisch_boeken_no_csm_multiple_suggesties(mocker: MockerFixture):
     with requests_mock.Mocker() as mock:
         get_any = mock.get(requests_mock.ANY, status_code=404)
         post_any = mock.post(requests_mock.ANY, status_code=404)
@@ -392,12 +335,12 @@ async def test_automatisch_boeken_no_csm_multiple_suggesties(test_request_contex
         mocker.patch(
             'hhb_backend.processen.automatisch_boeken.transactie_suggesties',
             return_value={
-                1: [Afspraak(id=11, zoektermen="test")],
-                2: [Afspraak(id=12, zoektermen="test")],
+                1: [Afspraak(id=11, rubriek_id= 21, zoektermen="test")],
+                2: [Afspraak(id=12, rubriek_id= 21, zoektermen="test")],
                 # This transaction will not be booked
                 3: [
-                    Afspraak(id=13, zoektermen="test"),
-                    Afspraak(id=23, zoektermen="test"),
+                    Afspraak(id=13, rubriek_id= 21, zoektermen="test"),
+                    Afspraak(id=23, rubriek_id= 21, zoektermen="test"),
                 ],
             })
         mocker.patch(
@@ -405,51 +348,33 @@ async def test_automatisch_boeken_no_csm_multiple_suggesties(test_request_contex
             mock_feature_flag("signalen", True)
         )
 
-        transactions_by_id = mock.get(
-            re.compile(f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/\\?filter_ids=.*"),
-            json=get_transactions
-        )
-        journaalposten_by_transaction = mock.get(
-            f"{settings.HHB_SERVICES_URL}/journaalposten/?filter_transactions=1,2",
-            json={"data": []}
-        )
-        afspraken_by_id = mock.get(
-            re.compile(f"{settings.HHB_SERVICES_URL}/afspraken/\\?filter_ids=.*"),
-            json=get_afspraken
-        )
         rubrieken_by_id = mock.get(
             f"{settings.HHB_SERVICES_URL}/rubrieken/?filter_ids=21",
             json={"data": [{"id": 21, "grootboekrekening_id": "test"}]}
         )
 
+        journaalpost_by_transaction = mock.get(f"{settings.HHB_SERVICES_URL}/journaalposten/?filter_transactions=1,2", json={"data": []})
         journaalposten_post = mock.post(f"{settings.HHB_SERVICES_URL}/journaalposten/", json=post_echo_multi(30))
-        log_post = mock.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", json=post_echo_single(50))
-        transactions_post = mock.post(f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/1", json=post_echo)
-        transactions_post2 = mock.post(f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/2", json=post_echo)
+        transactions_post = mock.post(f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/1,2", json=post_echo)
 
         result = await automatisch_boeken()
+        
+        # check if everything is mocked
+        assert post_any.call_count == 0
+        assert get_any.call_count == 0
 
         assert result == [
-            {'afspraak': {'id': 11}, 'id': 31, 'isAutomatischGeboekt': True, 'transaction': {'id': 1}},
-            {'afspraak': {'id': 12}, 'id': 32, 'isAutomatischGeboekt': True, 'transaction': {'id': 2}},
+            {'afspraak': {'id': 11, 'rubriek_id': 21, 'zoektermen': 'test'}, 'id': 31, 'is_automatisch_geboekt': True, 'transaction_id': 1, 'afspraak_id': 11, 'grootboekrekening_id': 'test'},
+            {'afspraak': {'id': 12, 'rubriek_id': 21, 'zoektermen': 'test'}, 'id': 32, 'is_automatisch_geboekt': True, 'transaction_id': 2, 'afspraak_id': 12, 'grootboekrekening_id': 'test'},
         ]
-        assert journaalposten_post.called_once
+        assert journaalposten_post.call_count == 1
         assert journaalposten_post.last_request.json() == [
             {"afspraak_id": 11, "grootboekrekening_id": "test", "is_automatisch_geboekt": True, "transaction_id": 1},
             {"afspraak_id": 12, "grootboekrekening_id": "test", "is_automatisch_geboekt": True, "transaction_id": 2},
         ]
         assert transactions_post.call_count == 1
-        assert transactions_post.last_request.json() == {"id": 1, "is_geboekt": True}
-        assert transactions_post2.call_count == 1
-        assert transactions_post2.last_request.json() == {"id": 2, "is_geboekt": True}
+        assert transactions_post.last_request.json() == [{"id": 1, "is_geboekt": True}, {"id": 2, "is_geboekt": True}]
 
-        assert transactions_is_geboekt.called_once
-        assert transactions_by_id.call_count == 3
-        assert journaalposten_by_transaction.called_once
-        assert afspraken_by_id.call_count == 3
-        assert rubrieken_by_id.called_once
-
-        assert log_post.called_once
-        # No leftover calls
-        assert not post_any.called
-        assert not get_any.called
+        assert transactions_is_geboekt.call_count == 1
+        assert rubrieken_by_id.call_count == 1
+        assert journaalpost_by_transaction.call_count == 1

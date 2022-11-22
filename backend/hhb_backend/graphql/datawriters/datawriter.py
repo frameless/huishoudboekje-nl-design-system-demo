@@ -11,14 +11,14 @@ class DataWriter:
 
     def post(self, input):
         try:
-            response = requests.post(f"{self.service}/{self.model}", 
+            response = requests.post(f"{self.service}/{self.model}/", 
                         data=json.dumps(input),
                         headers={"Content-type": "application/json"},
                        )
         except requests.exceptions.ConnectionError:
             raise GraphQLError(f"Failed to connect to service {self.service}")
 
-        if response.status_code != 201:
+        if not response.ok:
             raise UpstreamError(response, f"Could not POST to {self.model}. [{response.status_code}] {response.text}")
 
         return response.json()["data"]
