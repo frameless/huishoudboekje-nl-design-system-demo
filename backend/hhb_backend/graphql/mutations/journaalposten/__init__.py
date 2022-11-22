@@ -17,7 +17,7 @@ def update_transaction_service_is_geboekt(transactions: Union[List[BankTransacti
         transaction.is_geboekt = is_geboekt
         _transaction_ids.append(str(transaction.id))
         
-    process_transaction(transactions, _transaction_ids)
+    update_transactions_geboekt(transactions, _transaction_ids)
 
 
 def update_transactions_geboekt(transactions: List[BankTransaction], _transaction_ids):
