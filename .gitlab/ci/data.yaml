@@ -1,6 +1,6 @@
 .load-sample-data: &load-sample-data
   stage: data
-  image: registry.gitlab.com/commonground/huishoudboekje/data-importer/data-importer:next
+  image: registry.gitlab.com/commonground/huishoudboekje/data-importer/data-importer:1.2.0
   variables:
     CYPRESS_INSTALL_BINARY: "0"
     APP_HOST: hhb-$CI_COMMIT_REF_SLUG.nlx.reviews
