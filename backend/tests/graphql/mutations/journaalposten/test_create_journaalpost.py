@@ -581,7 +581,7 @@ def test_create_journaalpost_automatically_evaluate_alarms_no_signal_created(cli
         assert adapters["rubrieken"].call_count == 1
         assert adapters["journaalposten"].call_count == 1
         assert adapters["journaalposten_get"].call_count == 2
-        assert adapters["journaalposten_get_ids"].call_count == 1
+        assert adapters["journaalposten_get_ids"].call_count == 0
         assert adapters["alarmen_get"].call_count == 1
         assert adapters["active_alarmen_get"].call_count == 1
         assert adapters["alarmen_post"].call_count == 1
@@ -637,7 +637,7 @@ def test_create_journaalpost_automatically_evaluate_alarms_signal_created(client
         assert adapters["rubrieken"].call_count == 1
         assert adapters["journaalposten"].call_count == 1
         assert adapters["journaalposten_get"].call_count == 2
-        assert adapters["journaalposten_get_ids"].call_count == 1
+        assert adapters["journaalposten_get_ids"].call_count == 0
         assert adapters["alarmen_get"].call_count == 1
         assert adapters["active_alarmen_get"].call_count == 1
         assert adapters["alarmen_post"].call_count == 1

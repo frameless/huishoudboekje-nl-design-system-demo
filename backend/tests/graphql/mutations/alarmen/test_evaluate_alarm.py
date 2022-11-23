@@ -231,12 +231,12 @@ def test_bedrag_difference(expected_createSignal, expected_difference, deviated_
 def test_get_banktransactions_by_journaalposten():
     """This tests if the right banktransactions from the provided journaalposten are retrieved."""
     with requests_mock.Mocker() as rm:
-        rm1 = rm.get(
+        get_banktransactions = rm.get(
             f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/?filter_ids={banktransactie_id}",
             json={"data": [banktransactie]}
         )
         transactions = EvaluateAlarm.get_banktransactions_by_journaalposten([journaalpost])
-        assert rm1.call_count == 1
+        assert get_banktransactions.call_count == 1
         assert transactions == [banktransactie]
 
 def test_get_banktransactions_by_journaalposten_no_journaalposten():

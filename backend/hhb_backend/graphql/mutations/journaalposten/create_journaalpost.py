@@ -91,7 +91,7 @@ class CreateJournaalpostAfspraak(graphene.Mutation):
 
         return CreateJournaalpostAfspraak(journaalposten=journaalposten, ok=True)
 
-async def create_journaalposten(input, afspraken, transactions):
+def create_journaalposten(input, afspraken, transactions):
     transaction_ids = [t.id for t in transactions]
     previous = hhb_dataloader().journaalposten.by_transactions(transaction_ids)
     if previous:
@@ -119,7 +119,7 @@ async def create_journaalposten(input, afspraken, transactions):
     if Unleash().is_enabled("signalen"):
         logging.info("create_journaalpost mutation: Evaluating alarms...")
         if alarm_ids:
-            await evaluate_alarms(alarm_ids)
+            evaluate_alarms(alarm_ids, journaalposten)
     else:
         logging.info("create_journaalpost mutation: Skipping alarm evaluation.")
     
