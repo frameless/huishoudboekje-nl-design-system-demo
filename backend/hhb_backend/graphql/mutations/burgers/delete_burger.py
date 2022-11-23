@@ -9,10 +9,7 @@ from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 import hhb_backend.graphql.models.burger as graphene_burger
-from hhb_backend.graphql.utils.gebruikersactiviteiten import (
-    gebruikers_activiteit_entities,
-    log_gebruikers_activiteit,
-)
+from hhb_backend.graphql.utils.gebruikersactiviteiten import gebruikers_activiteit_entities
 
 
 class DeleteBurger(graphene.Mutation):
@@ -24,10 +21,10 @@ class DeleteBurger(graphene.Mutation):
     previous = graphene.Field(lambda: graphene_burger.Burger)
 
     @staticmethod
-    def mutate(root, info, id):
+    def mutate(self, info, id):
         """Delete current burger"""
-        existing_burger = hhb_dataloader().burgers.load_one(id)
-        if not existing_burger:
+        previous = hhb_dataloader().burgers.load_one(id)
+        if not previous:
             raise GraphQLError(f"Burger with id {id} not found")
 
         afspraken = hhb_dataloader().afspraken.by_burger(id)
@@ -56,4 +53,4 @@ class DeleteBurger(graphene.Mutation):
             before=dict(burger=previous),
         )
 
-        return DeleteBurger(ok=True, previous=existing_burger)
+        return DeleteBurger(ok=True, previous=previous)

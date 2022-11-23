@@ -11,10 +11,7 @@ from hhb_backend.graphql import settings
 import hhb_backend.graphql.models.burger as graphene_burger
 from hhb_backend.graphql.mutations.huishoudens.utils import create_huishouden_if_not_exists
 from hhb_backend.graphql.mutations.rekeningen.utils import create_burger_rekening
-from hhb_backend.graphql.utils.gebruikersactiviteiten import (
-    gebruikers_activiteit_entities,
-    log_gebruikers_activiteit,
-)
+from hhb_backend.graphql.utils.gebruikersactiviteiten import gebruikers_activiteit_entities
 from hhb_backend.service.model import burger
 
 
@@ -43,7 +40,7 @@ class CreateBurger(graphene.Mutation):
     burger = graphene.Field(lambda: graphene_burger.Burger)
 
     @staticmethod
-    def mutate(root, info, input):
+    def mutate(self, info, input):
         """ Create the new Gebruiker/Burger """
 
         graphene_burger.Burger.bsn_length(input.get('bsn'))
@@ -73,10 +70,10 @@ class CreateBurger(graphene.Mutation):
         AuditLogging.create(
             action=info.field_name,
             entities=gebruikers_activiteit_entities(
-                entity_type="burger", result=burger
+                entity_type="burger", result=created_burger
             ) + gebruikers_activiteit_entities(
-                entity_type="rekening", result=burger, key="rekeningen"
+                entity_type="rekening", result=created_burger, key="rekeningen"
             ),
-            after=dict(burger=burger),
+            after=dict(burger=created_burger),
         )
         return CreateBurger(ok=True, burger=created_burger)

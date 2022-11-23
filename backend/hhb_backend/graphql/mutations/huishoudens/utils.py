@@ -10,7 +10,7 @@ from hhb_backend.service.model.huishouden import Huishouden
 
 
 def create_huishouden_if_not_exists(huishouden: Dict) -> Huishouden:
-    if "id" in huishouden:
+    if huishouden and "id" in huishouden:
         existing_huishouden = hhb_dataloader().huishoudens.load_one(huishouden["id"])
         # dataloader will always return a tuple with at least one value,
         # regardless of whether object is found or not (value is None otherwise)

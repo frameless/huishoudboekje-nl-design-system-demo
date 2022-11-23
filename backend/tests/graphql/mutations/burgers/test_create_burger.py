@@ -1,6 +1,7 @@
 import requests_mock
 from requests_mock import Adapter
 
+from hhb_backend.graphql import settings
 
 class MockResponse():
     history = None
@@ -15,28 +16,17 @@ class MockResponse():
     def json(self):
         return self.json_data
 
-def create_mock_adapter() -> Adapter:
-    adapter = requests_mock.Adapter()
-
-    def test_matcher(request):
-        if request.path == "/rekeningen/" and request.query == "filter_ibans=gb33bukb20201555555555":
-            return MockResponse({'data': [{'id': 1}]}, 200)
-        elif request.path == "/burgers/":
-            return MockResponse({'data': {'id': 1}}, 201)
-        elif request.path == "/burgers/1/rekeningen/":
-            return MockResponse({'data': "{'id': 1}"}, 201)
-        elif request.path == "/gebruikersactiviteiten/":
-            return MockResponse({'data': {'id': 1}}, 201)
-        elif request.path == "/huishoudens/":
-            return MockResponse({'data': {'id': 1}}, 201)
-
-    adapter.add_matcher(test_matcher)
-    return adapter
-
 
 def test_create_burger_success(client):
     with requests_mock.Mocker() as mock:
-        mock._adapter = create_mock_adapter()
+        get_rekening = mock.get(
+            f"{settings.HHB_SERVICES_URL}/rekeningen/?filter_ibans=GB33BUKB20201555555555",
+            json={"data": [{"id": 1}]}
+        )
+        post_burger = mock.post(f"{settings.HHB_SERVICES_URL}/burgers/", json={'data': {'id': 1}}, status_code=201)
+        post_rekening = mock.post(f"{settings.HHB_SERVICES_URL}/burgers/1/rekeningen/", json={'data': {'id': 1}}, status_code=201)
+        post_gebruikersactiviteit = mock.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=201)
+        post_huishouden = mock.post(f"{settings.HHB_SERVICES_URL}/huishoudens/", json={'data': {'id': 1}}, status_code=201)
 
         response = client.post(
             "/graphql",
@@ -67,7 +57,11 @@ def test_create_burger_success(client):
             content_type='application/json'
         )
 
-        assert mock._adapter.call_count == 5
+        assert get_rekening.call_count == 1
+        assert post_burger.call_count == 1
+        assert post_rekening.call_count == 1
+        assert post_huishouden.call_count == 1
+        assert post_gebruikersactiviteit.call_count == 1
         assert response.json["data"]["createBurger"]["ok"] is True
 
 
