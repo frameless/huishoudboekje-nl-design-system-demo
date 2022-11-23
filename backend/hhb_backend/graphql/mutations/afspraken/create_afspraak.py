@@ -2,7 +2,7 @@
 import graphene
 import logging
 import requests
-from datetime import datetime
+from datetime import date
 from graphql import GraphQLError
 
 from hhb_backend.audit_logging import AuditLogging
@@ -15,10 +15,7 @@ from hhb_backend.graphql.models.postadres import Postadres
 from hhb_backend.graphql.mutations.afspraken.update_afspraak_betaalinstructie import BetaalinstructieInput
 from hhb_backend.graphql.mutations.afspraken.update_afspraak_betaalinstructie import validate_afspraak_betaalinstructie
 from hhb_backend.graphql.scalars.bedrag import Bedrag
-from hhb_backend.graphql.utils.gebruikersactiviteiten import (
-    log_gebruikers_activiteit,
-    gebruikers_activiteit_entities,
-)
+from hhb_backend.graphql.utils.gebruikersactiviteiten import gebruikers_activiteit_entities
 
 
 class CreateAfspraakInput(graphene.InputObjectType):
@@ -45,11 +42,11 @@ class CreateAfspraak(graphene.Mutation):
     afspraak = graphene.Field(lambda: graphene_afspraak.Afspraak)
 
     @staticmethod
-    def mutate(_root, _info, input: CreateAfspraakInput):
+    def mutate(self, info, input: CreateAfspraakInput):
         """ Create the new Afspraak """
 
         if "valid_from" not in input:
-            input["valid_from"] = str(datetime.now().date())
+            input["valid_from"] = str(date.now())
 
         # check burger_id
         burger = hhb_dataloader().burgers.load_one(input.burger_id)
@@ -105,7 +102,7 @@ class CreateAfspraak(graphene.Mutation):
         AuditLogging.create(
             action=info.field_name,
             entities=gebruikers_activiteit_entities(
-                entity_type="afspraak", result=afspraak, key="afspraak"
+                entity_type="afspraak", result=afspraak
             ) + gebruikers_activiteit_entities(
                 entity_type="burger", result=afspraak, key="burger_id"
             ) + gebruikers_activiteit_entities(

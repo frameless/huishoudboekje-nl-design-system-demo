@@ -4,13 +4,11 @@ import graphene
 import requests
 from graphql import GraphQLError
 
+from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 import hhb_backend.graphql.models.afspraak as graphene_afspraak
-from hhb_backend.graphql.utils.gebruikersactiviteiten import (
-    log_gebruikers_activiteit,
-    gebruikers_activiteit_entities,
-)
+from hhb_backend.graphql.utils.gebruikersactiviteiten import gebruikers_activiteit_entities
 
 
 class DeleteAfspraak(graphene.Mutation):
@@ -22,7 +20,7 @@ class DeleteAfspraak(graphene.Mutation):
     previous = graphene.Field(lambda: graphene_afspraak.Afspraak)
 
     @staticmethod
-    def mutate(_root, _info, id):
+    def mutate(self, info, id):
         """ Delete current afspraak """
         previous = hhb_dataloader().afspraken.load_one(id)
         if not previous:
@@ -39,13 +37,13 @@ class DeleteAfspraak(graphene.Mutation):
         AuditLogging.create(
             action=info.field_name,
             entities=gebruikers_activiteit_entities(
-                entity_type="afspraak", result=self, key="previous"
+                entity_type="afspraak", result=previous
             ) + gebruikers_activiteit_entities(
                 entity_type="burger", result=previous, key="burger_id"
             ) + gebruikers_activiteit_entities(
                 entity_type="afdeling", result=previous, key="afdeling_id"
             ),
-            before=dict(afspraak=self.previous),
+            before=dict(afspraak=previous),
         )
 
         return DeleteAfspraak(ok=True, previous=dict(previous))

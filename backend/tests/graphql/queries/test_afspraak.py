@@ -75,9 +75,9 @@ def test_afspraak_empty_interval(client):
             data='{"query": "{ afspraken(ids:[1]) { betaalinstructie { byMonthDay endDate startDate exceptDates }} }"}',
             content_type='application/json'
         )
-        assert response.json == {'data': {'afspraken': [{'betaalinstructie': {'byMonthDay': [],
+        assert response.json == {'data': {'afspraken': [{'betaalinstructie': {'byMonthDay': None,
                                               'endDate': None,
-                                              'exceptDates': [],
+                                              'exceptDates': None,
                                               'startDate': None}}]}}
 
 

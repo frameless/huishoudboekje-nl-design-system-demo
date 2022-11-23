@@ -7,7 +7,7 @@ from graphql import GraphQLError
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.models import afspraak
-from hhb_backend.graphql.utils.gebruikersactiviteiten import (gebruikers_activiteit_entities, log_gebruikers_activiteit)
+from hhb_backend.graphql.utils.gebruikersactiviteiten import gebruikers_activiteit_entities
 from hhb_backend.audit_logging import AuditLogging
 
 
@@ -21,7 +21,7 @@ class DeleteAfspraakBetaalinstructie(graphene.Mutation):
     previous = graphene.Field(lambda: afspraak.Afspraak)
 
     @staticmethod
-    def mutate(_root, _info, afspraak_id: int):
+    def mutate(self, info, afspraak_id: int):
         """ Update the Afspraak """
 
         previous = hhb_dataloader().afspraken.load_one(afspraak_id)
@@ -51,7 +51,7 @@ class DeleteAfspraakBetaalinstructie(graphene.Mutation):
         AuditLogging.create(
             action=info.field_name,
             entities=gebruikers_activiteit_entities(
-                entity_type="afspraak", result=self, key="afspraak"
+                entity_type="afspraak", result=afspraak
             )
                     + gebruikers_activiteit_entities(
                 entity_type="burger", result=afspraak, key="burger_id"
