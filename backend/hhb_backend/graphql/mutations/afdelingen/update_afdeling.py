@@ -7,10 +7,7 @@ from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 import hhb_backend.graphql.models.afdeling as graphene_afdeling
-from hhb_backend.graphql.utils.gebruikersactiviteiten import (
-    gebruikers_activiteit_entities,
-    log_gebruikers_activiteit,
-)
+from hhb_backend.graphql.utils.gebruikersactiviteiten import gebruikers_activiteit_entities
 
 
 class UpdateAfdeling(graphene.Mutation):

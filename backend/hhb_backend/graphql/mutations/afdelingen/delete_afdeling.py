@@ -3,13 +3,11 @@ import graphene
 import requests
 from graphql import GraphQLError
 
+from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 import hhb_backend.graphql.models.afdeling as graphene_afdeling
-from hhb_backend.graphql.utils.gebruikersactiviteiten import (
-    gebruikers_activiteit_entities,
-    log_gebruikers_activiteit,
-)
+from hhb_backend.graphql.utils.gebruikersactiviteiten import gebruikers_activiteit_entities
 
 
 class DeleteAfdeling(graphene.Mutation):
@@ -22,7 +20,7 @@ class DeleteAfdeling(graphene.Mutation):
     ok = graphene.Boolean()
     previous = graphene.Field(lambda: graphene_afdeling.Afdeling)
 
-    def mutate(root, _info, id):
+    def mutate(self, info, id):
         """ Delete current afdeling """
         previous = hhb_dataloader().afdelingen.load_one(id)
         if not previous:
