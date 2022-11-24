@@ -69,4 +69,4 @@ spec:
             - name: SIGNALENSERVICE_URL
               value: "http://hhb-signalenservice"
             - name: UNLEASHSERVICE_URL
-              value: "http://hhb-unleashservice/api/unleash"
+              value: "http://hhb-unleashservice"

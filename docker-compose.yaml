@@ -206,7 +206,7 @@ services:
       POSTADRESSENSERVICE_URL: "http://postadressenservice:8080"
       ALARMENSERVICE_URL: "http://alarmenservice:8080"
       SIGNALENSERVICE_URL: "http://signalenservice:8080"
-      UNLEASHSERVICE_URL: "http://unleashservice:8080/api/unleash"
+      UNLEASHSERVICE_URL: "http://unleashservice:8080"
     ports:
       - 5000:8000
 
