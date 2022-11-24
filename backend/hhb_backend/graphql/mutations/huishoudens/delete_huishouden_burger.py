@@ -9,10 +9,7 @@ from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.models import burger
 from hhb_backend.graphql.models import huishouden
 from hhb_backend.graphql.mutations.huishoudens.utils import create_new_huishouden
-from hhb_backend.graphql.utils.gebruikersactiviteiten import (
-    gebruikers_activiteit_entities,
-    log_gebruikers_activiteit,
-)
+from hhb_backend.graphql.utils.gebruikersactiviteiten import gebruikers_activiteit_entities
 
 
 class DeleteHuishoudenBurger(graphene.Mutation):
@@ -54,12 +51,12 @@ class DeleteHuishoudenBurger(graphene.Mutation):
         AuditLogging.create(
             action=info.field_name,
             entities=gebruikers_activiteit_entities(
-                entity_type="burger", result=burgerIds, key="burgers"
+                entity_type="burger", result=burger_ids
             ) + gebruikers_activiteit_entities(
-                entity_type="huishouden", result=previous["id"], key="huishouden"
+                entity_type="huishouden", result=previous["id"]
             ),
             before=dict(huishouden=previous),
-            after=dict(huishouden=huishouden),
+            after=dict(huishouden=new_huishoudens),
         )
 
         return DeleteHuishoudenBurger(

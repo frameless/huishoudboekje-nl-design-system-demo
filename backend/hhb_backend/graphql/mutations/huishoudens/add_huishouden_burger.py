@@ -7,10 +7,7 @@ from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.models import huishouden
-from hhb_backend.graphql.utils.gebruikersactiviteiten import (
-    gebruikers_activiteit_entities,
-    log_gebruikers_activiteit,
-)
+from hhb_backend.graphql.utils.gebruikersactiviteiten import gebruikers_activiteit_entities
 
 
 class AddHuishoudenBurger(graphene.Mutation):
@@ -25,7 +22,7 @@ class AddHuishoudenBurger(graphene.Mutation):
     previous = graphene.Field(lambda: huishouden.Huishouden)
 
     @staticmethod
-    def mutate(root, info, huishouden_id: int, burger_ids: List[int]):
+    def mutate(self, info, huishouden_id: int, burger_ids: List[int]):
         """Add burgers to given huishouden"""
         previous = hhb_dataloader().huishoudens.load_one(huishouden_id)
 
@@ -47,10 +44,10 @@ class AddHuishoudenBurger(graphene.Mutation):
         AuditLogging.create(
             action=info.field_name,
             entities=gebruikers_activiteit_entities(
-                entity_type="huishouden", result=huishouden
+                entity_type="huishouden", result=loaded_huishouden
             ),
             before=dict(huishouden=previous),
-            after=dict(huishouden=huishouden),
+            after=dict(huishouden=loaded_huishouden),
         )
 
         return AddHuishoudenBurger(

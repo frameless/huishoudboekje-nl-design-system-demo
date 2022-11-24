@@ -8,10 +8,7 @@ from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.models.huishouden import Huishouden
-from hhb_backend.graphql.utils.gebruikersactiviteiten import (
-    log_gebruikers_activiteit,
-    gebruikers_activiteit_entities,
-)
+from hhb_backend.graphql.utils.gebruikersactiviteiten import gebruikers_activiteit_entities
 
 
 class DeleteHuishouden(graphene.Mutation):
@@ -23,7 +20,7 @@ class DeleteHuishouden(graphene.Mutation):
     previous = graphene.Field(lambda: Huishouden)
 
     @staticmethod
-    def mutate(root, info, id):
+    def mutate(self, info, id):
         """ Delete current huishouden """
 
         previous = hhb_dataloader().huishoudens.load_one(id)

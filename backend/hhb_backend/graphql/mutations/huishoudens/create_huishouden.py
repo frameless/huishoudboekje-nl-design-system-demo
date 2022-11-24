@@ -11,10 +11,7 @@ from hhb_backend.graphql.models.huishouden import Huishouden
 from hhb_backend.graphql.mutations.burgers.utils import (
     update_existing_burger,
 )
-from hhb_backend.graphql.utils.gebruikersactiviteiten import (
-    gebruikers_activiteit_entities,
-    log_gebruikers_activiteit,
-)
+from hhb_backend.graphql.utils.gebruikersactiviteiten import gebruikers_activiteit_entities
 from hhb_backend.service.model import huishouden
 
 
@@ -30,7 +27,7 @@ class CreateHuishouden(graphene.Mutation):
     huishouden = graphene.Field(lambda: Huishouden)
 
     @staticmethod
-    def mutate(root, info, input: CreateHuishoudenInput):
+    def mutate(self, info, input: CreateHuishoudenInput):
         """Create a new Huishouden"""
         response = requests.post(
             f"{settings.HHB_SERVICES_URL}/huishoudens/", json=input
@@ -39,22 +36,23 @@ class CreateHuishouden(graphene.Mutation):
             raise GraphQLError(f"Upstream API responded: {response.text}")
         created_huishouden = huishouden.Huishouden(response.json()["data"])
 
-        for burger_id in input.burger_ids:
-            burger = hhb_dataloader().burgers.load_one(burger_id)
-            if not burger:
-                raise GraphQLError(
-                    f"Burger with id {burger_id} not found"
-                )
-            update_burger = {'id': burger_id, 'huishouden_id': created_huishouden.id}
+        if input:
+            for burger_id in input.burger_ids:
+                burger = hhb_dataloader().burgers.load_one(burger_id)
+                if not burger:
+                    raise GraphQLError(
+                        f"Burger with id {burger_id} not found"
+                    )
+                update_burger = {'id': burger_id, 'huishouden_id': created_huishouden.id}
 
-            update_existing_burger(burger=update_burger)
+                update_existing_burger(burger=update_burger)
 
         AuditLogging.create(
             action=info.field_name,
             entities=gebruikers_activiteit_entities(
-                entity_type="huishouden", result=huishouden
+                entity_type="huishouden", result=created_huishouden
             ),
-            after=dict(afspraak=huishouden),
+            after=dict(huishouden=created_huishouden),
         )
 
         return CreateHuishouden(huishouden=created_huishouden, ok=True)
