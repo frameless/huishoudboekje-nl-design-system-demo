@@ -8,10 +8,7 @@ from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.models.organisatie import Organisatie
-from hhb_backend.graphql.utils.gebruikersactiviteiten import (
-    gebruikers_activiteit_entities,
-    log_gebruikers_activiteit,
-)
+from hhb_backend.graphql.utils.gebruikersactiviteiten import gebruikers_activiteit_entities
 
 
 class DeleteOrganisatie(graphene.Mutation):
@@ -23,7 +20,7 @@ class DeleteOrganisatie(graphene.Mutation):
     previous = graphene.Field(lambda: Organisatie)
 
     @staticmethod
-    def mutate(root, _info, id):
+    def mutate(self, info, id):
         """ Delete current organisatie """
         previous = hhb_dataloader().organisaties.load_one(id)
         if not previous:

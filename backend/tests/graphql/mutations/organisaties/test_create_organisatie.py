@@ -4,7 +4,7 @@ from hhb_backend.graphql import settings
 def test_create_organisatie_succes(client):
     with requests_mock.Mocker() as mock:
         # arrange
-        organisatie_new = {'kvknummer': '123456789', 'vestigingsnummer': '1', 'naam': 'testOrganisatie'}
+        input = {'kvknummer': '123456789', 'vestigingsnummer': '1', 'naam': 'testOrganisatie'}
         request = {
                 "query": '''
                     mutation test($input:CreateOrganisatieInput!) {
@@ -15,11 +15,14 @@ def test_create_organisatie_succes(client):
                             }
                         }
                     }''',
-                "variables": {"input": organisatie_new}}
+                "variables": {"input": input}}
         fallback = mock.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
         organisatie_1 = {'id': 1, 'kvknummer': 123, 'vestigingsnummer': 123}
         organisaties = mock.get(f"{settings.ORGANISATIE_SERVICES_URL}/organisaties/", json={'data': [organisatie_1]}, status_code=200)
-        org = mock.post(f"{settings.ORGANISATIE_SERVICES_URL}/organisaties/", json={'data': [organisatie_new]})
+        organisatie_new = {'id':2, 'kvknummer': '123456789', 'vestigingsnummer': '1', 'naam': 'testOrganisatie'}
+        org = mock.post(f"{settings.ORGANISATIE_SERVICES_URL}/organisaties", json={'data': organisatie_new}, status_code=201)
+        log = mock.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/")
+
 
         # act
         response = client.post("/graphql", json=request, content_type='application/json')
@@ -27,6 +30,7 @@ def test_create_organisatie_succes(client):
         # assert
         assert organisaties.call_count == 1
         assert org.call_count == 1
+        assert log.call_count == 1
         assert fallback.call_count == 0
         assert response.json["data"]["createOrganisatie"]["ok"] is True
 

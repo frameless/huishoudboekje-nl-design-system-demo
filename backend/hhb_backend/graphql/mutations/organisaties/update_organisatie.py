@@ -7,10 +7,7 @@ from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.models.organisatie import Organisatie
-from hhb_backend.graphql.utils.gebruikersactiviteiten import (
-    gebruikers_activiteit_entities,
-    log_gebruikers_activiteit,
-)
+from hhb_backend.graphql.utils.gebruikersactiviteiten import gebruikers_activiteit_entities
 
 
 class UpdateOrganisatie(graphene.Mutation):
@@ -26,7 +23,7 @@ class UpdateOrganisatie(graphene.Mutation):
     previous = graphene.Field(lambda: Organisatie)
 
     @staticmethod
-    def mutate(root, info, id, **kwargs):
+    def mutate(self, info, id, **kwargs):
         """ Update the current Organisatie """
         previous = hhb_dataloader().organisaties.load_one(id)
         if not previous:
