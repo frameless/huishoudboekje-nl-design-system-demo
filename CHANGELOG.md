@@ -1,5 +1,19 @@
 # Huishoudboekje Changelog
 
+## 1.4.0
+
+Deze versie omvat nieuwe functionaliteit voor het signaleren van afwijkingen op verwachte inkomsten of uitgaven. Ook omvat het verbeteringen voor snelheid en stabiliteit.
+
+### Minor changes
+
+- Introducing alarms and signals!
+
+### Patch Changes
+
+- bb28672f: Fixed #1109: Improved performance for automated imports. Zoektermen can now be directly saved on create or update of an Afspraak.
+- ec98eab6: Fixed #1119: Fixed a bug where matching afspraken would be found when a zoekterm contained by Regex escapable characters.
+- 960e0288: Fixed #1115: Improved performance of automatisch boeken. All transactions are now created in batch.
+
 ## 1.3.0
 
 Deze versie omvat verbeteringen van snelheid en een voorbereiding op aankomende functionaliteit.
@@ -26,6 +40,7 @@ Deze versie omvat verbeteringen van snelheid en een voorbereiding op aankomende 
   ```
 
   To see the exact change in the context of a Kubernetes configuration file, please see `/k8s/base/organisatieservice/deployment.yaml`, lines 69-70.
+
 - d0bc03e8: #1076: A cronjob that checks alarms has been added.
 
   ## Migration guide
