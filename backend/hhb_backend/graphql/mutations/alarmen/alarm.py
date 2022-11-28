@@ -50,7 +50,7 @@ class AlarmHelper:
         self.burger_id = burger_id
 
     @staticmethod
-    async def create(input):
+    def create(input):
         logging.info(f"AlarmHelper.create: creating alarm... Input: {input}")
 
         # TODO eventually turn this back on, for testing purposes it is off
@@ -93,7 +93,7 @@ class AlarmHelper:
         return AlarmHelper(alarm=response_alarm, previous=dict(), ok=True, burger_id=afspraak.burger_id)
 
     @staticmethod
-    async def delete(id):
+    def delete(id):
         logging.info(f"AlarmHelper.delete: deleting alarm... Id: {id}")
 
         previous = hhb_dataloader().alarms.load_one(id)
@@ -115,7 +115,7 @@ class AlarmHelper:
         return AlarmHelper(alarm=dict(), previous=previous, ok=True, burger_id=burger_id)
 
     @staticmethod
-    async def update(id: str, input: UpdateAlarmInput):
+    def update(id: str, input: UpdateAlarmInput):
         logging.info(f"AlarmHelper.update: updating alarm... Id: {id}, input: {input}")
 
         # TODO eventually turn this back on, for testing purposes it is off

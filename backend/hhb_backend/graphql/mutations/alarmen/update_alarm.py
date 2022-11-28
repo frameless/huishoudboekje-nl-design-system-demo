@@ -36,8 +36,8 @@ class UpdateAlarm(graphene.Mutation):
 
     @staticmethod
     @log_gebruikers_activiteit
-    async def mutate(_root, _info, id: str, input: UpdateAlarmInput):
+    def mutate(_root, _info, id: str, input: UpdateAlarmInput):
         """ Mutatie voor het wijzigen van een bestaand Alarm """
-        response_alarm = await AlarmHelper.update(id, input)
+        response_alarm = AlarmHelper.update(id, input)
 
         return UpdateAlarm(alarm=response_alarm.alarm, previous=response_alarm.previous, ok=True, burger_id=response_alarm.burger_id)

@@ -51,7 +51,7 @@ class CreateJournaalpostAfspraak(graphene.Mutation):
 
     @staticmethod
     @log_gebruikers_activiteit
-    async def mutate(_root, _info, input: List[CreateJournaalpostAfspraakInput]):
+    def mutate(_root, _info, input: List[CreateJournaalpostAfspraakInput]):
         """ Create the new Journaalpost """
         # Validate that the references exist
         if len(input) == 0:
@@ -91,7 +91,7 @@ class CreateJournaalpostAfspraak(graphene.Mutation):
 
         return CreateJournaalpostAfspraak(journaalposten=journaalposten, ok=True)
 
-async def create_journaalposten(input, afspraken, transactions):
+def create_journaalposten(input, afspraken, transactions):
     transaction_ids = [t.id for t in transactions]
     previous = hhb_dataloader().journaalposten.by_transactions(transaction_ids)
     if previous:
@@ -119,7 +119,7 @@ async def create_journaalposten(input, afspraken, transactions):
     if Unleash().is_enabled("signalen"):
         logging.info("create_journaalpost mutation: Evaluating alarms...")
         if alarm_ids:
-            await evaluate_alarms(alarm_ids)
+            evaluate_alarms(alarm_ids, journaalposten)
     else:
         logging.info("create_journaalpost mutation: Skipping alarm evaluation.")
     
@@ -153,7 +153,7 @@ class CreateJournaalpostGrootboekrekening(graphene.Mutation):
 
     @staticmethod
     @log_gebruikers_activiteit
-    async def mutate(_root, _info, input, **_kwargs):
+    def mutate(_root, _info, input, **_kwargs):
         """ Create the new Journaalpost """
         # Validate that the references exist
         transaction = hhb_dataloader().bank_transactions.load_one(input.transaction_id)

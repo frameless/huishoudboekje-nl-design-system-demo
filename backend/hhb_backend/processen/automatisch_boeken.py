@@ -51,7 +51,7 @@ async def automatisch_boeken(customer_statement_message_id: int = None):
 
     _matching_transactions = [t for t in transactions if t.id in _matching_transaction_ids]
     
-    journaalposten_ = await create_journaalposten(json, _afspraken, _matching_transactions)
+    journaalposten_ = create_journaalposten(json, _afspraken, _matching_transactions)
     
     logging.info(f"automatisch boeken completed with {len(journaalposten_)}")
     return journaalposten_

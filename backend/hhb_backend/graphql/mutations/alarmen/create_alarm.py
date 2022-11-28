@@ -31,8 +31,8 @@ class CreateAlarm(graphene.Mutation):
 
     @staticmethod
     @log_gebruikers_activiteit
-    async def mutate(_root, _info, input: CreateAlarmInput):
+    def mutate(_root, _info, input: CreateAlarmInput):
         """ Mutatie voor het aanmaken van een nieuw Alarm """
-        response_alarm = await AlarmHelper.create(input)
+        response_alarm = AlarmHelper.create(input)
 
         return CreateAlarm(alarm=response_alarm.alarm, burger_id=response_alarm.burger_id, ok=True)
