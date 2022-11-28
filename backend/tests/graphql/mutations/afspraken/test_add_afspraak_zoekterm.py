@@ -27,7 +27,7 @@ def test_add_afspraak_zoekterm_success_1(client):
     with requests_mock.Mocker() as mock:
         get_any = mock.get(requests_mock.ANY, status_code=404)
         post_any = mock.post(requests_mock.ANY, status_code=404)
-        log_post = mock.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", json={"data": {"id": 1}})
+        log_post = mock.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=201)
         afspraken_get = mock.get(
             f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids=1",
             json={"data": [{
@@ -76,7 +76,7 @@ def test_add_afspraak_zoekterm_conflict_1(client):
     with requests_mock.Mocker() as mock:
         get_any = mock.get(requests_mock.ANY, status_code=404)
         post_any = mock.post(requests_mock.ANY, status_code=404)
-        log_post = mock.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", json={"data": {"id": 1}})
+        log_post = mock.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=201)
         afspraken_get = mock.get(
             f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids=1",
             json={"data": [{
@@ -126,7 +126,7 @@ def test_add_afspraak_zoekterm_conflict_2(client):
     with requests_mock.Mocker() as mock:
         get_any = mock.get(requests_mock.ANY, status_code=404)
         post_any = mock.post(requests_mock.ANY, status_code=404)
-        log_post = mock.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", json={"data": {"id": 1}})
+        log_post = mock.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=201)
         afspraken_get = mock.get(
             f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids=1",
             json={"data": [{
@@ -176,7 +176,7 @@ def test_add_afspraak_zoekterm_success_2(client):
     with requests_mock.Mocker() as mock:
         get_any = mock.get(requests_mock.ANY, status_code=404)
         post_any = mock.post(requests_mock.ANY, status_code=404)
-        log_post = mock.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", json={"data": {"id": 1}})
+        log_post = mock.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=201)
         afspraken_get = mock.get(
             f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids=1",
             json={"data": [{
@@ -234,7 +234,7 @@ def test_add_afspraak_zoekterm_conflict_3(client):
         }
         get_any = mock.get(requests_mock.ANY, status_code=404)
         post_any = mock.post(requests_mock.ANY, status_code=404)
-        log_post = mock.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/")
+        log_post = mock.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=201)
         afspraken_get = mock.get(
             f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids=1",
             json={"data": [afspraak1]}
