@@ -2,10 +2,6 @@
 import graphene
 import random
 
-from hhb_backend.graphql.dataloaders import hhb_dataloader
-from hhb_backend.graphql.models.signaal import Signaal
-from hhb_backend.graphql.utils.gebruikersactiviteiten import (gebruikers_activiteit_entities, log_gebruikers_activiteit)
-
 
 class TestQueryResult(graphene.ObjectType):
     ok = graphene.Boolean()

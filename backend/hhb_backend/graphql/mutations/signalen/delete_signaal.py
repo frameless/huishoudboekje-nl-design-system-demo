@@ -2,7 +2,7 @@
 import graphene
 
 from hhb_backend.audit_logging import AuditLogging
-from hhb_backend.graphql.models.signaal import Signaal
+import hhb_backend.graphql.models.signaal as graphene_signaal
 from hhb_backend.graphql.mutations.signalen.signalen import SignaalHelper
 from hhb_backend.graphql.utils.gebruikersactiviteiten import log_gebruikers_activiteit, gebruikers_activiteit_entities
 
@@ -12,7 +12,7 @@ class DeleteSignaal(graphene.Mutation):
         id = graphene.String(required=True)
 
     ok = graphene.Boolean()
-    previous = graphene.Field(lambda: Signaal)
+    previous = graphene.Field(lambda: graphene_signaal.Signaal)
 
     @staticmethod
     def mutate(root, info, id):
