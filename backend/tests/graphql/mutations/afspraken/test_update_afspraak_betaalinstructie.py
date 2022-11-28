@@ -54,7 +54,7 @@ def test_update_afspraak(client):
                             'byMonth': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
                             'byMonthDay': [3],
                             'repeatFrequency': None,
-                            'exceptDates': [],
+                            'exceptDates': None,
                             'startDate': '2020-11-01',
                             'endDate': '2022-11-01'
                         }
@@ -144,6 +144,8 @@ def test_update_afspraak(client):
                 "variables": {"afspraakId": afspraak_id, "input": input}},
             content_type='application/json'
         )
+
+        print(f"Response: {response.json}")
 
         # assert
         assert rm1.call_count == 1

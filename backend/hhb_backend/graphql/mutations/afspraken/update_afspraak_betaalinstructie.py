@@ -71,7 +71,7 @@ class UpdateAfspraakBetaalinstructie(graphene.Mutation):
         AuditLogging.create(
             action=info.field_name,
             entities=gebruikers_activiteit_entities(
-                entity_type="afspraak", result=result_afspraak
+                entity_type="afspraak", result=new_afspraak
             ) + gebruikers_activiteit_entities(
                 entity_type="burger", result=new_afspraak, key="burger_id"
             ),
