@@ -1,13 +1,18 @@
 import {Button, ButtonProps, Flex, Text, useTheme} from "@chakra-ui/react";
 import React, {useContext} from "react";
 import {IconContext} from "react-icons";
-import {NavLink, useLocation} from "react-router-dom";
+import {NavLink} from "react-router-dom";
 import {DrawerContext} from "../../utils/things";
 import LinkIcon from "./LinkIcon";
 
-const SidebarLink: React.FC<ButtonProps & {icon?, to: string, exactMatch?: boolean, target?: string}> = ({icon, to, children, exactMatch = false, ...props}) => {
-	const location = useLocation();
-	const isActive = exactMatch ? location.pathname === to : location.pathname.includes(to);
+type SidebarLinkProps = ButtonProps & {
+	icon?,
+	to: string,
+	isActive?: boolean,
+	target?: string
+};
+
+const SidebarLink: React.FC<SidebarLinkProps> = ({icon, to, isActive = false, children, ...props}) => {
 	const drawerContext = useContext(DrawerContext);
 	const theme = useTheme();
 
