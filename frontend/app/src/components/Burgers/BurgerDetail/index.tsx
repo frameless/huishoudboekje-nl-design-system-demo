@@ -5,13 +5,13 @@ import {NavLink, useNavigate, useParams} from "react-router-dom";
 import {AppRoutes} from "../../../config/routes";
 import {
 	Burger,
-	GetBurgerDocument,
+	GetBurgerDetailsDocument,
 	GetBurgersDocument,
 	GetBurgersSearchDocument,
 	GetHuishoudensDocument,
 	useDeleteBurgerMutation,
 	useDeleteHuishoudenBurgerMutation,
-	useGetBurgerQuery,
+	useGetBurgerDetailsQuery,
 } from "../../../generated/graphql";
 import useStore from "../../../store";
 import {useFeatureFlag} from "../../../utils/features";
@@ -24,7 +24,6 @@ import MenuIcon from "../../shared/MenuIcon";
 import Page from "../../shared/Page";
 import PageNotFound from "../../shared/PageNotFound";
 import BurgerAfsprakenView from "./BurgerAfsprakenView";
-import BurgerGebeurtenissen from "./BurgerGebeurtenissen";
 import BurgerSignalenView from "./BurgerSignalenView";
 
 const BurgerDetailPage = () => {
@@ -36,7 +35,7 @@ const BurgerDetailPage = () => {
 	const deleteAlert = useDisclosure();
 	const deleteHuishoudenBurgerAlert = useDisclosure();
 	const burgerSearch = useStore(store => store.burgerSearch);
-	const $burger = useGetBurgerQuery({
+	const $burger = useGetBurgerDetailsQuery({
 		variables: {
 			id: parseInt(id),
 		},
@@ -45,7 +44,7 @@ const BurgerDetailPage = () => {
 		refetchQueries: [
 			{query: GetBurgersSearchDocument, variables: {search: burgerSearch}},
 			{query: GetBurgersDocument},
-			{query: GetBurgerDocument, variables: {id: parseInt(id)}},
+			{query: GetBurgerDetailsDocument, variables: {id: parseInt(id)}},
 			{query: GetHuishoudensDocument},
 		],
 	});
@@ -150,6 +149,7 @@ const BurgerDetailPage = () => {
 							<Link href={AppRoutes.BrievenExport(id, "excel")} target={"_blank"}><MenuItem>{t("global.actions.brievenExport")}</MenuItem></Link>
 							<NavLink to={AppRoutes.RapportageBurger([id])}><MenuItem>{t("global.actions.showReports")}</MenuItem></NavLink>
 							<NavLink to={AppRoutes.ViewBurgerPersonalDetails(String(burger.id))}><MenuItem>{t("global.actions.showPersonalDetails")}</MenuItem></NavLink>
+							<NavLink to={AppRoutes.ViewBurgerAuditLog(String(burger.id))}><MenuItem>{t("global.actions.showBurgerAuditLog")}</MenuItem></NavLink>
 							<NavLink to={AppRoutes.Huishouden(String(burger.huishouden?.id))}><MenuItem>{t("global.actions.showHuishouden")}</MenuItem></NavLink>
 							<Divider />
 							<MenuItem onClick={() => deleteHuishoudenBurgerAlert.onOpen()}>{t("global.actions.deleteBurgerFromHuishouden")}</MenuItem>
@@ -159,7 +159,6 @@ const BurgerDetailPage = () => {
 				)}>
 					{isSignalenEnabled && <BurgerSignalenView burger={burger} />}
 					<BurgerAfsprakenView burger={burger} />
-					<BurgerGebeurtenissen burger={burger} />
 				</Page>
 			</>);
 		}}

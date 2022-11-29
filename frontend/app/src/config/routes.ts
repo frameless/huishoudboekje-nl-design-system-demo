@@ -72,6 +72,10 @@ export const AppRoutes = {
 		id,
 		action: RouteNames.personal,
 	}),
+	ViewBurgerAuditLog: (id: string) => generatePath(AppRoutesNew.burgerAction, {
+		id,
+		action: RouteNames.gebeurtenissen,
+	}),
 	CreateBurger: () => generatePath(AppRoutesNew.burgersAction, {
 		action: RouteNames.add,
 	}),

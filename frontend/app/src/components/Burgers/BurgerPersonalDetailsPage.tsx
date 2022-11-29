@@ -2,7 +2,7 @@ import {Stack} from "@chakra-ui/react";
 import React from "react";
 import {useParams} from "react-router-dom";
 import {AppRoutes} from "../../config/routes";
-import {Burger, useGetBurgerQuery} from "../../generated/graphql";
+import {Burger, useGetBurgerPersonalDetailsQuery} from "../../generated/graphql";
 import Queryable from "../../utils/Queryable";
 import {formatBurgerName} from "../../utils/things";
 import BackButton from "../shared/BackButton";
@@ -14,7 +14,7 @@ import BurgerRekeningenView from "./BurgerDetail/BurgerRekeningenView";
 const BurgerPersonalDetailsPage = () => {
 	const {id = ""} = useParams<{id: string}>();
 
-	const $burger = useGetBurgerQuery({
+	const $burger = useGetBurgerPersonalDetailsQuery({
 		variables: {
 			id: parseInt(id),
 		},

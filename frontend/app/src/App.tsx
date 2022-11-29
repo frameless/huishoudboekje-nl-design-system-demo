@@ -11,6 +11,7 @@ import CustomerStatementMessages from "./components/Bankzaken/Bankafschriften";
 import Betaalinstructies from "./components/Bankzaken/Betaalinstructies";
 import Transactions from "./components/Bankzaken/Transacties";
 import TransactieDetailPage from "./components/Bankzaken/Transacties/TransactieDetailPage";
+import BurgerAuditLogPage from "./components/Burgers/BurgerAuditLogPage";
 import BurgerDetailPage from "./components/Burgers/BurgerDetail";
 import BurgerList from "./components/Burgers/BurgerList";
 import BurgerPersonalDetailsPage from "./components/Burgers/BurgerPersonalDetailsPage";
@@ -114,6 +115,7 @@ const App = () => {
 								<Route path={RouteNames.add} element={<CreateBurger />} />
 								<Route path={":id"} element={<BurgerDetailPage />} />
 								<Route path={`:id/${RouteNames.personal}`} element={<BurgerPersonalDetailsPage />} />
+								<Route path={`:id/${RouteNames.gebeurtenissen}`} element={<BurgerAuditLogPage />} />
 								<Route path={`:id/${RouteNames.edit}`} element={<EditBurger />} />
 								<Route path={`:id/${RouteNames.afspraken}/${RouteNames.add}`} element={<CreateAfspraak />} />
 							</Route>
