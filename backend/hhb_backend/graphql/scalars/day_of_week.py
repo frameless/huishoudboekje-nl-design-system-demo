@@ -1,7 +1,7 @@
 import graphene
 
 
-class DayOfWeek(graphene.Enum):
+class DayOfWeek(str, graphene.Enum):
     """http://schema.org/DayOfWeek implementation"""
     Monday = 'Monday'
     Tuesday = 'Tuesday'
