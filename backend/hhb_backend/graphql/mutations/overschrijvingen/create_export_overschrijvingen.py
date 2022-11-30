@@ -11,10 +11,7 @@ from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 import hhb_backend.graphql.models.export as graphene_export
 from hhb_backend.graphql.utils.dates import to_date
-from hhb_backend.graphql.utils.gebruikersactiviteiten import (
-    gebruikers_activiteit_entities,
-    log_gebruikers_activiteit
-)
+from hhb_backend.graphql.utils.gebruikersactiviteiten import gebruikers_activiteit_entities
 from hhb_backend.processen.create_sepa_export import create_export_string
 from hhb_backend.processen.overschrijvingen_planner import (
     PlannedOverschrijvingenInput,
@@ -47,7 +44,7 @@ class CreateExportOverschrijvingen(graphene.Mutation):
     export = graphene.Field(lambda: graphene_export.Export)
 
     @staticmethod
-    def mutate(root, info, **kwargs):
+    def mutate(self, info, **kwargs):
         """ Create the export file based on start and end date """
         start_datum_str = kwargs.pop("startDatum")
         eind_datum_str = kwargs.pop("eindDatum")
@@ -152,9 +149,9 @@ class CreateExportOverschrijvingen(graphene.Mutation):
         AuditLogging.create(
             action=info.field_name,
             entities=gebruikers_activiteit_entities(
-                entity_type="export", result=export
+                entity_type="export", result=export_object
             ),
-            after=dict(export=export)
+            after=dict(export=export_object)
         )
 
         return CreateExportOverschrijvingen(export=export_object, ok=True)
