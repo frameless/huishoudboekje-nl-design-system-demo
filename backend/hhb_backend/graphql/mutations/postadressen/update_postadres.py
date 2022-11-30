@@ -7,10 +7,7 @@ from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 import hhb_backend.graphql.models.postadres as graphene_postadres
-from hhb_backend.graphql.utils.gebruikersactiviteiten import (
-    gebruikers_activiteit_entities,
-    log_gebruikers_activiteit,
-)
+from hhb_backend.graphql.utils.gebruikersactiviteiten import gebruikers_activiteit_entities
 
 
 class UpdatePostadres(graphene.Mutation):
@@ -26,7 +23,7 @@ class UpdatePostadres(graphene.Mutation):
     previous = graphene.Field(lambda: graphene_postadres.Postadres)
 
     @staticmethod
-    def mutate(root, info, id, **kwargs):
+    def mutate(self, info, id, **kwargs):
         """ Update the current Postadres """
         previous = hhb_dataloader().postadressen.load_one(id)
         if not previous:
