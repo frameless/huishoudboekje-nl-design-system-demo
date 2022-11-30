@@ -11,8 +11,8 @@ alarm2_id = "33738845-7f23-4c8f-8424-2b560a944884"
 alarm3_id = "9b205557-4c6a-468e-94f8-ed4bad90bd3f"
 signaal_id = "e2b282d9-b31f-451e-9242-11f86c902b35"
 mock_afspraken = {
-    11: {"id": 11, "rubriek_id": 1, "credit": True},
-    12: {"id": 12, "rubriek_id": 2, "credit": False},
+    11: {"id": 11, "rubriek_id": 1, "credit": True, "burger_id": 1},
+    12: {"id": 12, "rubriek_id": 2, "credit": False, "burger_id": 1},
     13: {"id": 13, "rubriek_id": 1, "credit": True, "burger_id": 1, "alarm_id": alarm1_id, "journaalposten": [23],
          "valid_from": "2021-01-01"},
 }

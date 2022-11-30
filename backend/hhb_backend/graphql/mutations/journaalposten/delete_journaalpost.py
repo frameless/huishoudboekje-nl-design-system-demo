@@ -7,7 +7,7 @@ from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 import hhb_backend.graphql.models.journaalpost as graphene_journaalpost
 from hhb_backend.graphql.mutations.journaalposten import update_transaction_service_is_geboekt
-from hhb_backend.graphql.utils.gebruikersactiviteiten import (gebruikers_activiteit_entities, log_gebruikers_activiteit)
+from hhb_backend.graphql.utils.gebruikersactiviteiten import gebruikers_activiteit_entities
 
 
 class DeleteJournaalpost(graphene.Mutation):
@@ -18,7 +18,7 @@ class DeleteJournaalpost(graphene.Mutation):
     previous = graphene.Field(lambda: graphene_journaalpost.Journaalpost)
 
     @staticmethod
-    def mutate(root, info, id):
+    def mutate(self, info, id):
         previous = hhb_dataloader().journaalposten.load_one(id)
         if previous and previous.afspraak_id:
             previous.afspraak = hhb_dataloader().afspraken.load_one(previous.afspraak_id)

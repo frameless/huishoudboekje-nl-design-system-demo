@@ -13,10 +13,7 @@ import hhb_backend.graphql.models.afspraak as graphene_afspraak
 from hhb_backend.graphql.models.journaalpost import Journaalpost
 from hhb_backend.graphql.mutations.alarmen.evaluate_alarm import evaluate_alarms
 from hhb_backend.graphql.mutations.journaalposten import update_transaction_service_is_geboekt
-from hhb_backend.graphql.utils.gebruikersactiviteiten import (
-    gebruikers_activiteit_entities,
-    log_gebruikers_activiteit,
-)
+from hhb_backend.graphql.utils.gebruikersactiviteiten import gebruikers_activiteit_entities
 from hhb_backend.service.model import journaalpost
 
 
@@ -40,7 +37,7 @@ class CreateJournaalpostAfspraak(graphene.Mutation):
     journaalposten = graphene.List(lambda: Journaalpost)
 
     @staticmethod
-    def mutate(root, info, input: List[CreateJournaalpostAfspraakInput]):
+    def mutate(self, info, input: List[CreateJournaalpostAfspraakInput]):
         """ Create the new Journaalpost """
         # Validate that the references exist
         if len(input) == 0:
