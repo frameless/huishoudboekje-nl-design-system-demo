@@ -9,10 +9,7 @@ from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.models.customer_statement_message import (
     CustomerStatementMessage,
 )
-from hhb_backend.graphql.utils.gebruikersactiviteiten import (
-    gebruikers_activiteit_entities,
-    log_gebruikers_activiteit,
-)
+from hhb_backend.graphql.utils.gebruikersactiviteiten import gebruikers_activiteit_entities
 
 
 class DeleteCustomerStatementMessage(graphene.Mutation):
@@ -24,7 +21,7 @@ class DeleteCustomerStatementMessage(graphene.Mutation):
     previous = graphene.Field(lambda: CustomerStatementMessage)
 
     @staticmethod
-    def mutate(root, info, id):
+    def mutate(self, info, id):
         """ Delete current Customer Statement Message """
         previous = hhb_dataloader().csms.load_one(id)
 

@@ -14,10 +14,7 @@ from hhb_backend.graphql import settings
 from hhb_backend.graphql.models.customer_statement_message import (
     CustomerStatementMessage,
 )
-from hhb_backend.graphql.utils.gebruikersactiviteiten import (
-    gebruikers_activiteit_entities,
-    log_gebruikers_activiteit,
-)
+from hhb_backend.graphql.utils.gebruikersactiviteiten import gebruikers_activiteit_entities
 from hhb_backend.processen import automatisch_boeken
 from hhb_backend.service.model import customer_statement_message
 from hhb_backend.service.model.bank_transaction import BankTransaction
@@ -35,7 +32,7 @@ class CreateCustomerStatementMessage(graphene.Mutation):
     journaalposten = graphene.List(lambda: journaalpost.Journaalpost)
 
     @staticmethod
-    def mutate(_root, _info, file):
+    def mutate(self, info, file):
         content = file.stream.read()
 
         if not content:
@@ -122,14 +119,13 @@ class CreateCustomerStatementMessage(graphene.Mutation):
             action=info.field_name,
             entities=gebruikers_activiteit_entities(
                 entity_type="customerStatementMessage",
-                result=customerStatementMessage,
+                result=csm,
             ) + gebruikers_activiteit_entities(
                 entity_type="transaction",
-                result=customerStatementMessage,
+                result=csm,
                 key="bank_transactions",
             ),
-            after=dict(customerStatementMessage=customerStatementMessage),
-
+            after=dict(customerStatementMessage=csm),
         )
 
         return CreateCustomerStatementMessage(
