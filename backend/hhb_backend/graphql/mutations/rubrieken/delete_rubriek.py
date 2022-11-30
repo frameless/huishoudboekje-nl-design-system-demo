@@ -8,10 +8,7 @@ from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.models.rubriek import Rubriek
-from hhb_backend.graphql.utils.gebruikersactiviteiten import (
-    gebruikers_activiteit_entities,
-    log_gebruikers_activiteit,
-)
+from hhb_backend.graphql.utils.gebruikersactiviteiten import gebruikers_activiteit_entities
 
 
 class DeleteRubriek(graphene.Mutation):
@@ -22,7 +19,7 @@ class DeleteRubriek(graphene.Mutation):
     previous = graphene.Field(lambda: Rubriek)
 
     @staticmethod
-    def mutate(root, info, id, **kwargs):
+    def mutate(self, info, id):
         """ Delete current rubriek """
         previous = hhb_dataloader().rubrieken.load_one(id)
 

@@ -9,10 +9,7 @@ from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.models.rubriek import Rubriek
-from hhb_backend.graphql.utils.gebruikersactiviteiten import (
-    gebruikers_activiteit_entities,
-    log_gebruikers_activiteit,
-)
+from hhb_backend.graphql.utils.gebruikersactiviteiten import gebruikers_activiteit_entities
 
 
 class UpdateRubriek(graphene.Mutation):
@@ -26,7 +23,7 @@ class UpdateRubriek(graphene.Mutation):
     previous = graphene.Field(lambda: Rubriek)
 
     @staticmethod
-    def mutate(root, info, id, **kwargs):
+    def mutate(self, info, id, **kwargs):
         """ Update a Rubriek """
         previous = hhb_dataloader().rubrieken.load_one(id)
         if (
@@ -43,6 +40,7 @@ class UpdateRubriek(graphene.Mutation):
         )
         if not post_response.ok:
             raise GraphQLError(f"Upstream API responded: {post_response.text}")
+
         rubriek = post_response.json()["data"]
 
         AuditLogging.create(
@@ -50,8 +48,8 @@ class UpdateRubriek(graphene.Mutation):
             entities=gebruikers_activiteit_entities(
                 entity_type="rubriek", result=rubriek
             ),
-            before=dict(rubriek=rubriek),  # Todo: this doesn't seem §§right (07-11-2022)
-            after=dict(rubriek=rubriek),  # Todo: this doesn't seem §right (07-11-2022)
+            before=dict(rubriek=previous),
+            after=dict(rubriek=rubriek),
         )
 
         return UpdateRubriek(rubriek=rubriek, previous=previous, ok=True)
