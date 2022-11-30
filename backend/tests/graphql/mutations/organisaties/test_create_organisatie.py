@@ -20,7 +20,7 @@ def test_create_organisatie_succes(client):
         organisatie_1 = {'id': 1, 'kvknummer': 123, 'vestigingsnummer': 123}
         organisaties = mock.get(f"{settings.ORGANISATIE_SERVICES_URL}/organisaties/", json={'data': [organisatie_1]}, status_code=200)
         organisatie_new = {'id':2, 'kvknummer': '123456789', 'vestigingsnummer': '1', 'naam': 'testOrganisatie'}
-        org = mock.post(f"{settings.ORGANISATIE_SERVICES_URL}/organisaties", json={'data': organisatie_new}, status_code=201)
+        org = mock.post(f"{settings.ORGANISATIE_SERVICES_URL}/organisaties/", json={'data': organisatie_new}, status_code=201)
         log = mock.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/")
 
 
