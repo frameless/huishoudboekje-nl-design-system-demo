@@ -2,7 +2,7 @@ import calendar
 import graphene
 import logging
 import requests
-from datetime import date, datetime, timezone, timedelta
+from datetime import date
 from dateutil.rrule import rrule, MONTHLY, YEARLY
 from graphql import GraphQLError
 
@@ -59,10 +59,10 @@ class AlarmHelper:
         # if alarm_date < utc_now:
         #     raise GraphQLError(f"The alarm date has to be in the future.")
 
-        if (input["byMonth"] or input["byMonthDay"]) and not (input["byMonth"] and input["byMonthDay"]):
+        if (input.get("byMonth") or input.get("byMonthDay")) and not (input.get("byMonth") and input.get("byMonthDay")):
             raise GraphQLError("Either both byMonth and byMonthDay are required, or neither.")
 
-        if not input["endDate"]:
+        if not input.get("endDate"):
             if input.get("startDate"):
                 raise GraphQLError("It is not possible to have a startDate for a repetitive alarm.")
             # can't use attributes to set data

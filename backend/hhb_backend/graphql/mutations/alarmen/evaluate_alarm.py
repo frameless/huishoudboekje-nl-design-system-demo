@@ -30,21 +30,21 @@ class AlarmTriggerResult(graphene.ObjectType):
 
 class EvaluateAlarms(graphene.Mutation):
     class Arguments:
-        ids = graphene.List(graphene.String)
+        ids = graphene.List(graphene.String, required=False)
 
     alarmTriggerResult = graphene.List(lambda: AlarmTriggerResult)
 
     @staticmethod
-    def mutate(self, info, ids):
+    def mutate(self, info, ids = []):
         """ Mutatie voor de evaluatie van een alarm wat kan resulteren in een signaal en/of een nieuw alarm in de reeks. """
         if not Unleash().is_enabled("signalen"):
             raise GraphQLError("Feature signalen is disabled")
 
-        triggered_alarms = evaluate_alarms(ids)
+        triggered_alarms = evaluate_alarms(ids=ids)
         AuditLogging.create(
             action=info.field_name,
             entities=gebruikers_activiteit_entities(
-                entity_type="alarm", result=triggered_alarms
+                entity_type="alarm", result=[a["alarm"] for a in triggered_alarms]
             ),
             after=dict(),
         )
@@ -69,7 +69,7 @@ class EvaluateAlarm(graphene.Mutation):
         AuditLogging.create(
             action=info.field_name,
             entities=gebruikers_activiteit_entities(
-                entity_type="alarm", result=evaluated_alarm
+                entity_type="alarm", result=evaluated_alarm[0]
             ),
             after=dict(),
         )
