@@ -11,7 +11,7 @@ from hhb_backend.graphql.mutations.rekeningen.utils import (
     delete_rekening,
     disconnect_burger_rekening
 )
-from hhb_backend.graphql.utils.gebruikersactiviteiten import (log_gebruikers_activiteit)
+from hhb_backend.graphql.utils.gebruikersactiviteiten import log_gebruikers_activiteit
 
 
 class DeleteBurgerRekening(graphene.Mutation):
@@ -25,7 +25,7 @@ class DeleteBurgerRekening(graphene.Mutation):
     previous = graphene.Field(lambda: rekening.Rekening)
 
     @staticmethod
-    def mutate(root, info, id, burger_id):
+    def mutate(self, info, id, burger_id):
         """ Delete rekening associations with either burger or organisation """
         previous = hhb_dataloader().rekeningen.load_one(id)
         if not previous:

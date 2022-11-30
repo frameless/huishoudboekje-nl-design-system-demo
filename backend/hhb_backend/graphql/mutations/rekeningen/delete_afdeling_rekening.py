@@ -21,7 +21,7 @@ class DeleteAfdelingRekening(graphene.Mutation):
     previous = graphene.Field(lambda: rekening.Rekening)
 
     @staticmethod
-    def mutate(root, info, rekening_id, afdeling_id):
+    def mutate(self, info, rekening_id, afdeling_id):
         """ Delete rekening associations with an afdeling """
         previous = hhb_dataloader().rekeningen.load_one(rekening_id)
         if not previous:

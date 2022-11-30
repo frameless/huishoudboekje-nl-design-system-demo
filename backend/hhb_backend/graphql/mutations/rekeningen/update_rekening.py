@@ -9,10 +9,7 @@ import hhb_backend.graphql.mutations.rekeningen.rekening_input as rekening_input
 from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
-from hhb_backend.graphql.utils.gebruikersactiviteiten import (
-    gebruikers_activiteit_entities,
-    log_gebruikers_activiteit,
-)
+from hhb_backend.graphql.utils.gebruikersactiviteiten import gebruikers_activiteit_entities
 
 
 class UpdateRekening(graphene.Mutation):
@@ -27,7 +24,7 @@ class UpdateRekening(graphene.Mutation):
     previous = graphene.Field(lambda: rekening.Rekening)
 
     @staticmethod
-    def mutate(root, info, id, rekening):
+    def mutate(self, info, id, rekening):
         """ Create the new Rekening """
         previous = hhb_dataloader().rekeningen.load_one(id)
 
@@ -51,16 +48,16 @@ class UpdateRekening(graphene.Mutation):
         AuditLogging.create(
             action=info.field_name,
             entities=gebruikers_activiteit_entities(
-                entity_type="rekening", result=rekening
+                entity_type="rekening", result=result
             )
                      + gebruikers_activiteit_entities(
-                entity_type="burger", result=burgers
+                entity_type="burger", result=result, key="burgers"
             )
                      + gebruikers_activiteit_entities(
-                entity_type="organisatie", result=organisaties
+                entity_type="organisatie", result=result.get("afdelingen", []), key="organisatie_id"
             ),
             before=dict(rekening=previous),
-            after=dict(rekening=rekening),
+            after=dict(rekening=result),
         )
 
         return UpdateRekening(ok=True, rekening=result, previous=previous)

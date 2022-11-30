@@ -16,7 +16,7 @@ class BurgerQuery:
     return_type = graphene.Field(burger.Burger, id=graphene.Int(required=True))
 
     @classmethod
-    def resolver(cls, _root, _info, id, *_args, **_kwargs):
+    def resolver(cls, _root, info, id, *_args, **_kwargs):
         AuditLogging.create(
             action=info.field_name,
             entities=gebruikers_activiteit_entities(entity_type="burger", result=id),
