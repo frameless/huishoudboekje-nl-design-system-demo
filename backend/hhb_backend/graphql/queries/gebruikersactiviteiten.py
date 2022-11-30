@@ -11,8 +11,8 @@ from hhb_backend.graphql.dataloaders import hhb_dataloader
 class GebruikersActiviteitQuery:
     return_type = graphene.Field(gebruikersactiviteit.GebruikersActiviteit, id=graphene.Int(required=True))
 
-    @classmethod
-    def resolver(cls, _info, **kwargs):
+    @staticmethod
+    def resolver(self, info, **kwargs):
         return hhb_dataloader().gebruikersactiviteiten.load_one(kwargs.get("id"))
 
 
@@ -26,7 +26,7 @@ class GebruikersActiviteitenQuery:
     )
 
     @staticmethod
-    def resolver(root, info, *args, **kwargs):
+    def resolver(self, info, *args, **kwargs):
         print(f"GebruikersActiviteitenQuery.resolver: info: {info}, args: {args}, kwargs: {kwargs}")
 
         if (
@@ -59,6 +59,9 @@ class GebruikersActiviteitenQuery:
                 afspraken_list = hhb_dataloader().gebruikersactiviteiten.by_huishouden(kwargs.get("huishoudenIds"))
                 gebruikersactiviteiten.extend(x for x in afspraken_list if x not in gebruikersactiviteiten)
 
+        # TODO willen we de get gebruikersactiviteiten loggen?
+        # Zo ja, dan moet ie ook in GebruikersActiviteitQuery 
+        # en in GebruikersActiviteitenPagedQuery? 
         AuditLogging.create(action=info.field_name)
 
         return gebruikersactiviteiten
@@ -75,7 +78,7 @@ class GebruikersActiviteitenPagedQuery:
     )
 
     @staticmethod
-    def resolver(_root, _info, **kwargs):
+    def resolver(self, info, **kwargs):
         if "start" in kwargs and "limit" in kwargs:
             if not kwargs.get("burgerIds") and not kwargs.get("afsprakenIds") and not kwargs.get("huishoudenIds"):
                 return hhb_dataloader().gebruikersactiviteiten.load_paged(

@@ -270,6 +270,8 @@ def test_gebruikersactiviteiten(client):
         log_service = mock.get(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/",
             json=activiteiten
         )
+        
+        log_get = mock.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=201)
 
         # act
         request = {
@@ -291,6 +293,7 @@ def test_gebruikersactiviteiten(client):
         # assert
         assert fallback.call_count == 0
         assert log_service.call_count == 1
+        assert log_get.call_count == 1
         assert response.status_code == 200
         assert response.json == {
         "data": {

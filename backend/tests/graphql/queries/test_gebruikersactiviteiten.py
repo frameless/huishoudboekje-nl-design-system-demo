@@ -34,13 +34,15 @@ def test_gebruikersactiviteiten(client):
         }
         data = { "data": [action1]}
         fallback = mock.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
-        mock1 = mock.get(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=200, json=data)
+        get_data = mock.get(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=200, json=data)
+        log_get = mock.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=201)
 
         # act
         response = client.post("/graphql", json=request, content_type='application/json')
 
         # assert
-        assert mock1.call_count == 1
+        assert get_data.call_count == 1
+        assert log_get.call_count == 1
         assert fallback.call_count == 0
         assert response.json ==  expected
 
