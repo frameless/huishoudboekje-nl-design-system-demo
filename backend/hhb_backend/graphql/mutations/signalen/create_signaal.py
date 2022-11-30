@@ -4,7 +4,7 @@ import graphene
 from hhb_backend.audit_logging import AuditLogging
 import hhb_backend.graphql.models.signaal as graphene_signaal
 from hhb_backend.graphql.mutations.signalen.signalen import SignaalHelper, CreateSignaalInput
-from hhb_backend.graphql.utils.gebruikersactiviteiten import log_gebruikers_activiteit, gebruikers_activiteit_entities
+from hhb_backend.graphql.utils.gebruikersactiviteiten import gebruikers_activiteit_entities
 
 
 class CreateSignaal(graphene.Mutation):
@@ -15,9 +15,10 @@ class CreateSignaal(graphene.Mutation):
     signaal = graphene.Field(lambda: graphene_signaal.Signaal)
 
     @staticmethod
-    def mutate(root, info, input: CreateSignaalInput):
+    def mutate(self, info, input: CreateSignaalInput):
         """ Mutatie voor het aanmaken van een nieuw Signaal """
         response_signaal = SignaalHelper.create(input)
+        signaal = response_signaal.signaal
 
         AuditLogging.create(
             action=info.field_name,
@@ -27,4 +28,4 @@ class CreateSignaal(graphene.Mutation):
             after=dict(signaal=signaal),
         )
 
-        return CreateSignaal(signaal=response_signaal.signaal, ok=True)
+        return CreateSignaal(signaal=signaal, ok=True)
