@@ -27,7 +27,7 @@ class UpdateAlarm(graphene.Mutation):
             entities=gebruikers_activiteit_entities(
                 entity_type="alarm", result=response_alarm.alarm
             ) + gebruikers_activiteit_entities(
-                entity_type="afspraak", result=response_alarm, key="afspraakId"
+                entity_type="afspraak", result=response_alarm.alarm, key="afspraakId"
             ) + gebruikers_activiteit_entities(
                 entity_type="burger", result=response_alarm.burger_id
             ),

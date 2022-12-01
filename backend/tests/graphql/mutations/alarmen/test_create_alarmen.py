@@ -41,7 +41,23 @@ def test_create_alarm(client):
         rm1 = rm.post(f"{settings.ALARMENSERVICE_URL}/alarms/", status_code=201, json={"ok": True, "data": alarm})
         rm2 = rm.post(f"{settings.HHB_SERVICES_URL}/afspraken/{afspraak_id}", status_code=200)
         rm3 = rm.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=201)
-        expected = {'data': {'createAlarm': {'ok': True, 'alarm': {'id': 'bd6222e7-bfab-46bc-b0bc-2b30b76228d4', 'isActive': True, 'afspraak': {'id': 19}, 'startDate': '2021-12-02', 'datumMargin': 5, 'bedrag': '120.12', 'bedragMargin': '10.34', 'byDay': ['Wednesday'], 'byMonth': [], 'byMonthDay': []}}}}
+        expected = {'data': {
+            'createAlarm': {
+                'ok': True, 
+                'alarm': {
+                    'id': 'bd6222e7-bfab-46bc-b0bc-2b30b76228d4', 
+                    'isActive': True, 
+                    'afspraak': {'id': 19}, 
+                    'startDate': '2021-12-02', 
+                    'datumMargin': 5, 
+                    'bedrag': '120.12', 
+                    'bedragMargin': '10.34', 
+                    'byDay': ['Wednesday'], 
+                    'byMonth': None, 
+                    'byMonthDay': None
+                }
+            }
+        }}
 
         # act
         response = client.post(

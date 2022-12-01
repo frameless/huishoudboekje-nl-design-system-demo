@@ -107,12 +107,12 @@ def test_update_alarm(client):
             'previous': {
                 'id': 'bd6222e7-bfab-46bc-b0bc-2b30b76228d4', 'isActive': True, 'afspraak': {"id": 19},
                 'startDate': '2021-12-07', 'datumMargin': 5, 'bedrag': '1800.12', 'bedragMargin': '10.00',
-                'byDay': ['Wednesday'], 'byMonth': [], 'byMonthDay': []
+                'byDay': ['Wednesday'], 'byMonth': None, 'byMonthDay': None
             },
             'alarm': {
                 'id': 'bd6222e7-bfab-46bc-b0bc-2b30b76228d4', 'isActive': False, 'afspraak': {'id': 20},
                 'startDate': '2021-12-02', 'datumMargin': 1, 'bedrag': '12.34', 'bedragMargin': '56.78',
-                'byDay': ['Thursday'], 'byMonth': [], 'byMonthDay': []
+                'byDay': ['Thursday'], 'byMonth': None, 'byMonthDay': None
             }
         }}}
 

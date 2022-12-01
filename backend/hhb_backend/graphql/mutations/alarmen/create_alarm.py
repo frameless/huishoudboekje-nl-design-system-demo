@@ -24,11 +24,11 @@ class CreateAlarm(graphene.Mutation):
             entities=gebruikers_activiteit_entities(
                 entity_type="alarm", result=response_alarm.alarm
             ) + gebruikers_activiteit_entities(
-                entity_type="afspraak", result=response_alarm, key="afspraakId"
+                entity_type="afspraak", result=response_alarm.alarm, key="afspraakId"
             ) + gebruikers_activiteit_entities(
                 entity_type="burger", result=response_alarm.burger_id
             ),
-            after=dict(alarm=response_alarm),
+            after=dict(alarm=response_alarm.alarm),
         )
 
         return CreateAlarm(alarm=response_alarm.alarm, burger_id=response_alarm.burger_id, ok=True)
