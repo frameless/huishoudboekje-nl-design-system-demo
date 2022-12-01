@@ -6,9 +6,39 @@ import app from "../src/app";
 const api = supertest(app());
 
 const featureFlags: FeatureInterface[] = [
-	{name: "feature1", type: "featureFlag", description: "Some description1", enabled: true, stale: false, impressionData: false, strategies: [], variants: []},
-	{name: "feature2", type: "featureFlag", description: "Some description2", enabled: false, stale: false, impressionData: false, strategies: [], variants: []},
-	{name: "feature3", type: "featureFlag", description: "Some description3", enabled: true, stale: false, impressionData: false, strategies: [], variants: []},
+	{
+		name: "feature1",
+		type: "featureFlag",
+		description: "Some description1",
+		enabled: true,
+		stale: false,
+		impressionData: false,
+		strategies: [],
+		variants: [],
+		project: "my-project",
+	},
+	{
+		name: "feature2",
+		type: "featureFlag",
+		description: "Some description2",
+		enabled: false,
+		stale: false,
+		impressionData: false,
+		strategies: [],
+		variants: [],
+		project: "my-project",
+	},
+	{
+		name: "feature3",
+		type: "featureFlag",
+		description: "Some description3",
+		enabled: true,
+		stale: false,
+		impressionData: false,
+		strategies: [],
+		variants: [],
+		project: "my-project",
+	},
 ];
 
 const mockFeatures = (featureFlags: FeatureInterface[] = []) => {

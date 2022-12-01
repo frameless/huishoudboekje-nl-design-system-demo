@@ -1,20 +1,20 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Alarm CRUD (operations) Given an unknown error occurs on the server should return a 500 when trying to create the Alarm 1`] = `
-Object {
+{
   "message": "Server did a boo boo",
   "ok": false,
 }
 `;
 
 exports[`Alarm CRUD (operations) Given the Alarm does not exist should create the Alarm 1`] = `
-Object {
-  "data": Object {
+{
+  "data": {
     "afspraakId": 1,
     "bedrag": 955,
     "bedragMargin": 75,
-    "byDay": Array [],
-    "byMonth": Array [
+    "byDay": [],
+    "byMonth": [
       1,
       2,
       3,
@@ -28,7 +28,7 @@ Object {
       11,
       12,
     ],
-    "byMonthDay": Array [
+    "byMonthDay": [
       3,
     ],
     "datumMargin": 7,
@@ -41,14 +41,14 @@ Object {
 `;
 
 exports[`Alarm CRUD (operations) Given the Alarm exists should return all Alarms 1`] = `
-Object {
-  "data": Array [
-    Object {
+{
+  "data": [
+    {
       "afspraakId": 1,
       "bedrag": 955,
       "bedragMargin": 75,
-      "byDay": Array [],
-      "byMonth": Array [
+      "byDay": [],
+      "byMonth": [
         1,
         2,
         3,
@@ -62,7 +62,7 @@ Object {
         11,
         12,
       ],
-      "byMonthDay": Array [
+      "byMonthDay": [
         3,
       ],
       "datumMargin": 7,
@@ -70,12 +70,12 @@ Object {
       "isActive": false,
       "startDate": "2021-12-18",
     },
-    Object {
+    {
       "afspraakId": 2,
       "bedrag": 299.99,
       "bedragMargin": 15.9,
-      "byDay": Array [],
-      "byMonth": Array [
+      "byDay": [],
+      "byMonth": [
         1,
         2,
         3,
@@ -89,7 +89,7 @@ Object {
         11,
         12,
       ],
-      "byMonthDay": Array [
+      "byMonthDay": [
         25,
       ],
       "datumMargin": 14,
@@ -97,32 +97,32 @@ Object {
       "isActive": true,
       "startDate": "2021-12-18",
     },
-    Object {
+    {
       "afspraakId": 44,
       "bedrag": 32.05,
       "bedragMargin": 12,
-      "byDay": Array [
+      "byDay": [
         "Monday",
       ],
-      "byMonth": Array [],
-      "byMonthDay": Array [],
+      "byMonth": [],
+      "byMonthDay": [],
       "datumMargin": 1,
       "id": "1a8ac60f-081f-4bbb-baca-6b6d399ce8db",
       "isActive": false,
       "startDate": "2021-12-18",
     },
-    Object {
+    {
       "afspraakId": 3,
       "bedrag": 1200.12,
       "bedragMargin": 75,
-      "byDay": Array [],
-      "byMonth": Array [
+      "byDay": [],
+      "byMonth": [
         1,
         4,
         7,
         10,
       ],
-      "byMonthDay": Array [
+      "byMonthDay": [
         10,
       ],
       "datumMargin": 3,
@@ -136,14 +136,14 @@ Object {
 `;
 
 exports[`Alarm CRUD (operations) Given the Alarm exists should return all Alarms filtered by ids 1`] = `
-Object {
-  "data": Array [
-    Object {
+{
+  "data": [
+    {
       "afspraakId": 1,
       "bedrag": 955,
       "bedragMargin": 75,
-      "byDay": Array [],
-      "byMonth": Array [
+      "byDay": [],
+      "byMonth": [
         1,
         2,
         3,
@@ -157,7 +157,7 @@ Object {
         11,
         12,
       ],
-      "byMonthDay": Array [
+      "byMonthDay": [
         3,
       ],
       "datumMargin": 7,
@@ -165,12 +165,12 @@ Object {
       "isActive": false,
       "startDate": "2021-12-18",
     },
-    Object {
+    {
       "afspraakId": 2,
       "bedrag": 299.99,
       "bedragMargin": 15.9,
-      "byDay": Array [],
-      "byMonth": Array [
+      "byDay": [],
+      "byMonth": [
         1,
         2,
         3,
@@ -184,7 +184,7 @@ Object {
         11,
         12,
       ],
-      "byMonthDay": Array [
+      "byMonthDay": [
         25,
       ],
       "datumMargin": 14,
@@ -198,14 +198,14 @@ Object {
 `;
 
 exports[`Alarm CRUD (operations) Given the Alarm exists should return only active Alarms 1`] = `
-Object {
-  "data": Array [
-    Object {
+{
+  "data": [
+    {
       "afspraakId": 2,
       "bedrag": 299.99,
       "bedragMargin": 15.9,
-      "byDay": Array [],
-      "byMonth": Array [
+      "byDay": [],
+      "byMonth": [
         1,
         2,
         3,
@@ -219,7 +219,7 @@ Object {
         11,
         12,
       ],
-      "byMonthDay": Array [
+      "byMonthDay": [
         25,
       ],
       "datumMargin": 14,
@@ -227,18 +227,18 @@ Object {
       "isActive": true,
       "startDate": "2021-12-18",
     },
-    Object {
+    {
       "afspraakId": 3,
       "bedrag": 1200.12,
       "bedragMargin": 75,
-      "byDay": Array [],
-      "byMonth": Array [
+      "byDay": [],
+      "byMonth": [
         1,
         4,
         7,
         10,
       ],
-      "byMonthDay": Array [
+      "byMonthDay": [
         10,
       ],
       "datumMargin": 3,
@@ -252,14 +252,14 @@ Object {
 `;
 
 exports[`Alarm CRUD (operations) Given the Alarm exists should return only inactive Alarms 1`] = `
-Object {
-  "data": Array [
-    Object {
+{
+  "data": [
+    {
       "afspraakId": 1,
       "bedrag": 955,
       "bedragMargin": 75,
-      "byDay": Array [],
-      "byMonth": Array [
+      "byDay": [],
+      "byMonth": [
         1,
         2,
         3,
@@ -273,7 +273,7 @@ Object {
         11,
         12,
       ],
-      "byMonthDay": Array [
+      "byMonthDay": [
         3,
       ],
       "datumMargin": 7,
@@ -281,15 +281,15 @@ Object {
       "isActive": false,
       "startDate": "2021-12-18",
     },
-    Object {
+    {
       "afspraakId": 44,
       "bedrag": 32.05,
       "bedragMargin": 12,
-      "byDay": Array [
+      "byDay": [
         "Monday",
       ],
-      "byMonth": Array [],
-      "byMonthDay": Array [],
+      "byMonth": [],
+      "byMonthDay": [],
       "datumMargin": 1,
       "id": "1a8ac60f-081f-4bbb-baca-6b6d399ce8db",
       "isActive": false,
@@ -301,13 +301,13 @@ Object {
 `;
 
 exports[`Alarm CRUD (operations) Given the Alarm exists should return the Alarm 1`] = `
-Object {
-  "data": Object {
+{
+  "data": {
     "afspraakId": 1,
     "bedrag": 955,
     "bedragMargin": 75,
-    "byDay": Array [],
-    "byMonth": Array [
+    "byDay": [],
+    "byMonth": [
       1,
       2,
       3,
@@ -321,7 +321,7 @@ Object {
       11,
       12,
     ],
-    "byMonthDay": Array [
+    "byMonthDay": [
       3,
     ],
     "datumMargin": 7,
@@ -334,16 +334,16 @@ Object {
 `;
 
 exports[`Alarm CRUD (operations) Given the Alarm exists should update the Alarm 1`] = `
-Object {
-  "data": Object {
+{
+  "data": {
     "afspraakId": 999,
     "bedrag": 999,
     "bedragMargin": 99,
-    "byDay": Array [
+    "byDay": [
       "Wednesday",
     ],
-    "byMonth": Array [],
-    "byMonthDay": Array [],
+    "byMonth": [],
+    "byMonthDay": [],
     "datumMargin": 10,
     "endDate": "",
     "id": "d9c00acb-8d04-4cf0-9be4-061f33b3357d",

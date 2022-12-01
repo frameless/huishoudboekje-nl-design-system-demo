@@ -1,20 +1,20 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Signal CRUD (operations) Given an unknown error occurs on the server should return a 500 when trying to create the Signal 1`] = `
-Object {
+{
   "message": "Server did a boo boo",
   "ok": false,
 }
 `;
 
 exports[`Signal CRUD (operations) Given the Signal does not exist should create the Signal 1`] = `
-Object {
-  "data": Object {
-    "actions": Array [],
+{
+  "data": {
+    "actions": [],
     "alarmId": "d9c00acb-8d04-4cf0-9be4-061f33b3357d",
-    "banktransactieIds": Array [],
+    "banktransactieIds": [],
     "bedragDifference": "100",
-    "context": Object {
+    "context": {
       "is": true,
       "something": "else",
     },
@@ -28,14 +28,14 @@ Object {
 `;
 
 exports[`Signal CRUD (operations) Given the Signal exists should return all Signals 1`] = `
-Object {
-  "data": Array [
-    Object {
-      "actions": Array [],
+{
+  "data": [
+    {
+      "actions": [],
       "alarmId": "d9c00acb-8d04-4cf0-9be4-061f33b3357d",
-      "banktransactieIds": Array [],
+      "banktransactieIds": [],
       "bedragDifference": "100",
-      "context": Object {
+      "context": {
         "is": true,
         "something": "else",
       },
@@ -44,12 +44,12 @@ Object {
       "timeUpdated": "2022-05-16T13:00:00.000Z",
       "type": "default",
     },
-    Object {
-      "actions": Array [],
+    {
+      "actions": [],
       "alarmId": "5d65d8e9-1f4a-4cb9-a89c-0f952ac5f2ff",
-      "banktransactieIds": Array [],
+      "banktransactieIds": [],
       "bedragDifference": null,
-      "context": Object {
+      "context": {
         "is": false,
         "something": "else",
       },
@@ -58,14 +58,14 @@ Object {
       "timeUpdated": "2022-05-16T13:00:00.000Z",
       "type": "default",
     },
-    Object {
-      "actions": Array [],
+    {
+      "actions": [],
       "alarmId": "1a8ac60f-081f-4bbb-baca-6b6d399ce8db",
-      "banktransactieIds": Array [],
+      "banktransactieIds": [],
       "bedragDifference": null,
-      "context": Object {
+      "context": {
         "isAdmin": true,
-        "user": Object {
+        "user": {
           "name": "Koen Brouwer",
         },
       },
@@ -74,12 +74,12 @@ Object {
       "timeUpdated": "2022-05-16T13:00:00.000Z",
       "type": "default",
     },
-    Object {
-      "actions": Array [],
+    {
+      "actions": [],
       "alarmId": "738247bc-e6b8-41ee-a09e-a6778822598d",
-      "banktransactieIds": Array [],
+      "banktransactieIds": [],
       "bedragDifference": null,
-      "context": Object {
+      "context": {
         "is": true,
         "something": "else",
       },
@@ -94,13 +94,13 @@ Object {
 `;
 
 exports[`Signal CRUD (operations) Given the Signal exists should return the Signal 1`] = `
-Object {
-  "data": Object {
-    "actions": Array [],
+{
+  "data": {
+    "actions": [],
     "alarmId": "d9c00acb-8d04-4cf0-9be4-061f33b3357d",
-    "banktransactieIds": Array [],
+    "banktransactieIds": [],
     "bedragDifference": "100",
-    "context": Object {
+    "context": {
       "is": true,
       "something": "else",
     },
@@ -114,13 +114,13 @@ Object {
 `;
 
 exports[`Signal CRUD (operations) Given the Signal exists should update the Signal 1`] = `
-Object {
-  "data": Object {
-    "actions": Array [],
+{
+  "data": {
+    "actions": [],
     "alarmId": "d9c00acb-8d04-4cf0-9be4-061f33b3357d",
-    "banktransactieIds": Array [],
+    "banktransactieIds": [],
     "bedragDifference": "300",
-    "context": Object {
+    "context": {
       "is": true,
       "something": "else",
     },
