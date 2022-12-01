@@ -4,10 +4,7 @@ import graphene
 from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.models.afdeling import Afdeling
-from hhb_backend.graphql.utils.gebruikersactiviteiten import (
-    gebruikers_activiteit_entities,
-    log_gebruikers_activiteit,
-)
+from hhb_backend.graphql.utils.gebruikersactiviteiten import gebruikers_activiteit_entities
 
 
 class AfdelingQuery:

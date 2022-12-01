@@ -6,10 +6,7 @@ import hhb_backend.graphql.models.bank_transaction as bank_transaction
 from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.filters.bank_transactions import BankTransactionFilter
-from hhb_backend.graphql.utils.gebruikersactiviteiten import (
-    gebruikers_activiteit_entities,
-    log_gebruikers_activiteit,
-)
+from hhb_backend.graphql.utils.gebruikersactiviteiten import gebruikers_activiteit_entities
 
 
 class BankTransactionQuery:
