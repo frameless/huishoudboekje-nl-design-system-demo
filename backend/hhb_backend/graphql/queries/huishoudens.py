@@ -1,7 +1,7 @@
 import graphene
-from graphql import GraphQLError
-
 import hhb_backend.graphql.models.huishouden as huishouden
+from graphql import GraphQLError
+from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.filters.burgers import BurgerFilter
 from hhb_backend.graphql.utils.gebruikersactiviteiten import (
@@ -14,16 +14,14 @@ class HuishoudenQuery:
     return_type = graphene.Field(huishouden.Huishouden, id=graphene.Int(required=True))
 
     @classmethod
-    def gebruikers_activiteit(cls, _root, info, id, *_args, **_kwargs):
-        return dict(
-            action=info.field_name,
-            entities=gebruikers_activiteit_entities(entity_type="huishouden", result=id),
-        )
-
-    @classmethod
     @log_gebruikers_activiteit
     def resolver(cls, _root, _info, id):
-        return hhb_dataloader().huishoudens.load_one(id)
+        result = hhb_dataloader().huishoudens.load_one(id)
+        AuditLogging.create(
+            action=info.field_name,
+            entities=gebruikers_activiteit_entities(entity_type="huishouden", result=id)
+        )
+        return result
 
 
 class HuishoudensQuery:
@@ -34,18 +32,18 @@ class HuishoudensQuery:
     )
 
     @classmethod
-    def gebruikers_activiteit(cls, _root, info, ids, *_args, **_kwargs):
-        return dict(
-            action=info.field_name,
-            entities=gebruikers_activiteit_entities(entity_type="huishouden", result=ids),
-        )
-
-    @classmethod
-    @log_gebruikers_activiteit
     def resolver(cls, _root, _info, ids=None, **kwargs):
+        entities = None
+
         if ids:
-            return hhb_dataloader().huishoudens.load(ids)
-        return hhb_dataloader().huishoudens.load_all(filters=kwargs.get("filters", None))
+            entities = gebruikers_activiteit_entities(entity_type="huishouden", result=ids)
+            result = hhb_dataloader().huishoudens.load(ids)
+        else:
+            result = hhb_dataloader().huishoudens.load_all(filters=kwargs.get("filters", None))
+
+        AuditLogging().create(action=info.field_name, entities=entities)
+
+        return result
 
 
 class HuishoudensPagedQuery:
@@ -57,25 +55,26 @@ class HuishoudensPagedQuery:
     )
 
     @classmethod
-    def gebruikers_activiteit(cls, _root, info, *_args, **kwargs):
-        return dict(
-            action=info.field_name,
-            entities=gebruikers_activiteit_entities(
-                entity_type="huishouden",
-                result=kwargs["result"] if "result" in kwargs else None,
-            ),
-        )
-
-    @classmethod
-    @log_gebruikers_activiteit
     def resolver(cls, _root, _info, **kwargs):
+        entities = None
+
         if "start" in kwargs and "limit" in kwargs:
-            return hhb_dataloader().huishoudens.load_paged(
+            result = hhb_dataloader().huishoudens.load_paged(
                 start=kwargs["start"],
                 limit=kwargs["limit"],
                 desc=True,
                 sorting_column="id",
                 filters=kwargs.get("filters")
             )
+
+            if "result" in kwargs:
+                entities = gebruikers_activiteit_entities(
+                    entity_type="huishouden",
+                    result=kwargs["result"],
+                )
         else:
             raise GraphQLError(f"Query needs params 'start', 'limit'. ")
+
+        AuditLogging().create(action=info.field_name, entities=entities)
+
+        return result
