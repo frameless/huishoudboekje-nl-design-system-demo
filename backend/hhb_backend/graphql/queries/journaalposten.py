@@ -12,7 +12,7 @@ class JournaalpostQuery:
     return_type = graphene.Field(Journaalpost, id=graphene.Int(required=True))
 
     @classmethod
-    def resolver(cls, _root, _info, id):
+    def resolver(cls, _root, info, id):
         result = hhb_dataloader().journaalposten.load_one(id)
         AuditLogging().create(
             action=info.field_name,
@@ -29,7 +29,7 @@ class JournaalpostenQuery:
     )
 
     @classmethod
-    def resolver(cls, _root, _info, ids=None):
+    def resolver(cls, _root, info, ids=None):
         if ids:
             result = hhb_dataloader().journaalposten.load(ids)
         result = hhb_dataloader().journaalposten.load_all()

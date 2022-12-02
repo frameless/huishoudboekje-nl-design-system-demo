@@ -14,8 +14,7 @@ class HuishoudenQuery:
     return_type = graphene.Field(huishouden.Huishouden, id=graphene.Int(required=True))
 
     @classmethod
-    @log_gebruikers_activiteit
-    def resolver(cls, _root, _info, id):
+    def resolver(cls, _root, info, id):
         result = hhb_dataloader().huishoudens.load_one(id)
         AuditLogging.create(
             action=info.field_name,
@@ -32,7 +31,7 @@ class HuishoudensQuery:
     )
 
     @classmethod
-    def resolver(cls, _root, _info, ids=None, **kwargs):
+    def resolver(cls, _root, info, ids=None, **kwargs):
         entities = None
 
         if ids:
@@ -55,7 +54,7 @@ class HuishoudensPagedQuery:
     )
 
     @classmethod
-    def resolver(cls, _root, _info, **kwargs):
+    def resolver(cls, _root, info, **kwargs):
         entities = None
 
         if "start" in kwargs and "limit" in kwargs:
