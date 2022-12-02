@@ -9,7 +9,6 @@ def post_echo(request, _context):
     return {"data": (request.json())}
 
 
-@pytest.mark.asyncio
 def test_transactie_suggesties_matches(test_request_context):
     with requests_mock.Mocker() as mock:
         get_any = mock.get(requests_mock.ANY, json={"data": []})
@@ -81,7 +80,6 @@ def test_transactie_suggesties_matches(test_request_context):
         assert not get_any.called
 
 
-@pytest.mark.asyncio
 def test_transactie_suggesties_multiple_matches(test_request_context):
     with requests_mock.Mocker() as mock:
         get_any = mock.get(requests_mock.ANY, json={"data": []})
@@ -144,7 +142,6 @@ def test_transactie_suggesties_multiple_matches(test_request_context):
         assert not get_any.called
 
 
-@pytest.mark.asyncio
 def test_transactie_suggesties_no_matches(test_request_context):
     with requests_mock.Mocker() as mock:
         get_any = mock.get(requests_mock.ANY, json={"data": []})
@@ -195,7 +192,6 @@ def test_transactie_suggesties_no_matches(test_request_context):
         assert not get_any.called
 
 
-@pytest.mark.asyncio
 def test_transactie_suggesties_no_afspraken(test_request_context):
     with requests_mock.Mocker() as mock:
         get_any = mock.get(requests_mock.ANY, json={"data": []})
@@ -235,7 +231,6 @@ def test_transactie_suggesties_no_afspraken(test_request_context):
         assert not get_any.called
 
 
-@pytest.mark.asyncio
 def test_transactie_suggesties_no_rekeningen(test_request_context):
     with requests_mock.Mocker() as mock:
         get_any = mock.get(requests_mock.ANY, json={"data": []})
@@ -272,7 +267,6 @@ def test_transactie_suggesties_no_rekeningen(test_request_context):
         assert not get_any.called
 
 
-@pytest.mark.asyncio
 def test_transactie_suggesties_no_transactions(test_request_context):
     with requests_mock.Mocker() as mock:
         get_any = mock.get(requests_mock.ANY, json={"data": []})
@@ -301,7 +295,6 @@ def test_transactie_suggesties_no_transactions(test_request_context):
         assert not get_any.called
 
 
-@pytest.mark.asyncio
 def test_transactie_suggesties_multiple_zoektermen(test_request_context):
     with requests_mock.Mocker() as mock:
         get_any = mock.get(requests_mock.ANY, json={"data": []})
@@ -341,7 +334,6 @@ def test_transactie_suggesties_multiple_zoektermen(test_request_context):
         assert not get_any.called
 
 
-@pytest.mark.asyncio
 def test_transactie_suggesties_multiple_zoektermen_too_specific(test_request_context):
     with requests_mock.Mocker() as mock:
         get_any = mock.get(requests_mock.ANY, json={"data": []})

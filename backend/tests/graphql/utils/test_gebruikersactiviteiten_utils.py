@@ -270,7 +270,7 @@ def test_gebruikersactiviteiten(client):
         log_service = mock.get(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/",
             json=activiteiten
         )
-        
+
         log_get = mock.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=201)
 
         # act
@@ -419,7 +419,6 @@ def test_extract_gebruikers_activiteit_classmethod():
     )
 
 
-@pytest.mark.asyncio
 def test_log_gebruikers_activiteit_mutation():
     with requests_mock.Mocker() as mock:
         log_request = mock.post(
@@ -438,7 +437,6 @@ class MockResolveInfo:
     field_name: str
 
 
-@pytest.mark.asyncio
 def test_log_gebruikers_activiteit_query():
     with requests_mock.Mocker() as mock:
         log_request = mock.post(
@@ -453,7 +451,6 @@ def test_log_gebruikers_activiteit_query():
         assert log_request.call_count == 1
 
 
-@pytest.mark.asyncio
 def test_log_gebruikers_activiteit_query_list():
     with requests_mock.Mocker() as mock:
         log_request = mock.post(
@@ -468,7 +465,6 @@ def test_log_gebruikers_activiteit_query_list():
         assert log_request.call_count == 1
 
 
-@pytest.mark.asyncio
 def test_log_gebruikers_activiteit_query_list_ids():
     with requests_mock.Mocker() as mock:
         log_request = mock.post(
