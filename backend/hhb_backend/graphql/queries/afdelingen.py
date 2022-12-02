@@ -12,11 +12,12 @@ class AfdelingQuery:
 
     @classmethod
     def resolver(cls, _, info, id):
+        result = hhb_dataloader().afdelingen.load_one(id)
         AuditLogging.create(
             action=info.field_name,
             entities=gebruikers_activiteit_entities(entity_type="afdeling", result=id)
         )
-        return hhb_dataloader().afdelingen.load_one(id)
+        return result
 
 
 class AfdelingenQuery:
