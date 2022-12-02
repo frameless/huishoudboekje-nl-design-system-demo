@@ -1,7 +1,6 @@
 from dataclasses import dataclass
 
 import graphene
-import pytest
 import requests_mock
 
 from hhb_backend.graphql import settings
@@ -17,6 +16,7 @@ class TestEntity(graphene.ObjectType):
     id: graphene.Int()
     attribute: graphene.String()
 
+# Todo: zijn deze tests nog relevant? (2022-12-02)
 
 class TestEntityResponse(graphene.Mutation):
     entity = graphene.Field(lambda: TestEntity)
