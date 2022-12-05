@@ -16,8 +16,8 @@ class Bedrag(Scalar):
         return f"{Decimal(value, Context(prec=2, rounding=ROUND_HALF_DOWN)) / 100:.2f}"
 
     @staticmethod
-    def parse_literal(node):
-        if isinstance(node, ast.StringValue):
+    def parse_literal(node, _variables=None):
+        if isinstance(node, ast.StringValueNode):
             return Bedrag.parse_value(node.value)
 
     @staticmethod
