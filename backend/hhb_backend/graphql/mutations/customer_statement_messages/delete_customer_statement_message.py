@@ -9,7 +9,7 @@ from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.models.customer_statement_message import (
     CustomerStatementMessage,
 )
-from hhb_backend.graphql.utils.gebruikersactiviteiten import gebruikers_activiteit_entities
+from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
 
 
 class DeleteCustomerStatementMessage(graphene.Mutation):
@@ -47,9 +47,7 @@ class DeleteCustomerStatementMessage(graphene.Mutation):
 
         AuditLogging.create(
             action=info.field_name,
-            entities=gebruikers_activiteit_entities(
-                entity_type="customerStatementMessage", result=previous
-            ),
+            entities=(GebruikersActiviteitEntity(entityType="customerStatementMessage", entityId=id)),
             before=dict(customerStatementMessage=previous),
         )
 

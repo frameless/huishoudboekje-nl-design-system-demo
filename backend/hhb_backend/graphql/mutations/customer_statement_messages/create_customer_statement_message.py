@@ -14,7 +14,7 @@ from hhb_backend.graphql import settings
 from hhb_backend.graphql.models.customer_statement_message import (
     CustomerStatementMessage,
 )
-from hhb_backend.graphql.utils.gebruikersactiviteiten import gebruikers_activiteit_entities
+from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
 from hhb_backend.processen import automatisch_boeken
 from hhb_backend.service.model import customer_statement_message
 from hhb_backend.service.model.bank_transaction import BankTransaction
@@ -117,13 +117,16 @@ class CreateCustomerStatementMessage(graphene.Mutation):
 
         AuditLogging.create(
             action=info.field_name,
-            entities=gebruikers_activiteit_entities(
-                entity_type="customerStatementMessage",
-                result=csm,
-            ) + gebruikers_activiteit_entities(
-                entity_type="transaction",
-                result=csm,
-                key="bank_transactions",
+            entities=(
+                [
+                    GebruikersActiviteitEntity(entityType="customerStatementMessage", entityId=item["id"])
+                    for item in csm
+                ],
+                [
+                    GebruikersActiviteitEntity(entityType="transaction", entityId=transaction["id"])
+                    for item in csm for transactions in item["bank_transactions"] for transaction in transactions
+                ]
+                
             ),
             after=dict(customerStatementMessage=csm),
         )

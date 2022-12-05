@@ -6,7 +6,7 @@ from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.models.configuratie import Configuratie
-from hhb_backend.graphql.utils.gebruikersactiviteiten import gebruikers_activiteit_entities
+from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
 
 
 class ConfiguratieInput(graphene.InputObjectType):
@@ -34,9 +34,7 @@ class CreateConfiguratie(graphene.Mutation):
 
         AuditLogging.create(
             action=info.field_name,
-            entities=gebruikers_activiteit_entities(
-                entity_type="configuratie", result=configuratie
-            ),
+            entities=(GebruikersActiviteitEntity(entityType="configuratie", entityId=configuratie["id"])),
             after=dict(configuratie=configuratie),
         )
 
