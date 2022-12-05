@@ -10,7 +10,7 @@ class SignaalQuery:
     return_type = graphene.Field(Signaal, id=graphene.String(required=True))
 
     @classmethod
-    def resolver(cls, _root, _info, id):
+    def resolver(cls, _root, info, id):
         AuditLogging().create(
             action=info.field_name,
             entities=gebruikers_activiteit_entities(entity_type="signaal", result=id),

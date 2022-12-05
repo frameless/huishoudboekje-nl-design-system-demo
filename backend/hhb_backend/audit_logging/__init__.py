@@ -1,13 +1,9 @@
-import json
 import logging
+
 import requests
-from dataclasses import dataclass, field
-from datetime import datetime
 from flask import g, request
-from typing import List
 
 from hhb_backend.graphql.settings import LOG_SERVICE_URL
-from hhb_backend.graphql.utils.gebruikersactiviteiten import gebruikers_activiteit_entities
 from .log_item import LogItem
 
 
