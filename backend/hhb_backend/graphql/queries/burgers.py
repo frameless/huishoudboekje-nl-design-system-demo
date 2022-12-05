@@ -6,7 +6,7 @@ from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.scalars.dynamic_types import DynamicType
 from hhb_backend.graphql.utils.dates import valid_afspraak
-from hhb_backend.graphql.utils.gebruikersactiviteiten import gebruikers_activiteit_entities
+from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
 
 
 class BurgerQuery:
@@ -17,7 +17,7 @@ class BurgerQuery:
         result = hhb_dataloader().burgers.load_one(id)
         AuditLogging.create(
             action=info.field_name,
-            entities=gebruikers_activiteit_entities(entity_type="burger", result=id),
+            entities=(GebruikersActiviteitEntity(entityType="burger", entityId=id)),
         )
         return result
 
@@ -35,7 +35,10 @@ class BurgersQuery:
             burgers = hhb_dataloader().burgers.load(kwargs["ids"])
             AuditLogging.create(
                 action=info.field_name,
-                entities=gebruikers_activiteit_entities(entity_type="burger", result=burgers),
+                entities=[
+                    GebruikersActiviteitEntity(entityType="burger", entityId=burger.id)
+                    for burger in burgers
+                ]
             )
             return burgers
 
@@ -74,14 +77,20 @@ class BurgersQuery:
 
             AuditLogging.create(
                 action=info.field_name,
-                entities=gebruikers_activiteit_entities(entity_type="burger", result=[b.id for b in result]),
+                entities=[
+                    GebruikersActiviteitEntity(entityType="burger", entityId=burger["id"])
+                    for burger in result
+                ]
             )
             return result
 
         burgers = hhb_dataloader().burgers.load_all(filters=kwargs.get("filters", None))
         AuditLogging.create(
             action=info.field_name,
-            entities=gebruikers_activiteit_entities(entity_type="burger", result=burgers),
+            entities=[
+                GebruikersActiviteitEntity(entityType="burger", entityId=burger.id)
+                for burger in burgers
+            ]
         )
         return burgers
 
@@ -98,12 +107,20 @@ class BurgersPagedQuery:
         burgers = []
         if "start" in kwargs and "limit" in kwargs:
             burgers = hhb_dataloader().burgers.load_paged(start=kwargs["start"], limit=kwargs["limit"])
+            entities=[
+                GebruikersActiviteitEntity(entityType="burger", entityId=burger["id"])
+                for burger in burgers.values()
+            ]
         else:
             burgers = hhb_dataloader().burgers.load_all()
+            entities=[
+                GebruikersActiviteitEntity(entityType="burger", entityId=burger["id"])
+                for burger in burgers
+            ]
 
         AuditLogging.create(
             action=info.field_name,
-            entities=gebruikers_activiteit_entities(entity_type="burger", result=burgers),
+            entities=entities
         )
 
         return burgers

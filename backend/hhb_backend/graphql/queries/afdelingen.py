@@ -4,7 +4,7 @@ import graphene
 from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.models.afdeling import Afdeling
-from hhb_backend.graphql.utils.gebruikersactiviteiten import gebruikers_activiteit_entities
+from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
 
 
 class AfdelingQuery:
@@ -15,7 +15,7 @@ class AfdelingQuery:
         result = hhb_dataloader().afdelingen.load_one(id)
         AuditLogging.create(
             action=info.field_name,
-            entities=gebruikers_activiteit_entities(entity_type="afdeling", result=id)
+            entities=(GebruikersActiviteitEntity(entityType="afdeling", entityId=id))
         )
         return result
 
@@ -28,7 +28,10 @@ class AfdelingenQuery:
         entities = None
 
         if ids:
-            entities = gebruikers_activiteit_entities(entity_type="afdeling", result=ids)
+            entities = [
+                GebruikersActiviteitEntity(entityType="afdeling", entityId=id)
+                for id in ids
+            ]
             result = hhb_dataloader().afdelingen.load(ids)
         else:
             result = hhb_dataloader().afdelingen.load_all()

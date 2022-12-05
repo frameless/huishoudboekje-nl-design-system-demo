@@ -6,7 +6,7 @@ import hhb_backend.graphql.models.bank_transaction as bank_transaction
 from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.filters.bank_transactions import BankTransactionFilter
-from hhb_backend.graphql.utils.gebruikersactiviteiten import gebruikers_activiteit_entities
+from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
 
 
 class BankTransactionQuery:
@@ -16,9 +16,7 @@ class BankTransactionQuery:
     def resolver(cls, _, info, id):
         AuditLogging.create(
             action=info.field_name,
-            entities=gebruikers_activiteit_entities(
-                entity_type="transactie", result=id
-            ),
+            entities=(GebruikersActiviteitEntity(entityType="transactie", entityId=id)),
         )
         return hhb_dataloader().bank_transactions.load_one(id)
 
@@ -31,10 +29,10 @@ class BankTransactionsQuery:
         result = hhb_dataloader().bank_transactions.load_all(filters=kwargs.get("filters", None))
         AuditLogging.create(
             action=info.field_name,
-            entities=gebruikers_activiteit_entities(
-                entity_type="transactie",
-                result=kwargs["result"] if "result" in kwargs else None,
-            ),
+            entities=[
+                GebruikersActiviteitEntity(entityType="transactie", entityId=transaction.id)
+                for transaction in result
+            ]
         )
         return result
 
@@ -58,9 +56,9 @@ class BankTransactionsPagedQuery:
         )
         AuditLogging.create(
             action=info.field_name,
-            entities=gebruikers_activiteit_entities(
-                entity_type="transactie",
-                result=result,
-            ),
+            entities=[
+                GebruikersActiviteitEntity(entityType="transactie", entityId=transaction["id"])
+                for transaction in result.values()
+            ],
         )
         return result
