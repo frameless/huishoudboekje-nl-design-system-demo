@@ -11,7 +11,7 @@ import hhb_backend.graphql.models.afspraak as graphene_afspraak
 import hhb_backend.graphql.models.alarm as graphene_alarm
 from hhb_backend.graphql.scalars.bedrag import Bedrag
 from hhb_backend.graphql.utils.upstream_error_handler import UpstreamError
-from hhb_backend.graphql.utils.gebruikersactiviteiten import gebruikers_activiteit_entities
+from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
 
 
 class UpdateAfspraakInput(graphene.InputObjectType):
@@ -96,14 +96,10 @@ class UpdateAfspraak(graphene.Mutation):
 
         AuditLogging.create(
             action=info.field_name,
-            entities=gebruikers_activiteit_entities(
-                entity_type="afspraak", result=afspraak
-            )
-                     + gebruikers_activiteit_entities(
-                entity_type="burger", result=afspraak, key="burger_id"
-            )
-                     + gebruikers_activiteit_entities(
-                entity_type="afdeling", result=afspraak, key="afdeling_id"
+            entities=(
+                GebruikersActiviteitEntity(entity_type="afspraak", entityId=id), 
+                GebruikersActiviteitEntity(entity_type="burger", entityId=afspraak["burger_id"]),
+                GebruikersActiviteitEntity(entity_type="afdeling", entityId=afspraak["afdeling_id"])
             ),
             before=dict(afspraak=previous),
             after=dict(afspraak=afspraak),

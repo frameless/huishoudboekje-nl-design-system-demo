@@ -9,7 +9,7 @@ from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.models import afspraak
 from hhb_backend.graphql.scalars.day_of_week import DayOfWeek
 from hhb_backend.graphql.utils.upstream_error_handler import UpstreamError
-from hhb_backend.graphql.utils.gebruikersactiviteiten import gebruikers_activiteit_entities
+from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
 
 
 class BetaalinstructieInput(graphene.InputObjectType):
@@ -70,10 +70,9 @@ class UpdateAfspraakBetaalinstructie(graphene.Mutation):
 
         AuditLogging.create(
             action=info.field_name,
-            entities=gebruikers_activiteit_entities(
-                entity_type="afspraak", result=new_afspraak
-            ) + gebruikers_activiteit_entities(
-                entity_type="burger", result=new_afspraak, key="burger_id"
+            entities=(
+                GebruikersActiviteitEntity(entityType="afspraak", entityId=afspraak_id),
+                GebruikersActiviteitEntity(entityType="burger", entityId=new_afspraak["burger_id"])
             ),
             before=dict(afspraak=previous),
             after=dict(afspraak=new_afspraak),

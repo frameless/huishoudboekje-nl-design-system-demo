@@ -15,7 +15,7 @@ from hhb_backend.graphql.models.postadres import Postadres
 from hhb_backend.graphql.mutations.afspraken.update_afspraak_betaalinstructie import BetaalinstructieInput
 from hhb_backend.graphql.mutations.afspraken.update_afspraak_betaalinstructie import validate_afspraak_betaalinstructie
 from hhb_backend.graphql.scalars.bedrag import Bedrag
-from hhb_backend.graphql.utils.gebruikersactiviteiten import gebruikers_activiteit_entities, GebruikersActiviteitEntity
+from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
 
 
 class CreateAfspraakInput(graphene.InputObjectType):

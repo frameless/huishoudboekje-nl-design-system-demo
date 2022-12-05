@@ -7,7 +7,7 @@ from graphql import GraphQLError
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.models import afspraak
-from hhb_backend.graphql.utils.gebruikersactiviteiten import gebruikers_activiteit_entities
+from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
 from hhb_backend.audit_logging import AuditLogging
 
 
@@ -50,11 +50,9 @@ class DeleteAfspraakBetaalinstructie(graphene.Mutation):
 
         AuditLogging.create(
             action=info.field_name,
-            entities=gebruikers_activiteit_entities(
-                entity_type="afspraak", result=afspraak
-            )
-                    + gebruikers_activiteit_entities(
-                entity_type="burger", result=afspraak, key="burger_id"
+            entities=(
+                GebruikersActiviteitEntity(entityType="afspraak", entityId=afspraak_id),
+                GebruikersActiviteitEntity(entityType="burger", entityId=afspraak["burger_id"])
             ),
             before=dict(afspraak=previous),
             after=dict(afspraak=afspraak),

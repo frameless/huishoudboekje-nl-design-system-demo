@@ -88,7 +88,7 @@ class CreateAfdeling(graphene.Mutation):
 
         AuditLogging.create(
             action=info.field_name, 
-            entities=[GebruikersActiviteitEntity(entityType="afdeling", entityId=afdeling_id)],
+            entities=(GebruikersActiviteitEntity(entityType="afdeling", entityId=afdeling_id)),
             after=dict(afspraak=result)
         )
 

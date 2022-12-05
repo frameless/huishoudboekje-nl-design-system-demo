@@ -9,7 +9,7 @@ from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 import hhb_backend.graphql.models.afspraak as graphene_afspraak
 from hhb_backend.graphql.utils.find_matching_afspraken import find_matching_afspraken_by_afspraak
-from hhb_backend.graphql.utils.gebruikersactiviteiten import gebruikers_activiteit_entities
+from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
 from hhb_backend.service.model.afspraak import Afspraak
 
 
@@ -56,11 +56,12 @@ class AddAfspraakZoekterm(graphene.Mutation):
 
         AuditLogging.create(
             action=info.field_name,
-            entities=gebruikers_activiteit_entities(
-                entity_type="afspraak", result=afspraak
-            ) + gebruikers_activiteit_entities(
-                entity_type="burger", result=afspraak, key="burger_id"
-            ),
+            entities=(
+                GebruikersActiviteitEntity(
+                entityType="afspraak", entityId=afspraak_id
+            ), GebruikersActiviteitEntity(
+                entityType="burger", entityId=afspraak["burger_id"]
+            )),
             before=dict(afspraak=previous),
             after=dict(afspraak=afspraak),
         )

@@ -59,9 +59,9 @@ class UpdateAfdeling(graphene.Mutation):
 
         AuditLogging.create(
             action=info.field_name,
-            entities=[GebruikersActiviteitEntity(
+            entities=(GebruikersActiviteitEntity(
                 entityType="afdeling", entityId=id
-            )],
+            )),
             before=dict(postadres=previous),
             after=dict(afdeling=afdeling),
         )
