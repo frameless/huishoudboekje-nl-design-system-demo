@@ -15,7 +15,7 @@ from hhb_backend.graphql.models.postadres import Postadres
 from hhb_backend.graphql.mutations.afspraken.update_afspraak_betaalinstructie import BetaalinstructieInput
 from hhb_backend.graphql.mutations.afspraken.update_afspraak_betaalinstructie import validate_afspraak_betaalinstructie
 from hhb_backend.graphql.scalars.bedrag import Bedrag
-from hhb_backend.graphql.utils.gebruikersactiviteiten import gebruikers_activiteit_entities
+from hhb_backend.graphql.utils.gebruikersactiviteiten import gebruikers_activiteit_entities, GebruikersActiviteitEntity
 
 
 class CreateAfspraakInput(graphene.InputObjectType):
@@ -101,12 +101,10 @@ class CreateAfspraak(graphene.Mutation):
 
         AuditLogging.create(
             action=info.field_name,
-            entities=gebruikers_activiteit_entities(
-                entity_type="afspraak", result=afspraak
-            ) + gebruikers_activiteit_entities(
-                entity_type="burger", result=afspraak, key="burger_id"
-            ) + gebruikers_activiteit_entities(
-                entity_type="afdeling", result=afspraak, key="afdeling_id"
+            entities=(
+                GebruikersActiviteitEntity(entityType="afspraak", entityId=afspraak["id"]),
+                GebruikersActiviteitEntity(entityType="burger", entityId=afspraak["burger_id"]),
+                GebruikersActiviteitEntity(entityType="afdeling", entityId=afspraak["afdeling_id"]),
             ),
             after=dict(afspraak=afspraak),
         )

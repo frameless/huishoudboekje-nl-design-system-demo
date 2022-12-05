@@ -7,12 +7,14 @@ from functools import wraps
 from typing import List
 
 import requests
-from dataclasses_json import dataclass_json, LetterCase, config
+from dataclasses_json import dataclass_json, config
 from dateutil import tz
+from deprecated import deprecated
 from flask import request, g
 
 from hhb_backend.graphql import settings
 from hhb_backend.version import load_version
+
 
 @dataclass_json
 @dataclass
@@ -38,6 +40,7 @@ class GebruikersActiviteit:
         return self
 
 
+@deprecated
 def extract_gebruikers_activiteit(result, *args, **kwargs):
     """Return a dict of the GebruikersActiviteit DataClass from the result by reading its gebruikers_activiteit property"""
 
@@ -69,6 +72,7 @@ def extract_gebruikers_activiteit(result, *args, **kwargs):
     return gebruikers_activiteit.map_entities().to_dict()
 
 
+@deprecated
 def log_gebruikers_activiteit(view_func):
     """ Todo: Deprecated """
     """Decorate graphql mutations with this to have the result of their gebruikers_activiteit method be logged to
@@ -84,7 +88,7 @@ def log_gebruikers_activiteit(view_func):
 
             gebruikers_activiteit = extract_gebruikers_activiteit(
                 result, *args, **kwargs)
-            logging.debug(f"gebruikersactiviteit: {gebruikers_activiteit}" )
+            logging.debug(f"gebruikersactiviteit: {gebruikers_activiteit}")
             if gebruikers_activiteit:
                 json = {
                     "timestamp": datetime.now(tz=tz.tzlocal())
@@ -117,9 +121,11 @@ def log_gebruikers_activiteit(view_func):
     return decorated
 
 
+@deprecated
 def gebruikers_activiteit_entities(
-    entity_type: str, result, key: str = None
+    entity_type: str, result, key: str = "id"
 ) -> List[GebruikersActiviteitEntity]:
+    """Return a list of entities of a list of objects in a dictionary at 'key'"""
     """Return a list of entities of a list of objects in a dictionary at 'key'"""
     value = None
     if result:

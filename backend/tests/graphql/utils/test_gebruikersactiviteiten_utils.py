@@ -317,14 +317,14 @@ def test_gebruikers_activiteit_entities_mutation():
     result = TestEntityResponse(entity=dict(id=1, attribute="test"))
     assert gebruikers_activiteit_entities(
         entity_type="entity", result=result, key="entity"
-    ) == [GebruikersActiviteitEntity(entity_type="entity", entity_id=1)]
+    ) == [GebruikersActiviteitEntity(entityType="entity", entityId=1)]
 
 
 def test_gebruikers_activiteit_entities_dict():
     result = dict(entity=dict(id=2, attribute="test"))
     assert gebruikers_activiteit_entities(
         entity_type="entity", result=result, key="entity"
-    ) == [GebruikersActiviteitEntity(entity_type="entity", entity_id=2)]
+    ) == [GebruikersActiviteitEntity(entityType="entity", entityId=2)]
 
 
 def test_gebruikers_activiteit_entities_nested_relation():
@@ -333,7 +333,7 @@ def test_gebruikers_activiteit_entities_nested_relation():
     )
     assert gebruikers_activiteit_entities(
         entity_type="relation", result=result["entity"], key="relation"
-    ) == [GebruikersActiviteitEntity(entity_type="relation", entity_id=11)]
+    ) == [GebruikersActiviteitEntity(entityType="relation", entityId=11)]
 
 
 def test_gebruikers_activiteit_entities_nested_relations():
@@ -350,8 +350,8 @@ def test_gebruikers_activiteit_entities_nested_relations():
     assert gebruikers_activiteit_entities(
         entity_type="relation", result=result["entity"], key="relation"
     ) == [
-        GebruikersActiviteitEntity(entity_type="relation", entity_id=11),
-        GebruikersActiviteitEntity(entity_type="relation", entity_id=12),
+        GebruikersActiviteitEntity(entityType="relation", entityId=11),
+        GebruikersActiviteitEntity(entityType="relation", entityId=12),
     ]
 
 
@@ -359,7 +359,7 @@ def test_gebruikers_activiteit_entities_relation_id():
     entity = dict(id=1, relation_id=13, attribute="test")
     assert gebruikers_activiteit_entities(
         entity_type="relation", result=entity, key="relation_id"
-    ) == [GebruikersActiviteitEntity(entity_type="relation", entity_id=13)]
+    ) == [GebruikersActiviteitEntity(entityType="relation", entityId=13)]
 
 
 def test_gebruikers_activiteit_entities_none():

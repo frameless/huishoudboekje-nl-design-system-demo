@@ -53,8 +53,6 @@ from .signalen.update_signaal import UpdateSignaal
 
 class RootMutation(graphene.ObjectType):
     """ The root of all mutations """
-    createTest = CreateTest.Field()  # Todo: remove this
-
     createBurger = CreateBurger.Field()
     deleteBurger = DeleteBurger.Field()
     updateBurger = UpdateBurger.Field()
