@@ -11,6 +11,7 @@ from hhb_backend.graphql.dataloaders import hhb_dataloader
 import hhb_backend.graphql.models.afdeling as graphene_afdeling
 from hhb_backend.graphql.mutations.postadressen.utils import create_afdeling_postadres
 from hhb_backend.graphql.mutations.rekeningen.utils import create_afdeling_rekening
+from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
 
 
 class CreateAfdelingInput(graphene.InputObjectType):
@@ -85,6 +86,10 @@ class CreateAfdeling(graphene.Mutation):
                 for postadres in postadressen
             ]
 
-        AuditLogging.create(action=info.field_name, entities=result)
+        AuditLogging.create(
+            action=info.field_name, 
+            entities=[GebruikersActiviteitEntity(entityType="afdeling", entityId=afdeling_id)],
+            after=dict(afspraak=result)
+        )
 
         return CreateAfdeling(afdeling=result, ok=True)

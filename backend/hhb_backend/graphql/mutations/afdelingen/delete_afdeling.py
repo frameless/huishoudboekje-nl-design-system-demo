@@ -7,7 +7,7 @@ from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 import hhb_backend.graphql.models.afdeling as graphene_afdeling
-from hhb_backend.graphql.utils.gebruikersactiviteiten import gebruikers_activiteit_entities
+from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
 
 
 class DeleteAfdeling(graphene.Mutation):
@@ -45,8 +45,10 @@ class DeleteAfdeling(graphene.Mutation):
         if response_hhb.status_code != 204:
             raise GraphQLError(f"Upstream API responded: {response_hhb.text}")
 
-        AuditLogging.create(action=info.field_name, entities=gebruikers_activiteit_entities(
-            entity_type="afdeling", result=self, key="previous"
-        ))
+        AuditLogging.create(
+            action=info.field_name, 
+            entities=[GebruikersActiviteitEntity(entityType="afdeling", entityId=id)],
+            before=dict(afdeling=previous)
+        )
 
         return DeleteAfdeling(ok=True, previous=previous)
