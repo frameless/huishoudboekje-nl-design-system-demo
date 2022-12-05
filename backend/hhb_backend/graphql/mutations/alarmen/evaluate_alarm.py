@@ -12,11 +12,11 @@ from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.models import alarm, signaal
 from hhb_backend.graphql.models.bank_transaction import Bedrag
-from hhb_backend.graphql.mutations.alarmen.alarm import generate_alarm_date, CreateAlarmInput
+from hhb_backend.graphql.mutations.alarmen.alarm import generate_alarm_date
 from hhb_backend.graphql.mutations.alarmen.create_alarm import AlarmHelper
 from hhb_backend.graphql.mutations.signalen.signalen import SignaalHelper
 from hhb_backend.graphql.utils.dates import to_date
-from hhb_backend.graphql.utils.gebruikersactiviteiten import gebruikers_activiteit_entities
+from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
 from hhb_backend.service.model.alarm import Alarm
 from hhb_backend.service.model.bank_transaction import BankTransaction
 from hhb_backend.service.model.signaal import Signaal
@@ -43,10 +43,10 @@ class EvaluateAlarms(graphene.Mutation):
         triggered_alarms = evaluate_alarms(ids=ids)
         AuditLogging.create(
             action=info.field_name,
-            entities=gebruikers_activiteit_entities(
-                entity_type="alarm", result=[a["alarm"] for a in triggered_alarms]
-            ),
-            after=dict(),
+            entities=[(
+                GebruikersActiviteitEntity(entity_type="alarm", entityId=a["alarm"]["id"])
+            ) for a in triggered_alarms],
+            after=dict(), # TODO this seems useless...
         )
 
         return EvaluateAlarms(alarmTriggerResult=triggered_alarms)
@@ -68,10 +68,8 @@ class EvaluateAlarm(graphene.Mutation):
 
         AuditLogging.create(
             action=info.field_name,
-            entities=gebruikers_activiteit_entities(
-                entity_type="alarm", result=evaluated_alarm[0]
-            ),
-            after=dict(),
+            entities=(GebruikersActiviteitEntity(entityType="alarm", entityId=id)),
+            after=dict(), # TODO this seems useless...
         )
         return EvaluateAlarm(alarmTriggerResult=evaluated_alarm)
 

@@ -4,7 +4,7 @@ import graphene
 import hhb_backend.graphql.models.alarm as graphene_alarm
 from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql.mutations.alarmen.alarm import AlarmHelper
-from hhb_backend.graphql.utils.gebruikersactiviteiten import gebruikers_activiteit_entities
+from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
 
 
 class DeleteAlarm(graphene.Mutation):
@@ -22,12 +22,10 @@ class DeleteAlarm(graphene.Mutation):
 
         AuditLogging.create(
             action=info.field_name,
-            entities=gebruikers_activiteit_entities(
-                entity_type="alarm", result=result.previous
-            ) + gebruikers_activiteit_entities(
-                entity_type="afspraak", result=dict(result.previous), key="afspraakId"
-            ) + gebruikers_activiteit_entities(
-                entity_type="burger", result=result.burger_id
+            entities=(
+                GebruikersActiviteitEntity(entityType="alarm", entityI=id),
+                GebruikersActiviteitEntity(entityType="afspraak", entityId=result.previous.afspraakId),
+                GebruikersActiviteitEntity(entityType="burger", entityId=result.burger_id)
             ),
             before=dict(alarm=result.previous),
         )
