@@ -9,7 +9,7 @@ from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 import hhb_backend.graphql.models.burger as graphene_burger
-from hhb_backend.graphql.utils.gebruikersactiviteiten import gebruikers_activiteit_entities
+from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
 
 
 class DeleteBurger(graphene.Mutation):
@@ -47,9 +47,7 @@ class DeleteBurger(graphene.Mutation):
 
         AuditLogging.create(
             action=info.field_name,
-            entities=gebruikers_activiteit_entities(
-                entity_type="burger", result=previous
-            ),
+            entities=(GebruikersActiviteitEntity(entityType="burger", entityId=id)),
             before=dict(burger=previous),
         )
 

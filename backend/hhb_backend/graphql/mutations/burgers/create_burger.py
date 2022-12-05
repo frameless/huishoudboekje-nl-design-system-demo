@@ -11,7 +11,7 @@ from hhb_backend.graphql import settings
 import hhb_backend.graphql.models.burger as graphene_burger
 from hhb_backend.graphql.mutations.huishoudens.utils import create_huishouden_if_not_exists
 from hhb_backend.graphql.mutations.rekeningen.utils import create_burger_rekening
-from hhb_backend.graphql.utils.gebruikersactiviteiten import gebruikers_activiteit_entities
+from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
 from hhb_backend.service.model import burger
 
 
@@ -69,10 +69,12 @@ class CreateBurger(graphene.Mutation):
 
         AuditLogging.create(
             action=info.field_name,
-            entities=gebruikers_activiteit_entities(
-                entity_type="burger", result=created_burger
-            ) + gebruikers_activiteit_entities(
-                entity_type="rekening", result=created_burger, key="rekeningen"
+            entities=(
+                GebruikersActiviteitEntity(entityType="burger", entityId=created_burger.id),
+                [
+                    GebruikersActiviteitEntity(entityType="rekening", entityId=rekening["id"])
+                    for rekening in created_burger.rekeningen
+                ]
             ),
             after=dict(burger=created_burger),
         )
