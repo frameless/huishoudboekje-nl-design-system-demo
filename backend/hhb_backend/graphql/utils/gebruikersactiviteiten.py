@@ -14,21 +14,20 @@ from flask import request, g
 from hhb_backend.graphql import settings
 from hhb_backend.version import load_version
 
-
-@dataclass_json(letter_case=LetterCase.CAMEL)
+@dataclass_json
 @dataclass
 class GebruikersActiviteitEntity:
-    entity_type: str = field(default=None, metadata=config(field_name="entityType"))
-    entity_id: str = field(default=None, metadata=config(field_name="entityId"))
+    entityType: str = field(default=None, metadata=config(field_name="entityType"))
+    entityId: str = field(default=None, metadata=config(field_name="entityId"))
 
 
-@dataclass_json(letter_case=LetterCase.CAMEL)
+@dataclass_json
 @dataclass
 class GebruikersActiviteit:
     action: str
     entities: List[GebruikersActiviteitEntity]
-    before: dict = field(default=None, metadata=config(field_name="snapshot_before"))
-    after: dict = field(default=None, metadata=config(field_name="snapshot_after"))
+    before: dict = field(default=None, metadata=config(field_name="snapshotBefore"))
+    after: dict = field(default=None, metadata=config(field_name="snapshotAfter"))
 
     def map_entities(self):
         """Map all entities to their DataClass """
@@ -71,6 +70,7 @@ def extract_gebruikers_activiteit(result, *args, **kwargs):
 
 
 def log_gebruikers_activiteit(view_func):
+    """ Todo: Deprecated """
     """Decorate graphql mutations with this to have the result of their gebruikers_activiteit method be logged to
     the LOG_SERVICE"""
 
@@ -141,14 +141,14 @@ def gebruikers_activiteit_entities(
         return [
             (
                 GebruikersActiviteitEntity(
-                    entity_type=entity_type,
-                    entity_id=item["id"] if type(item) == dict else item,
+                    entityType=entity_type,
+                    entityId=item["id"] if type(item) == dict else item,
                 )
             )
             for item in value
         ]
     if type(value) == dict:
         return [
-            GebruikersActiviteitEntity(entity_type=entity_type, entity_id=value["id"])
+            GebruikersActiviteitEntity(entityType=entity_type, entityId=value["id"])
         ]
-    return [GebruikersActiviteitEntity(entity_type=entity_type, entity_id=value)]
+    return [GebruikersActiviteitEntity(entityType=entity_type, entityId=value)]
