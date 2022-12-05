@@ -1,17 +1,18 @@
-import graphene
 import hashlib
 import json
-import requests
 from datetime import datetime
-from dateutil import tz
-from graphql import GraphQLError
 
+import graphene
+import requests
+from dateutil import tz
+
+import hhb_backend.graphql.models.export as graphene_export
+from graphql import GraphQLError
 from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
-import hhb_backend.graphql.models.export as graphene_export
+from hhb_backend.graphql.models.gebruikersactiviteit import GebruikersActiviteitEntity
 from hhb_backend.graphql.utils.dates import to_date
-from hhb_backend.graphql.utils.gebruikersactiviteiten import gebruikers_activiteit_entities
 from hhb_backend.processen.create_sepa_export import create_export_string
 from hhb_backend.processen.overschrijvingen_planner import (
     PlannedOverschrijvingenInput,
@@ -148,9 +149,9 @@ class CreateExportOverschrijvingen(graphene.Mutation):
 
         AuditLogging.create(
             action=info.field_name,
-            entities=gebruikers_activiteit_entities(
-                entity_type="export", result=export_object
-            ),
+            entities=[
+                GebruikersActiviteitEntity(entityType="export", entityId=export_object["id"]),
+            ],
             after=dict(export=export_object)
         )
 

@@ -17,7 +17,6 @@ class StartAutomatischBoeken(graphene.Mutation):
 
         AuditLogging.create(
             action=info.field_name,
-            entities=[]
         )
 
         return StartAutomatischBoeken(ok=True, journaalposten=journaalposten)
