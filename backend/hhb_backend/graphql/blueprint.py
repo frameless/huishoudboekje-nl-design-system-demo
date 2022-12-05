@@ -1,7 +1,6 @@
-import asyncio
 import logging
+
 from flask import Blueprint
-from inspect import isawaitable
 
 from hhb_backend.graphql import schema
 from lib.graphene_file_upload import FileUploadGraphQLView
