@@ -3,7 +3,7 @@ import graphene
 from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.models.configuratie import Configuratie
-from hhb_backend.graphql.utils.gebruikersactiviteiten import gebruikers_activiteit_entities
+from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
 
 
 class ConfiguratieQuery:
@@ -14,7 +14,7 @@ class ConfiguratieQuery:
         result = hhb_dataloader().configuraties.load_one(id)
         AuditLogging.create(
             action=info.field_name,
-            entities=gebruikers_activiteit_entities(entity_type="configuratie", result=result),
+            entities=(GebruikersActiviteitEntity(entityType="configuratie", entityId=id)),
         )
         return result
 
@@ -34,7 +34,10 @@ class ConfiguratiesQuery:
 
         AuditLogging.create(
             action=info.field_name,
-            entities=gebruikers_activiteit_entities(entity_type="configuratie", result=result)
+            entities=[
+                GebruikersActiviteitEntity(entityType="configuratie", entityId=config["id"])
+                for config in result
+            ] if ids else []
         )
 
         return result

@@ -24,16 +24,16 @@ class AlarmenQuery:
 
     @classmethod
     def resolver(cls, _, info, ids=None):
-        entities = None
-
         if ids:
-            entities = [
-                GebruikersActiviteitEntity(entityType="alarm", entityId=id)
-                for id in ids
-            ],
             result = hhb_dataloader().alarms.load(ids)
         else:
             result = hhb_dataloader().alarms.load_all()
 
-        AuditLogging.create(action=info.field_name, entities=entities)
+        AuditLogging.create(
+            action=info.field_name, 
+            entities=[
+                GebruikersActiviteitEntity(entityType="alarm", entityId=id)
+                for id in ids
+            ] if ids else []
+        )
         return result

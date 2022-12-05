@@ -4,9 +4,7 @@ import graphene
 from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.models.export import Export
-from hhb_backend.graphql.utils.gebruikersactiviteiten import (
-    gebruikers_activiteit_entities,
-)
+from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
 
 
 class ExportQuery:
@@ -18,9 +16,7 @@ class ExportQuery:
 
         AuditLogging.create(
             action=info.field_name,
-            entities=gebruikers_activiteit_entities(
-                entity_type="export", result=id
-            ),
+            entities=(GebruikersActiviteitEntity(entityType="export", entityId=id))
         )
 
         return result
@@ -45,10 +41,10 @@ class ExportsQuery:
 
         AuditLogging.create(
             action=info.field_name,
-            entities=gebruikers_activiteit_entities(
-                entity_type="export",
-                result=[export.id for export in result],
-            ),
+            entities=[
+                GebruikersActiviteitEntity(entityType="export", entityId=export.id)
+                for export in result
+            ] if ids or (start_datum and eind_datum) else []
         )
 
         return result

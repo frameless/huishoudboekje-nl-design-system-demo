@@ -3,10 +3,7 @@ import graphene
 from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.models.grootboekrekening import Grootboekrekening
-from hhb_backend.graphql.utils.gebruikersactiviteiten import (
-    gebruikers_activiteit_entities,
-    log_gebruikers_activiteit,
-)
+from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
 
 
 class GrootboekrekeningQuery:
@@ -17,9 +14,7 @@ class GrootboekrekeningQuery:
         result = hhb_dataloader().grootboekrekeningen.load_one(id)
         AuditLogging.create(
             action=info.field_name,
-            entities=gebruikers_activiteit_entities(
-                entity_type="grootboekrekening", result=id
-            ),
+            entities=(GebruikersActiviteitEntity(entityType="grootboekrekening", entityId=id)),
         )
         return result
 
@@ -38,9 +33,10 @@ class GrootboekrekeningenQuery:
 
         AuditLogging.create(
             action=info.field_name,
-            entities=gebruikers_activiteit_entities(
-                entity_type="grootboekrekening", result=ids
-            ),
+            entities=[
+                GebruikersActiviteitEntity(entityType="grootboekrekening", entityId=grootboekrekening["id"])
+                for grootboekrekening in result
+            ] if ids else []
         )
 
         return result

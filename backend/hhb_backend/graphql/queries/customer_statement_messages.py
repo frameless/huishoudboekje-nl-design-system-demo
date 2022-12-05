@@ -6,9 +6,7 @@ from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.models.customer_statement_message import (
     CustomerStatementMessage,
 )
-from hhb_backend.graphql.utils.gebruikersactiviteiten import (
-    gebruikers_activiteit_entities,
-)
+from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
 
 
 class CustomerStatementMessageQuery:
@@ -22,9 +20,7 @@ class CustomerStatementMessageQuery:
 
         AuditLogging.create(
             action=info.field_name,
-            entities=gebruikers_activiteit_entities(
-                entity_type="customer_statement_message", result=id
-            ),
+            entities=(GebruikersActiviteitEntity(entityType="customer_statement_message", entityId=id)),
         )
 
         return result
@@ -44,9 +40,10 @@ class CustomerStatementMessagesQuery:
 
         AuditLogging.create(
             action=info.field_name,
-            entities=gebruikers_activiteit_entities(
-                entity_type="customer_statement_message", result=ids
-            ),
+            entities=[
+                GebruikersActiviteitEntity(entityType="customer_statement_message", entityId=csm["id"])
+                for csm in result
+            ] if ids else []
         )
 
         return result

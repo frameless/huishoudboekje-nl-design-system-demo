@@ -24,16 +24,16 @@ class AfsprakenQuery:
 
     @classmethod
     def resolver(cls, _, info, ids=None):
-        entities = None
-
         if ids:
-            entities = [
-                GebruikersActiviteitEntity(entityType="afspraak", entityId=id)
-                for id in ids
-            ],
             result = hhb_dataloader().afspraken.load(ids)
         else:
             result = hhb_dataloader().afspraken.load_all()
 
-        AuditLogging.create(action=info.field_name, entities=entities)
+        AuditLogging.create(
+            action=info.field_name, 
+            entities=[
+                GebruikersActiviteitEntity(entityType="afspraak", entityId=id)
+                for id in ids
+            ] if ids else []
+        )
         return result

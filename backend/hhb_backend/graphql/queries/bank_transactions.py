@@ -32,7 +32,7 @@ class BankTransactionsQuery:
             entities=[
                 GebruikersActiviteitEntity(entityType="transactie", entityId=transaction.id)
                 for transaction in result
-            ]
+            ] if "filters" in kwargs else []
         )
         return result
 
