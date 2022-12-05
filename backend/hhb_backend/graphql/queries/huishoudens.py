@@ -4,10 +4,7 @@ from graphql import GraphQLError
 from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.filters.burgers import BurgerFilter
-from hhb_backend.graphql.utils.gebruikersactiviteiten import (
-    gebruikers_activiteit_entities,
-    log_gebruikers_activiteit,
-)
+from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
 
 
 class HuishoudenQuery:
@@ -18,7 +15,7 @@ class HuishoudenQuery:
         result = hhb_dataloader().huishoudens.load_one(id)
         AuditLogging.create(
             action=info.field_name,
-            entities=gebruikers_activiteit_entities(entity_type="huishouden", result=id)
+            entities=(GebruikersActiviteitEntity(entityType="huishouden", entityId=id))
         )
         return result
 
@@ -32,15 +29,18 @@ class HuishoudensQuery:
 
     @classmethod
     def resolver(cls, _root, info, ids=None, **kwargs):
-        entities = None
-
         if ids:
-            entities = gebruikers_activiteit_entities(entity_type="huishouden", result=ids)
             result = hhb_dataloader().huishoudens.load(ids)
         else:
             result = hhb_dataloader().huishoudens.load_all(filters=kwargs.get("filters", None))
 
-        AuditLogging().create(action=info.field_name, entities=entities)
+        AuditLogging().create(
+            action=info.field_name, 
+            entities=[
+                GebruikersActiviteitEntity(entityType="huishouden", entityId=id)
+                for id in ids
+            ] if ids or "filters" in kwargs else []
+        )
 
         return result
 
@@ -55,8 +55,6 @@ class HuishoudensPagedQuery:
 
     @classmethod
     def resolver(cls, _root, info, **kwargs):
-        entities = None
-
         if "start" in kwargs and "limit" in kwargs:
             result = hhb_dataloader().huishoudens.load_paged(
                 start=kwargs["start"],
@@ -65,15 +63,15 @@ class HuishoudensPagedQuery:
                 sorting_column="id",
                 filters=kwargs.get("filters")
             )
-
-            if "result" in kwargs:
-                entities = gebruikers_activiteit_entities(
-                    entity_type="huishouden",
-                    result=kwargs["result"],
-                )
         else:
             raise GraphQLError(f"Query needs params 'start', 'limit'. ")
 
-        AuditLogging().create(action=info.field_name, entities=entities)
+        AuditLogging().create(
+            action=info.field_name, 
+            entities=[
+                GebruikersActiviteitEntity(entityType="huishouden", entityId=huishouden["id"])
+                for huishouden in result
+            ]
+        )
 
         return result

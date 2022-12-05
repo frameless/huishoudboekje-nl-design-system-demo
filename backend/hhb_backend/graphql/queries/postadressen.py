@@ -2,9 +2,7 @@ import graphene
 from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.models.postadres import Postadres
-from hhb_backend.graphql.utils.gebruikersactiviteiten import (
-    gebruikers_activiteit_entities,
-)
+from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
 
 
 class PostadresQuery:
@@ -15,7 +13,7 @@ class PostadresQuery:
         result = hhb_dataloader().postadressen.load_one(id)
         AuditLogging.create(
             action=info.field_name,
-            entities=gebruikers_activiteit_entities(entity_type="postadres", result=id)
+            entities=(GebruikersActiviteitEntity(entityType="postadres", entityId=id))
         )
         return result
 
@@ -32,7 +30,10 @@ class PostadressenQuery:
 
         AuditLogging.create(
             action=info.field_name,
-            entities=gebruikers_activiteit_entities(entity_type="postadres", result=ids),
+            entities=[
+                GebruikersActiviteitEntity(entityType="postadres", entityId=id)
+                for id in ids
+            ] if ids else []
         )
 
         return result

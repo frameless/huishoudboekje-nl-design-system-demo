@@ -3,9 +3,7 @@ import graphene
 from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.models.journaalpost import Journaalpost
-from hhb_backend.graphql.utils.gebruikersactiviteiten import (
-    gebruikers_activiteit_entities,
-)
+from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
 
 
 class JournaalpostQuery:
@@ -16,9 +14,7 @@ class JournaalpostQuery:
         result = hhb_dataloader().journaalposten.load_one(id)
         AuditLogging().create(
             action=info.field_name,
-            entities=gebruikers_activiteit_entities(
-                entity_type="journaalpost", result=id
-            )
+            entities=(GebruikersActiviteitEntity(entityType="journaalpost", entityId=id))
         )
         return result
 
@@ -36,9 +32,10 @@ class JournaalpostenQuery:
 
         AuditLogging().create(
             action=info.field_name,
-            entities=gebruikers_activiteit_entities(
-                entity_type="journaalpost", result=ids
-            )
+            entities=[
+                GebruikersActiviteitEntity(entityType="journaalpost", entityId=id)
+                for id in ids
+            ] if ids else []
         )
 
         return result
