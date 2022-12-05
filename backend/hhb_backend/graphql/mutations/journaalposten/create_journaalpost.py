@@ -13,7 +13,7 @@ import hhb_backend.graphql.models.afspraak as graphene_afspraak
 from hhb_backend.graphql.models.journaalpost import Journaalpost
 from hhb_backend.graphql.mutations.alarmen.evaluate_alarm import evaluate_alarms
 from hhb_backend.graphql.mutations.journaalposten import update_transaction_service_is_geboekt
-from hhb_backend.graphql.utils.gebruikersactiviteiten import gebruikers_activiteit_entities
+from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
 from hhb_backend.service.model import journaalpost
 
 
@@ -77,10 +77,20 @@ class CreateJournaalpostAfspraak(graphene.Mutation):
 
         AuditLogging.create(
             action=info.field_name,
-            entities=[dict(entity_type="journaalpost", entity_id=j["id"]) for j in journaalposten]
-                     + [dict(entity_type="afspraak", entity_id=j["afspraak"]["id"]) for j in journaalposten]
-                     + [dict(entity_type="burger", entity_id=j["afspraak"]["burger_id"])
-                        for j in journaalposten],
+            entities=(
+                [
+                    GebruikersActiviteitEntity(entityType="journaalpost", entityId=j["id"]) 
+                    for j in journaalposten
+                ],
+                [
+                    GebruikersActiviteitEntity(entityType="afspraak", entityId=j["afspraak"]["id"]) 
+                    for j in journaalposten
+                ],
+                [
+                    GebruikersActiviteitEntity(entityType="burger", entityId=j["afspraak"]["burger_id"])
+                    for j in journaalposten
+                ]
+            ),
             after=dict(journaalpost=journaalposten),
         )
 
@@ -151,14 +161,10 @@ class CreateJournaalpostGrootboekrekening(graphene.Mutation):
 
         AuditLogging.create(
             action=info.field_name,
-            entities=gebruikers_activiteit_entities(
-                entity_type="journaalpost", result=journaalpost
-            ) + gebruikers_activiteit_entities(
-                entity_type="transaction", result=journaalpost, key="transaction"
-            ) + gebruikers_activiteit_entities(
-                entity_type="grootboekrekening",
-                result=journaalpost,
-                key="grootboekrekening_id",
+            entities=(
+                GebruikersActiviteitEntity(entityType="journaalpost", entityId=journaalpost["id"]), 
+                GebruikersActiviteitEntity(entityType="transaction", entityId=journaalpost["transaction"]), 
+                GebruikersActiviteitEntity(entityType="grootboekrekening", entityId=journaalpost["grootboekrekening_id"])
             ),
             after=dict(journaalpost=journaalpost),
         )

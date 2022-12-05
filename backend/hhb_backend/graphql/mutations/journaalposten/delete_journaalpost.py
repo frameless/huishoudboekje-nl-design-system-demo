@@ -7,7 +7,7 @@ from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 import hhb_backend.graphql.models.journaalpost as graphene_journaalpost
 from hhb_backend.graphql.mutations.journaalposten import update_transaction_service_is_geboekt
-from hhb_backend.graphql.utils.gebruikersactiviteiten import gebruikers_activiteit_entities
+from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
 
 
 class DeleteJournaalpost(graphene.Mutation):
@@ -33,24 +33,16 @@ class DeleteJournaalpost(graphene.Mutation):
 
         AuditLogging.create(
             action=info.field_name,
-            entities=gebruikers_activiteit_entities(
-                entity_type="journaalpost", result=previous
-            ) + gebruikers_activiteit_entities(
-                entity_type="afspraak", result=previous, key="afspraak"
-            ) + (
-                         gebruikers_activiteit_entities(
-                             entity_type="burger",
-                             result=previous["afspraak"],
-                             key="burger_id",
-                         )
-                         if "afspraak" in previous
-                         else []
-                     ) + gebruikers_activiteit_entities(
-                entity_type="transaction", result=previous, key="transaction_id"
-            ) + gebruikers_activiteit_entities(
-                entity_type="grootboekrekening",
-                result=previous,
-                key="grootboekrekening_id",
+            entities=(
+                GebruikersActiviteitEntity(entityType="journaalpost", entityId=id),
+                GebruikersActiviteitEntity(entityType="afspraak", entityId=previous["afspraak"]), 
+                (
+                    GebruikersActiviteitEntity(entityType="burger", entityId=previous["afspraak"]["burger_id"])
+                    if "afspraak" in previous
+                    else []
+                ), 
+                GebruikersActiviteitEntity(entityType="transaction", entityId=previous["transaction_id"]),
+                GebruikersActiviteitEntity(entityType="grootboekrekening", entityId=previous["grootboekrekening_id"])
             ),
             before=dict(journaalpost=previous),
         )
