@@ -8,7 +8,7 @@ from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.models.rubriek import Rubriek
-from hhb_backend.graphql.utils.gebruikersactiviteiten import gebruikers_activiteit_entities
+from hhb_backend.graphql.utils.gebruikersactiviteiten import gebruikers_activiteit_entities, GebruikersActiviteitEntity
 
 
 class DeleteRubriek(graphene.Mutation):
@@ -42,9 +42,9 @@ class DeleteRubriek(graphene.Mutation):
 
         AuditLogging.create(
             action=info.field_name,
-            entities=gebruikers_activiteit_entities(
-                entity_type="rubriek", result=previous
-            ),
+            entities=[
+                GebruikersActiviteitEntity(entityType="rubriek", entityId=id),
+            ],
             after=dict(rubriek=previous),
         )
 

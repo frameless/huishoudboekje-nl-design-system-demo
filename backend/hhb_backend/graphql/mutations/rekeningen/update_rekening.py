@@ -2,14 +2,14 @@
 
 import graphene
 import requests
-from graphql import GraphQLError
 
 import hhb_backend.graphql.models.rekening as rekening
 import hhb_backend.graphql.mutations.rekeningen.rekening_input as rekening_input
+from graphql import GraphQLError
 from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
-from hhb_backend.graphql.utils.gebruikersactiviteiten import gebruikers_activiteit_entities
+from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
 
 
 class UpdateRekening(graphene.Mutation):
@@ -47,15 +47,9 @@ class UpdateRekening(graphene.Mutation):
 
         AuditLogging.create(
             action=info.field_name,
-            entities=gebruikers_activiteit_entities(
-                entity_type="rekening", result=result
-            )
-                     + gebruikers_activiteit_entities(
-                entity_type="burger", result=result, key="burgers"
-            )
-                     + gebruikers_activiteit_entities(
-                entity_type="organisatie", result=result.get("afdelingen", []), key="organisatie_id"
-            ),
+            entities=[
+                GebruikersActiviteitEntity(entityType="rekening", entityId=id),
+            ],
             before=dict(rekening=previous),
             after=dict(rekening=result),
         )

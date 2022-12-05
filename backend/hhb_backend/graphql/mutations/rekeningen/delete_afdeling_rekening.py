@@ -1,13 +1,13 @@
 """ GraphQL mutation for deleting a Rekening from an Organisatie """
 import graphene
-from graphql import GraphQLError
 
+from graphql import GraphQLError
 from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.models import rekening
 from hhb_backend.graphql.mutations.rekeningen.utils import disconnect_afdeling_rekening, delete_rekening, \
     rekening_used_check
-from hhb_backend.graphql.utils.gebruikersactiviteiten import log_gebruikers_activiteit
+from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
 
 
 class DeleteAfdelingRekening(graphene.Mutation):
@@ -45,8 +45,8 @@ class DeleteAfdelingRekening(graphene.Mutation):
         AuditLogging.create(
             action=info.field_name,
             entities=[
-                dict(entity_type="rekening", entity_id=rekening_id), # Todo gebruikers_activiteit_entities? (07-11-2022)
-                dict(entity_type="afdeling", entity_id=afdeling_id), # Todo gebruikers_activiteit_entities? (07-11-2022)
+                GebruikersActiviteitEntity(entityType="rekening", entityId=rekening_id),
+                GebruikersActiviteitEntity(entityType="afdeling", entityId=afdeling_id),
             ],
             before=dict(rekening=previous),
         )

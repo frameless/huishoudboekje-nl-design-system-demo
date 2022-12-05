@@ -6,7 +6,7 @@ import hhb_backend.graphql.models.rekening as graphene_rekening
 import hhb_backend.graphql.mutations.rekeningen.rekening_input as rekening_input
 from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql.mutations.rekeningen.utils import create_afdeling_rekening
-from hhb_backend.graphql.utils.gebruikersactiviteiten import gebruikers_activiteit_entities
+from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
 
 
 class CreateAfdelingRekening(graphene.Mutation):
@@ -29,10 +29,9 @@ class CreateAfdelingRekening(graphene.Mutation):
         AuditLogging.create(
             action=info.field_name,
             entities=[
-                         dict(entity_type="afdeling", entity_id=afdeling_id) # Todo gebruikers_activiteit_entities? (07-11-2022)
-                     ] + gebruikers_activiteit_entities(
-                entity_type="rekening", result=result
-            ),
+                GebruikersActiviteitEntity(entityType="rekening", entityId=result["id"]),
+                GebruikersActiviteitEntity(entityType="afdeling", entityId=afdeling_id),
+            ],
             after=dict(rekening=result),
         )
 

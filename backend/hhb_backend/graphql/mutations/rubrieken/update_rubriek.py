@@ -1,15 +1,16 @@
 """ GraphQL mutation for updating a Rubriek """
 
-import graphene
 import json
-import requests
-from graphql import GraphQLError
 
+import graphene
+import requests
+
+from graphql import GraphQLError
 from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.models.rubriek import Rubriek
-from hhb_backend.graphql.utils.gebruikersactiviteiten import gebruikers_activiteit_entities
+from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
 
 
 class UpdateRubriek(graphene.Mutation):
@@ -45,9 +46,9 @@ class UpdateRubriek(graphene.Mutation):
 
         AuditLogging.create(
             action=info.field_name,
-            entities=gebruikers_activiteit_entities(
-                entity_type="rubriek", result=rubriek
-            ),
+            entities=[
+                GebruikersActiviteitEntity(entityType="rubriek", entityId=id),
+            ],
             before=dict(rubriek=previous),
             after=dict(rubriek=rubriek),
         )

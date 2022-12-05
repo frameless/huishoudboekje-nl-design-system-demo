@@ -6,7 +6,7 @@ import hhb_backend.graphql.models.rekening as rekening
 import hhb_backend.graphql.mutations.rekeningen.rekening_input as rekening_input
 from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql.mutations.rekeningen.utils import create_burger_rekening
-from hhb_backend.graphql.utils.gebruikersactiviteiten import gebruikers_activiteit_entities
+from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
 
 
 class CreateBurgerRekening(graphene.Mutation):
@@ -28,9 +28,10 @@ class CreateBurgerRekening(graphene.Mutation):
 
         AuditLogging.create(
             action=info.field_name,
-            entities=[dict(entity_type="burger", entity_id=burger_id)] + gebruikers_activiteit_entities(
-                entity_type="rekening", result=result
-            ),
+            entities=[
+                GebruikersActiviteitEntity(entityType="rekening", entityId=result["id"]),
+                GebruikersActiviteitEntity(entityType="burger", entityId=burger_id),
+            ],
             after=dict(rekening=result),
         )
 

@@ -1,14 +1,14 @@
 """ GraphQL mutation for creating a new Postadres """
 import graphene
 import requests
-from graphql import GraphQLError
 
+import hhb_backend.graphql.models.afdeling as graphene_afdeling
+import hhb_backend.graphql.models.postadres as graphene_postadres
+from graphql import GraphQLError
+from hhb_backend.graphql.models.gebruikersactiviteit import GebruikersActiviteitEntity
 from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
-import hhb_backend.graphql.models.afdeling as graphene_afdeling
-import hhb_backend.graphql.models.postadres as graphene_postadres
-from hhb_backend.graphql.utils.gebruikersactiviteiten import gebruikers_activiteit_entities
 
 
 class CreatePostadresInput(graphene.InputObjectType):
@@ -78,11 +78,10 @@ class CreatePostadres(graphene.Mutation):
 
         AuditLogging.create(
             action=info.field_name,
-            entities=gebruikers_activiteit_entities(
-                entity_type="postadres", result=result
-            ) + gebruikers_activiteit_entities(
-                entity_type="afdeling", result=new_afdeling
-            ),
+            entities=[
+                GebruikersActiviteitEntity(entityType="postadres", entityId=result['id']),
+                GebruikersActiviteitEntity(entityType="afdeling", entityId=afdeling_id),
+            ],
             after=dict(postadres=result),
         )
 
