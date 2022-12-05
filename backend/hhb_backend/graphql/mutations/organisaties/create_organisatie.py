@@ -4,7 +4,7 @@ import graphene
 from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql.datawriters import hhb_datawriter
 from hhb_backend.graphql.models.organisatie import Organisatie
-from hhb_backend.graphql.utils.gebruikersactiviteiten import gebruikers_activiteit_entities
+from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
 
 
 class CreateOrganisatieInput(graphene.InputObjectType):
@@ -30,9 +30,7 @@ class CreateOrganisatie(graphene.Mutation):
 
         AuditLogging.create(
             action=info.field_name,
-            entities=gebruikers_activiteit_entities(
-                entity_type="organisatie", result=result
-            ),
+            entities=(GebruikersActiviteitEntity(entityType="organisatie", entityId=result["id"])),
             after=dict(organisatie=result),
         )
 
