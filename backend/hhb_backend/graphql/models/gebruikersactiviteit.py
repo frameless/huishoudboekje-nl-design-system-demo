@@ -1,7 +1,8 @@
 """ GebruikersActiviteit model as used in GraphQL queries """
-import graphene
+import json
 from datetime import datetime
-from flask import request
+
+import graphene
 
 import hhb_backend.graphql.models.afdeling as afdeling
 import hhb_backend.graphql.models.afspraak as afspraak
@@ -35,6 +36,8 @@ class GebruikersActiviteitMeta(graphene.ObjectType):
 
 
 class GebruikersActiviteitSnapshot(graphene.ObjectType):
+    json = graphene.Field(lambda: graphene.JSONString)  # Just the snapshot as JSON
+
     afdeling = graphene.Field(lambda: afdeling.Afdeling)
     afspraak = graphene.Field(lambda: afspraak.Afspraak)
     burger = graphene.Field(lambda: burger.Burger)
@@ -63,6 +66,11 @@ class GebruikersActiviteitSnapshot(graphene.ObjectType):
                     bad_key = str(e).split("'")[1]
                     value.pop(bad_key)
                     continue
+
+    @classmethod
+    def resolve_json(cls, root, info):
+        """ Added for debugging purposes """
+        return root
 
     @classmethod
     def resolve_afdeling(cls, root, _info):
@@ -250,7 +258,7 @@ class GebruikersActiviteitEntity(graphene.ObjectType):
     @classmethod
     def resolve_signaal(cls, root, _info):
         return cls._resolve_entity(
-            root, entity_type="signaal", dataloader_name="signals"
+            root, entity_type="signaal", dataloader_name="signalen"
         )
 
 
