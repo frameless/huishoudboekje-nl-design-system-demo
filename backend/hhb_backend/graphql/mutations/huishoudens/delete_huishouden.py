@@ -8,7 +8,7 @@ from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.models.huishouden import Huishouden
-from hhb_backend.graphql.utils.gebruikersactiviteiten import gebruikers_activiteit_entities
+from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
 
 
 class DeleteHuishouden(graphene.Mutation):
@@ -33,9 +33,7 @@ class DeleteHuishouden(graphene.Mutation):
 
         AuditLogging.create(
             action=info.field_name,
-            entities=gebruikers_activiteit_entities(
-                entity_type="huishouden", result=previous
-            ),
+            entities=(GebruikersActiviteitEntity(entityType="huishouden", entityId=id)),
             before=dict(huishouden=previous),
         )
         return DeleteHuishouden(ok=True, previous=previous)

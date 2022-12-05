@@ -11,7 +11,7 @@ from hhb_backend.graphql.models.huishouden import Huishouden
 from hhb_backend.graphql.mutations.burgers.utils import (
     update_existing_burger,
 )
-from hhb_backend.graphql.utils.gebruikersactiviteiten import gebruikers_activiteit_entities
+from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
 from hhb_backend.service.model import huishouden
 
 
@@ -49,9 +49,7 @@ class CreateHuishouden(graphene.Mutation):
 
         AuditLogging.create(
             action=info.field_name,
-            entities=gebruikers_activiteit_entities(
-                entity_type="huishouden", result=created_huishouden
-            ),
+            entities=(GebruikersActiviteitEntity(entityType="huishouden", result=created_huishouden.id)),
             after=dict(huishouden=created_huishouden),
         )
 
