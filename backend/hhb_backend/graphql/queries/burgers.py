@@ -106,7 +106,6 @@ class BurgersPagedQuery:
 
     @classmethod
     def resolver(cls, _, info, **kwargs):
-        burgers = []
         if "start" in kwargs and "limit" in kwargs:
             burgers = hhb_dataloader().burgers.load_paged(start=kwargs["start"], limit=kwargs["limit"])
         else:
@@ -116,7 +115,7 @@ class BurgersPagedQuery:
             action=info.field_name,
             entities=[
                 GebruikersActiviteitEntity(entityType="burger", entityId=burger["id"])
-                for burger in burgers.values()
+                for burger in burgers["burgers"]
             ] if "start" in kwargs and "limit" in kwargs else []
         )
 

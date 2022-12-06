@@ -5,6 +5,7 @@ import graphene
 
 import hhb_backend.graphql.models.gebruikersactiviteit as gebruikersactiviteit
 from graphql import GraphQLError
+from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
 
@@ -14,13 +15,12 @@ class GebruikersActiviteitQuery:
 
     @staticmethod
     def resolver(self, info, **kwargs):
-        # Disabled for testing purposes
-        # AuditLogging.create(
-        #     action=info.field_name,
-        #     entities=[
-        #         GebruikersActiviteitEntity(entityType="gebruikersactiviteit", entityId=kwargs.get("id"))
-        #     ]
-        # )
+        AuditLogging.create(
+            action=info.field_name,
+            entities=[
+                GebruikersActiviteitEntity(entityType="gebruikersactiviteit", entityId=kwargs.get("id"))
+            ]
+        )
 
         return hhb_dataloader().gebruikersactiviteiten.load_one(kwargs.get("id"))
 
@@ -74,11 +74,10 @@ class GebruikersActiviteitenQuery:
                 for g in gebruikersactiviteiten
             ]
 
-        # Disabled for testing purposes
-        # AuditLogging.create(
-        #     action=info.field_name,
-        #     entities=entities
-        # )
+        AuditLogging.create(
+            action=info.field_name,
+            entities=entities
+        )
 
         return gebruikersactiviteiten
 
@@ -125,13 +124,12 @@ class GebruikersActiviteitenPagedQuery:
 
         logging.debug(f"result {result}")
 
-        # Disabled for testing purposes
-        # AuditLogging.create(
-        #     action=info.field_name,
-        #     entities=[
-        #         GebruikersActiviteitEntity(entityType="gebruikersactiviteit", entityId=g["id"])
-        #         for g in result["gebruikersactiviteiten"]
-        #     ]
-        # )
+        AuditLogging.create(
+            action=info.field_name,
+            entities=[
+                GebruikersActiviteitEntity(entityType="gebruikersactiviteit", entityId=g["id"])
+                for g in result["gebruikersactiviteiten"]
+            ]
+        )
 
         return result
