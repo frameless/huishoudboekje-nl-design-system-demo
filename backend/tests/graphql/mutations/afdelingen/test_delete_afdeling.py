@@ -7,7 +7,7 @@ def test_delete_afdeling(client):
     with requests_mock.Mocker() as mock:
         # arrange
         fallback = mock.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
-        afdeling = {'data': [{'id': 1, 'postadressen_ids': [], 'rekeningen_ids': []}]}
+        afdeling = {'data': [{'id': 1, 'postadressen_ids': [], 'rekeningen_ids': [], 'organisatie_id': 42 }]}
         afdeling_get = mock.get(f"{settings.ORGANISATIE_SERVICES_URL}/afdelingen/?filter_ids=1", json=afdeling)
         afdeling_org_del = mock.delete(f"{settings.ORGANISATIE_SERVICES_URL}/afdelingen/1", json={'data': {'id': 1}}, status_code=204)
         afdeling_hhb_del = mock.delete(f"{settings.HHB_SERVICES_URL}/afdelingen/1", json={'data': {'id': 1}}, status_code=204)
@@ -141,7 +141,7 @@ def test_delete_afdeling_without_postadres(client):
     with requests_mock.Mocker() as mock:
         # arrange
         fallback = mock.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
-        afdeling = {'data': [{'id': 1, 'postadressen_ids': [], 'rekeningen_ids': []}]}
+        afdeling = {'data': [{'id': 1, 'postadressen_ids': [], 'rekeningen_ids': [], 'organisatie_id': 42}]}
         afdeling_get = mock.get(f"{settings.ORGANISATIE_SERVICES_URL}/afdelingen/?filter_ids=1", json=afdeling)
         afdeling_org_del = mock.delete(
             f"{settings.ORGANISATIE_SERVICES_URL}/afdelingen/1",
