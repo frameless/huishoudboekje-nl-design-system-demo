@@ -12,7 +12,7 @@ setup(
         'Werkzeug>=2.2.2,<3',
         'aiodataloader>=0.2.1,<1',
         'dataclasses-json>=0.5.7,<1',
-        'graphql-server',
+        'graphql-server',  # Should be 3.0.0b5, if it ever stops working (06-12-2022)
         'graphene>=3.1.1,<4',
         'graphql-core>=3.2.3,<4',
         'gunicorn>=20.1.0,<21',
