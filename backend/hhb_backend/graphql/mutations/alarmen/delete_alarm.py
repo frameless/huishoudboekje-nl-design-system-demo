@@ -23,7 +23,7 @@ class DeleteAlarm(graphene.Mutation):
         AuditLogging.create(
             action=info.field_name,
             entities=(
-                GebruikersActiviteitEntity(entityType="alarm", entityI=id),
+                GebruikersActiviteitEntity(entityType="alarm", entityId=id),
                 GebruikersActiviteitEntity(entityType="afspraak", entityId=result.previous.afspraakId),
                 GebruikersActiviteitEntity(entityType="burger", entityId=result.burger_id)
             ),

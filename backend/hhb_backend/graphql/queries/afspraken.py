@@ -14,7 +14,9 @@ class AfspraakQuery:
     def resolver(cls, _, info, id):
         AuditLogging.create(
             action=info.field_name,
-            entities=(GebruikersActiviteitEntity(entityType="afspraak", entityId=id))
+            entities=[
+                GebruikersActiviteitEntity(entityType="afspraak", entityId=id)
+            ]
         )
         return hhb_dataloader().afspraken.load_one(id)
 
@@ -30,7 +32,7 @@ class AfsprakenQuery:
             result = hhb_dataloader().afspraken.load_all()
 
         AuditLogging.create(
-            action=info.field_name, 
+            action=info.field_name,
             entities=[
                 GebruikersActiviteitEntity(entityType="afspraak", entityId=id)
                 for id in ids

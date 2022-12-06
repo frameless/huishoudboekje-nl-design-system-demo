@@ -79,11 +79,11 @@ class CreateJournaalpostAfspraak(graphene.Mutation):
             action=info.field_name,
             entities=(
                 [
-                    GebruikersActiviteitEntity(entityType="journaalpost", entityId=j["id"]) 
+                    GebruikersActiviteitEntity(entityType="journaalpost", entityId=j["id"])
                     for j in journaalposten
                 ],
                 [
-                    GebruikersActiviteitEntity(entityType="afspraak", entityId=j["afspraak"]["id"]) 
+                    GebruikersActiviteitEntity(entityType="afspraak", entityId=j["afspraak"]["id"])
                     for j in journaalposten
                 ],
                 [
@@ -110,7 +110,7 @@ def create_journaalposten(input, afspraken, transactions):
         return []
 
     journaalposten = hhb_datawriter().journaalposten.post(input)
-    
+
     alarm_ids = []
     for post in journaalposten:
         afspraak = afspraken[journaalpost.Journaalpost(post).afspraak_id]
@@ -127,7 +127,7 @@ def create_journaalposten(input, afspraken, transactions):
             evaluate_alarms(alarm_ids, journaalposten)
     else:
         logging.info("create_journaalpost mutation: Skipping alarm evaluation.")
-    
+
     return journaalposten
 
 class CreateJournaalpostGrootboekrekening(graphene.Mutation):
@@ -162,8 +162,8 @@ class CreateJournaalpostGrootboekrekening(graphene.Mutation):
         AuditLogging.create(
             action=info.field_name,
             entities=(
-                GebruikersActiviteitEntity(entityType="journaalpost", entityId=journaalpost["id"]), 
-                GebruikersActiviteitEntity(entityType="transaction", entityId=journaalpost["transaction"]), 
+                GebruikersActiviteitEntity(entityType="journaalpost", entityId=journaalpost["id"]),
+                GebruikersActiviteitEntity(entityType="transaction", entityId=journaalpost["transaction_id"]),
                 GebruikersActiviteitEntity(entityType="grootboekrekening", entityId=journaalpost["grootboekrekening_id"])
             ),
             after=dict(journaalpost=journaalpost),

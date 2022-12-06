@@ -1,11 +1,12 @@
-import graphene
 import logging
-import requests
 from datetime import *
-from graphql import GraphQLError
 from tokenize import String
 from typing import Optional
 
+import graphene
+import requests
+
+from graphql import GraphQLError
 from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.feature_flags import Unleash
 from hhb_backend.graphql import settings
@@ -35,7 +36,7 @@ class EvaluateAlarms(graphene.Mutation):
     alarmTriggerResult = graphene.List(lambda: AlarmTriggerResult)
 
     @staticmethod
-    def mutate(self, info, ids = []):
+    def mutate(self, info, ids=[]):
         """ Mutatie voor de evaluatie van een alarm wat kan resulteren in een signaal en/of een nieuw alarm in de reeks. """
         if not Unleash().is_enabled("signalen"):
             raise GraphQLError("Feature signalen is disabled")
@@ -44,9 +45,8 @@ class EvaluateAlarms(graphene.Mutation):
         AuditLogging.create(
             action=info.field_name,
             entities=[(
-                GebruikersActiviteitEntity(entity_type="alarm", entityId=a["alarm"]["id"])
-            ) for a in triggered_alarms],
-            after=dict(), # TODO this seems useless...
+                GebruikersActiviteitEntity(entityType="alarm", entityId=a["alarm"]["id"])
+            ) for a in triggered_alarms]
         )
 
         return EvaluateAlarms(alarmTriggerResult=triggered_alarms)
@@ -68,13 +68,12 @@ class EvaluateAlarm(graphene.Mutation):
 
         AuditLogging.create(
             action=info.field_name,
-            entities=(GebruikersActiviteitEntity(entityType="alarm", entityId=id)),
-            after=dict(), # TODO this seems useless...
+            entities=(GebruikersActiviteitEntity(entityType="alarm", entityId=id))
         )
         return EvaluateAlarm(alarmTriggerResult=evaluated_alarm)
 
 
-def evaluate_alarms(ids: list[String] = [], journaalposten = []) -> list:
+def evaluate_alarms(ids: list[String] = [], journaalposten=[]) -> list:
     logging.info(f"Evaluating alarms")
     triggered_alarms = []
     active_alarms = get_active_alarms()
@@ -83,14 +82,15 @@ def evaluate_alarms(ids: list[String] = [], journaalposten = []) -> list:
         for alarm in alarms:
             if alarm.isActive:
                 triggered_alarms.append(_evaluate_alarm(alarm, active_alarms, journaalposten))
-    else: 
+    else:
         for alarm in active_alarms:
             triggered_alarms.append(_evaluate_alarm(alarm, active_alarms, journaalposten))
 
     return triggered_alarms
 
+
 # not used at the moment
-def evaluate_one_alarm(id: String, journaalpost = None) -> list:
+def evaluate_one_alarm(id: String, journaalpost=None) -> list:
     evaluated_alarm = None
     active_alarms = get_active_alarms()
     alarm_ = get_alarm(id)
@@ -100,9 +100,9 @@ def evaluate_one_alarm(id: String, journaalpost = None) -> list:
 
     if journaalpost:
         journaalposten = [journaalpost]
-    else: 
+    else:
         journaalposten = []
-        
+
     alarm_status: bool = alarm_.isActive
     if alarm_status:
         evaluated_alarm = _evaluate_alarm(alarm_, active_alarms, journaalposten)
@@ -116,7 +116,8 @@ def evaluate_one_alarm(id: String, journaalpost = None) -> list:
 def _evaluate_alarm(alarm_: Alarm, active_alarms: list[Alarm], journaalposten: list[dict]):
     logging.debug(f"Evaluating alarm {alarm_}")
     # get data from afspraak and transactions (by journaalpost reference)
-    journaalposten_alarm = [journaalpost for journaalpost in journaalposten if journaalpost["afspraak_id"] == alarm_.afspraakId]
+    journaalposten_alarm = [journaalpost for journaalpost in journaalposten if
+                            journaalpost["afspraak_id"] == alarm_.afspraakId]
     transactions = get_banktransactions_by_journaalposten(journaalposten_alarm)
 
     alarm_check_date = to_date(alarm_.startDate) + timedelta(days=(alarm_.get("datumMargin") + 1))
@@ -215,7 +216,7 @@ def get_alarm(id: String) -> Optional[Alarm]:
     # todo add isActive filter in service
     alarm = hhb_dataloader().alarms.load_one(id)
     return alarm if alarm and alarm.isActive else None
-    
+
 
 def get_banktransactions_by_journaalposten(journaalposten) -> list[BankTransaction]:
     if not journaalposten:
@@ -269,8 +270,9 @@ def update_alarm(alarm_id: str, alarm_update: dict):
     if alarm_response.status_code != 200:
         raise GraphQLError(f"Failed to update alarm. {alarm_response.json()}")
 
+
 def get_bedrag_difference(alarm: Alarm, transacties: list[BankTransaction]):
-    """ Determines the amount difference between the transactions and the expected amount in the alarm. 
+    """ Determines the amount difference between the transactions and the expected amount in the alarm.
     Returns if a signal needs to be created, the difference, and the monetary deviating transaction ids. """
     # expected dates
     datum_margin = int(alarm.datumMargin)

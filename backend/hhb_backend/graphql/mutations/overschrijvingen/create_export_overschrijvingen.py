@@ -8,10 +8,10 @@ from dateutil import tz
 
 import hhb_backend.graphql.models.export as graphene_export
 from graphql import GraphQLError
+from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
 from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
-from hhb_backend.graphql.models.gebruikersactiviteit import GebruikersActiviteitEntity
 from hhb_backend.graphql.utils.dates import to_date
 from hhb_backend.processen.create_sepa_export import create_export_string
 from hhb_backend.processen.overschrijvingen_planner import (

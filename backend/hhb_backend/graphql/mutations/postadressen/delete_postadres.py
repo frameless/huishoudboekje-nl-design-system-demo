@@ -4,7 +4,7 @@ import requests
 import hhb_backend.graphql.models.afdeling as graphene_afdeling
 import hhb_backend.graphql.models.postadres as graphene_postadres
 from graphql import GraphQLError
-from hhb_backend.graphql.models.gebruikersactiviteit import GebruikersActiviteitEntity
+from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
 from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader

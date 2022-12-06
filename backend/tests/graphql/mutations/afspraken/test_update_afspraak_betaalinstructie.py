@@ -8,6 +8,7 @@ afspraak = {
     "omschrijving": "huur",
     "bedrag": "650.00",
     "credit": False,
+    "burger_id": 42,
     "valid_from": "2021-11-12",
     "valid_through": None,
     "betaalinstructie": None,
@@ -74,6 +75,7 @@ def test_update_afspraak(client):
 
         updated_afspraak = {
             "id": 1,
+            "burger_id": 42,
             "omschrijving": "huur",
             "bedrag": "650.00",
             "credit": False,

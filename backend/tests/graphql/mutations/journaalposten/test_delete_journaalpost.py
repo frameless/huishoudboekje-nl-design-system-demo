@@ -19,7 +19,7 @@ def test_delete_journaalpost(client):
         )
         get_journaalpost = mock.get(
             f"{settings.HHB_SERVICES_URL}/journaalposten/?filter_ids=1",
-            json={"data": [{"id": 1, "transaction_id": 11, "afspraak_id": None}]},
+            json={"data": [{"id": 1, "transaction_id": 11, "afspraak_id": None, "grootboekrekening_id": 1}]},
             status_code=200,
         )
         adapter = mock.delete(

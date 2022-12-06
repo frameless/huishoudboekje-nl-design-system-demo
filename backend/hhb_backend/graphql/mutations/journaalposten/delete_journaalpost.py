@@ -35,12 +35,12 @@ class DeleteJournaalpost(graphene.Mutation):
             action=info.field_name,
             entities=(
                 GebruikersActiviteitEntity(entityType="journaalpost", entityId=id),
-                GebruikersActiviteitEntity(entityType="afspraak", entityId=previous["afspraak"]), 
+                GebruikersActiviteitEntity(entityType="afspraak", entityId=previous["afspraak_id"]),
                 (
                     GebruikersActiviteitEntity(entityType="burger", entityId=previous["afspraak"]["burger_id"])
                     if "afspraak" in previous
                     else []
-                ), 
+                ),
                 GebruikersActiviteitEntity(entityType="transaction", entityId=previous["transaction_id"]),
                 GebruikersActiviteitEntity(entityType="grootboekrekening", entityId=previous["grootboekrekening_id"])
             ),

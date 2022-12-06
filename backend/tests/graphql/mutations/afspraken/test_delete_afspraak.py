@@ -6,6 +6,7 @@ afspraak = {
     'id': 1,
     'rubriek_id': 1,
     'burger_id': 1,
+    'afdeling_id': 4,
     'tegen_rekening_id': 1,
     'valid_from': "2020-10-01",
     'valid_through': "2020-10-01",

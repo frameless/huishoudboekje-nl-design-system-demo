@@ -1,7 +1,7 @@
 import graphene
 import requests
-from graphql import GraphQLError
 
+from graphql import GraphQLError
 from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
@@ -64,8 +64,8 @@ class UpdateConfiguratie(graphene.Mutation):
 
         AuditLogging.create(
             action=info.field_name,
-            entities=gebruikers_activiteit_entities(
-                entity_type="configuratie", result=configuratie
+            entities=(
+                GebruikersActiviteitEntity(entityType="configuratie", entityId=input.id)
             ),
             before=dict(configuratie=previous),
             after=dict(configuratie=configuratie),
@@ -91,8 +91,8 @@ class DeleteConfiguratie(graphene.Mutation):
 
         AuditLogging.create(
             action=info.field_name,
-            entities=gebruikers_activiteit_entities(
-                entity_type="configuratie", result=previous
+            entities=(
+                GebruikersActiviteitEntity(entityType="configuratie", entityId=id)
             ),
             before=dict(configuratie=previous),
         )

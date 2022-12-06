@@ -3,6 +3,7 @@ import logging
 import requests
 from flask import g, request
 
+from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
 from hhb_backend.graphql.settings import LOG_SERVICE_URL
 from .log_item import LogItem
 
@@ -12,7 +13,7 @@ class AuditLogging:
         logging.info(f"AuditLogging: initialized")
 
     @staticmethod
-    def create(action: str, entities: list[dict] = None, before: any = None, after: any = None):
+    def create(action: str, entities: list[GebruikersActiviteitEntity] = None, before: any = None, after: any = None):
         logging.info(f"AuditLogging: creating log...")
 
         # Try to find the user

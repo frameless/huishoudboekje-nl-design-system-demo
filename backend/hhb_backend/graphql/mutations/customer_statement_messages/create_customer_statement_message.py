@@ -1,13 +1,14 @@
 """ GraphQL mutation for creating a new CustomerStatementMessage """
-import graphene
 import json
-import mt940
 import re
-import requests
 from datetime import datetime
-from graphql import GraphQLError
+
+import graphene
+import mt940
+import requests
 
 import hhb_backend.graphql.models.journaalpost as journaalpost
+from graphql import GraphQLError
 from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.camtParser import parser
 from hhb_backend.graphql import settings
@@ -115,18 +116,21 @@ class CreateCustomerStatementMessage(graphene.Mutation):
             if journaalpostentemp:
                 journaalposten.extend(journaalpostentemp)
 
+        entities = []
+        for csm_item in csm:
+            for t in csm_item["bank_transactions"]:
+                entities.append(
+                    GebruikersActiviteitEntity(entityType="transaction", entityId=t)
+                )
+
         AuditLogging.create(
             action=info.field_name,
             entities=(
+                entities,
                 [
                     GebruikersActiviteitEntity(entityType="customerStatementMessage", entityId=item["id"])
                     for item in csm
-                ],
-                [
-                    GebruikersActiviteitEntity(entityType="transaction", entityId=transaction["id"])
-                    for item in csm for transactions in item["bank_transactions"] for transaction in transactions
                 ]
-                
             ),
             after=dict(customerStatementMessage=csm),
         )

@@ -97,9 +97,9 @@ class UpdateAfspraak(graphene.Mutation):
         AuditLogging.create(
             action=info.field_name,
             entities=(
-                GebruikersActiviteitEntity(entity_type="afspraak", entityId=id), 
-                GebruikersActiviteitEntity(entity_type="burger", entityId=afspraak["burger_id"]),
-                GebruikersActiviteitEntity(entity_type="afdeling", entityId=afspraak["afdeling_id"])
+                GebruikersActiviteitEntity(entityType="afspraak", entityId=id),
+                GebruikersActiviteitEntity(entityType="burger", entityId=afspraak["burger_id"]),
+                GebruikersActiviteitEntity(entityType="afdeling", entityId=afspraak["afdeling_id"])
             ),
             before=dict(afspraak=previous),
             after=dict(afspraak=afspraak),

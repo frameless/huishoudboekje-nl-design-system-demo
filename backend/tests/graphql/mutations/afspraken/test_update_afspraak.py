@@ -11,6 +11,7 @@ afspraak = {
     'valid_through': "2020-10-01",
     'rubriek_id': 1,
     'burger_id': 1,
+    'afdeling_id': 4,
     'tegen_rekening_id': 1,
     'zoektermen': ["test1", "test2"],
 }
@@ -34,7 +35,7 @@ def test_update_afspraak(client):
         afspraakId = 1
         input = {
             "omschrijving": "gewijzigde omschrijving",
-            "bedrag":"543.21",
+            "bedrag": "543.21",
             "credit": False,
             "validThrough": "",
             "zoektermen": ["test1", "test2"]

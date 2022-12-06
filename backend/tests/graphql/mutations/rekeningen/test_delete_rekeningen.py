@@ -11,7 +11,7 @@ def test_delete_burger_rekening_succes(client):
         request = {
             "query": '''
                 mutation test($burgerId:Int!, $rekeningId:Int!) {
-                    deleteBurgerRekening(burgerId: $burgerId, id: $rekeningId) {
+                    deleteBurgerRekening(burgerId: $burgerId, rekeningId: $rekeningId) {
                         ok
                     }
                 }''',
@@ -43,11 +43,11 @@ def test_delete_burger_rekening_succes(client):
         )
 
         # assert
+        assert fallback.call_count == 0
         assert rm1.call_count == 2
         assert rm2.call_count == 1
         assert rm3.call_count == 1
         assert rm4.call_count == 1
-        assert fallback.call_count == 0
         assert response.json == expected
 
 
@@ -59,7 +59,7 @@ def test_delete_burger_rekening_multible_burgers(client):
         request = {
             "query": '''
                 mutation test($burgerId:Int!, $rekeningId:Int!) {
-                    deleteBurgerRekening(burgerId: $burgerId, id: $rekeningId) {
+                    deleteBurgerRekening(burgerId: $burgerId, rekeningId: $rekeningId) {
                         ok
                     }
                 }''',
@@ -167,7 +167,7 @@ def test_delete_burger_rekening_cant_delete_used_by_afspraak(client):
         request = {
             "query": '''
                 mutation test($burgerId:Int!, $rekeningId:Int!) {
-                    deleteBurgerRekening(burgerId: $burgerId, id: $rekeningId) {
+                    deleteBurgerRekening(burgerId: $burgerId, rekeningId: $rekeningId) {
                         ok
                     }
                 }''',
@@ -206,7 +206,7 @@ def test_delete_burger_rekening_cant_delete_also_used_by_afdeling(client):
         request = {
             "query": '''
                 mutation test($burgerId:Int!, $rekeningId:Int!) {
-                    deleteBurgerRekening(burgerId: $burgerId, id: $rekeningId) {
+                    deleteBurgerRekening(burgerId: $burgerId, rekeningId: $rekeningId) {
                         ok
                     }
                 }''',

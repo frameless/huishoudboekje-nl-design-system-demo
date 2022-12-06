@@ -4,7 +4,7 @@ import graphene
 import hhb_backend.graphql.models.signaal as graphene_signaal
 from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql.mutations.signalen.signalen import SignaalHelper
-from hhb_backend.graphql.utils.gebruikersactiviteiten import gebruikers_activiteit_entities, GebruikersActiviteitEntity
+from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
 
 
 class DeleteSignaal(graphene.Mutation):
@@ -23,7 +23,7 @@ class DeleteSignaal(graphene.Mutation):
         AuditLogging.create(
             action=info.field_name,
             entities=(
-                GebruikersActiviteitEntity(entityType="signaal", entityId=signaal["id"]),
+                GebruikersActiviteitEntity(entityType="signaal", entityId=id),
             ),
             before=dict(signaal=previous),
         )

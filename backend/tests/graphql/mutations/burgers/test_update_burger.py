@@ -18,7 +18,9 @@ def test_update_burger_success(client):
             'straatnaam': "Hoofdstraat",
             'voorletters': "H",
             'voornamen': "Hogan",
-            'plaatsnaam': "Dorp"}})
+            'plaatsnaam': "Dorp",
+            'rekeningen': [],
+        }})
         get_adapter = mock.get(f"{settings.HHB_SERVICES_URL}/burgers/?filter_ids=1", status_code=200,
                                json={"data": [{"id": 1}]})
         log_adapter = mock.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", json={'data': {'id': 1}}, status_code=201)
