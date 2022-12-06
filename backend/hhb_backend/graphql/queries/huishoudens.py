@@ -15,7 +15,9 @@ class HuishoudenQuery:
         result = hhb_dataloader().huishoudens.load_one(id)
         AuditLogging.create(
             action=info.field_name,
-            entities=(GebruikersActiviteitEntity(entityType="huishouden", entityId=id))
+            entities=(
+                GebruikersActiviteitEntity(entityType="huishouden", entityId=id)
+            )
         )
         return result
 
@@ -31,15 +33,17 @@ class HuishoudensQuery:
     def resolver(cls, _root, info, ids=None, **kwargs):
         if ids:
             result = hhb_dataloader().huishoudens.load(ids)
+            entities = (
+                GebruikersActiviteitEntity(entityType="huishouden", entityId=huishoudenId)
+                for huishoudenId in ids
+            )
         else:
             result = hhb_dataloader().huishoudens.load_all(filters=kwargs.get("filters", None))
+            entities = None
 
         AuditLogging().create(
-            action=info.field_name, 
-            entities=[
-                GebruikersActiviteitEntity(entityType="huishouden", entityId=id)
-                for id in ids
-            ] if ids or "filters" in kwargs else []
+            action=info.field_name,
+            entities=entities
         )
 
         return result
@@ -67,11 +71,11 @@ class HuishoudensPagedQuery:
             raise GraphQLError(f"Query needs params 'start', 'limit'. ")
 
         AuditLogging().create(
-            action=info.field_name, 
-            entities=[
+            action=info.field_name,
+            entities=(
                 GebruikersActiviteitEntity(entityType="huishouden", entityId=huishouden["id"])
                 for huishouden in result
-            ]
+            )
         )
 
         return result
