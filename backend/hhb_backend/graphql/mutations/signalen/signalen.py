@@ -1,12 +1,12 @@
-import graphene
 import logging
-import requests
-from graphql import GraphQLError
 
+import graphene
+import requests
+
+import hhb_backend.service.model.signaal as graphene_signaal
+from graphql import GraphQLError
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
-from hhb_backend.graphql.utils.gebruikersactiviteiten import (log_gebruikers_activiteit, gebruikers_activiteit_entities)
-import hhb_backend.service.model.signaal as graphene_signaal
 
 
 class CreateSignaalInput(graphene.InputObjectType):

@@ -2,13 +2,13 @@
 
 import graphene
 import requests
-from graphql import GraphQLError
 
+from graphql import GraphQLError
 from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.models.rubriek import Rubriek
-from hhb_backend.graphql.utils.gebruikersactiviteiten import gebruikers_activiteit_entities, GebruikersActiviteitEntity
+from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
 
 
 class DeleteRubriek(graphene.Mutation):
