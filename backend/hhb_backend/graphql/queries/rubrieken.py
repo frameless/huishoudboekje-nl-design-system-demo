@@ -7,7 +7,7 @@ from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActivitei
 
 
 class RubriekQuery:
-    return_type = graphene.Field(Rubriek, id=graphene.String(required=True))
+    return_type = graphene.Field(Rubriek, id=graphene.Int(required=True))
 
     @classmethod
     def resolver(cls, _root, info, id):
