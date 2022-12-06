@@ -123,15 +123,14 @@ class CreateCustomerStatementMessage(graphene.Mutation):
                     GebruikersActiviteitEntity(entityType="transaction", entityId=t)
                 )
 
+        entities.extend([
+            GebruikersActiviteitEntity(entityType="customerStatementMessage", entityId=item["id"])
+            for item in csm
+        ])
+
         AuditLogging.create(
             action=info.field_name,
-            entities=(
-                entities,
-                [
-                    GebruikersActiviteitEntity(entityType="customerStatementMessage", entityId=item["id"])
-                    for item in csm
-                ]
-            ),
+            entities=entities,
             after=dict(customerStatementMessage=csm),
         )
 

@@ -15,7 +15,9 @@ class AfdelingQuery:
         result = hhb_dataloader().afdelingen.load_one(id)
         AuditLogging.create(
             action=info.field_name,
-            entities=(GebruikersActiviteitEntity(entityType="afdeling", entityId=id))
+            entities=[
+                GebruikersActiviteitEntity(entityType="afdeling", entityId=id)
+            ]
         )
         return result
 
@@ -31,7 +33,7 @@ class AfdelingenQuery:
             result = hhb_dataloader().afdelingen.load_all()
 
         AuditLogging.create(
-            action=info.field_name, 
+            action=info.field_name,
             entities=[
                 GebruikersActiviteitEntity(entityType="afdeling", entityId=id)
                 for id in ids

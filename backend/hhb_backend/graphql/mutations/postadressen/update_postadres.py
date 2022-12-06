@@ -50,9 +50,9 @@ class UpdatePostadres(graphene.Mutation):
 
         AuditLogging.create(
             action=info.field_name,
-            entities=(
+            entities=[
                 GebruikersActiviteitEntity(entityType="postadres", entityId=id)
-            ),
+            ],
             before=dict(postadres=previous),
             after=dict(postadres=postadres),
         )

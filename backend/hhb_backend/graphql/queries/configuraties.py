@@ -14,7 +14,9 @@ class ConfiguratieQuery:
         result = hhb_dataloader().configuraties.load_one(id)
         AuditLogging.create(
             action=info.field_name,
-            entities=(GebruikersActiviteitEntity(entityType="configuratie", entityId=id)),
+            entities=[
+                GebruikersActiviteitEntity(entityType="configuratie", entityId=id)
+            ],
         )
         return result
 

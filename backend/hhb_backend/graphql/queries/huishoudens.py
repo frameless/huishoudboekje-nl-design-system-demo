@@ -15,9 +15,9 @@ class HuishoudenQuery:
         result = hhb_dataloader().huishoudens.load_one(id)
         AuditLogging.create(
             action=info.field_name,
-            entities=(
+            entities=[
                 GebruikersActiviteitEntity(entityType="huishouden", entityId=id)
-            )
+            ]
         )
         return result
 
@@ -33,10 +33,10 @@ class HuishoudensQuery:
     def resolver(cls, _root, info, ids=None, **kwargs):
         if ids:
             result = hhb_dataloader().huishoudens.load(ids)
-            entities = (
+            entities = [
                 GebruikersActiviteitEntity(entityType="huishouden", entityId=huishoudenId)
                 for huishoudenId in ids
-            )
+            ]
         else:
             result = hhb_dataloader().huishoudens.load_all(filters=kwargs.get("filters", None))
             entities = None
@@ -72,10 +72,10 @@ class HuishoudensPagedQuery:
 
         AuditLogging().create(
             action=info.field_name,
-            entities=(
+            entities=[
                 GebruikersActiviteitEntity(entityType="huishouden", entityId=huishouden["id"])
                 for huishouden in result
-            )
+            ]
         )
 
         return result

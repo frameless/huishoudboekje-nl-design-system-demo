@@ -1,13 +1,14 @@
 """ GraphQL mutation for updating a Burger """
-import graphene
 import json
-import requests
-from graphql import GraphQLError
 
+import graphene
+import requests
+
+import hhb_backend.graphql.models.burger as graphene_burger
+from graphql import GraphQLError
 from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
-import hhb_backend.graphql.models.burger as graphene_burger
 from hhb_backend.graphql.mutations.huishoudens import huishouden_input as huishouden_input
 from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
 from hhb_backend.service.model import burger
@@ -53,15 +54,19 @@ class UpdateBurger(graphene.Mutation):
 
         updated_burger = burger.Burger(response.json()["data"])
 
+        entities = [
+            GebruikersActiviteitEntity(entityType="burger", entityId=id),
+        ]
+
+        if "rekeningen" in updated_burger:
+            entities.extend([
+                GebruikersActiviteitEntity(entityType="rekening", entityId=rekening["id"])
+                for rekening in updated_burger.rekeningen
+            ])
+
         AuditLogging.create(
             action=info.field_name,
-            entities=(
-                GebruikersActiviteitEntity(entityType="burger", entityId=id),
-                [
-                    GebruikersActiviteitEntity(entityType="rekening", entityId=rekening["id"])
-                    for rekening in updated_burger.rekeningen
-                ]
-            ),
+            entities=entities,
             before=dict(burger=previous),
             after=dict(burger=updated_burger),
         )

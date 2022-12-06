@@ -24,11 +24,11 @@ class UpdateAlarm(graphene.Mutation):
 
         AuditLogging.create(
             action=info.field_name,
-            entities=(
-                GebruikersActiviteitEntity(entityType="alarm", entityId=id), 
-                GebruikersActiviteitEntity(entityType="afspraak", entityId=response_alarm.alarm["afspraakId"]), 
+            entities=[
+                GebruikersActiviteitEntity(entityType="alarm", entityId=id),
+                GebruikersActiviteitEntity(entityType="afspraak", entityId=response_alarm.alarm["afspraakId"]),
                 GebruikersActiviteitEntity(entityType="burger", entityId=response_alarm.burger_id)
-            ),
+            ],
             before=dict(alarm=response_alarm.previous),
             after=dict(alarm=response_alarm.alarm),
         )

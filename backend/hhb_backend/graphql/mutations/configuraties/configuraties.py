@@ -34,7 +34,9 @@ class CreateConfiguratie(graphene.Mutation):
 
         AuditLogging.create(
             action=info.field_name,
-            entities=(GebruikersActiviteitEntity(entityType="configuratie", entityId=configuratie["id"])),
+            entities=[
+                GebruikersActiviteitEntity(entityType="configuratie", entityId=configuratie["id"])
+            ],
             after=dict(configuratie=configuratie),
         )
 
@@ -64,9 +66,9 @@ class UpdateConfiguratie(graphene.Mutation):
 
         AuditLogging.create(
             action=info.field_name,
-            entities=(
+            entities=[
                 GebruikersActiviteitEntity(entityType="configuratie", entityId=input.id)
-            ),
+            ],
             before=dict(configuratie=previous),
             after=dict(configuratie=configuratie),
         )
@@ -91,9 +93,9 @@ class DeleteConfiguratie(graphene.Mutation):
 
         AuditLogging.create(
             action=info.field_name,
-            entities=(
+            entities=[
                 GebruikersActiviteitEntity(entityType="configuratie", entityId=id)
-            ),
+            ],
             before=dict(configuratie=previous),
         )
 

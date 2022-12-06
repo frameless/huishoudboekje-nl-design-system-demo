@@ -22,9 +22,9 @@ class DeleteSignaal(graphene.Mutation):
 
         AuditLogging.create(
             action=info.field_name,
-            entities=(
+            entities=[
                 GebruikersActiviteitEntity(entityType="signaal", entityId=id),
-            ),
+            ],
             before=dict(signaal=previous),
         )
 

@@ -1,8 +1,8 @@
 """ GraphQL mutation for updating a Organisatie """
 import graphene
 import requests
-from graphql import GraphQLError
 
+from graphql import GraphQLError
 from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
@@ -47,7 +47,9 @@ class UpdateOrganisatie(graphene.Mutation):
 
         AuditLogging.create(
             action=info.field_name,
-            entities=(GebruikersActiviteitEntity(entityType="organisatie", entityId=id)),
+            entities=[
+                GebruikersActiviteitEntity(entityType="organisatie", entityId=id)
+            ],
             before=dict(organisatie=previous),
             after=dict(organisatie=organisatie),
         )

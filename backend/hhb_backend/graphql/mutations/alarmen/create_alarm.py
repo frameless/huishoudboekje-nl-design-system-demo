@@ -2,9 +2,10 @@
 import graphene
 
 import hhb_backend.graphql.models.alarm as graphene_alarm
+from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql.mutations.alarmen.alarm import AlarmHelper, CreateAlarmInput
 from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
-from hhb_backend.audit_logging import AuditLogging
+
 
 class CreateAlarm(graphene.Mutation):
     class Arguments:
@@ -21,11 +22,11 @@ class CreateAlarm(graphene.Mutation):
 
         AuditLogging.create(
             action=info.field_name,
-            entities=(
+            entities=[
                 GebruikersActiviteitEntity(entityType="alarm", entityId=response_alarm.alarm["id"]),
                 GebruikersActiviteitEntity(entityType="afspraak", entityId=response_alarm.alarm["afspraakId"]),
                 GebruikersActiviteitEntity(entityType="burger", entityId=response_alarm.burger_id)
-            ),
+            ],
             after=dict(alarm=response_alarm.alarm),
         )
 

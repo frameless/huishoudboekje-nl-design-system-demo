@@ -2,16 +2,16 @@
 
 import graphene
 import requests
-from graphql import GraphQLError
 
+import hhb_backend.graphql.models.afspraak as graphene_afspraak
+import hhb_backend.graphql.models.alarm as graphene_alarm
+from graphql import GraphQLError
 from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
-import hhb_backend.graphql.models.afspraak as graphene_afspraak
-import hhb_backend.graphql.models.alarm as graphene_alarm
 from hhb_backend.graphql.scalars.bedrag import Bedrag
-from hhb_backend.graphql.utils.upstream_error_handler import UpstreamError
 from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
+from hhb_backend.graphql.utils.upstream_error_handler import UpstreamError
 
 
 class UpdateAfspraakInput(graphene.InputObjectType):
@@ -96,11 +96,11 @@ class UpdateAfspraak(graphene.Mutation):
 
         AuditLogging.create(
             action=info.field_name,
-            entities=(
+            entities=[
                 GebruikersActiviteitEntity(entityType="afspraak", entityId=id),
                 GebruikersActiviteitEntity(entityType="burger", entityId=afspraak["burger_id"]),
                 GebruikersActiviteitEntity(entityType="afdeling", entityId=afspraak["afdeling_id"])
-            ),
+            ],
             before=dict(afspraak=previous),
             after=dict(afspraak=afspraak),
         )

@@ -1,15 +1,16 @@
-import graphene
 import logging
-import requests
-from graphql import GraphQLError
 
+import graphene
+import requests
+
+from graphql import GraphQLError
 from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.models import afspraak
 from hhb_backend.graphql.scalars.day_of_week import DayOfWeek
-from hhb_backend.graphql.utils.upstream_error_handler import UpstreamError
 from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
+from hhb_backend.graphql.utils.upstream_error_handler import UpstreamError
 
 
 class BetaalinstructieInput(graphene.InputObjectType):
@@ -70,10 +71,10 @@ class UpdateAfspraakBetaalinstructie(graphene.Mutation):
 
         AuditLogging.create(
             action=info.field_name,
-            entities=(
+            entities=[
                 GebruikersActiviteitEntity(entityType="afspraak", entityId=afspraak_id),
                 GebruikersActiviteitEntity(entityType="burger", entityId=new_afspraak["burger_id"])
-            ),
+            ],
             before=dict(afspraak=previous),
             after=dict(afspraak=new_afspraak),
         )
@@ -91,4 +92,3 @@ def validate_afspraak_betaalinstructie(is_credit: bool, betaalinstructie: Betaal
         raise GraphQLError("Betaalinstructie: 'by_day' or 'by_month_day' is required.")
     if betaalinstructie.end_date and betaalinstructie.end_date < betaalinstructie.start_date:
         raise GraphQLError("StartDate has to be before endDate.")
-        

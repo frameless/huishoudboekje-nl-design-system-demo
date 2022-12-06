@@ -14,7 +14,9 @@ class RubriekQuery:
         result = hhb_dataloader().rubrieken.load_one(id)
         AuditLogging.create(
             action=info.field_name,
-            entities=(GebruikersActiviteitEntity(entityType="rubriek", entityId=id))
+            entities=[
+                GebruikersActiviteitEntity(entityType="rubriek", entityId=id)
+            ]
         )
         return result
 

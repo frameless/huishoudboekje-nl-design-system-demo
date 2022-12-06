@@ -1,12 +1,12 @@
 """ GraphQL mutation for updating a Afdeling """
 import graphene
 import requests
-from graphql import GraphQLError
 
+import hhb_backend.graphql.models.afdeling as graphene_afdeling
+from graphql import GraphQLError
 from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
-import hhb_backend.graphql.models.afdeling as graphene_afdeling
 from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
 
 
@@ -59,9 +59,9 @@ class UpdateAfdeling(graphene.Mutation):
 
         AuditLogging.create(
             action=info.field_name,
-            entities=(GebruikersActiviteitEntity(
-                entityType="afdeling", entityId=id
-            )),
+            entities=[
+                GebruikersActiviteitEntity(entityType="afdeling", entityId=id)
+            ],
             before=dict(postadres=previous),
             after=dict(afdeling=afdeling),
         )

@@ -1,8 +1,9 @@
-import graphene
-import requests
-from graphql import GraphQLError
 from typing import List
 
+import graphene
+import requests
+
+from graphql import GraphQLError
 from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
@@ -43,7 +44,9 @@ class AddHuishoudenBurger(graphene.Mutation):
 
         AuditLogging.create(
             action=info.field_name,
-            entities=(GebruikersActiviteitEntity(entityType="huishouden", entityId=huishouden_id)),
+            entities=[
+                GebruikersActiviteitEntity(entityType="huishouden", entityId=huishouden_id)
+            ],
             before=dict(huishouden=previous),
             after=dict(huishouden=loaded_huishouden),
         )

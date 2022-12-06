@@ -14,7 +14,9 @@ class GrootboekrekeningQuery:
         result = hhb_dataloader().grootboekrekeningen.load_one(id)
         AuditLogging.create(
             action=info.field_name,
-            entities=(GebruikersActiviteitEntity(entityType="grootboekrekening", entityId=id)),
+            entities=[
+                GebruikersActiviteitEntity(entityType="grootboekrekening", entityId=id)
+            ],
         )
         return result
 

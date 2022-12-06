@@ -1,10 +1,10 @@
 """ GraphQL mutatie voor het aanmaken van een Signaal """
 import graphene
 
-from hhb_backend.audit_logging import AuditLogging
 import hhb_backend.graphql.models.signaal as graphene_signaal
+from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql.mutations.signalen.signalen import SignaalHelper, CreateSignaalInput
-from hhb_backend.graphql.utils.gebruikersactiviteiten import gebruikers_activiteit_entities, GebruikersActiviteitEntity
+from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
 
 
 class CreateSignaal(graphene.Mutation):
@@ -22,9 +22,9 @@ class CreateSignaal(graphene.Mutation):
 
         AuditLogging.create(
             action=info.field_name,
-            entities=(
+            entities=[
                 GebruikersActiviteitEntity(entityType="signaal", entityId=signaal["id"]),
-            ),
+            ],
             after=dict(signaal=signaal),
         )
 

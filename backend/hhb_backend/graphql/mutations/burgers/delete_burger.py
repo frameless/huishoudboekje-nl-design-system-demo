@@ -1,14 +1,15 @@
 """ GraphQL mutation for deleting a Burger """
 
+from datetime import datetime
+
 import graphene
 import requests
-from datetime import datetime
-from graphql import GraphQLError
 
+import hhb_backend.graphql.models.burger as graphene_burger
+from graphql import GraphQLError
 from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
-import hhb_backend.graphql.models.burger as graphene_burger
 from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
 
 
@@ -47,7 +48,9 @@ class DeleteBurger(graphene.Mutation):
 
         AuditLogging.create(
             action=info.field_name,
-            entities=(GebruikersActiviteitEntity(entityType="burger", entityId=id)),
+            entities=[
+                GebruikersActiviteitEntity(entityType="burger", entityId=id)
+            ],
             before=dict(burger=previous),
         )
 

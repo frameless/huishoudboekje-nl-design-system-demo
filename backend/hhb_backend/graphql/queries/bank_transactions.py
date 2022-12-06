@@ -16,7 +16,9 @@ class BankTransactionQuery:
     def resolver(cls, _, info, id):
         AuditLogging.create(
             action=info.field_name,
-            entities=(GebruikersActiviteitEntity(entityType="transactie", entityId=id)),
+            entities=[
+                GebruikersActiviteitEntity(entityType="transactie", entityId=id)
+            ],
         )
         return hhb_dataloader().bank_transactions.load_one(id)
 

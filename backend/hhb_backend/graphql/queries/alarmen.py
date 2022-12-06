@@ -14,7 +14,9 @@ class AlarmQuery:
     def resolver(cls, _, info, id):
         AuditLogging.create(
             action=info.field_name,
-            entities=(GebruikersActiviteitEntity(entityType="alarm", entityId=id)),
+            entities=[
+                GebruikersActiviteitEntity(entityType="alarm", entityId=id)
+            ],
         )
         return hhb_dataloader().alarms.load_one(id)
 
@@ -30,7 +32,7 @@ class AlarmenQuery:
             result = hhb_dataloader().alarms.load_all()
 
         AuditLogging.create(
-            action=info.field_name, 
+            action=info.field_name,
             entities=[
                 GebruikersActiviteitEntity(entityType="alarm", entityId=id)
                 for id in ids

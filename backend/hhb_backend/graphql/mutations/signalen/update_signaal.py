@@ -25,9 +25,9 @@ class UpdateSignaal(graphene.Mutation):
 
         AuditLogging.create(
             action=info.field_name,
-            entities=(
+            entities=[
                 GebruikersActiviteitEntity(entityType="signaal", entityId=signaal["id"]),
-            ),
+            ],
             before=dict(signaal=previous),
             after=dict(signaal=signaal),
         )

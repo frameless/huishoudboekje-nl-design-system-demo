@@ -13,7 +13,9 @@ class PostadresQuery:
         result = hhb_dataloader().postadressen.load_one(id)
         AuditLogging.create(
             action=info.field_name,
-            entities=(GebruikersActiviteitEntity(entityType="postadres", entityId=id))
+            entities=[
+                GebruikersActiviteitEntity(entityType="postadres", entityId=id)
+            ]
         )
         return result
 

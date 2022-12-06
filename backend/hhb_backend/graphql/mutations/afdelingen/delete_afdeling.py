@@ -46,8 +46,10 @@ class DeleteAfdeling(graphene.Mutation):
             raise GraphQLError(f"Upstream API responded: {response_hhb.text}")
 
         AuditLogging.create(
-            action=info.field_name, 
-            entities=(GebruikersActiviteitEntity(entityType="afdeling", entityId=id)),
+            action=info.field_name,
+            entities=[
+                GebruikersActiviteitEntity(entityType="afdeling", entityId=id)
+            ],
             before=dict(afdeling=previous)
         )
 

@@ -16,7 +16,9 @@ class ExportQuery:
 
         AuditLogging.create(
             action=info.field_name,
-            entities=(GebruikersActiviteitEntity(entityType="export", entityId=id))
+            entities=[
+                GebruikersActiviteitEntity(entityType="export", entityId=id)
+            ]
         )
 
         return result

@@ -30,7 +30,9 @@ class CreateOrganisatie(graphene.Mutation):
 
         AuditLogging.create(
             action=info.field_name,
-            entities=(GebruikersActiviteitEntity(entityType="organisatie", entityId=result["id"])),
+            entities=[
+                GebruikersActiviteitEntity(entityType="organisatie", entityId=result["id"])
+            ],
             after=dict(organisatie=result),
         )
 

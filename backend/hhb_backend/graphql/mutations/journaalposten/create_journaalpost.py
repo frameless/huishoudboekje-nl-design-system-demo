@@ -1,15 +1,16 @@
 """ GraphQL mutation for creating a new Journaalpost """
 
-import graphene
 import logging
-from graphql import GraphQLError
 from typing import List, Dict
 
+import graphene
+
+import hhb_backend.graphql.models.afspraak as graphene_afspraak
+from graphql import GraphQLError
 from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.feature_flags import Unleash
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.datawriters import hhb_datawriter
-import hhb_backend.graphql.models.afspraak as graphene_afspraak
 from hhb_backend.graphql.models.journaalpost import Journaalpost
 from hhb_backend.graphql.mutations.alarmen.evaluate_alarm import evaluate_alarms
 from hhb_backend.graphql.mutations.journaalposten import update_transaction_service_is_geboekt
@@ -75,26 +76,22 @@ class CreateJournaalpostAfspraak(graphene.Mutation):
 
         journaalposten = create_journaalposten(json, afspraken, transactions)
 
+        entities = []
+        for j in journaalposten:
+            entities.extend([
+                GebruikersActiviteitEntity(entityType="journaalpost", entityId=j["id"]),
+                GebruikersActiviteitEntity(entityType="afspraak", entityId=j["afspraak"]["id"]),
+                GebruikersActiviteitEntity(entityType="burger", entityId=j["afspraak"]["burger_id"])
+            ])
+
         AuditLogging.create(
             action=info.field_name,
-            entities=(
-                [
-                    GebruikersActiviteitEntity(entityType="journaalpost", entityId=j["id"])
-                    for j in journaalposten
-                ],
-                [
-                    GebruikersActiviteitEntity(entityType="afspraak", entityId=j["afspraak"]["id"])
-                    for j in journaalposten
-                ],
-                [
-                    GebruikersActiviteitEntity(entityType="burger", entityId=j["afspraak"]["burger_id"])
-                    for j in journaalposten
-                ]
-            ),
+            entities=entities,
             after=dict(journaalpost=journaalposten),
         )
 
         return CreateJournaalpostAfspraak(journaalposten=journaalposten, ok=True)
+
 
 def create_journaalposten(input, afspraken, transactions):
     transaction_ids = [t.id for t in transactions]
@@ -130,6 +127,7 @@ def create_journaalposten(input, afspraken, transactions):
 
     return journaalposten
 
+
 class CreateJournaalpostGrootboekrekening(graphene.Mutation):
     """Mutatie om een banktransactie af te letteren op een grootboekrekening."""
 
@@ -161,11 +159,12 @@ class CreateJournaalpostGrootboekrekening(graphene.Mutation):
 
         AuditLogging.create(
             action=info.field_name,
-            entities=(
+            entities=[
                 GebruikersActiviteitEntity(entityType="journaalpost", entityId=journaalpost["id"]),
                 GebruikersActiviteitEntity(entityType="transaction", entityId=journaalpost["transaction_id"]),
-                GebruikersActiviteitEntity(entityType="grootboekrekening", entityId=journaalpost["grootboekrekening_id"])
-            ),
+                GebruikersActiviteitEntity(entityType="grootboekrekening",
+                              entityId=journaalpost["grootboekrekening_id"])
+            ],
             after=dict(journaalpost=journaalpost),
         )
 

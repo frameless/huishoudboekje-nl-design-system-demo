@@ -49,9 +49,9 @@ class CreateHuishouden(graphene.Mutation):
 
         AuditLogging.create(
             action=info.field_name,
-            entities=(
+            entities=[
                 GebruikersActiviteitEntity(entityType="huishouden", entityId=created_huishouden.id)
-            ),
+            ],
             after=dict(huishouden=created_huishouden),
         )
 

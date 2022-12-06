@@ -20,7 +20,9 @@ class CustomerStatementMessageQuery:
 
         AuditLogging.create(
             action=info.field_name,
-            entities=(GebruikersActiviteitEntity(entityType="customer_statement_message", entityId=id)),
+            entities=[
+                GebruikersActiviteitEntity(entityType="customer_statement_message", entityId=id)
+            ],
         )
 
         return result

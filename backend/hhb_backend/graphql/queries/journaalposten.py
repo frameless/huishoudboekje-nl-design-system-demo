@@ -14,7 +14,9 @@ class JournaalpostQuery:
         result = hhb_dataloader().journaalposten.load_one(id)
         AuditLogging().create(
             action=info.field_name,
-            entities=(GebruikersActiviteitEntity(entityType="journaalpost", entityId=id))
+            entities=[
+                GebruikersActiviteitEntity(entityType="journaalpost", entityId=id)
+            ]
         )
         return result
 

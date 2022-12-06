@@ -14,7 +14,9 @@ class OrganisatieQuery:
     def resolver(cls, root, info, id):
         AuditLogging().create(
             action=info.field_name,
-            entities=(GebruikersActiviteitEntity(entityType="organisatie", entityId=id))
+            entities=[
+                GebruikersActiviteitEntity(entityType="organisatie", entityId=id)
+            ]
         )
         return hhb_dataloader().organisaties.load_one(id)
 
@@ -32,7 +34,7 @@ class OrganisatiesQuery:
             result = hhb_dataloader().organisaties.load_all()
 
         AuditLogging().create(
-            action=info.field_name, 
+            action=info.field_name,
             entities=[
                 GebruikersActiviteitEntity(entityType="organisatie", entityId=id)
                 for id in ids

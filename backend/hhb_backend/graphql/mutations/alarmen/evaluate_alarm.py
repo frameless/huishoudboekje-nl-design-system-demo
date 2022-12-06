@@ -68,7 +68,9 @@ class EvaluateAlarm(graphene.Mutation):
 
         AuditLogging.create(
             action=info.field_name,
-            entities=(GebruikersActiviteitEntity(entityType="alarm", entityId=id))
+            entities=[
+                GebruikersActiviteitEntity(entityType="alarm", entityId=id)
+            ]
         )
         return EvaluateAlarm(alarmTriggerResult=evaluated_alarm)
 

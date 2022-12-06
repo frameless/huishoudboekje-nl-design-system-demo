@@ -17,7 +17,9 @@ class BurgerQuery:
         result = hhb_dataloader().burgers.load_one(id)
         AuditLogging.create(
             action=info.field_name,
-            entities=(GebruikersActiviteitEntity(entityType="burger", entityId=id)),
+            entities=[
+                GebruikersActiviteitEntity(entityType="burger", entityId=id)
+            ],
         )
         return result
 
@@ -112,10 +114,10 @@ class BurgersPagedQuery:
 
         AuditLogging.create(
             action=info.field_name,
-            entities=(
+            entities=[
                 GebruikersActiviteitEntity(entityType="burger", entityId=burger["id"])
                 for burger in burgers.values()
-            ) if "start" in kwargs and "limit" in kwargs else []
+            ] if "start" in kwargs and "limit" in kwargs else []
         )
 
         return burgers

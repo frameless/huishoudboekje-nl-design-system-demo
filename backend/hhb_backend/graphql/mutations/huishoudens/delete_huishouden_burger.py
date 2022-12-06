@@ -1,8 +1,9 @@
-import graphene
-import requests
-from graphql import GraphQLError
 from typing import List
 
+import graphene
+import requests
+
+from graphql import GraphQLError
 from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
@@ -33,6 +34,7 @@ class DeleteHuishoudenBurger(graphene.Mutation):
             raise GraphQLError("Huishouden not found")
 
         new_huishoudens = []
+        entities = []
 
         for burger_id in burger_ids:
             # create new huishouden
@@ -48,15 +50,17 @@ class DeleteHuishoudenBurger(graphene.Mutation):
                 raise GraphQLError(f"Upstream API responded: {response.text}")
             new_huishoudens.append(new_huishouden)
 
+            entities.append(
+                GebruikersActiviteitEntity(entityType="burger", entityId=burger_id)
+            )
+
+        entities.append(
+            GebruikersActiviteitEntity(entityType="huishouden", entityId=huishouden_id)
+        )
+
         AuditLogging.create(
             action=info.field_name,
-            entities=(
-                [
-                    GebruikersActiviteitEntity(entityType="burger", entityId=burger_id)
-                    for burger_id in burger_ids
-                ],
-                GebruikersActiviteitEntity(entityType="huishouden", entityId=huishouden_id)
-            ),
+            entities=entities,
             before=dict(huishouden=previous),
             after=dict(huishouden=new_huishoudens),
         )

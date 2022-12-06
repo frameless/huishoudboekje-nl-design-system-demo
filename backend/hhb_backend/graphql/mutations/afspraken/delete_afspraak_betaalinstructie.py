@@ -2,17 +2,18 @@
 
 import graphene
 import requests
-from graphql import GraphQLError
 
+from graphql import GraphQLError
+from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.models import afspraak
 from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
-from hhb_backend.audit_logging import AuditLogging
 
 
 class DeleteAfspraakBetaalinstructie(graphene.Mutation):
     """Mutatie om een betaalinstructie bij een afspraak te verwijderen."""
+
     class Arguments:
         afspraak_id = graphene.Int(required=True)
 
@@ -50,13 +51,12 @@ class DeleteAfspraakBetaalinstructie(graphene.Mutation):
 
         AuditLogging.create(
             action=info.field_name,
-            entities=(
+            entities=[
                 GebruikersActiviteitEntity(entityType="afspraak", entityId=afspraak_id),
                 GebruikersActiviteitEntity(entityType="burger", entityId=afspraak["burger_id"])
-            ),
+            ],
             before=dict(afspraak=previous),
             after=dict(afspraak=afspraak),
         )
 
         return DeleteAfspraakBetaalinstructie(afspraak=afspraak, previous=previous, ok=True)
-

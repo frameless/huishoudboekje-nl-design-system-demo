@@ -57,10 +57,10 @@ class DeleteAfspraakZoekterm(graphene.Mutation):
 
         AuditLogging.create(
             action=info.field_name,
-            entities=(
+            entities=[
                 GebruikersActiviteitEntity(entityType="afspraak", entityId=afspraak_id),
                 GebruikersActiviteitEntity(entityType="burger", entityId=afspraak["burger_id"])
-            ),
+            ],
             before=dict(afspraak=previous),
             after=dict(afspraak=afspraak),
         )

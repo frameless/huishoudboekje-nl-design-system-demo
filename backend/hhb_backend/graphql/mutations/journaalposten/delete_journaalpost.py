@@ -1,11 +1,11 @@
 import graphene
 import requests
-from graphql import GraphQLError
 
+import hhb_backend.graphql.models.journaalpost as graphene_journaalpost
+from graphql import GraphQLError
 from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
-import hhb_backend.graphql.models.journaalpost as graphene_journaalpost
 from hhb_backend.graphql.mutations.journaalposten import update_transaction_service_is_geboekt
 from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
 
@@ -33,17 +33,17 @@ class DeleteJournaalpost(graphene.Mutation):
 
         AuditLogging.create(
             action=info.field_name,
-            entities=(
+            entities=[
                 GebruikersActiviteitEntity(entityType="journaalpost", entityId=id),
                 GebruikersActiviteitEntity(entityType="afspraak", entityId=previous["afspraak_id"]),
-                (
+                (  # Todo: does this work? Is this not adding a tuple inside an array? (06-12-2022)
                     GebruikersActiviteitEntity(entityType="burger", entityId=previous["afspraak"]["burger_id"])
                     if "afspraak" in previous
                     else []
                 ),
                 GebruikersActiviteitEntity(entityType="transaction", entityId=previous["transaction_id"]),
                 GebruikersActiviteitEntity(entityType="grootboekrekening", entityId=previous["grootboekrekening_id"])
-            ),
+            ],
             before=dict(journaalpost=previous),
         )
 

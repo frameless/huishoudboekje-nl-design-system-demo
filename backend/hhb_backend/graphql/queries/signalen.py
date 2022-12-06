@@ -13,7 +13,9 @@ class SignaalQuery:
     def resolver(cls, _root, info, id):
         AuditLogging().create(
             action=info.field_name,
-            entities=(GebruikersActiviteitEntity(entityType="signaal", entityId=id))
+            entities=[
+                GebruikersActiviteitEntity(entityType="signaal", entityId=id)
+            ]
         )
         return hhb_dataloader().signalen.load_one(id)
 
@@ -29,7 +31,7 @@ class SignalenQuery:
             result = hhb_dataloader().signalen.load_all()
 
         AuditLogging().create(
-            action=info.field_name, 
+            action=info.field_name,
             entities=[
                 GebruikersActiviteitEntity(entityType="signaal", entityId=id)
                 for id in ids
