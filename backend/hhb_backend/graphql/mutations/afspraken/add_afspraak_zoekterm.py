@@ -50,7 +50,9 @@ class AddAfspraakZoekterm(graphene.Mutation):
         if not response.ok:
             raise GraphQLError(f"Upstream API responded: {response.text}")
 
-        afspraak = Afspraak(response.json()["data"])
+        result = response.json()["data"]
+        print(f"result {result}")
+        afspraak = Afspraak(result)
 
         matching_afspraken = find_matching_afspraken_by_afspraak(afspraak)
 
@@ -58,10 +60,12 @@ class AddAfspraakZoekterm(graphene.Mutation):
             action=info.field_name,
             entities=(
                 GebruikersActiviteitEntity(
-                entityType="afspraak", entityId=afspraak_id
-            ), GebruikersActiviteitEntity(
-                entityType="burger", entityId=afspraak["burger_id"]
-            )),
+                    entityType="afspraak", entityId=afspraak_id
+                ),
+                GebruikersActiviteitEntity(
+                    entityType="burger", entityId=result["burger_id"]
+                )
+            ),
             before=dict(afspraak=previous),
             after=dict(afspraak=afspraak),
         )

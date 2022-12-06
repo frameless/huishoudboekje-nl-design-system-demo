@@ -5,7 +5,7 @@ from hhb_backend.graphql import settings
 
 def get_json_payload(zoekterm):
     return {
-                "query": '''
+        "query": '''
                     mutation test($afspraakId: Int!, $zoekterm: String!) {
                         addAfspraakZoekterm(afspraakId: $afspraakId, zoekterm: $zoekterm) {
                             afspraak {
@@ -19,8 +19,8 @@ def get_json_payload(zoekterm):
                         }
                     }
                     ''',
-                "variables": {"afspraakId": 1, "zoekterm": zoekterm}
-            }
+        "variables": {"afspraakId": 1, "zoekterm": zoekterm}
+    }
 
 
 def test_add_afspraak_zoekterm_success_1(client):
@@ -31,7 +31,7 @@ def test_add_afspraak_zoekterm_success_1(client):
         afspraken_get = mock.get(
             f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids=1",
             json={"data": [{
-                "id": 1, "zoektermen": ["Albert Heijn"], "tegen_rekening_id": 14,
+                "id": 1, "zoektermen": ["Albert Heijn"], "tegen_rekening_id": 14, "burger_id": 42,
                 "valid_from": "2020-01-01", "valid_through": None, "journaalposten": [], "overschrijvingen": []
             }]}
         )
@@ -39,18 +39,18 @@ def test_add_afspraak_zoekterm_success_1(client):
             f"{settings.HHB_SERVICES_URL}/afspraken/?filter_rekening=14",
             json={"data": [
                 {
-                    "id": 1, "zoektermen": ["Albert Heijn"], "tegen_rekening_id": 14,
+                    "id": 1, "zoektermen": ["Albert Heijn"], "tegen_rekening_id": 14, "burger_id": 42,
                     "valid_from": "2020-01-01", "valid_through": None, "journaalposten": [], "overschrijvingen": []
                 },
                 {
-                    "id": 2, "zoektermen": ["Albert Heijn", "loon"], "tegen_rekening_id": 14,
+                    "id": 2, "zoektermen": ["Albert Heijn", "loon"], "tegen_rekening_id": 14, "burger_id": 42,
                     "valid_from": "2020-01-01", "valid_through": None, "journaalposten": [], "overschrijvingen": []
                 }
             ]}
         )
 
         afspraak = {"data": {
-            "id": 1, "zoektermen": ["Albert Heijn", "salaris"], "tegen_rekening_id": 14,
+            "id": 1, "zoektermen": ["Albert Heijn", "salaris"], "tegen_rekening_id": 14, "burger_id": 42,
             "valid_from": "2020-01-01", "valid_through": None, "journaalposten": [], "overschrijvingen": []
         }}
         afspraken_post = mock.post(f"{settings.HHB_SERVICES_URL}/afspraken/1", json=afspraak)
@@ -80,7 +80,7 @@ def test_add_afspraak_zoekterm_conflict_1(client):
         afspraken_get = mock.get(
             f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids=1",
             json={"data": [{
-                "id": 1, "zoektermen": ["Albert Heijn"], "tegen_rekening_id": 14,
+                "id": 1, "zoektermen": ["Albert Heijn"], "tegen_rekening_id": 14, "burger_id": 42,
                 "valid_from": "2020-01-01", "valid_through": None, "journaalposten": [], "overschrijvingen": []
             }]}
         )
@@ -88,18 +88,18 @@ def test_add_afspraak_zoekterm_conflict_1(client):
             f"{settings.HHB_SERVICES_URL}/afspraken/?filter_rekening=14",
             json={"data": [
                 {
-                    "id": 1, "zoektermen": ["Albert Heijn"], "tegen_rekening_id": 14,
+                    "id": 1, "zoektermen": ["Albert Heijn"], "tegen_rekening_id": 14, "burger_id": 42,
                     "valid_from": "2020-01-01", "valid_through": None, "journaalposten": [], "overschrijvingen": []
                 },
                 {
-                    "id": 2, "zoektermen": ["Albert Heijn", "loon"], "tegen_rekening_id": 14,
+                    "id": 2, "zoektermen": ["Albert Heijn", "loon"], "tegen_rekening_id": 14, "burger_id": 42,
                     "valid_from": "2020-01-01", "valid_through": None, "journaalposten": [], "overschrijvingen": []
                 }
             ]}
         )
 
         afspraak = {"data": {
-            "id": 1, "zoektermen": ["Albert Heijn", "loonbetaling"], "tegen_rekening_id": 14,
+            "id": 1, "zoektermen": ["Albert Heijn", "loonbetaling"], "tegen_rekening_id": 14, "burger_id": 42,
             "valid_from": "2020-01-01", "valid_through": None, "journaalposten": [], "overschrijvingen": []
         }}
         afspraken_post = mock.post(f"{settings.HHB_SERVICES_URL}/afspraken/1", json=afspraak)
@@ -130,7 +130,7 @@ def test_add_afspraak_zoekterm_conflict_2(client):
         afspraken_get = mock.get(
             f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids=1",
             json={"data": [{
-                "id": 1, "zoektermen": ["Albert Heijn", "loon"], "tegen_rekening_id": 14,
+                "id": 1, "zoektermen": ["Albert Heijn", "loon"], "tegen_rekening_id": 14, "burger_id": 42,
                 "valid_from": "2020-01-01", "valid_through": None, "journaalposten": [], "overschrijvingen": []
             }]}
         )
@@ -138,18 +138,18 @@ def test_add_afspraak_zoekterm_conflict_2(client):
             f"{settings.HHB_SERVICES_URL}/afspraken/?filter_rekening=14",
             json={"data": [
                 {
-                    "id": 1, "zoektermen": ["Albert Heijn", "loon"], "tegen_rekening_id": 14,
+                    "id": 1, "zoektermen": ["Albert Heijn", "loon"], "tegen_rekening_id": 14, "burger_id": 42,
                     "valid_from": "2020-01-01", "valid_through": None, "journaalposten": [], "overschrijvingen": []
                 },
                 {
-                    "id": 2, "zoektermen": ["Albert Heijn", "loonbetaling"], "tegen_rekening_id": 14,
+                    "id": 2, "zoektermen": ["Albert Heijn", "loonbetaling"], "tegen_rekening_id": 14, "burger_id": 42,
                     "valid_from": "2020-01-01", "valid_through": None, "journaalposten": [], "overschrijvingen": []
                 }
             ]}
         )
 
         afspraak = {"data": {
-            "id": 1, "zoektermen": ["Albert Heijn", "loon", "betaling"], "tegen_rekening_id": 14,
+            "id": 1, "zoektermen": ["Albert Heijn", "loon", "betaling"], "tegen_rekening_id": 14, "burger_id": 42,
             "valid_from": "2020-01-01", "valid_through": None, "journaalposten": [], "overschrijvingen": []
         }}
         afspraken_post = mock.post(f"{settings.HHB_SERVICES_URL}/afspraken/1", json=afspraak)
@@ -180,7 +180,7 @@ def test_add_afspraak_zoekterm_success_2(client):
         afspraken_get = mock.get(
             f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids=1",
             json={"data": [{
-                "id": 1, "zoektermen": ["Albert Heijn", "loon "], "tegen_rekening_id": 14,
+                "id": 1, "zoektermen": ["Albert Heijn", "loon "], "tegen_rekening_id": 14, "burger_id": 42,
                 "valid_from": "2020-01-01", "valid_through": None, "journaalposten": [], "overschrijvingen": []
             }]}
         )
@@ -188,18 +188,18 @@ def test_add_afspraak_zoekterm_success_2(client):
             f"{settings.HHB_SERVICES_URL}/afspraken/?filter_rekening=14",
             json={"data": [
                 {
-                    "id": 1, "zoektermen": ["Albert Heijn", "loon "], "tegen_rekening_id": 14,
+                    "id": 1, "zoektermen": ["Albert Heijn", "loon "], "tegen_rekening_id": 14, "burger_id": 42,
                     "valid_from": "2020-01-01", "valid_through": None, "journaalposten": [], "overschrijvingen": []
                 },
                 {
-                    "id": 2, "zoektermen": ["Albert Heijn", "loonbetaling"], "tegen_rekening_id": 14,
+                    "id": 2, "zoektermen": ["Albert Heijn", "loonbetaling"], "tegen_rekening_id": 14, "burger_id": 42,
                     "valid_from": "2020-01-01", "valid_through": None, "journaalposten": [], "overschrijvingen": []
                 }
             ]}
         )
 
         afspraak = {"data": {
-            "id": 1, "zoektermen": ["Albert Heijn", "loon ", "betaling"], "tegen_rekening_id": 14,
+            "id": 1, "zoektermen": ["Albert Heijn", "loon ", "betaling"], "tegen_rekening_id": 14, "burger_id": 42,
             "valid_from": "2020-01-01", "valid_through": None, "journaalposten": [], "overschrijvingen": []
         }}
         afspraken_post = mock.post(f"{settings.HHB_SERVICES_URL}/afspraken/1", json=afspraak)
@@ -225,11 +225,11 @@ def test_add_afspraak_zoekterm_success_2(client):
 def test_add_afspraak_zoekterm_conflict_3(client):
     with requests_mock.Mocker() as mock:
         afspraak1 = {
-            "id": 1, "zoektermen": ["Albert Heijn", "loon "], "tegen_rekening_id": 14,
+            "id": 1, "zoektermen": ["Albert Heijn", "loon "], "tegen_rekening_id": 14, "burger_id": 42,
             "valid_from": "2020-01-01", "valid_through": None, "journaalposten": [], "overschrijvingen": []
         }
         afspraak2 = {
-            "id": 2, "zoektermen": ["Albert Heijn", "loon betaling"], "tegen_rekening_id": 14,
+            "id": 2, "zoektermen": ["Albert Heijn", "loon betaling"], "tegen_rekening_id": 14, "burger_id": 42,
             "valid_from": "2020-01-01", "valid_through": None, "journaalposten": [], "overschrijvingen": []
         }
         get_any = mock.get(requests_mock.ANY, status_code=404)
@@ -247,7 +247,7 @@ def test_add_afspraak_zoekterm_conflict_3(client):
             ]}
         )
         afspraak1a = {"data": {
-            "id": 1, "zoektermen": ["Albert Heijn", "loon ", "betaling"], "tegen_rekening_id": 14,
+            "id": 1, "zoektermen": ["Albert Heijn", "loon ", "betaling"], "tegen_rekening_id": 14, "burger_id": 42,
             "valid_from": "2020-01-01", "valid_through": None, "journaalposten": [], "overschrijvingen": []
         }}
         afspraken_post = mock.post(f"{settings.HHB_SERVICES_URL}/afspraken/1", json=afspraak1a)
