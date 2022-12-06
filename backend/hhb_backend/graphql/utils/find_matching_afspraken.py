@@ -38,6 +38,9 @@ async def find_matching_afspraken_by_afspraak(main_afspraak):
 
 def match_zoekterm(afspraak, target_text: str):
     return afspraak.get("zoektermen") and all([
-        re.search(zoekterm, target_text, re.IGNORECASE)
-        for zoekterm in afspraak.get("zoektermen")
+        re.search(
+            re.escape(zoekterm),
+            target_text,
+            re.IGNORECASE
+        ) for zoekterm in afspraak.get("zoektermen")
     ])
