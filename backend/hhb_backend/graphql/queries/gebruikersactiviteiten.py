@@ -97,30 +97,28 @@ class GebruikersActiviteitenPagedQuery:
         if "start" not in kwargs or "limit" not in kwargs:
             raise GraphQLError(f"Query needs params 'start', 'limit'. ")
 
-        if not kwargs.get("burgerIds") and not kwargs.get("afsprakenIds") and not kwargs.get("huishoudenIds"):
-            result = hhb_dataloader().gebruikersactiviteiten.load_paged(
-                start=kwargs.get("start"), limit=kwargs.get("limit"), desc=True, sorting_column="timestamp"
+        if kwargs.get("burgerIds") and kwargs.get("afsprakenIds") and kwargs.get("huishoudenIds"):
+            raise GraphQLError(f"Only burgerIds, afsprakenIds or huishoudenIds is supported. ")
+
+        if kwargs.get("burgerIds"):
+            result = hhb_dataloader().gebruikersactiviteiten.by_burgers_paged(
+                keys=kwargs.get("burgerIds"), start=kwargs.get("start"), limit=kwargs.get("limit"),
+                desc=True, sorting_column="id"
+            )
+        elif kwargs.get("afsprakenIds"):
+            result = hhb_dataloader().gebruikersactiviteiten.by_afspraken_paged(
+                keys=kwargs.get("afsprakenIds"), start=kwargs.get("start"), limit=kwargs.get("limit"),
+                desc=True, sorting_column="id"
+            )
+        elif kwargs.get("huishoudenIds"):
+            result = hhb_dataloader().gebruikersactiviteiten.by_huishouden_paged(
+                keys=kwargs.get("huishoudenIds"), start=kwargs.get("start"), limit=kwargs.get("limit"),
+                desc=True, sorting_column="id"
             )
         else:
-            if kwargs.get("burgerIds") and kwargs.get("afsprakenIds") and kwargs.get("huishoudenIds"):
-                raise GraphQLError(f"Only burgerIds, afsprakenIds or huishoudenIds is supported. ")
-            elif kwargs.get("burgerIds"):
-                result = hhb_dataloader().gebruikersactiviteiten.by_burgers_paged(
-                    keys=kwargs.get("burgerIds"), start=kwargs.get("start"), limit=kwargs.get("limit"),
-                    desc=True, sorting_column="timestamp"
-                )
-            elif kwargs.get("afsprakenIds"):
-                result = hhb_dataloader().gebruikersactiviteiten.by_afspraken_paged(
-                    keys=kwargs.get("afsprakenIds"), start=kwargs.get("start"), limit=kwargs.get("limit"),
-                    desc=True, sorting_column="timestamp"
-                )
-            elif kwargs.get("huishoudenIds"):
-                result = hhb_dataloader().gebruikersactiviteiten.by_huishouden_paged(
-                    keys=kwargs.get("huishoudenIds"), start=kwargs.get("start"), limit=kwargs.get("limit"),
-                    desc=True, sorting_column="timestamp"
-                )
-            else:
-                result = []
+            result = hhb_dataloader().gebruikersactiviteiten.load_paged(
+                start=kwargs.get("start"), limit=kwargs.get("limit"), desc=True, sorting_column="id"
+            )
 
         logging.debug(f"result {result}")
 
