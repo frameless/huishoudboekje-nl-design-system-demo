@@ -1,14 +1,16 @@
 """ GraphQL mutation for creating a new Burger """
-import graphene
 import json
-import requests
-from graphql import GraphQLError
+import logging
 
+import graphene
+import requests
+
+import hhb_backend.graphql.models.burger as graphene_burger
 import hhb_backend.graphql.mutations.huishoudens.huishouden_input as huishouden_input
 import hhb_backend.graphql.mutations.rekeningen.rekening_input as rekening_input
+from graphql import GraphQLError
 from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql import settings
-import hhb_backend.graphql.models.burger as graphene_burger
 from hhb_backend.graphql.mutations.huishoudens.utils import create_huishouden_if_not_exists
 from hhb_backend.graphql.mutations.rekeningen.utils import create_burger_rekening
 from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
@@ -60,6 +62,9 @@ class CreateBurger(graphene.Mutation):
             raise GraphQLError(f"Upstream API responded: {response.json()}")
 
         created_burger = burger.Burger(response.json()["data"])
+        entities = [
+            GebruikersActiviteitEntity(entityType="burger", entityId=created_burger.id),
+        ]
 
         if rekeningen:
             created_burger.rekeningen = [
@@ -67,15 +72,16 @@ class CreateBurger(graphene.Mutation):
                 for rekening in rekeningen
             ]
 
+
+            rekeningen_entities = [GebruikersActiviteitEntity(entityType="rekening", entityId=rekening["id"]) for rekening in
+                           created_burger.rekeningen]
+            logging.debug(f"Rekeningen entities: {rekeningen_entities}")
+
+            entities.extend(rekeningen_entities)
+
         AuditLogging.create(
             action=info.field_name,
-            entities=(
-                GebruikersActiviteitEntity(entityType="burger", entityId=created_burger.id),
-                [
-                    GebruikersActiviteitEntity(entityType="rekening", entityId=rekening["id"])
-                    for rekening in created_burger.rekeningen
-                ]
-            ),
+            entities=entities,
             after=dict(burger=created_burger),
         )
         return CreateBurger(ok=True, burger=created_burger)
