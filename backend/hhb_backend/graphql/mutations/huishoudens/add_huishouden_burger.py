@@ -30,8 +30,16 @@ class AddHuishoudenBurger(graphene.Mutation):
         if previous is None:
             raise GraphQLError("Huishouden not found")
 
+        entities = [
+            GebruikersActiviteitEntity(entityType="huishouden", entityId=huishouden_id)
+        ]
+
         for burger_id in burger_ids:
             params = {"huishouden_id": huishouden_id}
+
+            entities.append(
+                GebruikersActiviteitEntity(entityType="burger", entityId=burger_id)
+            )
 
             response = requests.post(
                 f"{settings.HHB_SERVICES_URL}/burgers/{burger_id}",
@@ -44,9 +52,7 @@ class AddHuishoudenBurger(graphene.Mutation):
 
         AuditLogging.create(
             action=info.field_name,
-            entities=[
-                GebruikersActiviteitEntity(entityType="huishouden", entityId=huishouden_id)
-            ],
+            entities=entities,
             before=dict(huishouden=previous),
             after=dict(huishouden=loaded_huishouden),
         )

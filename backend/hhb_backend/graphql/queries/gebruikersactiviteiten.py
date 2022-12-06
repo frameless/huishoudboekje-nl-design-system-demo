@@ -126,10 +126,6 @@ class GebruikersActiviteitenPagedQuery:
 
         AuditLogging.create(
             action=info.field_name,
-            entities=[
-                GebruikersActiviteitEntity(entityType="gebruikersactiviteit", entityId=g["id"])
-                for g in result["gebruikersactiviteiten"]
-            ]
         )
 
         return result

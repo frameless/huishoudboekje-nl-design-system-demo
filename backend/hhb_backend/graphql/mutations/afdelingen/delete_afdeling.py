@@ -48,7 +48,8 @@ class DeleteAfdeling(graphene.Mutation):
         AuditLogging.create(
             action=info.field_name,
             entities=[
-                GebruikersActiviteitEntity(entityType="afdeling", entityId=id)
+                GebruikersActiviteitEntity(entityType="afdeling", entityId=id),
+                GebruikersActiviteitEntity(entityType="organisatie", entityId=previous["organisatie_id"])
             ],
             before=dict(afdeling=previous)
         )

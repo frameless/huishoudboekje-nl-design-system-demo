@@ -46,7 +46,7 @@ class CreateAfspraak(graphene.Mutation):
         """ Create the new Afspraak """
 
         if "valid_from" not in input:
-            input["valid_from"] = str(date.now())
+            input["valid_from"] = str(date.today())
 
         # check burger_id
         burger = hhb_dataloader().burgers.load_one(input.burger_id)
