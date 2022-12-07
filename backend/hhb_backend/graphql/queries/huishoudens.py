@@ -1,51 +1,53 @@
 import graphene
-from graphql import GraphQLError
 
 import hhb_backend.graphql.models.huishouden as huishouden
+from graphql import GraphQLError
+from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.filters.burgers import BurgerFilter
-from hhb_backend.graphql.utils.gebruikersactiviteiten import (
-    gebruikers_activiteit_entities,
-    log_gebruikers_activiteit,
-)
+from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
 
 
 class HuishoudenQuery:
     return_type = graphene.Field(huishouden.Huishouden, id=graphene.Int(required=True))
 
     @classmethod
-    def gebruikers_activiteit(cls, _root, info, id, *_args, **_kwargs):
-        return dict(
+    def resolver(cls, _root, info, id):
+        result = hhb_dataloader().huishoudens.load_one(id)
+        AuditLogging.create(
             action=info.field_name,
-            entities=gebruikers_activiteit_entities(entity_type="huishouden", result=id),
+            entities=[
+                GebruikersActiviteitEntity(entityType="huishouden", entityId=id)
+            ]
         )
-
-    @classmethod
-    @log_gebruikers_activiteit
-    async def resolver(cls, _root, _info, id):
-        return hhb_dataloader().huishoudens.load_one(id)
+        return result
 
 
 class HuishoudensQuery:
     return_type = graphene.List(
         huishouden.Huishouden,
-        ids=graphene.List(graphene.Int, default_value=[]),
+        ids=graphene.List(graphene.Int),
         filters=BurgerFilter(),
     )
 
     @classmethod
-    def gebruikers_activiteit(cls, _root, info, ids, *_args, **_kwargs):
-        return dict(
+    def resolver(cls, _root, info, ids=None, **kwargs):
+        if ids:
+            result = hhb_dataloader().huishoudens.load(ids)
+            entities = [
+                GebruikersActiviteitEntity(entityType="huishouden", entityId=huishoudenId)
+                for huishoudenId in ids
+            ]
+        else:
+            result = hhb_dataloader().huishoudens.load_all(filters=kwargs.get("filters", None))
+            entities = None
+
+        AuditLogging().create(
             action=info.field_name,
-            entities=gebruikers_activiteit_entities(entity_type="huishouden", result=ids),
+            entities=entities
         )
 
-    @classmethod
-    @log_gebruikers_activiteit
-    async def resolver(cls, _root, _info, ids=None, **kwargs):
-        if ids:
-            return hhb_dataloader().huishoudens.load(ids)
-        return hhb_dataloader().huishoudens.load_all(filters=kwargs.get("filters", None))
+        return result
 
 
 class HuishoudensPagedQuery:
@@ -57,25 +59,24 @@ class HuishoudensPagedQuery:
     )
 
     @classmethod
-    def gebruikers_activiteit(cls, _root, info, *_args, **kwargs):
-        return dict(
-            action=info.field_name,
-            entities=gebruikers_activiteit_entities(
-                entity_type="huishouden",
-                result=kwargs["result"] if "result" in kwargs else None,
-            ),
+    def resolver(cls, _root, info, **kwargs):
+        if "start" not in kwargs or "limit" not in kwargs:
+            raise GraphQLError(f"Query needs params 'start', 'limit'. ")
+
+        result = hhb_dataloader().huishoudens.load_paged(
+            start=kwargs["start"],
+            limit=kwargs["limit"],
+            desc=True,
+            sorting_column="id",
+            filters=kwargs.get("filters")
         )
 
-    @classmethod
-    @log_gebruikers_activiteit
-    async def resolver(cls, _root, _info, **kwargs):
-        if "start" in kwargs and "limit" in kwargs:
-            return hhb_dataloader().huishoudens.load_paged(
-                start=kwargs["start"],
-                limit=kwargs["limit"],
-                desc=True,
-                sorting_column="id",
-                filters=kwargs.get("filters")
-            )
-        else:
-            raise GraphQLError(f"Query needs params 'start', 'limit'. ")
+        AuditLogging().create(
+            action=info.field_name,
+            entities=[
+                GebruikersActiviteitEntity(entityType="huishouden", entityId=huishouden["id"])
+                for huishouden in result["huishoudens"]
+            ]
+        )
+
+        return result

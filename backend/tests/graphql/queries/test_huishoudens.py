@@ -14,7 +14,7 @@ def test_huishoudens_success(client):
             content_type="application/json",
         )
 
-        assert adapter.called_once
+        assert adapter.call_count == 1
         assert response.json == {"data": {"huishoudens": [{"id": 1}]}}
 
 
@@ -37,7 +37,7 @@ def test_huishoudens_paged_success(client):
             content_type="application/json",
         )
 
-        assert adapter.called_once
+        assert adapter.call_count == 1
         assert response.json == {
             "data": {
                 "huishoudensPaged": {

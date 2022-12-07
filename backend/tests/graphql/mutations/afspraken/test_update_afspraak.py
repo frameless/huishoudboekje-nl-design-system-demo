@@ -11,6 +11,7 @@ afspraak = {
     'valid_through': "2020-10-01",
     'rubriek_id': 1,
     'burger_id': 1,
+    'afdeling_id': 4,
     'tegen_rekening_id': 1,
     'zoektermen': ["test1", "test2"],
 }
@@ -34,7 +35,7 @@ def test_update_afspraak(client):
         afspraakId = 1
         input = {
             "omschrijving": "gewijzigde omschrijving",
-            "bedrag":"543.21",
+            "bedrag": "543.21",
             "credit": False,
             "validThrough": "",
             "zoektermen": ["test1", "test2"]
@@ -68,8 +69,8 @@ def test_update_afspraak(client):
         )
 
         # assert
-        assert rm1.called_once
-        assert rm2.called_once
-        assert rm3.called_once
-        assert fallback.called == 0
+        assert rm1.call_count == 1
+        assert rm2.call_count == 1
+        assert rm3.call_count == 1
+        assert fallback.call_count == 0
         assert response.json == expected

@@ -9,7 +9,7 @@ class Huishouden(graphene.ObjectType):
     id = graphene.Int()
     burgers = graphene.List(lambda: burger.Burger)
 
-    async def resolve_burgers(self, _info):
+    def resolve_burgers(self, _info):
         return hhb_dataloader().burgers.by_huishouden(self.get('id')) or []
 
 

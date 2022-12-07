@@ -41,7 +41,7 @@ def test_grootboekrekeningen(client):
             data='{"query": "query test { grootboekrekeningen { id naam }}"}',
             content_type='application/json'
         )
-        assert adapter.called_once
+        assert adapter.call_count == 1
         assert response.json == {"data": {"grootboekrekeningen": [
             {"id": "m1", "naam": "inkomsten"},
             {"id": "m12", "naam": "salaris"},
@@ -61,7 +61,7 @@ def test_grootboekrekeningen_children(client):
             data='{"query": "query test { grootboekrekeningen { id naam children { id naam }}}"}',
             content_type='application/json'
         )
-        assert adapter.called_once
+        assert adapter.call_count == 1
         assert filter_adapter.call_count == 1
         assert response.json == {"data": {"grootboekrekeningen": [
             {"id": "m1", "naam": "inkomsten", "children": [{"id": "m12", "naam": "salaris"}]},
@@ -99,7 +99,7 @@ def test_grootboekrekening_by_id(client):
             data='{"query":"query test($id:String!){ grootboekrekening(id: $id) { id naam } }","variables":{"id":"m1"}}',
             content_type='application/json'
         )
-        assert inkomsten_adapter.called_once
+        assert inkomsten_adapter.call_count == 1
         assert response.json == {"data": {"grootboekrekening":
                                               {"id": "m1", "naam": "inkomsten"},
 
@@ -121,8 +121,8 @@ def test_grootboekrekening_with_children(client):
             data='{"query":"query test($id:String!){ grootboekrekening(id: $id) { id naam children { id naam } } }","variables":{"id":"m1"}}',
             content_type='application/json'
         )
-        assert inkomsten_adapter.called_once
-        assert salaris_adapter.called_once
+        assert inkomsten_adapter.call_count == 1
+        assert salaris_adapter.call_count == 1
         assert response.json == {"data": {"grootboekrekening":
                                               {"id": "m1", "naam": "inkomsten",
                                                "children": [{"id": "m12", "naam": "salaris"}]},
@@ -144,8 +144,8 @@ def test_grootboekrekening_with_parent(client):
             data='{"query":"query test($id:String!){ grootboekrekening(id: $id) { id naam parent { id naam } } }","variables":{"id":"m12"}}',
             content_type='application/json'
         )
-        assert inkomsten_adapter.called_once
-        assert salaris_adapter.called_once
+        assert inkomsten_adapter.call_count == 1
+        assert salaris_adapter.call_count == 1
         assert response.json == {"data": {
             "grootboekrekening": {"id": "m12", "naam": "salaris", "parent": {"id": "m1", "naam": "inkomsten"}}
         }}
@@ -168,8 +168,8 @@ def test_grootboekrekeningen_rubriek(client):
             content_type='application/json'
         )
         assert adapter.call_count == 0
-        assert filter_adapter.called_once
-        assert hhb_adapter.called_once
+        assert filter_adapter.call_count == 1
+        assert hhb_adapter.call_count == 1
         assert response.json == {'data': {'grootboekrekening': {'id': 'm1', 'rubriek': {'id': 2, 'naam': 'Rubriek 1'}}}}
 
 def test_grootboekrekeningen_credit_transform(client):
@@ -180,7 +180,7 @@ def test_grootboekrekeningen_credit_transform(client):
             data='{"query": "query test { grootboekrekeningen { id naam credit }}"}',
             content_type='application/json'
         )
-        assert adapter.called_once
+        assert adapter.call_count == 1
         assert response.json == {"data": {"grootboekrekeningen": [
             {"id": "m1", "naam": "inkomsten", "credit": True},
             {"id": "m12", "naam": "salaris", "credit": True},

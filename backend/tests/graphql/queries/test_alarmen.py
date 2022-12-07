@@ -52,9 +52,9 @@ def test_get_alarmen(client):
         print(f">> >> >> >> response: {response.json} ")
         for call in rm.request_history:
             print(f">> >> >> >> fallback: {call.method} {call.url} ")
-        assert rm1.called_once
-        assert rm2.called_once
-        assert rm3.called_once
+        assert rm1.call_count == 1
+        assert rm2.call_count == 1
+        assert rm3.call_count == 1
         assert fallback.call_count == 0
         assert response.json == expected
 
@@ -109,8 +109,8 @@ def test_get_alarm_by_id(client):
         print(f">> >> >> >> response: {response.json} ")
         for call in rm.request_history:
             print(f">> >> >> >> fallback: {call.method} {call.url} ")
-        assert rm1.called_once
-        assert rm2.called_once
-        assert rm3.called_once
+        assert rm1.call_count == 1
+        assert rm2.call_count == 1
+        assert rm3.call_count == 1
         assert fallback.call_count == 0
         assert response.json == expected

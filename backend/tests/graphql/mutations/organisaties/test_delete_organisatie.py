@@ -58,8 +58,8 @@ mutation test($id: Int!) {
             }
         }}
 
-        assert rm1.called_once
-        assert adapter.called_once
+        assert rm1.call_count == 1
+        assert adapter.call_count == 1
         assert mock._adapter.call_count == 4
 
 def test_delete_organisatie_afdelingen_error(client):
@@ -108,4 +108,4 @@ mutation test($id: Int!) {
                                  "errors": [{"locations": [{"column": 3, "line": 3}],
                                              "message": "Organisatie not found",
                                              "path": ["deleteOrganisatie"]}]}
-        assert adapter.called_once
+        assert adapter.call_count == 1

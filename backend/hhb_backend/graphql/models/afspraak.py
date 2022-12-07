@@ -11,7 +11,7 @@ import hhb_backend.graphql.models.rekening as rekening
 import hhb_backend.graphql.models.rubriek as rubriek
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.scalars.bedrag import Bedrag
-from hhb_backend.graphql.scalars.day_of_week import DayOfWeek
+from hhb_backend.graphql.scalars.day_of_week import DayOfWeekEnum
 from hhb_backend.processen.overschrijvingen_planner import (
     PlannedOverschrijvingenInput,
     get_planned_overschrijvingen,
@@ -31,15 +31,15 @@ class Betaalinstructie(graphene.ObjectType):
     """Implementatie op basis van http://schema.org/Schedule"""
 
     '''Lijst van dagen in de week'''
-    by_day = graphene.List(DayOfWeek, default_value=[])
+    by_day = graphene.List(DayOfWeekEnum)
     '''Lijst van maanden in het jaar'''
-    by_month = graphene.List(graphene.Int, default_value=[])
+    by_month = graphene.List(graphene.Int)
     '''De dagen van de maand'''
-    by_month_day = graphene.List(graphene.Int, default_value=[])
+    by_month_day = graphene.List(graphene.Int)
     '''Bijvoorbeeld "P1W" elke week.'''
     repeat_frequency = graphene.String()
     '''Lijst met datums waarop het NIET geldt'''
-    except_dates = graphene.List(graphene.String, default_value=[])
+    except_dates = graphene.List(graphene.String)
     start_date = graphene.String()
     end_date = graphene.String()
 
@@ -68,7 +68,7 @@ class Afspraak(graphene.ObjectType):
     matching_afspraken = graphene.List(lambda: Afspraak)
 
 
-    async def resolve_overschrijvingen(root, info, **kwargs):
+    def resolve_overschrijvingen(root, info, **kwargs):
         if root.get("betaalinstructie") is None:
             return []
 
@@ -92,40 +92,40 @@ class Afspraak(graphene.ObjectType):
                 expected_overschrijvingen[o_date] = known_overschrijvingen[o_date]
         return expected_overschrijvingen.values()
 
-    async def resolve_rubriek(root, info):
+    def resolve_rubriek(root, info):
         """ Get rubriek when requested """
         if root.get("rubriek_id"):
             return hhb_dataloader().rubrieken.load_one(root.get("rubriek_id"))
 
-    async def resolve_burger(root, info):
+    def resolve_burger(root, info):
         """ Get burger when requested """
         if root.get("burger_id"):
             return hhb_dataloader().burgers.load_one(root.get("burger_id"))
 
-    async def resolve_rekening(root, info):
+    def resolve_rekening(root, info):
         """ Get rekening when requested """
         if root.get("rekening_id"):
             return hhb_dataloader().rekeningen.load_one(root.get("rekening_id"))
 
-    async def resolve_postadres(root, info):
+    def resolve_postadres(root, info):
         """ Get postadres when requested """
         postadres_id = root.get("postadres_id", None)
         if postadres_id:
             postadres = hhb_dataloader().postadressen.load_one(postadres_id)
             return postadres
 
-    async def resolve_alarm(self, _info):
+    def resolve_alarm(self, _info):
         """ Get alarm when requested """
         alarm_id = self.get("alarm_id")
         if alarm_id:
             return hhb_dataloader().alarms.load_one(alarm_id)
 
-    async def resolve_afdeling(root, info):
+    def resolve_afdeling(root, info):
         """ Get afdeling when requested """
         if root.get("afdeling_id"):
             return hhb_dataloader().afdelingen.load_one(root.get("afdeling_id"))
 
-    async def resolve_tegen_rekening(root, info):
+    def resolve_tegen_rekening(root, info):
         """ Get tegen_rekening when requested """
         if root.get("tegen_rekening_id"):
             return hhb_dataloader().rekeningen.load_one(root.get("tegen_rekening_id"))
@@ -138,10 +138,10 @@ class Afspraak(graphene.ObjectType):
         if value := root.get("valid_through"):
             return to_date(value)
 
-    async def resolve_journaalposten(self, _info):
+    def resolve_journaalposten(self, _info):
         """ Get organisatie when requested """
         if self.get("journaalposten"):
             return hhb_dataloader().journaalposten.load(self.get("journaalposten")) or []
 
-    async def resolve_matching_afspraken(self, info):
-        return await find_matching_afspraken_by_afspraak(self)
+    def resolve_matching_afspraken(self, info):
+        return find_matching_afspraken_by_afspraak(self)

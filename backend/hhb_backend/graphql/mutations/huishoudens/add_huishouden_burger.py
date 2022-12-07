@@ -2,15 +2,13 @@ from typing import List
 
 import graphene
 import requests
-from graphql import GraphQLError
 
+from graphql import GraphQLError
+from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.models import huishouden
-from hhb_backend.graphql.utils.gebruikersactiviteiten import (
-    gebruikers_activiteit_entities,
-    log_gebruikers_activiteit,
-)
+from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
 
 
 class AddHuishoudenBurger(graphene.Mutation):
@@ -24,27 +22,24 @@ class AddHuishoudenBurger(graphene.Mutation):
     huishouden = graphene.Field(lambda: huishouden.Huishouden)
     previous = graphene.Field(lambda: huishouden.Huishouden)
 
-    def gebruikers_activiteit(self, _root, info, *_args, **_kwargs):
-        return dict(
-            action=info.field_name,
-            entities=gebruikers_activiteit_entities(
-                entity_type="huishouden", result=self, key="huishouden"
-            ),
-            before=dict(huishouden=self.previous),
-            after=dict(huishouden=self.huishouden),
-        )
-
     @staticmethod
-    @log_gebruikers_activiteit
-    async def mutate(_root, _info, huishouden_id: int, burger_ids: List[int]):
+    def mutate(self, info, huishouden_id: int, burger_ids: List[int]):
         """Add burgers to given huishouden"""
         previous = hhb_dataloader().huishoudens.load_one(huishouden_id)
 
         if previous is None:
             raise GraphQLError("Huishouden not found")
 
+        entities = [
+            GebruikersActiviteitEntity(entityType="huishouden", entityId=huishouden_id)
+        ]
+
         for burger_id in burger_ids:
             params = {"huishouden_id": huishouden_id}
+
+            entities.append(
+                GebruikersActiviteitEntity(entityType="burger", entityId=burger_id)
+            )
 
             response = requests.post(
                 f"{settings.HHB_SERVICES_URL}/burgers/{burger_id}",
@@ -54,6 +49,14 @@ class AddHuishoudenBurger(graphene.Mutation):
                 raise GraphQLError(f"Upstream API responded: {response.text}")
 
         loaded_huishouden = hhb_dataloader().huishoudens.load_one(huishouden_id)
+
+        AuditLogging.create(
+            action=info.field_name,
+            entities=entities,
+            before=dict(huishouden=previous),
+            after=dict(huishouden=loaded_huishouden),
+        )
+
         return AddHuishoudenBurger(
             ok=True,
             huishouden=loaded_huishouden,

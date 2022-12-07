@@ -23,11 +23,11 @@ def test_create_afdeling_minimal_succes(client):
         afdeling_result = {
             "data": {
                 "id": 1,
-                "postadressen_ids": [], 
+                "postadressen_ids": [],
                 "rekeningen_ids": []
             }
         }
-      
+
         fallback = mock.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
         e1 = mock.get(f"{settings.ORGANISATIE_SERVICES_URL}/organisaties/?filter_ids=1", json={'data': [{'id': 1}]})
         e2 = mock.post(
@@ -67,11 +67,11 @@ def test_create_afdeling_minimal_succes(client):
         )
 
         # assert
-        assert e1.called_once
-        assert e2.called_once
-        assert e3.called_once
-        assert e9.called_once
-        assert e10.called_once
+        assert e1.call_count == 1
+        assert e2.call_count == 1
+        assert e3.call_count == 1
+        assert e9.call_count == 1
+        assert e10.call_count == 1
         assert response.json["data"]["createAfdeling"]["ok"] is True
         assert response.json["data"]["createAfdeling"]["afdeling"]["postadressen"] == []
         assert response.json["data"]["createAfdeling"]["afdeling"]["rekeningen"] == []
@@ -92,7 +92,7 @@ def test_create_afdeling_full_succes(client):
             "data": {
                 "id": 1,
                 "naam": "testAfdeling",
-                "postadressen_ids": [], 
+                "postadressen_ids": [],
                 "rekeningen_ids": []
             }
         }
@@ -204,22 +204,22 @@ def test_create_afdeling_full_succes(client):
         )
 
         # assert
-        assert e1.called_once
-        assert e2.called_once
-        assert e3.called_once
-        assert e4.called_once
-        assert e5.called_once
+        assert e1.call_count == 1
+        assert e2.call_count == 1
+        assert e3.call_count == 1
+        assert e4.call_count == 1
+        assert e5.call_count == 1
         assert e6.call_count == 3
-        assert e7.called_once
+        assert e7.call_count == 1
         assert e8.call_count == 2
-        assert e9.called_once
-        assert e10.called_once
-        assert e11.called_once
+        assert e9.call_count == 1
+        assert e10.call_count == 1
+        assert e11.call_count == 1
         assert fallback.call_count == 0
         assert response.json["data"]["createAfdeling"]["ok"] is True
         assert response.json["data"]["createAfdeling"]["afdeling"]["postadressen"] == [{'id': '7426aa95-03c0-453d-b9ff-11a5442ab959'}]
         assert response.json["data"]["createAfdeling"]["afdeling"]["rekeningen"] == [{'id': 1}]
-        
+
 
 def test_create_afdeling_foutieve_rekening_succes(client):
     with requests_mock.Mocker() as mock:
@@ -228,7 +228,7 @@ def test_create_afdeling_foutieve_rekening_succes(client):
             "data": {
                 "id": 1,
                 "naam": "testAfdeling",
-                "postadressen_ids": [], 
+                "postadressen_ids": [],
                 "rekeningen_ids": []
             }
         }
@@ -271,10 +271,10 @@ def test_create_afdeling_foutieve_rekening_succes(client):
 
         # assert
         assert fallback.call_count == 0
-        assert e1.called_once
-        assert e2.called_once
-        assert e3.called_once
+        assert e1.call_count == 1
+        assert e2.call_count == 1
+        assert e3.call_count == 1
         # rekeningen
-        assert e4.called_once
+        assert e4.call_count == 1
         assert response.json['errors'][0]['message'] == "Invalid IBAN: 33bukb20201555555555"
 

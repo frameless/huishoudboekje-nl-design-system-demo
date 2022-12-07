@@ -10,7 +10,7 @@ class Rubriek(graphene.ObjectType):
     naam = graphene.String()
     grootboekrekening = graphene.Field(lambda: grootboekrekening.Grootboekrekening)
 
-    async def resolve_grootboekrekening(self, _info):
+    def resolve_grootboekrekening(self, _info):
         """ Get gebruikers when requested """
         if self.get('grootboekrekening_id'):
             return hhb_dataloader().grootboekrekeningen.load_one(self.get('grootboekrekening_id')) or []

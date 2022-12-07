@@ -1,16 +1,14 @@
 """ GraphQL mutation for creating a new Postadres """
 import graphene
 import requests
-from graphql import GraphQLError
 
-from hhb_backend.graphql import settings
-from hhb_backend.graphql.dataloaders import hhb_dataloader
 import hhb_backend.graphql.models.afdeling as graphene_afdeling
 import hhb_backend.graphql.models.postadres as graphene_postadres
-from hhb_backend.graphql.utils.gebruikersactiviteiten import (
-    gebruikers_activiteit_entities,
-    log_gebruikers_activiteit,
-)
+from graphql import GraphQLError
+from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
+from hhb_backend.audit_logging import AuditLogging
+from hhb_backend.graphql import settings
+from hhb_backend.graphql.dataloaders import hhb_dataloader
 
 
 class CreatePostadresInput(graphene.InputObjectType):
@@ -30,20 +28,8 @@ class CreatePostadres(graphene.Mutation):
     postadres = graphene.Field(lambda: graphene_postadres.Postadres)
     afdeling = graphene.Field(lambda: graphene_afdeling.Afdeling)
 
-    def gebruikers_activiteit(self, _root, info, *_args, **_kwargs):
-        return dict(
-            action=info.field_name,
-            entities=gebruikers_activiteit_entities(
-                entity_type="postadres", result=self, key="postadres"
-            )
-            + gebruikers_activiteit_entities(
-                entity_type="afdeling", result=self, key="afdeling"
-            ),
-            after=dict(postadres=self.postadres),
-        )
-
-    @log_gebruikers_activiteit
-    async def mutate(root, _info, **kwargs):
+    @staticmethod
+    def mutate(self, info, **kwargs):
         """ Create the new Postadres """
         input = kwargs.pop("input")
 
@@ -89,5 +75,14 @@ class CreatePostadres(graphene.Mutation):
             )
 
         new_afdeling = update_afdeling_response.json()["data"]
+
+        AuditLogging.create(
+            action=info.field_name,
+            entities=[
+                GebruikersActiviteitEntity(entityType="postadres", entityId=result['id']),
+                GebruikersActiviteitEntity(entityType="afdeling", entityId=afdeling_id),
+            ],
+            after=dict(postadres=result),
+        )
 
         return CreatePostadres(postadres=result, afdeling=new_afdeling, ok=True)

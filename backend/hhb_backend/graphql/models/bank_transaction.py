@@ -36,22 +36,22 @@ class BankTransaction(graphene.ObjectType):
         if tegen_rekening:
             return tegen_rekening
 
-    async def resolve_tegen_rekening(root, info):
+    def resolve_tegen_rekening(root, info):
         tegen_rekening = root.get('tegen_rekening')
         if tegen_rekening:
             return hhb_dataloader().rekeningen.by_iban(tegen_rekening)
 
-    async def resolve_journaalpost(root, info):
+    def resolve_journaalpost(root, info):
         return hhb_dataloader().journaalposten.by_transaction(root.get('id'))
 
-    async def resolve_customer_statement_message(root, info):
+    def resolve_customer_statement_message(root, info):
         """ Get customer_statement_message when requested """
         if root.get('customer_statement_message_id'):
             return hhb_dataloader().csms.load_one(root.get('customer_statement_message_id'))
 
-    async def resolve_suggesties(root, info):
+    def resolve_suggesties(root, info):
         """ Get rubriek when requested """
-        suggesties = await automatisch_boeken.transactie_suggesties(root.get("id"))
+        suggesties = automatisch_boeken.transactie_suggesties(root.get("id"))
 
         return [item for sublist in suggesties.values() for item in sublist]
 

@@ -1,15 +1,13 @@
 """ GraphQL mutation for updating a Postadres """
 import graphene
 import requests
-from graphql import GraphQLError
 
+import hhb_backend.graphql.models.postadres as graphene_postadres
+from graphql import GraphQLError
+from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
-import hhb_backend.graphql.models.postadres as graphene_postadres
-from hhb_backend.graphql.utils.gebruikersactiviteiten import (
-    gebruikers_activiteit_entities,
-    log_gebruikers_activiteit,
-)
+from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
 
 
 class UpdatePostadres(graphene.Mutation):
@@ -24,19 +22,8 @@ class UpdatePostadres(graphene.Mutation):
     postadres = graphene.Field(lambda: graphene_postadres.Postadres)
     previous = graphene.Field(lambda: graphene_postadres.Postadres)
 
-    def gebruikers_activiteit(self, _root, info, *_args, **_kwargs):
-        return dict(
-            action=info.field_name,
-            entities=gebruikers_activiteit_entities(
-                entity_type="postadres", result=self, key="postadres"
-            ),
-            before=dict(postadres=self.previous),
-            after=dict(postadres=self.postadres),
-        )
-
     @staticmethod
-    @log_gebruikers_activiteit
-    async def mutate(_root, _info, id, **kwargs):
+    def mutate(self, info, id, **kwargs):
         """ Update the current Postadres """
         previous = hhb_dataloader().postadressen.load_one(id)
         if not previous:
@@ -60,5 +47,14 @@ class UpdatePostadres(graphene.Mutation):
             )
 
         postadres = postadres_response.json()['data']
+
+        AuditLogging.create(
+            action=info.field_name,
+            entities=[
+                GebruikersActiviteitEntity(entityType="postadres", entityId=id)
+            ],
+            before=dict(postadres=previous),
+            after=dict(postadres=postadres),
+        )
 
         return UpdatePostadres(postadres=postadres, previous=previous, ok=True)

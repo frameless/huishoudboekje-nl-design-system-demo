@@ -1,33 +1,31 @@
 """ GraphQL mutatie voor het aanmaken van een Signaal """
 import graphene
 
-from hhb_backend.graphql.models.signaal import Signaal
+import hhb_backend.graphql.models.signaal as graphene_signaal
+from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql.mutations.signalen.signalen import SignaalHelper, CreateSignaalInput
-from hhb_backend.graphql.utils.gebruikersactiviteiten import log_gebruikers_activiteit, gebruikers_activiteit_entities
+from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
+
 
 class CreateSignaal(graphene.Mutation):
     class Arguments:
         input = graphene.Argument(CreateSignaalInput, required=True)
 
     ok = graphene.Boolean()
-    signaal = graphene.Field(lambda: Signaal)
-
-    def gebruikers_activiteit(self, _root, _info, *_args, **_kwargs):
-        data = dict(
-            action=_info.field_name,
-            entities=gebruikers_activiteit_entities(
-                entity_type="signaal", result=self, key="signaal"
-            ),
-            after=dict(signaal=self.signaal),
-        )
-        i = _info.field_name.find("-")
-        _info.field_name = _info.field_name[:i].strip()
-        return data
+    signaal = graphene.Field(lambda: graphene_signaal.Signaal)
 
     @staticmethod
-    @log_gebruikers_activiteit
-    async def mutate(root, info, input: CreateSignaalInput):
+    def mutate(self, info, input: CreateSignaalInput):
         """ Mutatie voor het aanmaken van een nieuw Signaal """
         response_signaal = SignaalHelper.create(input)
+        signaal = response_signaal.signaal
 
-        return CreateSignaal(signaal=response_signaal.signaal, ok=True)
+        AuditLogging.create(
+            action=info.field_name,
+            entities=[
+                GebruikersActiviteitEntity(entityType="signaal", entityId=signaal["id"]),
+            ],
+            after=dict(signaal=signaal),
+        )
+
+        return CreateSignaal(signaal=signaal, ok=True)

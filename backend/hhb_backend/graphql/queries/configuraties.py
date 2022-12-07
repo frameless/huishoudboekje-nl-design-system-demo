@@ -1,48 +1,45 @@
 import graphene
 
+from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.models.configuratie import Configuratie
-from hhb_backend.graphql.utils.gebruikersactiviteiten import (
-    gebruikers_activiteit_entities,
-    log_gebruikers_activiteit,
-)
+from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
 
 
 class ConfiguratieQuery:
     return_type = graphene.Field(Configuratie, id=graphene.String(required=True))
 
     @classmethod
-    def gebruikers_activiteit(cls, _root, info, id, *_args, **_kwargs):
-        return dict(
+    def resolver(cls, _, info, id):
+        result = hhb_dataloader().configuraties.load_one(id)
+        AuditLogging.create(
             action=info.field_name,
-            entities=gebruikers_activiteit_entities(
-                entity_type="configuratie", result=id
-            ),
+            entities=[
+                GebruikersActiviteitEntity(entityType="configuratie", entityId=id)
+            ],
         )
-
-    @classmethod
-    @log_gebruikers_activiteit
-    async def resolver(cls, _root, _info, id):
-        return hhb_dataloader().configuraties.load_one(id)
+        return result
 
 
 class ConfiguratiesQuery:
     return_type = graphene.List(
-        Configuratie, ids=graphene.List(graphene.String, default_value=[])
+        Configuratie, ids=graphene.List(graphene.String)
     )
 
     @classmethod
-    def gebruikers_activiteit(cls, _root, info, ids, *_args, **_kwargs):
-        return dict(
+    def resolver(cls, _root, info, ids=None):
+        result = []
+        if ids:
+            result = hhb_dataloader().configuraties.load(ids)
+        else:
+            result = hhb_dataloader().configuraties.load_all()
+
+        AuditLogging.create(
             action=info.field_name,
-            entities=gebruikers_activiteit_entities(
-                entity_type="configuratie", result=ids
-            ),
+            entities=[
+                GebruikersActiviteitEntity(entityType="configuratie", entityId=config["id"])
+                for config in result
+            ] if ids else []
         )
 
-    @classmethod
-    @log_gebruikers_activiteit
-    async def resolver(cls, _root, _info, ids=None):
-        if ids:
-            return hhb_dataloader().configuraties.load(ids)
-        return hhb_dataloader().configuraties.load_all()
+        return result

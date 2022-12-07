@@ -3,52 +3,40 @@ import graphene
 from graphql import GraphQLError
 
 import hhb_backend.graphql.models.bank_transaction as bank_transaction
+from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.filters.bank_transactions import BankTransactionFilter
-from hhb_backend.graphql.utils.gebruikersactiviteiten import (
-    gebruikers_activiteit_entities,
-    log_gebruikers_activiteit,
-)
+from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
 
 
 class BankTransactionQuery:
     return_type = graphene.Field(bank_transaction.BankTransaction, id=graphene.Int(required=True))
 
     @classmethod
-    def gebruikers_activiteit(cls, _root, info, id, *_args, **_kwargs):
-        return dict(
+    def resolver(cls, _, info, id):
+        AuditLogging.create(
             action=info.field_name,
-            entities=gebruikers_activiteit_entities(
-                entity_type="transactie", result=id
-            ),
+            entities=[
+                GebruikersActiviteitEntity(entityType="transactie", entityId=id)
+            ],
         )
-
-    @classmethod
-    @log_gebruikers_activiteit
-    async def resolver(cls, _root, _info, id):
         return hhb_dataloader().bank_transactions.load_one(id)
 
 
 class BankTransactionsQuery:
-    return_type = graphene.List(
-        bank_transaction.BankTransaction,
-        filters=BankTransactionFilter()
-    )
+    return_type = graphene.List(bank_transaction.BankTransaction, filters=BankTransactionFilter())
 
     @classmethod
-    def gebruikers_activiteit(cls, _root, info, *_args, **kwargs):
-        return dict(
+    def resolver(cls, _, info, **kwargs):
+        result = hhb_dataloader().bank_transactions.load_all(filters=kwargs.get("filters", None))
+        AuditLogging.create(
             action=info.field_name,
-            entities=gebruikers_activiteit_entities(
-                entity_type="transactie",
-                result=kwargs["result"] if "result" in kwargs else None,
-            ),
+            entities=[
+                GebruikersActiviteitEntity(entityType="transactie", entityId=transaction.id)
+                for transaction in result
+            ] if "filters" in kwargs else []
         )
-
-    @classmethod
-    @log_gebruikers_activiteit
-    async def resolver(cls, _root, _info, **kwargs):
-        return hhb_dataloader().bank_transactions.load_all(filters=kwargs.get("filters", None))
+        return result
 
 
 class BankTransactionsPagedQuery:
@@ -60,25 +48,19 @@ class BankTransactionsPagedQuery:
     )
 
     @classmethod
-    def gebruikers_activiteit(cls, _root, info, *_args, **kwargs):
-        return dict(
-            action=info.field_name,
-            entities=gebruikers_activiteit_entities(
-                entity_type="transactie",
-                result=kwargs["result"] if "result" in kwargs else None,
-            ),
-        )
-
-    @classmethod
-    @log_gebruikers_activiteit
-    async def resolver(cls, _root, _info, **kwargs):
-        if "start" in kwargs and "limit" in kwargs:
-            return hhb_dataloader().bank_transactions.load_paged(
-                start=kwargs["start"],
-                limit=kwargs["limit"],
-                desc=True,
-                sorting_column="transactie_datum",
-                filters=kwargs.get("filters")
-            )
-        else:
+    def resolver(cls, _, info, **kwargs):
+        if not "start" in kwargs or not "limit" in kwargs:
             raise GraphQLError(f"Query needs params 'start', 'limit'. ")
+
+        result = hhb_dataloader().bank_transactions.load_paged(
+            start=kwargs["start"], limit=kwargs["limit"], desc=True,
+            sorting_column="transactie_datum", filters=kwargs.get("filters")
+        )
+        AuditLogging.create(
+            action=info.field_name,
+            entities=[
+                GebruikersActiviteitEntity(entityType="transactie", entityId=transaction["id"])
+                for transaction in result.values()
+            ],
+        )
+        return result

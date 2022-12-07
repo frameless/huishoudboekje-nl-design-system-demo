@@ -29,7 +29,7 @@ def test_update_alarm(client):
             "byDay": ["Wednesday"]
         }
         afspraak = {
-            "id": 20, 
+            "id": 20,
             "burger_id": 1
         }
         updated_alarm = {
@@ -96,23 +96,23 @@ def test_update_alarm(client):
         )
 
         # assert
-        assert rm0.called_once
-        assert rm1.called_once
-        assert rm2.called_once
-        assert rm3.called_once
+        assert rm0.call_count == 1
+        assert rm1.call_count == 1
+        assert rm2.call_count == 1
+        assert rm3.call_count == 1
         assert rm4.call_count == 2
-        assert fallback.called == 0
+        assert fallback.call_count == 0
         assert response.json == {'data': {'updateAlarm': {
             'ok': True,
             'previous': {
                 'id': 'bd6222e7-bfab-46bc-b0bc-2b30b76228d4', 'isActive': True, 'afspraak': {"id": 19},
                 'startDate': '2021-12-07', 'datumMargin': 5, 'bedrag': '1800.12', 'bedragMargin': '10.00',
-                'byDay': ['Wednesday'], 'byMonth': [], 'byMonthDay': []
+                'byDay': ['Wednesday'], 'byMonth': None, 'byMonthDay': None
             },
             'alarm': {
                 'id': 'bd6222e7-bfab-46bc-b0bc-2b30b76228d4', 'isActive': False, 'afspraak': {'id': 20},
                 'startDate': '2021-12-02', 'datumMargin': 1, 'bedrag': '12.34', 'bedragMargin': '56.78',
-                'byDay': ['Thursday'], 'byMonth': [], 'byMonthDay': []
+                'byDay': ['Thursday'], 'byMonth': None, 'byMonthDay': None
             }
         }}}
 
@@ -132,7 +132,7 @@ def test_update_alarm(client):
 #             "byDay": ["Thursday"]
 #         }
 #         alarm_id = "bd6222e7-bfab-46bc-b0bc-2b30b76228d4"
-#         expected = "Alarm start date has to be in the future." 
+#         expected = "Alarm start date has to be in the future."
 
 #         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
 
@@ -184,7 +184,7 @@ def test_update_alarm(client):
 
 
 #         # assert
-#         assert fallback.called == 0
+#         assert fallback.call_count == 0
 #         assert response.json["errors"][0]["message"] == expected
 
 
@@ -265,7 +265,7 @@ def test_update_alarm_failure_cant_set_alarm_to_non_existing_afspraak(client):
         )
 
         # assert
-        assert rm0.called_once
-        assert rm1.called_once
-        assert fallback.called == 0
+        assert rm0.call_count == 1
+        assert rm1.call_count == 1
+        assert fallback.call_count == 0
         assert response.json["errors"][0]["message"] == expected

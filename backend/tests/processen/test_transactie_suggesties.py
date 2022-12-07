@@ -9,8 +9,7 @@ def post_echo(request, _context):
     return {"data": (request.json())}
 
 
-@pytest.mark.asyncio
-async def test_transactie_suggesties_matches(test_request_context):
+def test_transactie_suggesties_matches(test_request_context):
     with requests_mock.Mocker() as mock:
         get_any = mock.get(requests_mock.ANY, json={"data": []})
         post_any = mock.post(requests_mock.ANY, json=post_echo)
@@ -64,11 +63,11 @@ async def test_transactie_suggesties_matches(test_request_context):
                           'valid_from': '2021-01-01', 'tegen_rekening_id': 5}
                          ]})
 
-        result = await transactie_suggesties([7, 8, 9])
+        result = transactie_suggesties([7, 8, 9])
 
-        assert get_transactions.called_once
-        assert get_rekeningen.called_once
-        assert get_afspraken.called_once
+        assert get_transactions.call_count == 1
+        assert get_rekeningen.call_count == 1
+        assert get_afspraken.call_count == 1
         assert result[7][0]["id"] == 4
         assert len(result[7]) == 1
         assert result[8][0]["id"] == 3
@@ -81,8 +80,7 @@ async def test_transactie_suggesties_matches(test_request_context):
         assert not get_any.called
 
 
-@pytest.mark.asyncio
-async def test_transactie_suggesties_multiple_matches(test_request_context):
+def test_transactie_suggesties_multiple_matches(test_request_context):
     with requests_mock.Mocker() as mock:
         get_any = mock.get(requests_mock.ANY, json={"data": []})
         post_any = mock.post(requests_mock.ANY, json=post_echo)
@@ -128,11 +126,11 @@ async def test_transactie_suggesties_multiple_matches(test_request_context):
                           'valid_from': '2021-01-01', 'tegen_rekening_id': 3}
                          ]})
 
-        result = await transactie_suggesties([7, 8])
+        result = transactie_suggesties([7, 8])
 
-        assert get_transactions.called_once
-        assert get_rekeningen.called_once
-        assert get_afspraken.called_once
+        assert get_transactions.call_count == 1
+        assert get_rekeningen.call_count == 1
+        assert get_afspraken.call_count == 1
         assert result[7][0]["id"] == 4
         assert len(result[7]) == 1
         assert result[8][0]["id"] == 3
@@ -144,8 +142,7 @@ async def test_transactie_suggesties_multiple_matches(test_request_context):
         assert not get_any.called
 
 
-@pytest.mark.asyncio
-async def test_transactie_suggesties_no_matches(test_request_context):
+def test_transactie_suggesties_no_matches(test_request_context):
     with requests_mock.Mocker() as mock:
         get_any = mock.get(requests_mock.ANY, json={"data": []})
         post_any = mock.post(requests_mock.ANY, json=post_echo)
@@ -183,11 +180,11 @@ async def test_transactie_suggesties_no_matches(test_request_context):
                           'overschrijvingen': [40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51], 'rubriek_id': None,
                           'valid_from': '2021-01-01', 'tegen_rekening_id': 3}]})
 
-        result = await transactie_suggesties([7, 8])
+        result = transactie_suggesties([7, 8])
 
-        assert get_transactions.called_once
-        assert get_rekeningen.called_once
-        assert get_afspraken.called_once
+        assert get_transactions.call_count == 1
+        assert get_rekeningen.call_count == 1
+        assert get_afspraken.call_count == 1
         assert result == {7: [], 8: []}
 
         # No leftover calls
@@ -195,8 +192,7 @@ async def test_transactie_suggesties_no_matches(test_request_context):
         assert not get_any.called
 
 
-@pytest.mark.asyncio
-async def test_transactie_suggesties_no_afspraken(test_request_context):
+def test_transactie_suggesties_no_afspraken(test_request_context):
     with requests_mock.Mocker() as mock:
         get_any = mock.get(requests_mock.ANY, json={"data": []})
         post_any = mock.post(requests_mock.ANY, json=post_echo)
@@ -223,11 +219,11 @@ async def test_transactie_suggesties_no_afspraken(test_request_context):
             f"{settings.HHB_SERVICES_URL}/afspraken/?filter_rekening=2,3", json={
                 'data': []})
 
-        result = await transactie_suggesties([7, 8])
+        result = transactie_suggesties([7, 8])
 
-        assert get_transactions.called_once
-        assert get_rekeningen.called_once
-        assert get_afspraken.called_once
+        assert get_transactions.call_count == 1
+        assert get_rekeningen.call_count == 1
+        assert get_afspraken.call_count == 1
         assert result == {7: [], 8: []}
 
         # No leftover calls
@@ -235,8 +231,7 @@ async def test_transactie_suggesties_no_afspraken(test_request_context):
         assert not get_any.called
 
 
-@pytest.mark.asyncio
-async def test_transactie_suggesties_no_rekeningen(test_request_context):
+def test_transactie_suggesties_no_rekeningen(test_request_context):
     with requests_mock.Mocker() as mock:
         get_any = mock.get(requests_mock.ANY, json={"data": []})
         post_any = mock.post(requests_mock.ANY, json=post_echo)
@@ -260,10 +255,10 @@ async def test_transactie_suggesties_no_rekeningen(test_request_context):
             f"{settings.HHB_SERVICES_URL}/afspraken/?filter_rekening=2,3", json={
                 'data': []})
 
-        result = await transactie_suggesties([7, 8])
+        result = transactie_suggesties([7, 8])
 
-        assert get_transactions.called_once
-        assert get_rekeningen.called_once
+        assert get_transactions.call_count == 1
+        assert get_rekeningen.call_count == 1
         assert not get_afspraken.called
         assert result == {7: [], 8: []}
 
@@ -272,8 +267,7 @@ async def test_transactie_suggesties_no_rekeningen(test_request_context):
         assert not get_any.called
 
 
-@pytest.mark.asyncio
-async def test_transactie_suggesties_no_transactions(test_request_context):
+def test_transactie_suggesties_no_transactions(test_request_context):
     with requests_mock.Mocker() as mock:
         get_any = mock.get(requests_mock.ANY, json={"data": []})
         post_any = mock.post(requests_mock.ANY, json=post_echo)
@@ -289,10 +283,10 @@ async def test_transactie_suggesties_no_transactions(test_request_context):
             f"{settings.HHB_SERVICES_URL}/afspraken/?filter_rekening=2,3", json={
                 'data': []})
 
-        result = await transactie_suggesties([7, 8])
+        result = transactie_suggesties([7, 8])
 
-        assert get_transactions.called_once
-        assert not get_rekeningen.called_once
+        assert get_transactions.call_count == 1
+        assert not get_rekeningen.call_count == 1
         assert not get_afspraken.called
         assert result == {7: [], 8: []}
 
@@ -301,8 +295,7 @@ async def test_transactie_suggesties_no_transactions(test_request_context):
         assert not get_any.called
 
 
-@pytest.mark.asyncio
-async def test_transactie_suggesties_multiple_zoektermen(test_request_context):
+def test_transactie_suggesties_multiple_zoektermen(test_request_context):
     with requests_mock.Mocker() as mock:
         get_any = mock.get(requests_mock.ANY, json={"data": []})
         post_any = mock.post(requests_mock.ANY, json=post_echo)
@@ -326,23 +319,22 @@ async def test_transactie_suggesties_multiple_zoektermen(test_request_context):
                      'tegen_rekening_id': 2, "valid_through": '2020-12-31', "valid_from": "2020-11-30"},
                 ]})
 
-        result = await transactie_suggesties([7])
+        result = transactie_suggesties([7])
 
         assert result == {7: [{
             'id': 4, 'tegen_rekening_id': 2, 'zoektermen': ['15814016000676480', 'Janssen'],
             "valid_through": '2020-12-31', "valid_from": "2020-11-30"
         }]}
-        assert get_transactions.called_once
-        assert get_rekeningen.called_once
-        assert get_afspraken.called_once
+        assert get_transactions.call_count == 1
+        assert get_rekeningen.call_count == 1
+        assert get_afspraken.call_count == 1
 
         # No leftover calls
         assert not post_any.called
         assert not get_any.called
 
 
-@pytest.mark.asyncio
-async def test_transactie_suggesties_multiple_zoektermen_too_specific(test_request_context):
+def test_transactie_suggesties_multiple_zoektermen_too_specific(test_request_context):
     with requests_mock.Mocker() as mock:
         get_any = mock.get(requests_mock.ANY, json={"data": []})
         post_any = mock.post(requests_mock.ANY, json=post_echo)
@@ -366,12 +358,12 @@ async def test_transactie_suggesties_multiple_zoektermen_too_specific(test_reque
                      'tegen_rekening_id': 2},
                 ]})
 
-        result = await transactie_suggesties([7])
+        result = transactie_suggesties([7])
 
         assert result == {7: []}
-        assert get_transactions.called_once
-        assert get_rekeningen.called_once
-        assert get_afspraken.called_once
+        assert get_transactions.call_count == 1
+        assert get_rekeningen.call_count == 1
+        assert get_afspraken.call_count == 1
 
         # No leftover calls
         assert not post_any.called

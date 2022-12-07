@@ -3,16 +3,14 @@ import json
 
 import graphene
 import requests
-from graphql import GraphQLError
 
+import hhb_backend.graphql.models.burger as graphene_burger
+from graphql import GraphQLError
+from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
-import hhb_backend.graphql.models.burger as graphene_burger
 from hhb_backend.graphql.mutations.huishoudens import huishouden_input as huishouden_input
-from hhb_backend.graphql.utils.gebruikersactiviteiten import (
-    gebruikers_activiteit_entities,
-    log_gebruikers_activiteit,
-)
+from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
 from hhb_backend.service.model import burger
 
 
@@ -37,22 +35,8 @@ class UpdateBurger(graphene.Mutation):
     burger = graphene.Field(lambda: graphene_burger.Burger)
     previous = graphene.Field(lambda: graphene_burger.Burger)
 
-    def gebruikers_activiteit(self, _root, info, *_args, **_kwargs):
-        return dict(
-            action=info.field_name,
-            entities=gebruikers_activiteit_entities(
-                entity_type="burger", result=self, key="burger"
-            )
-            + gebruikers_activiteit_entities(
-                entity_type="rekening", result=self.burger, key="rekeningen"
-            ),
-            before=dict(burger=self.previous),
-            after=dict(burger=self.burger),
-        )
-
     @staticmethod
-    @log_gebruikers_activiteit
-    async def mutate(_root, _info, id, **kwargs):
+    def mutate(self, info, id, **kwargs):
         """ Update the current Gebruiker/Burger """
         previous = hhb_dataloader().burgers.load_one(id)
 
@@ -69,5 +53,22 @@ class UpdateBurger(graphene.Mutation):
             raise GraphQLError(f"Upstream API responded: {response.json()}")
 
         updated_burger = burger.Burger(response.json()["data"])
+
+        entities = [
+            GebruikersActiviteitEntity(entityType="burger", entityId=id),
+        ]
+
+        if "rekeningen" in updated_burger:
+            entities.extend([
+                GebruikersActiviteitEntity(entityType="rekening", entityId=rekening["id"])
+                for rekening in updated_burger.rekeningen
+            ])
+
+        AuditLogging.create(
+            action=info.field_name,
+            entities=entities,
+            before=dict(burger=previous),
+            after=dict(burger=updated_burger),
+        )
 
         return UpdateBurger(ok=True, burger=updated_burger, previous=previous)

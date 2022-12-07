@@ -3,13 +3,11 @@ import graphene
 import requests
 from graphql import GraphQLError
 
+from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 import hhb_backend.graphql.models.afdeling as graphene_afdeling
-from hhb_backend.graphql.utils.gebruikersactiviteiten import (
-    gebruikers_activiteit_entities,
-    log_gebruikers_activiteit,
-)
+from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
 
 
 class DeleteAfdeling(graphene.Mutation):
@@ -22,17 +20,7 @@ class DeleteAfdeling(graphene.Mutation):
     ok = graphene.Boolean()
     previous = graphene.Field(lambda: graphene_afdeling.Afdeling)
 
-    def gebruikers_activiteit(self, _root, info, *_args, **_kwargs):
-        return dict(
-            action=info.field_name,
-            entities=gebruikers_activiteit_entities(
-                entity_type="afdeling", result=self, key="previous"
-            ),
-            before=dict(afdeling=self.previous),
-        )
-
-    @log_gebruikers_activiteit
-    async def mutate(root, _info, id):
+    def mutate(self, info, id):
         """ Delete current afdeling """
         previous = hhb_dataloader().afdelingen.load_one(id)
         if not previous:
@@ -45,7 +33,7 @@ class DeleteAfdeling(graphene.Mutation):
 
         # do not remove when attached rekeningen are found
         rekeningen_ids = previous.rekeningen_ids
-        if rekeningen_ids: 
+        if rekeningen_ids:
             raise GraphQLError("Afdeling has rekeningen - deletion is not possible.")
 
         # remove afdeling itself
@@ -56,5 +44,14 @@ class DeleteAfdeling(graphene.Mutation):
         response_hhb = requests.delete(f"{settings.HHB_SERVICES_URL}/afdelingen/{id}")
         if response_hhb.status_code != 204:
             raise GraphQLError(f"Upstream API responded: {response_hhb.text}")
+
+        AuditLogging.create(
+            action=info.field_name,
+            entities=[
+                GebruikersActiviteitEntity(entityType="afdeling", entityId=id),
+                GebruikersActiviteitEntity(entityType="organisatie", entityId=previous["organisatie_id"])
+            ],
+            before=dict(afdeling=previous)
+        )
 
         return DeleteAfdeling(ok=True, previous=previous)

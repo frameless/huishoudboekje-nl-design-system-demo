@@ -1,20 +1,19 @@
 """ GraphQL mutation for creating a new Burger """
 import json
+import logging
 
 import graphene
 import requests
-from graphql import GraphQLError
 
+import hhb_backend.graphql.models.burger as graphene_burger
 import hhb_backend.graphql.mutations.huishoudens.huishouden_input as huishouden_input
 import hhb_backend.graphql.mutations.rekeningen.rekening_input as rekening_input
+from graphql import GraphQLError
+from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql import settings
-import hhb_backend.graphql.models.burger as graphene_burger
 from hhb_backend.graphql.mutations.huishoudens.utils import create_huishouden_if_not_exists
 from hhb_backend.graphql.mutations.rekeningen.utils import create_burger_rekening
-from hhb_backend.graphql.utils.gebruikersactiviteiten import (
-    gebruikers_activiteit_entities,
-    log_gebruikers_activiteit,
-)
+from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
 from hhb_backend.service.model import burger
 
 
@@ -34,6 +33,7 @@ class CreateBurgerInput(graphene.InputObjectType):
     rekeningen = graphene.List(lambda: rekening_input.RekeningInput)
     huishouden = graphene.Field(huishouden_input.HuishoudenInput)
 
+
 class CreateBurger(graphene.Mutation):
     class Arguments:
         input = graphene.Argument(CreateBurgerInput)
@@ -41,21 +41,8 @@ class CreateBurger(graphene.Mutation):
     ok = graphene.Boolean()
     burger = graphene.Field(lambda: graphene_burger.Burger)
 
-    def gebruikers_activiteit(self, _root, info, *_args, **_kwargs):
-        return dict(
-            action=info.field_name,
-            entities=gebruikers_activiteit_entities(
-                entity_type="burger", result=self, key="burger"
-            )
-            + gebruikers_activiteit_entities(
-                entity_type="rekening", result=self.burger, key="rekeningen"
-            ),
-            after=dict(burger=self.burger),
-        )
-
     @staticmethod
-    @log_gebruikers_activiteit
-    async def mutate(_root, _info, input):
+    def mutate(self, info, input):
         """ Create the new Gebruiker/Burger """
 
         graphene_burger.Burger.bsn_length(input.get('bsn'))
@@ -63,7 +50,7 @@ class CreateBurger(graphene.Mutation):
 
         rekeningen = input.pop("rekeningen", None)
 
-        huishouden = await create_huishouden_if_not_exists(huishouden=input.pop("huishouden", {}))
+        huishouden = create_huishouden_if_not_exists(huishouden=input.pop("huishouden", {}))
         input["huishouden_id"] = huishouden.id
 
         response = requests.post(
@@ -75,6 +62,9 @@ class CreateBurger(graphene.Mutation):
             raise GraphQLError(f"Upstream API responded: {response.json()}")
 
         created_burger = burger.Burger(response.json()["data"])
+        entities = [
+            GebruikersActiviteitEntity(entityType="burger", entityId=created_burger.id),
+        ]
 
         if rekeningen:
             created_burger.rekeningen = [
@@ -82,4 +72,16 @@ class CreateBurger(graphene.Mutation):
                 for rekening in rekeningen
             ]
 
+
+            rekeningen_entities = [GebruikersActiviteitEntity(entityType="rekening", entityId=rekening["id"]) for rekening in
+                           created_burger.rekeningen]
+            logging.debug(f"Rekeningen entities: {rekeningen_entities}")
+
+            entities.extend(rekeningen_entities)
+
+        AuditLogging.create(
+            action=info.field_name,
+            entities=entities,
+            after=dict(burger=created_burger),
+        )
         return CreateBurger(ok=True, burger=created_burger)

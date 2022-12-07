@@ -175,7 +175,6 @@ def test_create_afspraak_validation(client, field: str, error_message_contains: 
         assert not post_any.called
         assert not get_any.called
 
-
 @pytest.mark.parametrize([
     "post_status", "post_message", "error_message_contains"], [
     (400, 'Bad request', 'Upstream API responded: [400] Bad request',),

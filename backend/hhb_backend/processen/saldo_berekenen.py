@@ -3,7 +3,7 @@ import logging
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 
 
-async def saldo_berekenen(burger_ids):
+def saldo_berekenen(burger_ids):
     """ Get saldo for burger_ids together """
     transaction_ids = []
 

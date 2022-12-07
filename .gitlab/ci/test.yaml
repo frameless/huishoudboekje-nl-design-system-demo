@@ -318,6 +318,7 @@ changeset:
   variables:
     NPM_CACHE_DIR: "${CI_PROJECT_DIR}/.cache/npm"
     CYPRESS_INSTALL_BINARY: "0"
+    GIT_DEPTH: 100 # Default is 50, but in Merge Requests with many commits, we might need more.
   cache:
     key: "${CI_COMMIT_REF_SLUG}__${CI_JOB_NAME}"
     paths:

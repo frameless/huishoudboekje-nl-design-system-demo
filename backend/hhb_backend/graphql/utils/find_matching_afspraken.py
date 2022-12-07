@@ -4,8 +4,8 @@ from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.utils.dates import afspraken_intersect, to_date
 
 
-async def find_matching_afspraken_by_afspraak(main_afspraak):
-    matching_afspraken = list()
+def find_matching_afspraken_by_afspraak(main_afspraak):
+    matching_afspraken = []
     if not main_afspraak.get("zoektermen"):
         return matching_afspraken
 

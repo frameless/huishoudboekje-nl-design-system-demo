@@ -1,20 +1,22 @@
-import graphene
 import logging
-import requests
-from graphql import GraphQLError
 
+import graphene
+import requests
+
+from graphql import GraphQLError
+from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.models import afspraak
-from hhb_backend.graphql.scalars.day_of_week import DayOfWeek
-from hhb_backend.graphql.utils.gebruikersactiviteiten import (gebruikers_activiteit_entities, log_gebruikers_activiteit)
+from hhb_backend.graphql.scalars.day_of_week import DayOfWeekEnum
+from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
 from hhb_backend.graphql.utils.upstream_error_handler import UpstreamError
 
 
 class BetaalinstructieInput(graphene.InputObjectType):
     """Implementatie op basis van http://schema.org/Schedule"""
     '''Lijst van dagen in de week'''
-    by_day = graphene.List(DayOfWeek)
+    by_day = graphene.List(DayOfWeekEnum)
     '''Lijst van maanden in het jaar'''
     by_month = graphene.List(graphene.Int)
     '''De dagen van de maand'''
@@ -38,21 +40,8 @@ class UpdateAfspraakBetaalinstructie(graphene.Mutation):
     afspraak = graphene.Field(lambda: afspraak.Afspraak)
     previous = graphene.Field(lambda: afspraak.Afspraak)
 
-    def gebruikers_activiteit(self, _root, info, *_args, **_kwargs):
-        return dict(
-            action=info.field_name,
-            entities=gebruikers_activiteit_entities(
-                entity_type="afspraak", result=self, key="afspraak"
-            ) + gebruikers_activiteit_entities(
-                entity_type="burger", result=self.afspraak, key="burger_id"
-            ),
-            before=dict(afspraak=self.previous),
-            after=dict(afspraak=self.afspraak),
-        )
-
     @staticmethod
-    @log_gebruikers_activiteit
-    async def mutate(_root, _info, afspraak_id: int, betaalinstructie: BetaalinstructieInput):
+    def mutate(self, info, afspraak_id: int, betaalinstructie: BetaalinstructieInput):
         """ Update the Afspraak """
         previous = hhb_dataloader().afspraken.load_one(afspraak_id)
 
@@ -79,6 +68,16 @@ class UpdateAfspraakBetaalinstructie(graphene.Mutation):
             **previous,
             **input
         }
+
+        AuditLogging.create(
+            action=info.field_name,
+            entities=[
+                GebruikersActiviteitEntity(entityType="afspraak", entityId=afspraak_id),
+                GebruikersActiviteitEntity(entityType="burger", entityId=new_afspraak["burger_id"])
+            ],
+            before=dict(afspraak=previous),
+            after=dict(afspraak=new_afspraak),
+        )
 
         return UpdateAfspraakBetaalinstructie(afspraak=new_afspraak, previous=previous, ok=True)
 

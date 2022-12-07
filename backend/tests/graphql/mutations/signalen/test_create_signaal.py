@@ -61,5 +61,5 @@ def test_create_signaal_succes(client):
         assert rm0.call_count == 1
         assert rm1.call_count == 1
         assert rm2.call_count == 1
-        assert fallback.called == 0
+        assert fallback.call_count == 0
         assert response.json == expected

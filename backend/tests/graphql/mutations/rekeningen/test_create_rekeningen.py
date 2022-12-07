@@ -19,7 +19,7 @@ def test_create_afdeling_rekening(client):
         new_afdeling = {
             "data" : {
                 "id" : afdeling_id,
-                "postadressen_ids": [], 
+                "postadressen_ids": [],
                 "rekeningen_ids": [1]
             }
         }
@@ -50,7 +50,7 @@ def test_create_afdeling_rekening(client):
                     "rekeninghouder": "piet pieter pieterson"
                 }
             ]
-        } 
+        }
         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
         rm1 = rm.get(f"{settings.HHB_SERVICES_URL}/rekeningen/?filter_ibans=NL19INGB7363245428", json=rekening)
 
@@ -72,17 +72,17 @@ def test_create_afdeling_rekening(client):
 
         # act
         response = client.post(
-            "/graphql", 
+            "/graphql",
             json=request,
             content_type='application/json'
         )
 
         # assert
-        assert rm1.called_once
-        assert rm2.called_once
-        assert rm3.called_once
-        assert rm4.called_once
-        assert rm5.called_once
+        assert rm1.call_count == 1
+        assert rm2.call_count == 1
+        assert rm3.call_count == 1
+        assert rm4.call_count == 1
+        assert rm5.call_count == 1
         assert fallback.call_count == 0
         assert response.json == expected
 
@@ -118,7 +118,7 @@ def test_create_burger_rekening(client):
                     "rekeninghouder": "piet pieter pieterson"
                 }
             ]
-        } 
+        }
         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
         rm1 = rm.get(f"{settings.HHB_SERVICES_URL}/rekeningen/?filter_ibans=NL19INGB7363245428", json=rekening)
 
@@ -138,14 +138,14 @@ def test_create_burger_rekening(client):
 
         # act
         response = client.post(
-            "/graphql", 
+            "/graphql",
             json=request,
             content_type='application/json'
         )
 
         # assert
-        assert rm1.called_once
-        assert rm2.called_once
-        assert rm3.called_once
+        assert rm1.call_count == 1
+        assert rm2.call_count == 1
+        assert rm3.call_count == 1
         assert fallback.call_count == 0
         assert response.json == expected

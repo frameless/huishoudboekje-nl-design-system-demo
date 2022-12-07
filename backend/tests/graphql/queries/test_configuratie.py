@@ -11,7 +11,7 @@ def test_configuraties_success(client):
             content_type='application/json'
         )
 
-        assert adapter.called_once
+        assert adapter.call_count == 1
         assert response.json == {'data': {'configuraties': [{'id': 'ab_45', 'waarde': 'a@b.c'}]}}
 
 

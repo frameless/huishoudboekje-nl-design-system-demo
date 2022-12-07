@@ -2,8 +2,9 @@
 import graphene
 
 import hhb_backend.graphql.models.alarm as graphene_alarm
+from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql.mutations.alarmen.alarm import AlarmHelper
-from hhb_backend.graphql.utils.gebruikersactiviteiten import log_gebruikers_activiteit, gebruikers_activiteit_entities
+from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
 
 
 class DeleteAlarm(graphene.Mutation):
@@ -14,27 +15,19 @@ class DeleteAlarm(graphene.Mutation):
     previous = graphene.Field(lambda: graphene_alarm.Alarm)
     burger_id = graphene.String(default_value="")
 
-    def gebruikers_activiteit(self, _root, _info, *_args, **_kwargs):
-        data = dict(
-            action=_info.field_name,
-            entities=gebruikers_activiteit_entities(
-                entity_type="alarm", result=self, key="previous"
-            ) + gebruikers_activiteit_entities(
-                entity_type="afspraak", result=dict(self.previous), key="afspraakId"
-            ) + gebruikers_activiteit_entities(
-                entity_type="burger", result=self, key="burger_id"
-            ),
-            before=dict(alarm=self.previous),
-        )
-        i = _info.field_name.find("-")
-        _info.field_name = _info.field_name[:i].strip()
-        return data
-
-
     @staticmethod
-    @log_gebruikers_activiteit
-    def mutate(_root, _info, id):
+    def mutate(self, info, id):
         """ Mutatie voor het verwijderen van een bestaand Alarm """
         result = AlarmHelper.delete(id)
+
+        AuditLogging.create(
+            action=info.field_name,
+            entities=[
+                GebruikersActiviteitEntity(entityType="alarm", entityId=id),
+                GebruikersActiviteitEntity(entityType="afspraak", entityId=result.previous.afspraakId),
+                GebruikersActiviteitEntity(entityType="burger", entityId=result.burger_id)
+            ],
+            before=dict(alarm=result.previous),
+        )
 
         return DeleteAlarm(ok=True, previous=result.previous, burger_id=result.burger_id)

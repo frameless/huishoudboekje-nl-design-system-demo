@@ -1,45 +1,41 @@
-""" GraphQL Postadressen query """
 import graphene
-
-import hhb_backend.graphql.models.postadres as postadres
+from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql.dataloaders import hhb_dataloader
-from hhb_backend.graphql.utils.gebruikersactiviteiten import (
-    gebruikers_activiteit_entities,
-    log_gebruikers_activiteit,
-)
+from hhb_backend.graphql.models.postadres import Postadres
+from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
 
 
 class PostadresQuery:
-    return_type = graphene.Field(postadres.Postadres, id=graphene.String(required=True))
+    return_type = graphene.Field(Postadres, id=graphene.String(required=True))
 
     @classmethod
-    def gebruikers_activiteit(cls, _root, info, id, *_args, **_kwargs):
-        return dict(
+    def resolver(cls, _root, info, id):
+        result = hhb_dataloader().postadressen.load_one(id)
+        AuditLogging.create(
             action=info.field_name,
-            entities=gebruikers_activiteit_entities(entity_type="postadres", result=id)
+            entities=[
+                GebruikersActiviteitEntity(entityType="postadres", entityId=id)
+            ]
         )
-
-    @classmethod
-    @log_gebruikers_activiteit
-    async def resolver(cls, _root, _info, id):
-        return hhb_dataloader().postadressen.load_one(id)
+        return result
 
 
 class PostadressenQuery:
-    return_type = graphene.List(
-        postadres.Postadres, ids=graphene.List(graphene.String, default_value=[])
-    )
+    return_type = graphene.List(Postadres, ids=graphene.List(graphene.String))
 
     @classmethod
-    def gebruikers_activiteit(cls, _root, info, ids=None, *_args, **_kwargs):
-        return dict(
+    def resolver(cls, _root, info, ids=None):
+        if ids:
+            result = hhb_dataloader().postadressen.load(ids)
+        else:
+            result = hhb_dataloader().postadressen.load_all()
+
+        AuditLogging.create(
             action=info.field_name,
-            entities=gebruikers_activiteit_entities(entity_type="postadres", result=ids),
+            entities=[
+                GebruikersActiviteitEntity(entityType="postadres", entityId=id)
+                for id in ids
+            ] if ids else []
         )
 
-    @classmethod
-    @log_gebruikers_activiteit
-    async def resolver(cls, _root, _info, ids=None):
-        if ids:
-            return hhb_dataloader().postadressen.load(ids)
-        return hhb_dataloader().postadressen.load_all()
+        return result

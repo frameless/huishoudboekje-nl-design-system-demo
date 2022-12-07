@@ -1,22 +1,19 @@
 """ GraphQL mutation for updating a Afdeling """
 import graphene
 import requests
-from graphql import GraphQLError
 
+import hhb_backend.graphql.models.afdeling as graphene_afdeling
+from graphql import GraphQLError
+from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
-import hhb_backend.graphql.models.afdeling as graphene_afdeling
-from hhb_backend.graphql.utils.gebruikersactiviteiten import (
-    gebruikers_activiteit_entities,
-    log_gebruikers_activiteit,
-)
+from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
 
 
 class UpdateAfdeling(graphene.Mutation):
     class Arguments:
         # hhb_service elements
         id = graphene.Int(required=True)
-        
 
         # org_service elements
         naam = graphene.String()
@@ -26,19 +23,8 @@ class UpdateAfdeling(graphene.Mutation):
     afdeling = graphene.Field(lambda: graphene_afdeling.Afdeling)
     previous = graphene.Field(lambda: graphene_afdeling.Afdeling)
 
-    def gebruikers_activiteit(self, _root, info, *_args, **_kwargs):
-        return dict(
-            action=info.field_name,
-            entities=gebruikers_activiteit_entities(
-                entity_type="afdeling", result=self, key="afdeling"
-            ),
-            before=dict(postadres=self.previous),
-            after=dict(afdeling=self.afdeling),
-        )
-
     @staticmethod
-    @log_gebruikers_activiteit
-    async def mutate(_root, _info, id, **kwargs):
+    def mutate(root, info, id, **kwargs):
         """ Update the current Afdeling """
         previous = hhb_dataloader().afdelingen.load_one(id)
         if not previous:
@@ -70,5 +56,14 @@ class UpdateAfdeling(graphene.Mutation):
             )
 
         afdeling = org_service_response.json()["data"]
+
+        AuditLogging.create(
+            action=info.field_name,
+            entities=[
+                GebruikersActiviteitEntity(entityType="afdeling", entityId=id)
+            ],
+            before=dict(postadres=previous),
+            after=dict(afdeling=afdeling),
+        )
 
         return UpdateAfdeling(afdeling=afdeling, previous=previous, ok=True)

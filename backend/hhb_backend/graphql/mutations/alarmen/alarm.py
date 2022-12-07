@@ -1,16 +1,16 @@
 import calendar
-import graphene
 import logging
-import requests
-from datetime import date, datetime, timezone, timedelta
-from dateutil.rrule import rrule, MONTHLY, YEARLY
-from graphql import GraphQLError
+from datetime import date
 
+import graphene
+import requests
+from dateutil.rrule import rrule, MONTHLY, YEARLY
+
+from graphql import GraphQLError
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.scalars.bedrag import Bedrag
-from hhb_backend.graphql.scalars.day_of_week import DayOfWeek
-from hhb_backend.graphql.utils.dates import valid_afspraak, to_date
+from hhb_backend.graphql.scalars.day_of_week import DayOfWeekEnum
 from hhb_backend.graphql.utils.dates import valid_afspraak, to_date
 from hhb_backend.graphql.utils.upstream_error_handler import UpstreamError
 
@@ -23,7 +23,7 @@ class CreateAlarmInput(graphene.InputObjectType):
     datumMargin = graphene.Int()
     bedrag = graphene.Field(Bedrag)
     bedragMargin = graphene.Field(Bedrag)
-    byDay = graphene.List(DayOfWeek, default_value=[])
+    byDay = graphene.List(DayOfWeekEnum, default_value=[])
     byMonth = graphene.List(graphene.Int, default_value=[])
     byMonthDay = graphene.List(graphene.Int, default_value=[])
 
@@ -36,7 +36,7 @@ class UpdateAlarmInput(graphene.InputObjectType):
     datumMargin = graphene.Int()
     bedrag = graphene.Field(Bedrag)
     bedragMargin = graphene.Field(Bedrag)
-    byDay = graphene.List(DayOfWeek)
+    byDay = graphene.List(DayOfWeekEnum)
     byMonth = graphene.List(graphene.Int)
     byMonthDay = graphene.List(graphene.Int)
 
@@ -59,10 +59,10 @@ class AlarmHelper:
         # if alarm_date < utc_now:
         #     raise GraphQLError(f"The alarm date has to be in the future.")
 
-        if (input["byMonth"] or input["byMonthDay"]) and not (input["byMonth"] and input["byMonthDay"]):
+        if (input.get("byMonth") or input.get("byMonthDay")) and not (input.get("byMonth") and input.get("byMonthDay")):
             raise GraphQLError("Either both byMonth and byMonthDay are required, or neither.")
 
-        if not input["endDate"]:
+        if not input.get("endDate"):
             if input.get("startDate"):
                 raise GraphQLError("It is not possible to have a startDate for a repetitive alarm.")
             # can't use attributes to set data

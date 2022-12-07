@@ -2,18 +2,20 @@
 
 import graphene
 import requests
-from graphql import GraphQLError
 
+import hhb_backend.graphql.models.afspraak as graphene_afspraak
+from graphql import GraphQLError
+from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
-import hhb_backend.graphql.models.afspraak as graphene_afspraak
 from hhb_backend.graphql.utils.find_matching_afspraken import find_matching_afspraken_by_afspraak
-from hhb_backend.graphql.utils.gebruikersactiviteiten import (gebruikers_activiteit_entities, log_gebruikers_activiteit)
+from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
 from hhb_backend.service.model.afspraak import Afspraak
 
 
 class AddAfspraakZoekterm(graphene.Mutation):
     """Mutatie om een zoekterm aan een afspraak toe te voegen."""
+
     class Arguments:
         afspraak_id = graphene.Int(required=True)
         zoekterm = graphene.String(required=True)
@@ -23,22 +25,8 @@ class AddAfspraakZoekterm(graphene.Mutation):
     previous = graphene.Field(lambda: graphene_afspraak.Afspraak)
     matching_afspraken = graphene.List(lambda: graphene_afspraak.Afspraak)
 
-    def gebruikers_activiteit(self, _root, info, *_args, **_kwargs):
-        return dict(
-            action=info.field_name,
-            entities=gebruikers_activiteit_entities(
-                entity_type="afspraak", result=self, key="afspraak"
-            )
-            + gebruikers_activiteit_entities(
-                entity_type="burger", result=self.afspraak, key="burger_id"
-            ),
-            before=dict(afspraak=self.previous),
-            after=dict(afspraak=self.afspraak),
-        )
-
     @staticmethod
-    @log_gebruikers_activiteit
-    async def mutate(_root, _info, afspraak_id: int, zoekterm):
+    def mutate(root, info, afspraak_id: int, zoekterm):
         """ Add zoekterm to afspraak """
 
         previous: Afspraak = hhb_dataloader().afspraken.load_one(afspraak_id)
@@ -62,8 +50,20 @@ class AddAfspraakZoekterm(graphene.Mutation):
         if not response.ok:
             raise GraphQLError(f"Upstream API responded: {response.text}")
 
-        afspraak = Afspraak(response.json()["data"])
+        result = response.json()["data"]
+        print(f"result {result}")
+        afspraak = Afspraak(result)
 
-        matching_afspraken = await find_matching_afspraken_by_afspraak(afspraak)
+        matching_afspraken = find_matching_afspraken_by_afspraak(afspraak)
+
+        AuditLogging.create(
+            action=info.field_name,
+            entities=[
+                GebruikersActiviteitEntity(entityType="afspraak", entityId=afspraak_id),
+                GebruikersActiviteitEntity(entityType="burger", entityId=result["burger_id"])
+            ],
+            before=dict(afspraak=previous),
+            after=dict(afspraak=afspraak),
+        )
 
         return AddAfspraakZoekterm(afspraak=afspraak, previous=previous, matching_afspraken=matching_afspraken, ok=True)

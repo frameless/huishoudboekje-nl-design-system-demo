@@ -30,8 +30,8 @@ mutation test($input:ConfiguratieInput!) {
                 "variables": {"input": {"id": "32", "waarde": "m12"}},
             },
         )
-        assert mock_get_configuratie.called_once
-        assert adapter.called_once
+        assert mock_get_configuratie.call_count == 1
+        assert adapter.call_count == 1
         assert response.json == {
             "data": {
                 "updateConfiguratie": {"configuratie": {"id": "32", "waarde": "m12"}}
@@ -66,8 +66,8 @@ mutation test($input:ConfiguratieInput!) {
                 "variables": {"input": {"id": "32", "waarde": "m12"}},
             },
         )
-        assert mock_get_configuratie.called_once
-        assert adapter.called_once
+        assert mock_get_configuratie.call_count == 1
+        assert adapter.call_count == 1
         assert response.json == {
             "data": {"updateConfiguratie": None},
             "errors": [

@@ -39,7 +39,7 @@ def test_update_postadres_success(client):
         # arrange
         expected = {"data": {"updatePostadres": {"ok": True, "postadres": {"id": "test_id"}}}}
         postadres_input = {"id": "test_id", "huisnummer": "52B", "plaatsnaam": "testplaats", "straatnaam": "teststraat", "postcode": "9999ZZ"}
-        
+
         postadres = {"id": "test_id", "houseNumber": "52", "locality": "testplaats1", "street": "teststraat1", "postalCode": "9999AA"}
         postadres_updated= {"id": "test_id", "houseNumber": "52B", "locality": "testplaats", "street": "teststraat", "postalCode": "9999ZZ"}
 
@@ -70,9 +70,9 @@ def test_update_postadres_success(client):
         )
 
 
-        # assert 
-        assert rm1.called_once
-        assert rm2.called_once
-        assert rm3.called_once
+        # assert
+        assert rm1.call_count == 1
+        assert rm2.call_count == 1
+        assert rm3.call_count == 1
         assert fallback.call_count == 0
         assert response.json == expected

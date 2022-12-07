@@ -1,15 +1,13 @@
 import graphene
 import requests
-from graphql import GraphQLError
 
-from hhb_backend.graphql import settings
-from hhb_backend.graphql.dataloaders import hhb_dataloader
 import hhb_backend.graphql.models.afdeling as graphene_afdeling
 import hhb_backend.graphql.models.postadres as graphene_postadres
-from hhb_backend.graphql.utils.gebruikersactiviteiten import (
-    gebruikers_activiteit_entities,
-    log_gebruikers_activiteit,
-)
+from graphql import GraphQLError
+from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
+from hhb_backend.audit_logging import AuditLogging
+from hhb_backend.graphql import settings
+from hhb_backend.graphql.dataloaders import hhb_dataloader
 
 
 class DeletePostadres(graphene.Mutation):
@@ -22,20 +20,8 @@ class DeletePostadres(graphene.Mutation):
     previous = graphene.Field(lambda: graphene_postadres.Postadres)
     afdeling = graphene.Field(lambda: graphene_afdeling.Afdeling)
 
-    def gebruikers_activiteit(self, _root, info, *_args, **_kwargs):
-        return dict(
-            action=info.field_name,
-            entities=gebruikers_activiteit_entities(
-                entity_type="postadres", result=self, key="previous"
-            )
-            + gebruikers_activiteit_entities(
-                entity_type="afdeling", result=self, key="afdeling"
-            ),
-            before=dict(postadres=self.previous),
-        )
-
-    @log_gebruikers_activiteit
-    async def mutate(self, _info, id, afdeling_id):
+    @staticmethod
+    def mutate(self, info, id, afdeling_id):
         """ Delete current postadres """
         previous = hhb_dataloader().postadressen.load_one(id)
         if not previous:
@@ -50,7 +36,6 @@ class DeletePostadres(graphene.Mutation):
         )
         if postadres_response.status_code != 204:
             raise GraphQLError(f"Upstream API responded: {postadres_response.text}")
-
 
         # Delete the Id from postadressen_ids column in afdeling
         afdeling = hhb_dataloader().afdelingen.load_one(afdeling_id)
@@ -69,5 +54,14 @@ class DeletePostadres(graphene.Mutation):
             )
 
         new_afdeling = org_service_response.json()['data']
+
+        AuditLogging.create(
+            action=info.field_name,
+            entities=[
+                GebruikersActiviteitEntity(entityType="postadres", entityId=id),
+                GebruikersActiviteitEntity(entityType="afdeling", entityId=afdeling_id),
+            ],
+            before=dict(postadres=previous),
+        )
 
         return DeletePostadres(ok=True, previous=previous, afdeling=new_afdeling)

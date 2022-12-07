@@ -1,12 +1,13 @@
 """ GraphQL mutation for deleting a Rekening from an Organisatie """
 import graphene
-from graphql import GraphQLError
 
+from graphql import GraphQLError
+from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.models import rekening
 from hhb_backend.graphql.mutations.rekeningen.utils import disconnect_afdeling_rekening, delete_rekening, \
     rekening_used_check
-from hhb_backend.graphql.utils.gebruikersactiviteiten import log_gebruikers_activiteit
+from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
 
 
 class DeleteAfdelingRekening(graphene.Mutation):
@@ -19,21 +20,8 @@ class DeleteAfdelingRekening(graphene.Mutation):
     ok = graphene.Boolean()
     previous = graphene.Field(lambda: rekening.Rekening)
 
-    def gebruikers_activiteit(
-            self, _root, info, rekening_id, afdeling_id, *_args, **_kwargs
-    ):
-        return dict(
-            action=info.field_name,
-            entities=[
-                dict(entity_type="rekening", entity_id=rekening_id),
-                dict(entity_type="afdeling", entity_id=afdeling_id),
-            ],
-            before=dict(rekening=self.previous),
-        )
-
     @staticmethod
-    @log_gebruikers_activiteit
-    async def mutate(_root, _info, rekening_id, afdeling_id):
+    def mutate(self, info, rekening_id, afdeling_id):
         """ Delete rekening associations with an afdeling """
         previous = hhb_dataloader().rekeningen.load_one(rekening_id)
         if not previous:
@@ -53,5 +41,14 @@ class DeleteAfdelingRekening(graphene.Mutation):
         # if not used - remove completely
         if len(afdelingen) == 1 and not burgers and not afspraken:
             delete_rekening(rekening_id)
+
+        AuditLogging.create(
+            action=info.field_name,
+            entities=[
+                GebruikersActiviteitEntity(entityType="rekening", entityId=rekening_id),
+                GebruikersActiviteitEntity(entityType="afdeling", entityId=afdeling_id),
+            ],
+            before=dict(rekening=previous),
+        )
 
         return DeleteAfdelingRekening(ok=True, previous=previous)

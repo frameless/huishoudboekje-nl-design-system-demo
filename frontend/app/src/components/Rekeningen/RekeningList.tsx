@@ -36,11 +36,11 @@ const RekeningList: React.FC<TableProps & RekeningListProps> = ({rekeningen, bur
 		],
 	});
 
-	const onDeleteBurgerRekening = (id?: number, burgerId?: number) => {
-		if (id && burgerId) {
+	const onDeleteBurgerRekening = (rekeningId?: number, burgerId?: number) => {
+		if (rekeningId && burgerId) {
 			deleteBurgerRekening({
 				variables: {
-					id,
+					rekeningId,
 					burgerId,
 				},
 			}).then(() => {

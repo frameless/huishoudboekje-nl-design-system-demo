@@ -8,6 +8,7 @@ afspraak = {
     "omschrijving": "huur",
     "bedrag": "650.00",
     "credit": False,
+    "burger_id": 42,
     "valid_from": "2021-11-12",
     "valid_through": None,
     "betaalinstructie": None,
@@ -54,7 +55,7 @@ def test_update_afspraak(client):
                             'byMonth': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
                             'byMonthDay': [3],
                             'repeatFrequency': None,
-                            'exceptDates': [],
+                            'exceptDates': None,
                             'startDate': '2020-11-01',
                             'endDate': '2022-11-01'
                         }
@@ -74,6 +75,7 @@ def test_update_afspraak(client):
 
         updated_afspraak = {
             "id": 1,
+            "burger_id": 42,
             "omschrijving": "huur",
             "bedrag": "650.00",
             "credit": False,
@@ -145,6 +147,8 @@ def test_update_afspraak(client):
             content_type='application/json'
         )
 
+        print(f"Response: {response.json}")
+
         # assert
         assert rm1.call_count == 1
         assert rm2.call_count == 1
@@ -176,8 +180,8 @@ def test_update_afspraak_does_not_exist(client):
             content_type='application/json')
 
         # assert
-        assert rm1.called_once
-        assert fallback.called == 0
+        assert rm1.call_count == 1
+        assert fallback.call_count == 0
         assert expected in response.json['errors'][0]['message']
 
 
@@ -204,8 +208,8 @@ def test_update_afspraak_is_credit(client):
             content_type='application/json')
 
         # assert
-        assert rm1.called_once
-        assert fallback.called == 0
+        assert rm1.call_count == 1
+        assert fallback.call_count == 0
         assert expected in response.json['errors'][0]['message']
 
 
@@ -240,8 +244,8 @@ def test_update_afspraak_invalid_betaalinstructie(client):
             content_type='application/json')
 
         # assert
-        assert rm1.called_once
-        assert fallback.called == 0
+        assert rm1.call_count == 1
+        assert fallback.call_count == 0
         assert expected in response.json['errors'][0]['message']
 
 
@@ -275,6 +279,6 @@ def test_update_afspraak_invalid_date_range(client):
             content_type='application/json')
 
         # assert
-        assert rm1.called_once
-        assert fallback.called == 0
+        assert rm1.call_count == 1
+        assert fallback.call_count == 0
         assert expected in response.json['errors'][0]['message']

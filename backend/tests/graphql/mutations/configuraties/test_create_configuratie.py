@@ -22,7 +22,7 @@ mutation test($input:ConfiguratieInput!) {
 }''',
                 "variables": {"input": {"id": "32", "waarde": "m12"}}},
         )
-        assert adapter.called_once
+        assert adapter.call_count == 1
         assert response.json == {"data": {"createConfiguratie": {"configuratie": {"id": "32", "waarde": "m12"}}}}
 
 
@@ -43,7 +43,7 @@ mutation test($input:ConfiguratieInput!) {
 }''',
                 "variables": {"input": {"id": "@@", "waarde": "m12"}}},
         )
-        assert adapter.called_once
+        assert adapter.call_count == 1
         assert response.json == {'data': {'createConfiguratie': None},
                                  'errors': [
                                      {'locations': [{'column': 3, 'line': 3}],

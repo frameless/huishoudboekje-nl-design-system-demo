@@ -1,7 +1,8 @@
 """ GebruikersActiviteit model as used in GraphQL queries """
-import graphene
+import json
 from datetime import datetime
-from flask import request
+
+import graphene
 
 import hhb_backend.graphql.models.afdeling as afdeling
 import hhb_backend.graphql.models.afspraak as afspraak
@@ -35,6 +36,8 @@ class GebruikersActiviteitMeta(graphene.ObjectType):
 
 
 class GebruikersActiviteitSnapshot(graphene.ObjectType):
+    json = graphene.Field(lambda: graphene.JSONString)  # Just the snapshot as JSON
+
     afdeling = graphene.Field(lambda: afdeling.Afdeling)
     afspraak = graphene.Field(lambda: afspraak.Afspraak)
     burger = graphene.Field(lambda: burger.Burger)
@@ -63,6 +66,11 @@ class GebruikersActiviteitSnapshot(graphene.ObjectType):
                     bad_key = str(e).split("'")[1]
                     value.pop(bad_key)
                     continue
+
+    @classmethod
+    def resolve_json(cls, root, info):
+        """ Added for debugging purposes """
+        return root
 
     @classmethod
     def resolve_afdeling(cls, root, _info):
@@ -149,108 +157,108 @@ class GebruikersActiviteitEntity(graphene.ObjectType):
     signaal = graphene.Field(lambda: signaal.Signaal)
 
     @classmethod
-    async def _resolve_entity(cls, root, entity_type: str, dataloader_name: str):
+    def _resolve_entity(cls, root, entity_type: str, dataloader_name: str):
         if root.get("entityType") == entity_type:
             return hhb_dataloader()[dataloader_name].load_one(root.get("entityId"))
 
     @classmethod
-    async def resolve_afdeling(cls, root, _info):
-        return await cls._resolve_entity(
+    def resolve_afdeling(cls, root, _info):
+        return cls._resolve_entity(
             root, entity_type="afdeling", dataloader_name="afdelingen"
         )
 
     @classmethod
-    async def resolve_postadres(cls, root, _info):
-        return await cls._resolve_entity(
+    def resolve_postadres(cls, root, _info):
+        return cls._resolve_entity(
             root, entity_type="postadres", dataloader_name="postadressen"
         )
 
     @classmethod
-    async def resolve_afspraak(cls, root, _info):
-        return await cls._resolve_entity(
+    def resolve_afspraak(cls, root, _info):
+        return cls._resolve_entity(
             root, entity_type="afspraak", dataloader_name="afspraken"
         )
 
     @classmethod
-    async def resolve_burger(cls, root, _info):
-        return await cls._resolve_entity(
+    def resolve_burger(cls, root, _info):
+        return cls._resolve_entity(
             root, entity_type="burger", dataloader_name="burgers"
         )
 
     @classmethod
-    async def resolve_configuratie(cls, root, _info):
-        return await cls._resolve_entity(
+    def resolve_configuratie(cls, root, _info):
+        return cls._resolve_entity(
             root, entity_type="configuratie", dataloader_name="configuraties"
         )
 
     @classmethod
-    async def resolve_customer_statement_message(cls, root, _info):
+    def resolve_customer_statement_message(cls, root, _info):
         if root.get("entityType") == "customerStatementMessage":
             return hhb_dataloader().csms.load_one(root.get("entityId"))
-        return await cls._resolve_entity(
+        return cls._resolve_entity(
             root, entity_type="customer_statement_message", dataloader_name="csms"
         )
 
     @classmethod
-    async def resolve_export(cls, root, _info):
-        return await cls._resolve_entity(
+    def resolve_export(cls, root, _info):
+        return cls._resolve_entity(
             root, entity_type="export", dataloader_name="exports"
         )
 
     @classmethod
-    async def resolve_grootboekrekening(cls, root, _info):
-        return await cls._resolve_entity(
+    def resolve_grootboekrekening(cls, root, _info):
+        return cls._resolve_entity(
             root,
             entity_type="grootboekrekening",
             dataloader_name="grootboekrekeningen",
         )
 
     @classmethod
-    async def resolve_journaalpost(cls, root, _info):
-        return await cls._resolve_entity(
+    def resolve_journaalpost(cls, root, _info):
+        return cls._resolve_entity(
             root, entity_type="journaalpost", dataloader_name="journaalposten"
         )
 
     @classmethod
-    async def resolve_organisatie(cls, root, _info):
-        return await cls._resolve_entity(
+    def resolve_organisatie(cls, root, _info):
+        return cls._resolve_entity(
             root, entity_type="organisatie", dataloader_name="organisaties"
         )
 
     @classmethod
-    async def resolve_rekening(cls, root, _info):
-        return await cls._resolve_entity(
+    def resolve_rekening(cls, root, _info):
+        return cls._resolve_entity(
             root, entity_type="rekening", dataloader_name="rekeningen"
         )
 
     @classmethod
-    async def resolve_rubriek(cls, root, _info):
-        return await cls._resolve_entity(
+    def resolve_rubriek(cls, root, _info):
+        return cls._resolve_entity(
             root, entity_type="rubriek", dataloader_name="rubrieken"
         )
 
     @classmethod
-    async def resolve_transactie(cls, root, _info):
-        return await cls._resolve_entity(
+    def resolve_transactie(cls, root, _info):
+        return cls._resolve_entity(
             root, entity_type="transactie", dataloader_name="bank_transactions"
         )
 
     @classmethod
-    async def resolve_huishouden(cls, root, _info):
-        return await cls._resolve_entity(
+    def resolve_huishouden(cls, root, _info):
+        return cls._resolve_entity(
             root, entity_type="huishouden", dataloader_name="huishoudens"
         )
 
     @classmethod
-    async def resolve_alarm(cls, root, _info):
-        return await cls._resolve_entity(
+    def resolve_alarm(cls, root, _info):
+        return cls._resolve_entity(
             root, entity_type="alarm", dataloader_name="alarms"
         )
 
     @classmethod
-    async def resolve_signaal(cls, root, _info):
-        return await cls._resolve_entity(
-            root, entity_type="signaal", dataloader_name="signals"
+    def resolve_signaal(cls, root, _info):
+        return cls._resolve_entity(
+            root, entity_type="signaal", dataloader_name="signalen"
         )
 
 

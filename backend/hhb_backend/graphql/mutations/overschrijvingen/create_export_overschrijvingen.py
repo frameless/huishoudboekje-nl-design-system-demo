@@ -5,15 +5,13 @@ from datetime import datetime
 import graphene
 import requests
 from dateutil import tz
-from graphql import GraphQLError
 
+import hhb_backend.graphql.models.export as graphene_export
+from graphql import GraphQLError
+from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
+from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
-import hhb_backend.graphql.models.export as graphene_export
-from hhb_backend.graphql.utils.gebruikersactiviteiten import (
-    gebruikers_activiteit_entities,
-    log_gebruikers_activiteit
-)
 from hhb_backend.graphql.utils.dates import to_date
 from hhb_backend.processen.create_sepa_export import create_export_string
 from hhb_backend.processen.overschrijvingen_planner import (
@@ -38,7 +36,7 @@ def get_config_value(config_id) -> str:
 
 class CreateExportOverschrijvingen(graphene.Mutation):
     """Mutatie om een betaalinstructie te genereren."""
-    
+
     class Arguments:
         startDatum = graphene.String()
         eindDatum = graphene.String()
@@ -46,17 +44,8 @@ class CreateExportOverschrijvingen(graphene.Mutation):
     ok = graphene.Boolean()
     export = graphene.Field(lambda: graphene_export.Export)
 
-    def gebruikers_activiteit(self, _root, info, *_args, **_kwargs):
-        return dict(
-            action=info.field_name,
-            entities=gebruikers_activiteit_entities(
-                entity_type="export", result=self, key="export"
-            ),
-            after=dict(export=self.export)
-        )
-
-    @log_gebruikers_activiteit
-    async def mutate(self, info, **kwargs):
+    @staticmethod
+    def mutate(self, info, **kwargs):
         """ Create the export file based on start and end date """
         start_datum_str = kwargs.pop("startDatum")
         eind_datum_str = kwargs.pop("eindDatum")
@@ -157,5 +146,13 @@ class CreateExportOverschrijvingen(graphene.Mutation):
                 raise GraphQLError(
                     f"Upstream API responded: {overschrijving_response.json()}"
                 )
+
+        AuditLogging.create(
+            action=info.field_name,
+            entities=[
+                GebruikersActiviteitEntity(entityType="export", entityId=export_object["id"]),
+            ],
+            after=dict(export=export_object)
+        )
 
         return CreateExportOverschrijvingen(export=export_object, ok=True)

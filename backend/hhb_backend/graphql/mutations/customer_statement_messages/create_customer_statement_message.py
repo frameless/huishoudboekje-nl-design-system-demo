@@ -6,22 +6,20 @@ from datetime import datetime
 import graphene
 import mt940
 import requests
-from graphene_file_upload.scalars import Upload
-from graphql import GraphQLError
 
 import hhb_backend.graphql.models.journaalpost as journaalpost
+from graphql import GraphQLError
+from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.camtParser import parser
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.models.customer_statement_message import (
     CustomerStatementMessage,
 )
-from hhb_backend.graphql.utils.gebruikersactiviteiten import (
-    gebruikers_activiteit_entities,
-    log_gebruikers_activiteit,
-)
+from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
 from hhb_backend.processen import automatisch_boeken
 from hhb_backend.service.model import customer_statement_message
 from hhb_backend.service.model.bank_transaction import BankTransaction
+from lib.graphene_file_upload.scalars import Upload
 
 IBAN_REGEX = r"[a-zA-Z]{2}[0-9]{2}[a-zA-Z0-9]{4}[0-9]{7}([a-zA-Z0-9]?){0,16}"
 
@@ -31,28 +29,11 @@ class CreateCustomerStatementMessage(graphene.Mutation):
         file = Upload(required=True)
 
     ok = graphene.Boolean()
-    customerStatementMessage = graphene. List(lambda: CustomerStatementMessage)
+    customerStatementMessage = graphene.List(lambda: CustomerStatementMessage)
     journaalposten = graphene.List(lambda: journaalpost.Journaalpost)
 
-    def gebruikers_activiteit(self, _root, info, *_args, **_kwargs):
-        return dict(
-            action=info.field_name,
-            entities=gebruikers_activiteit_entities(
-                entity_type="customerStatementMessage",
-                result=self,
-                key="customerStatementMessage",
-            )
-            + gebruikers_activiteit_entities(
-                entity_type="transaction",
-                result=self.customerStatementMessage,
-                key="bank_transactions",
-            ),
-            after=dict(customerStatementMessage=self.customerStatementMessage),
-        )
-
     @staticmethod
-    @log_gebruikers_activiteit
-    async def mutate(_root, _info, file):
+    def mutate(self, info, file):
         content = file.stream.read()
 
         if not content:
@@ -67,7 +48,6 @@ class CreateCustomerStatementMessage(graphene.Mutation):
             csm_files = parser.CamtParser().parse(content)
         else:
             csm_files = [mt940.parse(content)]
-
 
         csm = []
         journaalposten = []
@@ -86,7 +66,8 @@ class CreateCustomerStatementMessage(graphene.Mutation):
 
             # csmServiceModel.related_reference = csm_file.data['??']
             if not csm_file.data.get("account_identification"):
-                raise GraphQLError(f"Incorrect file, missing tag 25 account identification or misplaced/missing IBAN tag")
+                raise GraphQLError(
+                    f"Incorrect file, missing tag 25 account identification or misplaced/missing IBAN tag")
             csm_model.account_identification = csm_file.data["account_identification"]
 
             if csm_file.data.get("sequence_number"):
@@ -131,9 +112,27 @@ class CreateCustomerStatementMessage(graphene.Mutation):
             csm.append(created_csm)
 
             # Try, if possible, to match banktransaction
-            journaalpostentemp = await automatisch_boeken.automatisch_boeken(created_csm.id)
+            journaalpostentemp = automatisch_boeken.automatisch_boeken(created_csm.id)
             if journaalpostentemp:
                 journaalposten.extend(journaalpostentemp)
+
+        entities = []
+        for csm_item in csm:
+            for t in csm_item["bank_transactions"]:
+                entities.append(
+                    GebruikersActiviteitEntity(entityType="transaction", entityId=t)
+                )
+
+        entities.extend([
+            GebruikersActiviteitEntity(entityType="customerStatementMessage", entityId=item["id"])
+            for item in csm
+        ])
+
+        AuditLogging.create(
+            action=info.field_name,
+            entities=entities,
+            after=dict(customerStatementMessage=csm),
+        )
 
         return CreateCustomerStatementMessage(
             journaalposten=journaalposten,
@@ -143,7 +142,7 @@ class CreateCustomerStatementMessage(graphene.Mutation):
 
 
 def retrieve_iban(transaction_details: dict) -> str:
-    if transaction_details.get('tegen_rekening',False):
+    if transaction_details.get('tegen_rekening', False):
         result = transaction_details['tegen_rekening']
     else:
         result = re.search(IBAN_REGEX, transaction_details['transaction_details'])

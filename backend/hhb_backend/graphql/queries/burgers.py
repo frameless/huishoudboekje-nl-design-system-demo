@@ -2,50 +2,47 @@
 import graphene
 
 import hhb_backend.graphql.models.burger as burger
+from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.scalars.dynamic_types import DynamicType
 from hhb_backend.graphql.utils.dates import valid_afspraak
-from hhb_backend.graphql.utils.gebruikersactiviteiten import (
-    gebruikers_activiteit_entities,
-    log_gebruikers_activiteit,
-)
+from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
 
 
 class BurgerQuery:
     return_type = graphene.Field(burger.Burger, id=graphene.Int(required=True))
 
     @classmethod
-    def gebruikers_activiteit(cls, _root, info, id, *_args, **_kwargs):
-        return dict(
+    def resolver(cls, _, info, id):
+        result = hhb_dataloader().burgers.load_one(id)
+        AuditLogging.create(
             action=info.field_name,
-            entities=gebruikers_activiteit_entities(entity_type="burger", result=id),
+            entities=[
+                GebruikersActiviteitEntity(entityType="burger", entityId=id)
+            ],
         )
-
-    @classmethod
-    @log_gebruikers_activiteit
-    async def resolver(cls, _root, _info, id, *_args, **_kwargs):
-        return hhb_dataloader().burgers.load_one(id)
+        return result
 
 
 class BurgersQuery:
     return_type = graphene.List(
         burger.Burger,
-        ids=graphene.List(graphene.Int, default_value=[]),
+        ids=graphene.List(graphene.Int),
         search=DynamicType()
     )
 
     @classmethod
-    def gebruikers_activiteit(cls, _root, info, ids, *_args, **_kwargs):
-        return dict(
-            action=info.field_name,
-            entities=gebruikers_activiteit_entities(entity_type="burger", result=ids),
-        )
-
-    @classmethod
-    @log_gebruikers_activiteit
-    async def resolver(cls, _root, _info, **kwargs):
-        if kwargs["ids"]:
-            return hhb_dataloader().burgers.load(kwargs["ids"])
+    def resolver(cls, _, info, **kwargs):
+        if "ids" in kwargs:
+            burgers = hhb_dataloader().burgers.load(kwargs["ids"])
+            AuditLogging.create(
+                action=info.field_name,
+                entities=[
+                    GebruikersActiviteitEntity(entityType="burger", entityId=id)
+                    for id in kwargs["ids"]
+                ]
+            )
+            return burgers
 
         if "search" in kwargs:
             burger_ids = set()
@@ -54,15 +51,15 @@ class BurgersQuery:
 
             burgers = hhb_dataloader().burgers.load_all(filters=kwargs.get("filters", None))
             for burger in burgers:
-                if search in str(burger['achternaam']).lower() or\
-                        search in str(burger['voornamen']).lower() or\
-                        search in str(burger['bsn']).lower():
+                if search in str(burger['achternaam']).lower() or \
+                    search in str(burger['voornamen']).lower() or \
+                    search in str(burger['bsn']).lower():
                     burger_ids.add(burger["id"])
 
             rekeningen = hhb_dataloader().rekeningen.load_all(filters=kwargs.get("filters", None))
             for rekening in rekeningen:
                 if search in str(rekening['iban']).lower() or \
-                        search in str(rekening['rekeninghouder']).lower():
+                    search in str(rekening['rekeninghouder']).lower():
                     for burger_id in rekening["burgers"]:
                         if burger_id:
                             burger_ids.add(burger_id)
@@ -79,9 +76,25 @@ class BurgersQuery:
             for burger in burgers:
                 if burger["id"] in burger_ids:
                     result.append(burger)
+
+            AuditLogging.create(
+                action=info.field_name,
+                entities=[
+                    GebruikersActiviteitEntity(entityType="burger", entityId=burger["id"])
+                    for burger in result
+                ]
+            )
             return result
 
-        return hhb_dataloader().burgers.load_all(filters=kwargs.get("filters", None))
+        burgers = hhb_dataloader().burgers.load_all(filters=kwargs.get("filters", None))
+        AuditLogging.create(
+            action=info.field_name,
+            entities=[
+                GebruikersActiviteitEntity(entityType="burger", entityId=burger.id)
+                for burger in burgers
+            ] if "filters" in kwargs else []
+        )
+        return burgers
 
 
 class BurgersPagedQuery:
@@ -92,15 +105,18 @@ class BurgersPagedQuery:
     )
 
     @classmethod
-    def gebruikers_activiteit(cls, _root, info, ids, *_args, **_kwargs):
-        return dict(
+    def resolver(cls, _, info, **kwargs):
+        if "start" in kwargs and "limit" in kwargs:
+            burgers = hhb_dataloader().burgers.load_paged(start=kwargs["start"], limit=kwargs["limit"])
+        else:
+            burgers = hhb_dataloader().burgers.load_all()
+
+        AuditLogging.create(
             action=info.field_name,
-            entities=gebruikers_activiteit_entities(entity_type="burger", result=ids),
+            entities=[
+                GebruikersActiviteitEntity(entityType="burger", entityId=burger["id"])
+                for burger in burgers["burgers"]
+            ] if "start" in kwargs and "limit" in kwargs else []
         )
 
-    @classmethod
-    @log_gebruikers_activiteit
-    async def resolver(cls, _root, _info, **kwargs):
-        if "start" in kwargs and "limit" in kwargs:
-            return hhb_dataloader().burgers.load_paged(start=kwargs["start"], limit=kwargs["limit"])
-        return hhb_dataloader().burgers.load_all()
+        return burgers

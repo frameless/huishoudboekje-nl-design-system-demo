@@ -15,17 +15,17 @@ class Rekening(graphene.ObjectType):
     afdelingen = graphene.List(lambda: afdeling.Afdeling)
     afspraken = graphene.List(lambda: afspraak.Afspraak)
 
-    async def resolve_burgers(self, info):
+    def resolve_burgers(self, info):
         """ Get burgers when requested """
         if self.get('burgers'):
             return hhb_dataloader().burgers.load(self.get('burgers')) or []
 
-    async def resolve_afdelingen(self, info):
+    def resolve_afdelingen(self, info):
         """ Get afdelingen when requested """
         if self.get('afdelingen'):
             return hhb_dataloader().afdelingen.load(self.get('afdelingen')) or []
     
-    async def resolve_afspraken(self, info):
+    def resolve_afspraken(self, info):
         """ Get afspraken when requested """
         if self.get('afspraken'):
             return hhb_dataloader().afspraken.load(self.get('afspraken')) or []

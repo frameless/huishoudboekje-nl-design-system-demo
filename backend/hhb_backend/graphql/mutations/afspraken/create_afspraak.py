@@ -2,9 +2,10 @@
 import graphene
 import logging
 import requests
-from datetime import datetime
+from datetime import date
 from graphql import GraphQLError
 
+from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 import hhb_backend.graphql.models.afdeling as graphene_afdeling
@@ -14,10 +15,7 @@ from hhb_backend.graphql.models.postadres import Postadres
 from hhb_backend.graphql.mutations.afspraken.update_afspraak_betaalinstructie import BetaalinstructieInput
 from hhb_backend.graphql.mutations.afspraken.update_afspraak_betaalinstructie import validate_afspraak_betaalinstructie
 from hhb_backend.graphql.scalars.bedrag import Bedrag
-from hhb_backend.graphql.utils.gebruikersactiviteiten import (
-    log_gebruikers_activiteit,
-    gebruikers_activiteit_entities,
-)
+from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
 
 
 class CreateAfspraakInput(graphene.InputObjectType):
@@ -43,28 +41,12 @@ class CreateAfspraak(graphene.Mutation):
     ok = graphene.Boolean()
     afspraak = graphene.Field(lambda: graphene_afspraak.Afspraak)
 
-    def gebruikers_activiteit(self, _root, info, *_args, **_kwargs):
-        return dict(
-            action=info.field_name,
-            entities=gebruikers_activiteit_entities(
-                entity_type="afspraak", result=self, key="afspraak"
-            )
-                     + gebruikers_activiteit_entities(
-                entity_type="burger", result=self.afspraak, key="burger_id"
-            )
-                     + gebruikers_activiteit_entities(
-                entity_type="afdeling", result=self.afspraak, key="afdeling_id"
-            ),
-            after=dict(afspraak=self.afspraak),
-        )
-
     @staticmethod
-    @log_gebruikers_activiteit
-    async def mutate(_root, _info, input: CreateAfspraakInput):
+    def mutate(self, info, input: CreateAfspraakInput):
         """ Create the new Afspraak """
 
         if "valid_from" not in input:
-            input["valid_from"] = str(datetime.now().date())
+            input["valid_from"] = str(date.today())
 
         # check burger_id
         burger = hhb_dataloader().burgers.load_one(input.burger_id)
@@ -116,5 +98,15 @@ class CreateAfspraak(graphene.Mutation):
         if response.status_code != 201:
             raise GraphQLError(f"Upstream API responded: {response.text}")
         afspraak = response.json()["data"]
+
+        AuditLogging.create(
+            action=info.field_name,
+            entities=[
+                GebruikersActiviteitEntity(entityType="afspraak", entityId=afspraak["id"]),
+                GebruikersActiviteitEntity(entityType="burger", entityId=afspraak["burger_id"]),
+                GebruikersActiviteitEntity(entityType="afdeling", entityId=afspraak["afdeling_id"]),
+            ],
+            after=dict(afspraak=afspraak),
+        )
 
         return CreateAfspraak(afspraak=afspraak, ok=True)

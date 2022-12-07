@@ -15,7 +15,7 @@ tab_width = 4
 [{*.css, *.less, *.sass, *.scss}]
 indent_style = tab
 
-[{*.ts, *.tsx, *.js, *.jsx, *.cts, *.ctsx, *.cjs, *.cjsx}]
+[{*.ts, *.tsx, *.js, *.jsx, *.cts, *.ctsx, *.cjs, *.cjsx, *.yaml, *.yml}]
 indent_style = tab
 max_line_length = 200
 tab_width = 4

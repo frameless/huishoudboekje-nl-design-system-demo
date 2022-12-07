@@ -1,9 +1,11 @@
 """ GraphQl Mutatie voor het aanpassen van een Alarm """
 import graphene
 
-from hhb_backend.graphql.models.signaal import Signaal
+import hhb_backend.graphql.models.signaal as graphene_signaal
+from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql.mutations.signalen.signalen import SignaalHelper, UpdateSignaalInput
-from hhb_backend.graphql.utils.gebruikersactiviteiten import log_gebruikers_activiteit, gebruikers_activiteit_entities
+from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
+
 
 class UpdateSignaal(graphene.Mutation):
     class Arguments:
@@ -11,26 +13,23 @@ class UpdateSignaal(graphene.Mutation):
         input = graphene.Argument(UpdateSignaalInput, required=True)
 
     ok = graphene.Boolean()
-    signaal = graphene.Field(lambda: Signaal)
-    previous = graphene.Field(lambda: Signaal)
-
-    def gebruikers_activiteit(self, _root, _info, *_args, **_kwargs):
-        data = dict(
-            action=_info.field_name,
-            entities=gebruikers_activiteit_entities(
-                entity_type="signaal", result=self, key="signaal"
-            ),
-            before=dict(signaal=self.previous),
-            after=dict(signaal=self.signaal),
-        )
-        i = _info.field_name.find("-")
-        _info.field_name = _info.field_name[:i].strip()
-        return data
+    signaal = graphene.Field(lambda: graphene_signaal.Signaal)
+    previous = graphene.Field(lambda: graphene_signaal.Signaal)
 
     @staticmethod
-    @log_gebruikers_activiteit
-    async def mutate(root, info, id: str, input: UpdateSignaalInput):
+    def mutate(self, info, id: str, input: UpdateSignaalInput):
         """ Mutatie voor het wijzigen van een bestaand Signaal """
         response = SignaalHelper.update(id, input)
+        signaal = response.signaal
+        previous = response.previous
 
-        return UpdateSignaal(signaal=response.signaal, previous=response.previous, ok=True)
+        AuditLogging.create(
+            action=info.field_name,
+            entities=[
+                GebruikersActiviteitEntity(entityType="signaal", entityId=signaal["id"]),
+            ],
+            before=dict(signaal=previous),
+            after=dict(signaal=signaal),
+        )
+
+        return UpdateSignaal(signaal=signaal, previous=previous, ok=True)

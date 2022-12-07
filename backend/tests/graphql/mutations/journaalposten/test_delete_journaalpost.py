@@ -19,7 +19,7 @@ def test_delete_journaalpost(client):
         )
         get_journaalpost = mock.get(
             f"{settings.HHB_SERVICES_URL}/journaalposten/?filter_ids=1",
-            json={"data": [{"id": 1, "transaction_id": 11, "afspraak_id": None}]},
+            json={"data": [{"id": 1, "transaction_id": 11, "afspraak_id": None, "grootboekrekening_id": 1}]},
             status_code=200,
         )
         adapter = mock.delete(
@@ -47,10 +47,10 @@ mutation test($id: Int!) {
                 }
             }
         }
-        assert adapter.called_once
-        assert get_transaction.called_once
-        assert get_journaalpost.called_once
-        assert post_transaction.called_once
+        assert adapter.call_count == 1
+        assert get_transaction.call_count == 1
+        assert get_journaalpost.call_count == 1
+        assert post_transaction.call_count == 1
 
 
 def test_delete_journaalpost_error(client):
@@ -90,4 +90,4 @@ mutation test($id: Int!) {
                 }
             ],
         }
-        assert adapter.called_once
+        assert adapter.call_count == 1

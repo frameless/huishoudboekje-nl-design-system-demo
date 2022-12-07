@@ -52,14 +52,14 @@ def test_afdeling(client):
             content_type='application/json'
         )
 
-        assert rm1.called_once
-        assert rm2.called_once
-        assert rm3.called_once
-        assert rm4.called_once
-        assert rm5.called_once
+        assert rm1.call_count == 1
+        assert rm2.call_count == 1
+        assert rm3.call_count == 1
+        assert rm4.call_count == 1
+        assert rm5.call_count == 1
         assert fallback.call_count == 0
         assert response.json ==  {'data': {'afdeling': {'naam': 'naam', 'organisatie': {'id':1}, 'postadressen': [{'id':'test_id'}], 'rekeningen': [{'id': 1}]}}}
-        
+
 
 def test_afdelingen(client):
     with requests_mock.Mocker() as rm:
@@ -114,11 +114,11 @@ def test_afdelingen(client):
         )
 
         # assert
-        assert rm1.called_once
-        assert rm2.called_once
-        assert rm3.called_once
-        assert rm4.called_once
-        assert rm5.called_once
+        assert rm1.call_count == 1
+        assert rm2.call_count == 1
+        assert rm3.call_count == 1
+        assert rm4.call_count == 1
+        assert rm5.call_count == 1
         assert fallback.call_count == 0
         assert response.json == {'data': {
             'afdelingen': [{'naam': 'naam', 'organisatie': {'id': 1},

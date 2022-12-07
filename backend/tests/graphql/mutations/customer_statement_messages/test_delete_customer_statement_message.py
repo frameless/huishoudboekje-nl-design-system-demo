@@ -45,13 +45,13 @@ mutation test($id: Int!) {
             },
             content_type="application/json",
         )
-        assert log_post.called_once
-        assert get_csm.called_once
-        assert get_journaalpost.called_once
-        assert delete_journaalpost.called_once
-        assert delete_transactie1.called_once
-        assert delete_transactie2.called_once
-        assert delete_csm.called_once
+        assert log_post.call_count == 1
+        assert get_csm.call_count == 1
+        assert get_journaalpost.call_count == 1
+        assert delete_journaalpost.call_count == 1
+        assert delete_transactie1.call_count == 1
+        assert delete_transactie2.call_count == 1
+        assert delete_csm.call_count == 1
 
 
 def test_delete_csm_error(client):
@@ -91,4 +91,4 @@ mutation test($id: Int!) {
                 }
             ],
         }
-        assert adapter.called_once
+        assert adapter.call_count == 1

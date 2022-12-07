@@ -29,9 +29,9 @@ def test_delete_rubrieken(client):
 
 
         # assert
-        assert rm1.called_once
-        assert rm2.called_once
-        assert rm3.called_once
+        assert rm1.call_count == 1
+        assert rm2.call_count == 1
+        assert rm3.call_count == 1
         assert fallback.call_count == 0
         assert response.json == expected
 
@@ -58,7 +58,7 @@ def test_delete_rubrieken_error_afspraak(client):
 
 
         # assert
-        assert rm1.called_once
+        assert rm1.call_count == 1
         assert fallback.call_count == 0
         assert response.json["errors"][0].get("message") == expected
 
@@ -89,7 +89,7 @@ def test_delete_rubrieken_error_journaalpost(client):
 
 
         # assert
-        assert rm1.called_once
-        assert rm2.called_once
+        assert rm1.call_count == 1
+        assert rm2.call_count == 1
         assert fallback.call_count == 0
         assert response.json["errors"][0].get("message") == expected

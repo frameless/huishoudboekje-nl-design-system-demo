@@ -15,19 +15,19 @@ class Afdeling(graphene.ObjectType):
     postadressen = graphene.List(lambda: postadres.Postadres)
     afspraken = graphene.List(lambda: afspraak.Afspraak)
 
-    async def resolve_rekeningen(self, _info):
+    def resolve_rekeningen(self, _info):
         """ Get rekeningen when requested """
         return hhb_dataloader().rekeningen.by_afdeling(self.get('id')) or []
 
-    async def resolve_organisatie(self, _info):
+    def resolve_organisatie(self, _info):
         return hhb_dataloader().organisaties.load_one(self.get('organisatie_id'))
 
-    async def resolve_postadressen(self, _info):
+    def resolve_postadressen(self, _info):
         ids = self.get('postadressen_ids')
         if not ids:
             return []
 
         return hhb_dataloader().postadressen.load(ids)
 
-    async def resolve_afspraken(self, _info):
+    def resolve_afspraken(self, _info):
         return hhb_dataloader().afspraken.by_afdeling(self.get('id')) or []

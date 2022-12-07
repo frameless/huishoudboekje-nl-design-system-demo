@@ -23,7 +23,7 @@ class Export(graphene.ObjectType):
         if value:
             return datetime.fromisoformat(value)
 
-    async def resolve_overschrijvingen(self, _info):
+    def resolve_overschrijvingen(self, _info):
         """ Get overschrijvingen when requested """
         if self.get('overschrijvingen'):
             return hhb_dataloader().overschrijvingen.load(self.get('overschrijvingen')) or []

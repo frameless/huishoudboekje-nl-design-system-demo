@@ -65,12 +65,12 @@ def test_delete_postadres(client):
 
 
         # assert
-        assert rm1.called_once
-        assert rm2.called_once
-        assert rm3.called_once
-        assert rm4.called_once
-        assert rm5.called_once
-        assert rm6.called_once
+        assert rm1.call_count == 1
+        assert rm2.call_count == 1
+        assert rm3.call_count == 1
+        assert rm4.call_count == 1
+        assert rm5.call_count == 1
+        assert rm6.call_count == 1
         assert fallback.call_count == 0
         assert response.json == expected
 
@@ -106,8 +106,8 @@ def test_delete_postadres_error_afspraken(client):
 
 
         # assert
-        assert rm1.called_once
-        assert rm2.called_once
+        assert rm1.call_count == 1
+        assert rm2.call_count == 1
         assert fallback.call_count == 0
         assert response.json == expected
 
@@ -134,4 +134,4 @@ def test_delete_postadres_error(client):
                                  "errors": [{"locations": [{"column": 11, "line": 4}],
                                              "message": "postadres not found",
                                              "path": ["deletePostadres"]}]}
-        assert adapter.called_once
+        assert adapter.call_count == 1

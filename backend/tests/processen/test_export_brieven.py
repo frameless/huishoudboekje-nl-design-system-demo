@@ -25,7 +25,7 @@ def test_create_export_brieven(client):
         # arrange
         burger_id = 2
         fallback = mock.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
-        
+
         burger = {'data': [{'achternaam': 'Do', 'bsn': 156807233, 'email': None, 'geboortedatum': None, 'huishouden_id': 2, 'huisnummer': '15a', 'id': 2, 'plaatsnaam': 'burger test plaats', 'postcode': '1234AB', 'straatnaam': 'burger test straat', 'telefoonnummer': None, 'voorletters': 'J', 'voornamen': 'John'}]}
         burger_endpoint = mock.get(f"{settings.HHB_SERVICES_URL}/burgers/?filter_ids={burger_id}", json=burger)
 
@@ -34,7 +34,7 @@ def test_create_export_brieven(client):
 
         postadres_ids_1 = 'ce2e9ac9-9759-48c5-85fa-7dacc9913e37'
         afspraak_postadres = {'data': [
-            {'id': '378d8f82-ffac-42e0-af82-7041014389a4', 'street': 'test straat 2', 'houseNumber': 'test huisnummer 2', 'postalCode': 'test postcode 2', 'locality': 'test plaats 2', 'timeCreated': '2021-10-25T08:15:54+00:00'}, 
+            {'id': '378d8f82-ffac-42e0-af82-7041014389a4', 'street': 'test straat 2', 'houseNumber': 'test huisnummer 2', 'postalCode': 'test postcode 2', 'locality': 'test plaats 2', 'timeCreated': '2021-10-25T08:15:54+00:00'},
             {'id': 'ce2e9ac9-9759-48c5-85fa-7dacc9913e37', 'street': 'test straat 1.1', 'houseNumber': 'test huisnummer 1.1', 'postalCode': 'code 1.1', 'locality': 'test plaats 1.1', 'timeCreated': '2021-10-25T08:11:29+00:00'}]}
         postadres_endpoint_1 = mock.get(f"{settings.POSTADRESSEN_SERVICE_URL}/addresses/?filter_ids={postadres_ids_1}", json=afspraak_postadres)
 
@@ -44,7 +44,7 @@ def test_create_export_brieven(client):
 
         postadres_ids_2 = 'ce2e9ac9-9759-48c5-85fa-7dacc9913e37,378d8f82-ffac-42e0-af82-7041014389a4'
         afdeling_postadres = {'data': [
-            {'id': '378d8f82-ffac-42e0-af82-7041014389a4', 'street': 'test straat 2', 'houseNumber': 'test huisnummer 2', 'postalCode': 'test postcode 2', 'locality': 'test plaats 2', 'timeCreated': '2021-10-25T08:15:54+00:00'}, 
+            {'id': '378d8f82-ffac-42e0-af82-7041014389a4', 'street': 'test straat 2', 'houseNumber': 'test huisnummer 2', 'postalCode': 'test postcode 2', 'locality': 'test plaats 2', 'timeCreated': '2021-10-25T08:15:54+00:00'},
             {'id': 'ce2e9ac9-9759-48c5-85fa-7dacc9913e37', 'street': 'test straat 1.1', 'houseNumber': 'test huisnummer 1.1', 'postalCode': 'code 1.1', 'locality': 'test plaats 1.1', 'timeCreated': '2021-10-25T08:11:29+00:00'}]}
         postadres_endpoint_2 = mock.get(f"{settings.POSTADRESSEN_SERVICE_URL}/addresses/?filter_ids={postadres_ids_2}", json=afdeling_postadres)
 
@@ -59,13 +59,13 @@ def test_create_export_brieven(client):
         current_date_str = datetime.now().strftime("%Y-%m-%d")
 
         # assert
-        assert burger_endpoint.called_once
-        assert afspraak_endpoint.called_once
-        assert afdeling_endpoint.called_once
-        assert postadres_endpoint_1.called_once
-        assert postadres_endpoint_2.called_once
-        assert organisatie_endpoint.called_once
-        assert gebruikers_activiteit.called_once
+        assert burger_endpoint.call_count == 1
+        assert afspraak_endpoint.call_count == 1
+        assert afdeling_endpoint.call_count == 1
+        assert postadres_endpoint_1.call_count == 1
+        assert postadres_endpoint_2.call_count == 1
+        assert organisatie_endpoint.call_count == 1
+        assert gebruikers_activiteit.call_count == 1
 
         assert response_csv == f'organisatie.naam|organisatie.postadres.adresregel1|organisatie.postadres.postcode|organisatie.postadres.plaats|afspraak.id|nu.datum|burger.naam|burger.postadres.adresregel1|burger.postadres.postcode|burger.postadres.plaats|betaalrichting|status.afspraak\ntest organisatie 1|test straat 1.1 test huisnummer 1.1|code 1.1|test plaats 1.1|stuff, things, test#1, com bi na ti|{current_date_str}|John Do|burger test straat 15a|1234AB|burger test plaats|credit|2021-12-01\n'
         assert filename_csv == f"{current_date_str}_{burger['data'][0]['voornamen']}_{burger['data'][0]['achternaam']}.csv"

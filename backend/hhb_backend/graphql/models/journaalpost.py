@@ -15,17 +15,17 @@ class Journaalpost(graphene.ObjectType):
     grootboekrekening = graphene.Field(lambda: grootboekrekening.Grootboekrekening)
     is_automatisch_geboekt = graphene.Boolean()
 
-    async def resolve_transaction(root, info):
+    def resolve_transaction(root, info):
         """ Get transaction when requested """
         if root.get('transaction_id'):
             return hhb_dataloader().bank_transactions.load_one(root.get('transaction_id'))
 
-    async def resolve_grootboekrekening(root, info):
+    def resolve_grootboekrekening(root, info):
         """ Get grootboekrekening when requested """
         if root.get('grootboekrekening_id'):
             return hhb_dataloader().grootboekrekeningen.load_one(root.get('grootboekrekening_id'))
 
-    async def resolve_afspraak(root, info):
+    def resolve_afspraak(root, info):
         """ Get afspraak when requested """
         if root.get('afspraak_id'):
             return hhb_dataloader().afspraken.load_one(root.get('afspraak_id'))

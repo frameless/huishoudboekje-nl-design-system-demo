@@ -39,7 +39,7 @@ def test_delete_signaal(client):
         assert rm0.call_count == 1
         assert rm1.call_count == 1
         assert rm2.call_count == 1
-        assert fallback.called == 0
+        assert fallback.call_count == 0
         assert response.json == expected
 
 def test_delete_signaal_failure(client):
@@ -66,5 +66,5 @@ def test_delete_signaal_failure(client):
         )
 
         assert rm0.call_count == 1
-        assert fallback.called == 0
+        assert fallback.call_count == 0
         assert response.json["errors"][0]["message"] == expected

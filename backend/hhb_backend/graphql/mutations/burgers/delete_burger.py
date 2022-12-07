@@ -4,15 +4,13 @@ from datetime import datetime
 
 import graphene
 import requests
-from graphql import GraphQLError
 
+import hhb_backend.graphql.models.burger as graphene_burger
+from graphql import GraphQLError
+from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
-import hhb_backend.graphql.models.burger as graphene_burger
-from hhb_backend.graphql.utils.gebruikersactiviteiten import (
-    gebruikers_activiteit_entities,
-    log_gebruikers_activiteit,
-)
+from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
 
 
 class DeleteBurger(graphene.Mutation):
@@ -23,21 +21,11 @@ class DeleteBurger(graphene.Mutation):
     ok = graphene.Boolean()
     previous = graphene.Field(lambda: graphene_burger.Burger)
 
-    def gebruikers_activiteit(self, _root, info, *_args, **_kwargs):
-        return dict(
-            action=info.field_name,
-            entities=gebruikers_activiteit_entities(
-                entity_type="burger", result=self, key="previous"
-            ),
-            before=dict(burger=self.previous),
-        )
-
     @staticmethod
-    @log_gebruikers_activiteit
-    async def mutate(_root, info, id):
+    def mutate(self, info, id):
         """Delete current burger"""
-        existing_burger = hhb_dataloader().burgers.load_one(id)
-        if not existing_burger:
+        previous = hhb_dataloader().burgers.load_one(id)
+        if not previous:
             raise GraphQLError(f"Burger with id {id} not found")
 
         afspraken = hhb_dataloader().afspraken.by_burger(id)
@@ -58,4 +46,12 @@ class DeleteBurger(graphene.Mutation):
         if response.status_code != 204:
             raise GraphQLError(f"Upstream API responded: {response.json()}")
 
-        return DeleteBurger(ok=True, previous=existing_burger)
+        AuditLogging.create(
+            action=info.field_name,
+            entities=[
+                GebruikersActiviteitEntity(entityType="burger", entityId=id)
+            ],
+            before=dict(burger=previous),
+        )
+
+        return DeleteBurger(ok=True, previous=previous)

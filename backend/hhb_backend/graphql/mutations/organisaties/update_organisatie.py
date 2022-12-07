@@ -1,15 +1,13 @@
 """ GraphQL mutation for updating a Organisatie """
 import graphene
 import requests
-from graphql import GraphQLError
 
+from graphql import GraphQLError
+from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.models.organisatie import Organisatie
-from hhb_backend.graphql.utils.gebruikersactiviteiten import (
-    gebruikers_activiteit_entities,
-    log_gebruikers_activiteit,
-)
+from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
 
 
 class UpdateOrganisatie(graphene.Mutation):
@@ -24,19 +22,8 @@ class UpdateOrganisatie(graphene.Mutation):
     organisatie = graphene.Field(lambda: Organisatie)
     previous = graphene.Field(lambda: Organisatie)
 
-    def gebruikers_activiteit(self, _root, info, *_args, **_kwargs):
-        return dict(
-            action=info.field_name,
-            entities=gebruikers_activiteit_entities(
-                entity_type="organisatie", result=self, key="organisatie"
-            ),
-            before=dict(organisatie=self.previous),
-            after=dict(organisatie=self.organisatie),
-        )
-
     @staticmethod
-    @log_gebruikers_activiteit
-    async def mutate(_root, _info, id, **kwargs):
+    def mutate(self, info, id, **kwargs):
         """ Update the current Organisatie """
         previous = hhb_dataloader().organisaties.load_one(id)
         if not previous:
@@ -57,5 +44,14 @@ class UpdateOrganisatie(graphene.Mutation):
                 )
 
             organisatie = org_service_response.json()["data"]
+
+        AuditLogging.create(
+            action=info.field_name,
+            entities=[
+                GebruikersActiviteitEntity(entityType="organisatie", entityId=id)
+            ],
+            before=dict(organisatie=previous),
+            after=dict(organisatie=organisatie),
+        )
 
         return UpdateOrganisatie(organisatie=organisatie, previous=previous, ok=True)

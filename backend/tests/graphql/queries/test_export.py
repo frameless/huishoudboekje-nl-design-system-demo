@@ -19,8 +19,8 @@ def test_export_getAll(client):
         response = client.post("/graphql", data=request, content_type='application/json')
 
         # assert
-        assert rm1.called_once
-        assert rm2.called_once
+        assert rm1.call_count == 1
+        assert rm2.call_count == 1
         assert fallback.call_count == 0
         assert response.json == {'data': {
             'exports': [{
@@ -46,7 +46,7 @@ def test_export_getById(client):
         response = client.post("/graphql", data=request, content_type='application/json')
 
         # assert
-        assert rm1.called_once
-        assert rm2.called_once
+        assert rm1.call_count == 1
+        assert rm2.call_count == 1
         assert fallback.call_count == 0
-        assert response.json == {'data': {'export': {'id': 1}}} 
+        assert response.json == {'data': {'export': {'id': 1}}}
