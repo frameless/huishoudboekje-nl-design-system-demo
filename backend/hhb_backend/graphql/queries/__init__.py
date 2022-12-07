@@ -20,16 +20,10 @@ from .rekeningen import RekeningQuery, RekeningenQuery
 from .rubrieken import RubriekQuery, RubriekenQuery
 from .saldo import SaldoQuery
 from .signalen import SignaalQuery, SignalenQuery
-from .test import TestQuery
 
 
 class RootQuery(graphene.ObjectType):
     """ The root of all queries """
-    test = TestQuery.return_type
-
-    def resolve_test(root, info):
-        return TestQuery.resolver(root, info)
-
     burger = BurgerQuery.return_type
     burgers = BurgersQuery.return_type
     burgers_paged = BurgersPagedQuery.return_type

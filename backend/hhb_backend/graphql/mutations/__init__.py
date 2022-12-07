@@ -20,7 +20,6 @@ from .burgers.create_burger import CreateBurger
 from .burgers.delete_burger import DeleteBurger
 from .burgers.update_burger import UpdateBurger
 from .configuraties.configuraties import CreateConfiguratie, DeleteConfiguratie, UpdateConfiguratie
-from .create_test import CreateTest
 from .customer_statement_messages.create_customer_statement_message import CreateCustomerStatementMessage
 from .customer_statement_messages.delete_customer_statement_message import DeleteCustomerStatementMessage
 from .huishoudens.add_huishouden_burger import AddHuishoudenBurger
