@@ -2,10 +2,13 @@ import {gql} from "@apollo/client";
 
 export const DeleteBurgerRekeningMutation = gql`
     mutation deleteBurgerRekening(
-        $id: Int!
+        $rekeningId: Int!
         $burgerId: Int!
     ){
-        deleteBurgerRekening(id: $id, burgerId: $burgerId){
+        deleteBurgerRekening(
+            rekeningId: $rekeningId,
+            burgerId: $burgerId
+        ){
             ok
         }
     }

@@ -30,6 +30,13 @@ export type Scalars = {
   /** Accepteert datum, datum en tijd, ints en strings en wordt gebruikt bij ComplexFilterType. */
   DynamicType: any;
   /**
+   * Allows use of a JSON String for input / output from the GraphQL schema.
+   *
+   * Use of this type is *not recommended* as you lose the benefits of having a defined, static
+   * schema (one of the key benefits of GraphQL).
+   */
+  JSONString: any;
+  /**
    * Create scalar that ignores normal serialization/deserialization, since
    * that will be handled by the multipart request spec
    */
@@ -616,6 +623,7 @@ export type GebruikersActiviteitSnapshot = {
   grootboekrekening?: Maybe<Grootboekrekening>;
   huishouden?: Maybe<Huishouden>;
   journaalpost?: Maybe<Journaalpost>;
+  json?: Maybe<Scalars['JSONString']>;
   organisatie?: Maybe<Organisatie>;
   postadres?: Maybe<Postadres>;
   rubriek?: Maybe<Rubriek>;
@@ -776,8 +784,6 @@ export type RootMutation = {
   updateAlarm?: Maybe<UpdateAlarm>;
   updateBurger?: Maybe<UpdateBurger>;
   updateConfiguratie?: Maybe<UpdateConfiguratie>;
-  /** deprecated */
-  updateJournaalpostGrootboekrekening?: Maybe<UpdateJournaalpostGrootboekrekening>;
   updateOrganisatie?: Maybe<UpdateOrganisatie>;
   updatePostadres?: Maybe<UpdatePostadres>;
   updateRekening?: Maybe<UpdateRekening>;
@@ -947,7 +953,7 @@ export type RootMutationDeleteBurgerArgs = {
 /** The root of all mutations  */
 export type RootMutationDeleteBurgerRekeningArgs = {
   burgerId: Scalars['Int'];
-  id: Scalars['Int'];
+  rekeningId: Scalars['Int'];
 };
 
 
@@ -1069,12 +1075,6 @@ export type RootMutationUpdateBurgerArgs = {
 /** The root of all mutations  */
 export type RootMutationUpdateConfiguratieArgs = {
   input?: InputMaybe<ConfiguratieInput>;
-};
-
-
-/** The root of all mutations  */
-export type RootMutationUpdateJournaalpostGrootboekrekeningArgs = {
-  input?: InputMaybe<UpdateJournaalpostGrootboekrekeningInput>;
 };
 
 
@@ -1384,7 +1384,7 @@ export type RootQueryRekeningenArgs = {
 
 /** The root of all queries  */
 export type RootQueryRubriekArgs = {
-  id: Scalars['String'];
+  id: Scalars['Int'];
 };
 
 
@@ -1502,18 +1502,6 @@ export type UpdateConfiguratie = {
   configuratie?: Maybe<Configuratie>;
   ok?: Maybe<Scalars['Boolean']>;
   previous?: Maybe<Configuratie>;
-};
-
-/** deprecated */
-export type UpdateJournaalpostGrootboekrekening = {
-  journaalpost?: Maybe<Journaalpost>;
-  ok?: Maybe<Scalars['Boolean']>;
-  previous?: Maybe<Journaalpost>;
-};
-
-export type UpdateJournaalpostGrootboekrekeningInput = {
-  grootboekrekeningId: Scalars['String'];
-  id: Scalars['Int'];
 };
 
 export type UpdateOrganisatie = {
@@ -1786,7 +1774,7 @@ export type DeleteBurgerMutationVariables = Exact<{
 export type DeleteBurgerMutation = { deleteBurger?: { ok?: boolean } };
 
 export type DeleteBurgerRekeningMutationVariables = Exact<{
-  id: Scalars['Int'];
+  rekeningId: Scalars['Int'];
   burgerId: Scalars['Int'];
 }>;
 
@@ -1920,14 +1908,6 @@ export type UpdateConfiguratieMutationVariables = Exact<{
 
 
 export type UpdateConfiguratieMutation = { updateConfiguratie?: { ok?: boolean, configuratie?: { id?: string, waarde?: string } } };
-
-export type UpdateJournaalpostGrootboekrekeningMutationVariables = Exact<{
-  id: Scalars['Int'];
-  grootboekrekeningId: Scalars['String'];
-}>;
-
-
-export type UpdateJournaalpostGrootboekrekeningMutation = { updateJournaalpostGrootboekrekening?: { ok?: boolean } };
 
 export type UpdateOrganisatieMutationVariables = Exact<{
   id: Scalars['Int'];
@@ -3466,8 +3446,8 @@ export type DeleteBurgerMutationHookResult = ReturnType<typeof useDeleteBurgerMu
 export type DeleteBurgerMutationResult = Apollo.MutationResult<DeleteBurgerMutation>;
 export type DeleteBurgerMutationOptions = Apollo.BaseMutationOptions<DeleteBurgerMutation, DeleteBurgerMutationVariables>;
 export const DeleteBurgerRekeningDocument = gql`
-    mutation deleteBurgerRekening($id: Int!, $burgerId: Int!) {
-  deleteBurgerRekening(id: $id, burgerId: $burgerId) {
+    mutation deleteBurgerRekening($rekeningId: Int!, $burgerId: Int!) {
+  deleteBurgerRekening(rekeningId: $rekeningId, burgerId: $burgerId) {
     ok
   }
 }
@@ -3487,7 +3467,7 @@ export type DeleteBurgerRekeningMutationFn = Apollo.MutationFunction<DeleteBurge
  * @example
  * const [deleteBurgerRekeningMutation, { data, loading, error }] = useDeleteBurgerRekeningMutation({
  *   variables: {
- *      id: // value for 'id'
+ *      rekeningId: // value for 'rekeningId'
  *      burgerId: // value for 'burgerId'
  *   },
  * });
@@ -4091,42 +4071,6 @@ export function useUpdateConfiguratieMutation(baseOptions?: Apollo.MutationHookO
 export type UpdateConfiguratieMutationHookResult = ReturnType<typeof useUpdateConfiguratieMutation>;
 export type UpdateConfiguratieMutationResult = Apollo.MutationResult<UpdateConfiguratieMutation>;
 export type UpdateConfiguratieMutationOptions = Apollo.BaseMutationOptions<UpdateConfiguratieMutation, UpdateConfiguratieMutationVariables>;
-export const UpdateJournaalpostGrootboekrekeningDocument = gql`
-    mutation updateJournaalpostGrootboekrekening($id: Int!, $grootboekrekeningId: String!) {
-  updateJournaalpostGrootboekrekening(
-    input: {id: $id, grootboekrekeningId: $grootboekrekeningId}
-  ) {
-    ok
-  }
-}
-    `;
-export type UpdateJournaalpostGrootboekrekeningMutationFn = Apollo.MutationFunction<UpdateJournaalpostGrootboekrekeningMutation, UpdateJournaalpostGrootboekrekeningMutationVariables>;
-
-/**
- * __useUpdateJournaalpostGrootboekrekeningMutation__
- *
- * To run a mutation, you first call `useUpdateJournaalpostGrootboekrekeningMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateJournaalpostGrootboekrekeningMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [updateJournaalpostGrootboekrekeningMutation, { data, loading, error }] = useUpdateJournaalpostGrootboekrekeningMutation({
- *   variables: {
- *      id: // value for 'id'
- *      grootboekrekeningId: // value for 'grootboekrekeningId'
- *   },
- * });
- */
-export function useUpdateJournaalpostGrootboekrekeningMutation(baseOptions?: Apollo.MutationHookOptions<UpdateJournaalpostGrootboekrekeningMutation, UpdateJournaalpostGrootboekrekeningMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<UpdateJournaalpostGrootboekrekeningMutation, UpdateJournaalpostGrootboekrekeningMutationVariables>(UpdateJournaalpostGrootboekrekeningDocument, options);
-      }
-export type UpdateJournaalpostGrootboekrekeningMutationHookResult = ReturnType<typeof useUpdateJournaalpostGrootboekrekeningMutation>;
-export type UpdateJournaalpostGrootboekrekeningMutationResult = Apollo.MutationResult<UpdateJournaalpostGrootboekrekeningMutation>;
-export type UpdateJournaalpostGrootboekrekeningMutationOptions = Apollo.BaseMutationOptions<UpdateJournaalpostGrootboekrekeningMutation, UpdateJournaalpostGrootboekrekeningMutationVariables>;
 export const UpdateOrganisatieDocument = gql`
     mutation updateOrganisatie($id: Int!, $kvknummer: String, $vestigingsnummer: String, $naam: String) {
   updateOrganisatie(
