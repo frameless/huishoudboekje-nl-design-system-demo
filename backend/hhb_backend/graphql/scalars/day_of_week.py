@@ -1,7 +1,7 @@
 import graphene
 import enum
 
-class pDayOfWeek(str, enum.Enum):
+class DayOfWeek(str, enum.Enum):
     """http://schema.org/DayOfWeek implementation"""
     Monday: str = "Monday"
     Tuesday: str = "Tuesday"
@@ -12,4 +12,4 @@ class pDayOfWeek(str, enum.Enum):
     Sunday: str = "Sunday"
 
 
-DayOfWeek = graphene.Enum.from_enum(pDayOfWeek)
+DayOfWeekEnum = graphene.Enum.from_enum(DayOfWeek)

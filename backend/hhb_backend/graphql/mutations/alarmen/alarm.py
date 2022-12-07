@@ -10,7 +10,7 @@ from graphql import GraphQLError
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.scalars.bedrag import Bedrag
-from hhb_backend.graphql.scalars.day_of_week import DayOfWeek
+from hhb_backend.graphql.scalars.day_of_week import DayOfWeekEnum
 from hhb_backend.graphql.utils.dates import valid_afspraak, to_date
 from hhb_backend.graphql.utils.upstream_error_handler import UpstreamError
 
@@ -23,7 +23,7 @@ class CreateAlarmInput(graphene.InputObjectType):
     datumMargin = graphene.Int()
     bedrag = graphene.Field(Bedrag)
     bedragMargin = graphene.Field(Bedrag)
-    byDay = graphene.List(DayOfWeek, default_value=[])
+    byDay = graphene.List(DayOfWeekEnum, default_value=[])
     byMonth = graphene.List(graphene.Int, default_value=[])
     byMonthDay = graphene.List(graphene.Int, default_value=[])
 
@@ -36,7 +36,7 @@ class UpdateAlarmInput(graphene.InputObjectType):
     datumMargin = graphene.Int()
     bedrag = graphene.Field(Bedrag)
     bedragMargin = graphene.Field(Bedrag)
-    byDay = graphene.List(DayOfWeek)
+    byDay = graphene.List(DayOfWeekEnum)
     byMonth = graphene.List(graphene.Int)
     byMonthDay = graphene.List(graphene.Int)
 

@@ -8,7 +8,7 @@ from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.models import afspraak
-from hhb_backend.graphql.scalars.day_of_week import DayOfWeek
+from hhb_backend.graphql.scalars.day_of_week import DayOfWeekEnum
 from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
 from hhb_backend.graphql.utils.upstream_error_handler import UpstreamError
 
@@ -16,7 +16,7 @@ from hhb_backend.graphql.utils.upstream_error_handler import UpstreamError
 class BetaalinstructieInput(graphene.InputObjectType):
     """Implementatie op basis van http://schema.org/Schedule"""
     '''Lijst van dagen in de week'''
-    by_day = graphene.List(DayOfWeek)
+    by_day = graphene.List(DayOfWeekEnum)
     '''Lijst van maanden in het jaar'''
     by_month = graphene.List(graphene.Int)
     '''De dagen van de maand'''

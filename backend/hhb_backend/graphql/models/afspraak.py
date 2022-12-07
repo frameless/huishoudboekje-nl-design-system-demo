@@ -11,7 +11,7 @@ import hhb_backend.graphql.models.rekening as rekening
 import hhb_backend.graphql.models.rubriek as rubriek
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.scalars.bedrag import Bedrag
-from hhb_backend.graphql.scalars.day_of_week import DayOfWeek
+from hhb_backend.graphql.scalars.day_of_week import DayOfWeekEnum
 from hhb_backend.processen.overschrijvingen_planner import (
     PlannedOverschrijvingenInput,
     get_planned_overschrijvingen,
@@ -31,7 +31,7 @@ class Betaalinstructie(graphene.ObjectType):
     """Implementatie op basis van http://schema.org/Schedule"""
 
     '''Lijst van dagen in de week'''
-    by_day = graphene.List(DayOfWeek)
+    by_day = graphene.List(DayOfWeekEnum)
     '''Lijst van maanden in het jaar'''
     by_month = graphene.List(graphene.Int)
     '''De dagen van de maand'''
