@@ -33,6 +33,10 @@
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook"
   },
+  "engines": {
+    "node": ">=18",
+    "npm": ">=8"
+  },
   "dependencies": {
     "@apollo/client": "^3.7.2",
     "@chakra-ui/icons": "^2.0.13",

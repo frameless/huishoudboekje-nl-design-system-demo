@@ -9,6 +9,10 @@
     "version-changeset": "changeset version && npm run postversion",
     "postversion": "node scripts/postversion.js"
   },
+  "engines": {
+    "node": ">=18",
+    "npm": ">=8"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://gitlab.com/commonground/huishoudboekje/app-new.git"
