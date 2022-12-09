@@ -2,6 +2,7 @@
   "name": "postadressenservice",
   "version": "0.1.0",
   "description": "Little NodeJS Express server that handles requests for saving information about postal addresses.",
+  "private": true,
   "main": "main.ts",
   "author": {
     "name": "Koen Brouwer",
