@@ -12,7 +12,7 @@ const useBurgerValidator = () => {
 		voornamen: zod.string().min(1).refine(v => v.trim().length > 0).transform(v => v.trim()),
 		achternaam: zod.string().min(1).refine(v => v.trim().length > 0).transform(v => v.trim()),
 		geboortedatum: zod.string().regex(Regex.Date).refine(strval => dayjs(strval, "L").isSameOrBefore(dayjs()), {message: t("messages.burgers.invalidGeboortedatum")}),
-		email: zod.string().min(1).email(),
+		email: zod.string().min(1).email().nullable().optional(),
 		straatnaam: zod.string().min(1).refine(v => v.trim().length > 0).transform(v => v.trim()),
 		huisnummer: zod.string().min(1).refine(v => v.trim().length > 0).transform(v => v.trim()),
 		postcode: zod.string().regex(Regex.ZipcodeNL),
@@ -20,7 +20,7 @@ const useBurgerValidator = () => {
 		telefoonnummer: zod.union([
 			zod.string().regex(Regex.MobilePhoneNL),
 			zod.string().regex(Regex.PhoneNumberNL),
-		]),
+		]).nullable().optional(),
 	});
 };
 

@@ -49,6 +49,10 @@ const BurgerForm: React.FC<BurgerFormProps> = ({burger, onSubmit, isLoading, isB
 
 		try {
 			const data = validator.parse(form);
+
+			// Todo: GraphQL doesn't understand undefined, the solution is to explicitly set a field to null
+			//  but gen-types doesn't understand null (12-12-2022)
+			// @ts-ignore
 			onSubmit({
 				...data,
 				...burger?.id && {id: burger?.id},
@@ -155,7 +159,7 @@ const BurgerForm: React.FC<BurgerFormProps> = ({burger, onSubmit, isLoading, isB
 							<Stack spacing={1}>
 								<FormLabel>{t("forms.burgers.fields.telefoonnummer")}</FormLabel>
 								<Tooltip label={t("forms.burgers.tooltips.telefoonnummer")} aria-label={t("forms.burgers.tooltips.telefoonnummer")} placement={isMobile ? "top" : "left"}>
-									<Input onChange={e => updateForm("telefoonnummer", e.target.value)} value={form.telefoonnummer || ""} />
+									<Input onChange={e => updateForm("telefoonnummer", e.target.value || null)} value={form.telefoonnummer || ""} />
 								</Tooltip>
 								<FormErrorMessage>{t("messages.burgers.invalidTelefoonnummer")}</FormErrorMessage>
 							</Stack>
@@ -163,7 +167,7 @@ const BurgerForm: React.FC<BurgerFormProps> = ({burger, onSubmit, isLoading, isB
 						<FormControl id={"mail"} isInvalid={!isFieldValid("email")} isRequired={true}>
 							<Stack spacing={1}>
 								<FormLabel>{t("forms.burgers.fields.mail")}</FormLabel>
-								<Input onChange={e => updateForm("email", e.target.value)} value={form.email || ""} />
+								<Input onChange={e => updateForm("email", e.target.value || null)} value={form.email || ""} />
 								<FormErrorMessage>{t("messages.burgers.invalidEmail")}</FormErrorMessage>
 							</Stack>
 						</FormControl>
