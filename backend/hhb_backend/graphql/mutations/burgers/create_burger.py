@@ -18,7 +18,6 @@ from hhb_backend.service.model import burger
 
 
 class CreateBurgerInput(graphene.InputObjectType):
-    # burger arguments
     bsn = graphene.Int()
     voorletters = graphene.String()
     voornamen = graphene.String()
@@ -43,10 +42,11 @@ class CreateBurger(graphene.Mutation):
 
     @staticmethod
     def mutate(self, info, input):
-        """ Create the new Gebruiker/Burger """
+        """ Create the new Burger """
 
-        graphene_burger.Burger.bsn_length(input.get('bsn'))
-        graphene_burger.Burger.bsn_elf_proef(input.get('bsn'))
+        bsn = input.get('bsn')
+        graphene_burger.Burger.bsn_length(bsn)
+        graphene_burger.Burger.bsn_elf_proef(bsn)
 
         rekeningen = input.pop("rekeningen", None)
 
@@ -72,9 +72,9 @@ class CreateBurger(graphene.Mutation):
                 for rekening in rekeningen
             ]
 
-
-            rekeningen_entities = [GebruikersActiviteitEntity(entityType="rekening", entityId=rekening["id"]) for rekening in
-                           created_burger.rekeningen]
+            rekeningen_entities = [GebruikersActiviteitEntity(entityType="rekening", entityId=rekening["id"]) for
+                                   rekening in
+                                   created_burger.rekeningen]
             logging.debug(f"Rekeningen entities: {rekeningen_entities}")
 
             entities.extend(rekeningen_entities)

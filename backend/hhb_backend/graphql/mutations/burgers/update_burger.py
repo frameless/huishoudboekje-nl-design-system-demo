@@ -41,8 +41,9 @@ class UpdateBurger(graphene.Mutation):
         previous = hhb_dataloader().burgers.load_one(id)
 
         bsn = kwargs.get("bsn")
-        graphene_burger.Burger.bsn_length(bsn)
-        graphene_burger.Burger.bsn_elf_proef(bsn)
+        if bsn is not None:
+            graphene_burger.Burger.bsn_length(bsn)
+            graphene_burger.Burger.bsn_elf_proef(bsn)
 
         response = requests.post(
             f"{settings.HHB_SERVICES_URL}/burgers/{id}",
