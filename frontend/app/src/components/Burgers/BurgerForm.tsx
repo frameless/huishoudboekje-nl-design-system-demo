@@ -155,7 +155,7 @@ const BurgerForm: React.FC<BurgerFormProps> = ({burger, onSubmit, isLoading, isB
 								</Stack>
 							</FormControl>
 						</Stack>
-						<FormControl id={"telefoonnummer"} isInvalid={!isFieldValid("telefoonnummer")} isRequired={true}>
+						<FormControl id={"telefoonnummer"} isInvalid={!isFieldValid("telefoonnummer")}>
 							<Stack spacing={1}>
 								<FormLabel>{t("forms.burgers.fields.telefoonnummer")}</FormLabel>
 								<Tooltip label={t("forms.burgers.tooltips.telefoonnummer")} aria-label={t("forms.burgers.tooltips.telefoonnummer")} placement={isMobile ? "top" : "left"}>
@@ -164,7 +164,7 @@ const BurgerForm: React.FC<BurgerFormProps> = ({burger, onSubmit, isLoading, isB
 								<FormErrorMessage>{t("messages.burgers.invalidTelefoonnummer")}</FormErrorMessage>
 							</Stack>
 						</FormControl>
-						<FormControl id={"mail"} isInvalid={!isFieldValid("email")} isRequired={true}>
+						<FormControl id={"mail"} isInvalid={!isFieldValid("email")}>
 							<Stack spacing={1}>
 								<FormLabel>{t("forms.burgers.fields.mail")}</FormLabel>
 								<Input onChange={e => updateForm("email", e.target.value || null)} value={form.email || ""} />
