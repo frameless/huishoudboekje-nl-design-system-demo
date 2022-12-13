@@ -89,6 +89,9 @@ def transactie_suggesties(transactie_ids: List[int] = None, transactions: List[B
 
     transactie_ids_with_afspraken = {}
     for transaction in transactions:
+        if not transaction.tegen_rekening:
+            continue
+        
         rekening_id: int = iban_to_rekening_id[transaction.tegen_rekening]
 
         transactie_ids_with_afspraken[transaction.id] = [
