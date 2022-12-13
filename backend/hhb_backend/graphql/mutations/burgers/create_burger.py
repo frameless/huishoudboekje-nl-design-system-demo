@@ -30,7 +30,7 @@ class CreateBurgerInput(graphene.InputObjectType):
     postcode = graphene.String()
     plaatsnaam = graphene.String()
     rekeningen = graphene.List(lambda: rekening_input.RekeningInput)
-    huishouden = graphene.Field(huishouden_input.HuishoudenInput)
+    huishouden = graphene.Argument(huishouden_input.HuishoudenInput)
 
 
 class CreateBurger(graphene.Mutation):
