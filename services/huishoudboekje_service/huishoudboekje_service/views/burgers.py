@@ -55,20 +55,6 @@ class BurgerView(HHBView):
         self.add_filter_filter_huishouden()
         self.add_filter_filter_bsn()
 
-    @staticmethod
-    def filter_in_string(name, cb):
-        filter_string = request.args.get(name)
-        if filter_string:
-            ids = []
-            for raw_id in filter_string.split(","):
-                try:
-                    ids.append(int(raw_id))
-                except ValueError:
-                    abort(make_response(
-                        {"errors": [
-                            f"Input for {name} is not correct, '{raw_id}' is not a number."]},
-                        400))
-            cb(ids)
 
     def add_filter_filter_huishouden(self):
         """ Add filter_huishouden filter based on the id of huishouden """

@@ -2,9 +2,6 @@ import re
 
 from flask.views import MethodView
 from flask import request, abort, make_response
-from sqlalchemy.exc import IntegrityError
-from sqlalchemy.orm.exc import NoResultFound
-from core_service.utils import row2dict
 from core_service.inputs.inputs import Inputs
 from core_service.inputs.validators import JsonSchema
 from core_service.database import db
@@ -58,9 +55,23 @@ class HHBView(MethodView):
                     return [int(s) for s in object_id.split(",")]
             abort(make_response({"errors": [f"Supplied id '{object_id}' is not valid."]}, 400))
 
+    @staticmethod
+    def filter_in_string(name, cb):
+        filter_string = request.args.get(name)
+        ids = []
+        if filter_string:
+            for raw_id in filter_string.split(","):
+                ids.append(str(raw_id))
+        elif not filter_string and "content-type" in request.headers and "json" in request.headers['content-type']:
+            ids = request.json.get(name)
+
+        if ids:
+            cb(ids)
+
+
     def get(self, **kwargs):
         """ GET /<view_path>/(<int:object_id>)?(columns=..,..,..)&(filter_ids=..,..,..))
-        
+
         Inputs
             object_id: optional path parameter
             optional url parameters:
@@ -94,7 +105,7 @@ class HHBView(MethodView):
 
     def post(self, **kwargs):
         """ POST /<view_path>/(<int:object_id>)
-        
+
         Input:
             object_id: optional path parameter
             object_json: data
@@ -115,7 +126,7 @@ class HHBView(MethodView):
 
     def delete(self, **kwargs):
         """ DELETE /<view_path>/<int:object_id>
-        
+
         Input:
             object_id: required path parameter
 
@@ -133,6 +144,6 @@ class HHBView(MethodView):
         return {}, 204
 
     # TODO put implementeren
-    # def put(self, **kwargs): 
+    # def put(self, **kwargs):
     #     """ PUT /<view_path>/(<int:object_id>) """
     #     return {"data": self.hhb_object.json}, 200

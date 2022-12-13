@@ -91,8 +91,6 @@ def test_afspraak_get_filter_burgers(client, afspraak_factory, burger_factory):
     assert response.json["data"][2]["zoektermen"] == afspraak3.zoektermen
     response = client.get(f'/afspraken/?filter_burgers=1337')
     assert response.json["data"] == []
-    response = client.get(f'/afspraken/?filter_burgers=a')
-    assert response.json["errors"][0] == "Input for filter_burgers is not correct, 'a' is not a number."
 
 #
 # def test_afspraak_get_filter_organisaties(client, afspraak_factory, organisatie_factory):
@@ -143,7 +141,5 @@ def test_afspraak_get_filter_rekening(client, afspraak_factory, rekening_factory
     assert len(response.json["data"]) == 2
     assert response.json["data"][0]["zoektermen"] == afspraak1.zoektermen
     assert response.json["data"][1]["zoektermen"] == afspraak2.zoektermen
-    response = client.get(f'/afspraken/?filter_burgers=1337')
+    response = client.get(f'/afspraken/?filter_rekening=1337')
     assert response.json["data"] == []
-    response = client.get(f'/afspraken/?filter_burgers=a')
-    assert response.json["errors"][0] == "Input for filter_burgers is not correct, 'a' is not a number."

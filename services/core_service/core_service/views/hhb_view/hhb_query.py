@@ -49,6 +49,8 @@ class HHBQuery():
             filter_ids = object_id
         elif 'filter_ids' in request.args:
             filter_ids = request.args.get('filter_ids').split(",")
+        elif "content-type" in request.headers and "json" in request.headers["content-type"] and 'filter_ids' in request.json:
+            filter_ids = request.json['filter_ids']
         else:
             return
 
