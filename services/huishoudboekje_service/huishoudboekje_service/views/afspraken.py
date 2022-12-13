@@ -1,10 +1,12 @@
 """ MethodView for /afspraken/(<afspraak_id>)/ path """
+import logging
+
+from core_service.views.hhb_view import HHBView
 from dateutil import parser
 from flask import request, abort, make_response
-from sqlalchemy import or_, and_
-from werkzeug.exceptions import BadRequest
 from models.afspraak import Afspraak
-from core_service.views.hhb_view import HHBView
+from sqlalchemy import or_, and_
+
 
 def get_date_from_request(request, key):
     value = request.args.get(key)
@@ -107,34 +109,7 @@ class AfspraakView(HHBView):
         self.add_filter_filter_zoektermen()
         self.hhb_query.expose_many_relation("journaalposten", "id")
         self.hhb_query.expose_many_relation("overschrijvingen", "id")
-
-    @staticmethod
-    def filter_in_string(name, cb):
-        filter_string = request.args.get(name)
-        if filter_string:
-            ids = []
-            for raw_id in filter_string.split(","):
-                try:
-                    ids.append(int(raw_id))
-                except ValueError:
-                    abort(make_response(
-                        {"errors": [f"Input for {name} is not correct, '{raw_id}' is not a number."]},
-                        400))
-            cb(ids)
-
-    @staticmethod
-    def filter_in_string_(name, cb):
-        filter_string = request.args.get(name)
-        if filter_string:
-            ids = []
-            for raw_id in filter_string.split(","):
-                try:
-                    ids.append(str(raw_id))
-                except ValueError:
-                    abort(make_response(
-                        {"errors": [f"Input for {name} is not correct, '{raw_id}' is not a string."]},
-                        400))
-            cb(ids)
+        
 
     def add_filter_filter_datums(self):
         """ Add filter_datums filter based on the valid_from and valid_through """
@@ -186,21 +161,24 @@ class AfspraakView(HHBView):
 
     def add_filter_filter_afdelingen(self):
         """ Add filter_afdelingen filter based on the id of the afdeling model """
-        def cb(ids): # not mandetory, make optional
+
+        def cb(ids):  # not mandetory, make optional
             self.hhb_query.query = self.hhb_query.query.filter(self.hhb_model.afdeling_id.in_(ids))
 
         AfspraakView.filter_in_string('filter_afdelingen', cb)
 
     def add_filter_filter_postadressen(self):
         """ Add filter_postadressen filter based on the id of the postadres model """
-        def cb(ids): # not mandetory, make optional
+
+        def cb(ids):  # not mandetory, make optional
             self.hhb_query.query = self.hhb_query.query.filter(self.hhb_model.postadres_id.in_(ids))
 
-        AfspraakView.filter_in_string_('filter_postadressen', cb)
+        AfspraakView.filter_in_string('filter_postadressen', cb)
 
     def add_filter_filter_alarmen(self):
         """ Add filter_alarmen filter based on the id of the alarm model """
-        def cb(ids): # not mandetory, make optional
+
+        def cb(ids):  # not mandetory, make optional
             self.hhb_query.query = self.hhb_query.query.filter(self.hhb_model.alarm_id.in_(ids))
 
-        AfspraakView.filter_in_string_('filter_alarmen', cb)
+        AfspraakView.filter_in_string('filter_alarmen', cb)

@@ -190,6 +190,15 @@ def _base_load_with_options(service: str, options: Unpack[DataLoaderOptions], ke
 def _send_get_request(url, service, params=None, headers=None):
     try:
         response = requests.get(url, params=params, headers=headers)
+
+        if response.status_code == 400 and "too large" in response.text.lower():
+            if not headers: headers = {}
+            headers["content-type"] = "application/json"
+            json = {}
+            for key, value in params.items():
+                json[key] = value.split(",")
+            response = requests.get(url, json=json, headers=headers)
+
     except requests.exceptions.ConnectionError:
         raise GraphQLError(f"Failed to connect to service {service}")
 
