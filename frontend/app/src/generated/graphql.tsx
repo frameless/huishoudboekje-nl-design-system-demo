@@ -4842,10 +4842,20 @@ export type GetCreateAfspraakFormDataQueryResult = Apollo.QueryResult<GetCreateA
 export const GetCsmsDocument = gql`
     query getCsms {
   customerStatementMessages {
-    ...CustomerStatementMessage
+    id
+    filename
+    uploadDate
+    accountIdentification
+    closingAvailableFunds
+    closingBalance
+    forwardAvailableBalance
+    openingBalance
+    relatedReference
+    sequenceNumber
+    transactionReferenceNumber
   }
 }
-    ${CustomerStatementMessageFragmentDoc}`;
+    `;
 
 /**
  * __useGetCsmsQuery__

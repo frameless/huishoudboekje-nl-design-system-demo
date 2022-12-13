@@ -10,10 +10,10 @@ class BurgerView(HHBView):
         "type": "object",
         "properties": {
             "telefoonnummer": {
-                "type": "string",
+                "type": ["string", "null"],
             },
             "email": {
-                "type": "string",
+                "type": ["string", "null"],
             },
             "geboortedatum": {
                 "type": "string",
