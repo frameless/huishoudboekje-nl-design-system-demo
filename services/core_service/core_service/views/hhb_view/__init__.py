@@ -61,12 +61,7 @@ class HHBView(MethodView):
         ids = []
         if filter_string:
             for raw_id in filter_string.split(","):
-                try:
-                    ids.append(str(raw_id))
-                except ValueError:
-                    abort(make_response(
-                        {"errors": [f"Input for {name} is not correct, '{raw_id}' is not a number."]},
-                        400))
+                ids.append(str(raw_id))
         elif not filter_string and "content-type" in request.headers and "json" in request.headers['content-type']:
             ids = request.json.get(name)
 
