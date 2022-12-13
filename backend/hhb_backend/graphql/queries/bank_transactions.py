@@ -1,8 +1,9 @@
 """ GraphQL Gebruikers query """
+
 import graphene
-from graphql import GraphQLError
 
 import hhb_backend.graphql.models.bank_transaction as bank_transaction
+from graphql import GraphQLError
 from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.filters.bank_transactions import BankTransactionFilter
@@ -48,19 +49,20 @@ class BankTransactionsPagedQuery:
     )
 
     @classmethod
-    def resolver(cls, _, info, **kwargs):
-        if not "start" in kwargs or not "limit" in kwargs:
+    def resolver(cls, _, info, filters=None, **kwargs):
+        if "start" not in kwargs or "limit" not in kwargs:
             raise GraphQLError(f"Query needs params 'start', 'limit'. ")
 
         result = hhb_dataloader().bank_transactions.load_paged(
             start=kwargs["start"], limit=kwargs["limit"], desc=True,
-            sorting_column="transactie_datum", filters=kwargs.get("filters")
+            sorting_column="transactie_datum", filters=filters
         )
+
         AuditLogging.create(
             action=info.field_name,
             entities=[
                 GebruikersActiviteitEntity(entityType="transactie", entityId=transaction["id"])
-                for transaction in result.values()
+                for transaction in result["banktransactions"]
             ],
         )
         return result

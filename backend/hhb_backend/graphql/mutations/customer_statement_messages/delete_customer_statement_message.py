@@ -25,7 +25,8 @@ class DeleteCustomerStatementMessage(graphene.Mutation):
         """ Delete current Customer Statement Message """
         previous = hhb_dataloader().csms.load_one(id)
 
-        transaction_ids = previous.bank_transactions
+        transactions = hhb_dataloader().bank_transactions.by_csm(id)
+        transaction_ids = [t.id for t in transactions]
 
         journaalposten = hhb_dataloader().journaalposten.by_transactions(transaction_ids)
         for journaalpost in journaalposten:

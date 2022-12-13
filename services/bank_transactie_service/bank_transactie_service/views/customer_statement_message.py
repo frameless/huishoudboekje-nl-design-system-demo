@@ -44,5 +44,5 @@ class CustomerStatementMessageView(HHBView):
         "required": []
     }
 
-    def extend_get(self, **kwargs):
-        self.hhb_query.expose_many_relation("bank_transactions", "id")
+    # def extend_get(self, **kwargs):
+    #     self.hhb_query.expose_many_relation("bank_transactions", "id")
