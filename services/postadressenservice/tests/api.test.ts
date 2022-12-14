@@ -135,7 +135,7 @@ describe("Address CRUD (operations)", () => {
 
 	describe("Given the address does not exist", () => {
 		it("should return 404 Not Found when tyring to getOneAddress", async () => {
-			prismaMock.address.update.mockRejectedValue(new Prisma.PrismaClientKnownRequestError("Not found", "P2025", "Client"));
+			prismaMock.address.update.mockRejectedValue(new Prisma.PrismaClientKnownRequestError("Not found", {code: "P2025", clientVersion: "0.0.0"}));
 
 			const result = await api.get("/v1/addresses/" + addresses[0].id);
 			expect(result.statusCode).toEqual(404);
@@ -151,7 +151,7 @@ describe("Address CRUD (operations)", () => {
 
 		it("should return 404 Not Found when trying to updateAddress", async () => {
 			const newStreet = "Barstreet";
-			prismaMock.address.update.mockRejectedValue(new Prisma.PrismaClientKnownRequestError("Not found", "P2025", "Client"));
+			prismaMock.address.update.mockRejectedValue(new Prisma.PrismaClientKnownRequestError("Not found", {code: "P2025", clientVersion: "0.0.0"}));
 
 			const result = await api.put("/v1/addresses/" + addresses[0].id).send({
 				id: addresses[0].id,
@@ -161,7 +161,7 @@ describe("Address CRUD (operations)", () => {
 		});
 
 		it("should delete the Address", async () => {
-			prismaMock.address.delete.mockRejectedValue(new Prisma.PrismaClientKnownRequestError("Not found", "P2025", "Client"));
+			prismaMock.address.delete.mockRejectedValue(new Prisma.PrismaClientKnownRequestError("Not found", {code: "P2025", clientVersion: "0.0.0"}));
 			const result = await api.delete("/v1/addresses/" + addresses[0].id);
 			expect(result.statusCode).toEqual(204);
 		});

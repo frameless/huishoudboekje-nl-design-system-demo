@@ -110,7 +110,7 @@ describe("Alarm CRUD (operations)", () => {
 
 	describe("Given the Alarm does not exist", () => {
 		it("should return 404 Not Found when tyring to getOneAlarm", async () => {
-			prismaMock.alarm.update.mockRejectedValue(new Prisma.PrismaClientKnownRequestError("Not found", "P2025", "Client"));
+			prismaMock.alarm.update.mockRejectedValue(new Prisma.PrismaClientKnownRequestError("Not found", {code: "P2025", clientVersion: "0.0.0"}));
 
 			const result = await api.get("/v1/alarms/" + alarms[0].id);
 			expect(result.statusCode).toEqual(404);
@@ -127,7 +127,7 @@ describe("Alarm CRUD (operations)", () => {
 
 		it("should return 404 Not Found when trying to updateAlarm", async () => {
 			const newStreet = "Barstreet";
-			prismaMock.alarm.update.mockRejectedValue(new Prisma.PrismaClientKnownRequestError("Not found", "P2025", "Client"));
+			prismaMock.alarm.update.mockRejectedValue(new Prisma.PrismaClientKnownRequestError("Not found", {code: "P2025", clientVersion: "0.0.0"}));
 
 			const result = await api.put("/v1/alarms/" + alarms[0].id).send({
 				id: alarms[0].id,
@@ -137,7 +137,7 @@ describe("Alarm CRUD (operations)", () => {
 		});
 
 		it("should delete the Alarm", async () => {
-			prismaMock.alarm.delete.mockRejectedValue(new Prisma.PrismaClientKnownRequestError("Not found", "P2025", "Client"));
+			prismaMock.alarm.delete.mockRejectedValue(new Prisma.PrismaClientKnownRequestError("Not found", {code: "P2025", clientVersion: "0.0.0"}));
 			const result = await api.delete("/v1/alarms/" + alarms[0].id);
 			expect(result.statusCode).toEqual(204);
 		});
