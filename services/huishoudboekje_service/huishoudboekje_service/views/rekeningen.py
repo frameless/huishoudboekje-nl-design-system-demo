@@ -59,18 +59,20 @@ class RekeningView(HHBView):
                     f"Input for filter_afdelingen is not correct."]}, 400))
 
     def add_filter_ibans(self):
-        filter_ibans = request.args.get('filter_ibans')
-        if filter_ibans:
+        def add_filter(ids):
             self.hhb_query.query = self.hhb_query.query.filter(
-                Rekening.iban.in_(filter_ibans.split(","))
+                Rekening.iban.in_(ids)
             )
+        
+        RekeningView.filter_in_string('filter_ibans', add_filter)            
   
     def add_filter_rekeninghouders(self):
-        filter_rekeninghouders = request.args.get('filter_rekeninghouders')
-        if filter_rekeninghouders:
+        def add_filter(rekeninghouders):
             self.hhb_query.query = self.hhb_query.query.filter(
-                Rekening.rekeninghouder.in_(filter_rekeninghouders.split(","))
+                Rekening.rekeninghouder.in_(rekeninghouders)
             )
+        
+        RekeningView.filter_in_string('filter_rekeninghouders', add_filter)            
 
     def add_relations(self, **kwargs):
         self.hhb_query.expose_many_relation("burgers", "burger_id")

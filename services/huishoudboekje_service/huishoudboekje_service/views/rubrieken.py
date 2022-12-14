@@ -25,9 +25,9 @@ class RubriekView(HHBView):
         self.hhb_query.expose_many_relation("afspraken", "id")
 
     def add_filter_grootboekrekening(self):
-        filter_grootboekrekeningen = request.args.get('filter_grootboekrekeningen')
-        if filter_grootboekrekeningen:
-            self.hhb_query.query = self.hhb_query.query.\
-                filter(
-                    Rubriek.grootboekrekening_id.in_(filter_grootboekrekeningen.split(","))
-                )
+        def add_filter(ids):
+            self.hhb_query.query = self.hhb_query.query.filter(
+                Rubriek.grootboekrekening_id.in_(ids)
+            )
+        
+        RubriekView.filter_in_string('filter_grootboekrekeningen', add_filter)            

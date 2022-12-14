@@ -23,6 +23,6 @@ def test_overschrijving_filter_afspraak_id(client, overschrijving_factory, afspr
 
 
 def test_afspraak_filter_invalid_id(client):
-    response = client.get(f'/overschrijvingen/?filter_afspraken=NaN')
-    assert response.status_code == 400
-    assert response.json["errors"][0] == "Input for filter_afspraken is not correct, 'NaN' is not a number."
+    response = client.get(f'/overschrijvingen/?filter_afspraken=1225')
+    assert response.status_code == 200
+    assert response.json["data"] == []
