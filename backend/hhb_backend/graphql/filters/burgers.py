@@ -4,8 +4,8 @@ from ..scalars.complex_filter import ComplexFilterType, ComplexBedragFilterType
 
 
 class BurgerFilter(graphene.InputObjectType):
-    OR = graphene.Field(lambda: BurgerFilter)
-    AND = graphene.Field(lambda: BurgerFilter)
+    OR = graphene.Argument(lambda: BurgerFilter)
+    AND = graphene.Argument(lambda: BurgerFilter)
     id = ComplexFilterType()
     telefoonnummer = ComplexFilterType()
     email = ComplexFilterType()
