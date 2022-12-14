@@ -4,6 +4,7 @@ import deleteAlarm from "../prisma/operations/deleteAlarm";
 import getManyAlarms from "../prisma/operations/getManyAlarms";
 import getOneAlarm from "../prisma/operations/getOneAlarm";
 import updateAlarm from "../prisma/operations/updateAlarm";
+import {addFilterByActive, addFilterByIds} from "./filters";
 import healthRouter from "./health";
 
 const app = express.Router();
@@ -13,17 +14,10 @@ app.get("/health", healthRouter);
 // Get all alarms
 app.get("/", async (req, res, next) => {
 	try {
-		const qFilterIds: string = req.query.filter_ids as string;
-		const qFilterActive: string = req.query.filter_active as string;
-
 		const filters = {
-			// Filter by ids (?filter_ids=1,2,3)
-			...qFilterIds && {ids: qFilterIds.split(",").filter(s => s)},
-
-			// Filter by active (?filter_active=true|false)
-			...qFilterActive && {isActive: qFilterActive === "true"},
+			...addFilterByIds(req),
+			...addFilterByActive(req),
 		};
-
 		const alarms = await getManyAlarms(filters);
 
 		return res.json({
