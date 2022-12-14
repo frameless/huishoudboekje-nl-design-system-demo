@@ -31,27 +31,13 @@ class OrganisatieView(HHBView):
         """ Extend the get function with extra filter """
         self.add_filter_filter_afdelingen()
 
-    @staticmethod
-    def filter_in_string(name, cb):
-        filter_string = request.args.get(name)
-        if filter_string:
-            ids = []
-            for raw_id in filter_string.split(","):
-                try:
-                    ids.append(int(raw_id))
-                except ValueError:
-                    abort(make_response(
-                        {"errors": [
-                            f"Input for {name} is not correct, '{raw_id}' is not a number."]},
-                        400))
-            cb(ids)
-
     def add_filter_filter_afdelingen(self):
         """ Add filter_afdelingen filter based on the id of the organisatie model """
 
         def add_filter(ids):
             self.hhb_query.query = self.hhb_query.query.filter(
-                self.hhb_model.afdeling_id.in_(ids))
+                self.hhb_model.afdeling_id.in_(ids)
+            )
 
         OrganisatieView.filter_in_string('filter_afdelingen', add_filter)
 

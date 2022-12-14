@@ -162,23 +162,23 @@ class AfspraakView(HHBView):
     def add_filter_filter_afdelingen(self):
         """ Add filter_afdelingen filter based on the id of the afdeling model """
 
-        def cb(ids):  # not mandetory, make optional
+        def add_filter(ids):  # not mandetory, make optional
             self.hhb_query.query = self.hhb_query.query.filter(self.hhb_model.afdeling_id.in_(ids))
 
-        AfspraakView.filter_in_string('filter_afdelingen', cb)
+        AfspraakView.filter_in_string('filter_afdelingen', add_filter)
 
     def add_filter_filter_postadressen(self):
         """ Add filter_postadressen filter based on the id of the postadres model """
 
-        def cb(ids):  # not mandetory, make optional
+        def add_filter(ids):  # not mandetory, make optional
             self.hhb_query.query = self.hhb_query.query.filter(self.hhb_model.postadres_id.in_(ids))
 
-        AfspraakView.filter_in_string('filter_postadressen', cb)
+        AfspraakView.filter_in_string('filter_postadressen', add_filter)
 
     def add_filter_filter_alarmen(self):
         """ Add filter_alarmen filter based on the id of the alarm model """
 
-        def cb(ids):  # not mandetory, make optional
+        def add_filter(ids):  # not mandetory, make optional
             self.hhb_query.query = self.hhb_query.query.filter(self.hhb_model.alarm_id.in_(ids))
 
-        AfspraakView.filter_in_string('filter_alarmen', cb)
+        AfspraakView.filter_in_string('filter_alarmen', add_filter)
