@@ -21,6 +21,54 @@ exports[`Address CRUD (operations) Given the address does not exist should creat
 }
 `;
 
+exports[`Address CRUD (operations) Given the address exists should return addresses filtered by id (through request body) 1`] = `
+{
+  "data": [
+    {
+      "houseNumber": "1",
+      "id": "3fc9baf4-f85b-4643-b525-bb901ab825dc",
+      "locality": "Sloothuizen",
+      "postalCode": "9999ZZ",
+      "street": "Foostreet",
+      "timeCreated": "2022-05-10T12:00:00.000Z",
+    },
+    {
+      "houseNumber": "1",
+      "id": "14769fb4-46be-4a87-84d1-da49833ca786",
+      "locality": "Sloothuizen",
+      "postalCode": "9999ZZ",
+      "street": "Foostreet",
+      "timeCreated": "2022-05-10T12:00:00.000Z",
+    },
+  ],
+  "ok": true,
+}
+`;
+
+exports[`Address CRUD (operations) Given the address exists should return addresses filtered by id (through request query params) 1`] = `
+{
+  "data": [
+    {
+      "houseNumber": "1",
+      "id": "3fc9baf4-f85b-4643-b525-bb901ab825dc",
+      "locality": "Sloothuizen",
+      "postalCode": "9999ZZ",
+      "street": "Foostreet",
+      "timeCreated": "2022-05-10T12:00:00.000Z",
+    },
+    {
+      "houseNumber": "1",
+      "id": "14769fb4-46be-4a87-84d1-da49833ca786",
+      "locality": "Sloothuizen",
+      "postalCode": "9999ZZ",
+      "street": "Foostreet",
+      "timeCreated": "2022-05-10T12:00:00.000Z",
+    },
+  ],
+  "ok": true,
+}
+`;
+
 exports[`Address CRUD (operations) Given the address exists should return all addresses 1`] = `
 {
   "data": [

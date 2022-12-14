@@ -22,7 +22,27 @@ describe("Address CRUD (operations)", () => {
 		it("should return all addresses", async () => {
 			prismaMock.address.findMany.mockResolvedValue(addresses as ResolvedValue<unknown>);
 
-			const result = await api.get("/v1/addresses/?filter_ids=" + addresses.map(a => a.id).join(","));
+			const result = await api.get("/v1/addresses/");
+			expect(result.statusCode).toBe(200);
+			expect(result.body).toMatchSnapshot();
+		});
+
+		it("should return addresses filtered by id (through request query params)", async () => {
+			const filterIds = addresses.map(a => a.id).slice(0, 2);
+			prismaMock.address.findMany.mockResolvedValue(addresses.filter(a => filterIds.includes(a.id)) as ResolvedValue<unknown>);
+
+			const result = await api.get("/v1/addresses/?filter_ids=" + filterIds.join(","));
+			expect(result.statusCode).toBe(200);
+			expect(result.body).toMatchSnapshot();
+		});
+
+		it("should return addresses filtered by id (through request body)", async () => {
+			const filterIds = addresses.map(a => a.id).slice(0, 2);
+			prismaMock.address.findMany.mockResolvedValue(addresses.filter(a => filterIds.includes(a.id)) as ResolvedValue<unknown>);
+
+			const result = await api.get("/v1/addresses/").send({
+				filter_ids: filterIds,
+			});
 			expect(result.statusCode).toBe(200);
 			expect(result.body).toMatchSnapshot();
 		});
