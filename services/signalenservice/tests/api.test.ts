@@ -29,8 +29,27 @@ describe("Signal CRUD (operations)", () => {
 		it("should return all Signals", async () => {
 			prismaMock.signal.findMany.mockResolvedValue(signals as ResolvedValue<unknown>);
 
-			const ids: string[] = signals.map(a => a.id);
-			const result = await api.get("/v1/signals/?filter_ids=" + ids.join(","));
+			const result = await api.get("/v1/signals/");
+			expect(result.statusCode).toBe(200);
+			expect(result.body).toMatchSnapshot();
+		});
+
+		it("should return Signals filtered by id (through request query params)", async () => {
+			const filterIds = signals.map(a => a.id).slice(0, 2);
+			prismaMock.signal.findMany.mockResolvedValue(signals.filter(a => filterIds.includes(a.id)) as ResolvedValue<unknown>);
+
+			const result = await api.get("/v1/signals/?filter_ids=" + filterIds.join(","));
+			expect(result.statusCode).toBe(200);
+			expect(result.body).toMatchSnapshot();
+		});
+
+		it("should return Signals filtered by id (through request body)", async () => {
+			const filterIds = signals.map(a => a.id).slice(0, 2);
+			prismaMock.signal.findMany.mockResolvedValue(signals.filter(a => filterIds.includes(a.id)) as ResolvedValue<unknown>);
+
+			const result = await api.get("/v1/signals/").send({
+				filter_ids: filterIds,
+			});
 			expect(result.statusCode).toBe(200);
 			expect(result.body).toMatchSnapshot();
 		});
