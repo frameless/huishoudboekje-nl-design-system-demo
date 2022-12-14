@@ -54,15 +54,17 @@ class JournaalpostView(HHBView):
         self.add_filter_afspraken()
 
     def add_filter_transactions(self):
-        filter_transactions = request.args.get('filter_transactions')
-        if filter_transactions:
+        def add_filter(ids):
             self.hhb_query.query = self.hhb_query.query.filter(
-                Journaalpost.transaction_id.in_(filter_transactions.split(","))
+                Journaalpost.transaction_id.in_(ids)
             )
+            
+        JournaalpostView.filter_in_string('filter_transactions', add_filter)
 
     def add_filter_afspraken(self):
-        filter_afspraken = request.args.get('filter_afspraken')
-        if filter_afspraken:
+        def add_filter(ids):
             self.hhb_query.query = self.hhb_query.query.filter(
-                Journaalpost.afspraak_id.in_(filter_afspraken.split(","))
+                Journaalpost.afspraak_id.in_(ids)
             )
+        
+        JournaalpostView.filter_in_string('filter_afspraken', add_filter)

@@ -55,16 +55,11 @@ class BankTransactionView(HHBView):
 
     def add_filter_filter_customer_statement_message(self):
         """ Add filter_csms filter """
-        filter_csms = request.args.get('filter_csms')
-        if filter_csms:
-            csms = []
-            for raw_id in filter_csms.split(","):
-                try:
-                    csms.append(int(raw_id))
-                except ValueError:
-                    abort(make_response(
-                        {"errors": [f"Input for filter_csms is not correct, '{raw_id}' is not a number."]}, 400))
+
+        def add_filter(csms):
             self.hhb_query.query = self.hhb_query.query.filter(self.hhb_model.customer_statement_message_id.in_(csms))
+
+        BankTransactionView.filter_in_string('filter_csms', add_filter)
 
     def add_filter_filter_is_geboekt(self):
         """ Add filter_is_geboekt filter """
