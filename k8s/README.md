@@ -1,10 +1,10 @@
 > ⚠️ Notice: This is the way we deploy Huishoudboekje onto our review cluster.
-> For production, we recommend using the Helm charts that have been
-> [provided by the community](https://gitlab.com/commonground/huishoudboekje/helm-charts).
+> For production, we recommend using [Helm charts that have been
+> provided by the community](https://gitlab.com/commonground/huishoudboekje/helm-charts).
 
 # Kubernetes Configuration
 
-This readme describes how to Huishoudboekje is deployed as an application to be reviewed on a Kubernetes cluster through
+This readme describes how to deploy Huishoudboekje as an application to be reviewed on a Kubernetes cluster through
 GitLab. It is recommended to have at least some knowledge of the following techniques:
 
 - [Kubernetes](https://kubernetes.io/)
@@ -51,8 +51,8 @@ We have a default set of configurations for various environments, including:
 - Our own review applications and our demonstration environments
 - [Haven compliant Kubernetes clusters](https://haven.commonground.nl/)
 
-This method uses Docker containers that are hosted on our own
-[GitLab Container Repository](https://gitlab.com/commonground/huishoudboekje/app-new/container_registry).
+This method uses Docker containers that are hosted on [our own
+GitLab Container Repository](https://gitlab.com/commonground/huishoudboekje/app-new/container_registry).
 
 Now you can generate the kustomize YAML-files by running the build script.
 
@@ -78,7 +78,7 @@ JWT_AUDIENCE="your-issuer"
 JWT_SECRET="your-jwt-secret"
 ```
 
-We are using Docker images that are hosted on our own GitLab Image Repository, so please make sure you are on an
+We use [Docker images that are hosted on our own GitLab Image Repository](https://gitlab.com/commonground/huishoudboekje/app-new/-/blob/develop/docker-compose.yaml), so please make sure you are on an
 existing branch. Now you can generate the kustomize YAML files by running the build script.
 
 ```shell
@@ -89,7 +89,7 @@ You will find the YAML files with the Kubernetes configuration in the `dist` dir
 
 ## Step 2: Deploying
 
-Deploying Huishoudboekje can be done by running the following commands:
+Deploy Huishoudboekje with these commands:
 
 ```shell
 # Create the namespace if it doesn't exist yet.
@@ -102,4 +102,4 @@ kubectl create namespace $NAMESPACE
 sh k8s/deploy.sh
 ```
 
-Huishoudboekje is now running on your Kubernetes cluster.
+Huishoudboekje will now run on your Kubernetes cluster.
