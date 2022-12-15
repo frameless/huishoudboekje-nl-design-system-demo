@@ -78,7 +78,7 @@ JWT_AUDIENCE="your-issuer"
 JWT_SECRET="your-jwt-secret"
 ```
 
-We use [Docker images that are hosted on our own GitLab Image Repository](https://gitlab.com/commonground/huishoudboekje/app-new/-/blob/develop/docker-compose.yaml), so please make sure you are on an
+We use [Docker images that are hosted on our own GitLab Image Repository](https://gitlab.com/commonground/huishoudboekje/app-new/container_registry), so please make sure you are on an
 existing branch. Now you can generate the kustomize YAML files by running the build script.
 
 ```shell
