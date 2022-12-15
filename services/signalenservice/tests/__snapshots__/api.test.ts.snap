@@ -27,6 +27,78 @@ exports[`Signal CRUD (operations) Given the Signal does not exist should create 
 }
 `;
 
+exports[`Signal CRUD (operations) Given the Signal exists should return Signals filtered by id (through request body) 1`] = `
+{
+  "data": [
+    {
+      "actions": [],
+      "alarmId": "d9c00acb-8d04-4cf0-9be4-061f33b3357d",
+      "banktransactieIds": [],
+      "bedragDifference": "100",
+      "context": {
+        "is": true,
+        "something": "else",
+      },
+      "id": "02c49b0b-def0-46b2-ae03-9b90430adb94",
+      "isActive": true,
+      "timeUpdated": "2022-05-16T13:00:00.000Z",
+      "type": "default",
+    },
+    {
+      "actions": [],
+      "alarmId": "5d65d8e9-1f4a-4cb9-a89c-0f952ac5f2ff",
+      "banktransactieIds": [],
+      "bedragDifference": null,
+      "context": {
+        "is": false,
+        "something": "else",
+      },
+      "id": "bef7c096-40b6-4158-b0a5-5b6b813080be",
+      "isActive": true,
+      "timeUpdated": "2022-05-16T13:00:00.000Z",
+      "type": "default",
+    },
+  ],
+  "ok": true,
+}
+`;
+
+exports[`Signal CRUD (operations) Given the Signal exists should return Signals filtered by id (through request query params) 1`] = `
+{
+  "data": [
+    {
+      "actions": [],
+      "alarmId": "d9c00acb-8d04-4cf0-9be4-061f33b3357d",
+      "banktransactieIds": [],
+      "bedragDifference": "100",
+      "context": {
+        "is": true,
+        "something": "else",
+      },
+      "id": "02c49b0b-def0-46b2-ae03-9b90430adb94",
+      "isActive": true,
+      "timeUpdated": "2022-05-16T13:00:00.000Z",
+      "type": "default",
+    },
+    {
+      "actions": [],
+      "alarmId": "5d65d8e9-1f4a-4cb9-a89c-0f952ac5f2ff",
+      "banktransactieIds": [],
+      "bedragDifference": null,
+      "context": {
+        "is": false,
+        "something": "else",
+      },
+      "id": "bef7c096-40b6-4158-b0a5-5b6b813080be",
+      "isActive": true,
+      "timeUpdated": "2022-05-16T13:00:00.000Z",
+      "type": "default",
+    },
+  ],
+  "ok": true,
+}
+`;
+
 exports[`Signal CRUD (operations) Given the Signal exists should return all Signals 1`] = `
 {
   "data": [

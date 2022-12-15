@@ -29,8 +29,27 @@ describe("Signal CRUD (operations)", () => {
 		it("should return all Signals", async () => {
 			prismaMock.signal.findMany.mockResolvedValue(signals as ResolvedValue<unknown>);
 
-			const ids: string[] = signals.map(a => a.id);
-			const result = await api.get("/v1/signals/?filter_ids=" + ids.join(","));
+			const result = await api.get("/v1/signals/");
+			expect(result.statusCode).toBe(200);
+			expect(result.body).toMatchSnapshot();
+		});
+
+		it("should return Signals filtered by id (through request query params)", async () => {
+			const filterIds = signals.map(a => a.id).slice(0, 2);
+			prismaMock.signal.findMany.mockResolvedValue(signals.filter(a => filterIds.includes(a.id)) as ResolvedValue<unknown>);
+
+			const result = await api.get("/v1/signals/?filter_ids=" + filterIds.join(","));
+			expect(result.statusCode).toBe(200);
+			expect(result.body).toMatchSnapshot();
+		});
+
+		it("should return Signals filtered by id (through request body)", async () => {
+			const filterIds = signals.map(a => a.id).slice(0, 2);
+			prismaMock.signal.findMany.mockResolvedValue(signals.filter(a => filterIds.includes(a.id)) as ResolvedValue<unknown>);
+
+			const result = await api.get("/v1/signals/").send({
+				filter_ids: filterIds,
+			});
 			expect(result.statusCode).toBe(200);
 			expect(result.body).toMatchSnapshot();
 		});
@@ -73,7 +92,7 @@ describe("Signal CRUD (operations)", () => {
 
 	describe("Given the Signal does not exist", () => {
 		it("should return 404 Not Found when tyring to getOneSignal", async () => {
-			prismaMock.signal.update.mockRejectedValue(new Prisma.PrismaClientKnownRequestError("Not found", "P2025", "Client"));
+			prismaMock.signal.update.mockRejectedValue(new Prisma.PrismaClientKnownRequestError("Not found", {code: "P2025", clientVersion: "0.0.0"}));
 
 			const result = await api.get("/v1/signals/" + signals[0].id);
 			expect(result.statusCode).toEqual(404);
@@ -90,7 +109,7 @@ describe("Signal CRUD (operations)", () => {
 
 		it("should return 404 Not Found when trying to updateSignal", async () => {
 			const newStreet = "Barstreet";
-			prismaMock.signal.update.mockRejectedValue(new Prisma.PrismaClientKnownRequestError("Not found", "P2025", "Client"));
+			prismaMock.signal.update.mockRejectedValue(new Prisma.PrismaClientKnownRequestError("Not found", {code: "P2025", clientVersion: "0.0.0"}));
 
 			const result = await api.put("/v1/signals/" + signals[0].id).send({
 				id: signals[0].id,
@@ -100,7 +119,7 @@ describe("Signal CRUD (operations)", () => {
 		});
 
 		it("should delete the Signal", async () => {
-			prismaMock.signal.delete.mockRejectedValue(new Prisma.PrismaClientKnownRequestError("Not found", "P2025", "Client"));
+			prismaMock.signal.delete.mockRejectedValue(new Prisma.PrismaClientKnownRequestError("Not found", {code: "P2025", clientVersion: "0.0.0"}));
 			const result = await api.delete("/v1/signals/" + signals[0].id);
 			expect(result.statusCode).toEqual(204);
 		});

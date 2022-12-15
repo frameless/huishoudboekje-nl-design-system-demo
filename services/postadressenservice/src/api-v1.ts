@@ -4,6 +4,7 @@ import deleteAddress from "../prisma/operations/deleteAddress";
 import getManyAddresses from "../prisma/operations/getManyAddresses";
 import getOneAddress from "../prisma/operations/getOneAddress";
 import updateAddress from "../prisma/operations/updateAddress";
+import {addFilterByIds} from "./filters";
 import healthRouter from "./health";
 
 const app = express.Router();
@@ -13,18 +14,15 @@ app.get("/health", healthRouter);
 // Get all addresses
 app.get("/", async (req, res, next) => {
 	try {
-		const qFilterIds: string = req.query.filter_ids as string;
+		const filters = {
+			...addFilterByIds(req),
+		};
 
-		let ids: string[] = [];
-		if (qFilterIds) {
-			ids = qFilterIds.trim().split(",").filter(s => s);
-		}
+		const alarms = await getManyAddresses(filters);
 
-		// Split by , and filter out empty strings.
-		const addresses = await getManyAddresses(ids);
 		return res.json({
 			ok: true,
-			data: addresses,
+			data: alarms,
 		});
 	}
 	catch (err) {

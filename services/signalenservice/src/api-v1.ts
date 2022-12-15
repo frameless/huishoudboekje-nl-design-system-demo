@@ -4,6 +4,7 @@ import deleteSignal from "../prisma/operations/deleteSignal";
 import getManySignals from "../prisma/operations/getManySignals";
 import getOneSignal from "../prisma/operations/getOneSignal";
 import updateSignal from "../prisma/operations/updateSignal";
+import {addFilterByActive, addFilterByIds} from "./filters";
 import healthRouter from "./health";
 
 const app = express.Router();
@@ -13,18 +14,16 @@ app.get("/health", healthRouter);
 // Get all signals
 app.get("/", async (req, res, next) => {
 	try {
-		const qFilterIds: string = req.query.filter_ids as string;
+		const filters = {
+			...addFilterByIds(req),
+			...addFilterByActive(req),
+		};
 
-		let ids: string[] = [];
-		if (qFilterIds) {
-			ids = qFilterIds.trim().split(",").filter(s => s);
-		}
+		const alarms = await getManySignals(filters);
 
-		// Split by , and filter out empty strings.
-		const signals = await getManySignals(ids);
 		return res.json({
 			ok: true,
-			data: signals,
+			data: alarms,
 		});
 	}
 	catch (err) {
