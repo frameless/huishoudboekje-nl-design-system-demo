@@ -1154,6 +1154,7 @@ export type RootQuery = {
   postadressen?: Maybe<Array<Maybe<Postadres>>>;
   rekening?: Maybe<Rekening>;
   rekeningen?: Maybe<Array<Maybe<Rekening>>>;
+  rekeningenByIbans?: Maybe<Array<Maybe<Rekening>>>;
   rubriek?: Maybe<Rubriek>;
   rubrieken?: Maybe<Array<Maybe<Rubriek>>>;
   saldo?: Maybe<Saldo>;
@@ -1379,6 +1380,12 @@ export type RootQueryRekeningArgs = {
 /** The root of all queries  */
 export type RootQueryRekeningenArgs = {
   ids?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
+};
+
+
+/** The root of all queries  */
+export type RootQueryRekeningenByIbansArgs = {
+  ibans?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
 
@@ -2102,6 +2109,13 @@ export type GetRekeningQueryVariables = Exact<{
 
 export type GetRekeningQuery = { rekening?: { id?: number, iban?: string, rekeninghouder?: string } };
 
+export type GetRekeningenByIbansQueryVariables = Exact<{
+  ibans?: InputMaybe<Array<Scalars['String']> | Scalars['String']>;
+}>;
+
+
+export type GetRekeningenByIbansQuery = { rekeningenByIbans?: Array<{ iban?: string, rekeninghouder?: string }> };
+
 export type GetReportingDataQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -2151,7 +2165,7 @@ export type GetTransactiesQueryVariables = Exact<{
 }>;
 
 
-export type GetTransactiesQuery = { bankTransactionsPaged?: { banktransactions?: Array<{ id?: number, informationToAccountOwner?: string, statementLine?: string, bedrag?: any, isCredit?: boolean, tegenRekeningIban?: string, transactieDatum?: any, tegenRekening?: { iban?: string, rekeninghouder?: string } }>, pageInfo?: { count?: number, limit?: number, start?: number } } };
+export type GetTransactiesQuery = { bankTransactionsPaged?: { banktransactions?: Array<{ id?: number, informationToAccountOwner?: string, statementLine?: string, bedrag?: any, isCredit?: boolean, tegenRekeningIban?: string, transactieDatum?: any }>, pageInfo?: { count?: number, limit?: number, start?: number } } };
 
 export const CustomerStatementMessageFragmentDoc = gql`
     fragment CustomerStatementMessage on CustomerStatementMessage {
@@ -5181,6 +5195,42 @@ export function useGetRekeningLazyQuery(baseOptions?: Apollo.LazyQueryHookOption
 export type GetRekeningQueryHookResult = ReturnType<typeof useGetRekeningQuery>;
 export type GetRekeningLazyQueryHookResult = ReturnType<typeof useGetRekeningLazyQuery>;
 export type GetRekeningQueryResult = Apollo.QueryResult<GetRekeningQuery, GetRekeningQueryVariables>;
+export const GetRekeningenByIbansDocument = gql`
+    query getRekeningenByIbans($ibans: [String!]) {
+  rekeningenByIbans(ibans: $ibans) {
+    iban
+    rekeninghouder
+  }
+}
+    `;
+
+/**
+ * __useGetRekeningenByIbansQuery__
+ *
+ * To run a query within a React component, call `useGetRekeningenByIbansQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetRekeningenByIbansQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetRekeningenByIbansQuery({
+ *   variables: {
+ *      ibans: // value for 'ibans'
+ *   },
+ * });
+ */
+export function useGetRekeningenByIbansQuery(baseOptions?: Apollo.QueryHookOptions<GetRekeningenByIbansQuery, GetRekeningenByIbansQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetRekeningenByIbansQuery, GetRekeningenByIbansQueryVariables>(GetRekeningenByIbansDocument, options);
+      }
+export function useGetRekeningenByIbansLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetRekeningenByIbansQuery, GetRekeningenByIbansQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetRekeningenByIbansQuery, GetRekeningenByIbansQueryVariables>(GetRekeningenByIbansDocument, options);
+        }
+export type GetRekeningenByIbansQueryHookResult = ReturnType<typeof useGetRekeningenByIbansQuery>;
+export type GetRekeningenByIbansLazyQueryHookResult = ReturnType<typeof useGetRekeningenByIbansLazyQuery>;
+export type GetRekeningenByIbansQueryResult = Apollo.QueryResult<GetRekeningenByIbansQuery, GetRekeningenByIbansQueryVariables>;
 export const GetReportingDataDocument = gql`
     query getReportingData {
   burgers {
@@ -5554,7 +5604,13 @@ export const GetTransactiesDocument = gql`
     query getTransacties($offset: Int!, $limit: Int!, $filters: BankTransactionFilter) {
   bankTransactionsPaged(start: $offset, limit: $limit, filters: $filters) {
     banktransactions {
-      ...BankTransaction
+      id
+      informationToAccountOwner
+      statementLine
+      bedrag
+      isCredit
+      tegenRekeningIban
+      transactieDatum
     }
     pageInfo {
       count
@@ -5563,7 +5619,7 @@ export const GetTransactiesDocument = gql`
     }
   }
 }
-    ${BankTransactionFragmentDoc}`;
+    `;
 
 /**
  * __useGetTransactiesQuery__

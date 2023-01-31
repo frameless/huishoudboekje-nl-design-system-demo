@@ -3,7 +3,7 @@ import React, {useEffect, useState} from "react";
 import DatePicker from "react-datepicker";
 import {useTranslation} from "react-i18next";
 import Select from "react-select";
-import {GetTransactiesDocument, useGetTransactiesQuery, useStartAutomatischBoekenMutation} from "../../../generated/graphql";
+import {BankTransaction, GetTransactiesDocument, Rekening, useGetRekeningenByIbansQuery, useGetTransactiesQuery, useStartAutomatischBoekenMutation} from "../../../generated/graphql";
 import {BanktransactieFilters} from "../../../models/models";
 import useStore from "../../../store";
 import Queryable from "../../../utils/Queryable";
@@ -42,7 +42,7 @@ const Transactions = () => {
 		filters: createQueryParamsFromFilters(banktransactieFilters),
 	};
 
-	const $transactions = useGetTransactiesQuery({
+	const transactions = useGetTransactiesQuery({
 		fetchPolicy: "no-cache", // This "no-cache" is to make sure the list is refreshed after uploading a Bankafschrift in CsmUploadModal.tsx (24-02-2022)
 		variables: queryVariables,
 		onCompleted: data => {
@@ -54,6 +54,15 @@ const Transactions = () => {
 			setBanktransactieQueryVariables(queryVariables);
 		},
 	});
+
+	const transacties : BankTransaction[] = transactions.data?.bankTransactionsPaged?.banktransactions || []
+	const ibans = transacties.filter(transactie => transactie.tegenRekeningIban !== null).map(transactie => transactie.tegenRekeningIban? transactie.tegenRekeningIban : "")
+	
+	const $rekeningen = useGetRekeningenByIbansQuery({
+		fetchPolicy: 'no-cache',
+		variables: {ibans: ibans}
+	})
+
 	const [startAutomatischBoeken] = useStartAutomatischBoekenMutation({
 		refetchQueries: [
 			{query: GetTransactiesDocument, variables: queryVariables},
@@ -146,8 +155,12 @@ const Transactions = () => {
 			)}
 
 			<SectionContainer>
-				<Queryable query={$transactions} children={(data) => {
-					const transacties = data?.bankTransactionsPaged?.banktransactions || [];
+				<Queryable query={$rekeningen} children={(data) => {
+					const rekeningen: Rekening[] = data.rekeningenByIbans || [];
+					transacties.forEach(transactie => {
+						transactie.tegenRekening = rekeningen.find(rekening => rekening.iban == transactie.tegenRekeningIban)
+					})
+
 					/* eslint-disable-next-line @typescript-eslint/no-explicit-any */
 					const filtersActive = Object.values(queryVariables.filters).filter(q => ![null, undefined].includes(q as any)).length > 0;
 
