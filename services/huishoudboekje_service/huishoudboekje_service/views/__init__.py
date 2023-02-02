@@ -11,3 +11,4 @@ from .overschrijvingen import OverschrijvingView
 from .exports import ExportView
 from .huishoudens import HuishoudenView
 from .afdelingen import AfdelingView
+from .journaalposten_rubriek import JournaalpostRubriekView

@@ -40,3 +40,23 @@ class RekeningenQuery:
         )
 
         return result
+
+class RekeningenByIbansQuery:
+    return_type = graphene.List(Rekening, ibans=graphene.List(graphene.String))
+
+    @classmethod
+    def resolver(cls, _root, info, ibans=None):
+        if ibans:
+            result = hhb_dataloader().rekeningen.by_ibans(ibans)
+        else:
+            []
+
+        AuditLogging.create(
+            action=info.field_name,
+            entities=[
+                GebruikersActiviteitEntity(entityType="rekening", entityId=iban)
+                for iban in ibans
+            ] if ibans else []
+        )
+
+        return result

@@ -13,10 +13,10 @@ from .gebruikersactiviteiten import GebruikersActiviteitQuery, GebruikersActivit
     GebruikersActiviteitenPagedQuery
 from .grootboekrekeningen import GrootboekrekeningQuery, GrootboekrekeningenQuery
 from .huishoudens import HuishoudenQuery, HuishoudensQuery, HuishoudensPagedQuery
-from .journaalposten import JournaalpostQuery, JournaalpostenQuery
+from .journaalposten import JournaalpostQuery, JournaalpostenTransactionRubriekQuery, JournaalpostenQuery
 from .organisaties import OrganisatieQuery, OrganisatiesQuery
 from .postadressen import PostadressenQuery, PostadresQuery
-from .rekeningen import RekeningQuery, RekeningenQuery
+from .rekeningen import RekeningQuery, RekeningenByIbansQuery, RekeningenQuery
 from .rubrieken import RubriekQuery, RubriekenQuery
 from .saldo import SaldoQuery
 from .signalen import SignaalQuery, SignalenQuery
@@ -33,6 +33,7 @@ class RootQuery(graphene.ObjectType):
     afspraken = AfsprakenQuery.return_type
     rekening = RekeningQuery.return_type
     rekeningen = RekeningenQuery.return_type
+    rekeningen_by_ibans = RekeningenByIbansQuery.return_type
     customer_statement_message = CustomerStatementMessageQuery.return_type
     customer_statement_messages = CustomerStatementMessagesQuery.return_type
     bank_transaction = BankTransactionQuery.return_type
@@ -42,6 +43,7 @@ class RootQuery(graphene.ObjectType):
     grootboekrekeningen = GrootboekrekeningenQuery.return_type
     journaalpost = JournaalpostQuery.return_type
     journaalposten = JournaalpostenQuery.return_type
+    journaalposten_transactie_rubriek = JournaalpostenTransactionRubriekQuery.return_type
     rubriek = RubriekQuery.return_type
     rubrieken = RubriekenQuery.return_type
     configuratie = ConfiguratieQuery.return_type
@@ -91,6 +93,9 @@ class RootQuery(graphene.ObjectType):
     def resolve_rekeningen(root, info, **kwargs):
         return RekeningenQuery.resolver(root, info, **kwargs)
 
+    def resolve_rekeningen_by_ibans(root, info, **kwargs):
+        return RekeningenByIbansQuery.resolver(root, info, **kwargs)
+
     def resolve_customer_statement_message(root, info, **kwargs):
         return CustomerStatementMessageQuery.resolver(root, info, **kwargs)
 
@@ -117,6 +122,9 @@ class RootQuery(graphene.ObjectType):
 
     def resolve_journaalposten(root, info, **kwargs):
         return JournaalpostenQuery.resolver(root, info, **kwargs)
+
+    def resolve_journaalposten_transactie_rubriek(root, info, **kwargs):
+        return JournaalpostenTransactionRubriekQuery.resolver(root, info, **kwargs)
 
     def resolve_rubriek(root, info, **kwargs):
         return RubriekQuery.resolver(root, info, **kwargs)

@@ -3,7 +3,7 @@ import React, {useEffect, useState} from "react";
 import DatePicker from "react-datepicker";
 import {useTranslation} from "react-i18next";
 import Select from "react-select";
-import {GetTransactiesDocument, useGetTransactiesQuery, useStartAutomatischBoekenMutation} from "../../../generated/graphql";
+import {BankTransaction, GetTransactiesDocument, Rekening, JournaalpostTransactieRubriek, useGetAdditionalTransactionDataQuery, useGetTransactiesQuery, useStartAutomatischBoekenMutation} from "../../../generated/graphql";
 import {BanktransactieFilters} from "../../../models/models";
 import useStore from "../../../store";
 import Queryable from "../../../utils/Queryable";
@@ -15,6 +15,7 @@ import Page from "../../shared/Page";
 import Section from "../../shared/Section";
 import SectionContainer from "../../shared/SectionContainer";
 import {defaultBanktransactieFilters} from "./defaultBanktransactieFilters";
+import { TransactionSimple } from "./TransactieOverzichtObject";
 import TransactiesList from "./TransactiesList";
 
 const Transactions = () => {
@@ -42,7 +43,7 @@ const Transactions = () => {
 		filters: createQueryParamsFromFilters(banktransactieFilters),
 	};
 
-	const $transactions = useGetTransactiesQuery({
+	const transactions = useGetTransactiesQuery({
 		fetchPolicy: "no-cache", // This "no-cache" is to make sure the list is refreshed after uploading a Bankafschrift in CsmUploadModal.tsx (24-02-2022)
 		variables: queryVariables,
 		onCompleted: data => {
@@ -54,6 +55,16 @@ const Transactions = () => {
 			setBanktransactieQueryVariables(queryVariables);
 		},
 	});
+
+	const transacties: TransactionSimple[] = transactions.data?.bankTransactionsPaged?.banktransactions || []
+	const ibans = transacties.filter(transactie => transactie.tegenRekeningIban !== null).map(transactie => transactie.tegenRekeningIban? transactie.tegenRekeningIban : "")
+	const transaction_ids = transacties.filter(transactie => transactie.id !== null).map(transactie => transactie.id? transactie.id : -1)
+
+	const $additionalTransactionData = useGetAdditionalTransactionDataQuery({
+		fetchPolicy: 'no-cache',
+		variables: {ibans: ibans, transaction_ids: transaction_ids}
+	})
+
 	const [startAutomatischBoeken] = useStartAutomatischBoekenMutation({
 		refetchQueries: [
 			{query: GetTransactiesDocument, variables: queryVariables},
@@ -146,8 +157,17 @@ const Transactions = () => {
 			)}
 
 			<SectionContainer>
-				<Queryable query={$transactions} children={(data) => {
-					const transacties = data?.bankTransactionsPaged?.banktransactions || [];
+				<Queryable query={$additionalTransactionData} children={(data) => {
+					const rekeningen: Rekening[] = data.rekeningenByIbans || [];
+					const journaalposten: JournaalpostTransactieRubriek[] = data.journaalpostenTransactieRubriek
+					transacties.forEach(transactie => {
+						transactie.tegenRekening = rekeningen.find(rekening => rekening.iban == transactie.tegenRekeningIban)
+						const journaalpost = journaalposten.find(post => post.transactionId == transactie.id)
+						if(journaalpost !== undefined){
+							transactie.rubriek = journaalpost?.afspraakRubriekNaam || journaalpost?.grootboekrekeningRubriekNaam
+						}
+					})
+
 					/* eslint-disable-next-line @typescript-eslint/no-explicit-any */
 					const filtersActive = Object.values(queryVariables.filters).filter(q => ![null, undefined].includes(q as any)).length > 0;
 

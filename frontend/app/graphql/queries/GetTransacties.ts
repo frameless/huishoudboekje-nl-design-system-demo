@@ -1,33 +1,17 @@
 import {gql} from "@apollo/client";
-import {GrootboekrekeningFragment} from "../fragments/Grootboekrekening";
-import {TransactieFragment} from "../fragments/Transactie";
 
+//Should use fragment ...BankTransaction again when getting tegenRekening using getRekeningenByIbans is implemented on all locations
 export const GetTransactiesQuery = gql`
     query getTransacties($offset: Int!, $limit: Int!, $filters: BankTransactionFilter) {
         bankTransactionsPaged(start: $offset, limit: $limit, filters: $filters){
             banktransactions{
-                ...BankTransaction
-                journaalpost {
-                    id
-                    isAutomatischGeboekt
-                    afspraak {
-                        ...Afspraak
-                        rubriek{
-                            id
-                            naam
-                        }
-                    }
-                    grootboekrekening {
-                        ...Grootboekrekening
-                        rubriek {
-                            id
-                            naam
-                        }
-                    }
-                }
-                suggesties {
-                    ...Afspraak
-                }
+                id
+                informationToAccountOwner
+                statementLine
+                bedrag
+                isCredit
+                tegenRekeningIban
+                transactieDatum
             }
             pageInfo{
                 count
@@ -36,6 +20,4 @@ export const GetTransactiesQuery = gql`
             }
         }
     }
-    ${TransactieFragment}
-    ${GrootboekrekeningFragment}
 `;

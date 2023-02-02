@@ -670,6 +670,15 @@ export type Journaalpost = {
   transaction?: Maybe<BankTransaction>;
 };
 
+/** Model van een afgeletterde banktransactie. (minimale data om eenvoudig de rubriek van een banktransactie te kunnen vinden)  */
+export type JournaalpostTransactieRubriek = {
+  afspraakRubriekNaam?: Maybe<Scalars['String']>;
+  grootboekrekeningRubriekNaam?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['Int']>;
+  isAutomatischGeboekt?: Maybe<Scalars['Boolean']>;
+  transactionId?: Maybe<Scalars['Int']>;
+};
+
 export type Organisatie = {
   afdelingen?: Maybe<Array<Maybe<Afdeling>>>;
   id?: Maybe<Scalars['Int']>;
@@ -1148,12 +1157,14 @@ export type RootQuery = {
   huishoudensPaged?: Maybe<HuishoudensPaged>;
   journaalpost?: Maybe<Journaalpost>;
   journaalposten?: Maybe<Array<Maybe<Journaalpost>>>;
+  journaalpostenTransactieRubriek?: Maybe<Array<Maybe<JournaalpostTransactieRubriek>>>;
   organisatie?: Maybe<Organisatie>;
   organisaties?: Maybe<Array<Maybe<Organisatie>>>;
   postadres?: Maybe<Postadres>;
   postadressen?: Maybe<Array<Maybe<Postadres>>>;
   rekening?: Maybe<Rekening>;
   rekeningen?: Maybe<Array<Maybe<Rekening>>>;
+  rekeningenByIbans?: Maybe<Array<Maybe<Rekening>>>;
   rubriek?: Maybe<Rubriek>;
   rubrieken?: Maybe<Array<Maybe<Rubriek>>>;
   saldo?: Maybe<Saldo>;
@@ -1347,6 +1358,12 @@ export type RootQueryJournaalpostenArgs = {
 
 
 /** The root of all queries  */
+export type RootQueryJournaalpostenTransactieRubriekArgs = {
+  transactionIds?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
+};
+
+
+/** The root of all queries  */
 export type RootQueryOrganisatieArgs = {
   id: Scalars['Int'];
 };
@@ -1379,6 +1396,12 @@ export type RootQueryRekeningArgs = {
 /** The root of all queries  */
 export type RootQueryRekeningenArgs = {
   ids?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
+};
+
+
+/** The root of all queries  */
+export type RootQueryRekeningenByIbansArgs = {
+  ibans?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
 
@@ -1956,6 +1979,14 @@ export type UpdateSignaalMutationVariables = Exact<{
 
 export type UpdateSignaalMutation = { updateSignaal?: { ok?: boolean, signaal?: { id?: string, isActive?: boolean, type?: string, actions?: Array<string>, bedragDifference?: string, timeUpdated?: string, alarm?: { id?: string, afspraak?: { id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, validFrom?: any, validThrough?: any, betaalinstructie?: { byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string }, burger?: { id?: number, bsn?: number, voornamen?: string, voorletters?: string, achternaam?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, alarm?: { id?: string, isActive?: boolean, bedrag?: any, bedragMargin?: any, startDate?: string, endDate?: string, datumMargin?: number, byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, afspraak?: { id?: number }, signaal?: { id?: string } }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, postadres?: { id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string }, rubriek?: { id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } }, matchingAfspraken?: Array<{ id?: number, credit?: boolean, zoektermen?: Array<string>, bedrag?: any, omschrijving?: string, burger?: { voorletters?: string, voornamen?: string, achternaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string } }> } }, bankTransactions?: Array<{ id?: number, bedrag?: any, isCredit?: boolean }> } } };
 
+export type GetAdditionalTransactionDataQueryVariables = Exact<{
+  ibans?: InputMaybe<Array<Scalars['String']> | Scalars['String']>;
+  transaction_ids?: InputMaybe<Array<Scalars['Int']> | Scalars['Int']>;
+}>;
+
+
+export type GetAdditionalTransactionDataQuery = { rekeningenByIbans?: Array<{ iban?: string, rekeninghouder?: string }>, journaalpostenTransactieRubriek?: Array<{ id?: number, transactionId?: number, isAutomatischGeboekt?: boolean, afspraakRubriekNaam?: string, grootboekrekeningRubriekNaam?: string }> };
+
 export type GetAfdelingQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
@@ -2151,7 +2182,7 @@ export type GetTransactiesQueryVariables = Exact<{
 }>;
 
 
-export type GetTransactiesQuery = { bankTransactionsPaged?: { banktransactions?: Array<{ id?: number, informationToAccountOwner?: string, statementLine?: string, bedrag?: any, isCredit?: boolean, tegenRekeningIban?: string, transactieDatum?: any, journaalpost?: { id?: number, isAutomatischGeboekt?: boolean, afspraak?: { id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, validFrom?: any, validThrough?: any, rubriek?: { id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } }, betaalinstructie?: { byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string }, burger?: { id?: number, bsn?: number, voornamen?: string, voorletters?: string, achternaam?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, alarm?: { id?: string, isActive?: boolean, bedrag?: any, bedragMargin?: any, startDate?: string, endDate?: string, datumMargin?: number, byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, afspraak?: { id?: number }, signaal?: { id?: string } }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, postadres?: { id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string }, matchingAfspraken?: Array<{ id?: number, credit?: boolean, zoektermen?: Array<string>, bedrag?: any, omschrijving?: string, burger?: { voorletters?: string, voornamen?: string, achternaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string } }> }, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } }, suggesties?: Array<{ id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, validFrom?: any, validThrough?: any, betaalinstructie?: { byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string }, burger?: { id?: number, bsn?: number, voornamen?: string, voorletters?: string, achternaam?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, alarm?: { id?: string, isActive?: boolean, bedrag?: any, bedragMargin?: any, startDate?: string, endDate?: string, datumMargin?: number, byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, afspraak?: { id?: number }, signaal?: { id?: string } }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, postadres?: { id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string }, rubriek?: { id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } }, matchingAfspraken?: Array<{ id?: number, credit?: boolean, zoektermen?: Array<string>, bedrag?: any, omschrijving?: string, burger?: { voorletters?: string, voornamen?: string, achternaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string } }> }>, tegenRekening?: { iban?: string, rekeninghouder?: string } }>, pageInfo?: { count?: number, limit?: number, start?: number } } };
+export type GetTransactiesQuery = { bankTransactionsPaged?: { banktransactions?: Array<{ id?: number, informationToAccountOwner?: string, statementLine?: string, bedrag?: any, isCredit?: boolean, tegenRekeningIban?: string, transactieDatum?: any }>, pageInfo?: { count?: number, limit?: number, start?: number } } };
 
 export const CustomerStatementMessageFragmentDoc = gql`
     fragment CustomerStatementMessage on CustomerStatementMessage {
@@ -4268,6 +4299,50 @@ export function useUpdateSignaalMutation(baseOptions?: Apollo.MutationHookOption
 export type UpdateSignaalMutationHookResult = ReturnType<typeof useUpdateSignaalMutation>;
 export type UpdateSignaalMutationResult = Apollo.MutationResult<UpdateSignaalMutation>;
 export type UpdateSignaalMutationOptions = Apollo.BaseMutationOptions<UpdateSignaalMutation, UpdateSignaalMutationVariables>;
+export const GetAdditionalTransactionDataDocument = gql`
+    query getAdditionalTransactionData($ibans: [String!], $transaction_ids: [Int!]) {
+  rekeningenByIbans(ibans: $ibans) {
+    iban
+    rekeninghouder
+  }
+  journaalpostenTransactieRubriek(transactionIds: $transaction_ids) {
+    id
+    transactionId
+    isAutomatischGeboekt
+    afspraakRubriekNaam
+    grootboekrekeningRubriekNaam
+  }
+}
+    `;
+
+/**
+ * __useGetAdditionalTransactionDataQuery__
+ *
+ * To run a query within a React component, call `useGetAdditionalTransactionDataQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetAdditionalTransactionDataQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetAdditionalTransactionDataQuery({
+ *   variables: {
+ *      ibans: // value for 'ibans'
+ *      transaction_ids: // value for 'transaction_ids'
+ *   },
+ * });
+ */
+export function useGetAdditionalTransactionDataQuery(baseOptions?: Apollo.QueryHookOptions<GetAdditionalTransactionDataQuery, GetAdditionalTransactionDataQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetAdditionalTransactionDataQuery, GetAdditionalTransactionDataQueryVariables>(GetAdditionalTransactionDataDocument, options);
+      }
+export function useGetAdditionalTransactionDataLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAdditionalTransactionDataQuery, GetAdditionalTransactionDataQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetAdditionalTransactionDataQuery, GetAdditionalTransactionDataQueryVariables>(GetAdditionalTransactionDataDocument, options);
+        }
+export type GetAdditionalTransactionDataQueryHookResult = ReturnType<typeof useGetAdditionalTransactionDataQuery>;
+export type GetAdditionalTransactionDataLazyQueryHookResult = ReturnType<typeof useGetAdditionalTransactionDataLazyQuery>;
+export type GetAdditionalTransactionDataQueryResult = Apollo.QueryResult<GetAdditionalTransactionDataQuery, GetAdditionalTransactionDataQueryVariables>;
 export const GetAfdelingDocument = gql`
     query getAfdeling($id: Int!) {
   afdeling(id: $id) {
@@ -5554,28 +5629,13 @@ export const GetTransactiesDocument = gql`
     query getTransacties($offset: Int!, $limit: Int!, $filters: BankTransactionFilter) {
   bankTransactionsPaged(start: $offset, limit: $limit, filters: $filters) {
     banktransactions {
-      ...BankTransaction
-      journaalpost {
-        id
-        isAutomatischGeboekt
-        afspraak {
-          ...Afspraak
-          rubriek {
-            id
-            naam
-          }
-        }
-        grootboekrekening {
-          ...Grootboekrekening
-          rubriek {
-            id
-            naam
-          }
-        }
-      }
-      suggesties {
-        ...Afspraak
-      }
+      id
+      informationToAccountOwner
+      statementLine
+      bedrag
+      isCredit
+      tegenRekeningIban
+      transactieDatum
     }
     pageInfo {
       count
@@ -5584,9 +5644,7 @@ export const GetTransactiesDocument = gql`
     }
   }
 }
-    ${BankTransactionFragmentDoc}
-${AfspraakFragmentDoc}
-${GrootboekrekeningFragmentDoc}`;
+    `;
 
 /**
  * __useGetTransactiesQuery__

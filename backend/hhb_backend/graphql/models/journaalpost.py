@@ -29,3 +29,11 @@ class Journaalpost(graphene.ObjectType):
         """ Get afspraak when requested """
         if root.get('afspraak_id'):
             return hhb_dataloader().afspraken.load_one(root.get('afspraak_id'))
+
+class JournaalpostTransactieRubriek(graphene.ObjectType):
+    """Model van een afgeletterde banktransactie. (minimale data om eenvoudig de rubriek van een banktransactie te kunnen vinden) """
+    id = graphene.Int()
+    transaction_id = graphene.Int()
+    is_automatisch_geboekt = graphene.Boolean()
+    afspraak_rubriek_naam = graphene.String()
+    grootboekrekening_rubriek_naam = graphene.String()
