@@ -13,7 +13,7 @@ from .gebruikersactiviteiten import GebruikersActiviteitQuery, GebruikersActivit
     GebruikersActiviteitenPagedQuery
 from .grootboekrekeningen import GrootboekrekeningQuery, GrootboekrekeningenQuery
 from .huishoudens import HuishoudenQuery, HuishoudensQuery, HuishoudensPagedQuery
-from .journaalposten import JournaalpostQuery, JournaalpostenQuery
+from .journaalposten import JournaalpostQuery, JournaalpostenTransactionRubriekQuery, JournaalpostenQuery
 from .organisaties import OrganisatieQuery, OrganisatiesQuery
 from .postadressen import PostadressenQuery, PostadresQuery
 from .rekeningen import RekeningQuery, RekeningenByIbansQuery, RekeningenQuery
@@ -43,6 +43,7 @@ class RootQuery(graphene.ObjectType):
     grootboekrekeningen = GrootboekrekeningenQuery.return_type
     journaalpost = JournaalpostQuery.return_type
     journaalposten = JournaalpostenQuery.return_type
+    journaalposten_transactie_rubriek = JournaalpostenTransactionRubriekQuery.return_type
     rubriek = RubriekQuery.return_type
     rubrieken = RubriekenQuery.return_type
     configuratie = ConfiguratieQuery.return_type
@@ -121,6 +122,9 @@ class RootQuery(graphene.ObjectType):
 
     def resolve_journaalposten(root, info, **kwargs):
         return JournaalpostenQuery.resolver(root, info, **kwargs)
+
+    def resolve_journaalposten_transactie_rubriek(root, info, **kwargs):
+        return JournaalpostenTransactionRubriekQuery.resolver(root, info, **kwargs)
 
     def resolve_rubriek(root, info, **kwargs):
         return RubriekQuery.resolver(root, info, **kwargs)

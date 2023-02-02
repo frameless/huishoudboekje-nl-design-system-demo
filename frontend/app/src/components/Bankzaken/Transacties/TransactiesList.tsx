@@ -5,9 +5,10 @@ import {BankTransaction} from "../../../generated/graphql";
 import d from "../../../utils/dayjs";
 import {sortBankTransactions} from "../../../utils/things";
 import TransactieItem from "./TransactieItem";
+import { TransactionSimple } from "./TransactieOverzichtObject";
 
 type TransactiesListProps = {
-	transacties: BankTransaction[],
+	transacties: TransactionSimple[],
 };
 
 const TransactiesList: React.FC<TransactiesListProps> = ({transacties}) => {

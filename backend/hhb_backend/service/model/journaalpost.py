@@ -9,3 +9,11 @@ class Journaalpost(BaseModel):
     grootboekrekening_id: int
     transaction_id: int
     is_automatisch_geboekt: bool
+
+
+class JournaalpostTransactieRubriek(BaseModel):
+    id: int
+    transaction_id: int
+    is_automatisch_geboekt: bool
+    afsrpaak_rubriek_naam = Optional[str]
+    grootboekrekening_rubriek_naam = Optional[str]

@@ -1,4 +1,6 @@
 """ GraphQL Journaalpost query """
+import logging
+from hhb_backend.graphql.models.journaalpost import JournaalpostTransactieRubriek
 import graphene
 from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql.dataloaders import hhb_dataloader
@@ -38,6 +40,28 @@ class JournaalpostenQuery:
                 GebruikersActiviteitEntity(entityType="journaalpost", entityId=id)
                 for id in ids
             ] if ids else []
+        )
+
+        return result
+
+class JournaalpostenTransactionRubriekQuery:
+    return_type = graphene.List(
+        JournaalpostTransactieRubriek, transaction_ids=graphene.List(graphene.Int)
+    )
+
+    @classmethod
+    def resolver(cls, _root, info, transaction_ids=None):
+        if transaction_ids:
+            result = hhb_dataloader().journaalposten_transactie_rubriek.load(transaction_ids)
+        else:
+            result = []
+
+        AuditLogging().create(
+            action=info.field_name,
+            entities=[
+                GebruikersActiviteitEntity(entityType="journaalpostbytransactionid", entityId=id)
+                for id in transaction_ids
+            ] if transaction_ids else []
         )
 
         return result

@@ -7,6 +7,7 @@ import {AppRoutes} from "../../../config/routes";
 import {BankTransaction} from "../../../generated/graphql";
 import {currencyFormat2, formatIBAN} from "../../../utils/things";
 import PrettyIban from "../../shared/PrettyIban";
+import { TransactionSimple } from "./TransactieOverzichtObject";
 
 const hoverStyles = {
 	_hover: {
@@ -16,7 +17,7 @@ const hoverStyles = {
 };
 
 type TransactieItemProps = BoxProps & {
-	transactie: BankTransaction
+	transactie: TransactionSimple
 };
 
 const TransactieItem: React.FC<TransactieItemProps> = ({transactie: bt, ...props}) => {
@@ -46,8 +47,8 @@ const TransactieItem: React.FC<TransactieItemProps> = ({transactie: bt, ...props
 
 				{!isMobile && (
 					<Flex flex={1} width={"100%"} alignItems={"center"}>
-						{bt.journaalpost ? (
-							<Text fontSize={"sm"}>{bt.journaalpost.afspraak?.rubriek?.naam || bt.journaalpost.grootboekrekening?.rubriek?.naam}</Text>
+						{bt.rubriek ? (
+							<Text fontSize={"sm"}>{bt.rubriek}</Text>
 						) : (
 							<Tag colorScheme={"red"} size={"sm"} variant={"subtle"}>
 								<TagLeftIcon boxSize={"12px"} as={WarningIcon} />

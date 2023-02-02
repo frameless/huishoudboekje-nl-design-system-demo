@@ -12,6 +12,7 @@ from .gebruikersactiviteit_loader import GebruikersactiviteitLoader
 from .grootboekrekening_loader import GrootboekrekeningLoader
 from .huishouden_loader import HuishoudenLoader
 from .journaalpost_loader import JournaalpostLoader
+from .transacties_journaalposten_rubriek_loader import JournaalpostRubriekLoader
 from .organisatie_loader import OrganisatieLoader
 from .overschrijving_loader import OverschrijvingLoader
 from .postadres_loader import PostadresLoader
@@ -36,6 +37,7 @@ class HHBDataLoader:
         self.grootboekrekeningen = GrootboekrekeningLoader()
         self.huishoudens = HuishoudenLoader()
         self.journaalposten = JournaalpostLoader()
+        self.journaalposten_transactie_rubriek = JournaalpostRubriekLoader()
         self.postadressen = PostadresLoader()
         self.rekeningen = RekeningLoader()
         self.rubrieken = RubriekLoader()
