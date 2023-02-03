@@ -1,5 +1,22 @@
 # Huishoudboekje Changelog
 
+## 1.5.0
+
+Deze versie omvat verbeteringen voor snelheid bij het weergeven van banktransacties.
+
+### Minor Changes
+
+- 9cf1132a: #1102: Updated to Graphene 3.
+- 41b8cfc4: Improved performance transaction page, it now collects only the data it needs and changed the way it is collected to minimize calls made to the services
+
+### Patch Changes
+
+- 1883df50: #1128: Moved audit logs for burger to separate page. This will improve performance on first page load.
+- af22175d: #1134: Fixed an issue where the banktransactieservice would stop working when bankstatements were retrieved with a high volume of transactions in the system.
+- 00a4af4f: Fixes #1108 and #1100: Only evaluate alarms for the new journaalposten.
+- 20deff19: #1072: Huishoudboekje now accepts burgers without a phone number and/or email address.
+- 119b23b5: Fixed #1158: Fixed issue for transactions without tegenrekening.
+
 ## 1.4.0
 
 Deze versie omvat nieuwe functionaliteit voor het signaleren van afwijkingen op verwachte inkomsten of uitgaven. Ook omvat het verbeteringen voor snelheid en stabiliteit.
