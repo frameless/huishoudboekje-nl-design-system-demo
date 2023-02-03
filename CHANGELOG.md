@@ -2,6 +2,8 @@
 
 ## 1.5.0
 
+Deze versie omvat verbeteringen voor snelheid bij het weergeven van banktransacties.
+
 ### Minor Changes
 
 - 9cf1132a: #1102: Updated to Graphene 3.
