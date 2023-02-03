@@ -38,16 +38,9 @@ const BookingSection = ({transaction, rubrieken, afspraken}) => {
 			// Skip afspraken that are suggesties
 			if (suggesties.find(b => b.id === a.id)) {
 				return false;
+				// TODO: Show all afspraken if there are no matching afspraken 
 			}
-
-			const tegenRekening = transaction.tegenRekening?.iban || transaction.tegenRekeningIban;
-
-			// Show all afspraken if there is no tegenRekening
-			if (!tegenRekening) {
-				return true;
-			}
-
-			return a.tegenRekening?.iban?.replaceAll(" ", "") === tegenRekening.replaceAll(" ", "");
+			return true;
 		}),
 		rubrieken: rubrieken.filter(r => r.grootboekrekening && r.grootboekrekening.id).sort((a: Rubriek, b: Rubriek) => {
 			return a.naam && b.naam && a.naam < b.naam ? -1 : 1;

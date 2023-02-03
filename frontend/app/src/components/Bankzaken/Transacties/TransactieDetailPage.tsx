@@ -12,6 +12,7 @@ const TransactieDetailPage = () => {
 	const {t} = useTranslation();
 
 	const $transactie = useGetTransactieQuery({
+		fetchPolicy: "no-cache", // This is "no-cache" because the data changes
 		variables: {
 			id: parseInt(id),
 		},
@@ -20,13 +21,18 @@ const TransactieDetailPage = () => {
 	return (
 		<Queryable query={$transactie} children={(data => {
 			const transactie: BankTransaction = data.bankTransaction;
-			const afspraken: Afspraak[] = data.afspraken;
+			const afspraken: Afspraak[] = []
+			transactie.suggesties?.forEach(suggestie =>{
+					const matching = suggestie.matchingAfspraken? suggestie.matchingAfspraken : []
+					afspraken.push(...matching)
+				}
+			)		
+
 			const rubrieken: Rubriek[] = data.rubrieken;
 
 			if (!transactie?.id) {
 				return <PageNotFound />;
 			}
-
 			return (
 				<Page title={t("transaction")}>
 					<TransactieItemView transactie={transactie} afspraken={afspraken} rubrieken={rubrieken} />
