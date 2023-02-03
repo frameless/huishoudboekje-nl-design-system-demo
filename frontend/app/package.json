@@ -17,6 +17,7 @@
   },
   "scripts": {
     "postinstall": "node version.js",
+    "prestart": "sh ./prestart.sh",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "pretest": "npm run i18n-migrate",

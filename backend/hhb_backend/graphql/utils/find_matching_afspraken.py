@@ -1,4 +1,3 @@
-import logging
 import re
 
 from hhb_backend.graphql.dataloaders import hhb_dataloader
@@ -8,7 +7,6 @@ from hhb_backend.graphql.utils.dates import afspraken_intersect, to_date
 def find_matching_afspraken_by_afspraak(main_afspraak):
     matching_afspraken = []
     if not main_afspraak.get("zoektermen"):  
-        logging.warning("xxyyzznono")
         return matching_afspraken
 
         
@@ -16,9 +14,6 @@ def find_matching_afspraken_by_afspraak(main_afspraak):
 
     afspraken = hhb_dataloader().afspraken.by_rekening(main_afspraak.get("tegen_rekening_id"))
 
-    logging.warning("xxyyzz")
-    logging.warning(main_afspraak.get("zoektermen"))
-    logging.warning("xxyyzzaaa")
     zoektermen_main = ' '.join(main_afspraak.get("zoektermen"))
     main_afspraak_valid_from = to_date(main_afspraak.get("valid_from"))
     main_afspraak_valid_through = to_date(main_afspraak.get("valid_through"))
@@ -29,7 +24,6 @@ def find_matching_afspraken_by_afspraak(main_afspraak):
 
             not_main_afspraak = (afspraak.id != main_afspraak.get("id"))
 
-            logging.warning(zoektermen_afspraak)
 
             matching_zoekterm = match_similar_zoekterm(afspraak, zoektermen_main) or match_similar_zoekterm(main_afspraak, zoektermen_afspraak)
 
