@@ -1,10 +1,11 @@
 import {CloseIcon, SearchIcon} from "@chakra-ui/icons";
 import {Button, IconButton, Input, InputGroup, InputLeftElement, InputRightElement} from "@chakra-ui/react";
-import React, {useRef, useState} from "react";
+import _ from "lodash";
+import {useRef, useState} from "react";
 import {useTranslation} from "react-i18next";
 import {Outlet, useNavigate} from "react-router-dom";
 import {AppRoutes} from "../../config/routes";
-import {Huishouden, useGetHuishoudensQuery} from "../../generated/graphql";
+import {Burger, Huishouden, useGetHuishoudensQuery} from "../../generated/graphql";
 import Queryable from "../../utils/Queryable";
 import {searchFields} from "../../utils/things";
 import AddButton from "../shared/AddButton";
@@ -32,7 +33,12 @@ const HuishoudensList = () => {
 
 	return (
 		<Queryable query={$huishoudens} children={data => {
-			const huishoudens: Huishouden[] = data.huishoudens || [];
+			const burgers: Burger[] = data.burgers || [];
+			const huishoudens: Huishouden[] = []
+			const grouped = _.groupBy(burgers, burger => burger.huishoudenId)
+			Object.keys(grouped).forEach(element =>
+				huishoudens.push({id: Number(element), burgers: grouped[element]})
+			)
 			const filteredHuishoudens = huishoudens.filter(h => {
 				return [
 					searchFields(search, [

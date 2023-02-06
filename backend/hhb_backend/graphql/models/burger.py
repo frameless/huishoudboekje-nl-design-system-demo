@@ -26,6 +26,7 @@ class Burger(graphene.ObjectType):
     plaatsnaam = graphene.String()
     rekeningen = graphene.List(lambda: rekening.Rekening)
     afspraken = graphene.List(lambda: afspraak.Afspraak)
+    huishouden_id = graphene.Int()
     huishouden = graphene.Field(lambda: huishouden.Huishouden)
     gebruikersactiviteiten = graphene.List(lambda: gebruikersactiviteit.GebruikersActiviteit)
 
