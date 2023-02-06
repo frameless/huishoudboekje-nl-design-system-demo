@@ -38,7 +38,6 @@ const BookingSection = ({transaction, rubrieken, afspraken}) => {
 			// Skip afspraken that are suggesties
 			if (suggesties.find(b => b.id === a.id)) {
 				return false;
-				// TODO: Show all afspraken if there are no matching afspraken 
 			}
 			return true;
 		}),
