@@ -56,7 +56,7 @@ export const GetTransactieQuery = gql`
 					voorletters
 					achternaam
 				}
-				matchingAfspraken {
+				similarAfspraken {
 					id
 					omschrijving
 					bedrag
