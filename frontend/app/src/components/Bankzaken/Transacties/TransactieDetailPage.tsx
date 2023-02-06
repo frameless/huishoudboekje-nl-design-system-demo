@@ -23,10 +23,9 @@ const TransactieDetailPage = () => {
 			const transactie: BankTransaction = data.bankTransaction;
 			const afspraken: Afspraak[] = []
 			transactie.suggesties?.forEach(suggestie =>{
-					const matching = suggestie.matchingAfspraken? suggestie.matchingAfspraken : []
-					afspraken.push(...matching)
-				}
-			)		
+				const matching = suggestie.matchingAfspraken? suggestie.matchingAfspraken : []
+				afspraken.push(...matching)
+			})
 
 			const rubrieken: Rubriek[] = data.rubrieken;
 

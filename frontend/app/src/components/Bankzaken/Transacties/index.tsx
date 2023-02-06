@@ -3,7 +3,7 @@ import React, {useEffect, useState} from "react";
 import DatePicker from "react-datepicker";
 import {useTranslation} from "react-i18next";
 import Select from "react-select";
-import {BankTransaction, GetTransactiesDocument, Rekening, JournaalpostTransactieRubriek, useGetAdditionalTransactionDataQuery, useGetTransactiesQuery, useStartAutomatischBoekenMutation} from "../../../generated/graphql";
+import { GetTransactiesDocument, Rekening, JournaalpostTransactieRubriek, useGetAdditionalTransactionDataQuery, useGetTransactiesQuery, useStartAutomatischBoekenMutation} from "../../../generated/graphql";
 import {BanktransactieFilters} from "../../../models/models";
 import useStore from "../../../store";
 import Queryable from "../../../utils/Queryable";
@@ -61,7 +61,7 @@ const Transactions = () => {
 	const transaction_ids = transacties.filter(transactie => transactie.id !== null).map(transactie => transactie.id? transactie.id : -1)
 
 	const $additionalTransactionData = useGetAdditionalTransactionDataQuery({
-		fetchPolicy: 'no-cache',
+		fetchPolicy: "no-cache",
 		variables: {ibans: ibans, transaction_ids: transaction_ids}
 	})
 

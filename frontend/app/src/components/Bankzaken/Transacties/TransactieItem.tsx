@@ -4,7 +4,6 @@ import React from "react";
 import {useTranslation} from "react-i18next";
 import {useNavigate} from "react-router-dom";
 import {AppRoutes} from "../../../config/routes";
-import {BankTransaction} from "../../../generated/graphql";
 import {currencyFormat2, formatIBAN} from "../../../utils/things";
 import PrettyIban from "../../shared/PrettyIban";
 import { TransactionSimple } from "./TransactieOverzichtObject";
