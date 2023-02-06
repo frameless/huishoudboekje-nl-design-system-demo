@@ -17,7 +17,7 @@ from hhb_backend.processen.overschrijvingen_planner import (
     get_planned_overschrijvingen,
 )
 from hhb_backend.graphql.utils.dates import to_date
-from hhb_backend.graphql.utils.find_matching_afspraken import find_matching_afspraken_by_afspraak
+from hhb_backend.graphql.utils.find_matching_afspraken import find_matching_afspraken_by_afspraak, find_similar_afspraken_by_afspraak
 
 
 class Interval(graphene.ObjectType):
@@ -66,6 +66,7 @@ class Afspraak(graphene.ObjectType):
         eind_datum=graphene.Date(),
     )
     matching_afspraken = graphene.List(lambda: Afspraak)
+    similar_afspraken = graphene.List(lambda: Afspraak)
 
 
     def resolve_overschrijvingen(root, info, **kwargs):
@@ -144,4 +145,7 @@ class Afspraak(graphene.ObjectType):
             return hhb_dataloader().journaalposten.load(self.get("journaalposten")) or []
 
     def resolve_matching_afspraken(self, info):
-        return find_matching_afspraken_by_afspraak(self)
+        return find_matching_afspraken_by_afspraak(self) 
+
+    def resolve_similar_afspraken(self, info):
+        return find_similar_afspraken_by_afspraak(self) 

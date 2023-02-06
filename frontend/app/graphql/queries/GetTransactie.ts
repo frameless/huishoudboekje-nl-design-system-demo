@@ -1,46 +1,79 @@
 import {gql} from "@apollo/client";
-import {AfspraakFragment} from "../fragments/Afspraak";
-import {GrootboekrekeningFragment} from "../fragments/Grootboekrekening";
-import {TransactieFragment} from "../fragments/Transactie";
 
 export const GetTransactieQuery = gql`
 	query getTransactie($id: Int!) {
 		bankTransaction(id: $id){
-			...BankTransaction
+			id
+			informationToAccountOwner
+			statementLine
+			bedrag
+			isCredit
+			tegenRekeningIban
+			tegenRekening {
+				iban
+				rekeninghouder
+			}
+			transactieDatum
 			journaalpost {
 				id
 				isAutomatischGeboekt
 				afspraak {
-					...Afspraak
+					id
+					omschrijving
+					bedrag
+					credit
+					zoektermen
+					burger {
+						voornamen
+						voorletters
+						achternaam
+					}
 					rubriek{
 						id
 						naam
 					}
 				}
 				grootboekrekening {
-					...Grootboekrekening
-					rubriek {
+					id
+					naam
+					credit
+					omschrijving
+					referentie
+					rubriek{
 						id
 						naam
 					}
 				}
 			}
 			suggesties {
-				...Afspraak
+				id
+				omschrijving
+				bedrag
+				credit
+				zoektermen
+				burger {
+					voornamen
+					voorletters
+					achternaam
+				}
+				similarAfspraken {
+					id
+					omschrijving
+					bedrag
+					credit
+					zoektermen
+					burger {
+						voorletters
+						voornamen
+						achternaam
+					}
+				}
 			}
 		}
 		rubrieken {
-			...Rubriek
-			grootboekrekening{
-				id
-				naam
-			}
-		}
-		afspraken {
-			...Afspraak
+			id
+			naam
 		}
 	}
-	${AfspraakFragment}
-	${TransactieFragment}
-	${GrootboekrekeningFragment}
 `;
+

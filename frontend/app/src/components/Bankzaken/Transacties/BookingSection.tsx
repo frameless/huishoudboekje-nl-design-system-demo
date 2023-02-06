@@ -39,15 +39,7 @@ const BookingSection = ({transaction, rubrieken, afspraken}) => {
 			if (suggesties.find(b => b.id === a.id)) {
 				return false;
 			}
-
-			const tegenRekening = transaction.tegenRekening?.iban || transaction.tegenRekeningIban;
-
-			// Show all afspraken if there is no tegenRekening
-			if (!tegenRekening) {
-				return true;
-			}
-
-			return a.tegenRekening?.iban?.replaceAll(" ", "") === tegenRekening.replaceAll(" ", "");
+			return true;
 		}),
 		rubrieken: rubrieken.filter(r => r.grootboekrekening && r.grootboekrekening.id).sort((a: Rubriek, b: Rubriek) => {
 			return a.naam && b.naam && a.naam < b.naam ? -1 : 1;

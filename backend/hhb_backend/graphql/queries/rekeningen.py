@@ -49,7 +49,7 @@ class RekeningenByIbansQuery:
         if ibans:
             result = hhb_dataloader().rekeningen.by_ibans(ibans)
         else:
-            []
+            result = []
 
         AuditLogging.create(
             action=info.field_name,

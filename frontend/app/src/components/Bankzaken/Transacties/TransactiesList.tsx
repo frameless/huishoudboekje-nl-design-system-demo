@@ -1,7 +1,6 @@
 import {Box, FormLabel, Stack, useBreakpointValue} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
-import {BankTransaction} from "../../../generated/graphql";
 import d from "../../../utils/dayjs";
 import {sortBankTransactions} from "../../../utils/things";
 import TransactieItem from "./TransactieItem";

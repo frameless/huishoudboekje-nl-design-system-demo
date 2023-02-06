@@ -1,5 +1,13 @@
 # Huishoudboekje Changelog
 
+## 1.6.0
+
+Deze versie omvat verbeteringen voor snelheid bij het weergeven van een individuele banktransactie.
+
+### Minor Changes
+
+- 8055dd79: #1200 Improved loading speed banktransaction detail page
+
 ## 1.5.0
 
 Deze versie omvat verbeteringen voor snelheid bij het weergeven van banktransacties.
