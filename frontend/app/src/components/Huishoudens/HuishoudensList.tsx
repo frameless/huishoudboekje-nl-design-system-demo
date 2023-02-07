@@ -18,7 +18,7 @@ const HuishoudensList = () => {
 	const navigate = useNavigate();
 	const [search, setSearch] = useState<string>("");
 	const searchRef = useRef<HTMLInputElement>(null);
-	const $huishoudens = useGetHuishoudensQuery();
+	const $huishoudens = useGetHuishoudensQuery({fetchPolicy: "no-cache"});
 
 	const onKeyDownOnSearch = (e) => {
 		if (e.key === "Escape") {
