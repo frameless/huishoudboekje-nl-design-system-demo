@@ -11,13 +11,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "M.Patterson@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB9690880615",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "982162204",
@@ -30,13 +48,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "J.Morrow@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB7615191827",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "513064790",
@@ -49,13 +85,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "A.Noble@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB8512656307",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "901624346",
@@ -68,13 +122,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "W.Maddox@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB7488238005",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "574193266",
@@ -87,13 +159,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "V.Clarke@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB8766350536",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "721352554",
@@ -106,13 +196,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "K.Lopez@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB1595060431",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "919151842",
@@ -125,13 +233,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "A.Morin@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB8010587356",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "961504472",
@@ -144,13 +270,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "P.Alford@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB6353529915",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "833834368",
@@ -163,13 +307,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "L.Goodwin@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB2066578494",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "863403119",
@@ -182,13 +344,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "M.Zamora@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB6902400732",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "868795574",
@@ -201,13 +381,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "H.Bartlett@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB179709998",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "666885928",
@@ -220,13 +418,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "T.Byrd@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB4948628719",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "231362051",
@@ -239,13 +455,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "T.Fry@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB8987460814",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "315531340",
@@ -258,13 +492,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "S.Baker@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB3230213718",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "912372760",
@@ -277,13 +529,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "A.Fulton@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB6026454023",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "970615626",
@@ -296,13 +566,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "K.Townsend@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB5960964488",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "431792910",
@@ -315,13 +603,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "C.Preston@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB8350802244",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "655432863",
@@ -334,13 +640,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "P.Maldonado@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB3295322789",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "567411812",
@@ -353,13 +677,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "G.Carpenter@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB1974124607",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "238078411",
@@ -372,13 +714,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "M.Rivera@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB9709716870",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "866723490",
@@ -391,13 +751,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "W.Romero@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB2205498415",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "823098791",
@@ -410,13 +788,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "C.Padilla@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB1425126705",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "462278795",
@@ -429,13 +825,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "E.Craft@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB3630767131",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "337796708",
@@ -448,13 +862,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "P.William@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB191460624",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "674288365",
@@ -467,13 +899,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "B.Nunez@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB1937520601",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "882691660",
@@ -486,13 +936,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "R.Lindsay@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB6869368368",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "989894597",
@@ -505,13 +973,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "S.Holloway@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB5674280182",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "749971766",
@@ -524,13 +1010,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "C.Raymond@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB5164823742",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "43170049",
@@ -543,13 +1047,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "B.Hale@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB343293515",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "946671569",
@@ -562,13 +1084,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "M.Christensen@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB4694143536",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "568507938",
@@ -581,13 +1121,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "M.Slater@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB5335156641",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "354110156",
@@ -600,13 +1158,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "S.Logan@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB6184608691",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "183191339",
@@ -619,13 +1195,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "B.Lang@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB3363430254",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "366790244",
@@ -638,13 +1232,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "N.Wilson@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB3146007843",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "479706986",
@@ -657,13 +1269,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "M.Crane@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB1109854999",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "301195843",
@@ -676,13 +1306,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "M.Juarez@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB4723973026",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "13702721",
@@ -695,13 +1343,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "S.Glover@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB8949239089",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "591961882",
@@ -714,13 +1380,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "C.Hester@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB3285528778",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "976253813",
@@ -733,13 +1417,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "B.Moss@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB9695916955",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "231226652",
@@ -752,13 +1454,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "S.Hancock@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB1111985914",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "524268552",
@@ -771,13 +1491,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "M.Delgado@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB787809415",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "798220674",
@@ -790,13 +1528,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "L.Kemp@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB5548048484",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "933022274",
@@ -809,13 +1565,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "C.Simmons@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB241100014",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "636284928",
@@ -828,13 +1602,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "C.Hull@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB7770533390",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "138440446",
@@ -847,13 +1639,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "M.Ayala@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB7061733192",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "36204867",
@@ -866,13 +1676,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "H.Lott@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB9490589811",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "774356825",
@@ -885,13 +1713,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "P.Compton@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB3663902937",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "565543266",
@@ -904,13 +1750,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "T.Garner@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB5799991448",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "191185072",
@@ -923,13 +1787,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "G.Cline@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB602429274",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "830313365",
@@ -942,13 +1824,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "T.Castillo@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB5880655398",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "291502683",
@@ -961,13 +1861,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "T.Gallegos@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB7102454447",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "134591732",
@@ -980,13 +1898,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "B.Hammond@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB7823107600",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "100589589",
@@ -999,13 +1935,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "P.Garrison@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB2546522494",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "969663821",
@@ -1018,13 +1972,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "C.Dejesus@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB5118674743",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "997206820",
@@ -1037,13 +2009,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "N.Pope@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB3052037220",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "512508277",
@@ -1056,13 +2046,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "G.Cochran@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB7566661463",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "540669662",
@@ -1075,13 +2083,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "M.Gamble@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB9087450169",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "651470467",
@@ -1094,13 +2120,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "P.Ortiz@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB4762885042",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "824925749",
@@ -1113,13 +2157,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "M.Wong@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB3282756746",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "821925812",
@@ -1132,13 +2194,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "M.Fletcher@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB5712078225",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "631267382",
@@ -1151,13 +2231,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "P.Hartman@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB3548300716",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "96663265",
@@ -1170,13 +2268,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "K.Mooney@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB1170465240",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "722700006",
@@ -1189,13 +2305,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "C.Bright@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB2751902339",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "115334615",
@@ -1208,13 +2342,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "R.Gates@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB4001690531",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "283745474",
@@ -1227,13 +2379,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "E.Joseph@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB4613073628",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "236777412",
@@ -1246,13 +2416,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "F.Landry@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB6284460463",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "772860424",
@@ -1265,13 +2453,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "S.Short@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB2978583177",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "727943057",
@@ -1284,13 +2490,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "J.Sawyer@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB4476947880",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "222609403",
@@ -1303,13 +2527,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "C.Rutledge@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB3026509032",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "788644392",
@@ -1322,13 +2564,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "O.Salazar@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB2309464421",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "168027342",
@@ -1341,13 +2601,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "N.Jenkins@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB903850406",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "809057317",
@@ -1360,13 +2638,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "C.Jefferson@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB1581800242",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "618571601",
@@ -1379,13 +2675,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "O.Davenport@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB5396737410",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "539821070",
@@ -1398,13 +2712,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "R.Webb@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB8299715630",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "866896753",
@@ -1417,13 +2749,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "D.Daugherty@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB9228790118",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "698450058",
@@ -1436,13 +2786,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "C.Moreno@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB1744939704",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "36286044",
@@ -1455,13 +2823,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "S.Oneil@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB6564881648",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "374282883",
@@ -1474,13 +2860,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "F.Pennington@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB9586693048",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "714677132",
@@ -1493,13 +2897,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "J.Chan@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB6239251417",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "742125577",
@@ -1512,13 +2934,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "C.David@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB7891383397",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "615883852",
@@ -1531,13 +2971,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "S.Stephenson@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB328566613",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "433044090",
@@ -1550,13 +3008,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "W.Vargas@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB9601250919",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "199983493",
@@ -1569,13 +3045,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "J.Summers@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB9058457501",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "889544774",
@@ -1588,13 +3082,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "F.Lamb@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB2576386008",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "734908145",
@@ -1607,13 +3119,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "R.Kerr@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB2283895955",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "504232387",
@@ -1626,13 +3156,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "H.Palmer@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB3346746256",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "426408232",
@@ -1645,13 +3193,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "K.Cannon@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB7796536387",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "176396345",
@@ -1664,13 +3230,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "A.Adams@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB3497711481",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "905319527",
@@ -1683,13 +3267,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "G.Pena@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB312733585",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "706567848",
@@ -1702,13 +3304,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "B.Mayo@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB9354511170",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "977397665",
@@ -1721,13 +3341,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "T.Griffith@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB8975467713",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "33452419",
@@ -1740,13 +3378,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "W.Hopkins@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB8642037034",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "109229766",
@@ -1759,13 +3415,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "E.Carter@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB7102166247",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "863240284",
@@ -1778,13 +3452,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "B.Lynch@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB512149452",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "475534255",
@@ -1797,13 +3489,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "C.Harding@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB6279378252",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "242206981",
@@ -1816,13 +3526,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "P.Bowman@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB8151660396",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "486499913",
@@ -1835,13 +3563,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "C.Bernard@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB4868617923",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "410686382",
@@ -1854,13 +3600,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "A.Massey@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB979828414",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "889664764",
@@ -1873,13 +3637,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "K.Meyers@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB6167282460",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "996894249",
@@ -1892,13 +3674,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "A.Petty@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB5837457564",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "161171769",
@@ -1911,13 +3711,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "P.Velez@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB4779273242",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "523317204",
@@ -1930,13 +3748,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "W.Medina@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB6928204256",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "694577528",
@@ -1949,13 +3785,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "M.Gillespie@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB5053136564",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "975542544",
@@ -1968,13 +3822,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "H.Newman@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB1261801906",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "161973686",
@@ -1987,13 +3859,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "H.Norman@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB9226645437",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "865012782",
@@ -2006,13 +3896,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "H.Mckenzie@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB573101087",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "567632704",
@@ -2025,13 +3933,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "T.Odom@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB5325399736",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "795381415",
@@ -2044,13 +3970,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "L.Terrell@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB6343419132",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "955682110",
@@ -2063,13 +4007,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "M.Cardenas@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB1442420384",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "150477816",
@@ -2082,13 +4044,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "R.Merritt@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB6397189431",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "660781277",
@@ -2101,13 +4081,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "K.Blackwell@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB2071646560",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "961007797",
@@ -2120,13 +4118,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "M.Lowery@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB8864647681",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "826024529",
@@ -2139,13 +4155,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "S.Tucker@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB7814648718",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "561545523",
@@ -2158,13 +4192,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "K.Huff@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB89653379",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "141105166",
@@ -2177,13 +4229,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "S.Riddle@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB2575385358",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "209469573",
@@ -2196,13 +4266,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "L.Middleton@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB9929334225",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "649675466",
@@ -2215,13 +4303,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "L.Talley@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB8041008908",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "556104401",
@@ -2234,13 +4340,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "H.Michael@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB4086221587",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "209750046",
@@ -2253,13 +4377,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "W.Brewer@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB2982621109",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "147304169",
@@ -2272,13 +4414,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "H.Welch@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB7357651224",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "843071861",
@@ -2291,13 +4451,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "S.Jarvis@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB8038875152",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "860306708",
@@ -2310,13 +4488,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "O.Farley@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB6089342365",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "714579149",
@@ -2329,13 +4525,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "A.Spence@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB5161391498",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "350375697",
@@ -2348,13 +4562,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "L.Thompson@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB5458510141",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "739804764",
@@ -2367,13 +4599,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "M.Greer@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB3320137843",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "210805736",
@@ -2386,13 +4636,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "L.Brooks@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB3879805993",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "827439875",
@@ -2405,13 +4673,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "J.Andrews@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB6227718809",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "246398784",
@@ -2424,13 +4710,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "D.Howell@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB8131735700",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "575245008",
@@ -2443,13 +4747,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "C.Goodman@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB5468459141",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "677552141",
@@ -2462,13 +4784,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "S.Dillard@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB3050907195",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "170828661",
@@ -2481,13 +4821,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "T.Freeman@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB1205765889",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "908411536",
@@ -2500,13 +4858,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "R.Miranda@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB1120308937",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "741793896",
@@ -2519,13 +4895,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "D.Mullen@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB8125115541",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "731396274",
@@ -2538,13 +4932,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "D.Nash@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB3333396648",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "676009194",
@@ -2557,13 +4969,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "V.Stuart@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB4841643652",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "461124018",
@@ -2576,13 +5006,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "C.Fuentes@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB478471686",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "131326194",
@@ -2595,13 +5043,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "C.Baxter@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB2527882893",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "224013975",
@@ -2614,13 +5080,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "H.Camacho@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB9643118517",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "420495031",
@@ -2633,13 +5117,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "V.Payne@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB9282293036",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "944798286",
@@ -2652,13 +5154,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "W.Cabrera@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB3414779042",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "193508371",
@@ -2671,13 +5191,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "T.Small@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB4153762242",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "957108223",
@@ -2690,13 +5228,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "G.Walls@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB3037802051",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "756499565",
@@ -2709,13 +5265,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "H.Browning@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB7571948970",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "55032627",
@@ -2728,13 +5302,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "S.Rosa@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB602531825",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "908527651",
@@ -2747,13 +5339,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "B.Gentry@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB3216130539",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "464237292",
@@ -2766,13 +5376,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "R.Castaneda@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB5700451730",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "716114554",
@@ -2785,13 +5413,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "S.Dixon@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB8657031095",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "363001725",
@@ -2804,13 +5450,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "W.Dudley@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB6997505395",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "195069811",
@@ -2823,13 +5487,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "O.Willis@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB5588525193",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "242482268",
@@ -2842,13 +5524,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "B.Roberts@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB5763843870",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "564261830",
@@ -2861,13 +5561,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "J.Reed@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB2168214941",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "798908850",
@@ -2880,13 +5598,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "T.Miller@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB3691517645",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "783939026",
@@ -2899,13 +5635,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "P.Lara@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB6123923761",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "937835219",
@@ -2918,13 +5672,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "L.Banks@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB383753240",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "160747966",
@@ -2937,13 +5709,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "H.Nicholson@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB595220431",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "421615465",
@@ -2956,13 +5746,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "C.Wolfe@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB347209027",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "57342205",
@@ -2975,13 +5783,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "S.Patton@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB3334589356",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "484500072",
@@ -2994,13 +5820,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "O.Ware@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB6389086466",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "337938263",
@@ -3013,13 +5857,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "C.Charles@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB4477099304",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "997747590",
@@ -3032,13 +5894,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "B.Ortega@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB4389888638",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "769076779",
@@ -3051,13 +5931,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "A.Hatfield@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB8121916647",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "735726934",
@@ -3070,13 +5968,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "K.Hardin@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB6456554685",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "969504539",
@@ -3089,13 +6005,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "P.Tran@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB8417854512",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "103590684",
@@ -3108,13 +6042,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "S.Singleton@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB2346401764",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "293198687",
@@ -3127,13 +6079,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "H.Harmon@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB5555144973",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "610167541",
@@ -3146,13 +6116,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "H.Cooke@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB1225470217",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "86371294",
@@ -3165,13 +6153,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "L.Schultz@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB1441154334",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "625258672",
@@ -3184,13 +6190,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "G.Deleon@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB6810523029",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "195203700",
@@ -3203,13 +6227,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "F.Black@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB7940323884",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "689224575",
@@ -3222,13 +6264,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "S.Lee@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB438641436",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "278386270",
@@ -3241,13 +6301,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "K.Thomas@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB5281774169",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "181975802",
@@ -3260,13 +6338,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "A.Mcknight@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB7366483256",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "65665168",
@@ -3279,13 +6375,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "R.Campbell@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB969981496",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "279762583",
@@ -3298,13 +6412,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "S.Day@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB1506992771",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "83171243",
@@ -3317,13 +6449,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "N.Cleveland@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB5339892337",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "218842139",
@@ -3336,13 +6486,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "M.Pruitt@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB6574333575",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "225734328",
@@ -3355,13 +6523,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "L.Cortez@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB2543368481",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "36279296",
@@ -3374,13 +6560,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "B.Strong@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB6541200637",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "326373533",
@@ -3393,13 +6597,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "H.Crawford@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB4592382791",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "242355980",
@@ -3412,13 +6634,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "L.Casey@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB170005660",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "195770040",
@@ -3431,13 +6671,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "C.Santiago@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB6858734016",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "829901539",
@@ -3450,13 +6708,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "J.Schroeder@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB9103815536",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "451412418",
@@ -3469,13 +6745,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "S.Foster@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB7951292595",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "312955627",
@@ -3488,13 +6782,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "J.Donaldson@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB2139146502",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "253053594",
@@ -3507,13 +6819,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "S.Norris@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB9693690264",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "955230555",
@@ -3526,13 +6856,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "S.Chapman@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB872958083",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "706034626",
@@ -3545,13 +6893,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "M.Barnett@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB1737438408",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "629601932",
@@ -3564,13 +6930,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "L.Martin@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB8651915183",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "924196690",
@@ -3583,13 +6967,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "M.Guerra@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB1163033089",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "475929306",
@@ -3602,13 +7004,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "K.Carr@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB3823306207",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "226717235",
@@ -3621,13 +7041,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "A.Anderson@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB464155301",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "120760750",
@@ -3640,13 +7078,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "L.Contreras@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB7734846178",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "93477140",
@@ -3659,13 +7115,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "M.Buckley@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB6685219195",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "484657571",
@@ -3678,13 +7152,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "M.Roberson@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB2958986011",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "971922896",
@@ -3697,13 +7189,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "B.Young@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB6179201592",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "739542878",
@@ -3716,13 +7226,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "C.Rivas@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB297757244",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "967059652",
@@ -3735,13 +7263,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "L.Hebert@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB4427447691",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "348577944",
@@ -3754,13 +7300,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "S.Ramsey@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB2139374732",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "682934176",
@@ -3773,13 +7337,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "L.Fowler@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB6281331678",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "981388449",
@@ -3792,13 +7374,31 @@
       "plaatsnaam": "Sloothuizen",
       "geboortedatum": "1987-06-18",
       "email": "W.Barber@sloothuizen.nl",
-      "telefoonnummer": "687542132",
+      "telefoonnummer": "0687542132",
       "rekeningen": [
         {
           "iban": "NL84INGB7397185984",
           "rekeninghouder": "T. test"
         }
-      ],"afspraken": []
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": "765.32",
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
     },
     {
       "bsn": "999999990",
