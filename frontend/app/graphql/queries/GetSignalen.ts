@@ -21,8 +21,7 @@ export const GetSignalenQuery = gql`
     query getSignalen {
         signalen {
             id
-            ...Signaal
+            isActive
         }
     }
-    ${SignaalFragment}
 `;
