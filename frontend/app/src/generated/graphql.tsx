@@ -178,6 +178,7 @@ export type Burger = {
   geboortedatum?: Maybe<Scalars['Date']>;
   gebruikersactiviteiten?: Maybe<Array<Maybe<GebruikersActiviteit>>>;
   huishouden?: Maybe<Huishouden>;
+  huishoudenId?: Maybe<Scalars['Int']>;
   huisnummer?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['Int']>;
   plaatsnaam?: Maybe<Scalars['String']>;
@@ -2108,7 +2109,7 @@ export type GetHuishoudenQuery = { huishouden?: { id?: number, burgers?: Array<{
 export type GetHuishoudensQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetHuishoudensQuery = { huishoudens?: Array<{ id?: number, burgers?: Array<{ id?: number, voorletters?: string, voornamen?: string, achternaam?: string }> }> };
+export type GetHuishoudensQuery = { burgers?: Array<{ id?: number, voorletters?: string, voornamen?: string, achternaam?: string, huishoudenId?: number }> };
 
 export type GetOrganisatieQueryVariables = Exact<{
   id: Scalars['Int'];
@@ -5077,14 +5078,12 @@ export type GetHuishoudenLazyQueryHookResult = ReturnType<typeof useGetHuishoude
 export type GetHuishoudenQueryResult = Apollo.QueryResult<GetHuishoudenQuery, GetHuishoudenQueryVariables>;
 export const GetHuishoudensDocument = gql`
     query getHuishoudens {
-  huishoudens {
+  burgers {
     id
-    burgers {
-      id
-      voorletters
-      voornamen
-      achternaam
-    }
+    voorletters
+    voornamen
+    achternaam
+    huishoudenId
   }
 }
     `;

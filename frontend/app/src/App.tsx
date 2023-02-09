@@ -35,10 +35,7 @@ import Sidebar from "./components/Sidebar";
 import SidebarContainer from "./components/Sidebar/SidebarContainer";
 import SignalenList from "./components/Signalen/SignalenList";
 import StatusErrorPage from "./components/Status/StatusErrorPage";
-import {dataLayerOptions} from "./config/dataLayer";
 import {RouteNames} from "./config/routes";
-import onPathChanged from "./utils/DataLayer/hooks/onPathChanged";
-import useDataLayer from "./utils/DataLayer/useDataLayer";
 import {useFeatureFlag, useInitializeFeatureFlags} from "./utils/features";
 import useAuth from "./utils/useAuth";
 
@@ -47,8 +44,11 @@ const App = () => {
 	const {user, error, loading, reset, login} = useAuth();
 	const theme = useTheme();
 	const location = useLocation();
-	const dataLayer = useDataLayer(dataLayerOptions);
-	dataLayer.addHook(onPathChanged("PathChanged"));
+
+	// Todo: enable this once Matomo is available again.
+	// const dataLayer = useDataLayer(dataLayerOptions);
+	// dataLayer.addHook(onPathChanged("PathChanged"));
+
 	useInitializeFeatureFlags();
 	const isSignalenEnabled = useFeatureFlag("signalen");
 

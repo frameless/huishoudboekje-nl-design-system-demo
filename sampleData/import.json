@@ -1,1733 +1,3057 @@
 {
   "burgers": [
-	{
-	  "bsn": "999999990",
-	  "voorletters": "F.S.",
-	  "voornamen": "Fien Sandra",
-	  "achternaam": "de Jager",
-	  "huisnummer": "14",
-	  "postcode": "9999ZZ",
-	  "straatnaam": "Winkelstraat",
-	  "plaatsnaam": "Sloothuizen",
-	  "geboortedatum": "1987-06-18",
-	  "email": "fien.de.jager@sloothuizen.nl",
-	  "telefoonnummer": "0687542132",
-	  "rekeningen": [
-		{
-		  "iban": "NL84INGB2266765221",
-		  "rekeninghouder": "F. de Jager"
-		}
-	  ],
-	  "afspraken": [
-		{
-		  "rubriek": {
-			"naam": "Inkomsten"
-		  },
-		  "omschrijving": "Loon",
-		  "organisatie": {
-			"kvknummer": "35012085"
-		  },
-		  "bedrag": 765.32,
-		  "credit": true,
-		  "validFrom": "2021-01-01",
-		  "zoektermen": [
-			"Loon",
-			"ZOEKTERMPERSONA1"
-		  ]
-		},
-		{
-		  "rubriek": {
-			"naam": "Uitkeringen"
-		  },
-		  "omschrijving": "Aanvullende uitkering",
-		  "organisatie": {
-			"kvknummer": "30280353"
-		  },
-		  "bedrag": 147.84,
-		  "credit": true,
-		  "validFrom": "2019-01-07",
-		  "zoektermen": [
-			"Aanvullende uitkering",
-			"ZOEKTERMPERSONA1"
-		  ]
-		},
-		{
-		  "rubriek": {
-			"naam": "Toeslagen"
-		  },
-		  "omschrijving": "Voorschot kindgebonden budget",
-		  "organisatie": {
-			"kvknummer": "27365323"
-		  },
-		  "bedrag": 391,
-		  "credit": true,
-		  "validFrom": "2019-01-20",
-		  "zoektermen": [
-			"999999990",
-			"VOORSCHOT KIT/Kgb"
-		  ]
-		},
-		{
-		  "rubriek": {
-			"naam": "Toeslagen"
-		  },
-		  "omschrijving": "Voorschot huurtoeslag",
-		  "organisatie": {
-			"kvknummer": "27365323"
-		  },
-		  "bedrag": 322,
-		  "credit": true,
-		  "validFrom": "2019-01-20",
-		  "zoektermen": [
-			"999999990",
-			"VOORSCHOT HUURTOESLAG"
-		  ]
-		},
-		{
-		  "rubriek": {
-			"naam": "Toeslagen"
-		  },
-		  "omschrijving": "Voorschot zorgtoeslag",
-		  "organisatie": {
-			"kvknummer": "27365323"
-		  },
-		  "bedrag": 107,
-		  "credit": true,
-		  "validFrom": "2019-01-20",
-		  "zoektermen": [
-			"999999990",
-			"VOORSCHOT ZORGTOESLAG"
-		  ]
-		},
-		{
-		  "rubriek": {
-			"naam": "Huur of hypotheek"
-		  },
-		  "omschrijving": "Huur",
-		  "organisatie": {
-			"kvknummer": "30038487"
-		  },
-		  "bedrag": 647.35,
-		  "credit": false,
-		  "validFrom": "2019-01-01",
-		  "zoektermen": [
-			"Betaalde huur",
-			"ZOEKTERMPERSONA1"
-		  ]
-		},
-		{
-		  "rubriek": {
-			"naam": "Gas en elektriciteit"
-		  },
-		  "omschrijving": "Elektriciteit",
-		  "organisatie": {
-			"kvknummer": "05082820"
-		  },
-		  "bedrag": 132,
-		  "credit": false,
-		  "validFrom": "2019-01-01",
-		  "zoektermen": [
-			"Elektriciteit",
-			"ZOEKTERMPERSONA1"
-		  ]
-		},
-		{
-		  "rubriek": {
-			"naam": "Water"
-		  },
-		  "omschrijving": "Water",
-		  "organisatie": {
-			"kvknummer": "05069581"
-		  },
-		  "bedrag": 41.61,
-		  "credit": false,
-		  "validFrom": "2021-01-01",
-		  "zoektermen": [
-			"Water",
-			"ZOEKTERMPERSONA1"
-		  ]
-		},
-		{
-		  "rubriek": {
-			"naam": "Privé-opname"
-		  },
-		  "omschrijving": "Leefgeld",
-		  "bedrag": 939.94,
-		  "credit": false,
-		  "validFrom": "2021-01-01",
-		  "zoektermen": [
-			"Leefgeld",
-			"ZOEKTERMPERSONA1"
-		  ],
-		  "betaalinstructie": {
-			"byMonth": [
-			  1,
-			  2,
-			  3,
-			  4,
-			  5,
-			  6,
-			  7,
-			  8,
-			  9,
-			  10,
-			  11,
-			  12
-			],
-			"byMonthDay": [1],
-			"startDate": "2021-01-01"
-		  }
-		}
-	  ]
-	},
-	{
-	  "bsn": "999999989",
-	  "voorletters": "H.J.",
-	  "voornamen": "Henk-Jan",
-	  "achternaam": "Poortvliet",
-	  "huisnummer": "37B",
-	  "postcode": "9999ZZ",
-	  "straatnaam": "Spoorlaan",
-	  "plaatsnaam": "Sloothuizen",
-	  "geboortedatum": "1964-08-14",
-	  "email": "henkjanpoortvliet@sloothuizen.nl",
-	  "telefoonnummer": "0698653212",
-	  "rekeningen": [
-		{
-		  "iban": "NL83ABNA1927261899",
-		  "rekeninghouder": "H.J. Poortvliet"
-		},
-		{
-		  "iban": "NL58INGB5228863516",
-		  "rekeninghouder": "H.J. Poortvliet en/of A.B. Zee"
-		}
-	  ],
-	  "afspraken": [
-		{
-		  "rubriek": {
-			"naam": "Uitkeringen"
-		  },
-		  "omschrijving": "Aanvullende uitkering minus terugvordering",
-		  "organisatie": {
-			"kvknummer": "30280353"
-		  },
-		  "bedrag": 104.85,
-		  "credit": true,
-		  "validFrom": "2019-01-07",
-		  "zoektermen": [
-			"Aanvullende uitkering",
-			"ZOEKTERMPERSONA2"
-		  ]
-		},
-		{
-		  "rubriek": {
-			"naam": "Inkomsten"
-		  },
-		  "omschrijving": "Loon",
-		  "organisatie": {
-			"kvknummer": "35012085"
-		  },
-		  "bedrag": 1669.12,
-		  "credit": true,
-		  "validFrom": "2021-01-01",
-		  "zoektermen": [
-			"Loon",
-			"ZOEKTERMPERSONA2"
-		  ]
-		},
-		{
-		  "rubriek": {
-			"naam": "Toeslagen"
-		  },
-		  "omschrijving": "Voorschot huurtoeslag",
-		  "organisatie": {
-			"kvknummer": "27365323"
-		  },
-		  "bedrag": 286,
-		  "credit": true,
-		  "validFrom": "2019-01-20",
-		  "zoektermen": [
-			"999999989",
-			"VOORSCHOT HUURTOESLAG"
-		  ]
-		},
-		{
-		  "rubriek": {
-			"naam": "Toeslagen"
-		  },
-		  "omschrijving": "Voorschot zorgtoeslag",
-		  "organisatie": {
-			"kvknummer": "27365323"
-		  },
-		  "bedrag": 107,
-		  "credit": true,
-		  "validFrom": "2019-01-20",
-		  "zoektermen": [
-			"999999989",
-			"VOORSCHOT ZORGTOESLAG"
-		  ]
-		},
-		{
-		  "rubriek": {
-			"naam": "Inkomsten"
-		  },
-		  "omschrijving": "Bijdrage Vaste Lasten Pakket",
-		  "organisatie": {
-			"kvknummer": "73834238"
-		  },
-		  "bedrag": 30,
-		  "credit": true,
-		  "validFrom": "2021-01-01",
-		  "zoektermen": [
-			"Vaste Lasten Pakket",
-			"ZOEKTERMPERSONA2"
-		  ]
-		},
-		{
-		  "rubriek": {
-			"naam": "Huur of hypotheek"
-		  },
-		  "omschrijving": "Huur",
-		  "organisatie": {
-			"kvknummer": "30038487"
-		  },
-		  "bedrag": 570.77,
-		  "credit": false,
-		  "validFrom": "2019-01-01",
-		  "zoektermen": [
-			"Betaalde huur",
-			"ZOEKTERMPERSONA2"
-		  ]
-		},
-		{
-		  "rubriek": {
-			"naam": "Gas en elektriciteit"
-		  },
-		  "omschrijving": "Elektriciteit",
-		  "organisatie": {
-			"kvknummer": "24324527"
-		  },
-		  "bedrag": 122,
-		  "credit": false,
-		  "validFrom": "2019-01-01",
-		  "zoektermen": [
-			"Elektriciteit",
-			"ZOEKTERMPERSONA2"
-		  ]
-		},
-		{
-		  "rubriek": {
-			"naam": "Verzekeringen"
-		  },
-		  "omschrijving": "Zorgverzekering",
-		  "organisatie": {
-			"kvknummer": "41168265"
-		  },
-		  "bedrag": 181.34,
-		  "credit": false,
-		  "validFrom": "2019-01-01",
-		  "zoektermen": [
-			"Zorgverzekering",
-			"ZOEKTERMPERSONA2"
-		  ]
-		},
-		{
-		  "rubriek": {
-			"naam": "Water"
-		  },
-		  "omschrijving": "Water",
-		  "organisatie": {
-			"kvknummer": "05069581"
-		  },
-		  "bedrag": 45.77,
-		  "credit": false,
-		  "validFrom": "2019-01-01",
-		  "zoektermen": [
-			"Water",
-			"ZOEKTERMPERSONA2"
-		  ]
-		},
-		{
-		  "rubriek": {
-			"naam": "Privé-opname"
-		  },
-		  "omschrijving": "Leefgeld",
-		  "bedrag": 1195.2,
-		  "credit": false,
-		  "validFrom": "2019-01-01",
-		  "zoektermen": [
-			"Leefgeld",
-			"ZOEKTERMPERSONA2"
-		  ],
-		  "betaalinstructie": {
-			"byMonth": [
-			  1,
-			  2,
-			  3,
-			  4,
-			  5,
-			  6,
-			  7,
-			  8,
-			  9,
-			  10,
-			  11,
-			  12
-			],
-			"byMonthDay": [10],
-			"startDate": "2019-01-01"
-		  }
-		},
-		{
-		  "rubriek": {
-			"naam": "Verzekeringen"
-		  },
-		  "omschrijving": "Inboedelverzekering",
-		  "organisatie": {
-			"kvknummer": "69653852"
-		  },
-		  "bedrag": 19.52,
-		  "credit": false,
-		  "validFrom": "2019-01-01",
-		  "zoektermen": [
-			"Inboedelverzekering",
-			"ZOEKTERMPERSONA2"
-		  ]
-		},
-		{
-		  "rubriek": {
-			"naam": "Telefoon, internet en televisie"
-		  },
-		  "omschrijving": "Vaste telefonie en internet",
-		  "organisatie": {
-			"kvknummer": "27124701"
-		  },
-		  "bedrag": 62.88,
-		  "credit": false,
-		  "validFrom": "2019-01-01",
-		  "zoektermen": [
-			"Vaste telefonie en internet",
-			"ZOEKTERMPERSONA2"
-		  ]
-		},
-		{
-		  "rubriek": {
-			"naam": "Telefoon, internet en televisie"
-		  },
-		  "omschrijving": "Mobiele telefonie",
-		  "organisatie": {
-			"kvknummer": "14052264"
-		  },
-		  "bedrag": 30,
-		  "credit": false,
-		  "validFrom": "2019-01-01",
-		  "zoektermen": [
-			"Mobiele telefonie",
-			"ZOEKTERMPERSONA2"
-		  ]
-		}
-	  ]
-	},
-	{
-	  "bsn": "999999977",
-	  "voorletters": "C.R.D.",
-	  "voornamen": "Christel Ramone Davina",
-	  "achternaam": "Poortvliet",
-	  "huisnummer": "37B",
-	  "postcode": "9999ZZ",
-	  "straatnaam": "Spoorlaan",
-	  "plaatsnaam": "Sloothuizen",
-	  "geboortedatum": "1968-08-14",
-	  "email": "krdpoortvliet@sloothuizen.nl",
-	  "telefoonnummer": "0632659887",
-	  "rekeningen": [
-		{
-		  "iban": "NL05ABNA1578530261",
-		  "rekeninghouder": "K.R.D. Poortvliet"
-		}
-	  ],
-	  "afspraken": [
-		{
-		  "rubriek": {
-			"naam": "Inkomsten"
-		  },
-		  "omschrijving": "Loon",
-		  "organisatie": {
-			"kvknummer": "35012085"
-		  },
-		  "bedrag": 765.32,
-		  "credit": true,
-		  "validFrom": "2021-01-01",
-		  "zoektermen": [
-			"Loon",
-			"ZOEKTERMPERSONA3"
-		  ]
-		},
-		{
-		  "rubriek": {
-			"naam": "Uitkeringen"
-		  },
-		  "omschrijving": "Aanvullende uitkering",
-		  "organisatie": {
-			"kvknummer": "30280353"
-		  },
-		  "bedrag": 147.84,
-		  "credit": true,
-		  "validFrom": "2019-01-07",
-		  "zoektermen": [
-			"Aanvullende uitkering",
-			"ZOEKTERMPERSONA3"
-		  ]
-		},
-		{
-		  "rubriek": {
-			"naam": "Toeslagen"
-		  },
-		  "omschrijving": "Voorschot kindgebonden budget",
-		  "organisatie": {
-			"kvknummer": "27365323"
-		  },
-		  "bedrag": 391,
-		  "credit": true,
-		  "validFrom": "2019-01-20",
-		  "zoektermen": [
-			"999999977",
-			"VOORSCHOT KIT/Kgb"
-		  ]
-		},
-		{
-		  "rubriek": {
-			"naam": "Toeslagen"
-		  },
-		  "omschrijving": "Voorschot huurtoeslag",
-		  "organisatie": {
-			"kvknummer": "27365323"
-		  },
-		  "bedrag": 322,
-		  "credit": true,
-		  "validFrom": "2019-01-20",
-		  "zoektermen": [
-			"999999977",
-			"VOORSCHOT HUURTOESLAG"
-		  ]
-		},
-		{
-		  "rubriek": {
-			"naam": "Toeslagen"
-		  },
-		  "omschrijving": "Voorschot zorgtoeslag",
-		  "organisatie": {
-			"kvknummer": "27365323"
-		  },
-		  "bedrag": 107,
-		  "credit": true,
-		  "validFrom": "2019-01-20",
-		  "zoektermen": [
-			"999999977",
-			"VOORSCHOT ZORGTOESLAG"
-		  ]
-		},
-		{
-		  "rubriek": {
-			"naam": "Huur of hypotheek"
-		  },
-		  "omschrijving": "Huur",
-		  "organisatie": {
-			"kvknummer": "30038487"
-		  },
-		  "bedrag": 647.35,
-		  "credit": false,
-		  "validFrom": "2019-01-01",
-		  "zoektermen": [
-			"Betaalde huur",
-			"ZOEKTERMPERSONA3"
-		  ]
-		},
-		{
-		  "rubriek": {
-			"naam": "Gas en elektriciteit"
-		  },
-		  "omschrijving": "Elektriciteit",
-		  "organisatie": {
-			"kvknummer": "05082820"
-		  },
-		  "bedrag": 132,
-		  "credit": false,
-		  "validFrom": "2019-01-01",
-		  "zoektermen": [
-			"Elektriciteit",
-			"ZOEKTERMPERSONA3"
-		  ]
-		},
-		{
-		  "rubriek": {
-			"naam": "Water"
-		  },
-		  "omschrijving": "Water",
-		  "organisatie": {
-			"kvknummer": "05069581"
-		  },
-		  "bedrag": 41.61,
-		  "credit": false,
-		  "validFrom": "2021-01-01",
-		  "zoektermen": [
-			"Water",
-			"ZOEKTERMPERSONA3"
-		  ]
-		},
-		{
-		  "rubriek": {
-			"naam": "Privé-opname"
-		  },
-		  "omschrijving": "Leefgeld",
-		  "bedrag": 939.94,
-		  "credit": false,
-		  "validFrom": "2021-01-01",
-		  "zoektermen": [
-			"Leefgeld",
-			"ZOEKTERMPERSONA3"
-		  ]
-		}
-	  ]
-	},
-	{
-	  "bsn": "999999965",
-	  "voorletters": "C.",
-	  "voornamen": "Chris",
-	  "achternaam": "de Burg",
-	  "huisnummer": "91",
-	  "postcode": "9999ZZ",
-	  "straatnaam": "Het Laantje",
-	  "plaatsnaam": "Sloothuizen",
-	  "geboortedatum": "1982-04-11",
-	  "email": "chrisdeburg@sloothuizen.nl",
-	  "telefoonnummer": "0612456598",
-	  "rekeningen": [
-		{
-		  "iban": "NL56ABNA3971204384",
-		  "rekeninghouder": "C. de Burg"
-		}
-	  ],
-	  "afspraken": [
-		{
-		  "rubriek": {
-			"naam": "Inkomsten"
-		  },
-		  "omschrijving": "Loon",
-		  "organisatie": {
-			"kvknummer": "35012085"
-		  },
-		  "bedrag": 765.32,
-		  "credit": true,
-		  "validFrom": "2021-01-01",
-		  "zoektermen": [
-			"Loon",
-			"ZOEKTERMPERSONA4"
-		  ]
-		},
-		{
-		  "rubriek": {
-			"naam": "Uitkeringen"
-		  },
-		  "omschrijving": "Aanvullende uitkering",
-		  "organisatie": {
-			"kvknummer": "30280353"
-		  },
-		  "bedrag": 147.84,
-		  "credit": true,
-		  "validFrom": "2019-01-07",
-		  "zoektermen": [
-			"Aanvullende uitkering",
-			"ZOEKTERMPERSONA4"
-		  ]
-		},
-		{
-		  "rubriek": {
-			"naam": "Toeslagen"
-		  },
-		  "omschrijving": "Voorschot kindgebonden budget",
-		  "organisatie": {
-			"kvknummer": "27365323"
-		  },
-		  "bedrag": 391,
-		  "credit": true,
-		  "validFrom": "2019-01-20",
-		  "zoektermen": [
-			"999999965",
-			"VOORSCHOT KIT/Kgb"
-		  ]
-		},
-		{
-		  "rubriek": {
-			"naam": "Toeslagen"
-		  },
-		  "omschrijving": "Voorschot huurtoeslag",
-		  "organisatie": {
-			"kvknummer": "27365323"
-		  },
-		  "bedrag": 322,
-		  "credit": true,
-		  "validFrom": "2019-01-20",
-		  "zoektermen": [
-			"999999965",
-			"VOORSCHOT HUURTOESLAG"
-		  ]
-		},
-		{
-		  "rubriek": {
-			"naam": "Toeslagen"
-		  },
-		  "omschrijving": "Voorschot zorgtoeslag",
-		  "organisatie": {
-			"kvknummer": "27365323"
-		  },
-		  "bedrag": 107,
-		  "credit": true,
-		  "validFrom": "2019-01-20",
-		  "zoektermen": [
-			"999999965",
-			"VOORSCHOT ZORGTOESLAG"
-		  ]
-		},
-		{
-		  "rubriek": {
-			"naam": "Huur of hypotheek"
-		  },
-		  "omschrijving": "Huur",
-		  "organisatie": {
-			"kvknummer": "30038487"
-		  },
-		  "bedrag": 647.35,
-		  "credit": false,
-		  "validFrom": "2019-01-01",
-		  "zoektermen": [
-			"Betaalde huur",
-			"ZOEKTERMPERSONA4"
-		  ]
-		},
-		{
-		  "rubriek": {
-			"naam": "Gas en elektriciteit"
-		  },
-		  "omschrijving": "Elektriciteit",
-		  "organisatie": {
-			"kvknummer": "05082820"
-		  },
-		  "bedrag": 132,
-		  "credit": false,
-		  "validFrom": "2019-01-01",
-		  "zoektermen": [
-			"Elektriciteit",
-			"ZOEKTERMPERSONA4"
-		  ]
-		},
-		{
-		  "rubriek": {
-			"naam": "Water"
-		  },
-		  "omschrijving": "Water",
-		  "organisatie": {
-			"kvknummer": "05069581"
-		  },
-		  "bedrag": 41.61,
-		  "credit": false,
-		  "validFrom": "2021-01-01",
-		  "zoektermen": [
-			"Water",
-			"ZOEKTERMPERSONA4"
-		  ]
-		},
-		{
-		  "rubriek": {
-			"naam": "Privé-opname"
-		  },
-		  "omschrijving": "Leefgeld",
-		  "bedrag": 939.94,
-		  "credit": false,
-		  "validFrom": "2021-01-01",
-		  "zoektermen": [
-			"Leefgeld",
-			"ZOEKTERMPERSONA4"
-		  ]
-		}
-	  ]
-	}
+    {
+      "bsn": "676764083",
+      "voornamen": "Mcpherson",
+      "voorletters": "M.",
+      "achternaam": "Patterson",
+      "huisnummer": "72",
+      "postcode": "9999ZZ",
+      "straatnaam": "Winkelstraat",
+      "plaatsnaam": "Sloothuizen",
+      "geboortedatum": "1987-06-18",
+      "email": "M.Patterson@sloothuizen.nl",
+      "telefoonnummer": "0687542132",
+      "rekeningen": [
+        {
+          "iban": "NL79ZWLB0896665399",
+          "rekeninghouder": "T. test"
+        }
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": 765.32,
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
+    },
+    {
+      "bsn": "358294903",
+      "voornamen": "Jeannine",
+      "voorletters": "J.",
+      "achternaam": "Morrow",
+      "huisnummer": "15",
+      "postcode": "9999ZZ",
+      "straatnaam": "Winkelstraat",
+      "plaatsnaam": "Sloothuizen",
+      "geboortedatum": "1987-06-18",
+      "email": "J.Morrow@sloothuizen.nl",
+      "telefoonnummer": "0687542132",
+      "rekeningen": [
+        {
+          "iban": "NL39ASRB0616982534",
+          "rekeninghouder": "T. test"
+        }
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": 765.32,
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
+    },
+    {
+      "bsn": "157285431",
+      "voornamen": "Allie",
+      "voorletters": "A.",
+      "achternaam": "Noble",
+      "huisnummer": "5",
+      "postcode": "9999ZZ",
+      "straatnaam": "Winkelstraat",
+      "plaatsnaam": "Sloothuizen",
+      "geboortedatum": "1987-06-18",
+      "email": "A.Noble@sloothuizen.nl",
+      "telefoonnummer": "0687542132",
+      "rekeningen": [
+        {
+          "iban": "NL22ANAA0224242547",
+          "rekeninghouder": "T. test"
+        }
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": 765.32,
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
+    },
+    {
+      "bsn": "194275115",
+      "voornamen": "Wheeler",
+      "voorletters": "W.",
+      "achternaam": "Maddox",
+      "huisnummer": "8",
+      "postcode": "9999ZZ",
+      "straatnaam": "Winkelstraat",
+      "plaatsnaam": "Sloothuizen",
+      "geboortedatum": "1987-06-18",
+      "email": "W.Maddox@sloothuizen.nl",
+      "telefoonnummer": "0687542132",
+      "rekeningen": [
+        {
+          "iban": "NL70HSBC0855674946",
+          "rekeninghouder": "T. test"
+        }
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": 765.32,
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
+    },
+    {
+      "bsn": "523439398",
+      "voornamen": "Valentine",
+      "voorletters": "V.",
+      "achternaam": "Clarke",
+      "huisnummer": "59",
+      "postcode": "9999ZZ",
+      "straatnaam": "Winkelstraat",
+      "plaatsnaam": "Sloothuizen",
+      "geboortedatum": "1987-06-18",
+      "email": "V.Clarke@sloothuizen.nl",
+      "telefoonnummer": "0687542132",
+      "rekeningen": [
+        {
+          "iban": "NL86AEGO0410440728",
+          "rekeninghouder": "T. test"
+        }
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": 765.32,
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
+    },
+    {
+      "bsn": "398954367",
+      "voornamen": "Kendra",
+      "voorletters": "K.",
+      "achternaam": "Lopez",
+      "huisnummer": "73",
+      "postcode": "9999ZZ",
+      "straatnaam": "Winkelstraat",
+      "plaatsnaam": "Sloothuizen",
+      "geboortedatum": "1987-06-18",
+      "email": "K.Lopez@sloothuizen.nl",
+      "telefoonnummer": "0687542132",
+      "rekeningen": [
+        {
+          "iban": "NL69KABA0247688851",
+          "rekeninghouder": "T. test"
+        }
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": 765.32,
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
+    },
+    {
+      "bsn": "468057298",
+      "voornamen": "Alexandria",
+      "voorletters": "A.",
+      "achternaam": "Morin",
+      "huisnummer": "15",
+      "postcode": "9999ZZ",
+      "straatnaam": "Winkelstraat",
+      "plaatsnaam": "Sloothuizen",
+      "geboortedatum": "1987-06-18",
+      "email": "A.Morin@sloothuizen.nl",
+      "telefoonnummer": "0687542132",
+      "rekeningen": [
+        {
+          "iban": "NL83KABA0326214852",
+          "rekeninghouder": "T. test"
+        }
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": 765.32,
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
+    },
+    {
+      "bsn": "454015434",
+      "voornamen": "Phyllis",
+      "voorletters": "P.",
+      "achternaam": "Alford",
+      "huisnummer": "87",
+      "postcode": "9999ZZ",
+      "straatnaam": "Winkelstraat",
+      "plaatsnaam": "Sloothuizen",
+      "geboortedatum": "1987-06-18",
+      "email": "P.Alford@sloothuizen.nl",
+      "telefoonnummer": "0687542132",
+      "rekeningen": [
+        {
+          "iban": "NL35LPLN0823047237",
+          "rekeninghouder": "T. test"
+        }
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": 765.32,
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
+    },
+    {
+      "bsn": "582372896",
+      "voornamen": "Lila",
+      "voorletters": "L.",
+      "achternaam": "Goodwin",
+      "huisnummer": "72",
+      "postcode": "9999ZZ",
+      "straatnaam": "Winkelstraat",
+      "plaatsnaam": "Sloothuizen",
+      "geboortedatum": "1987-06-18",
+      "email": "L.Goodwin@sloothuizen.nl",
+      "telefoonnummer": "0687542132",
+      "rekeningen": [
+        {
+          "iban": "NL52BBRU0833858785",
+          "rekeninghouder": "T. test"
+        }
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": 765.32,
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
+    },
+    {
+      "bsn": "140683252",
+      "voornamen": "Margo",
+      "voorletters": "M.",
+      "achternaam": "Zamora",
+      "huisnummer": "92",
+      "postcode": "9999ZZ",
+      "straatnaam": "Winkelstraat",
+      "plaatsnaam": "Sloothuizen",
+      "geboortedatum": "1987-06-18",
+      "email": "M.Zamora@sloothuizen.nl",
+      "telefoonnummer": "0687542132",
+      "rekeningen": [
+        {
+          "iban": "NL78KRED0149098340",
+          "rekeninghouder": "T. test"
+        }
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": 765.32,
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
+    },
+    {
+      "bsn": "482276034",
+      "voornamen": "Herring",
+      "voorletters": "H.",
+      "achternaam": "Bartlett",
+      "huisnummer": "5",
+      "postcode": "9999ZZ",
+      "straatnaam": "Winkelstraat",
+      "plaatsnaam": "Sloothuizen",
+      "geboortedatum": "1987-06-18",
+      "email": "H.Bartlett@sloothuizen.nl",
+      "telefoonnummer": "0687542132",
+      "rekeningen": [
+        {
+          "iban": "NL78KRED0149098340",
+          "rekeninghouder": "T. test"
+        }
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": 765.32,
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
+    },
+    {
+      "bsn": "425041608",
+      "voornamen": "Traci",
+      "voorletters": "T.",
+      "achternaam": "Byrd",
+      "huisnummer": "78",
+      "postcode": "9999ZZ",
+      "straatnaam": "Winkelstraat",
+      "plaatsnaam": "Sloothuizen",
+      "geboortedatum": "1987-06-18",
+      "email": "T.Byrd@sloothuizen.nl",
+      "telefoonnummer": "0687542132",
+      "rekeningen": [
+        {
+          "iban": "NL84INGB4948628719",
+          "rekeninghouder": "T. test"
+        }
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": 765.32,
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
+    },
+    {
+      "bsn": "220786550",
+      "voornamen": "Tommie",
+      "voorletters": "T.",
+      "achternaam": "Fry",
+      "huisnummer": "4",
+      "postcode": "9999ZZ",
+      "straatnaam": "Winkelstraat",
+      "plaatsnaam": "Sloothuizen",
+      "geboortedatum": "1987-06-18",
+      "email": "T.Fry@sloothuizen.nl",
+      "telefoonnummer": "0687542132",
+      "rekeningen": [
+        {
+          "iban": "NL89FBHL0451908120",
+          "rekeninghouder": "T. test"
+        }
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": 765.32,
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
+    },
+    {
+      "bsn": "551672511",
+      "voornamen": "Sasha",
+      "voorletters": "S.",
+      "achternaam": "Baker",
+      "huisnummer": "79",
+      "postcode": "9999ZZ",
+      "straatnaam": "Winkelstraat",
+      "plaatsnaam": "Sloothuizen",
+      "geboortedatum": "1987-06-18",
+      "email": "S.Baker@sloothuizen.nl",
+      "telefoonnummer": "0687542132",
+      "rekeningen": [
+        {
+          "iban": "NL70INGB0294419853",
+          "rekeninghouder": "T. test"
+        }
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": 765.32,
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
+    },
+    {
+      "bsn": "000419540",
+      "voornamen": "Alvarado",
+      "voorletters": "A.",
+      "achternaam": "Fulton",
+      "huisnummer": "37",
+      "postcode": "9999ZZ",
+      "straatnaam": "Winkelstraat",
+      "plaatsnaam": "Sloothuizen",
+      "geboortedatum": "1987-06-18",
+      "email": "A.Fulton@sloothuizen.nl",
+      "telefoonnummer": "0687542132",
+      "rekeningen": [
+        {
+          "iban": "NL70INGB0294419853",
+          "rekeninghouder": "T. test"
+        }
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": 765.32,
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
+    },
+    {
+      "bsn": "483335058",
+      "voornamen": "Kara",
+      "voorletters": "K.",
+      "achternaam": "Townsend",
+      "huisnummer": "50",
+      "postcode": "9999ZZ",
+      "straatnaam": "Winkelstraat",
+      "plaatsnaam": "Sloothuizen",
+      "geboortedatum": "1987-06-18",
+      "email": "K.Townsend@sloothuizen.nl",
+      "telefoonnummer": "0687542132",
+      "rekeningen": [
+        {
+          "iban": "NL70INGB0294419853",
+          "rekeninghouder": "T. test"
+        }
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": 765.32,
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
+    },
+    {
+      "bsn": "350806767",
+      "voornamen": "Casey",
+      "voorletters": "C.",
+      "achternaam": "Preston",
+      "huisnummer": "18",
+      "postcode": "9999ZZ",
+      "straatnaam": "Winkelstraat",
+      "plaatsnaam": "Sloothuizen",
+      "geboortedatum": "1987-06-18",
+      "email": "C.Preston@sloothuizen.nl",
+      "telefoonnummer": "0687542132",
+      "rekeningen": [
+        {
+          "iban": "NL70INGB0294419853",
+          "rekeninghouder": "T. test"
+        }
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": 765.32,
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
+    },
+    {
+      "bsn": "239213002",
+      "voornamen": "Powell",
+      "voorletters": "P.",
+      "achternaam": "Maldonado",
+      "huisnummer": "50",
+      "postcode": "9999ZZ",
+      "straatnaam": "Winkelstraat",
+      "plaatsnaam": "Sloothuizen",
+      "geboortedatum": "1987-06-18",
+      "email": "P.Maldonado@sloothuizen.nl",
+      "telefoonnummer": "0687542132",
+      "rekeningen": [
+        {
+          "iban": "NL70INGB0294419853",
+          "rekeninghouder": "T. test"
+        }
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": 765.32,
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
+    },
+    {
+      "bsn": "254391217",
+      "voornamen": "Garner",
+      "voorletters": "G.",
+      "achternaam": "Carpenter",
+      "huisnummer": "46",
+      "postcode": "9999ZZ",
+      "straatnaam": "Winkelstraat",
+      "plaatsnaam": "Sloothuizen",
+      "geboortedatum": "1987-06-18",
+      "email": "G.Carpenter@sloothuizen.nl",
+      "telefoonnummer": "0687542132",
+      "rekeningen": [
+        {
+          "iban": "NL70INGB0294419853",
+          "rekeninghouder": "T. test"
+        }
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": 765.32,
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
+    },
+    {
+      "bsn": "286691693",
+      "voornamen": "Mann",
+      "voorletters": "M.",
+      "achternaam": "Rivera",
+      "huisnummer": "74",
+      "postcode": "9999ZZ",
+      "straatnaam": "Winkelstraat",
+      "plaatsnaam": "Sloothuizen",
+      "geboortedatum": "1987-06-18",
+      "email": "M.Rivera@sloothuizen.nl",
+      "telefoonnummer": "0687542132",
+      "rekeningen": [
+        {
+          "iban": "NL70INGB0294419853",
+          "rekeninghouder": "T. test"
+        }
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": 765.32,
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
+    },
+    {
+      "bsn": "585352884",
+      "voornamen": "Whitney",
+      "voorletters": "W.",
+      "achternaam": "Romero",
+      "huisnummer": "94",
+      "postcode": "9999ZZ",
+      "straatnaam": "Winkelstraat",
+      "plaatsnaam": "Sloothuizen",
+      "geboortedatum": "1987-06-18",
+      "email": "W.Romero@sloothuizen.nl",
+      "telefoonnummer": "0687542132",
+      "rekeningen": [
+        {
+          "iban": "NL70INGB0294419853",
+          "rekeninghouder": "T. test"
+        }
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": 765.32,
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
+    },
+    {
+      "bsn": "339877078",
+      "voornamen": "Carly",
+      "voorletters": "C.",
+      "achternaam": "Padilla",
+      "huisnummer": "79",
+      "postcode": "9999ZZ",
+      "straatnaam": "Winkelstraat",
+      "plaatsnaam": "Sloothuizen",
+      "geboortedatum": "1987-06-18",
+      "email": "C.Padilla@sloothuizen.nl",
+      "telefoonnummer": "0687542132",
+      "rekeningen": [
+        {
+          "iban": "NL70INGB0294419853",
+          "rekeninghouder": "T. test"
+        }
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": 765.32,
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
+    },
+    {
+      "bsn": "275936107",
+      "voornamen": "Emily",
+      "voorletters": "E.",
+      "achternaam": "Craft",
+      "huisnummer": "15",
+      "postcode": "9999ZZ",
+      "straatnaam": "Winkelstraat",
+      "plaatsnaam": "Sloothuizen",
+      "geboortedatum": "1987-06-18",
+      "email": "E.Craft@sloothuizen.nl",
+      "telefoonnummer": "0687542132",
+      "rekeningen": [
+        {
+          "iban": "NL70INGB0294419853",
+          "rekeninghouder": "T. test"
+        }
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": 765.32,
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
+    },
+    {
+      "bsn": "105527373",
+      "voornamen": "Patton",
+      "voorletters": "P.",
+      "achternaam": "William",
+      "huisnummer": "43",
+      "postcode": "9999ZZ",
+      "straatnaam": "Winkelstraat",
+      "plaatsnaam": "Sloothuizen",
+      "geboortedatum": "1987-06-18",
+      "email": "P.William@sloothuizen.nl",
+      "telefoonnummer": "0687542132",
+      "rekeningen": [
+        {
+          "iban": "NL70INGB0294419853",
+          "rekeninghouder": "T. test"
+        }
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": 765.32,
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
+    },
+    {
+      "bsn": "104933082",
+      "voornamen": "Brooks",
+      "voorletters": "B.",
+      "achternaam": "Nunez",
+      "huisnummer": "50",
+      "postcode": "9999ZZ",
+      "straatnaam": "Winkelstraat",
+      "plaatsnaam": "Sloothuizen",
+      "geboortedatum": "1987-06-18",
+      "email": "B.Nunez@sloothuizen.nl",
+      "telefoonnummer": "0687542132",
+      "rekeningen": [
+        {
+          "iban": "NL70INGB0294419853",
+          "rekeninghouder": "T. test"
+        }
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": 765.32,
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
+    },
+    {
+      "bsn": "558598122",
+      "voornamen": "Rosales",
+      "voorletters": "R.",
+      "achternaam": "Lindsay",
+      "huisnummer": "93",
+      "postcode": "9999ZZ",
+      "straatnaam": "Winkelstraat",
+      "plaatsnaam": "Sloothuizen",
+      "geboortedatum": "1987-06-18",
+      "email": "R.Lindsay@sloothuizen.nl",
+      "telefoonnummer": "0687542132",
+      "rekeningen": [
+        {
+          "iban": "NL70INGB0294419853",
+          "rekeninghouder": "T. test"
+        }
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": 765.32,
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
+    },
+    {
+      "bsn": "447986648",
+      "voornamen": "Slater",
+      "voorletters": "S.",
+      "achternaam": "Holloway",
+      "huisnummer": "2",
+      "postcode": "9999ZZ",
+      "straatnaam": "Winkelstraat",
+      "plaatsnaam": "Sloothuizen",
+      "geboortedatum": "1987-06-18",
+      "email": "S.Holloway@sloothuizen.nl",
+      "telefoonnummer": "0687542132",
+      "rekeningen": [
+        {
+          "iban": "NL70INGB0294419853",
+          "rekeninghouder": "T. test"
+        }
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": 765.32,
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
+    },
+    {
+      "bsn": "170913703",
+      "voornamen": "Conway",
+      "voorletters": "C.",
+      "achternaam": "Raymond",
+      "huisnummer": "6",
+      "postcode": "9999ZZ",
+      "straatnaam": "Winkelstraat",
+      "plaatsnaam": "Sloothuizen",
+      "geboortedatum": "1987-06-18",
+      "email": "C.Raymond@sloothuizen.nl",
+      "telefoonnummer": "0687542132",
+      "rekeningen": [
+        {
+          "iban": "NL70INGB0294419853",
+          "rekeninghouder": "T. test"
+        }
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": 765.32,
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
+    },
+    {
+      "bsn": "465628990",
+      "voornamen": "Beatrice",
+      "voorletters": "B.",
+      "achternaam": "Hale",
+      "huisnummer": "28",
+      "postcode": "9999ZZ",
+      "straatnaam": "Winkelstraat",
+      "plaatsnaam": "Sloothuizen",
+      "geboortedatum": "1987-06-18",
+      "email": "B.Hale@sloothuizen.nl",
+      "telefoonnummer": "0687542132",
+      "rekeningen": [
+        {
+          "iban": "NL70INGB0294419853",
+          "rekeninghouder": "T. test"
+        }
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": 765.32,
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
+    },
+    {
+      "bsn": "249342650",
+      "voornamen": "Murray",
+      "voorletters": "M.",
+      "achternaam": "Christensen",
+      "huisnummer": "83",
+      "postcode": "9999ZZ",
+      "straatnaam": "Winkelstraat",
+      "plaatsnaam": "Sloothuizen",
+      "geboortedatum": "1987-06-18",
+      "email": "M.Christensen@sloothuizen.nl",
+      "telefoonnummer": "0687542132",
+      "rekeningen": [
+        {
+          "iban": "NL70INGB0294419853",
+          "rekeninghouder": "T. test"
+        }
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": 765.32,
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        }
+	]
+    },
+    {
+      "bsn": "999999990",
+      "voorletters": "F.S.",
+      "voornamen": "Fien Sandra",
+      "achternaam": "de Jager",
+      "huisnummer": "14",
+      "postcode": "9999ZZ",
+      "straatnaam": "Winkelstraat",
+      "plaatsnaam": "Sloothuizen",
+      "geboortedatum": "1987-06-18",
+      "email": "fien.de.jager@sloothuizen.nl",
+      "telefoonnummer": "0687542132",
+      "rekeningen": [
+        {
+          "iban": "NL84INGB2266765221",
+          "rekeninghouder": "F. de Jager"
+        }
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": 765.32,
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA1"
+          ]
+        },
+        {
+          "rubriek": {
+            "naam": "Uitkeringen"
+          },
+          "omschrijving": "Aanvullende uitkering",
+          "organisatie": {
+            "kvknummer": "30280353"
+          },
+          "bedrag": 147.84,
+          "credit": true,
+          "validFrom": "2019-01-07",
+          "zoektermen": [
+            "Aanvullende uitkering",
+            "ZOEKTERMPERSONA1"
+          ]
+        },
+        {
+          "rubriek": {
+            "naam": "Toeslagen"
+          },
+          "omschrijving": "Voorschot kindgebonden budget",
+          "organisatie": {
+            "kvknummer": "27365323"
+          },
+          "bedrag": 391,
+          "credit": true,
+          "validFrom": "2019-01-20",
+          "zoektermen": [
+            "999999990",
+            "VOORSCHOT KIT/Kgb"
+          ]
+        },
+        {
+          "rubriek": {
+            "naam": "Toeslagen"
+          },
+          "omschrijving": "Voorschot huurtoeslag",
+          "organisatie": {
+            "kvknummer": "27365323"
+          },
+          "bedrag": 322,
+          "credit": true,
+          "validFrom": "2019-01-20",
+          "zoektermen": [
+            "999999990",
+            "VOORSCHOT HUURTOESLAG"
+          ]
+        },
+        {
+          "rubriek": {
+            "naam": "Toeslagen"
+          },
+          "omschrijving": "Voorschot zorgtoeslag",
+          "organisatie": {
+            "kvknummer": "27365323"
+          },
+          "bedrag": 107,
+          "credit": true,
+          "validFrom": "2019-01-20",
+          "zoektermen": [
+            "999999990",
+            "VOORSCHOT ZORGTOESLAG"
+          ]
+        },
+        {
+          "rubriek": {
+            "naam": "Huur of hypotheek"
+          },
+          "omschrijving": "Huur",
+          "organisatie": {
+            "kvknummer": "30038487"
+          },
+          "bedrag": 647.35,
+          "credit": false,
+          "validFrom": "2019-01-01",
+          "zoektermen": [
+            "Betaalde huur",
+            "ZOEKTERMPERSONA1"
+          ]
+        },
+        {
+          "rubriek": {
+            "naam": "Gas en elektriciteit"
+          },
+          "omschrijving": "Elektriciteit",
+          "organisatie": {
+            "kvknummer": "05082820"
+          },
+          "bedrag": 132,
+          "credit": false,
+          "validFrom": "2019-01-01",
+          "zoektermen": [
+            "Elektriciteit",
+            "ZOEKTERMPERSONA1"
+          ]
+        },
+        {
+          "rubriek": {
+            "naam": "Water"
+          },
+          "omschrijving": "Water",
+          "organisatie": {
+            "kvknummer": "05069581"
+          },
+          "bedrag": 41.61,
+          "credit": false,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Water",
+            "ZOEKTERMPERSONA1"
+          ]
+        },
+        {
+          "rubriek": {
+            "naam": "Privé-opname"
+          },
+          "omschrijving": "Leefgeld",
+          "bedrag": 939.94,
+          "credit": false,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Leefgeld",
+            "ZOEKTERMPERSONA1"
+          ],
+          "betaalinstructie": {
+            "byMonth": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12
+            ],
+            "byMonthDay": [
+              1
+            ],
+            "startDate": "2021-01-01"
+          }
+        }
+      ]
+    },
+    {
+      "bsn": "999999989",
+      "voorletters": "H.J.",
+      "voornamen": "Henk-Jan",
+      "achternaam": "Poortvliet",
+      "huisnummer": "37B",
+      "postcode": "9999ZZ",
+      "straatnaam": "Spoorlaan",
+      "plaatsnaam": "Sloothuizen",
+      "geboortedatum": "1964-08-14",
+      "email": "henkjanpoortvliet@sloothuizen.nl",
+      "telefoonnummer": "0698653212",
+      "rekeningen": [
+        {
+          "iban": "NL83ABNA1927261899",
+          "rekeninghouder": "H.J. Poortvliet"
+        },
+        {
+          "iban": "NL58INGB5228863516",
+          "rekeninghouder": "H.J. Poortvliet en/of A.B. Zee"
+        }
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Uitkeringen"
+          },
+          "omschrijving": "Aanvullende uitkering minus terugvordering",
+          "organisatie": {
+            "kvknummer": "30280353"
+          },
+          "bedrag": 104.85,
+          "credit": true,
+          "validFrom": "2019-01-07",
+          "zoektermen": [
+            "Aanvullende uitkering",
+            "ZOEKTERMPERSONA2"
+          ]
+        },
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": 1669.12,
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA2"
+          ]
+        },
+        {
+          "rubriek": {
+            "naam": "Toeslagen"
+          },
+          "omschrijving": "Voorschot huurtoeslag",
+          "organisatie": {
+            "kvknummer": "27365323"
+          },
+          "bedrag": 286,
+          "credit": true,
+          "validFrom": "2019-01-20",
+          "zoektermen": [
+            "999999989",
+            "VOORSCHOT HUURTOESLAG"
+          ]
+        },
+        {
+          "rubriek": {
+            "naam": "Toeslagen"
+          },
+          "omschrijving": "Voorschot zorgtoeslag",
+          "organisatie": {
+            "kvknummer": "27365323"
+          },
+          "bedrag": 107,
+          "credit": true,
+          "validFrom": "2019-01-20",
+          "zoektermen": [
+            "999999989",
+            "VOORSCHOT ZORGTOESLAG"
+          ]
+        },
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Bijdrage Vaste Lasten Pakket",
+          "organisatie": {
+            "kvknummer": "73834238"
+          },
+          "bedrag": 30,
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Vaste Lasten Pakket",
+            "ZOEKTERMPERSONA2"
+          ]
+        },
+        {
+          "rubriek": {
+            "naam": "Huur of hypotheek"
+          },
+          "omschrijving": "Huur",
+          "organisatie": {
+            "kvknummer": "30038487"
+          },
+          "bedrag": 570.77,
+          "credit": false,
+          "validFrom": "2019-01-01",
+          "zoektermen": [
+            "Betaalde huur",
+            "ZOEKTERMPERSONA2"
+          ]
+        },
+        {
+          "rubriek": {
+            "naam": "Gas en elektriciteit"
+          },
+          "omschrijving": "Elektriciteit",
+          "organisatie": {
+            "kvknummer": "24324527"
+          },
+          "bedrag": 122,
+          "credit": false,
+          "validFrom": "2019-01-01",
+          "zoektermen": [
+            "Elektriciteit",
+            "ZOEKTERMPERSONA2"
+          ]
+        },
+        {
+          "rubriek": {
+            "naam": "Verzekeringen"
+          },
+          "omschrijving": "Zorgverzekering",
+          "organisatie": {
+            "kvknummer": "41168265"
+          },
+          "bedrag": 181.34,
+          "credit": false,
+          "validFrom": "2019-01-01",
+          "zoektermen": [
+            "Zorgverzekering",
+            "ZOEKTERMPERSONA2"
+          ]
+        },
+        {
+          "rubriek": {
+            "naam": "Water"
+          },
+          "omschrijving": "Water",
+          "organisatie": {
+            "kvknummer": "05069581"
+          },
+          "bedrag": 45.77,
+          "credit": false,
+          "validFrom": "2019-01-01",
+          "zoektermen": [
+            "Water",
+            "ZOEKTERMPERSONA2"
+          ]
+        },
+        {
+          "rubriek": {
+            "naam": "Privé-opname"
+          },
+          "omschrijving": "Leefgeld",
+          "bedrag": 1195.2,
+          "credit": false,
+          "validFrom": "2019-01-01",
+          "zoektermen": [
+            "Leefgeld",
+            "ZOEKTERMPERSONA2"
+          ],
+          "betaalinstructie": {
+            "byMonth": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12
+            ],
+            "byMonthDay": [
+              10
+            ],
+            "startDate": "2019-01-01"
+          }
+        },
+        {
+          "rubriek": {
+            "naam": "Verzekeringen"
+          },
+          "omschrijving": "Inboedelverzekering",
+          "organisatie": {
+            "kvknummer": "69653852"
+          },
+          "bedrag": 19.52,
+          "credit": false,
+          "validFrom": "2019-01-01",
+          "zoektermen": [
+            "Inboedelverzekering",
+            "ZOEKTERMPERSONA2"
+          ]
+        },
+        {
+          "rubriek": {
+            "naam": "Telefoon, internet en televisie"
+          },
+          "omschrijving": "Vaste telefonie en internet",
+          "organisatie": {
+            "kvknummer": "27124701"
+          },
+          "bedrag": 62.88,
+          "credit": false,
+          "validFrom": "2019-01-01",
+          "zoektermen": [
+            "Vaste telefonie en internet",
+            "ZOEKTERMPERSONA2"
+          ]
+        },
+        {
+          "rubriek": {
+            "naam": "Telefoon, internet en televisie"
+          },
+          "omschrijving": "Mobiele telefonie",
+          "organisatie": {
+            "kvknummer": "14052264"
+          },
+          "bedrag": 30,
+          "credit": false,
+          "validFrom": "2019-01-01",
+          "zoektermen": [
+            "Mobiele telefonie",
+            "ZOEKTERMPERSONA2"
+          ]
+        }
+      ]
+    },
+    {
+      "bsn": "999999977",
+      "voorletters": "C.R.D.",
+      "voornamen": "Christel Ramone Davina",
+      "achternaam": "Poortvliet",
+      "huisnummer": "37B",
+      "postcode": "9999ZZ",
+      "straatnaam": "Spoorlaan",
+      "plaatsnaam": "Sloothuizen",
+      "geboortedatum": "1968-08-14",
+      "email": "krdpoortvliet@sloothuizen.nl",
+      "telefoonnummer": "0632659887",
+      "rekeningen": [
+        {
+          "iban": "NL05ABNA1578530261",
+          "rekeninghouder": "K.R.D. Poortvliet"
+        }
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": 765.32,
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA3"
+          ]
+        },
+        {
+          "rubriek": {
+            "naam": "Uitkeringen"
+          },
+          "omschrijving": "Aanvullende uitkering",
+          "organisatie": {
+            "kvknummer": "30280353"
+          },
+          "bedrag": 147.84,
+          "credit": true,
+          "validFrom": "2019-01-07",
+          "zoektermen": [
+            "Aanvullende uitkering",
+            "ZOEKTERMPERSONA3"
+          ]
+        },
+        {
+          "rubriek": {
+            "naam": "Toeslagen"
+          },
+          "omschrijving": "Voorschot kindgebonden budget",
+          "organisatie": {
+            "kvknummer": "27365323"
+          },
+          "bedrag": 391,
+          "credit": true,
+          "validFrom": "2019-01-20",
+          "zoektermen": [
+            "999999977",
+            "VOORSCHOT KIT/Kgb"
+          ]
+        },
+        {
+          "rubriek": {
+            "naam": "Toeslagen"
+          },
+          "omschrijving": "Voorschot huurtoeslag",
+          "organisatie": {
+            "kvknummer": "27365323"
+          },
+          "bedrag": 322,
+          "credit": true,
+          "validFrom": "2019-01-20",
+          "zoektermen": [
+            "999999977",
+            "VOORSCHOT HUURTOESLAG"
+          ]
+        },
+        {
+          "rubriek": {
+            "naam": "Toeslagen"
+          },
+          "omschrijving": "Voorschot zorgtoeslag",
+          "organisatie": {
+            "kvknummer": "27365323"
+          },
+          "bedrag": 107,
+          "credit": true,
+          "validFrom": "2019-01-20",
+          "zoektermen": [
+            "999999977",
+            "VOORSCHOT ZORGTOESLAG"
+          ]
+        },
+        {
+          "rubriek": {
+            "naam": "Huur of hypotheek"
+          },
+          "omschrijving": "Huur",
+          "organisatie": {
+            "kvknummer": "30038487"
+          },
+          "bedrag": 647.35,
+          "credit": false,
+          "validFrom": "2019-01-01",
+          "zoektermen": [
+            "Betaalde huur",
+            "ZOEKTERMPERSONA3"
+          ]
+        },
+        {
+          "rubriek": {
+            "naam": "Gas en elektriciteit"
+          },
+          "omschrijving": "Elektriciteit",
+          "organisatie": {
+            "kvknummer": "05082820"
+          },
+          "bedrag": 132,
+          "credit": false,
+          "validFrom": "2019-01-01",
+          "zoektermen": [
+            "Elektriciteit",
+            "ZOEKTERMPERSONA3"
+          ]
+        },
+        {
+          "rubriek": {
+            "naam": "Water"
+          },
+          "omschrijving": "Water",
+          "organisatie": {
+            "kvknummer": "05069581"
+          },
+          "bedrag": 41.61,
+          "credit": false,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Water",
+            "ZOEKTERMPERSONA3"
+          ]
+        },
+        {
+          "rubriek": {
+            "naam": "Privé-opname"
+          },
+          "omschrijving": "Leefgeld",
+          "bedrag": 939.94,
+          "credit": false,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Leefgeld",
+            "ZOEKTERMPERSONA3"
+          ]
+        }
+      ]
+    },
+    {
+      "bsn": "999999965",
+      "voorletters": "C.",
+      "voornamen": "Chris",
+      "achternaam": "de Burg",
+      "huisnummer": "91",
+      "postcode": "9999ZZ",
+      "straatnaam": "Het Laantje",
+      "plaatsnaam": "Sloothuizen",
+      "geboortedatum": "1982-04-11",
+      "email": "chrisdeburg@sloothuizen.nl",
+      "telefoonnummer": "0612456598",
+      "rekeningen": [
+        {
+          "iban": "NL56ABNA3971204384",
+          "rekeninghouder": "C. de Burg"
+        }
+      ],
+      "afspraken": [
+        {
+          "rubriek": {
+            "naam": "Inkomsten"
+          },
+          "omschrijving": "Loon",
+          "organisatie": {
+            "kvknummer": "35012085"
+          },
+          "bedrag": 765.32,
+          "credit": true,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Loon",
+            "ZOEKTERMPERSONA4"
+          ]
+        },
+        {
+          "rubriek": {
+            "naam": "Uitkeringen"
+          },
+          "omschrijving": "Aanvullende uitkering",
+          "organisatie": {
+            "kvknummer": "30280353"
+          },
+          "bedrag": 147.84,
+          "credit": true,
+          "validFrom": "2019-01-07",
+          "zoektermen": [
+            "Aanvullende uitkering",
+            "ZOEKTERMPERSONA4"
+          ]
+        },
+        {
+          "rubriek": {
+            "naam": "Toeslagen"
+          },
+          "omschrijving": "Voorschot kindgebonden budget",
+          "organisatie": {
+            "kvknummer": "27365323"
+          },
+          "bedrag": 391,
+          "credit": true,
+          "validFrom": "2019-01-20",
+          "zoektermen": [
+            "999999965",
+            "VOORSCHOT KIT/Kgb"
+          ]
+        },
+        {
+          "rubriek": {
+            "naam": "Toeslagen"
+          },
+          "omschrijving": "Voorschot huurtoeslag",
+          "organisatie": {
+            "kvknummer": "27365323"
+          },
+          "bedrag": 322,
+          "credit": true,
+          "validFrom": "2019-01-20",
+          "zoektermen": [
+            "999999965",
+            "VOORSCHOT HUURTOESLAG"
+          ]
+        },
+        {
+          "rubriek": {
+            "naam": "Toeslagen"
+          },
+          "omschrijving": "Voorschot zorgtoeslag",
+          "organisatie": {
+            "kvknummer": "27365323"
+          },
+          "bedrag": 107,
+          "credit": true,
+          "validFrom": "2019-01-20",
+          "zoektermen": [
+            "999999965",
+            "VOORSCHOT ZORGTOESLAG"
+          ]
+        },
+        {
+          "rubriek": {
+            "naam": "Huur of hypotheek"
+          },
+          "omschrijving": "Huur",
+          "organisatie": {
+            "kvknummer": "30038487"
+          },
+          "bedrag": 647.35,
+          "credit": false,
+          "validFrom": "2019-01-01",
+          "zoektermen": [
+            "Betaalde huur",
+            "ZOEKTERMPERSONA4"
+          ]
+        },
+        {
+          "rubriek": {
+            "naam": "Gas en elektriciteit"
+          },
+          "omschrijving": "Elektriciteit",
+          "organisatie": {
+            "kvknummer": "05082820"
+          },
+          "bedrag": 132,
+          "credit": false,
+          "validFrom": "2019-01-01",
+          "zoektermen": [
+            "Elektriciteit",
+            "ZOEKTERMPERSONA4"
+          ]
+        },
+        {
+          "rubriek": {
+            "naam": "Water"
+          },
+          "omschrijving": "Water",
+          "organisatie": {
+            "kvknummer": "05069581"
+          },
+          "bedrag": 41.61,
+          "credit": false,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Water",
+            "ZOEKTERMPERSONA4"
+          ]
+        },
+        {
+          "rubriek": {
+            "naam": "Privé-opname"
+          },
+          "omschrijving": "Leefgeld",
+          "bedrag": 939.94,
+          "credit": false,
+          "validFrom": "2021-01-01",
+          "zoektermen": [
+            "Leefgeld",
+            "ZOEKTERMPERSONA4"
+          ]
+        }
+      ]
+    }
   ],
   "configuraties": [
-	{
-	  "key": "derdengeldenrekening_rekeninghouder",
-	  "value": "Gemeente Sloothuizen Huishoudboekje"
-	},
-	{
-	  "key": "derdengeldenrekening_iban",
-	  "value": "NL36ABNA5632579034"
-	},
-	{
-	  "key": "derdengeldenrekening_bic",
-	  "value": "ABNANL2A"
-	}
+    {
+      "key": "derdengeldenrekening_rekeninghouder",
+      "value": "Gemeente Sloothuizen Huishoudboekje"
+    },
+    {
+      "key": "derdengeldenrekening_iban",
+      "value": "NL36ABNA5632579034"
+    },
+    {
+      "key": "derdengeldenrekening_bic",
+      "value": "ABNANL2A"
+    }
   ],
   "huishoudens": [
-	{
-	  "burgers": [
-		{
-		  "bsn": "999999990"
-		},
-		{
-		  "bsn": "999999965"
-		}
-	  ]
-	},
-	{
-	  "burgers": [
-		{
-		  "bsn": "999999989"
-		},
-		{
-		  "bsn": "999999977"
-		}
-	  ]
-	}
+    {
+      "burgers": [
+        {
+          "bsn": "676764083"
+        }
+      ]
+    },
+    {
+      "burgers": [
+        {
+          "bsn": "358294903"
+        }
+      ]
+    },
+    {
+      "burgers": [
+        {
+          "bsn": "157285431"
+        }
+      ]
+    },
+    {
+      "burgers": [
+        {
+          "bsn": "194275115"
+        }
+      ]
+    },
+    {
+      "burgers": [
+        {
+          "bsn": "523439398"
+        }
+      ]
+    },
+    {
+      "burgers": [
+        {
+          "bsn": "398954367"
+        }
+      ]
+    },
+    {
+      "burgers": [
+        {
+          "bsn": "468057298"
+        }
+      ]
+    },
+    {
+      "burgers": [
+        {
+          "bsn": "454015434"
+        }
+      ]
+    },
+    {
+      "burgers": [
+        {
+          "bsn": "582372896"
+        }
+      ]
+    },
+    {
+      "burgers": [
+        {
+          "bsn": "140683252"
+        }
+      ]
+    },
+    {
+      "burgers": [
+        {
+          "bsn": "482276034"
+        }
+      ]
+    },
+    {
+      "burgers": [
+        {
+          "bsn": "425041608"
+        }
+      ]
+    },
+    {
+      "burgers": [
+        {
+          "bsn": "220786550"
+        }
+      ]
+    },
+    {
+      "burgers": [
+        {
+          "bsn": "551672511"
+        }
+      ]
+    },
+    {
+      "burgers": [
+        {
+          "bsn": "000419540"
+        }
+      ]
+    },
+    {
+      "burgers": [
+        {
+          "bsn": "483335058"
+        }
+      ]
+    },
+    {
+      "burgers": [
+        {
+          "bsn": "350806767"
+        }
+      ]
+    },
+    {
+      "burgers": [
+        {
+          "bsn": "239213002"
+        }
+      ]
+    },
+    {
+      "burgers": [
+        {
+          "bsn": "254391217"
+        }
+      ]
+    },
+    {
+      "burgers": [
+        {
+          "bsn": "286691693"
+        }
+      ]
+    },
+    {
+      "burgers": [
+        {
+          "bsn": "585352884"
+        }
+      ]
+    },
+    {
+      "burgers": [
+        {
+          "bsn": "339877078"
+        }
+      ]
+    },
+    {
+      "burgers": [
+        {
+          "bsn": "275936107"
+        }
+      ]
+    },
+    {
+      "burgers": [
+        {
+          "bsn": "105527373"
+        }
+      ]
+    },
+    {
+      "burgers": [
+        {
+          "bsn": "104933082"
+        }
+      ]
+    },
+    {
+      "burgers": [
+        {
+          "bsn": "558598122"
+        }
+      ]
+    },
+    {
+      "burgers": [
+        {
+          "bsn": "447986648"
+        }
+      ]
+    },
+    {
+      "burgers": [
+        {
+          "bsn": "170913703"
+        }
+      ]
+    },
+    {
+      "burgers": [
+        {
+          "bsn": "465628990"
+        }
+      ]
+    },
+    {
+      "burgers": [
+        {
+          "bsn": "249342650"
+        }
+      ]
+    },
+    {
+      "burgers": [
+        {
+          "bsn": "999999990"
+        },
+        {
+          "bsn": "999999965"
+        }
+      ]
+    },
+    {
+      "burgers": [
+        {
+          "bsn": "999999989"
+        },
+        {
+          "bsn": "999999977"
+        }
+      ]
+    }
   ],
   "organisaties": [
-	{
-	  "naam": "Belastingdienst Toeslagen Kantoor Utrecht",
-	  "kvknummer": "27365323",
-	  "vestigingsnummer": "000023683899",
-	  "afdelingen": [
-		{
-		  "naam": "Belastingdienst Toeslagen Kantoor Utrecht",
-		  "postadressen": [
-			{
-			  "straatnaam": "Graadt van Roggenweg",
-			  "huisnummer": "500",
-			  "postcode": "3531AH",
-			  "plaatsnaam": "Utrecht"
-			}
-		  ],
-		  "rekeningen": [
-			{
-			  "iban": "NL86INGB0002445588",
-			  "rekeninghouder": "Belastingdienst"
-			},
-			{
-			  "iban": "NL36INGB0003445588",
-			  "rekeninghouder": "Belastingdienst"
-			}
-		  ]
-		}
-	  ]
-	},
-	{
-	  "naam": "CAK",
-	  "kvknummer": "56806787",
-	  "vestigingsnummer": "000026319926",
-	  "afdelingen": [
-		{
-		  "naam": "CAK",
-		  "postadressen": [
-			{
-			  "straatnaam": "Prinses Beatrixlaan",
-			  "huisnummer": "7",
-			  "postcode": "2595AK",
-			  "plaatsnaam": "'s-Gravenhage"
-			}
-		  ],
-		  "rekeningen": [
-			{
-			  "iban": "NL38ABNA0435930001",
-			  "rekeninghouder": "CAK"
-			}
-		  ]
-		}
-	  ]
-	},
-	{
-	  "naam": "Dienst Uitvoering Onderwijs",
-	  "kvknummer": "50973029",
-	  "vestigingsnummer": "000000299391",
-	  "afdelingen": [
-		{
-		  "naam": "Dienst Uitvoering Onderwijs",
-		  "postadressen": [
-			{
-			  "straatnaam": "Postbus",
-			  "huisnummer": "30155",
-			  "postcode": "9700LG",
-			  "plaatsnaam": "Groningen"
-			}
-		  ],
-		  "rekeningen": [
-			{
-			  "iban": "NL45INGB0705001903",
-			  "rekeninghouder": "DUO"
-			}
-		  ]
-		}
-	  ]
-	},
-	{
-	  "naam": "Gemeente Utrecht",
-	  "kvknummer": "30280353",
-	  "vestigingsnummer": "000005203368",
-	  "afdelingen": [
-		{
-		  "naam": "Gemeente Utrecht",
-		  "postadressen": [
-			{
-			  "straatnaam": "Postbus",
-			  "huisnummer": "16200",
-			  "postcode": "3500CE",
-			  "plaatsnaam": "Utrecht"
-			}
-		  ],
-		  "rekeningen": [
-			{
-			  "iban": "NL71ABNA0411065785",
-			  "rekeninghouder": "GEMEENTE UTRECHT"
-			},
-			{
-			  "iban": "NL92BNGH0285178601",
-			  "rekeninghouder": "Gemeente Utrecht"
-			},
-			{
-			  "iban": "NL76BNGH0285178598",
-			  "rekeninghouder": "GEM UTRECHT WENI"
-			},
-			{
-			  "iban": "NL49BNGH0285171712",
-			  "rekeninghouder": "Gemeente Utrecht Huishoudboekje"
-			}
-		  ]
-		}
-	  ]
-	},
-	{
-	  "naam": "Sociale Verzekeringsbank",
-	  "kvknummer": "34366008",
-	  "vestigingsnummer": "000007246382",
-	  "afdelingen": [
-		{
-		  "naam": "Sociale Verzekeringsbank",
-		  "postadressen": [
-			{
-			  "straatnaam": "Graadt van Roggenweg",
-			  "huisnummer": "400",
-			  "postcode": "3531AH",
-			  "plaatsnaam": "Utrecht"
-			}
-		  ],
-		  "rekeningen": [
-			{
-			  "iban": "NL29RABO0317344927",
-			  "rekeninghouder": "SVB Utrecht"
-			}
-		  ]
-		}
-	  ]
-	},
-	{
-	  "naam": "UWV Utrecht",
-	  "kvknummer": "34360247",
-	  "vestigingsnummer": "000010718842",
-	  "afdelingen": [
-		{
-		  "naam": "UWV, afdeling WW",
-		  "postadressen": [
-			{
-			  "straatnaam": "Postbus",
-			  "huisnummer": "58195",
-			  "postcode": "1040HD",
-			  "plaatsnaam": "Amsterdam"
-			}
-		  ],
-		  "rekeningen": [
-			{
-			  "iban": "NL58INGB0702712760",
-			  "rekeninghouder": "UWV"
-			},
-			{
-			  "iban": "NL27INGB0702712736",
-			  "rekeninghouder": "UWV"
-			},
-			{
-			  "iban": "NL02INGB0702712701",
-			  "rekeninghouder": "UWV"
-			},
-			{
-			  "iban": "NL49INGB0702712728",
-			  "rekeninghouder": "UWV"
-			}
-		  ]
-		},
-		{
-		  "naam": "UWV, afdeling Wajong",
-		  "postadressen": [
-			{
-			  "straatnaam": "Postbus",
-			  "huisnummer": "244",
-			  "postcode": "1000AE",
-			  "plaatsnaam": "Amsterdam"
-			}
-		  ],
-		  "rekeningen": [
-			{
-			  "iban": "NL58INGB0702712760",
-			  "rekeninghouder": "UWV"
-			},
-			{
-			  "iban": "NL27INGB0702712736",
-			  "rekeninghouder": "UWV"
-			},
-			{
-			  "iban": "NL02INGB0702712701",
-			  "rekeninghouder": "UWV"
-			},
-			{
-			  "iban": "NL49INGB0702712728",
-			  "rekeninghouder": "UWV"
-			}
-		  ]
-		},
-		{
-		  "naam": "UWV, afdeling WAO",
-		  "postadressen": [
-			{
-			  "straatnaam": "Postbus",
-			  "huisnummer": "245",
-			  "postcode": "1000AE",
-			  "plaatsnaam": "Amsterdam"
-			}
-		  ],
-		  "rekeningen": [
-			{
-			  "iban": "NL58INGB0702712760",
-			  "rekeninghouder": "UWV"
-			},
-			{
-			  "iban": "NL27INGB0702712736",
-			  "rekeninghouder": "UWV"
-			},
-			{
-			  "iban": "NL02INGB0702712701",
-			  "rekeninghouder": "UWV"
-			},
-			{
-			  "iban": "NL49INGB0702712728",
-			  "rekeninghouder": "UWV"
-			}
-		  ]
-		},
-		{
-		  "naam": "UWV, afdeling WAZ",
-		  "postadressen": [
-			{
-			  "straatnaam": "Postbus",
-			  "huisnummer": "246",
-			  "postcode": "1000AE",
-			  "plaatsnaam": "Amsterdam"
-			}
-		  ],
-		  "rekeningen": [
-			{
-			  "iban": "NL58INGB0702712760",
-			  "rekeninghouder": "UWV"
-			},
-			{
-			  "iban": "NL27INGB0702712736",
-			  "rekeninghouder": "UWV"
-			},
-			{
-			  "iban": "NL02INGB0702712701",
-			  "rekeninghouder": "UWV"
-			},
-			{
-			  "iban": "NL49INGB0702712728",
-			  "rekeninghouder": "UWV"
-			}
-		  ]
-		},
-		{
-		  "naam": "UWV, afdeling ZW",
-		  "postadressen": [
-			{
-			  "straatnaam": "Postbus",
-			  "huisnummer": "57015",
-			  "postcode": "1040CT",
-			  "plaatsnaam": "Amsterdam"
-			}
-		  ],
-		  "rekeningen": [
-			{
-			  "iban": "NL58INGB0702712760",
-			  "rekeninghouder": "UWV"
-			},
-			{
-			  "iban": "NL27INGB0702712736",
-			  "rekeninghouder": "UWV"
-			},
-			{
-			  "iban": "NL02INGB0702712701",
-			  "rekeninghouder": "UWV"
-			},
-			{
-			  "iban": "NL49INGB0702712728",
-			  "rekeninghouder": "UWV"
-			}
-		  ]
-		},
-		{
-		  "naam": "UWV, afdeling WAZO/ZEZ (tot 1-7-2019)",
-		  "postadressen": [
-			{
-			  "straatnaam": "Postbus",
-			  "huisnummer": "58018",
-			  "postcode": "1040HA",
-			  "plaatsnaam": "Amsterdam"
-			}
-		  ],
-		  "rekeningen": [
-			{
-			  "iban": "NL58INGB0702712760",
-			  "rekeninghouder": "UWV"
-			},
-			{
-			  "iban": "NL27INGB0702712736",
-			  "rekeninghouder": "UWV"
-			},
-			{
-			  "iban": "NL02INGB0702712701",
-			  "rekeninghouder": "UWV"
-			},
-			{
-			  "iban": "NL49INGB0702712728",
-			  "rekeninghouder": "UWV"
-			}
-		  ]
-		},
-		{
-		  "naam": "UWV, afdeling WAZO/ZEZ (vanaf 1-7-2019)",
-		  "postadressen": [
-			{
-			  "straatnaam": "Postbus",
-			  "huisnummer": "57015",
-			  "postcode": "1040CT",
-			  "plaatsnaam": "Amsterdam"
-			}
-		  ],
-		  "rekeningen": [
-			{
-			  "iban": "NL58INGB0702712760",
-			  "rekeninghouder": "UWV"
-			},
-			{
-			  "iban": "NL27INGB0702712736",
-			  "rekeninghouder": "UWV"
-			},
-			{
-			  "iban": "NL02INGB0702712701",
-			  "rekeninghouder": "UWV"
-			},
-			{
-			  "iban": "NL49INGB0702712728",
-			  "rekeninghouder": "UWV"
-			}
-		  ]
-		},
-		{
-		  "naam": "UWV, afdeling WIA",
-		  "postadressen": [
-			{
-			  "straatnaam": "Postbus",
-			  "huisnummer": "69254",
-			  "postcode": "1060CH",
-			  "plaatsnaam": "Amsterdam"
-			}
-		  ],
-		  "rekeningen": [
-			{
-			  "iban": "NL58INGB0702712760",
-			  "rekeninghouder": "UWV"
-			},
-			{
-			  "iban": "NL27INGB0702712736",
-			  "rekeninghouder": "UWV"
-			},
-			{
-			  "iban": "NL02INGB0702712701",
-			  "rekeninghouder": "UWV"
-			},
-			{
-			  "iban": "NL49INGB0702712728",
-			  "rekeninghouder": "UWV"
-			}
-		  ]
-		},
-		{
-		  "naam": "UWV, afdeling IOW",
-		  "postadressen": [
-			{
-			  "straatnaam": "Postbus",
-			  "huisnummer": "6111",
-			  "postcode": "1005EC",
-			  "plaatsnaam": "Amsterdam"
-			}
-		  ],
-		  "rekeningen": [
-			{
-			  "iban": "NL58INGB0702712760",
-			  "rekeninghouder": "UWV"
-			},
-			{
-			  "iban": "NL27INGB0702712736",
-			  "rekeninghouder": "UWV"
-			},
-			{
-			  "iban": "NL02INGB0702712701",
-			  "rekeninghouder": "UWV"
-			},
-			{
-			  "iban": "NL49INGB0702712728",
-			  "rekeninghouder": "UWV"
-			}
-		  ]
-		},
-		{
-		  "naam": "UWV, afdeling Beoordeling arbeidsvermogen",
-		  "postadressen": [
-			{
-			  "straatnaam": "Postbus",
-			  "huisnummer": "2441",
-			  "postcode": "1000CK",
-			  "plaatsnaam": "Amsterdam"
-			}
-		  ],
-		  "rekeningen": [
-			{
-			  "iban": "NL58INGB0702712760",
-			  "rekeninghouder": "UWV"
-			},
-			{
-			  "iban": "NL27INGB0702712736",
-			  "rekeninghouder": "UWV"
-			},
-			{
-			  "iban": "NL02INGB0702712701",
-			  "rekeninghouder": "UWV"
-			},
-			{
-			  "iban": "NL49INGB0702712728",
-			  "rekeninghouder": "UWV"
-			}
-		  ]
-		}
-	  ]
-	},
-	{
-	  "naam": "Stichting Vaste Lasten Pakket",
-	  "kvknummer": "73834238",
-	  "vestigingsnummer": "000000000000",
-	  "afdelingen": [
-		{
-		  "naam": "Stichting Vaste Lasten Pakket",
-		  "postadressen": [
-			{
-			  "straatnaam": "Arthur van Schendelstraat",
-			  "huisnummer": "650",
-			  "postcode": "3511MJ",
-			  "plaatsnaam": "Utrecht"
-			}
-		  ],
-		  "rekeningen": [
-			{
-			  "iban": "NL95RABO4545747078",
-			  "rekeninghouder": "Stichting Vaste Lasten Pakket"
-			}
-		  ]
-		}
-	  ]
-	},
-	{
-	  "naam": "Vitens N.V.",
-	  "kvknummer": "05069581",
-	  "vestigingsnummer": "000015447650",
-	  "afdelingen": [
-		{
-		  "naam": "Vitens N.V.",
-		  "postadressen": [
-			{
-			  "straatnaam": "Postbus",
-			  "huisnummer": "1205",
-			  "postcode": "8001BE",
-			  "plaatsnaam": "Zwolle"
-			}
-		  ],
-		  "rekeningen": [
-			{
-			  "iban": "NL94INGB0000869000",
-			  "rekeninghouder": "VITENS NV"
-			}
-		  ]
-		}
-	  ]
-	},
-	{
-	  "naam": "Stichting Mitros",
-	  "kvknummer": "30136131",
-	  "vestigingsnummer": "000000595233",
-	  "afdelingen": [
-		{
-		  "naam": "Stichting Mitros",
-		  "postadressen": [
-			{
-			  "straatnaam": "Postbus",
-			  "huisnummer": "8217",
-			  "postcode": "3503RE",
-			  "plaatsnaam": "Utrecht"
-			}
-		  ],
-		  "rekeningen": [
-			{
-			  "iban": "NL81ABNA0479270961",
-			  "rekeninghouder": "STICHTING MITROS"
-			},
-			{
-			  "iban": "NL28INGB0668690550",
-			  "rekeninghouder": "STICHTING MITROS"
-			}
-		  ]
-		}
-	  ]
-	},
-	{
-	  "naam": "Stichting Portaal",
-	  "kvknummer": "30038487",
-	  "vestigingsnummer": "000002799669",
-	  "afdelingen": [
-		{
-		  "naam": "Stichting Portaal",
-		  "postadressen": [
-			{
-			  "straatnaam": "Postbus",
-			  "huisnummer": "2211",
-			  "postcode": "3500GE",
-			  "plaatsnaam": "Utrecht"
-			}
-		  ],
-		  "rekeningen": [
-			{
-			  "iban": "NL15BNGH0285162624",
-			  "rekeninghouder": "Portaal"
-			}
-		  ]
-		}
-	  ]
-	},
-	{
-	  "naam": "De Nederlandse Energie Maatschappij",
-	  "kvknummer": "34297646",
-	  "vestigingsnummer": "000017772559",
-	  "afdelingen": [
-		{
-		  "naam": "De Nederlandse Energie Maatschappij",
-		  "postadressen": [
-			{
-			  "straatnaam": "Aert van Nesstraat",
-			  "huisnummer": "45",
-			  "postcode": "3012CA",
-			  "plaatsnaam": "Rotterdam"
-			}
-		  ],
-		  "rekeningen": [
-			{
-			  "iban": "NL86ABNA0511919131",
-			  "rekeninghouder": "Budget Energie"
-			}
-		  ]
-		}
-	  ]
-	},
-	{
-	  "naam": "Eneco Consumenten B.V.",
-	  "kvknummer": "24324527",
-	  "vestigingsnummer": "000016418557",
-	  "afdelingen": [
-		{
-		  "naam": "Eneco Consumenten B.V.",
-		  "postadressen": [
-			{
-			  "straatnaam": "Marten Meesweg",
-			  "huisnummer": "5",
-			  "postcode": "3068AV",
-			  "plaatsnaam": "Rotterdam"
-			}
-		  ],
-		  "rekeningen": [
-			{
-			  "iban": "NL10ABNA0240120000",
-			  "rekeninghouder": "Eneco Services"
-			}
-		  ]
-		}
-	  ]
-	},
-	{
-	  "naam": "Energiedirect B.V.",
-	  "kvknummer": "17146989",
-	  "vestigingsnummer": "000016985524",
-	  "afdelingen": [
-		{
-		  "naam": "Energiedirect B.V.",
-		  "postadressen": [
-			{
-			  "straatnaam": "Willemsplein",
-			  "huisnummer": "4",
-			  "postcode": "5211AK",
-			  "plaatsnaam": "'s-Hertogenbosch"
-			}
-		  ],
-		  "rekeningen": [
-			{
-			  "iban": "NL71ABNA0629639183",
-			  "rekeninghouder": "Energiedirect BV"
-			}
-		  ]
-		}
-	  ]
-	},
-	{
-	  "naam": "ENGIE Nederland Retail B.V.",
-	  "kvknummer": "05082820",
-	  "vestigingsnummer": "000020223862",
-	  "afdelingen": [
-		{
-		  "naam": "ENGIE Nederland Retail B.V.",
-		  "postadressen": [
-			{
-			  "straatnaam": "Grote Voort",
-			  "huisnummer": "291",
-			  "postcode": "8041BL",
-			  "plaatsnaam": "Zwolle"
-			}
-		  ],
-		  "rekeningen": [
-			{
-			  "iban": "NL54INGB0661901246",
-			  "rekeninghouder": "ENGIE Nederland RETAIL B.V."
-			}
-		  ]
-		}
-	  ]
-	},
-	{
-	  "naam": "Essent Retail Energie B.V.",
-	  "kvknummer": "13041611",
-	  "vestigingsnummer": "000016784626",
-	  "afdelingen": [
-		{
-		  "naam": "Essent Retail Energie B.V.",
-		  "postadressen": [
-			{
-			  "straatnaam": "Willemsplein",
-			  "huisnummer": "4",
-			  "postcode": "5211AK",
-			  "plaatsnaam": "'s-Hertogenbosch"
-			}
-		  ],
-		  "rekeningen": [
-			{
-			  "iban": "NL32ABNA0242244777",
-			  "rekeninghouder": "ESSENT RETAIL ENERG"
-			}
-		  ]
-		}
-	  ]
-	},
-	{
-	  "naam": "Anderzorg N.V.",
-	  "kvknummer": "50544403",
-	  "vestigingsnummer": "000020842066",
-	  "afdelingen": [
-		{
-		  "naam": "Anderzorg N.V.",
-		  "postadressen": [
-			{
-			  "straatnaam": "Winschoterdiep",
-			  "huisnummer": "70",
-			  "postcode": "9723AB",
-			  "plaatsnaam": "Groningen"
-			}
-		  ],
-		  "rekeningen": [
-			{
-			  "iban": "NL87INGB0676416217",
-			  "rekeninghouder": "Anderzorg N.V."
-			}
-		  ]
-		}
-	  ]
-	},
-	{
-	  "naam": "Coöperatie VGZ U.A.",
-	  "kvknummer": "10029718",
-	  "vestigingsnummer": "000016548582",
-	  "afdelingen": [
-		{
-		  "naam": "Coöperatie VGZ U.A.",
-		  "postadressen": [
-			{
-			  "straatnaam": "Winschoterdiep",
-			  "huisnummer": "70",
-			  "postcode": "9723AB",
-			  "plaatsnaam": "Groningen"
-			}
-		  ],
-		  "rekeningen": [
-			{
-			  "iban": "NL87INGB0000717127",
-			  "rekeninghouder": "Bewuzt"
-			}
-		  ]
-		}
-	  ]
-	},
-	{
-	  "naam": "CZ Groep Aanvullende Verzekering Zorgverzekeraar",
-	  "kvknummer": "18028752",
-	  "vestigingsnummer": "000004636074",
-	  "afdelingen": [
-		{
-		  "naam": "CZ Groep Aanvullende Verzekering Zorgverzekeraar",
-		  "postadressen": [
-			{
-			  "straatnaam": "Ringbaan-West",
-			  "huisnummer": "236",
-			  "postcode": "5038KE",
-			  "plaatsnaam": "Tilburg"
-			}
-		  ],
-		  "rekeningen": [
-			{
-			  "iban": "NL85INGB0668339063",
-			  "rekeninghouder": "CZ Groep Zorgverzekeraar"
-			}
-		  ]
-		}
-	  ]
-	},
-	{
-	  "naam": "DSW Ziektekostenverzekeringen N.V.",
-	  "kvknummer": "24230430",
-	  "vestigingsnummer": "000018569463",
-	  "afdelingen": [
-		{
-		  "naam": "DSW Ziektekostenverzekeringen N.V.",
-		  "postadressen": [
-			{
-			  "straatnaam": "Postbus",
-			  "huisnummer": "173",
-			  "postcode": "3100AD",
-			  "plaatsnaam": "Schiedam"
-			}
-		  ],
-		  "rekeningen": [
-			{
-			  "iban": "NL11RABO0343685310",
-			  "rekeninghouder": "DSW Ziektekostenverzekeringen"
-			}
-		  ]
-		}
-	  ]
-	},
-	{
-	  "naam": "FBTO Zorgverzekeringen N.V.",
-	  "kvknummer": "30208631",
-	  "vestigingsnummer": "000018994245",
-	  "afdelingen": [
-		{
-		  "naam": "FBTO Zorgverzekeringen N.V.",
-		  "postadressen": [
-			{
-			  "straatnaam": "Postbus",
-			  "huisnummer": "318",
-			  "postcode": "8901BC",
-			  "plaatsnaam": "Leeuwarden"
-			}
-		  ],
-		  "rekeningen": [
-			{
-			  "iban": "NL47INGB0000003054",
-			  "rekeninghouder": "FBTO ZORGVERZEKERINGEN NV"
-			}
-		  ]
-		}
-	  ]
-	},
-	{
-	  "naam": "Stichting Zorg en Zekerheid",
-	  "kvknummer": "41168265",
-	  "vestigingsnummer": "000040446425",
-	  "afdelingen": [
-		{
-		  "naam": "Stichting Zorg en Zekerheid",
-		  "postadressen": [
-			{
-			  "straatnaam": "Postbus",
-			  "huisnummer": "400",
-			  "postcode": "2300AK",
-			  "plaatsnaam": "Leiden"
-			}
-		  ],
-		  "rekeningen": [
-			{
-			  "iban": "NL28INGB0000128526",
-			  "rekeninghouder": "Zorgverzekeraar Zorg en Zekerheid"
-			}
-		  ]
-		}
-	  ]
-	},
-	{
-	  "naam": "RISK Direct B.V.",
-	  "kvknummer": "69653852",
-	  "vestigingsnummer": "000037991752",
-	  "afdelingen": [
-		{
-		  "naam": "RISK Direct B.V.",
-		  "postadressen": [
-			{
-			  "straatnaam": "Postbus",
-			  "huisnummer": "1006",
-			  "postcode": "3430BA",
-			  "plaatsnaam": "Nieuwegein"
-			}
-		  ],
-		  "rekeningen": [
-			{
-			  "iban": "NL62INGB2650400811",
-			  "rekeninghouder": "RISK Direct"
-			}
-		  ]
-		}
-	  ]
-	},
-	{
-	  "naam": "Albert Heijn B.V.",
-	  "kvknummer": "35012085",
-	  "vestigingsnummer": "000018360785",
-	  "afdelingen": [
-		{
-		  "naam": "Albert Heijn B.V.",
-		  "postadressen": [
-			{
-			  "straatnaam": "Postbus",
-			  "huisnummer": "3000",
-			  "postcode": "1500HA",
-			  "plaatsnaam": "Zaandam"
-			}
-		  ],
-		  "rekeningen": [
-			{
-			  "iban": "NL09INGB4826953240",
-			  "rekeninghouder": "Albert Heijn B.V."
-			}
-		  ]
-		}
-	  ]
-	},
-	{
-	  "naam": "KPN B.V.",
-	  "kvknummer": "27124701",
-	  "vestigingsnummer": "000016430921",
-	  "afdelingen": [
-		{
-		  "naam": "KPN B.V.",
-		  "postadressen": [
-			{
-			  "straatnaam": "Postbus",
-			  "huisnummer": "30000",
-			  "postcode": "2500GA",
-			  "plaatsnaam": "Den Haag"
-			}
-		  ],
-		  "rekeningen": [
-			{
-			  "iban": "NL45INGB0670984779",
-			  "rekeninghouder": "KPN"
-			}
-		  ]
-		}
-	  ]
-	},
-	{
-	  "naam": "Vodafone Libertel B.V.",
-	  "kvknummer": "14052264",
-	  "vestigingsnummer": "000016160703",
-	  "afdelingen": [
-		{
-		  "naam": "Vodafone Libertel B.V.",
-		  "postadressen": [
-			{
-			  "straatnaam": "Avenue Ceramique",
-			  "huisnummer": "300",
-			  "postcode": "6221KX",
-			  "plaatsnaam": "Maastricht"
-			}
-		  ],
-		  "rekeningen": [
-			{
-			  "iban": "NL93INGB0007939833",
-			  "rekeninghouder": "Vodafone Libertel B.V. te Maastricht"
-			}
-		  ]
-		}
-	  ]
-	}
+    {
+      "naam": "Belastingdienst Toeslagen Kantoor Utrecht",
+      "kvknummer": "27365323",
+      "vestigingsnummer": "000023683899",
+      "afdelingen": [
+        {
+          "naam": "Belastingdienst Toeslagen Kantoor Utrecht",
+          "postadressen": [
+            {
+              "straatnaam": "Graadt van Roggenweg",
+              "huisnummer": "500",
+              "postcode": "3531AH",
+              "plaatsnaam": "Utrecht"
+            }
+          ],
+          "rekeningen": [
+            {
+              "iban": "NL86INGB0002445588",
+              "rekeninghouder": "Belastingdienst"
+            },
+            {
+              "iban": "NL36INGB0003445588",
+              "rekeninghouder": "Belastingdienst"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "naam": "CAK",
+      "kvknummer": "56806787",
+      "vestigingsnummer": "000026319926",
+      "afdelingen": [
+        {
+          "naam": "CAK",
+          "postadressen": [
+            {
+              "straatnaam": "Prinses Beatrixlaan",
+              "huisnummer": "7",
+              "postcode": "2595AK",
+              "plaatsnaam": "'s-Gravenhage"
+            }
+          ],
+          "rekeningen": [
+            {
+              "iban": "NL38ABNA0435930001",
+              "rekeninghouder": "CAK"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "naam": "Dienst Uitvoering Onderwijs",
+      "kvknummer": "50973029",
+      "vestigingsnummer": "000000299391",
+      "afdelingen": [
+        {
+          "naam": "Dienst Uitvoering Onderwijs",
+          "postadressen": [
+            {
+              "straatnaam": "Postbus",
+              "huisnummer": "30155",
+              "postcode": "9700LG",
+              "plaatsnaam": "Groningen"
+            }
+          ],
+          "rekeningen": [
+            {
+              "iban": "NL45INGB0705001903",
+              "rekeninghouder": "DUO"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "naam": "Gemeente Utrecht",
+      "kvknummer": "30280353",
+      "vestigingsnummer": "000005203368",
+      "afdelingen": [
+        {
+          "naam": "Gemeente Utrecht",
+          "postadressen": [
+            {
+              "straatnaam": "Postbus",
+              "huisnummer": "16200",
+              "postcode": "3500CE",
+              "plaatsnaam": "Utrecht"
+            }
+          ],
+          "rekeningen": [
+            {
+              "iban": "NL71ABNA0411065785",
+              "rekeninghouder": "GEMEENTE UTRECHT"
+            },
+            {
+              "iban": "NL92BNGH0285178601",
+              "rekeninghouder": "Gemeente Utrecht"
+            },
+            {
+              "iban": "NL76BNGH0285178598",
+              "rekeninghouder": "GEM UTRECHT WENI"
+            },
+            {
+              "iban": "NL49BNGH0285171712",
+              "rekeninghouder": "Gemeente Utrecht Huishoudboekje"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "naam": "Sociale Verzekeringsbank",
+      "kvknummer": "34366008",
+      "vestigingsnummer": "000007246382",
+      "afdelingen": [
+        {
+          "naam": "Sociale Verzekeringsbank",
+          "postadressen": [
+            {
+              "straatnaam": "Graadt van Roggenweg",
+              "huisnummer": "400",
+              "postcode": "3531AH",
+              "plaatsnaam": "Utrecht"
+            }
+          ],
+          "rekeningen": [
+            {
+              "iban": "NL29RABO0317344927",
+              "rekeninghouder": "SVB Utrecht"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "naam": "UWV Utrecht",
+      "kvknummer": "34360247",
+      "vestigingsnummer": "000010718842",
+      "afdelingen": [
+        {
+          "naam": "UWV, afdeling WW",
+          "postadressen": [
+            {
+              "straatnaam": "Postbus",
+              "huisnummer": "58195",
+              "postcode": "1040HD",
+              "plaatsnaam": "Amsterdam"
+            }
+          ],
+          "rekeningen": [
+            {
+              "iban": "NL58INGB0702712760",
+              "rekeninghouder": "UWV"
+            },
+            {
+              "iban": "NL27INGB0702712736",
+              "rekeninghouder": "UWV"
+            },
+            {
+              "iban": "NL02INGB0702712701",
+              "rekeninghouder": "UWV"
+            },
+            {
+              "iban": "NL49INGB0702712728",
+              "rekeninghouder": "UWV"
+            }
+          ]
+        },
+        {
+          "naam": "UWV, afdeling Wajong",
+          "postadressen": [
+            {
+              "straatnaam": "Postbus",
+              "huisnummer": "244",
+              "postcode": "1000AE",
+              "plaatsnaam": "Amsterdam"
+            }
+          ],
+          "rekeningen": [
+            {
+              "iban": "NL58INGB0702712760",
+              "rekeninghouder": "UWV"
+            },
+            {
+              "iban": "NL27INGB0702712736",
+              "rekeninghouder": "UWV"
+            },
+            {
+              "iban": "NL02INGB0702712701",
+              "rekeninghouder": "UWV"
+            },
+            {
+              "iban": "NL49INGB0702712728",
+              "rekeninghouder": "UWV"
+            }
+          ]
+        },
+        {
+          "naam": "UWV, afdeling WAO",
+          "postadressen": [
+            {
+              "straatnaam": "Postbus",
+              "huisnummer": "245",
+              "postcode": "1000AE",
+              "plaatsnaam": "Amsterdam"
+            }
+          ],
+          "rekeningen": [
+            {
+              "iban": "NL58INGB0702712760",
+              "rekeninghouder": "UWV"
+            },
+            {
+              "iban": "NL27INGB0702712736",
+              "rekeninghouder": "UWV"
+            },
+            {
+              "iban": "NL02INGB0702712701",
+              "rekeninghouder": "UWV"
+            },
+            {
+              "iban": "NL49INGB0702712728",
+              "rekeninghouder": "UWV"
+            }
+          ]
+        },
+        {
+          "naam": "UWV, afdeling WAZ",
+          "postadressen": [
+            {
+              "straatnaam": "Postbus",
+              "huisnummer": "246",
+              "postcode": "1000AE",
+              "plaatsnaam": "Amsterdam"
+            }
+          ],
+          "rekeningen": [
+            {
+              "iban": "NL58INGB0702712760",
+              "rekeninghouder": "UWV"
+            },
+            {
+              "iban": "NL27INGB0702712736",
+              "rekeninghouder": "UWV"
+            },
+            {
+              "iban": "NL02INGB0702712701",
+              "rekeninghouder": "UWV"
+            },
+            {
+              "iban": "NL49INGB0702712728",
+              "rekeninghouder": "UWV"
+            }
+          ]
+        },
+        {
+          "naam": "UWV, afdeling ZW",
+          "postadressen": [
+            {
+              "straatnaam": "Postbus",
+              "huisnummer": "57015",
+              "postcode": "1040CT",
+              "plaatsnaam": "Amsterdam"
+            }
+          ],
+          "rekeningen": [
+            {
+              "iban": "NL58INGB0702712760",
+              "rekeninghouder": "UWV"
+            },
+            {
+              "iban": "NL27INGB0702712736",
+              "rekeninghouder": "UWV"
+            },
+            {
+              "iban": "NL02INGB0702712701",
+              "rekeninghouder": "UWV"
+            },
+            {
+              "iban": "NL49INGB0702712728",
+              "rekeninghouder": "UWV"
+            }
+          ]
+        },
+        {
+          "naam": "UWV, afdeling WAZO/ZEZ (tot 1-7-2019)",
+          "postadressen": [
+            {
+              "straatnaam": "Postbus",
+              "huisnummer": "58018",
+              "postcode": "1040HA",
+              "plaatsnaam": "Amsterdam"
+            }
+          ],
+          "rekeningen": [
+            {
+              "iban": "NL58INGB0702712760",
+              "rekeninghouder": "UWV"
+            },
+            {
+              "iban": "NL27INGB0702712736",
+              "rekeninghouder": "UWV"
+            },
+            {
+              "iban": "NL02INGB0702712701",
+              "rekeninghouder": "UWV"
+            },
+            {
+              "iban": "NL49INGB0702712728",
+              "rekeninghouder": "UWV"
+            }
+          ]
+        },
+        {
+          "naam": "UWV, afdeling WAZO/ZEZ (vanaf 1-7-2019)",
+          "postadressen": [
+            {
+              "straatnaam": "Postbus",
+              "huisnummer": "57015",
+              "postcode": "1040CT",
+              "plaatsnaam": "Amsterdam"
+            }
+          ],
+          "rekeningen": [
+            {
+              "iban": "NL58INGB0702712760",
+              "rekeninghouder": "UWV"
+            },
+            {
+              "iban": "NL27INGB0702712736",
+              "rekeninghouder": "UWV"
+            },
+            {
+              "iban": "NL02INGB0702712701",
+              "rekeninghouder": "UWV"
+            },
+            {
+              "iban": "NL49INGB0702712728",
+              "rekeninghouder": "UWV"
+            }
+          ]
+        },
+        {
+          "naam": "UWV, afdeling WIA",
+          "postadressen": [
+            {
+              "straatnaam": "Postbus",
+              "huisnummer": "69254",
+              "postcode": "1060CH",
+              "plaatsnaam": "Amsterdam"
+            }
+          ],
+          "rekeningen": [
+            {
+              "iban": "NL58INGB0702712760",
+              "rekeninghouder": "UWV"
+            },
+            {
+              "iban": "NL27INGB0702712736",
+              "rekeninghouder": "UWV"
+            },
+            {
+              "iban": "NL02INGB0702712701",
+              "rekeninghouder": "UWV"
+            },
+            {
+              "iban": "NL49INGB0702712728",
+              "rekeninghouder": "UWV"
+            }
+          ]
+        },
+        {
+          "naam": "UWV, afdeling IOW",
+          "postadressen": [
+            {
+              "straatnaam": "Postbus",
+              "huisnummer": "6111",
+              "postcode": "1005EC",
+              "plaatsnaam": "Amsterdam"
+            }
+          ],
+          "rekeningen": [
+            {
+              "iban": "NL58INGB0702712760",
+              "rekeninghouder": "UWV"
+            },
+            {
+              "iban": "NL27INGB0702712736",
+              "rekeninghouder": "UWV"
+            },
+            {
+              "iban": "NL02INGB0702712701",
+              "rekeninghouder": "UWV"
+            },
+            {
+              "iban": "NL49INGB0702712728",
+              "rekeninghouder": "UWV"
+            }
+          ]
+        },
+        {
+          "naam": "UWV, afdeling Beoordeling arbeidsvermogen",
+          "postadressen": [
+            {
+              "straatnaam": "Postbus",
+              "huisnummer": "2441",
+              "postcode": "1000CK",
+              "plaatsnaam": "Amsterdam"
+            }
+          ],
+          "rekeningen": [
+            {
+              "iban": "NL58INGB0702712760",
+              "rekeninghouder": "UWV"
+            },
+            {
+              "iban": "NL27INGB0702712736",
+              "rekeninghouder": "UWV"
+            },
+            {
+              "iban": "NL02INGB0702712701",
+              "rekeninghouder": "UWV"
+            },
+            {
+              "iban": "NL49INGB0702712728",
+              "rekeninghouder": "UWV"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "naam": "Stichting Vaste Lasten Pakket",
+      "kvknummer": "73834238",
+      "vestigingsnummer": "000000000000",
+      "afdelingen": [
+        {
+          "naam": "Stichting Vaste Lasten Pakket",
+          "postadressen": [
+            {
+              "straatnaam": "Arthur van Schendelstraat",
+              "huisnummer": "650",
+              "postcode": "3511MJ",
+              "plaatsnaam": "Utrecht"
+            }
+          ],
+          "rekeningen": [
+            {
+              "iban": "NL95RABO4545747078",
+              "rekeninghouder": "Stichting Vaste Lasten Pakket"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "naam": "Vitens N.V.",
+      "kvknummer": "05069581",
+      "vestigingsnummer": "000015447650",
+      "afdelingen": [
+        {
+          "naam": "Vitens N.V.",
+          "postadressen": [
+            {
+              "straatnaam": "Postbus",
+              "huisnummer": "1205",
+              "postcode": "8001BE",
+              "plaatsnaam": "Zwolle"
+            }
+          ],
+          "rekeningen": [
+            {
+              "iban": "NL94INGB0000869000",
+              "rekeninghouder": "VITENS NV"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "naam": "Stichting Mitros",
+      "kvknummer": "30136131",
+      "vestigingsnummer": "000000595233",
+      "afdelingen": [
+        {
+          "naam": "Stichting Mitros",
+          "postadressen": [
+            {
+              "straatnaam": "Postbus",
+              "huisnummer": "8217",
+              "postcode": "3503RE",
+              "plaatsnaam": "Utrecht"
+            }
+          ],
+          "rekeningen": [
+            {
+              "iban": "NL81ABNA0479270961",
+              "rekeninghouder": "STICHTING MITROS"
+            },
+            {
+              "iban": "NL28INGB0668690550",
+              "rekeninghouder": "STICHTING MITROS"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "naam": "Stichting Portaal",
+      "kvknummer": "30038487",
+      "vestigingsnummer": "000002799669",
+      "afdelingen": [
+        {
+          "naam": "Stichting Portaal",
+          "postadressen": [
+            {
+              "straatnaam": "Postbus",
+              "huisnummer": "2211",
+              "postcode": "3500GE",
+              "plaatsnaam": "Utrecht"
+            }
+          ],
+          "rekeningen": [
+            {
+              "iban": "NL15BNGH0285162624",
+              "rekeninghouder": "Portaal"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "naam": "De Nederlandse Energie Maatschappij",
+      "kvknummer": "34297646",
+      "vestigingsnummer": "000017772559",
+      "afdelingen": [
+        {
+          "naam": "De Nederlandse Energie Maatschappij",
+          "postadressen": [
+            {
+              "straatnaam": "Aert van Nesstraat",
+              "huisnummer": "45",
+              "postcode": "3012CA",
+              "plaatsnaam": "Rotterdam"
+            }
+          ],
+          "rekeningen": [
+            {
+              "iban": "NL86ABNA0511919131",
+              "rekeninghouder": "Budget Energie"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "naam": "Eneco Consumenten B.V.",
+      "kvknummer": "24324527",
+      "vestigingsnummer": "000016418557",
+      "afdelingen": [
+        {
+          "naam": "Eneco Consumenten B.V.",
+          "postadressen": [
+            {
+              "straatnaam": "Marten Meesweg",
+              "huisnummer": "5",
+              "postcode": "3068AV",
+              "plaatsnaam": "Rotterdam"
+            }
+          ],
+          "rekeningen": [
+            {
+              "iban": "NL10ABNA0240120000",
+              "rekeninghouder": "Eneco Services"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "naam": "Energiedirect B.V.",
+      "kvknummer": "17146989",
+      "vestigingsnummer": "000016985524",
+      "afdelingen": [
+        {
+          "naam": "Energiedirect B.V.",
+          "postadressen": [
+            {
+              "straatnaam": "Willemsplein",
+              "huisnummer": "4",
+              "postcode": "5211AK",
+              "plaatsnaam": "'s-Hertogenbosch"
+            }
+          ],
+          "rekeningen": [
+            {
+              "iban": "NL71ABNA0629639183",
+              "rekeninghouder": "Energiedirect BV"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "naam": "ENGIE Nederland Retail B.V.",
+      "kvknummer": "05082820",
+      "vestigingsnummer": "000020223862",
+      "afdelingen": [
+        {
+          "naam": "ENGIE Nederland Retail B.V.",
+          "postadressen": [
+            {
+              "straatnaam": "Grote Voort",
+              "huisnummer": "291",
+              "postcode": "8041BL",
+              "plaatsnaam": "Zwolle"
+            }
+          ],
+          "rekeningen": [
+            {
+              "iban": "NL54INGB0661901246",
+              "rekeninghouder": "ENGIE Nederland RETAIL B.V."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "naam": "Essent Retail Energie B.V.",
+      "kvknummer": "13041611",
+      "vestigingsnummer": "000016784626",
+      "afdelingen": [
+        {
+          "naam": "Essent Retail Energie B.V.",
+          "postadressen": [
+            {
+              "straatnaam": "Willemsplein",
+              "huisnummer": "4",
+              "postcode": "5211AK",
+              "plaatsnaam": "'s-Hertogenbosch"
+            }
+          ],
+          "rekeningen": [
+            {
+              "iban": "NL32ABNA0242244777",
+              "rekeninghouder": "ESSENT RETAIL ENERG"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "naam": "Anderzorg N.V.",
+      "kvknummer": "50544403",
+      "vestigingsnummer": "000020842066",
+      "afdelingen": [
+        {
+          "naam": "Anderzorg N.V.",
+          "postadressen": [
+            {
+              "straatnaam": "Winschoterdiep",
+              "huisnummer": "70",
+              "postcode": "9723AB",
+              "plaatsnaam": "Groningen"
+            }
+          ],
+          "rekeningen": [
+            {
+              "iban": "NL87INGB0676416217",
+              "rekeninghouder": "Anderzorg N.V."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "naam": "Coöperatie VGZ U.A.",
+      "kvknummer": "10029718",
+      "vestigingsnummer": "000016548582",
+      "afdelingen": [
+        {
+          "naam": "Coöperatie VGZ U.A.",
+          "postadressen": [
+            {
+              "straatnaam": "Winschoterdiep",
+              "huisnummer": "70",
+              "postcode": "9723AB",
+              "plaatsnaam": "Groningen"
+            }
+          ],
+          "rekeningen": [
+            {
+              "iban": "NL87INGB0000717127",
+              "rekeninghouder": "Bewuzt"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "naam": "CZ Groep Aanvullende Verzekering Zorgverzekeraar",
+      "kvknummer": "18028752",
+      "vestigingsnummer": "000004636074",
+      "afdelingen": [
+        {
+          "naam": "CZ Groep Aanvullende Verzekering Zorgverzekeraar",
+          "postadressen": [
+            {
+              "straatnaam": "Ringbaan-West",
+              "huisnummer": "236",
+              "postcode": "5038KE",
+              "plaatsnaam": "Tilburg"
+            }
+          ],
+          "rekeningen": [
+            {
+              "iban": "NL85INGB0668339063",
+              "rekeninghouder": "CZ Groep Zorgverzekeraar"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "naam": "DSW Ziektekostenverzekeringen N.V.",
+      "kvknummer": "24230430",
+      "vestigingsnummer": "000018569463",
+      "afdelingen": [
+        {
+          "naam": "DSW Ziektekostenverzekeringen N.V.",
+          "postadressen": [
+            {
+              "straatnaam": "Postbus",
+              "huisnummer": "173",
+              "postcode": "3100AD",
+              "plaatsnaam": "Schiedam"
+            }
+          ],
+          "rekeningen": [
+            {
+              "iban": "NL11RABO0343685310",
+              "rekeninghouder": "DSW Ziektekostenverzekeringen"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "naam": "FBTO Zorgverzekeringen N.V.",
+      "kvknummer": "30208631",
+      "vestigingsnummer": "000018994245",
+      "afdelingen": [
+        {
+          "naam": "FBTO Zorgverzekeringen N.V.",
+          "postadressen": [
+            {
+              "straatnaam": "Postbus",
+              "huisnummer": "318",
+              "postcode": "8901BC",
+              "plaatsnaam": "Leeuwarden"
+            }
+          ],
+          "rekeningen": [
+            {
+              "iban": "NL47INGB0000003054",
+              "rekeninghouder": "FBTO ZORGVERZEKERINGEN NV"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "naam": "Stichting Zorg en Zekerheid",
+      "kvknummer": "41168265",
+      "vestigingsnummer": "000040446425",
+      "afdelingen": [
+        {
+          "naam": "Stichting Zorg en Zekerheid",
+          "postadressen": [
+            {
+              "straatnaam": "Postbus",
+              "huisnummer": "400",
+              "postcode": "2300AK",
+              "plaatsnaam": "Leiden"
+            }
+          ],
+          "rekeningen": [
+            {
+              "iban": "NL28INGB0000128526",
+              "rekeninghouder": "Zorgverzekeraar Zorg en Zekerheid"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "naam": "RISK Direct B.V.",
+      "kvknummer": "69653852",
+      "vestigingsnummer": "000037991752",
+      "afdelingen": [
+        {
+          "naam": "RISK Direct B.V.",
+          "postadressen": [
+            {
+              "straatnaam": "Postbus",
+              "huisnummer": "1006",
+              "postcode": "3430BA",
+              "plaatsnaam": "Nieuwegein"
+            }
+          ],
+          "rekeningen": [
+            {
+              "iban": "NL62INGB2650400811",
+              "rekeninghouder": "RISK Direct"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "naam": "Albert Heijn B.V.",
+      "kvknummer": "35012085",
+      "vestigingsnummer": "000018360785",
+      "afdelingen": [
+        {
+          "naam": "Albert Heijn B.V.",
+          "postadressen": [
+            {
+              "straatnaam": "Postbus",
+              "huisnummer": "3000",
+              "postcode": "1500HA",
+              "plaatsnaam": "Zaandam"
+            }
+          ],
+          "rekeningen": [
+            {
+              "iban": "NL09INGB4826953240",
+              "rekeninghouder": "Albert Heijn B.V."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "naam": "KPN B.V.",
+      "kvknummer": "27124701",
+      "vestigingsnummer": "000016430921",
+      "afdelingen": [
+        {
+          "naam": "KPN B.V.",
+          "postadressen": [
+            {
+              "straatnaam": "Postbus",
+              "huisnummer": "30000",
+              "postcode": "2500GA",
+              "plaatsnaam": "Den Haag"
+            }
+          ],
+          "rekeningen": [
+            {
+              "iban": "NL45INGB0670984779",
+              "rekeninghouder": "KPN"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "naam": "Vodafone Libertel B.V.",
+      "kvknummer": "14052264",
+      "vestigingsnummer": "000016160703",
+      "afdelingen": [
+        {
+          "naam": "Vodafone Libertel B.V.",
+          "postadressen": [
+            {
+              "straatnaam": "Avenue Ceramique",
+              "huisnummer": "300",
+              "postcode": "6221KX",
+              "plaatsnaam": "Maastricht"
+            }
+          ],
+          "rekeningen": [
+            {
+              "iban": "NL93INGB0007939833",
+              "rekeninghouder": "Vodafone Libertel B.V. te Maastricht"
+            }
+          ]
+        }
+      ]
+    }
   ],
   "rubrieken": [
-	{
-	  "naam": "Inkomsten",
-	  "grootboekrekening": "WOmzNooNdo"
-	},
-	{
-	  "naam": "Toeslagen",
-	  "grootboekrekening": "WOvbOrsOsuSro"
-	},
-	{
-	  "naam": "Uitkeringen",
-	  "grootboekrekening": "WOvbOrsOsuSov"
-	},
-	{
-	  "naam": "Subsidies",
-	  "grootboekrekening": "WOvbOrsOsuSpo"
-	},
-	{
-	  "naam": "Huur of hypotheek",
-	  "grootboekrekening": "WBedHuiBeh"
-	},
-	{
-	  "naam": "Gas en elektriciteit",
-	  "grootboekrekening": "WBedHuiGweElk"
-	},
-	{
-	  "naam": "Water",
-	  "grootboekrekening": "WBedHuiGweWat"
-	},
-	{
-	  "naam": "Lokale lasten",
-	  "grootboekrekening": "WBedHuiMez"
-	},
-	{
-	  "naam": "Telefoon, internet en televisie",
-	  "grootboekrekening": "WBedKanTef"
-	},
-	{
-	  "naam": "Verzekeringen",
-	  "grootboekrekening": "WBedAssOva"
-	},
-	{
-	  "naam": "Privé-opname",
-	  "grootboekrekening": "BEivKapProPok"
-	}
+    {
+      "naam": "Inkomsten",
+      "grootboekrekening": "WOmzNooNdo"
+    },
+    {
+      "naam": "Toeslagen",
+      "grootboekrekening": "WOvbOrsOsuSro"
+    },
+    {
+      "naam": "Uitkeringen",
+      "grootboekrekening": "WOvbOrsOsuSov"
+    },
+    {
+      "naam": "Subsidies",
+      "grootboekrekening": "WOvbOrsOsuSpo"
+    },
+    {
+      "naam": "Huur of hypotheek",
+      "grootboekrekening": "WBedHuiBeh"
+    },
+    {
+      "naam": "Gas en elektriciteit",
+      "grootboekrekening": "WBedHuiGweElk"
+    },
+    {
+      "naam": "Water",
+      "grootboekrekening": "WBedHuiGweWat"
+    },
+    {
+      "naam": "Lokale lasten",
+      "grootboekrekening": "WBedHuiMez"
+    },
+    {
+      "naam": "Telefoon, internet en televisie",
+      "grootboekrekening": "WBedKanTef"
+    },
+    {
+      "naam": "Verzekeringen",
+      "grootboekrekening": "WBedAssOva"
+    },
+    {
+      "naam": "Privé-opname",
+      "grootboekrekening": "BEivKapProPok"
+    }
   ]
 }
