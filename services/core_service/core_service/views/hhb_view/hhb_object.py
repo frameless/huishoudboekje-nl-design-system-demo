@@ -5,8 +5,7 @@ from sqlalchemy.exc import IntegrityError, OperationalError
 from sqlalchemy.orm.exc import NoResultFound
 
 from core_service.database import db
-from core_service.utils import row2dict, handle_operational_error, get_all
-from core_service.views.hhb_view.hhb_query import HHBQuery
+from core_service.utils import row2dict, handle_operational_error
 
 
 class HHBObject:
