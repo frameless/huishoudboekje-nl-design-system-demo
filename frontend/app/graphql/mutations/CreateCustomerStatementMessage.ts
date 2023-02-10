@@ -5,10 +5,6 @@ export const CreateCustomerStatementMessageMutation = gql`
     mutation createCustomerStatementMessage($file: Upload!){
         createCustomerStatementMessage(file: $file){
             ok
-            customerStatementMessage{
-                ...CustomerStatementMessage
-            }
         }
     }
-    ${CustomerStatementMessageFragment}
 `;

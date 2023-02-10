@@ -154,9 +154,7 @@ def retrieve_iban(transaction_details: dict) -> str:
 
 
 def process_transactions(csm_id, transactions):
-    # TODO when the performance of this becomes a problem, convert to batch: transform all the transactions to a json
-    #  array and post them with one call.
-    result = []
+    bank_transactions = []
     for t in transactions:
         transaction_model = BankTransaction(
             customer_statement_message_id=csm_id,
@@ -174,16 +172,16 @@ def process_transactions(csm_id, transactions):
             is_credit=t.data["status"] == "C",
             bedrag=int(t.data["amount"].amount * 100)
         )
-        bank_transaction_response = requests.post(
-            f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/",
-            data=json.dumps(transaction_model),
-            headers={"Content-type": "application/json"},
-        )
-        if bank_transaction_response.status_code != 201:
-            raise GraphQLError(
-                f"Upstream API responded: {bank_transaction_response.text}"
-            )
-        bank_transaction = bank_transaction_response.json()["data"]
-        result.append(bank_transaction["id"])
+        bank_transactions.append(transaction_model)
 
-    return result
+
+    bank_transactions_response = requests.post(
+        f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/",
+        data=json.dumps(bank_transactions),
+        headers={"Content-type": "application/json"},
+    )
+    if bank_transactions_response.status_code != 201:
+        raise GraphQLError(
+            f"Upstream API responded: {bank_transactions_response.text}"
+        )
+    return bank_transactions_response.json()["data"]
