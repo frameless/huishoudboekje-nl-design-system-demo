@@ -29,6 +29,12 @@ def update_transactions_geboekt(transactions: List[BankTransaction], _transactio
     else:
         ids = ",".join(_transaction_ids)
 
+    # TODO
+    # The ids are all joined and added in the url. For large updates this makes the url very long.
+    # In the Dockerfile for the banktransaction service is GUNICORN_LIMIT_REQUEST_LINE=0 added to set the limit for the url to unlimited.
+    # This makes sure this works for larger updates, however this should not be necessary.
+    # To improve this the PUT request should be implemented in the services.
+    # When implemented this should be a put request instead of a post
     transaction_response = requests.post(
         f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/{ids}",
         json=transactions
