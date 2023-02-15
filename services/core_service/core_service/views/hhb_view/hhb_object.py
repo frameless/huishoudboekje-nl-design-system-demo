@@ -76,11 +76,5 @@ class HHBObject:
     def json(self):
         """ Convert object to json dict """
         if type(self.hhb_object) == list:
-            if hasattr(self.hhb_object[0], "id"):
-                ids = [obj.id for obj in self.hhb_object]
-                hhb_query = HHBQuery(self.hhb_model)
-                hhb_query.add_filter_ids(ids)
-                rows = get_all(hhb_query.query)
-                return [row2dict(row) for row in rows]
             return [row2dict(o) for o in self.hhb_object]
         return row2dict(self.hhb_object)
