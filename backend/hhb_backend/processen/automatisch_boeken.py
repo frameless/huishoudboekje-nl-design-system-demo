@@ -1,6 +1,6 @@
 import logging
 from collections import Counter
-from typing import List, Tuple, Dict
+from typing import List, Dict
 
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.utils.dates import to_date, valid_afspraak

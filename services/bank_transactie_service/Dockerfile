@@ -20,6 +20,7 @@ RUN pip install .
 ENV GUNICORN_PORT="8000" \
     GUNICORN_WORKERS="2" \
     GUNICORN_THREADS="4" \
+    GUNICORN_LIMIT_REQUEST_LINE="0" \
     GUNICORN_LOGLEVEL="info" \
     PYTHONDONTWRITEBYTECODE="1" \
     PYTHONUNBUFFERED="1" \
@@ -30,6 +31,7 @@ CMD ["bash", "-c", "exec gunicorn \
   --bind=0.0.0.0:${GUNICORN_PORT} \
   --workers=${GUNICORN_WORKERS} \
   --threads=${GUNICORN_THREADS} \
+  --limit-request-line=${GUNICORN_LIMIT_REQUEST_LINE} \
   --log-level=${GUNICORN_LOGLEVEL} \
   --capture-output \
   --worker-class=gthread \

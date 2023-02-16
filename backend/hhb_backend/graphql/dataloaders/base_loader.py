@@ -142,7 +142,7 @@ def _base_data_load_with_options(service: str, options: Unpack[DataLoaderOptions
         if len(keys) > batch_size:
             result = []
             for i in range(0, len(keys), batch_size):
-                part, _ = _base_load_with_options(service, options, keys=keys[i::i + batch_size])
+                part = _base_load_with_options(service, options, keys=keys[i::i + batch_size])
                 for entry in part["data"]:
                     result.append(model_type(entry))
             return result

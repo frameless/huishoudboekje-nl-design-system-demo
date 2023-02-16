@@ -58,13 +58,14 @@ def test_create_csm_with_ing_file(client, mocker: MockerFixture):
             )
             # Bank transaction
             assert (
-                adapter.request_history[1].json()["tegen_rekening"]
+                adapter.request_history[1].json()[0]["tegen_rekening"]
                 == "NL32INGB0000012345"
             )
-            assert adapter.request_history[1].json()["bedrag"] == 156
-            assert adapter.request_history[1].json()["transactie_datum"] == "2014-02-20"
+            assert adapter.request_history[1].json()[0]["bedrag"] == 156
+            assert adapter.request_history[1].json()[0]["transactie_datum"] == "2014-02-20"
             # Overall response
-            assert adapter.call_count == 10
+            assert len(adapter.request_history[1].json()) == 8
+            assert adapter.call_count == 3
             assert response.json.get("errors") is None
             assert response.status_code == 200
 
@@ -91,12 +92,13 @@ def test_create_csm_with_abn_file(client, mocker: MockerFixture):
             assert adapter.request_history[0].json()["closing_balance"] == 563862
             # Bank transaction
             assert (
-                adapter.request_history[1].json()["tegen_rekening"]
+                adapter.request_history[1].json()[0]["tegen_rekening"]
                 == "FR12345678901234"
             )
-            assert adapter.request_history[1].json()["bedrag"] == 50001
-            assert adapter.request_history[1].json()["transactie_datum"] == "2012-05-12"
+            assert adapter.request_history[1].json()[0]["bedrag"] == 50001
+            assert adapter.request_history[1].json()[0]["transactie_datum"] == "2012-05-12"
             # Overall response
+            assert len(adapter.request_history[1].json()) == 1
             assert adapter.call_count == 3
             assert response.json.get("errors") is None
             assert response.status_code == 200
@@ -124,13 +126,14 @@ def test_create_csm_with_bng_file(client, mocker: MockerFixture):
             assert adapter.request_history[0].json()["closing_balance"] == 17060000
             # Bank transaction
             assert (
-                adapter.request_history[2].json()["tegen_rekening"]
+                adapter.request_history[1].json()[1]["tegen_rekening"]
                 == "DE37500700100925464001"
             )
-            assert adapter.request_history[1].json()["bedrag"] == -100000
-            assert adapter.request_history[1].json()["transactie_datum"] == "2014-09-12"
+            assert adapter.request_history[1].json()[0]["bedrag"] == -100000
+            assert adapter.request_history[1].json()[0]["transactie_datum"] == "2014-09-12"
             # Overall response
-            assert adapter.call_count == 15
+            assert len(adapter.request_history[1].json()) == 13
+            assert adapter.call_count == 3
             assert response.json.get("errors") is None
             assert response.status_code == 200
 
@@ -160,35 +163,36 @@ def test_create_csm_with_abn_camt_file(client, mocker: MockerFixture):
             )
             # Bank transaction
             assert (
-                adapter.request_history[2].json()["tegen_rekening"]
+                adapter.request_history[1].json()[1]["tegen_rekening"]
                 == "NL46ABNA0499998748"
             )
             assert(
-                adapter.request_history[2].json()["information_to_account_owner"]
+                adapter.request_history[1].json()[1]["information_to_account_owner"]
                 == "/TRTP/SEPA OVERBOEKING/IBAN/NL46ABNA0499998748/BIC/ABNANL2A/NAME/NAAM/REMI/OMSCHRIJVING/EREF/NOTPROVIDED"
             )
-            assert adapter.request_history[2].json()["bedrag"] == 100
-            assert adapter.request_history[2].json()["transactie_datum"] == "2013-04-02"
+            assert adapter.request_history[1].json()[1]["bedrag"] == 100
+            assert adapter.request_history[1].json()[1]["transactie_datum"] == "2013-04-02"
 
             # Details from other transactions must be correct
             assert(
-                adapter.request_history[3].json()["information_to_account_owner"]
+                adapter.request_history[1].json()[2]["information_to_account_owner"]
                 == "/TRTP/SEPA ACCEPTGIRO/IBAN/NL46ABNA0499998748/BIC/ABNANL2A/NAME/NAAM/REMI//REMI/Issuer: CUR Ref: 1234567812345678/EREF/NOTPROVIDED"
             )
             assert (
-                adapter.request_history[4].json()["information_to_account_owner"]
+                adapter.request_history[1].json()[3]["information_to_account_owner"]
                 == "/TRTP/SEPA ACCEPTGIRO BATCH/PREF/3095D4322561460S0PS/NRTX/10"
             )
             assert (
-                adapter.request_history[5].json()["information_to_account_owner"]
+                adapter.request_history[1].json()[4]["information_to_account_owner"]
                 == "/TRTP/SEPA ACCEPTGIRO BATCH/PREF/3095D4322561460S0PS/NRTX/10"
             )
             assert (
-                adapter.request_history[28].json()["information_to_account_owner"]
+                adapter.request_history[1].json()[27]["information_to_account_owner"]
                 == "/RTYP/SEPA Incasso niet uitgevoerd/MARF/123456789XXmandaat/RTRN/MS03/IBAN/NL27ABNA0562399340/NAME/Debtor/REMI/Levering maand mei, zie nota 1234556. Uw klantnummer 123455666/EREF/1234567X908303803"
             )
             # Overall response
-            assert adapter.call_count == 31
+            assert len(adapter.request_history[1].json()) == 29
+            assert adapter.call_count == 3
             assert response.json.get("errors") is None
             assert response.status_code == 200
 
@@ -218,14 +222,15 @@ def test_create_csm_with_rabo_camt_file(client, mocker: MockerFixture):
             )
             # Bank transaction
             assert (
-                adapter.request_history[2].json()["tegen_rekening"]
+                adapter.request_history[1].json()[1]["tegen_rekening"]
                 == ""
             )
-            assert adapter.request_history[2].json()["bedrag"] == -3
-            assert adapter.request_history[2].json()["transactie_datum"] == "2015-01-23"
-            assert adapter.request_history[2].json()["information_to_account_owner"] == "Europayment Batch-id:0002"
+            assert adapter.request_history[1].json()[1]["bedrag"] == -3
+            assert adapter.request_history[1].json()[1]["transactie_datum"] == "2015-01-23"
+            assert adapter.request_history[1].json()[1]["information_to_account_owner"] == "Europayment Batch-id:0002"
             # Overall response
-            assert adapter.call_count == 8
+            assert len(adapter.request_history[1].json()) == 6
+            assert adapter.call_count == 3
             assert response.json.get("errors") is None
             assert response.status_code == 200
 
@@ -255,15 +260,16 @@ def test_create_csm_with_ing_camt_file(client, mocker: MockerFixture):
             )
             # Bank transaction
             assert (
-                adapter.request_history[2].json()["tegen_rekening"]
+                adapter.request_history[1].json()[1]["tegen_rekening"]
                 == "NL20INGB0001234567"
             )
-            assert adapter.request_history[2].json()["bedrag"] == 12500
-            assert adapter.request_history[2].json()["transactie_datum"] == "2014-01-03"
-            assert adapter.request_history[2].json()["information_to_account_owner"] == 'UstrdRemi2014010323566INGBankNV'
-            assert adapter.request_history[3].json()["information_to_account_owner"] == "6390338414964113"
+            assert adapter.request_history[1].json()[1]["bedrag"] == 12500
+            assert adapter.request_history[1].json()[1]["transactie_datum"] == "2014-01-03"
+            assert adapter.request_history[1].json()[1]["information_to_account_owner"] == 'UstrdRemi2014010323566INGBankNV'
+            assert adapter.request_history[1].json()[2]["information_to_account_owner"] == "6390338414964113"
             # Overall response
-            assert adapter.call_count == 11
+            assert len(adapter.request_history[1].json()) == 9
+            assert adapter.call_count == 3
             assert response.json.get("errors") is None
             assert response.status_code == 200
 
@@ -293,18 +299,19 @@ def test_create_csm_with_anoniem_camt_file(client, mocker: MockerFixture):
             )
             # Bank transaction
             assert (
-                adapter.request_history[2].json()["tegen_rekening"]
+                adapter.request_history[1].json()[1]["tegen_rekening"]
                 == 'NL54INGB0000000503'
             )
-            assert adapter.request_history[2].json()["bedrag"] == 100997
-            assert adapter.request_history[2].json()["transactie_datum"] == "2021-08-16"
-            assert adapter.request_history[2].json()["information_to_account_owner"] == '''/TRTP/SEPA ontvangst/REMI/518303424874 Factnr 54005413523 BTW 137,11 Jaarafr 10.08.2021
+            assert adapter.request_history[1].json()[1]["bedrag"] == 100997
+            assert adapter.request_history[1].json()[1]["transactie_datum"] == "2021-08-16"
+            assert adapter.request_history[1].json()[1]["information_to_account_owner"] == '''/TRTP/SEPA ontvangst/REMI/518303424874 Factnr 54005413523 BTW 137,11 Jaarafr 10.08.2021
                     Klantnr 12345678 CRN 3014357265 Straatnaam 1 3531 PN UTRECHT
                 '''
-            assert adapter.request_history[3].json()["information_to_account_owner"] == '''/TRTP/SEPA ontvangst/REMI/MAAND AUG. NR. 123456789H1001 IB/PVV 2021 (ACHTER )
+            assert adapter.request_history[1].json()[2]["information_to_account_owner"] == '''/TRTP/SEPA ontvangst/REMI/MAAND AUG. NR. 123456789H1001 IB/PVV 2021 (ACHTER )
                 '''
             # Overall response
-            assert adapter.call_count == 25
+            assert len(adapter.request_history[1].json()) == 23
+            assert adapter.call_count == 3
             assert response.json.get("errors") is None
             assert response.status_code == 200
 

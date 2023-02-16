@@ -1670,7 +1670,7 @@ export type CreateCustomerStatementMessageMutationVariables = Exact<{
 }>;
 
 
-export type CreateCustomerStatementMessageMutation = { createCustomerStatementMessage?: { ok?: boolean, customerStatementMessage?: Array<{ id?: number, filename?: string, uploadDate?: any, accountIdentification?: string, closingAvailableFunds?: number, closingBalance?: number, forwardAvailableBalance?: number, openingBalance?: number, relatedReference?: string, sequenceNumber?: string, transactionReferenceNumber?: string }> } };
+export type CreateCustomerStatementMessageMutation = { createCustomerStatementMessage?: { ok?: boolean } };
 
 export type CreateExportOverschrijvingenMutationVariables = Exact<{
   startDatum: Scalars['String'];
@@ -2847,12 +2847,9 @@ export const CreateCustomerStatementMessageDocument = gql`
     mutation createCustomerStatementMessage($file: Upload!) {
   createCustomerStatementMessage(file: $file) {
     ok
-    customerStatementMessage {
-      ...CustomerStatementMessage
-    }
   }
 }
-    ${CustomerStatementMessageFragmentDoc}`;
+    `;
 export type CreateCustomerStatementMessageMutationFn = Apollo.MutationFunction<CreateCustomerStatementMessageMutation, CreateCustomerStatementMessageMutationVariables>;
 
 /**
