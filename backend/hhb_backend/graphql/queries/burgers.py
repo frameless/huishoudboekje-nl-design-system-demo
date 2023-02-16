@@ -45,46 +45,47 @@ class BurgersQuery:
             return burgers
 
         if "search" in kwargs:
-            burger_ids = set()
-            afspraken_ids = set()
             search = str(kwargs["search"]).lower()
+            if search:            
+                burger_ids = set()
+                afspraken_ids = set()
 
-            burgers = hhb_dataloader().burgers.load_all(filters=kwargs.get("filters", None))
-            for burger in burgers:
-                if search in str(burger['achternaam']).lower() or \
-                    search in str(burger['voornamen']).lower() or \
-                    search in str(burger['bsn']).lower():
-                    burger_ids.add(burger["id"])
+                burgers = hhb_dataloader().burgers.load_all(filters=kwargs.get("filters", None))
+                for burger in burgers:
+                    if search in str(burger['achternaam']).lower() or \
+                        search in str(burger['voornamen']).lower() or \
+                        search in str(burger['bsn']).lower():
+                        burger_ids.add(burger["id"])
 
-            rekeningen = hhb_dataloader().rekeningen.load_all(filters=kwargs.get("filters", None))
-            for rekening in rekeningen:
-                if search in str(rekening['iban']).lower() or \
-                    search in str(rekening['rekeninghouder']).lower():
-                    for burger_id in rekening["burgers"]:
-                        if burger_id:
-                            burger_ids.add(burger_id)
-                    for afspraak_id in rekening["afspraken"]:
-                        afspraken_ids.add(afspraak_id)
+                rekeningen = hhb_dataloader().rekeningen.load_all(filters=kwargs.get("filters", None))
+                for rekening in rekeningen:
+                    if search in str(rekening['iban']).lower() or \
+                        search in str(rekening['rekeninghouder']).lower():
+                        for burger_id in rekening["burgers"]:
+                            if burger_id:
+                                burger_ids.add(burger_id)
+                        for afspraak_id in rekening["afspraken"]:
+                            afspraken_ids.add(afspraak_id)
 
-            afspraken = hhb_dataloader().afspraken.load_all(filters=kwargs.get("filters", None))
-            for afspraak in afspraken:
-                if valid_afspraak(afspraak) and afspraak["burger_id"]:
-                    if afspraak["id"] in afspraken_ids or search in str(afspraak['zoektermen']).lower():
-                        burger_ids.add(afspraak["burger_id"])
+                afspraken = hhb_dataloader().afspraken.load_all(filters=kwargs.get("filters", None))
+                for afspraak in afspraken:
+                    if valid_afspraak(afspraak) and afspraak["burger_id"]:
+                        if afspraak["id"] in afspraken_ids or search in str(afspraak['zoektermen']).lower():
+                            burger_ids.add(afspraak["burger_id"])
 
-            result = []
-            for burger in burgers:
-                if burger["id"] in burger_ids:
-                    result.append(burger)
+                result = []
+                for burger in burgers:
+                    if burger["id"] in burger_ids:
+                        result.append(burger)
 
-            AuditLogging.create(
-                action=info.field_name,
-                entities=[
-                    GebruikersActiviteitEntity(entityType="burger", entityId=burger["id"])
-                    for burger in result
-                ]
-            )
-            return result
+                AuditLogging.create(
+                    action=info.field_name,
+                    entities=[
+                        GebruikersActiviteitEntity(entityType="burger", entityId=burger["id"])
+                        for burger in result
+                    ]
+                )
+                return result
 
         burgers = hhb_dataloader().burgers.load_all(filters=kwargs.get("filters", None))
         AuditLogging.create(
