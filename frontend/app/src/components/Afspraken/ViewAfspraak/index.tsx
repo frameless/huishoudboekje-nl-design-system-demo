@@ -9,6 +9,7 @@ const ViewAfspraak = () => {
 	const {id = ""} = useParams<{id: string}>();
 
 	const $afspraak = useGetAfspraakQuery({
+		fetchPolicy: "no-cache",
 		variables: {
 			id: parseInt(id),
 		},
