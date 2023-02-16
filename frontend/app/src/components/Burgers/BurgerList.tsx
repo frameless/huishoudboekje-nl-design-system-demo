@@ -20,6 +20,7 @@ const BurgerList = () => {
 
 	const searchRef = useRef<HTMLInputElement>(null);
 	const $burgers = useGetBurgersSearchQuery({
+		fetchPolicy: "no-cache",
 		context: {debounceKey: "burgerSearch"},
 		variables: {
 			search: burgerSearch,
