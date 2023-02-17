@@ -1582,7 +1582,7 @@ export type CustomerStatementMessageFragment = { id?: number, filename?: string,
 
 export type ExportFragment = { id?: number, naam?: string, timestamp?: any, startDatum?: any, eindDatum?: any, sha256?: string, overschrijvingen?: Array<{ id?: number }> };
 
-export type GebruikersactiviteitFragment = { id?: number, timestamp?: any, gebruikerId?: string, action?: string, entities?: Array<{ entityType?: string, entityId?: string, huishouden?: { id?: number, burgers?: Array<{ id?: number, voorletters?: string, voornamen?: string, achternaam?: string }> }, burger?: { id?: number, voorletters?: string, voornamen?: string, achternaam?: string }, organisatie?: { id?: number, naam?: string, kvknummer?: string, vestigingsnummer?: string, afdelingen?: Array<{ id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }> }, afspraak?: { id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, validFrom?: any, validThrough?: any, burger?: { id?: number, voorletters?: string, voornamen?: string, achternaam?: string, bsn?: number, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, betaalinstructie?: { byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string }, alarm?: { id?: string, isActive?: boolean, bedrag?: any, bedragMargin?: any, startDate?: string, endDate?: string, datumMargin?: number, byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, afspraak?: { id?: number }, signaal?: { id?: string } }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, postadres?: { id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string }, rubriek?: { id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } }, matchingAfspraken?: Array<{ id?: number, credit?: boolean, zoektermen?: Array<string>, bedrag?: any, omschrijving?: string, burger?: { voorletters?: string, voornamen?: string, achternaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string } }> }, rekening?: { id?: number, iban?: string, rekeninghouder?: string }, customerStatementMessage?: { id?: number, filename?: string, bankTransactions?: Array<{ id?: number }> }, configuratie?: { id?: string, waarde?: string }, rubriek?: { id?: number, naam?: string, grootboekrekening?: { naam?: string } }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, naam?: string } }, postadres?: { id?: string }, export?: { id?: number, naam?: string } }>, meta?: { userAgent?: string, ip?: Array<string>, applicationVersion?: string } };
+export type GebruikersactiviteitFragment = { id?: number, timestamp?: any, gebruikerId?: string, action?: string, entities?: Array<{ entityType?: string, entityId?: string, huishouden?: { id?: number, burgers?: Array<{ id?: number, voorletters?: string, voornamen?: string, achternaam?: string }> }, burger?: { id?: number, voorletters?: string, voornamen?: string, achternaam?: string }, organisatie?: { id?: number, naam?: string, kvknummer?: string, vestigingsnummer?: string }, afspraak?: { id?: number, burger?: { id?: number, voornamen?: string, voorletters?: string, achternaam?: string }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string } } }, rekening?: { id?: number, iban?: string, rekeninghouder?: string }, customerStatementMessage?: { id?: number, filename?: string, bankTransactions?: Array<{ id?: number }> }, configuratie?: { id?: string, waarde?: string }, rubriek?: { id?: number, naam?: string }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, naam?: string } }, postadres?: { id?: string }, export?: { id?: number, naam?: string } }>, meta?: { userAgent?: string, ip?: Array<string>, applicationVersion?: string } };
 
 export type GrootboekrekeningFragment = { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } };
 
@@ -2055,7 +2055,7 @@ export type GetBurgerGebeurtenissenQueryVariables = Exact<{
 }>;
 
 
-export type GetBurgerGebeurtenissenQuery = { burgers?: Array<{ id?: number, voornamen?: string, voorletters?: string, achternaam?: string }>, gebruikersactiviteitenPaged?: { gebruikersactiviteiten?: Array<{ id?: number, timestamp?: any, gebruikerId?: string, action?: string, entities?: Array<{ entityType?: string, entityId?: string, huishouden?: { id?: number, burgers?: Array<{ id?: number, voorletters?: string, voornamen?: string, achternaam?: string }> }, burger?: { id?: number, voorletters?: string, voornamen?: string, achternaam?: string }, organisatie?: { id?: number, naam?: string, kvknummer?: string, vestigingsnummer?: string, afdelingen?: Array<{ id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }> }, afspraak?: { id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, validFrom?: any, validThrough?: any, burger?: { id?: number, voorletters?: string, voornamen?: string, achternaam?: string, bsn?: number, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, betaalinstructie?: { byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string }, alarm?: { id?: string, isActive?: boolean, bedrag?: any, bedragMargin?: any, startDate?: string, endDate?: string, datumMargin?: number, byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, afspraak?: { id?: number }, signaal?: { id?: string } }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, postadres?: { id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string }, rubriek?: { id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } }, matchingAfspraken?: Array<{ id?: number, credit?: boolean, zoektermen?: Array<string>, bedrag?: any, omschrijving?: string, burger?: { voorletters?: string, voornamen?: string, achternaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string } }> }, rekening?: { id?: number, iban?: string, rekeninghouder?: string }, customerStatementMessage?: { id?: number, filename?: string, bankTransactions?: Array<{ id?: number }> }, configuratie?: { id?: string, waarde?: string }, rubriek?: { id?: number, naam?: string, grootboekrekening?: { naam?: string } }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, naam?: string } }, postadres?: { id?: string }, export?: { id?: number, naam?: string } }>, meta?: { userAgent?: string, ip?: Array<string>, applicationVersion?: string } }>, pageInfo?: { count?: number } } };
+export type GetBurgerGebeurtenissenQuery = { burgers?: Array<{ id?: number, voornamen?: string, voorletters?: string, achternaam?: string }>, gebruikersactiviteitenPaged?: { gebruikersactiviteiten?: Array<{ id?: number, timestamp?: any, gebruikerId?: string, action?: string, entities?: Array<{ entityType?: string, entityId?: string, huishouden?: { id?: number, burgers?: Array<{ id?: number, voorletters?: string, voornamen?: string, achternaam?: string }> }, burger?: { id?: number, voorletters?: string, voornamen?: string, achternaam?: string }, organisatie?: { id?: number, naam?: string, kvknummer?: string, vestigingsnummer?: string }, afspraak?: { id?: number, burger?: { id?: number, voornamen?: string, voorletters?: string, achternaam?: string }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string } } }, rekening?: { id?: number, iban?: string, rekeninghouder?: string }, customerStatementMessage?: { id?: number, filename?: string, bankTransactions?: Array<{ id?: number }> }, configuratie?: { id?: string, waarde?: string }, rubriek?: { id?: number, naam?: string }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, naam?: string } }, postadres?: { id?: string }, export?: { id?: number, naam?: string } }>, meta?: { userAgent?: string, ip?: Array<string>, applicationVersion?: string } }>, pageInfo?: { count?: number } } };
 
 export type GetBurgersQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -2097,7 +2097,7 @@ export type GetGebeurtenissenQueryVariables = Exact<{
 }>;
 
 
-export type GetGebeurtenissenQuery = { gebruikersactiviteitenPaged?: { gebruikersactiviteiten?: Array<{ id?: number, timestamp?: any, gebruikerId?: string, action?: string, entities?: Array<{ entityType?: string, entityId?: string, huishouden?: { id?: number, burgers?: Array<{ id?: number, voorletters?: string, voornamen?: string, achternaam?: string }> }, burger?: { id?: number, voorletters?: string, voornamen?: string, achternaam?: string }, organisatie?: { id?: number, naam?: string, kvknummer?: string, vestigingsnummer?: string, afdelingen?: Array<{ id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }> }, afspraak?: { id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, validFrom?: any, validThrough?: any, burger?: { id?: number, voorletters?: string, voornamen?: string, achternaam?: string, bsn?: number, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, betaalinstructie?: { byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string }, alarm?: { id?: string, isActive?: boolean, bedrag?: any, bedragMargin?: any, startDate?: string, endDate?: string, datumMargin?: number, byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, afspraak?: { id?: number }, signaal?: { id?: string } }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, postadres?: { id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string }, rubriek?: { id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } }, matchingAfspraken?: Array<{ id?: number, credit?: boolean, zoektermen?: Array<string>, bedrag?: any, omschrijving?: string, burger?: { voorletters?: string, voornamen?: string, achternaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string } }> }, rekening?: { id?: number, iban?: string, rekeninghouder?: string }, customerStatementMessage?: { id?: number, filename?: string, bankTransactions?: Array<{ id?: number }> }, configuratie?: { id?: string, waarde?: string }, rubriek?: { id?: number, naam?: string, grootboekrekening?: { naam?: string } }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, naam?: string } }, postadres?: { id?: string }, export?: { id?: number, naam?: string } }>, meta?: { userAgent?: string, ip?: Array<string>, applicationVersion?: string } }>, pageInfo?: { count?: number } } };
+export type GetGebeurtenissenQuery = { gebruikersactiviteitenPaged?: { gebruikersactiviteiten?: Array<{ id?: number, timestamp?: any, gebruikerId?: string, action?: string, entities?: Array<{ entityType?: string, entityId?: string, huishouden?: { id?: number, burgers?: Array<{ id?: number, voorletters?: string, voornamen?: string, achternaam?: string }> }, burger?: { id?: number, voorletters?: string, voornamen?: string, achternaam?: string }, organisatie?: { id?: number, naam?: string, kvknummer?: string, vestigingsnummer?: string }, afspraak?: { id?: number, burger?: { id?: number, voornamen?: string, voorletters?: string, achternaam?: string }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string } } }, rekening?: { id?: number, iban?: string, rekeninghouder?: string }, customerStatementMessage?: { id?: number, filename?: string, bankTransactions?: Array<{ id?: number }> }, configuratie?: { id?: string, waarde?: string }, rubriek?: { id?: number, naam?: string }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, naam?: string } }, postadres?: { id?: string }, export?: { id?: number, naam?: string } }>, meta?: { userAgent?: string, ip?: Array<string>, applicationVersion?: string } }>, pageInfo?: { count?: number } } };
 
 export type GetHuishoudenQueryVariables = Exact<{
   id: Scalars['Int'];
@@ -2214,13 +2214,96 @@ export const ExportFragmentDoc = gql`
   }
 }
     `;
-export const PostadresFragmentDoc = gql`
-    fragment Postadres on Postadres {
+export const GebruikersactiviteitFragmentDoc = gql`
+    fragment Gebruikersactiviteit on GebruikersActiviteit {
   id
-  straatnaam
-  huisnummer
-  postcode
-  plaatsnaam
+  timestamp
+  gebruikerId
+  action
+  entities {
+    entityType
+    entityId
+    huishouden {
+      id
+      burgers {
+        id
+        voorletters
+        voornamen
+        achternaam
+      }
+    }
+    burger {
+      id
+      voorletters
+      voornamen
+      achternaam
+    }
+    organisatie {
+      id
+      naam
+      kvknummer
+      vestigingsnummer
+    }
+    afspraak {
+      id
+      burger {
+        id
+        voornamen
+        voorletters
+        achternaam
+      }
+      afdeling {
+        id
+        naam
+        organisatie {
+          id
+          kvknummer
+          vestigingsnummer
+          naam
+        }
+      }
+    }
+    rekening {
+      id
+      iban
+      rekeninghouder
+    }
+    customerStatementMessage {
+      id
+      filename
+      bankTransactions {
+        id
+      }
+    }
+    configuratie {
+      id
+      waarde
+    }
+    rubriek {
+      id
+      naam
+    }
+    afdeling {
+      id
+      naam
+      organisatie {
+        id
+        naam
+      }
+    }
+    postadres {
+      id
+    }
+    export {
+      id
+      naam
+    }
+  }
+  meta {
+    userAgent
+    ip
+    applicationVersion
+  }
 }
     `;
 export const RekeningFragmentDoc = gql`
@@ -2230,36 +2313,6 @@ export const RekeningFragmentDoc = gql`
   rekeninghouder
 }
     `;
-export const AfdelingFragmentDoc = gql`
-    fragment Afdeling on Afdeling {
-  id
-  naam
-  organisatie {
-    id
-    kvknummer
-    vestigingsnummer
-    naam
-  }
-  postadressen {
-    ...Postadres
-  }
-  rekeningen {
-    ...Rekening
-  }
-}
-    ${PostadresFragmentDoc}
-${RekeningFragmentDoc}`;
-export const OrganisatieFragmentDoc = gql`
-    fragment Organisatie on Organisatie {
-  id
-  naam
-  kvknummer
-  vestigingsnummer
-  afdelingen {
-    ...Afdeling
-  }
-}
-    ${AfdelingFragmentDoc}`;
 export const BetaalinstructieFragmentDoc = gql`
     fragment Betaalinstructie on Betaalinstructie {
   byDay
@@ -2291,6 +2344,34 @@ export const AlarmFragmentDoc = gql`
   }
 }
     `;
+export const PostadresFragmentDoc = gql`
+    fragment Postadres on Postadres {
+  id
+  straatnaam
+  huisnummer
+  postcode
+  plaatsnaam
+}
+    `;
+export const AfdelingFragmentDoc = gql`
+    fragment Afdeling on Afdeling {
+  id
+  naam
+  organisatie {
+    id
+    kvknummer
+    vestigingsnummer
+    naam
+  }
+  postadressen {
+    ...Postadres
+  }
+  rekeningen {
+    ...Rekening
+  }
+}
+    ${PostadresFragmentDoc}
+${RekeningFragmentDoc}`;
 export const GrootboekrekeningFragmentDoc = gql`
     fragment Grootboekrekening on Grootboekrekening {
   id
@@ -2375,89 +2456,6 @@ ${AlarmFragmentDoc}
 ${AfdelingFragmentDoc}
 ${PostadresFragmentDoc}
 ${RubriekFragmentDoc}`;
-export const GebruikersactiviteitFragmentDoc = gql`
-    fragment Gebruikersactiviteit on GebruikersActiviteit {
-  id
-  timestamp
-  gebruikerId
-  action
-  entities {
-    entityType
-    entityId
-    huishouden {
-      id
-      burgers {
-        id
-        voorletters
-        voornamen
-        achternaam
-      }
-    }
-    burger {
-      id
-      voorletters
-      voornamen
-      achternaam
-    }
-    organisatie {
-      ...Organisatie
-    }
-    afspraak {
-      ...Afspraak
-      burger {
-        id
-        voorletters
-        voornamen
-        achternaam
-      }
-    }
-    rekening {
-      id
-      iban
-      rekeninghouder
-    }
-    customerStatementMessage {
-      id
-      filename
-      bankTransactions {
-        id
-      }
-    }
-    configuratie {
-      id
-      waarde
-    }
-    rubriek {
-      id
-      naam
-      grootboekrekening {
-        naam
-      }
-    }
-    afdeling {
-      id
-      naam
-      organisatie {
-        id
-        naam
-      }
-    }
-    postadres {
-      id
-    }
-    export {
-      id
-      naam
-    }
-  }
-  meta {
-    userAgent
-    ip
-    applicationVersion
-  }
-}
-    ${OrganisatieFragmentDoc}
-${AfspraakFragmentDoc}`;
 export const BurgerFragmentDoc = gql`
     fragment Burger on Burger {
   id
@@ -2500,6 +2498,17 @@ export const JournaalpostFragmentDoc = gql`
   id
 }
     `;
+export const OrganisatieFragmentDoc = gql`
+    fragment Organisatie on Organisatie {
+  id
+  naam
+  kvknummer
+  vestigingsnummer
+  afdelingen {
+    ...Afdeling
+  }
+}
+    ${AfdelingFragmentDoc}`;
 export const SignaalFragmentDoc = gql`
     fragment Signaal on Signaal {
   id
