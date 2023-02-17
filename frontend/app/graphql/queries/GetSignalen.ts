@@ -1,11 +1,29 @@
 import {gql} from "@apollo/client";
-import {SignaalFragment} from "../fragments/Signaal";
 
 export const GetSignalenAndBurgersQuery = gql`
     query getSignalenAndBurgers {
         signalen {
             id
-            ...Signaal
+            isActive
+            type
+            actions
+            bedragDifference
+            timeUpdated
+            alarm {
+                id
+                afspraak {
+                    id
+                    omschrijving
+                    bedrag
+                    credit
+                    burgerId
+                }
+            }
+            bankTransactions {
+                id
+                bedrag
+                isCredit
+            }
         }
         burgers {
             id
@@ -14,7 +32,6 @@ export const GetSignalenAndBurgersQuery = gql`
             achternaam
         }
     }
-    ${SignaalFragment}
 `;
 
 export const GetSignalenQuery = gql`

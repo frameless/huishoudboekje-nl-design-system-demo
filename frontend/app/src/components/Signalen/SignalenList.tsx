@@ -13,7 +13,7 @@ import SignalenListView from "./SignalenListView";
 
 const SignalenList = () => {
 	const {t} = useTranslation();
-	const $signalen = useGetSignalenAndBurgersQuery();
+	const $signalen = useGetSignalenAndBurgersQuery({fetchPolicy: "no-cache"});
 	const reactSelectStyles = useReactSelectStyles();
 	const [filterByState, setFilterByState] = useState<ActiveSwitch>({active: true, inactive: false});
 	const [filterByBurgers, setFilterByBurgers] = useState<number[]>([]);
@@ -35,7 +35,7 @@ const SignalenList = () => {
 						return true;
 					}
 
-					const burgerId = s.alarm?.afspraak?.burger?.id;
+					const burgerId = s.alarm?.afspraak?.burgerId;
 					if (burgerId) {
 						return filterByBurgers.includes(burgerId);
 					}
@@ -52,6 +52,11 @@ const SignalenList = () => {
 
 					return false;
 				});
+			filteredSignalen.forEach(singaal => {
+				if(singaal.alarm?.afspraak){
+					singaal.alarm.afspraak.burger = burgers.find(burger => burger.id === singaal.alarm?.afspraak?.burgerId)
+				}
+			});
 
 			return (
 				<Page title={t("signalen.signalen")}>

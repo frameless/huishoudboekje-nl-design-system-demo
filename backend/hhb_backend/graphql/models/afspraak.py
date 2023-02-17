@@ -53,6 +53,7 @@ class Afspraak(graphene.ObjectType):
     valid_through = graphene.Date()
     rubriek = graphene.Field(lambda: rubriek.Rubriek)
     zoektermen = graphene.List(graphene.String)
+    burger_id = graphene.Int()
     burger = graphene.Field(lambda: burger.Burger)
     afdeling = graphene.Field(lambda: afdeling.Afdeling)
     postadres = graphene.Field(lambda: postadres.Postadres)
