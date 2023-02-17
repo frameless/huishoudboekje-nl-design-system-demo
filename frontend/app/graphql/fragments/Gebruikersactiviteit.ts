@@ -1,5 +1,4 @@
 import {gql} from "@apollo/client";
-import {OrganisatieFragment} from "./Organisatie";
 
 export const GebruikersactiviteitFragment = gql`
     fragment Gebruikersactiviteit on GebruikersActiviteit {
@@ -26,16 +25,29 @@ export const GebruikersactiviteitFragment = gql`
                 achternaam
             }
             organisatie {
-                ...Organisatie
+                id
+                naam
+                kvknummer
+                vestigingsnummer
             }
             afspraak {
-                ...Afspraak
-							burger {
-								id
-								voorletters
-								voornamen
-								achternaam
-							}
+                id
+                burger {
+                    id
+                    voornamen
+                    voorletters
+                    achternaam
+                }
+                afdeling {
+                    id
+                    naam
+                    organisatie {
+                        id
+                        kvknummer
+                        vestigingsnummer
+                        naam
+                    }
+                }
             }
             rekening {
                 id
@@ -56,9 +68,6 @@ export const GebruikersactiviteitFragment = gql`
             rubriek {
                 id
                 naam
-                grootboekrekening {
-                    naam
-                }
             }
             afdeling {
                 id
@@ -94,5 +103,4 @@ export const GebruikersactiviteitFragment = gql`
             applicationVersion
         }
     }
-    ${OrganisatieFragment}
 `;
