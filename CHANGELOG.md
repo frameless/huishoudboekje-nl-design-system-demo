@@ -2,7 +2,7 @@
 
 ## 1.7.0
 
-Deze versie omvat verbeteringen voor snelheid voor de pagina's: gebeurtenissen, afspraak, burger overzicht, signalen en huishoudens. Daarnaast is ook de snelheid verbeterd van de signalen teller en het importeren van banktransacties, ook zijn een paar bugs verholpen.
+Deze versie omvat verbeteringen voor snelheid voor de pagina's: gebeurtenissen, afspraak, burger overzicht, signalen en huishoudens. Ook is de snelheid verbeterd van de teller met signalen in het navigatiemenu en het importeren van banktransacties. Daarnaast zijn een aantal bugs verholpen.
 
 ### Minor Changes
 
