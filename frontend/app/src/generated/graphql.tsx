@@ -73,6 +73,7 @@ export type Afspraak = {
   bedrag?: Maybe<Scalars['Bedrag']>;
   betaalinstructie?: Maybe<Betaalinstructie>;
   burger?: Maybe<Burger>;
+  burgerId?: Maybe<Scalars['Int']>;
   credit?: Maybe<Scalars['Boolean']>;
   id?: Maybe<Scalars['Int']>;
   journaalposten?: Maybe<Array<Maybe<Journaalpost>>>;
@@ -2153,7 +2154,7 @@ export type GetRubriekenConfiguratieQuery = { rubrieken?: Array<{ id?: number, n
 export type GetSignalenAndBurgersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetSignalenAndBurgersQuery = { signalen?: Array<{ id?: string, isActive?: boolean, type?: string, actions?: Array<string>, bedragDifference?: string, timeUpdated?: string, alarm?: { id?: string, afspraak?: { id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, validFrom?: any, validThrough?: any, betaalinstructie?: { byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string }, burger?: { id?: number, bsn?: number, voornamen?: string, voorletters?: string, achternaam?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, alarm?: { id?: string, isActive?: boolean, bedrag?: any, bedragMargin?: any, startDate?: string, endDate?: string, datumMargin?: number, byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, afspraak?: { id?: number }, signaal?: { id?: string } }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, postadres?: { id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string }, rubriek?: { id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } }, matchingAfspraken?: Array<{ id?: number, credit?: boolean, zoektermen?: Array<string>, bedrag?: any, omschrijving?: string, burger?: { voorletters?: string, voornamen?: string, achternaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string } }> } }, bankTransactions?: Array<{ id?: number, bedrag?: any, isCredit?: boolean }> }>, burgers?: Array<{ id?: number, voorletters?: string, voornamen?: string, achternaam?: string }> };
+export type GetSignalenAndBurgersQuery = { signalen?: Array<{ id?: string, isActive?: boolean, type?: string, actions?: Array<string>, bedragDifference?: string, timeUpdated?: string, alarm?: { id?: string, afspraak?: { id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, burgerId?: number } }, bankTransactions?: Array<{ id?: number, bedrag?: any, isCredit?: boolean }> }>, burgers?: Array<{ id?: number, voorletters?: string, voornamen?: string, achternaam?: string }> };
 
 export type GetSignalenQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -5481,7 +5482,26 @@ export const GetSignalenAndBurgersDocument = gql`
     query getSignalenAndBurgers {
   signalen {
     id
-    ...Signaal
+    isActive
+    type
+    actions
+    bedragDifference
+    timeUpdated
+    alarm {
+      id
+      afspraak {
+        id
+        omschrijving
+        bedrag
+        credit
+        burgerId
+      }
+    }
+    bankTransactions {
+      id
+      bedrag
+      isCredit
+    }
   }
   burgers {
     id
@@ -5490,7 +5510,7 @@ export const GetSignalenAndBurgersDocument = gql`
     achternaam
   }
 }
-    ${SignaalFragmentDoc}`;
+    `;
 
 /**
  * __useGetSignalenAndBurgersQuery__
