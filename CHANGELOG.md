@@ -1,5 +1,25 @@
 # Huishoudboekje Changelog
 
+## 1.7.0
+
+Deze versie omvat verbeteringen voor snelheid voor de pagina's: gebeurtenissen, afspraak, burger overzicht, signalen en huishoudens. Daarnaast is ook de snelheid verbeterd van de signalen teller en het importeren van banktransacties, ook zijn een paar bugs verholpen.
+
+### Minor Changes
+
+- a966332d: #1205 Improved loading speed when gebeurtenissen contains afspraken
+- fc3e824a: #1211 Removed unused requested data from afspraak request to improve loading speed
+- c02eedf5: #1201 When loading burger overzicht with empty search string it returns all burgers instantly
+- 1071ab76: #1203 Minimized data requested while loading signalen
+- a0264503: #1212 Improved loading speed signalen teller sidebar menu
+- d28d7eef: #1208 Improved importing speed bankafscriften
+- 2c82de87: #1204 improved speed huishouden overzicht
+
+### Patch Changes
+
+- bf14555e: #1213 & #1209 fixed bug in code that made large datasets error
+- f15b3ad9: Patch for bug that the banktransactionservice cant handle large request urls by changing its server settings. This is necessary the way it is implemented right now, this can be improved later when put functionality is added in the service
+- f15b3ad9: Increased resources k8s banktransactionservice and huishoudboekjeservice
+
 ## 1.6.0
 
 Deze versie omvat verbeteringen voor snelheid bij het weergeven van een individuele banktransactie.
