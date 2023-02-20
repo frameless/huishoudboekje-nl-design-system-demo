@@ -6,22 +6,48 @@ import {TransactieFragment} from "../fragments/Transactie";
 export const GetReportingDataQuery = gql`
     query getReportingData {
         burgers {
-            ...Burger
+            id
         }
         bankTransactions{
-            ...BankTransaction
+            id
+            informationToAccountOwner
+            statementLine
+            bedrag
+            isCredit
+            tegenRekeningIban
+            tegenRekening {
+                iban
+                rekeninghouder
+            }
+            transactieDatum
             journaalpost {
                 id
                 isAutomatischGeboekt
                 afspraak {
-                    ...Afspraak
-                    rubriek{
+                    id
+                    omschrijving
+                    bedrag
+                    credit
+                    zoektermen
+                    validFrom
+                    validThrough
+                    afdeling {
                         id
                         naam
+                        organisatie {
+                            id
+                            kvknummer
+                            vestigingsnummer
+                            naam
+                        }
                     }
                 }
                 grootboekrekening {
-                    ...Grootboekrekening
+                    id
+                    naam
+                    credit
+                    omschrijving
+                    referentie
                     rubriek {
                         id
                         naam
@@ -34,7 +60,4 @@ export const GetReportingDataQuery = gql`
             naam
         }
     }
-    ${TransactieFragment}
-    ${GrootboekrekeningFragment}
-    ${BurgerFragment}
 `;
