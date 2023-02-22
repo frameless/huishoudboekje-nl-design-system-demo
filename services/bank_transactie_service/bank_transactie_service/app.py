@@ -49,7 +49,7 @@ def create_app(config_name='bank_transactie_service.config.Config'):
         {"path": "/banktransactions/<object_id>", "view": BankTransactionView,
          "name": "banktransaction_detail_view"},
         {"path": "/banktransactions/range", "view": BanktransactionRangeView,
-         "name": "banktransaction_range__view"},
+         "name": "banktransaction_range_view"},
         {"path": "/banktransactions/saldo/<object_id>", "view": SaldoView,
          "name": "banktransaction_saldo_view"},
         {"path": "/banktransactions/saldo", "view": SaldoView,

@@ -16,7 +16,6 @@ class BanktransactionRangeService():
             return "Invalid date range", 400
 
         result_list = [row2dict(row) for row in self.get_banktransactions_from_database(ids,startDate,endDate)]
-
         return {"data": result_list}, 200
         
     
