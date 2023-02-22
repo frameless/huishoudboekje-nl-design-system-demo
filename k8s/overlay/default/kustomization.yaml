@@ -15,4 +15,5 @@ resources:
   - ../../base/alarmenservice
   - ../../base/signalenservice
   - ../../base/authservice
+  - ../../base/rapportageservice
   - ../../base/storybook

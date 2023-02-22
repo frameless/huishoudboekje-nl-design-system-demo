@@ -98,6 +98,14 @@ x-unleashservice: &x-unleashservice
   volumes:
     - ./services/unleashservice:/app
 
+x-rapportageservice: &x-rapportageservice
+  build:
+    dockerfile: ./rapportage_service/dev.Dockerfile
+    context: ./services
+  volumes:
+    - ./services/rapportage_service:/app
+    - ./services/core_service/core_service:/app/core_service
+
 x-py-tests: &x-py-tests
   profiles:
     - tests
@@ -364,3 +372,15 @@ services:
       LOG_LEVEL: DEBUG
     ports:
       - 8010:8080
+
+  rapportageservice:
+    <<: *x-rapportageservice
+    container_name: rapportageservice
+    environment:
+      LOG_LEVEL: DEBUG
+    ports:
+      - 8011:8000
+      
+  rapportageservice-test:
+    <<: *x-rapportageservice
+    <<: *x-py-tests
