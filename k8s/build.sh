@@ -135,6 +135,7 @@ kustomize edit set image postadressenservice=${IMAGE_REGISTRY}/postadressenservi
 kustomize edit set image alarmenservice=${IMAGE_REGISTRY}/alarmenservice:${IMAGE_TAG}
 kustomize edit set image signalenservice=${IMAGE_REGISTRY}/signalenservice:${IMAGE_TAG}
 kustomize edit set image authservice=${IMAGE_REGISTRY}/authservice:${IMAGE_TAG}
+kustomize edit set image rapportageservice=${IMAGE_REGISTRY}/rapportageservice:${IMAGE_TAG}
 kustomize edit set image storybook=${IMAGE_REGISTRY}/storybook:${IMAGE_TAG}
 
 cd ../../
