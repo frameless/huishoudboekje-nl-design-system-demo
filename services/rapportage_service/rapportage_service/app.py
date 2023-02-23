@@ -3,6 +3,7 @@ import logging
 import logging.config
 
 from flask import Flask, Response
+from rapportage_service.views.RapportageView import RapportageView
 
 def create_app(config_name='rapportage_service.config.Config'):
     app = Flask(__name__)
@@ -25,6 +26,17 @@ def create_app(config_name='rapportage_service.config.Config'):
     def health():
         return Response()
 
+    # Views
+    routes = [
+        {"path": "/rapportage/<burger_id>", "view": RapportageView,
+         "name": "rapportage_burger"}
+    ]
+    for route in routes:
+        app.add_url_rule(
+            route["path"],
+            view_func=route["view"].as_view(route["name"]),
+            strict_slashes=False
+        )
     return app
 
 
