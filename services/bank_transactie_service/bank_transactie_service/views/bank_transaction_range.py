@@ -3,7 +3,7 @@ from flask import request
 
 from models.bank_transaction import BankTransaction
 from core_service.views.hhb_view import HHBView
-from bank_transactie_service.services.BanktransactionRangeService import BanktransactionRangeService
+from bank_transactie_service.controllers.BanktransactionRangeControllers import BanktransactionRangeController
 
 
 class BanktransactionRangeView(HHBView):
@@ -22,19 +22,18 @@ class BanktransactionRangeView(HHBView):
       }
 
     def get(self, **kwargs):
-        """ GET /banktransactions/range?startDate=<start>&endDate=<end>
-
-        returns
+        """ 
+            GET /banktransactions/range?startDate=<start>&endDate=<end>
         """
         start = request.args.get('startDate')
         end = request.args.get('endDate')
-        ids = self.get_transaction_ids_from_body()
+        ids = self.__get_transaction_ids_from_body()
 
-        banktransactionRangeService = BanktransactionRangeService()
+        banktransactionRangeService = BanktransactionRangeController()
 
         return banktransactionRangeService.get_banktransactions_in_range(ids,start,end)
 
-    def get_transaction_ids_from_body(self):
+    def __get_transaction_ids_from_body(self):
         ''' validates json in body and if valid returns list of transaction ids'''
         self.input_validate()
         return request.json.get(self.TRANSACTIONS_IDS_LIST_NAME)
