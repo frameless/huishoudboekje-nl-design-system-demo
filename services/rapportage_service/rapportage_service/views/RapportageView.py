@@ -1,6 +1,7 @@
 from flask import request
 from flask.views import MethodView
 from core_service.views.hhb_view import HHBView
+from rapportage_service.controllers.rapportageController import RapportageController
 
 class RapportageView(MethodView):
 
@@ -11,11 +12,16 @@ class RapportageView(MethodView):
             GET rapportage/<burger_id>?startDate=<start>&endDate=<end>
         """
 
-        burger_id = kwargs.get("burger_id", None)        
+        burger_id = kwargs.get("burger_id", None) 
+
+        #TODO check dates are valid, functions for this are in banktransaction service should be refactored into core service       
         start = request.args.get('startDate')
         end = request.args.get('endDate')
 
-        return {"id" : burger_id, "start": start, "end": end}, 200
+        #TODO implement dependency injection 
+        controller = RapportageController()
+
+        return controller.get_rapportage_burger(burger_id,start,end)
 
 
     def post(self, **kwargs):
