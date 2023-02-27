@@ -12,3 +12,4 @@ from .exports import ExportView
 from .huishoudens import HuishoudenView
 from .afdelingen import AfdelingView
 from .journaalposten_rubriek import JournaalpostRubriekView
+from .burger_afspraken_transacties_view import BurgerAfsprakenTransactiesView
