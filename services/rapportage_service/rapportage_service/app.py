@@ -3,6 +3,8 @@ import logging
 import logging.config
 
 from flask import Flask, Response
+from flask_injector import FlaskInjector
+from rapportage_service.dependencies import configure
 from rapportage_service.views.RapportageView import RapportageView
 
 def create_app(config_name='rapportage_service.config.Config'):
@@ -36,7 +38,11 @@ def create_app(config_name='rapportage_service.config.Config'):
             route["path"],
             view_func=route["view"].as_view(route["name"]),
             strict_slashes=False
-        )
+        )  
+
+    # Initialize Flask-Injector. This needs to be run after you attached all
+    # views, handlers, context processors and template globals.
+    FlaskInjector(app=app,modules=[configure])
     return app
 
 

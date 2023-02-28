@@ -1,10 +1,15 @@
 from flask import request
 from flask.views import MethodView
-from core_service.views.hhb_view import HHBView
+from injector import inject
 from rapportage_service.controllers.rapportageController import RapportageController
 
 class RapportageView(MethodView):
+    _rapportage_controller: RapportageController
 
+    @inject
+    def __init__(self, rapportage_controller: RapportageController):
+        self._rapportage_controller = rapportage_controller
+        super().__init__()
 
     
     def get(self, **kwargs):
@@ -18,10 +23,7 @@ class RapportageView(MethodView):
         start = request.args.get('startDate')
         end = request.args.get('endDate')
 
-        #TODO implement dependency injection 
-        controller = RapportageController()
-
-        return controller.get_rapportage_burger(burger_id,start,end)
+        return self._rapportage_controller.get_rapportage_burger(burger_id,start,end)
 
 
     def post(self, **kwargs):
