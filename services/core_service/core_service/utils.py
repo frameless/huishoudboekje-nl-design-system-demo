@@ -1,4 +1,5 @@
 """ Utility functions """
+import datetime
 import logging
 from datetime import date
 
@@ -39,3 +40,11 @@ def get_all(query):
         return query.all()
     except OperationalError as error:
         handle_operational_error(error)
+
+def valid_date_range(startDate,endDate):
+    '''Checks if both dates in the range are valid and that the end date is after start date'''
+    dateformat = '%Y-%m-%d'
+    try:
+        return datetime.datetime.strptime(endDate, dateformat) > datetime.datetime.strptime(startDate, dateformat)
+    except:
+        return False

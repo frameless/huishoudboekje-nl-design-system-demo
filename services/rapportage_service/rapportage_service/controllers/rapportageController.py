@@ -1,3 +1,4 @@
+from core_service.utils import valid_date_range
 from injector import inject
 from rapportage_service.repositories.banktransactieservice_repository import BanktransactieServiceRepository
 from rapportage_service.repositories.huishoudboekjeservice_repository import HuishoudboekjeserviceRepository
@@ -18,6 +19,9 @@ class RapportageController():
         self._banktransactionservice_repository = banktransactionservice_repository
 
     def get_rapportage_burger(self,burger_id, start, end):
+        if not valid_date_range(start,end):
+            return "Invalid date range", 400
+        
         transactions_info = self._hhb_repository.get_transactions_burger(burger_id)
         transaction_ids = [transaction[self.TRANSACTION_Id] for transaction in transactions_info]
         transactions_in_range = self._banktransactionservice_repository.get_transacties_in_range(start,end,transaction_ids)
