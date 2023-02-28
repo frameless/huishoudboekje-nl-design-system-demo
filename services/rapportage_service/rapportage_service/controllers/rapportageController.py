@@ -1,4 +1,6 @@
 from core_service.utils import valid_date_range
+from decimal import Context, ROUND_HALF_DOWN
+from decimal import Decimal
 from injector import inject
 from rapportage_service.repositories.banktransactieservice_repository import BanktransactieServiceRepository
 from rapportage_service.repositories.huishoudboekjeservice_repository import HuishoudboekjeserviceRepository
@@ -13,10 +15,12 @@ class RapportageController():
     TRANSACTION_Id = "transaction_id"
     ID = "id"
 
+
     @inject
     def __init__(self, hhb_repository: HuishoudboekjeserviceRepository, banktransactionservice_repository: BanktransactieServiceRepository) -> None:
         self._hhb_repository = hhb_repository
         self._banktransactionservice_repository = banktransactionservice_repository
+
 
     def get_rapportage_burger(self,burger_id, start, end):
         if not valid_date_range(start,end):
@@ -25,20 +29,24 @@ class RapportageController():
         transactions_info = self._hhb_repository.get_transactions_burger(burger_id)
         transaction_ids = [transaction[self.TRANSACTION_Id] for transaction in transactions_info]
         transactions_in_range = self._banktransactionservice_repository.get_transacties_in_range(start,end,transaction_ids)
+        self.__transaform_transaction_amount(transactions_in_range)
         rapportage_transactions = self.__add_info_to_transactions_in_range(transactions_info, transactions_in_range)
         return {"data": self.__generate_rapportage(rapportage_transactions, start, end)}, 200
     
+
     def __add_info_to_transactions_in_range(self, transactions_info, transactions_in_range):
         return [transaction | self.__matching_transaction_info_with_transaction(transactions_info, transaction) for transaction in transactions_in_range]
     
+
     def __matching_transaction_info_with_transaction(self, transaction_info_list, transaction):
         return list(filter(lambda burger_transaction: burger_transaction[self.TRANSACTION_Id] == transaction[self.ID],transaction_info_list))[0]
     
+
     def __generate_rapportage(self, transactions, start, end):
         income = []
         expenses = []
-        total_income = 0
-        total_expenses = 0
+        total_income = Decimal(0)
+        total_expenses = Decimal(0)
         for transaction in transactions:
             report_line = self.__create_report_line_from_transaction(transaction)
             amount = transaction[self.AMOUNT]
@@ -48,7 +56,7 @@ class RapportageController():
             else:
                 expenses.append(report_line)
                 total_expenses += amount
-        total = total_income - total_expenses
+        total = total_expenses + total_income
         return {"inkomsten": income,
                 "uitgaven" : expenses,
                 "totaalInkomsten": total_income,
@@ -60,4 +68,11 @@ class RapportageController():
 
     def __create_report_line_from_transaction(self, transaction):
         return {column : transaction[column] for column in self.REPORT_LINE_COLUMNS}
+    
+    
+    def __transaform_transaction_amount(self, transactions_in_range):
+        for transaction in transactions_in_range:
+            transaction[self.AMOUNT] = self.__convert_value_into_decimal(transaction[self.AMOUNT])
 
+    def __convert_value_into_decimal(self,value):
+        return Decimal(value, Context(prec=2, rounding=ROUND_HALF_DOWN)) / 100
