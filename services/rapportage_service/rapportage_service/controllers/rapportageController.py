@@ -1,4 +1,3 @@
-import logging
 from core_service.utils import valid_date_range
 from decimal import Context, ROUND_HALF_DOWN
 from decimal import Decimal
@@ -11,10 +10,12 @@ class RapportageController():
     _hhb_repository: HuishoudboekjeserviceRepository
     _banktransactionservice_repository: BanktransactieServiceRepository
 
-    REPORT_LINE_COLUMNS = ["tegen_rekening", "transactie_datum", "bedrag"]
     RUBRIEK = "rubriek"
-    AMOUNT = "bedrag"
-    TRANSACTION_Id = "transaction_id"
+    TEGENREKENING = "tegen_rekening"
+    TRANSACTIE_DATUM = "transactie_datum"
+    BEDRAG = "bedrag"
+    REPORT_LINE_COLUMNS = [TEGENREKENING, TRANSACTIE_DATUM, BEDRAG]
+    TRANSACTION_ID = "transaction_id"
     ID = "id"
 
 
@@ -30,14 +31,14 @@ class RapportageController():
         
         transactions_info = self._hhb_repository.get_transactions_burger(burger_id)
 
-        if len(transactions_info) <= 0:
+        if not self.__correct_structure_requested_data(transactions_info, [self.TEGENREKENING, self.TRANSACTION_ID, self.RUBRIEK]):
             '''No content'''
             return "No data found for burger", 204
 
-        transaction_ids = [transaction[self.TRANSACTION_Id] for transaction in transactions_info]
+        transaction_ids = [transaction[self.TRANSACTION_ID] for transaction in transactions_info]
         transactions_in_range = self._banktransactionservice_repository.get_transacties_in_range(start,end,transaction_ids)
 
-        if len(transactions_in_range) <= 0:
+        if not self.__correct_structure_requested_data(transactions_in_range, [self.TRANSACTIE_DATUM, self.BEDRAG]):
             '''No content'''
             return "No data found in range", 204
 
@@ -51,7 +52,7 @@ class RapportageController():
     
 
     def __get_matching_transaction_info_with_transaction(self, transaction_info_list, transaction):
-        return list(filter(lambda burger_transaction: burger_transaction[self.TRANSACTION_Id] == transaction[self.ID],transaction_info_list))[0]
+        return list(filter(lambda burger_transaction: burger_transaction[self.TRANSACTION_ID] == transaction[self.ID],transaction_info_list))[0]
     
 
     def __generate_rapportage(self, transactions, start, end):
@@ -60,7 +61,7 @@ class RapportageController():
         total_income = Decimal(0)
         total_expenses = Decimal(0)
         for transaction in transactions:
-            amount = transaction[self.AMOUNT]
+            amount = transaction[self.BEDRAG]
             if amount > 0:
                 self.__add_transaction_to_list(income, transaction)
                 total_income += amount
@@ -83,11 +84,13 @@ class RapportageController():
     
     def __transaform_transaction_amount(self, transactions_in_range):
         for transaction in transactions_in_range:
-            transaction[self.AMOUNT] = self.__convert_value_into_decimal(transaction[self.AMOUNT])
+            transaction[self.BEDRAG] = self.__convert_value_into_decimal(transaction[self.BEDRAG])
+
 
     def __convert_value_into_decimal(self,value):
         return Decimal(value, Context(prec=2, rounding=ROUND_HALF_DOWN)) / 100
     
+
     def __add_transaction_to_list(self, report_rubriek_list, transaction):
         report_line = self.__create_report_line_from_transaction(transaction)
         rubriek_name = transaction[self.RUBRIEK]
@@ -96,3 +99,8 @@ class RapportageController():
             report_rubriek_list.append({rubriek_name: [report_line]})
         else:
             rubriek[rubriek_name].append(report_line)
+
+    def __correct_structure_requested_data(self, list, dict_keys):
+        return len(list) > 0 \
+            and type(list[0]) is dict \
+            and all(key in list[0] for key in dict_keys)
