@@ -2,7 +2,7 @@ import {FormControl, HStack, Stack, Tab, Table, TabList, TabPanel, TabPanels, Ta
 import React from "react";
 import {useTranslation} from "react-i18next";
 import Select from "react-select";
-import {Afspraak, GetTransactieDocument, Rubriek, useCreateJournaalpostAfspraakMutation, useCreateJournaalpostGrootboekrekeningMutation} from "../../../generated/graphql";
+import {Afspraak, GetTransactieAfgeletterdDocument, GetTransactieDocument, Rubriek, useCreateJournaalpostAfspraakMutation, useCreateJournaalpostGrootboekrekeningMutation} from "../../../generated/graphql";
 import {useReactSelectStyles} from "../../../utils/things";
 import useToaster from "../../../utils/useToaster";
 import SelectAfspraakOption from "../../shared/SelectAfspraakOption";
@@ -17,6 +17,7 @@ const BookingSection = ({transaction, rubrieken, afspraken}) => {
 	const [createJournaalpostAfspraak] = useCreateJournaalpostAfspraakMutation({
 		refetchQueries: [
 			{query: GetTransactieDocument, variables: {id: transaction.id}},
+			{query: GetTransactieAfgeletterdDocument, variables: {id: transaction.id}}
 		],
 		// Todo move this to the backend, which should be way more performant. (30-09-2022)
 		// onCompleted: (result) => {
