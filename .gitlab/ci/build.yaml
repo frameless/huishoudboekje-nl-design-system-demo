@@ -8,6 +8,8 @@
   stage: build
   image: registry.gitlab.com/commonground/huishoudboekje/review-app-deployer:latest
   needs: [ ]
+  services:
+    - docker:20.10.22-dind
   tags:
     - cg
     - docker
