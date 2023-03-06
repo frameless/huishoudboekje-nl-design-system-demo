@@ -10,7 +10,7 @@
   needs: [ ]
   tags:
     - cg
-    - shell
+    - docker
   variables:
     DOCKER_TLS_CERTDIR: "/certs"
     CYPRESS_INSTALL_BINARY: "0"
@@ -27,7 +27,7 @@
   needs: [ ]
   tags:
     - cg
-    - shell
+    - docker
   variables:
     DOCKER_TLS_CERTDIR: "/certs"
   script:
