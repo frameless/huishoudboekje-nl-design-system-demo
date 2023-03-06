@@ -60,6 +60,7 @@ const BookingSection = ({transaction, rubrieken, afspraken}) => {
 		if (transactionId && grootboekrekeningId) {
 			createJournaalpostGrootboekrekening({
 				variables: {transactionId, grootboekrekeningId},
+				errorPolicy: "ignore"
 			}).then(() => {
 				toast({success: t("messages.journals.createSuccessMessage")});
 			}).catch(err => {

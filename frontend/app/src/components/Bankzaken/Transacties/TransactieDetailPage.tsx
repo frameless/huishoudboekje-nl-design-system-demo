@@ -1,6 +1,6 @@
-import React, {useState, createContext} from "react";
+import React from "react";
 import {useTranslation} from "react-i18next";
-import {useParams, useLocation} from "react-router-dom";
+import {useParams} from "react-router-dom";
 import {Afspraak, BankTransaction, Rubriek, useGetTransactieQuery, useGetTransactieAfgeletterdQuery} from "../../../generated/graphql";
 import Queryable from "../../../utils/Queryable";
 import Page from "../../shared/Page";
@@ -9,23 +9,11 @@ import TransactieItemView from "./TransactieItemView";
 
 const TransactieDetailPage = () => {
 	const {id = ""} = useParams<{id: string}>();
-	const location = useLocation();
 	const {t} = useTranslation();
 
-	const [afgeletterd, setAfgeletterd] = useState(location.state.afgeletterd)
-
 	const $transactie = () => {
-		if (afgeletterd == true) {
-			return useGetTransactieAfgeletterdQuery({
-				fetchPolicy: "no-cache", // This is "no-cache" because the data changes
-				variables: {
-					id: parseInt(id),
-				},
-			});
-
-		}
 		return useGetTransactieQuery({
-			fetchPolicy: "no-cache", // This is "no-cache" because the data changes
+			fetchPolicy: "cache-and-network",
 			variables: {
 				id: parseInt(id),
 			},
@@ -42,7 +30,6 @@ const TransactieDetailPage = () => {
 			})
 
 			const rubrieken: Rubriek[] = data.rubrieken;
-
 			if (!transactie?.id) {
 				return <PageNotFound />;
 			}
