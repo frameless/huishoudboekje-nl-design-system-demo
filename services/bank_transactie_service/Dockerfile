@@ -12,7 +12,7 @@ COPY ./bank_transactie_service/setup.py /app
 RUN mkdir -p core_service bank_transactie_service models  \
 RUN pip install .
 
-COPY ./bank_transactie_service /app
+#COPY ./bank_transactie_service /app
 COPY ./core_service/core_service /app/core_service
 
 RUN pip install .
