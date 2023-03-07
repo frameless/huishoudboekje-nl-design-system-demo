@@ -12,7 +12,7 @@ COPY grootboek_service/setup.py /app
 RUN mkdir -p core_service grootboek_service models
 RUN pip install .
 
-COPY ./grootboek_service /app
+#COPY ./grootboek_service /app
 COPY ./core_service/core_service /app/core_service
 
 RUN pip install .
