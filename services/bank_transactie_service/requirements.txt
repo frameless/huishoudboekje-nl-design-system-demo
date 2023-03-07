@@ -2,8 +2,9 @@
  #
  # installs dependencies from ./setup.py, and the package itself,
  # in editable mode
- -e .
+ #-e .
+# caused issues so sing below
 
  # (the -e above is optional). you could also just install the package
  # normally with just the line below (after uncommenting)
- # .
+  .
