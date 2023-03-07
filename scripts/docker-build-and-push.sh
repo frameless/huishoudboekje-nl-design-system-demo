@@ -29,8 +29,8 @@ docker push $CI_REGISTRY_IMAGE/postadressenservice:$IMAGE_TAG
 docker push $CI_REGISTRY_IMAGE/alarmenservice:$IMAGE_TAG
 docker push $CI_REGISTRY_IMAGE/signalenservice:$IMAGE_TAG
 docker push $CI_REGISTRY_IMAGE/authservice:$IMAGE_TAG
-docker push $CI_REGISTRY_IMAGE/grootboekservice:$IMAGE_TAG
 docker push $CI_REGISTRY_IMAGE/banktransactieservice:$IMAGE_TAG
+docker push $CI_REGISTRY_IMAGE/grootboekservice:$IMAGE_TAG
 docker push $CI_REGISTRY_IMAGE/huishoudboekjeservice:$IMAGE_TAG
 docker push $CI_REGISTRY_IMAGE/logservice:$IMAGE_TAG
 docker push $CI_REGISTRY_IMAGE/organisatieservice:$IMAGE_TAG
