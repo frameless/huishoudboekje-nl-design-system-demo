@@ -2,10 +2,15 @@
 import pytest
 from flask_injector import request
 from unittest.mock import Mock
+from flask_injector import request
+from unittest.mock import Mock
 from rapportage_service.app import create_app
+from rapportage_service.controllers.rapportageController import RapportageController
 from rapportage_service.controllers.rapportageController import RapportageController
 
 
+@pytest.fixture(scope="session")
+def client(app):
 @pytest.fixture(scope="session")
 def client(app):
     """
@@ -16,9 +21,15 @@ def client(app):
 
 @pytest.fixture(scope="session")
 def app(rapportage_controller_mock):
+@pytest.fixture(scope="session")
+def app(rapportage_controller_mock):
     """
     Returns session-wide application.
     """
+
+    def dependency_injection(binder):
+        binder.bind(RapportageController, to=rapportage_controller_mock, scope=request)
+    app = create_app(dependency_injection_configuration=dependency_injection)
 
     def dependency_injection(binder):
         binder.bind(RapportageController, to=rapportage_controller_mock, scope=request)
@@ -28,7 +39,7 @@ def app(rapportage_controller_mock):
 @pytest.fixture(scope="session")
 def rapportage_controller_mock():
     """
-    Returns  rapportage_controller_mock.
+    Returns session-wide rapportage_controller_mock.
     """
 
     rapportage_controller_mock=Mock()
