@@ -21,6 +21,9 @@ ENV FLASK_RUN_PORT="8000"
 ENV FLASK_DEBUG="1"
 ENV JWT_SECRET="local-secret"
 
+ENV HHB_SERVICE_URL="http://huishoudboekjeservice:8000"
+ENV TRANSACTIE_SERVICE_URL="http://banktransactieservice:8000"
+
 EXPOSE 8000
 
 CMD ["/bin/sh", "start.sh"]

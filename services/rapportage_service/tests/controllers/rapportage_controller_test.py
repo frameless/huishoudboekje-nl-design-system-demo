@@ -1,5 +1,5 @@
-""" Test rapportage view """
-from unittest.mock import Mock, patch
+""" Test rapportage controller """
+from unittest.mock import Mock
 import pytest
 from decimal import Decimal
 from rapportage_service.controllers.rapportageController import RapportageController
