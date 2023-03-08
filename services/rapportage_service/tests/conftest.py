@@ -2,10 +2,7 @@
 import pytest
 from flask_injector import request
 from unittest.mock import Mock
-from flask_injector import request
-from unittest.mock import Mock
 from rapportage_service.app import create_app
-from rapportage_service.controllers.rapportageController import RapportageController
 from rapportage_service.controllers.rapportageController import RapportageController
 
 
