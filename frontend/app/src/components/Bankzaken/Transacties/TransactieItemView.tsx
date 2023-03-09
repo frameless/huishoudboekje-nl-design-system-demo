@@ -11,7 +11,6 @@ type TransactieItemViewProps = {
 	transactie: BankTransaction,
 	afspraken?: Afspraak[],
 	rubrieken?: Rubriek[],
-	afgeletterd: boolean
 };
 
 const TransactieItemView: React.FC<TransactieItemViewProps> = ({transactie, afspraken, rubrieken, afgeletterd}) => {

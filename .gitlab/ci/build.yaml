@@ -8,9 +8,11 @@
   stage: build
   image: registry.gitlab.com/commonground/huishoudboekje/review-app-deployer:latest
   needs: [ ]
+  services:
+    - docker:20.10.22-dind
   tags:
     - cg
-    - shell
+    - docker
   variables:
     DOCKER_TLS_CERTDIR: "/certs"
     CYPRESS_INSTALL_BINARY: "0"
@@ -25,9 +27,11 @@
   stage: build
   image: registry.gitlab.com/commonground/huishoudboekje/review-app-deployer:latest
   needs: [ ]
+  services:
+    - docker:20.10.22-dind
   tags:
     - cg
-    - shell
+    - docker
   variables:
     DOCKER_TLS_CERTDIR: "/certs"
   script:

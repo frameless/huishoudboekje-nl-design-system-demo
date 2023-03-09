@@ -9,8 +9,6 @@ ENV TZ=Europe/Amsterdam
 WORKDIR /app
 
 COPY organisatie_service/setup.py /app
-RUN mkdir -p core_service organisatie_service models
-RUN pip install .
 
 COPY ./organisatie_service /app
 COPY ./core_service/core_service /app/core_service

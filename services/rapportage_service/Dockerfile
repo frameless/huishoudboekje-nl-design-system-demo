@@ -9,8 +9,6 @@ ENV TZ=Europe/Amsterdam
 WORKDIR /app
 
 COPY ./rapportage_service/setup.py /app
-RUN mkdir -p core_service rapportage_service models  \
-RUN pip install .
 
 COPY ./rapportage_service /app
 COPY ./core_service/core_service /app/core_service
