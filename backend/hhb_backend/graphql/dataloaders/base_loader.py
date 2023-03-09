@@ -158,8 +158,6 @@ def _base_data_load_with_options(service: str, options: Unpack[DataLoaderOptions
         data = indexed
     else:
         data = [model_type(item) for item in data]
-
-    logging.info(f"response: {data}")
     return data
 
 
@@ -181,9 +179,7 @@ def _base_load_with_options(service: str, options: Unpack[DataLoaderOptions], ke
     if filters:
         params["filters"] = json.dumps(filters)
 
-    logging.info(f"requesting: get, {url}, {params}")
     response = _send_get_request(url, service, params=params).json()
-    logging.info(f"response: {response}")
     return response
 
 
