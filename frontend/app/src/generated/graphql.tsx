@@ -2173,13 +2173,6 @@ export type GetTransactieQueryVariables = Exact<{
 
 export type GetTransactieQuery = { bankTransaction?: { id?: number, informationToAccountOwner?: string, statementLine?: string, bedrag?: any, isCredit?: boolean, tegenRekeningIban?: string, transactieDatum?: any, tegenRekening?: { iban?: string, rekeninghouder?: string }, journaalpost?: { id?: number, isAutomatischGeboekt?: boolean, afspraak?: { id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, burger?: { voornamen?: string, voorletters?: string, achternaam?: string }, rubriek?: { id?: number, naam?: string } }, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } }, suggesties?: Array<{ id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, burger?: { voornamen?: string, voorletters?: string, achternaam?: string }, similarAfspraken?: Array<{ id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, burger?: { voorletters?: string, voornamen?: string, achternaam?: string } }> }> }, rubrieken?: Array<{ id?: number, naam?: string }> };
 
-export type GetTransactieAfgeletterdQueryVariables = Exact<{
-  id: Scalars['Int'];
-}>;
-
-
-export type GetTransactieAfgeletterdQuery = { bankTransaction?: { id?: number, informationToAccountOwner?: string, statementLine?: string, bedrag?: any, isCredit?: boolean, tegenRekeningIban?: string, transactieDatum?: any, tegenRekening?: { iban?: string, rekeninghouder?: string }, journaalpost?: { id?: number, isAutomatischGeboekt?: boolean, afspraak?: { id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, burger?: { voornamen?: string, voorletters?: string, achternaam?: string }, rubriek?: { id?: number, naam?: string } }, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } } }, rubrieken?: Array<{ id?: number, naam?: string }> };
-
 export type GetTransactionItemFormDataQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -5744,86 +5737,6 @@ export function useGetTransactieLazyQuery(baseOptions?: Apollo.LazyQueryHookOpti
 export type GetTransactieQueryHookResult = ReturnType<typeof useGetTransactieQuery>;
 export type GetTransactieLazyQueryHookResult = ReturnType<typeof useGetTransactieLazyQuery>;
 export type GetTransactieQueryResult = Apollo.QueryResult<GetTransactieQuery, GetTransactieQueryVariables>;
-export const GetTransactieAfgeletterdDocument = gql`
-    query GetTransactieAfgeletterd($id: Int!) {
-  bankTransaction(id: $id) {
-    id
-    informationToAccountOwner
-    statementLine
-    bedrag
-    isCredit
-    tegenRekeningIban
-    tegenRekening {
-      iban
-      rekeninghouder
-    }
-    transactieDatum
-    journaalpost {
-      id
-      isAutomatischGeboekt
-      afspraak {
-        id
-        omschrijving
-        bedrag
-        credit
-        zoektermen
-        burger {
-          voornamen
-          voorletters
-          achternaam
-        }
-        rubriek {
-          id
-          naam
-        }
-      }
-      grootboekrekening {
-        id
-        naam
-        credit
-        omschrijving
-        referentie
-        rubriek {
-          id
-          naam
-        }
-      }
-    }
-  }
-  rubrieken {
-    id
-    naam
-  }
-}
-    `;
-
-/**
- * __useGetTransactieAfgeletterdQuery__
- *
- * To run a query within a React component, call `useGetTransactieAfgeletterdQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetTransactieAfgeletterdQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetTransactieAfgeletterdQuery({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
-export function useGetTransactieAfgeletterdQuery(baseOptions: Apollo.QueryHookOptions<GetTransactieAfgeletterdQuery, GetTransactieAfgeletterdQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetTransactieAfgeletterdQuery, GetTransactieAfgeletterdQueryVariables>(GetTransactieAfgeletterdDocument, options);
-      }
-export function useGetTransactieAfgeletterdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetTransactieAfgeletterdQuery, GetTransactieAfgeletterdQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetTransactieAfgeletterdQuery, GetTransactieAfgeletterdQueryVariables>(GetTransactieAfgeletterdDocument, options);
-        }
-export type GetTransactieAfgeletterdQueryHookResult = ReturnType<typeof useGetTransactieAfgeletterdQuery>;
-export type GetTransactieAfgeletterdLazyQueryHookResult = ReturnType<typeof useGetTransactieAfgeletterdLazyQuery>;
-export type GetTransactieAfgeletterdQueryResult = Apollo.QueryResult<GetTransactieAfgeletterdQuery, GetTransactieAfgeletterdQueryVariables>;
 export const GetTransactionItemFormDataDocument = gql`
     query getTransactionItemFormData {
   rubrieken {

@@ -27,8 +27,7 @@ const TransactieItem: React.FC<TransactieItemProps> = ({transactie: bt, ...props
 	return (
 		<Box px={2} mx={-2} {...!isMobile && hoverStyles}>
 			<Stack direction={"row"} alignItems={"center"} justifyContent={"center"} {...props} onClick={() => {
-				const isAfgeletterd = bt.rubriek ? true : false
-				navigate(AppRoutes.ViewTransactie(String(bt.id)), {state: {afgeletterd: isAfgeletterd}});
+				navigate(AppRoutes.ViewTransactie(String(bt.id)));
 			}}>
 				<Box flex={2}>
 					{bt.tegenRekening ? (

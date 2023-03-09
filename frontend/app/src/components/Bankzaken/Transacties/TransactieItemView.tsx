@@ -18,7 +18,7 @@ const TransactieItemView: React.FC<TransactieItemViewProps> = ({transactie, afsp
 
 	return (
 		<SectionContainer>
-			<Section title={t("pages.transactieDetails.transactie.title")} helperText={t("pages.transactieDetails.transactie.helperText")}>
+			<Section title={t("pages.transactieDetails.transactie.title", {id: transactie.id})} helperText={t("pages.transactieDetails.transactie.helperText")}>
 				<TransactieDetailsView transaction={transactie} />
 			</Section>
 			{transactie.journaalpost ? (
