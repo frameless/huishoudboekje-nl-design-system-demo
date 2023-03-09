@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React from "react";
 import {useTranslation} from "react-i18next";
 import {Afspraak, BankTransaction, Rubriek} from "../../../generated/graphql";
 import Section from "../../shared/Section";
@@ -13,22 +13,17 @@ type TransactieItemViewProps = {
 	rubrieken?: Rubriek[],
 };
 
-const TransactieItemView: React.FC<TransactieItemViewProps> = ({transactie, afspraken, rubrieken, afgeletterd}) => {
+const TransactieItemView: React.FC<TransactieItemViewProps> = ({transactie, afspraken, rubrieken}) => {
 	const {t} = useTranslation();
-	const [count, setCount] = useState(0);
-
-	const handleChildCount = () => {
-		setCount(count + 1);
-	}
 
 	return (
 		<SectionContainer>
-			<Section title={t("pages.transactieDetails.transactie.title", {id: count})} helperText={t("pages.transactieDetails.transactie.helperText")}>
+			<Section title={t("pages.transactieDetails.transactie.title")} helperText={t("pages.transactieDetails.transactie.helperText")}>
 				<TransactieDetailsView transaction={transactie} />
 			</Section>
 			{transactie.journaalpost ? (
 				<Section title={t("pages.transactieDetails.afspraak.title")} helperText={t("pages.transactieDetails.afspraak.helperText")}>
-					<BookingDetailsView transactie={transactie} handleCount={handleChildCount} />
+					<BookingDetailsView transactie={transactie} />
 				</Section>
 			) : (
 				<Section title={t("pages.transactieDetails.afletteren.title")} helperText={t("pages.transactieDetails.afletteren.helperText")}>
