@@ -28,7 +28,7 @@ def app(rapportage_controller_mock):
 @pytest.fixture(scope="session")
 def rapportage_controller_mock():
     """
-    Returns session-wide rapportage_controller_mock.
+    Returns  rapportage_controller_mock.
     """
 
     rapportage_controller_mock=Mock()
