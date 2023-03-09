@@ -24,6 +24,7 @@ class UpdateAfspraakInput(graphene.InputObjectType):
     omschrijving = graphene.String()
     credit = graphene.Boolean()
     bedrag = graphene.Argument(Bedrag)
+    valid_from = graphene.String()
     valid_through = graphene.String()
     zoektermen = graphene.List(graphene.String)
 
