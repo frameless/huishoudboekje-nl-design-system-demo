@@ -6,7 +6,7 @@ import {useNavigate} from "react-router-dom";
 import {AppRoutes} from "../../../config/routes";
 import {currencyFormat2, formatIBAN} from "../../../utils/things";
 import PrettyIban from "../../shared/PrettyIban";
-import { TransactionSimple } from "./TransactieOverzichtObject";
+import {TransactionSimple} from "./TransactieOverzichtObject";
 
 const hoverStyles = {
 	_hover: {
@@ -29,7 +29,6 @@ const TransactieItem: React.FC<TransactieItemProps> = ({transactie: bt, ...props
 			<Stack direction={"row"} alignItems={"center"} justifyContent={"center"} {...props} onClick={() => {
 				navigate(AppRoutes.ViewTransactie(String(bt.id)));
 			}}>
-
 				<Box flex={2}>
 					{bt.tegenRekening ? (
 						<Text>

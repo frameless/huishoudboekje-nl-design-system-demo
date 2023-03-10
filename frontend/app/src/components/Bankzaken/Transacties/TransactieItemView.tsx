@@ -10,7 +10,7 @@ import TransactieDetailsView from "./TransactieDetailsView";
 type TransactieItemViewProps = {
 	transactie: BankTransaction,
 	afspraken?: Afspraak[],
-	rubrieken?: Rubriek[]
+	rubrieken?: Rubriek[],
 };
 
 const TransactieItemView: React.FC<TransactieItemViewProps> = ({transactie, afspraken, rubrieken}) => {
@@ -21,7 +21,6 @@ const TransactieItemView: React.FC<TransactieItemViewProps> = ({transactie, afsp
 			<Section title={t("pages.transactieDetails.transactie.title", {id: transactie.id})} helperText={t("pages.transactieDetails.transactie.helperText")}>
 				<TransactieDetailsView transaction={transactie} />
 			</Section>
-
 			{transactie.journaalpost ? (
 				<Section title={t("pages.transactieDetails.afspraak.title")} helperText={t("pages.transactieDetails.afspraak.helperText")}>
 					<BookingDetailsView transactie={transactie} />

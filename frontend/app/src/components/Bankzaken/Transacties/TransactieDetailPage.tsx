@@ -11,24 +11,26 @@ const TransactieDetailPage = () => {
 	const {id = ""} = useParams<{id: string}>();
 	const {t} = useTranslation();
 
-	const $transactie = useGetTransactieQuery({
-		fetchPolicy: "no-cache", // This is "no-cache" because the data changes
-		variables: {
-			id: parseInt(id),
-		},
-	});
+
+	const $transactie = () => {
+		return useGetTransactieQuery({
+			fetchPolicy: "cache-and-network",
+			variables: {
+				id: parseInt(id),
+			},
+		});
+	}
 
 	return (
-		<Queryable query={$transactie} children={(data => {
+		<Queryable query={$transactie()} children={(data => {
 			const transactie: BankTransaction = data.bankTransaction;
 			const afspraken: Afspraak[] = []
-			transactie.suggesties?.forEach(suggestie =>{
-				const similar = suggestie.similarAfspraken? suggestie.similarAfspraken : []
+			transactie.suggesties?.forEach(suggestie => {
+				const similar = suggestie.similarAfspraken ? suggestie.similarAfspraken : []
 				afspraken.push(...similar)
 			})
 
 			const rubrieken: Rubriek[] = data.rubrieken;
-
 			if (!transactie?.id) {
 				return <PageNotFound />;
 			}
