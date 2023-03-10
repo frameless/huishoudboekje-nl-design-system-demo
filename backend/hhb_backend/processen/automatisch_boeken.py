@@ -1,5 +1,6 @@
 import logging
 from collections import Counter
+from operator import itemgetter
 from typing import List, Dict
 
 from hhb_backend.graphql.dataloaders import hhb_dataloader
@@ -11,24 +12,20 @@ from hhb_backend.graphql.mutations.journaalposten.create_journaalpost import cre
 
 
 def automatisch_boeken(customer_statement_message_id: int = None):
-    logging.info(f"automatisch_boeken: customer_statement_message_id={customer_statement_message_id}")
-    if customer_statement_message_id is not None:
-        transactions = [
-            t
-            for t in hhb_dataloader().bank_transactions.by_csm(customer_statement_message_id)
-            if not t.is_geboekt
-        ]
-    else:
-        transactions = hhb_dataloader().bank_transactions.by_is_geboekt(False)
-
+    transactions = get_transactions_to_write_off(customer_statement_message_id)
     suggesties = transactie_suggesties(transactions=transactions)
     _afspraken = {}
     _automatische_transacties = []
     _matching_transaction_ids = []
-    for transactie_id, afspraken in suggesties.items():
+    for transactie_id, afspraken in suggesties.items():  
+        matching_afspraak = None
         if len(afspraken) == 1 and afspraken[0].zoektermen:
-            _afspraken[afspraken[0].id] = afspraken[0]
-            _automatische_transacties.append({"transaction_id": transactie_id, "afspraak_id": afspraken[0].id, "is_automatisch_geboekt": True})
+            matching_afspraak = afspraken[0]
+        if len(afspraken) > 1 and all(afspraak.zoektermen and afspraak.burger_id == afspraken[0].burger_id for afspraak in afspraken):
+            matching_afspraak = min(afspraken, key=itemgetter('valid_from'))
+        if matching_afspraak:
+            _afspraken[matching_afspraak.id] = matching_afspraak
+            _automatische_transacties.append({"transaction_id": transactie_id, "afspraak_id": matching_afspraak.id, "is_automatisch_geboekt": True})
             _matching_transaction_ids.append(transactie_id)
 
     stats = Counter(len(s) for s in suggesties.values())
@@ -56,6 +53,18 @@ def automatisch_boeken(customer_statement_message_id: int = None):
     logging.info(f"automatisch boeken completed with {len(journaalposten_)}")
     return journaalposten_
 
+def get_transactions_to_write_off(customer_statement_message_id):
+    logging.info(f"automatisch_boeken: customer_statement_message_id={customer_statement_message_id}")
+    if customer_statement_message_id is not None:
+        transactions = [
+            transaction for
+            transaction in hhb_dataloader().bank_transactions.by_csm(customer_statement_message_id)
+            if not transaction.is_geboekt
+        ]
+    else:
+        transactions = hhb_dataloader().bank_transactions.by_is_geboekt(False)
+    return transactions
+
 
 def transactie_suggesties(transactie_ids: List[int] = None, transactions: List[BankTransaction] = None) -> Dict[int, List[Afspraak]]:
     if transactie_ids:
@@ -69,10 +78,10 @@ def transactie_suggesties(transactie_ids: List[int] = None, transactions: List[B
             return {key: [] for key in transactie_ids}
     
     if transactions and not transactie_ids:
-        transactie_ids = [transactie.id for transactie in transactions]
+        transactie_ids = [transaction.id for transaction in transactions]
 
     # Rekeningen ophalen adhv iban
-    rekening_ibans = [t.tegen_rekening for t in transactions]
+    rekening_ibans = [transaction.tegen_rekening for transaction in transactions]
     rekeningen = hhb_dataloader().rekeningen.by_ibans(rekening_ibans)
     if not rekeningen:
         return {key: [] for key in transactie_ids}
@@ -81,7 +90,7 @@ def transactie_suggesties(transactie_ids: List[int] = None, transactions: List[B
     for rekening in rekeningen:
         iban_to_rekening_id[rekening.iban] = rekening.id
 
-    rekening_ids = [r.id if r is not None else -1 for r in rekeningen]
+    rekening_ids = [rekening.id if rekening is not None else -1 for rekening in rekeningen]
 
     afspraken = hhb_dataloader().afspraken.by_rekeningen(rekening_ids)
     if not afspraken:
