@@ -1,4 +1,5 @@
 """ Main app for grootboek_service """
+from models import *
 import logging
 from flask import Flask, Response
 from flask_migrate import Migrate
@@ -6,7 +7,6 @@ from core_service import database
 from grootboek_service.views.grootboekrekeningen import GrootboekrekeningenView
 
 db = database.db
-from models import *
 
 
 def create_app(config_name='grootboek_service.config.Config'):
@@ -18,7 +18,11 @@ def create_app(config_name='grootboek_service.config.Config'):
         level=app.config["LOG_LEVEL"],
         datefmt='%Y-%m-%d %H:%M:%S')
     logging.info(f"Starting {__name__} with {config_name}")
-    
+
+    # Werkzeug has their own logger which outputs info level URL calls.
+    # This can also cause parameters that are normally hidden to be logged
+    logging.getLogger('werkzeug').setLevel(app.config["LOG_LEVEL"])
+
     db.init_app(app)
     Migrate(app, db)
 

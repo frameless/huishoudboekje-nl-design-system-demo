@@ -21,7 +21,7 @@ const logger = () => (req, res, next) => {
 
 app.use(cors());
 app.use(express.json());
-if (process.env.NODE_ENV !== "test") {
+if (process.env.NODE_ENV === 'dev') {
 	app.use(logger());
 }
 

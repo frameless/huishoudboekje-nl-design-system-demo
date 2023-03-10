@@ -22,6 +22,10 @@ def create_app(config_name='tests.basket_service.config.Config'):
         datefmt='%Y-%m-%d %H:%M:%S')
     logging.info(f"Starting {__name__} with {config_name}")
 
+    # Werkzeug has their own logger which outputs info level URL calls.
+    # This can also cause parameters that are normally hidden to be logged
+    logging.getLogger('werkzeug').setLevel(app.config["LOG_LEVEL"])
+
     @app.route('/health')
     def health():
         return Response()
