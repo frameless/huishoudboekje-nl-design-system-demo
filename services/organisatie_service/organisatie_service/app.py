@@ -1,4 +1,5 @@
 """ Main app for organisatie_service """
+from models import *
 import logging
 
 from flask import Flask, Response
@@ -10,7 +11,7 @@ from core_service import database
 from organisatie_service import config
 
 db = database.db
-from models import *
+
 
 def create_app(config_name='organisatie_service.config.Config'):
     app = Flask(__name__)
@@ -21,7 +22,11 @@ def create_app(config_name='organisatie_service.config.Config'):
         level=app.config["LOG_LEVEL"],
         datefmt='%Y-%m-%d %H:%M:%S')
     logging.info(f"Starting {__name__} with {config_name}")
-    
+
+    # Werkzeug has their own logger which outputs info level URL calls.
+    # This can also cause parameters that are normally hidden to be logged
+    logging.getLogger('werkzeug').setLevel(app.config["LOG_LEVEL"])
+
     db.init_app(app)
     Migrate(app, db)
 
@@ -31,9 +36,11 @@ def create_app(config_name='organisatie_service.config.Config'):
 
     routes = [
         {"path": "/organisaties", "view": OrganisatieView, "name": "organisatie_view"},
-        {"path": "/organisaties/<object_id>", "view": OrganisatieView, "name": "organisatie_detail_view"},
-        {"path": "/afdelingen", "view": AfdelingView,"name": "afdeling_view"},
-        {"path": "/afdelingen/<object_id>", "view": AfdelingView, "name": "afdeling_detail_view"},
+        {"path": "/organisaties/<object_id>", "view": OrganisatieView,
+            "name": "organisatie_detail_view"},
+        {"path": "/afdelingen", "view": AfdelingView, "name": "afdeling_view"},
+        {"path": "/afdelingen/<object_id>", "view": AfdelingView,
+            "name": "afdeling_detail_view"},
     ]
 
     for route in routes:
@@ -43,6 +50,7 @@ def create_app(config_name='organisatie_service.config.Config'):
             strict_slashes=False
         )
     return app
+
 
 if __name__ == '__main__':
     create_app().run()

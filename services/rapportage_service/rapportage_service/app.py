@@ -7,6 +7,7 @@ from flask_injector import FlaskInjector
 from rapportage_service.dependencies import configure
 from rapportage_service.views.RapportageView import RapportageView
 
+
 def create_app(config_name='rapportage_service.config.Config'):
     app = Flask(__name__)
     app.config.from_object(config_name)
@@ -24,6 +25,10 @@ def create_app(config_name='rapportage_service.config.Config'):
     )
     logging.info(f"Starting {__name__} with {config_name}")
 
+    # Werkzeug has their own logger which outputs info level URL calls.
+    # This can also cause parameters that are normally hidden to be logged
+    logging.getLogger('werkzeug').setLevel(app.config["LOG_LEVEL"])
+
     @app.route('/health')
     def health():
         return Response()
@@ -38,11 +43,11 @@ def create_app(config_name='rapportage_service.config.Config'):
             route["path"],
             view_func=route["view"].as_view(route["name"]),
             strict_slashes=False
-        )  
+        )
 
     # Initialize Flask-Injector. This needs to be run after you attached all
     # views, handlers, context processors and template globals.
-    FlaskInjector(app=app,modules=[configure])
+    FlaskInjector(app=app, modules=[configure])
     return app
 
 

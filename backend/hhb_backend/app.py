@@ -29,8 +29,13 @@ def create_app(
     app.logger = logger = logging.getLogger(__name__)
     logger.info(f"Starting {__name__} with {config_name}")
 
+    # Werkzeug has their own logger which outputs info level URL calls.
+    # This can also cause parameters that are normally hidden to be logged
+    logging.getLogger('werkzeug').setLevel(app.config["LOG_LEVEL"])
+
     if app.config["PREFIX"]:
-        app.wsgi_app = ReverseProxied(app.wsgi_app, script_name=app.config["PREFIX"])
+        app.wsgi_app = ReverseProxied(
+            app.wsgi_app, script_name=app.config["PREFIX"])
 
     if not loop:
         loop = asyncio.new_event_loop()
@@ -75,7 +80,8 @@ def create_app(
 
         export_file = io.BytesIO(xml_data.encode("utf-8"))
         response = make_response(
-            send_file(export_file, download_name=xml_filename)  # attachment_filename=xml_filename)
+            # attachment_filename=xml_filename)
+            send_file(export_file, download_name=xml_filename)
         )
         response.headers[
             "Content-Disposition"
@@ -86,7 +92,8 @@ def create_app(
     @auth.require_login
     def export_afspraken(burger_id, type="excel"):
         """ Send csv with afspraken data to medewerker """
-        data, csv_filename_or_errorcode, excel_data, excel_filename = brieven_export.create_brieven_export(burger_id)
+        data, csv_filename_or_errorcode, excel_data, excel_filename = brieven_export.create_brieven_export(
+            burger_id)
 
         # If the filename is an int, its an error code.
         if isinstance(csv_filename_or_errorcode, int):
