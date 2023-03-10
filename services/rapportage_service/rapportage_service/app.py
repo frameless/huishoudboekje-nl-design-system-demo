@@ -7,6 +7,7 @@ from flask_injector import FlaskInjector
 from rapportage_service.dependencies import configure
 from rapportage_service.views.RapportageView import RapportageView
 
+
 def create_app(config_name='rapportage_service.config.Config', dependency_injection_configuration=configure):
     app = Flask(__name__)
     app.config.from_object(config_name)
