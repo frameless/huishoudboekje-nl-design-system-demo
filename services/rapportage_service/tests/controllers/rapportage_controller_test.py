@@ -23,8 +23,8 @@ def test_rapportage_controller_invalid_dates(start_date,end_date):
 
 
 @pytest.mark.parametrize("transactions_info", [([]), ([1242354]),(["EFWEFWF"]),
-                                          ([{"rurbiek" : "test", "tegen_rekening" : "test"}]),   
-                                          ([{"transaction_id": "test", "tegen_rekening" : "test"}]), 
+                                          ([{"rurbiek" : "test", "rekeninghouder" : "test"}]),   
+                                          ([{"transaction_id": "test", "rekeninghouder" : "test"}]), 
                                           ([{"transaction_id": "test", "rurbiek" : "test", }])])
 def test_rapportage_controller_no_burger_transactions(transactions_info):
     """ Test if invalid dates are correctly handled"""
@@ -48,7 +48,7 @@ def test_rapportage_controller_no_transactions_in_range(transactions):
     # ARRANGE
     mock_hhbservice_repository = Mock()
     mock_banktransactionservice_repository = Mock()
-    mock_hhbservice_repository.get_transactions_burger.return_value = [{"transaction_id" : 12, "rubriek" : "test", "tegen_rekening": "test"}]
+    mock_hhbservice_repository.get_transactions_burger.return_value = [{"transaction_id" : 12, "rubriek" : "test", "rekeninghouder": "test"}]
     mock_banktransactionservice_repository.get_transacties_in_range.return_value = transactions
     sut = RapportageController(mock_hhbservice_repository,mock_banktransactionservice_repository)
 
@@ -62,13 +62,13 @@ def test_rapportage_rapportage_burger():
     """ Test if invalid dates are correctly handled"""
     # ARRANGE
     mock_hhbservice_repository = Mock()
-    transaction_info_1 = {"transaction_id" : 11, "rubriek" : "gas", "tegen_rekening": "test1"}
-    transaction_info_2 = {"transaction_id" : 12, "rubriek" : "gas", "tegen_rekening": "test2"}
-    transaction_info_3 = {"transaction_id" : 13, "rubriek" : "loon", "tegen_rekening": "test3"}
-    transaction_info_4 = {"transaction_id" : 14, "rubriek" : "toeslagen", "tegen_rekening": "test4"}
-    transaction_info_5 = {"transaction_id" : 15, "rubriek" : "toeslagen", "tegen_rekening": "test4"}
-    transaction_info_6 = {"transaction_id" : 16, "rubriek" : "toeslagen", "tegen_rekening": "test4"}
-    transaction_info_7 = {"transaction_id" : 17, "rubriek" : "elektra", "tegen_rekening": "test2"}
+    transaction_info_1 = {"transaction_id" : 11, "rubriek" : "gas", "rekeninghouder": "test1"}
+    transaction_info_2 = {"transaction_id" : 12, "rubriek" : "gas", "rekeninghouder": "test2"}
+    transaction_info_3 = {"transaction_id" : 13, "rubriek" : "loon", "rekeninghouder": "test3"}
+    transaction_info_4 = {"transaction_id" : 14, "rubriek" : "toeslagen", "rekeninghouder": "test4"}
+    transaction_info_5 = {"transaction_id" : 15, "rubriek" : "toeslagen", "rekeninghouder": "test4"}
+    transaction_info_6 = {"transaction_id" : 16, "rubriek" : "toeslagen", "rekeninghouder": "test4"}
+    transaction_info_7 = {"transaction_id" : 17, "rubriek" : "elektra", "rekeninghouder": "test2"}
 
     mock_hhbservice_repository.get_transactions_burger.return_value = [transaction_info_1,transaction_info_2,transaction_info_3,transaction_info_4,transaction_info_5,transaction_info_6, transaction_info_7]
     mock_banktransactionservice_repository = Mock()
@@ -93,11 +93,11 @@ def test_rapportage_rapportage_burger():
     result, response_code = sut.get_rapportage_burger(1,start, end)
     # ASSERT
     assert response_code == 200
-    assert result["data"] == {"inkomsten": [{"loon": [{"tegen_rekening": "test3", "transactie_datum": "2023-12-13", "bedrag": Decimal(113.25)}]},
-                                            {"toeslagen": [{"tegen_rekening": "test4", "transactie_datum": "2023-12-14", "bedrag": Decimal(114.25)}]}],
-                            "uitgaven" : [{"gas": [{"tegen_rekening": "test1", "transactie_datum": "2023-12-11", "bedrag": Decimal(-111.25)},
-                                                   {"tegen_rekening": "test2", "transactie_datum": "2023-12-12", "bedrag": Decimal(-112.25)}]},
-                                        {"elektra": [{"tegen_rekening": "test2", "transactie_datum": "2023-12-15", "bedrag": Decimal(-1)}]}],
+    assert result["data"] == {"inkomsten": [{"loon": [{"rekeninghouder": "test3", "transactie_datum": "2023-12-13", "bedrag": Decimal(113.25)}]},
+                                            {"toeslagen": [{"rekeninghouder": "test4", "transactie_datum": "2023-12-14", "bedrag": Decimal(114.25)}]}],
+                            "uitgaven" : [{"gas": [{"rekeninghouder": "test1", "transactie_datum": "2023-12-11", "bedrag": Decimal(-111.25)},
+                                                   {"rekeninghouder": "test2", "transactie_datum": "2023-12-12", "bedrag": Decimal(-112.25)}]},
+                                        {"elektra": [{"rekeninghouder": "test2", "transactie_datum": "2023-12-15", "bedrag": Decimal(-1)}]}],
                             "totaalInkomsten": total_in,
                             "totaalUitgaven": total_out,
                             "startDatum": start,

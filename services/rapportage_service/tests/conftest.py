@@ -11,8 +11,6 @@ from rapportage_service.controllers.rapportageController import RapportageContro
 
 @pytest.fixture(scope="session")
 def client(app):
-@pytest.fixture(scope="session")
-def client(app):
     """
     Returns session-wide test client
     """
@@ -21,16 +19,9 @@ def client(app):
 
 @pytest.fixture(scope="session")
 def app(rapportage_controller_mock):
-@pytest.fixture(scope="session")
-def app(rapportage_controller_mock):
     """
     Returns session-wide application.
     """
-
-    def dependency_injection(binder):
-        binder.bind(RapportageController, to=rapportage_controller_mock, scope=request)
-    app = create_app(dependency_injection_configuration=dependency_injection)
-
     def dependency_injection(binder):
         binder.bind(RapportageController, to=rapportage_controller_mock, scope=request)
     app = create_app(dependency_injection_configuration=dependency_injection)
@@ -41,7 +32,6 @@ def rapportage_controller_mock():
     """
     Returns session-wide rapportage_controller_mock.
     """
-
     rapportage_controller_mock=Mock()
     yield rapportage_controller_mock
 
