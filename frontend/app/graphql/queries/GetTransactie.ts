@@ -73,6 +73,9 @@ export const GetTransactieQuery = gql`
 		rubrieken {
 			id
 			naam
+			grootboekrekening {
+				id
+			}
 		}
 	}
 `;
