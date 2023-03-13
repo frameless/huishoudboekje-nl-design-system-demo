@@ -9,7 +9,8 @@ from hhb_backend.graphql.utils.dates import to_date
 class LogItem:
     action: str
     entities: list[dict] = field(default_factory=lambda: [])
-    timestamp: datetime = field(default=datetime.now(timezone.utc).replace(microsecond=0).isoformat())
+    timestamp: datetime = field(default=datetime.now(
+        timezone.utc).replace(microsecond=0).isoformat())
     before: dict = field(default=None)
     after: dict = field(default=None)
     user: str = field(default=None)

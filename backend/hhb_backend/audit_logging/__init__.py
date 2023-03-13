@@ -6,6 +6,7 @@ from flask import g, request
 from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
 from hhb_backend.graphql.settings import LOG_SERVICE_URL
 from .log_item import LogItem
+from datetime import datetime, timezone
 
 
 class AuditLogging:
@@ -37,6 +38,8 @@ class AuditLogging:
             entities=entities if entities is not None else [],
             before=before,
             after=after,
+            timestamp=datetime.now(timezone.utc).replace(
+                microsecond=0).isoformat(),
             user=user,
             meta={
                 "user_agent": user_agent,
@@ -59,11 +62,13 @@ class AuditLogging:
                     "snapshot_before": item.before,
                     "snapshot_after": item.after,
                 },
-                headers={"Accept": "application/json", "Content-type": "application/json"}
+                headers={"Accept": "application/json",
+                         "Content-type": "application/json"}
             )
 
             if response.status_code != 201:
-                logging.warning(f"AuditLogging: could not create audit log: {response.json()}")
+                logging.warning(
+                    f"AuditLogging: could not create audit log: {response.json()}")
             else:
                 logging.info(f"AuditLogging: log created")
                 logging.debug(f"AuditLogging: response {response}")
