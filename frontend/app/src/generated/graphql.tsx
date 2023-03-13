@@ -1494,6 +1494,7 @@ export type UpdateAfspraakInput = {
   postadresId?: InputMaybe<Scalars['String']>;
   rubriekId?: InputMaybe<Scalars['Int']>;
   tegenRekeningId?: InputMaybe<Scalars['Int']>;
+  validFrom?: InputMaybe<Scalars['String']>;
   validThrough?: InputMaybe<Scalars['String']>;
   zoektermen?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
@@ -2171,7 +2172,7 @@ export type GetTransactieQueryVariables = Exact<{
 }>;
 
 
-export type GetTransactieQuery = { bankTransaction?: { id?: number, informationToAccountOwner?: string, statementLine?: string, bedrag?: any, isCredit?: boolean, tegenRekeningIban?: string, transactieDatum?: any, tegenRekening?: { iban?: string, rekeninghouder?: string }, journaalpost?: { id?: number, isAutomatischGeboekt?: boolean, afspraak?: { id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, burger?: { voornamen?: string, voorletters?: string, achternaam?: string }, rubriek?: { id?: number, naam?: string } }, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } }, suggesties?: Array<{ id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, burger?: { voornamen?: string, voorletters?: string, achternaam?: string }, similarAfspraken?: Array<{ id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, burger?: { voorletters?: string, voornamen?: string, achternaam?: string } }> }> }, rubrieken?: Array<{ id?: number, naam?: string }> };
+export type GetTransactieQuery = { bankTransaction?: { id?: number, informationToAccountOwner?: string, statementLine?: string, bedrag?: any, isCredit?: boolean, tegenRekeningIban?: string, transactieDatum?: any, tegenRekening?: { iban?: string, rekeninghouder?: string }, journaalpost?: { id?: number, isAutomatischGeboekt?: boolean, afspraak?: { id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, burger?: { voornamen?: string, voorletters?: string, achternaam?: string }, rubriek?: { id?: number, naam?: string } }, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } }, suggesties?: Array<{ id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, burger?: { voornamen?: string, voorletters?: string, achternaam?: string }, similarAfspraken?: Array<{ id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, burger?: { voorletters?: string, voornamen?: string, achternaam?: string } }> }> }, rubrieken?: Array<{ id?: number, naam?: string, grootboekrekening?: { id: string } }> };
 
 export type GetTransactionItemFormDataQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -5706,6 +5707,9 @@ export const GetTransactieDocument = gql`
   rubrieken {
     id
     naam
+    grootboekrekening {
+      id
+    }
   }
 }
     `;
