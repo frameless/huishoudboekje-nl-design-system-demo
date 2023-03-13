@@ -11,7 +11,7 @@ class RapportageController():
     _banktransactionservice_repository: BanktransactieServiceRepository
 
     RUBRIEK = "rubriek"
-    TEGENREKENING = "tegen_rekening"
+    TEGENREKENING = "rekeninghouder"
     TRANSACTIE_DATUM = "transactie_datum"
     BEDRAG = "bedrag"
     REPORT_LINE_COLUMNS = [TEGENREKENING, TRANSACTIE_DATUM, BEDRAG]
@@ -33,7 +33,7 @@ class RapportageController():
 
         if not self.__correct_structure_requested_data(transactions_info, [self.TEGENREKENING, self.TRANSACTION_ID, self.RUBRIEK]):
             '''No content'''
-            return "No data found for burger", 204
+            return "No data found for burger", 201
 
         transaction_ids = [transaction[self.TRANSACTION_ID] for transaction in transactions_info]
         transactions_in_range = self._banktransactionservice_repository.get_transacties_in_range(start,end,transaction_ids)
