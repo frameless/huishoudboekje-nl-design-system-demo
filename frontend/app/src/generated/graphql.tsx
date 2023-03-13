@@ -2140,7 +2140,7 @@ export type GetRekeningQuery = { rekening?: { id?: number, iban?: string, rekeni
 export type GetReportingDataQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetReportingDataQuery = { burgers?: Array<{ id?: number }>, bankTransactions?: Array<{ id?: number, informationToAccountOwner?: string, statementLine?: string, bedrag?: any, isCredit?: boolean, tegenRekeningIban?: string, transactieDatum?: any, tegenRekening?: { iban?: string, rekeninghouder?: string }, journaalpost?: { id?: number, isAutomatischGeboekt?: boolean, afspraak?: { id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, validFrom?: any, validThrough?: any, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string } } }, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } } }>, rubrieken?: Array<{ id?: number, naam?: string }> };
+export type GetReportingDataQuery = { burgers?: Array<{ id?: number, voornamen?: string, achternaam?: string, voorletters?: string }>, bankTransactions?: Array<{ id?: number, informationToAccountOwner?: string, statementLine?: string, bedrag?: any, isCredit?: boolean, tegenRekeningIban?: string, transactieDatum?: any, tegenRekening?: { iban?: string, rekeninghouder?: string }, journaalpost?: { id?: number, isAutomatischGeboekt?: boolean, afspraak?: { id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, validFrom?: any, validThrough?: any, burger?: { id?: number }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string } } }, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } } }>, rubrieken?: Array<{ id?: number, naam?: string }> };
 
 export type GetRubriekenQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -5338,6 +5338,9 @@ export const GetReportingDataDocument = gql`
     query getReportingData {
   burgers {
     id
+    voornamen
+    achternaam
+    voorletters
   }
   bankTransactions {
     id
@@ -5358,6 +5361,9 @@ export const GetReportingDataDocument = gql`
         id
         omschrijving
         bedrag
+        burger {
+          id
+        }
         credit
         zoektermen
         validFrom

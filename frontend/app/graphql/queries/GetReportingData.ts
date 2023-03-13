@@ -1,12 +1,12 @@
 import {gql} from "@apollo/client";
-import {BurgerFragment} from "../fragments/Burger";
-import {GrootboekrekeningFragment} from "../fragments/Grootboekrekening";
-import {TransactieFragment} from "../fragments/Transactie";
 
 export const GetReportingDataQuery = gql`
     query getReportingData {
         burgers {
             id
+            voornamen
+            achternaam
+            voorletters
         }
         bankTransactions{
             id
@@ -27,6 +27,9 @@ export const GetReportingDataQuery = gql`
                     id
                     omschrijving
                     bedrag
+                    burger {
+                        id
+                    }
                     credit
                     zoektermen
                     validFrom

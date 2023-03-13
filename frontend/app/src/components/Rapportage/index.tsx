@@ -41,7 +41,17 @@ const Rapportage = () => {
 
 	const [filterBurgerIds, setFilterBurgerIds] = useState<number[]>(new URLSearchParams(queryParams).get("burgerId")?.split(",").map(p => parseInt(p)) || []);
 	const [filterRubriekIds, setFilterRubriekIds] = useState<number[]>([]);
-	const onSelectBurger = (value) => setFilterBurgerIds(value ? value.map(v => v.value) : []);
+	const onSelectBurger = (value) => {
+		setFilterBurgerIds(value ? value.map(v => v.value) : [])
+	};
+
+	function filterTransactions(transactions, startDate, endDate) {
+		return transactions
+			.filter(t => filterRubriekIds.length > 0 ? t.hasAnyRubriek(filterRubriekIds) : true)
+			.filter(t => filterBurgerIds.length > 0 ? t.belongsToAnyBurger(filterBurgerIds) : true)
+			.filter(t => t.isBetweenDates(startDate, endDate));
+
+	}
 	const onSelectRubriek = (value) => setFilterRubriekIds(value ? value.map(v => v.value) : []);
 	const onChangeGranularity = (value) => setGranularity(value);
 
@@ -54,10 +64,7 @@ const Rapportage = () => {
 				const transactions: Transaction[] = data.bankTransactions.map(t => new Transaction(t));
 				const burgers: Burger[] = data.burgers;
 
-				const filteredTransactions = transactions
-					.filter(t => filterRubriekIds.length > 0 ? t.hasAnyRubriek(filterRubriekIds) : true)
-					.filter(t => filterBurgerIds.length > 0 ? t.belongsToAnyBurger(filterBurgerIds) : true)
-					.filter(t => t.isBetweenDates(_startDate, _endDate));
+				const filteredTransactions = filterTransactions(transactions, _startDate, _endDate);
 
 				const selectedBurgers = burgers.filter(b => filterBurgerIds.includes(b.id!));
 
