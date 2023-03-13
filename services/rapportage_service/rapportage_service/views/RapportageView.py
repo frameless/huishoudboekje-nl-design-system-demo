@@ -16,13 +16,9 @@ class RapportageView(MethodView):
         """ 
             GET rapportage/<burger_id>?startDate=<start>&endDate=<end>
         """
-
-        burger_id = kwargs.get("burger_id", None) 
-
-        #TODO check dates are valid, functions for this are in banktransaction service should be refactored into core service       
+        burger_id = kwargs.get("burger_id", None)       
         start = request.args.get('startDate')
         end = request.args.get('endDate')
-
         return self._rapportage_controller.get_rapportage_burger(burger_id,start,end)
 
 

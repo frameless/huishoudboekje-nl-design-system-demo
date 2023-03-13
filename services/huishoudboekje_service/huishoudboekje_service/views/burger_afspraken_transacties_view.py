@@ -1,7 +1,7 @@
 """ MethodView for /burgers/<burger_id>/transacties path """
 from core_service.utils import row2dict, one_or_none
 from core_service.views.hhb_view import HHBView
-from models import Afspraak, Journaalpost, Rekening
+from models import Afspraak, Journaalpost, Rekening, Rubriek
 
 
 class BurgerAfsprakenTransactiesView(HHBView):
@@ -24,13 +24,14 @@ class BurgerAfsprakenTransactiesView(HHBView):
 
     def get_burger_transactions(self,burger_id):
         '''
-            Gets transactions that are related to a burger with tegenrekening rekeninghouder
+            Gets transactions that are related to a burger with tegenrekening rekeninghouder and rubriek
         '''
         result = Afspraak.query\
                     .filter(Afspraak.burger_id == burger_id)\
                     .join(Journaalpost)\
                     .join(Rekening)\
-                    .with_entities(Afspraak.tegen_rekening_id, Rekening.rekeninghouder, Journaalpost.transaction_id.label("transaction_id"))
+                    .join(Rubriek)\
+                    .with_entities(Rubriek.naam.label("rubriek"), Rekening.rekeninghouder, Journaalpost.transaction_id.label("transaction_id"))
         return result
 
 

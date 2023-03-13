@@ -8,7 +8,7 @@ from rapportage_service.dependencies import configure
 from rapportage_service.views.RapportageView import RapportageView
 
 
-def create_app(config_name='rapportage_service.config.Config'):
+def create_app(config_name='rapportage_service.config.Config', dependency_injection_configuration=configure):
     app = Flask(__name__)
     app.config.from_object(config_name)
 
@@ -47,7 +47,7 @@ def create_app(config_name='rapportage_service.config.Config'):
 
     # Initialize Flask-Injector. This needs to be run after you attached all
     # views, handlers, context processors and template globals.
-    FlaskInjector(app=app, modules=[configure])
+    FlaskInjector(app=app, modules=[dependency_injection_configuration])
     return app
 
 
