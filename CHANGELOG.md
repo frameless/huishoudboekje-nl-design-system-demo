@@ -1,5 +1,27 @@
 # Huishoudboekje Changelog
 
+## 1.8.0
+
+Deze versie omvat het oplossen van kleine problemen en de eerste stappen richting nieuwe rapportage functionaliteit.
+
+### Minor Changes
+
+- a0d124b2: #1239 end and start date are now used better to search matching afspraken, when 1 transaction has more afspraken from one burger it uses the oldest start date
+- 83adefa1: #1224 Added endpoint to get banktransactions in a date range
+- dffa92a6: #1219 Added a new service. the rapportageservice
+- 4545288b: Added endpoint hhb service to get transactions from a burger
+- 4f2faa05: #1221 &1223 Added rapportage endpoint in rapportage service that generates a rapportage for a burger in a date range
+- a27e24bf: #1226 Implemented dependency injection in rapportage service using flask-injector
+
+### Patch Changes
+
+- ca688702: #1206 better loading speed rapportage
+- 39e0188f: fixed burgers not being properly fetched and missing in transactions for the rapportage filter
+- f6adcbe3: Changed fetch policies of queries to allow for refreshing components on refetch
+- 83b51346: Changed werkzeug logging to adhere to the LOG_LEVEL set in the environment and changed javascript apps to only add logging on 'dev' environment
+- 12d612e4: added grootboekrekening id to transactie query for rubriek section in transactie booking section
+- f14affe1: Changed default loging to `WARNING` instead of `INFO` due to database logs containing personal information
+
 ## 1.7.0
 
 Deze versie omvat verbeteringen voor snelheid voor de pagina's: gebeurtenissen, afspraak, burger overzicht, signalen en huishoudens. Ook is de snelheid verbeterd van de teller met signalen in het navigatiemenu en het importeren van banktransacties. Daarnaast zijn een aantal bugs verholpen.
