@@ -2,22 +2,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: hhb-rapportageserviceservice
+  name: hhb-rapportageservice
   labels:
-    name: hhb-rapportageserviceservice
+    name: hhb-rapportageservice
 spec:
   replicas: 1
   selector:
     matchLabels:
-      name: hhb-rapportageserviceservice
+      name: hhb-rapportageservice
   template:
     metadata:
       labels:
-        name: hhb-rapportageserviceservice
+        name: hhb-rapportageservice
     spec:
       initContainers:
       containers:
-        - name: hhb-rapportageserviceservice
+        - name: hhb-rapportageservice
           image: rapportageservice
           imagePullPolicy: Always
           ports:
