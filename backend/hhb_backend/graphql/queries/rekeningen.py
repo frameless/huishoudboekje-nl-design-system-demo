@@ -41,6 +41,7 @@ class RekeningenQuery:
 
         return result
 
+
 class RekeningenByIbansQuery:
     return_type = graphene.List(Rekening, ibans=graphene.List(graphene.String))
 
@@ -54,8 +55,9 @@ class RekeningenByIbansQuery:
         AuditLogging.create(
             action=info.field_name,
             entities=[
-                GebruikersActiviteitEntity(entityType="rekening", entityId=iban)
-                for iban in ibans
+                GebruikersActiviteitEntity(
+                    entityType="rekening", entityId=item.id)
+                for item in result
             ] if ibans else []
         )
 
