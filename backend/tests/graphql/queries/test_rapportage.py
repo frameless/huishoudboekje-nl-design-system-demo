@@ -93,7 +93,7 @@ def test_burger_rapportage(client):
             "/graphql",
             json={
                 "query": '''
-                query test($burger:Int!,$start:Date!,$end:Date!) {
+                query test($burger:Int!,$start:String!,$end:String!) {
                     burgerRapportage(burgerId:$burger, startDate:$start, endDate:$end){
                         burger{
                             voornamen
