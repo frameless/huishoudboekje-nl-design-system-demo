@@ -55,7 +55,6 @@ const Rapportage = () => {
 	const $burgers = useGetBurgersQuery();
 	//const $rubrieken = useGetRubriekenQuery();
 
-
 	return (
 		<RapportageContext.Provider value={{startDate: d(dateRange.from), endDate: d(dateRange.through), granularity}}>
 			<Page title={t("reports.title")} right={!$burgers.loading && (

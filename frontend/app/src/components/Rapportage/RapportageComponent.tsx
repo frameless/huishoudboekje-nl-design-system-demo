@@ -1,5 +1,5 @@
 
-import { useGetBurgerRapportageQuery } from "../../generated/graphql";
+import { BurgerRapportage, useGetBurgerRapportageQuery } from "../../generated/graphql";
 import Queryable from "../../utils/Queryable";
 
 
@@ -8,25 +8,42 @@ import Queryable from "../../utils/Queryable";
 type RapportageComponentParams = {burgerIds: number[], startDate: Date, endDate: Date};
 
 const RapportageComponent: React.FC<RapportageComponentParams> = ({burgerIds, startDate, endDate}) => {
-	
-	console.info(startDate.toISOString())
-	console.info(endDate.toLocaleString().split(' ')[0])
 
+	if (!(startDate instanceof Date && endDate instanceof Date)){
+		return (
+			<p></p>
+		)
+	}
+
+	if (burgerIds.length !==1){
+		return (
+			<p>Selecteer één burger</p>
+		)
+	}
 
 	const $rapportage = useGetBurgerRapportageQuery({
 		variables: {
 			burger: burgerIds[0],
-			start: startDate.toLocaleString().split(' ')[0],
-			end:  endDate.toLocaleString().split(' ')[0]
-		},
+			start: startDate.toISOString().split('T')[0],
+			end:  endDate.toISOString().split('T')[0]
+		}
 	});
-
 
 	return (
 		
 				<Queryable query={$rapportage} children={data => {
+
+					if (data.burgerRapportage === null){
+						return (
+							<p>Geen data</p>
+						)
+					}
+
+					const reports : [BurgerRapportage] = [data.burgerRapportage]
+
 					return (
-						<p>idk</p>
+						//Implementatie van de data weergeven volgt nog
+						<p>Er is data</p>
 						
 						// <Heading size={"sm"} fontWeight={"normal"}>{selectedBurgers.length > 0 ? humanJoin(selectedBurgers.map(b => formatBurgerName(b))) : t("allBurgers")}</Heading>
 						// <SectionContainer>
@@ -45,7 +62,7 @@ const RapportageComponent: React.FC<RapportageComponentParams> = ({burgerIds, st
 						// 		</TabPanels>
 						// 	</Tabs>
 						// </SectionContainer>
-						// <BalanceTable transactions={filteredTransactions} startDate={d(dateRange.from).format("L")} endDate={d(dateRange.through).format("L")} />
+						//<BalanceTable transactions={filteredTransactions} startDate={d(dateRange.from).format("L")} endDate={d(dateRange.through).format("L")} />
 
 					);
 				}}/>

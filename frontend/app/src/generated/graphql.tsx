@@ -1266,8 +1266,8 @@ export type RootQueryBurgerArgs = {
 /** The root of all queries  */
 export type RootQueryBurgerRapportageArgs = {
   burgerId: Scalars['Int'];
-  endDate: Scalars['Date'];
-  startDate: Scalars['Date'];
+  endDate: Scalars['String'];
+  startDate: Scalars['String'];
 };
 
 
@@ -2094,8 +2094,8 @@ export type GetBurgerGebeurtenissenQuery = { burgers?: Array<{ id?: number, voor
 
 export type GetBurgerRapportageQueryVariables = Exact<{
   burger: Scalars['Int'];
-  start: Scalars['Date'];
-  end: Scalars['Date'];
+  start: Scalars['String'];
+  end: Scalars['String'];
 }>;
 
 
@@ -4875,7 +4875,7 @@ export type GetBurgerGebeurtenissenQueryHookResult = ReturnType<typeof useGetBur
 export type GetBurgerGebeurtenissenLazyQueryHookResult = ReturnType<typeof useGetBurgerGebeurtenissenLazyQuery>;
 export type GetBurgerGebeurtenissenQueryResult = Apollo.QueryResult<GetBurgerGebeurtenissenQuery, GetBurgerGebeurtenissenQueryVariables>;
 export const GetBurgerRapportageDocument = gql`
-    query getBurgerRapportage($burger: Int!, $start: Date!, $end: Date!) {
+    query getBurgerRapportage($burger: Int!, $start: String!, $end: String!) {
   burgerRapportage(burgerId: $burger, startDate: $start, endDate: $end) {
     burger {
       voornamen
