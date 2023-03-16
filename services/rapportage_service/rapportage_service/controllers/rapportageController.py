@@ -11,6 +11,7 @@ class RapportageController():
     _banktransactionservice_repository: BanktransactieServiceRepository
 
     RUBRIEK = "rubriek"
+    TRANSACTIES = "transacties"
     TEGENREKENING = "rekeninghouder"
     TRANSACTIE_DATUM = "transactie_datum"
     BEDRAG = "bedrag"
@@ -44,7 +45,7 @@ class RapportageController():
 
         self.__transaform_transaction_amount(transactions_in_range)
         rapportage_transactions = self.__add_info_to_transactions_in_range(transactions_info, transactions_in_range)
-        return {"data": self.__generate_rapportage(rapportage_transactions, start, end)}, 200
+        return {"data": self.__generate_rapportage(burger_id, rapportage_transactions, start, end)}, 200
     
 
     def __add_info_to_transactions_in_range(self, transactions_info, transactions_in_range):
@@ -55,7 +56,7 @@ class RapportageController():
         return list(filter(lambda burger_transaction: burger_transaction[self.TRANSACTION_ID] == transaction[self.ID],transaction_info_list))[0]
     
 
-    def __generate_rapportage(self, transactions, start, end):
+    def __generate_rapportage(self, burger_id, transactions, start, end):
         income = []
         expenses = []
         total_income = Decimal(0)
@@ -69,12 +70,13 @@ class RapportageController():
                 self.__add_transaction_to_list(expenses, transaction)
                 total_expenses += amount
         total = total_expenses + total_income
-        return {"inkomsten": income,
+        return {"burger_id": burger_id,
+                "inkomsten": income,
                 "uitgaven" : expenses,
-                "totaalInkomsten": total_income,
-                "totaalUitgaven": total_expenses,
-                "startDatum": start,
-                "eindDatum": end,
+                "totaal_inkomsten": total_income,
+                "totaal_uitgaven": total_expenses,
+                "start_datum": start,
+                "eind_datum": end,
                 "totaal": total }
 
 
@@ -94,11 +96,11 @@ class RapportageController():
     def __add_transaction_to_list(self, report_rubriek_list, transaction):
         report_line = self.__create_report_line_from_transaction(transaction)
         rubriek_name = transaction[self.RUBRIEK]
-        rubriek = next((report_rubriek for report_rubriek in report_rubriek_list if rubriek_name in report_rubriek), False)
+        rubriek = next((report_rubriek for report_rubriek in report_rubriek_list if report_rubriek.get(self.RUBRIEK, "") == rubriek_name), False)
         if not rubriek:
-            report_rubriek_list.append({rubriek_name: [report_line]})
+            report_rubriek_list.append({self.RUBRIEK:rubriek_name, self.TRANSACTIES: [report_line] })
         else:
-            rubriek[rubriek_name].append(report_line)
+            rubriek[self.TRANSACTIES].append(report_line)
 
     def __correct_structure_requested_data(self, list, dict_keys):
         return len(list) > 0 \

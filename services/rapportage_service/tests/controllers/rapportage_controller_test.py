@@ -86,20 +86,27 @@ def test_rapportage_rapportage_burger():
     total = 3
     start = "2023-01-01"
     end = "2023-12-30"
+    burger_id = 1
 
     sut = RapportageController(mock_hhbservice_repository,mock_banktransactionservice_repository)
 
     # ACT
-    result, response_code = sut.get_rapportage_burger(1,start, end)
+    result, response_code = sut.get_rapportage_burger(burger_id,start, end)
     # ASSERT
     assert response_code == 200
-    assert result["data"] == {"inkomsten": [{"loon": [{"rekeninghouder": "test3", "transactie_datum": "2023-12-13", "bedrag": Decimal(113.25)}]},
-                                            {"toeslagen": [{"rekeninghouder": "test4", "transactie_datum": "2023-12-14", "bedrag": Decimal(114.25)}]}],
-                            "uitgaven" : [{"gas": [{"rekeninghouder": "test1", "transactie_datum": "2023-12-11", "bedrag": Decimal(-111.25)},
-                                                   {"rekeninghouder": "test2", "transactie_datum": "2023-12-12", "bedrag": Decimal(-112.25)}]},
-                                        {"elektra": [{"rekeninghouder": "test2", "transactie_datum": "2023-12-15", "bedrag": Decimal(-1)}]}],
-                            "totaalInkomsten": total_in,
-                            "totaalUitgaven": total_out,
-                            "startDatum": start,
-                            "eindDatum": end,
-                            "totaal": total }
+    assert result["data"] == {"inkomsten": [{"rubriek": "loon",
+                                             "transacties": [{"rekeninghouder": "test3", "transactie_datum": "2023-12-13", "bedrag": Decimal(113.25)}]},
+                                            {"rubriek": "toeslagen",
+                                              "transacties": [{"rekeninghouder": "test4", "transactie_datum": "2023-12-14", "bedrag": Decimal(114.25)}]}],
+                            "uitgaven" : [{"rubriek": "gas",
+                                           "transacties": [
+                                                    {"rekeninghouder": "test1", "transactie_datum": "2023-12-11", "bedrag": Decimal(-111.25)},
+                                                    {"rekeninghouder": "test2", "transactie_datum": "2023-12-12", "bedrag": Decimal(-112.25)}]},
+                                        {"rubriek": "elektra",
+                                         "transacties": [{"rekeninghouder": "test2", "transactie_datum": "2023-12-15", "bedrag": Decimal(-1)}]}],
+                            "totaal_inkomsten": total_in,
+                            "totaal_uitgaven": total_out,
+                            "start_datum": start,
+                            "eind_datum": end,
+                            "totaal": total ,
+                            "burger_id": burger_id }

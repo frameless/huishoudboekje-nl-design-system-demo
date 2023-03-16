@@ -19,6 +19,7 @@ from .postadres_loader import PostadresLoader
 from .rekening_loader import RekeningLoader
 from .rubriek_loader import RubriekLoader
 from .signaal_loader import SignaalLoader
+from .rapportage_loader import RapportageLoader
 
 
 class HHBDataLoader:
@@ -44,6 +45,7 @@ class HHBDataLoader:
         self.signalen = SignaalLoader()
         self.organisaties = OrganisatieLoader()
         self.overschrijvingen = OverschrijvingLoader()
+        self.rapportage = RapportageLoader()
 
     def __getitem__(self, item: str):
         return getattr(self, item)

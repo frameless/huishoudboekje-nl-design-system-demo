@@ -9,3 +9,4 @@ POSTADRESSEN_SERVICE_URL = os.getenv('POSTADRESSENSERVICE_URL', "http://localhos
 ALARMENSERVICE_URL = os.getenv('ALARMENSERVICE_URL', "http://localhost:8008") + '/v1'
 SIGNALENSERVICE_URL = os.getenv('SIGNALENSERVICE_URL', "http://localhost:8009") + '/v1'
 UNLEASHSERVICE_URL = os.getenv('UNLEASHSERVICE_URL', "http://localhost:8010") + '/api/unleash'
+RAPPORTAGE_SERVICE_URL = os.getenv('RAPPORTAGE_SERVICE_URL', "http://rapportageservice:8000")
