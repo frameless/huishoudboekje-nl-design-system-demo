@@ -7,7 +7,7 @@ from hhb_backend.graphql.models.rapportage import BurgerRapportage
 from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
 
 class BurgerRapportageQuery:
-    return_type = graphene.Field(BurgerRapportage, burger_id=graphene.Int(required=True), start_date=graphene.Date(required=True), end_date=graphene.Date(required=True))
+    return_type = graphene.Field(BurgerRapportage, burger_id=graphene.Int(required=True), start_date=graphene.String(required=True), end_date=graphene.String(required=True))
 
     @classmethod
     def resolver(cls, _, info, burger_id, start_date, end_date):
