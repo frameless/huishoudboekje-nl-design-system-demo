@@ -6,3 +6,6 @@ from hhb_backend.service.model.organisatie import Organisatie
 class OrganisatieLoader(DataLoader[Organisatie]):
     service = ORGANISATIE_SERVICES_URL
     model = "organisaties"
+
+
+    #rekening ids ophalen van organisatie met rekening _id

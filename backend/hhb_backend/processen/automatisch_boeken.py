@@ -85,6 +85,9 @@ def transactie_suggesties(transactie_ids: List[int] = None, transactions: List[B
     rekeningen = hhb_dataloader().rekeningen.by_ibans(rekening_ibans)
     if not rekeningen:
         return {key: [] for key in transactie_ids}
+    
+
+    # orginisaties rekeningen ophalen
 
     iban_to_rekening_id = {}
     for rekening in rekeningen:
@@ -106,7 +109,7 @@ def transactie_suggesties(transactie_ids: List[int] = None, transactions: List[B
         transactie_ids_with_afspraken[transaction.id] = [
             afspraak
             for afspraak in afspraken
-            if afspraak.tegen_rekening_id == rekening_id
+            if afspraak.tegen_rekening_id == rekening_id # verander organisatie id
             and match_zoekterm(afspraak, transaction.information_to_account_owner)
             and valid_afspraak(afspraak, to_date(transaction.transactie_datum))
         ]

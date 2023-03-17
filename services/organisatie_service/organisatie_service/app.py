@@ -6,6 +6,7 @@ from flask import Flask, Response
 from flask_migrate import Migrate
 
 from organisatie_service.views.organisaties import OrganisatieView
+from organisatie_service.views.organisatie_rekeningen_view import OrganisatieRekeningenView
 from organisatie_service.views.afdelingen import AfdelingView
 from core_service import database
 from organisatie_service import config
@@ -38,6 +39,7 @@ def create_app(config_name='organisatie_service.config.Config'):
         {"path": "/organisaties", "view": OrganisatieView, "name": "organisatie_view"},
         {"path": "/organisaties/<object_id>", "view": OrganisatieView,
             "name": "organisatie_detail_view"},
+        {"path": "/rekeningen/<rekening_id>/organisatie/rekeningen", "view": OrganisatieRekeningenView, "name": "organisatie_rekeningen_view"},
         {"path": "/afdelingen", "view": AfdelingView, "name": "afdeling_view"},
         {"path": "/afdelingen/<object_id>", "view": AfdelingView,
             "name": "afdeling_detail_view"},
