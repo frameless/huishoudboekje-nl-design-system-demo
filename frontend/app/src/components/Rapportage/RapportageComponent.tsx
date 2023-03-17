@@ -1,25 +1,29 @@
 
-import { Text } from "@chakra-ui/react";
-import { useTranslation } from "react-i18next";
-import { BurgerRapportage, useGetBurgerRapportageQuery } from "../../generated/graphql";
+import {Heading, Text, Stack, Tab, TabList, TabPanel, TabPanels, Tabs} from "@chakra-ui/react";
+import {useTranslation} from "react-i18next";
+import {BurgerRapportage, useGetBurgerRapportageQuery} from "../../generated/graphql";
 import Queryable from "../../utils/Queryable";
+import Saldo from "./Saldo";
+import {humanJoin, formatBurgerName} from "../../utils/things";
+import SectionContainer from "../shared/SectionContainer";
+import InkomstenUitgaven from "./InkomstenUitgaven";
 
 
 
 
-type RapportageComponentParams = { burgerIds: number[], startDate: Date, endDate: Date};
+type RapportageComponentParams = {burgerIds: number[], startDate: Date, endDate: Date};
 
 const RapportageComponent: React.FC<RapportageComponentParams> = ({burgerIds, startDate, endDate}) => {
 	const {t} = useTranslation();
 
-	if (!(startDate instanceof Date && endDate instanceof Date)){
+	if (!(startDate instanceof Date && endDate instanceof Date)) {
 		return (
 			<p></p>
 		)
 	}
 
 	let burgerId = -1
-	if (burgerIds.length === 1){
+	if (burgerIds.length === 1) {
 		burgerId = burgerIds[0]
 	}
 
@@ -27,10 +31,10 @@ const RapportageComponent: React.FC<RapportageComponentParams> = ({burgerIds, st
 		variables: {
 			burger: burgerId,
 			start: startDate.toISOString().split('T')[0],
-			end:  endDate.toISOString().split('T')[0]
+			end: endDate.toISOString().split('T')[0]
 		}
 	});
-	if (burgerId === -1){
+	if (burgerId === -1) {
 		return (
 			<Text color={"red"}>{t("reports.toManyBurgers")}</Text>
 		)
@@ -44,32 +48,28 @@ const RapportageComponent: React.FC<RapportageComponentParams> = ({burgerIds, st
 				);
 			}
 
-			const reports : [BurgerRapportage] = [data.burgerRapportage]
+			const reports: [BurgerRapportage] = [data.burgerRapportage]
 
 			return (
-				//Implementatie van de data weergeven volgt nog
-				<p>Er is data</p>
-
-				// <Heading size={"sm"} fontWeight={"normal"}>{selectedBurgers.length > 0 ? humanJoin(selectedBurgers.map(b => formatBurgerName(b))) : t("allBurgers")}</Heading>
-				// <SectionContainer>
-				// 	<Tabs isLazy variant={"solid"} align={"start"} colorScheme={"primary"}>
-				// 		<Stack direction={"row"} as={TabList} spacing={2}>
-				// 			<Tab>{t("charts.saldo.title")}</Tab>
-				// 			<Tab>{t("charts.inkomstenUitgaven.title")}</Tab>
-				// 		</Stack>
-				// 		<TabPanels>
-				// 			<TabPanel>
-				// 				<Saldo transactions={filteredTransactions} />
-				// 			</TabPanel>
-				// 			<TabPanel>
-				// 				<InkomstenUitgaven transactions={filteredTransactions} />
-				// 			</TabPanel>
-				// 		</TabPanels>
-				// 	</Tabs>
-				// </SectionContainer>
+				<SectionContainer>
+					<Tabs isLazy variant={"solid"} align={"start"} colorScheme={"primary"}>
+						<Stack direction={"row"} as={TabList} spacing={2}>
+							<Tab>{t("charts.saldo.title")}</Tab>
+							<Tab>{t("charts.inkomstenUitgaven.title")}</Tab>
+						</Stack>
+						<TabPanels>
+							<TabPanel>
+								<Saldo transactions={reports} />
+							</TabPanel>
+							<TabPanel>
+								<InkomstenUitgaven transactions={reports} />
+							</TabPanel>
+						</TabPanels>
+					</Tabs>
+				</SectionContainer>
 				//<BalanceTable transactions={filteredTransactions} startDate={d(dateRange.from).format("L")} endDate={d(dateRange.through).format("L")} />
-			);
-		} } />
+			)
+		}} />
 	);
 };
 

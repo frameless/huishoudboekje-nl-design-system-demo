@@ -1,4 +1,4 @@
-import {BankTransaction, Organisatie, Rubriek} from "../../generated/graphql";
+import {BankTransaction, BurgerRapportage, RapportageTransactie, RapportageRubriek, Organisatie, Rubriek} from "../../generated/graphql";
 import d from "../../utils/dayjs";
 import {formatBurgerName, getOrganisatieForTransaction, getRubriekForTransaction} from "../../utils/things";
 
@@ -15,6 +15,10 @@ type RichTransaction = BankTransaction & {
 	organisatie?: Organisatie,
 };
 
+type Transaction = RapportageTransactie & {
+	type: Type
+}
+
 export enum Granularity {
 	Monthly = "monthly",
 	Weekly = "weekly",
@@ -26,6 +30,45 @@ export const periodFormatForGranularity = {
 	[Granularity.Weekly]: "gggg-ww",
 	[Granularity.Daily]: "DD-MM-YYYY",
 };
+
+function getTransactionsFromRapportageRubrieks(rapportageRubrieken: RapportageRubriek[], type: Type): Transaction[] {
+	const result: Transaction[] = [];
+	for (const rubriek of rapportageRubrieken ?? []) {
+		for (const transaction of rubriek.transacties ?? []) {
+			result.push({
+				...transaction,
+				type: Type.Inkomsten
+			})
+		}
+	}
+	return result;
+}
+
+export function createChartAggregation(burgerRapportages: BurgerRapportage[], granularity: Granularity) {
+	let _data: Transaction[] = [];
+
+	for (const rapportages of burgerRapportages) {
+		_data = _data.concat(getTransactionsFromRapportageRubrieks(rapportages.inkomsten ?? [], Type.Inkomsten))
+		_data = _data.concat(getTransactionsFromRapportageRubrieks(rapportages.uitgaven ?? [], Type.Uitgaven))
+	}
+
+
+	const reduceByPeriod = (granularity: Granularity = Granularity.Monthly) => (result, tr) => {
+		const period = d(tr.transactieDatum, "YYYY MM DD").format(periodFormatForGranularity[granularity]);
+
+		result[period] = result[period] || {};
+		result[period][tr.type] = result[period][tr.type] || 0;
+		result[period][tr.type] += parseFloat(tr.bedrag);
+		return result;
+	};
+
+	const chartData = _data.reduce(reduceByPeriod(granularity), {});
+	return chartData;
+}
+
+export function createBalanceTableAggregation(burgerRapportages: BurgerRapportage[]){
+	
+}
 
 // Todo: clean this up, can be more compact maybe?
 export const createAggregation = (tr: BankTransaction[], granularity = Granularity.Monthly) => {

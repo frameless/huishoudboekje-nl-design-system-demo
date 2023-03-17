@@ -2,18 +2,18 @@ import {BoxProps, Heading, Spinner, Stack, Text, useToken} from "@chakra-ui/reac
 import React, {useContext} from "react";
 import {useTranslation} from "react-i18next";
 import ChakraChart from "../../config/theme/custom/Chart";
-import {BankTransaction} from "../../generated/graphql";
+import {BankTransaction, BurgerRapportage} from "../../generated/graphql";
 import {prepareChartData} from "../../utils/things";
-import {createAggregation} from "./Aggregator";
+import {createChartAggregation} from "./Aggregator";
 import {RapportageContext} from "./context";
 
 // Todo: specify types explicitly
-const InkomstenUitgaven: React.FC<BoxProps & {transactions: BankTransaction[]}> = ({transactions = []}) => {
+const InkomstenUitgaven: React.FC<BoxProps & {transactions: BurgerRapportage[]}> = ({transactions = []}) => {
 	const {t} = useTranslation();
 	const [colorInkomsten, colorUitgaven] = useToken("colors", ["green.300", "red.300"]);
 	const {startDate, endDate, granularity} = useContext(RapportageContext);
 
-	const [aggregation] = createAggregation(transactions, granularity);
+	const aggregation = createChartAggregation(transactions, granularity);
 
 	const columns = [t("interval.period"), t("charts.inkomstenUitgaven.income"), t("charts.inkomstenUitgaven.expenses")];
 	const chartTemplate = prepareChartData(startDate, endDate, granularity, columns.length - 1);
