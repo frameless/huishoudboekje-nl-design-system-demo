@@ -19,6 +19,7 @@ def automatisch_boeken(customer_statement_message_id: int = None):
     _automatische_transacties = []
     _matching_transaction_ids = []
     for transactie_id, afspraken in suggesties.items():  
+        logging.warning(len(afspraken))
         matching_afspraak = None
         if len(afspraken) == 1 and afspraken[0].zoektermen:
             matching_afspraak = afspraken[0]
@@ -123,7 +124,7 @@ def transactie_suggesties(transactie_ids: List[int] = None, transactions: List[B
         transactie_ids_with_afspraken[transaction.id] = [
             afspraak
             for afspraak in afspraken
-            if  afspraak.tegen_rekening_id == rekening.id or transactie_matches_afspraak_organisatie(transactie_rekening, afspraak, organisaties)
+            if  (afspraak.tegen_rekening_id == rekening.id or transactie_matches_afspraak_organisatie(transactie_rekening, afspraak, organisaties))
             and match_zoekterm(afspraak, transaction.information_to_account_owner)
             and valid_afspraak(afspraak, to_date(transaction.transactie_datum))
         ]
