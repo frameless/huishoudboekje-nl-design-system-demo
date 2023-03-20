@@ -62,7 +62,13 @@ def test_transactie_suggesties_matches(test_request_context):
                           'overschrijvingen': [40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51], 'rubriek_id': None,
                           'valid_from': '2020-01-01', 'tegen_rekening_id': 5}
                          ]})
-
+        
+        get_afspraken = mock.get(
+            f"{settings.ORGANISATIE_SERVICES_URL}/organisaties/rekeningen", json={
+                'data': [{"afdeling_ids": [20],"organisatie_id": 1,"rekening_ids": [2]},
+                    {"afdeling_ids": [21],"organisatie_id": 2,"rekening_ids": [3]},
+                ]})
+        
         result = transactie_suggesties([7, 8, 9])
 
         assert get_transactions.call_count == 1
@@ -88,8 +94,8 @@ def test_transactie_suggesties_multiple_matches(test_request_context):
         get_transactions = mock.get(
             f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/?filter_ids=7,8", json={'data': [
                 {'bedrag': None, 'customer_statement_message_id': 17, 'id': 7,
-                 'information_to_account_owner': '/EREF/15814016000676480//CNTP/NL32INGB0000012345/INGBNL2A/J.Janssen///REMI/STRD/CUR/9001123412341234/',
-                 'is_credit': None, 'is_geboekt': None, 'statement_line': '140220C32.00NTRF900112341234123408/',
+                 'information_to_account_owner': '/EREF/15814016000676480//CNTP/NL32INGB0000012345/INGBNL2A/J.Janssen///REMI/STRD/CUR/9001123412351234/',
+                 'is_credit': None, 'is_geboekt': None, 'statement_line': '140220C32.00NTRF900112341235123408/',
                  'tegen_rekening': 'NL04RABO5082680188', "transactie_datum": '2021-12-30'},
                 {'bedrag': None, 'customer_statement_message_id': 17, 'id': 8,
                  'information_to_account_owner': '/EREF/15614016000384600//CNTP/NL32INGB0000012345/INGBNL2A/INGBANK NV///REMI/STRD/CUR/1070123412341234/\n/SUM/4/4/134,46/36,58/\n\xad}',
@@ -125,17 +131,23 @@ def test_transactie_suggesties_multiple_matches(test_request_context):
                           'overschrijvingen': [40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51], 'rubriek_id': None,
                           'valid_from': '2021-01-01', 'tegen_rekening_id': 3}
                          ]})
-
+        
+        get_afspraken = mock.get(
+            f"{settings.ORGANISATIE_SERVICES_URL}/organisaties/rekeningen", json={
+                'data': [{"afdeling_ids": [20],"organisatie_id": 1,"rekening_ids": [2]},
+                    {"afdeling_ids": [21],"organisatie_id": 2,"rekening_ids": [3]},
+                ]})
+        
         result = transactie_suggesties([7, 8])
 
         assert get_transactions.call_count == 1
         assert get_rekeningen.call_count == 1
         assert get_afspraken.call_count == 1
-        assert result[7][0]["id"] == 4
         assert len(result[7]) == 1
+        assert result[7][0]["id"] == 4
+        assert len(result[8]) == 2
         assert result[8][0]["id"] == 3
         assert result[8][1]["id"] == 5
-        assert len(result[8]) == 2
 
         # No leftover calls
         assert not post_any.called
@@ -174,6 +186,11 @@ def test_transactie_suggesties_matching_zoekterm_dates_overlap(test_request_cont
                           'overschrijvingen': [40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51], 'rubriek_id': None,
                           'valid_from': '2019-01-01', 'tegen_rekening_id': 2}
                          ]})
+        
+        get_afspraken = mock.get(
+            f"{settings.ORGANISATIE_SERVICES_URL}/organisaties/rekeningen", json={
+                'data': [{"afdeling_ids": [20],"organisatie_id": 1,"rekening_ids": [2]},
+                ]})
 
         result = transactie_suggesties([7])
 
@@ -215,7 +232,12 @@ def test_transactie_suggesties_startdate_after_transaction_date(test_request_con
                           'overschrijvingen': [40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51], 'rubriek_id': None,
                           'valid_from': '2021-01-01', 'tegen_rekening_id': 2}
                          ]})
-
+        
+        get_afspraken = mock.get(
+            f"{settings.ORGANISATIE_SERVICES_URL}/organisaties/rekeningen", json={
+                'data': [{"afdeling_ids": [20],"organisatie_id": 1,"rekening_ids": [2]},
+                ]})
+        
         result = transactie_suggesties([7])
 
         assert get_transactions.call_count == 1
@@ -259,6 +281,11 @@ def test_transactie_suggesties_matching_zoekterm_enddate_passed(test_request_con
                           'overschrijvingen': [40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51], 'rubriek_id': None,
                           'valid_from': '2019-01-01', 'tegen_rekening_id': 2}
                          ]})
+        
+        get_afspraken = mock.get(
+            f"{settings.ORGANISATIE_SERVICES_URL}/organisaties/rekeningen", json={
+                'data': [{"afdeling_ids": [20],"organisatie_id": 1,"rekening_ids": [2]},
+                ]})
 
         result = transactie_suggesties([7])
 
@@ -311,6 +338,12 @@ def test_transactie_suggesties_no_matches(test_request_context):
                           'overschrijvingen': [40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51], 'rubriek_id': None,
                           'valid_from': '2021-01-01', 'tegen_rekening_id': 3}]})
 
+        get_afspraken = mock.get(
+            f"{settings.ORGANISATIE_SERVICES_URL}/organisaties/rekeningen", json={
+                'data': [{"afdeling_ids": [20],"organisatie_id": 1,"rekening_ids": [2]},
+                    {"afdeling_ids": [21],"organisatie_id": 2,"rekening_ids": [3]},
+                ]})
+
         result = transactie_suggesties([7, 8])
 
         assert get_transactions.call_count == 1
@@ -349,6 +382,12 @@ def test_transactie_suggesties_no_afspraken(test_request_context):
         get_afspraken = mock.get(
             f"{settings.HHB_SERVICES_URL}/afspraken/?filter_rekening=2,3", json={
                 'data': []})
+        
+        get_afspraken = mock.get(
+            f"{settings.ORGANISATIE_SERVICES_URL}/organisaties/rekeningen", json={
+                'data': [{"afdeling_ids": [20],"organisatie_id": 1,"rekening_ids": [2]},
+                    {"afdeling_ids": [21],"organisatie_id": 2,"rekening_ids": [3]},
+                ]})
 
         result = transactie_suggesties([7, 8])
 
@@ -449,7 +488,12 @@ def test_transactie_suggesties_multiple_zoektermen(test_request_context):
                     {'id': 4, 'zoektermen': ['15814016000676480', 'Janssen'],
                      'tegen_rekening_id': 2, "valid_through": '2020-12-31', "valid_from": "2020-11-30"},
                 ]})
-
+        
+        get_afspraken = mock.get(
+            f"{settings.ORGANISATIE_SERVICES_URL}/organisaties/rekeningen", json={
+                'data': [{"afdeling_ids": [20],"organisatie_id": 1,"rekening_ids": [2]},
+                ]})
+        
         result = transactie_suggesties([7])
 
         assert result == {7: [{
@@ -487,6 +531,18 @@ def test_transactie_suggesties_multiple_zoektermen_too_specific(test_request_con
                 'data': [
                     {'id': 4, 'zoektermen': ['15814016000676480', 'Janssen', 'Loon'],
                      'tegen_rekening_id': 2},
+                ]})
+        
+        get_afspraken = mock.get(
+            f"{settings.HHB_SERVICES_URL}/afspraken/?filter_rekening=2", json={
+                'data': [
+                    {'id': 4, 'zoektermen': ['15814016000676480', 'Janssen', 'Loon'],
+                     'tegen_rekening_id': 2},
+                ]})
+        
+        get_afspraken = mock.get(
+            f"{settings.ORGANISATIE_SERVICES_URL}/organisaties/rekeningen", json={
+                'data': [{"afdeling_ids": [20],"organisatie_id": 1,"rekening_ids": [2]},
                 ]})
 
         result = transactie_suggesties([7])
