@@ -41,7 +41,7 @@ def test_transactie_suggesties_matches(test_request_context):
                          ]})
 
         get_afspraken = mock.get(
-            f"{settings.HHB_SERVICES_URL}/afspraken/?filter_rekening=2,3,5", json={
+            f"{settings.HHB_SERVICES_URL}/afspraken/?filter_rekening=2,3,5,4", json={
                 'data': [{'aantal_betalingen': 12,
                           'bedrag': 450000, 'omschrijving': 'Nog meer geld overmaken',
                           'credit': True, 'valid_through': '2021-12-31', 'gebruiker_id': 1, 'id': 4,
@@ -63,10 +63,16 @@ def test_transactie_suggesties_matches(test_request_context):
                           'valid_from': '2020-01-01', 'tegen_rekening_id': 5}
                          ]})
         
-        get_afspraken = mock.get(
+        get_organisaties = mock.get(
             f"{settings.ORGANISATIE_SERVICES_URL}/organisaties/rekeningen", json={
-                'data': [{"afdeling_ids": [20],"organisatie_id": 1,"rekening_ids": [2]},
+                'data': [{"afdeling_ids": [20],"organisatie_id": 1,"rekening_ids": [2,4]},
                     {"afdeling_ids": [21],"organisatie_id": 2,"rekening_ids": [3]},
+                ]})
+        
+        get_organisatie_rekeningen = mock.get(
+            f"{settings.HHB_SERVICES_URL}/rekeningen/?filter_ids=4", json={
+                'data': [{'afspraken': [6], 'gebruikers': [], 'iban': 'NL29ABNA5179215998', 'id': 4, 'organisaties': [],
+                          'rekeninghouder': 'Hema'}
                 ]})
         
         result = transactie_suggesties([7, 8, 9])
@@ -74,6 +80,8 @@ def test_transactie_suggesties_matches(test_request_context):
         assert get_transactions.call_count == 1
         assert get_rekeningen.call_count == 1
         assert get_afspraken.call_count == 1
+        assert get_organisaties.call_count == 1
+        assert get_organisatie_rekeningen.call_count == 1
         assert result[7][0]["id"] == 4
         assert len(result[7]) == 1
         assert result[8][0]["id"] == 3
@@ -110,7 +118,7 @@ def test_transactie_suggesties_multiple_matches(test_request_context):
                           'organisaties': [], 'rekeninghouder': 'Shell'}]})
 
         get_afspraken = mock.get(
-            f"{settings.HHB_SERVICES_URL}/afspraken/?filter_rekening=2,3", json={
+            f"{settings.HHB_SERVICES_URL}/afspraken/?filter_rekening=2,3,4", json={
                 'data': [{'aantal_betalingen': 12,
                           'bedrag': 450000, 'omschrijving': 'Nog meer geld overmaken',
                           'credit': True, 'valid_through': '2021-12-31', 'gebruiker_id': 1, 'id': 4,
@@ -132,10 +140,16 @@ def test_transactie_suggesties_multiple_matches(test_request_context):
                           'valid_from': '2021-01-01', 'tegen_rekening_id': 3}
                          ]})
         
-        get_afspraken = mock.get(
+        get_organisaties = mock.get(
             f"{settings.ORGANISATIE_SERVICES_URL}/organisaties/rekeningen", json={
-                'data': [{"afdeling_ids": [20],"organisatie_id": 1,"rekening_ids": [2]},
+                'data': [{"afdeling_ids": [20],"organisatie_id": 1,"rekening_ids": [2,4]},
                     {"afdeling_ids": [21],"organisatie_id": 2,"rekening_ids": [3]},
+                ]})
+        
+        get_organisatie_rekeningen = mock.get(
+            f"{settings.HHB_SERVICES_URL}/rekeningen/?filter_ids=4", json={
+                'data': [{'afspraken': [6], 'gebruikers': [], 'iban': 'NL29ABNA5179215998', 'id': 4, 'organisaties': [],
+                          'rekeninghouder': 'Hema'}
                 ]})
         
         result = transactie_suggesties([7, 8])
@@ -143,6 +157,8 @@ def test_transactie_suggesties_multiple_matches(test_request_context):
         assert get_transactions.call_count == 1
         assert get_rekeningen.call_count == 1
         assert get_afspraken.call_count == 1
+        assert get_organisaties.call_count == 1
+        assert get_organisatie_rekeningen.call_count == 1
         assert len(result[7]) == 1
         assert result[7][0]["id"] == 4
         assert len(result[8]) == 2
@@ -172,7 +188,7 @@ def test_transactie_suggesties_matching_zoekterm_dates_overlap(test_request_cont
                           'rekeninghouder': 'Hema'}]})
 
         get_afspraken = mock.get(
-            f"{settings.HHB_SERVICES_URL}/afspraken/?filter_rekening=2", json={
+            f"{settings.HHB_SERVICES_URL}/afspraken/?filter_rekening=2,4", json={
                 'data': [{'aantal_betalingen': 12,
                           'bedrag': 4654654, 'omschrijving': 'Zorg', 'credit': True,
                           'valid_through': '2022-12-31', 'gebruiker_id': 1, 'id': 3, 'interval': 'P0Y1M0W0D',
@@ -185,18 +201,26 @@ def test_transactie_suggesties_matching_zoekterm_dates_overlap(test_request_cont
                           'journaalposten': [], 'zoektermen': ['15814016000676480'], 'organisatie_id': None,
                           'overschrijvingen': [40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51], 'rubriek_id': None,
                           'valid_from': '2019-01-01', 'tegen_rekening_id': 2}
-                         ]})
-        
-        get_afspraken = mock.get(
+                         ]})       
+      
+        get_organisaties = mock.get(
             f"{settings.ORGANISATIE_SERVICES_URL}/organisaties/rekeningen", json={
-                'data': [{"afdeling_ids": [20],"organisatie_id": 1,"rekening_ids": [2]},
+                'data': [{"afdeling_ids": [20],"organisatie_id": 1,"rekening_ids": [2,4]}
                 ]})
-
+        
+        get_organisatie_rekeningen = mock.get(
+            f"{settings.HHB_SERVICES_URL}/rekeningen/?filter_ids=4", json={
+                'data': [{'afspraken': [6], 'gebruikers': [], 'iban': 'NL29ABNA5179215998', 'id': 4, 'organisaties': [],
+                          'rekeninghouder': 'Hema'}
+                ]})
+        
         result = transactie_suggesties([7])
 
         assert get_transactions.call_count == 1
         assert get_rekeningen.call_count == 1
         assert get_afspraken.call_count == 1
+        assert get_organisaties.call_count == 1
+        assert get_organisatie_rekeningen.call_count == 1
         assert len(result[7]) == 2
         assert result[7][0]["id"] == 3
         assert result[7][1]["id"] == 5
@@ -224,7 +248,7 @@ def test_transactie_suggesties_startdate_after_transaction_date(test_request_con
                           'rekeninghouder': 'Hema'}]})
 
         get_afspraken = mock.get(
-            f"{settings.HHB_SERVICES_URL}/afspraken/?filter_rekening=2", json={
+            f"{settings.HHB_SERVICES_URL}/afspraken/?filter_rekening=2,4", json={
                 'data': [{'aantal_betalingen': 12,
                           'bedrag': 4654654, 'omschrijving': 'Zorg', 'credit': True,
                           'valid_through': '2022-12-31', 'gebruiker_id': 1, 'id': 3, 'interval': 'P0Y1M0W0D',
@@ -233,16 +257,25 @@ def test_transactie_suggesties_startdate_after_transaction_date(test_request_con
                           'valid_from': '2021-01-01', 'tegen_rekening_id': 2}
                          ]})
         
-        get_afspraken = mock.get(
+        get_organisaties = mock.get(
             f"{settings.ORGANISATIE_SERVICES_URL}/organisaties/rekeningen", json={
-                'data': [{"afdeling_ids": [20],"organisatie_id": 1,"rekening_ids": [2]},
+                'data': [{"afdeling_ids": [20],"organisatie_id": 1,"rekening_ids": [2,4]}
                 ]})
+        
+        get_organisatie_rekeningen = mock.get(
+            f"{settings.HHB_SERVICES_URL}/rekeningen/?filter_ids=4", json={
+                'data': [{'afspraken': [6], 'gebruikers': [], 'iban': 'NL29ABNA5179215998', 'id': 4, 'organisaties': [],
+                          'rekeninghouder': 'Hema'}
+                ]})
+        
         
         result = transactie_suggesties([7])
 
         assert get_transactions.call_count == 1
         assert get_rekeningen.call_count == 1
         assert get_afspraken.call_count == 1
+        assert get_organisaties.call_count == 1
+        assert get_organisatie_rekeningen.call_count == 1
         assert len(result[7]) == 0
 
         # No leftover calls
@@ -282,7 +315,7 @@ def test_transactie_suggesties_matching_zoekterm_enddate_passed(test_request_con
                           'valid_from': '2019-01-01', 'tegen_rekening_id': 2}
                          ]})
         
-        get_afspraken = mock.get(
+        get_organisaties = mock.get(
             f"{settings.ORGANISATIE_SERVICES_URL}/organisaties/rekeningen", json={
                 'data': [{"afdeling_ids": [20],"organisatie_id": 1,"rekening_ids": [2]},
                 ]})
@@ -292,6 +325,7 @@ def test_transactie_suggesties_matching_zoekterm_enddate_passed(test_request_con
         assert get_transactions.call_count == 1
         assert get_rekeningen.call_count == 1
         assert get_afspraken.call_count == 1
+        assert get_organisaties.call_count == 1
         assert len(result[7]) == 1
         assert result[7][0]["id"] == 3
 
@@ -383,7 +417,7 @@ def test_transactie_suggesties_no_afspraken(test_request_context):
             f"{settings.HHB_SERVICES_URL}/afspraken/?filter_rekening=2,3", json={
                 'data': []})
         
-        get_afspraken = mock.get(
+        get_organisaties = mock.get(
             f"{settings.ORGANISATIE_SERVICES_URL}/organisaties/rekeningen", json={
                 'data': [{"afdeling_ids": [20],"organisatie_id": 1,"rekening_ids": [2]},
                     {"afdeling_ids": [21],"organisatie_id": 2,"rekening_ids": [3]},
@@ -394,6 +428,7 @@ def test_transactie_suggesties_no_afspraken(test_request_context):
         assert get_transactions.call_count == 1
         assert get_rekeningen.call_count == 1
         assert get_afspraken.call_count == 1
+        assert get_organisaties.call_count == 1
         assert result == {7: [], 8: []}
 
         # No leftover calls
@@ -483,15 +518,21 @@ def test_transactie_suggesties_multiple_zoektermen(test_request_context):
             ]})
 
         get_afspraken = mock.get(
-            f"{settings.HHB_SERVICES_URL}/afspraken/?filter_rekening=2", json={
+            f"{settings.HHB_SERVICES_URL}/afspraken/?filter_rekening=2,4", json={
                 'data': [
                     {'id': 4, 'zoektermen': ['15814016000676480', 'Janssen'],
                      'tegen_rekening_id': 2, "valid_through": '2020-12-31', "valid_from": "2020-11-30"},
                 ]})
         
-        get_afspraken = mock.get(
+        get_organisaties = mock.get(
             f"{settings.ORGANISATIE_SERVICES_URL}/organisaties/rekeningen", json={
-                'data': [{"afdeling_ids": [20],"organisatie_id": 1,"rekening_ids": [2]},
+                'data': [{"afdeling_ids": [20],"organisatie_id": 1,"rekening_ids": [2,4]}
+                ]})
+        
+        get_organisatie_rekeningen = mock.get(
+            f"{settings.HHB_SERVICES_URL}/rekeningen/?filter_ids=4", json={
+                'data': [{'afspraken': [6], 'gebruikers': [], 'iban': 'NL29ABNA5179215998', 'id': 4, 'organisaties': [],
+                          'rekeninghouder': 'Hema'}
                 ]})
         
         result = transactie_suggesties([7])
@@ -503,6 +544,8 @@ def test_transactie_suggesties_multiple_zoektermen(test_request_context):
         assert get_transactions.call_count == 1
         assert get_rekeningen.call_count == 1
         assert get_afspraken.call_count == 1
+        assert get_organisaties.call_count == 1
+        assert get_organisatie_rekeningen.call_count == 1
 
         # No leftover calls
         assert not post_any.called
@@ -540,7 +583,7 @@ def test_transactie_suggesties_multiple_zoektermen_too_specific(test_request_con
                      'tegen_rekening_id': 2},
                 ]})
         
-        get_afspraken = mock.get(
+        get_organisaties = mock.get(
             f"{settings.ORGANISATIE_SERVICES_URL}/organisaties/rekeningen", json={
                 'data': [{"afdeling_ids": [20],"organisatie_id": 1,"rekening_ids": [2]},
                 ]})
@@ -551,6 +594,7 @@ def test_transactie_suggesties_multiple_zoektermen_too_specific(test_request_con
         assert get_transactions.call_count == 1
         assert get_rekeningen.call_count == 1
         assert get_afspraken.call_count == 1
+        assert get_organisaties.call_count == 1
 
         # No leftover calls
         assert not post_any.called
