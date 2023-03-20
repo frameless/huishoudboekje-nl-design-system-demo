@@ -127,7 +127,7 @@ def transactie_suggesties(transactie_ids: List[int] = None, transactions: List[B
         transactie_ids_with_afspraken[transaction.id] = [
             afspraak
             for afspraak in afspraken
-            if  (afspraak.tegen_rekening_id == rekening.id or transactie_matches_afspraak_organisatie(transactie_rekening, afspraak, organisaties))
+            if  (afspraak.tegen_rekening_id == transactie_rekening.id or transactie_matches_afspraak_organisatie(transactie_rekening, afspraak, organisaties))
             and match_zoekterm(afspraak, transaction.information_to_account_owner)
             and valid_afspraak(afspraak, to_date(transaction.transactie_datum))
         ]
