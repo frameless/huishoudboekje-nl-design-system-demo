@@ -39,7 +39,7 @@ def create_app(config_name='organisatie_service.config.Config'):
         {"path": "/organisaties", "view": OrganisatieView, "name": "organisatie_view"},
         {"path": "/organisaties/<object_id>", "view": OrganisatieView,
             "name": "organisatie_detail_view"},
-        {"path": "/rekeningen/<rekening_id>/organisatie/rekeningen", "view": OrganisatieRekeningenView, "name": "organisatie_rekeningen_view"},
+        {"path": "/organisaties/rekeningen", "view": OrganisatieRekeningenView, "name": "organisatie_rekeningen_view"},
         {"path": "/afdelingen", "view": AfdelingView, "name": "afdeling_view"},
         {"path": "/afdelingen/<object_id>", "view": AfdelingView,
             "name": "afdeling_detail_view"},
