@@ -8,7 +8,7 @@ from core_service.database import db
 from core_service.views.hhb_view import HHBView
 
 class OrganisatieRekeningenView(HHBView):
-    """ Methods for organisaties/rekeningen path """
+    """ Methods for organisaties/afdelingen path """
     REKENINGEN_IDS = "rekeningen_ids"
 
     hhb_model = Afdeling
@@ -33,7 +33,7 @@ class OrganisatieRekeningenView(HHBView):
 
         #sum combines all the lists, set makes it distinct values in a set type, list() to convert it back to a list
         for result in result_list:
-            result["rekeningen_ids"] = list(set(sum(result["rekeningen_ids"], [])))
+            result["rekening_ids"] = list(set(sum(result["rekening_ids"], [])))
 
         return {"data": result_list}, 200 
     
@@ -53,7 +53,7 @@ class OrganisatieRekeningenView(HHBView):
                     .filter(or_(*clauses))\
                     .with_entities(Afdeling.organisatie_id, \
                         func.array_agg(Afdeling.id).label("afdeling_ids"),\
-                        func.array_agg(Afdeling.rekeningen_ids).label("rekeningen_ids"))\
+                        func.array_agg(Afdeling.rekeningen_ids).label("rekening_ids"))\
                     .group_by(Afdeling.organisatie_id)
         return organisatie_rekeningen
 

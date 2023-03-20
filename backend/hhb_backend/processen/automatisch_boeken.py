@@ -7,6 +7,7 @@ from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.utils.dates import to_date, valid_afspraak
 from hhb_backend.graphql.utils.find_matching_afspraken import match_zoekterm
 from hhb_backend.service.model.afspraak import Afspraak
+from hhb_backend.service.model.rekening import Rekening
 from hhb_backend.service.model.bank_transaction import BankTransaction
 from hhb_backend.graphql.mutations.journaalposten.create_journaalpost import create_journaalposten
 
@@ -85,33 +86,56 @@ def transactie_suggesties(transactie_ids: List[int] = None, transactions: List[B
     rekeningen = hhb_dataloader().rekeningen.by_ibans(rekening_ibans)
     if not rekeningen:
         return {key: [] for key in transactie_ids}
-    
+  
+    rekening_ids = [rekening.id if rekening is not None else -1 for rekening in rekeningen]  
 
-    # orginisaties rekeningen ophalen
+    # Orginisaties ophalen (organisaties_id, afdeling_ids, rekening_ids)
+    organisaties = hhb_dataloader().organisaties.organisatie_afdelingen_by_rekening_ids(rekening_ids)
+    organisatie_rekeningen_ids = []
+    for organisatie in organisaties:
+        organisatie_rekeningen_ids.extend(organisatie["rekening_ids"])
+    rekening_ids.extend(organisatie_rekeningen_ids)
 
-    iban_to_rekening_id = {}
+    # Rekeningen ophalen van organisaties adhv ids
+    organisatie_rekeningen = hhb_dataloader().rekeningen.load(organisatie_rekeningen_ids)
+    rekeningen.extend(organisatie_rekeningen)
+
+    # Make a rekening searchable by iban
+    iban_to_rekening = {}
     for rekening in rekeningen:
-        iban_to_rekening_id[rekening.iban] = rekening.id
+        iban_to_rekening[rekening.iban] = rekening
 
-    rekening_ids = [rekening.id if rekening is not None else -1 for rekening in rekeningen]
-
+    # Afspraken ophalen adhv rekeningen
     afspraken = hhb_dataloader().afspraken.by_rekeningen(rekening_ids)
     if not afspraken:
         return {key: [] for key in transactie_ids}
 
+    # Transacties koppelen aan een afspraak
     transactie_ids_with_afspraken = {}
     for transaction in transactions:
         if not transaction.tegen_rekening:
             continue
         
-        rekening_id: int = iban_to_rekening_id[transaction.tegen_rekening]
+        # Passende rekening bij transactie ophalen
+        transactie_rekening: Rekening = iban_to_rekening[transaction.tegen_rekening]
 
+        # Transactie koppelen aan afspraken
         transactie_ids_with_afspraken[transaction.id] = [
             afspraak
             for afspraak in afspraken
-            if afspraak.tegen_rekening_id == rekening_id # verander organisatie id
+            if  afspraak.tegen_rekening_id == rekening.id or transactie_matches_afspraak_organisatie(transactie_rekening, afspraak, organisaties)
             and match_zoekterm(afspraak, transaction.information_to_account_owner)
             and valid_afspraak(afspraak, to_date(transaction.transactie_datum))
         ]
 
     return transactie_ids_with_afspraken
+
+def transactie_matches_afspraak_organisatie(rekening: Rekening, afspraak: Afspraak, organisaties):
+    filtered_organisaties = filter(lambda organisatie: rekening.id in organisatie["rekening_ids"], organisaties)
+    afdelingen = []
+    for organisatie in filtered_organisaties:
+        logging.warning(organisatie)
+        afdelingen.extend(organisatie["afdeling_ids"])
+
+    return afspraak.afdeling_id in afdelingen
+

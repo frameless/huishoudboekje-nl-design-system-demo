@@ -6,7 +6,7 @@ from flask import Flask, Response
 from flask_migrate import Migrate
 
 from organisatie_service.views.organisaties import OrganisatieView
-from organisatie_service.views.organisatie_rekeningen_view import OrganisatieRekeningenView
+from organisatie_service.views.organisatie_rekeningen import OrganisatieRekeningenView
 from organisatie_service.views.afdelingen import AfdelingView
 from core_service import database
 from organisatie_service import config

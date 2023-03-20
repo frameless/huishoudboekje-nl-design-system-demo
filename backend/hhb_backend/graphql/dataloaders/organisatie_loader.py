@@ -12,10 +12,11 @@ class OrganisatieLoader(DataLoader[Organisatie]):
     model = "organisaties"
 
     
-    def organisatie_rekeningen_by_rekening_id(self, rekening_id: int) -> List[int]:
+    def organisatie_afdelingen_by_rekening_ids(self, rekeningen_ids: List[int]):
         try:
-            url = f"{self.service}/rekeningen/{rekening_id}/organisatie/rekeningen"
-            response = requests.get(url)
+            url = f"{self.service}/{self.model}/rekeningen"
+            body = {"rekeningen_ids": rekeningen_ids}
+            response = requests.get(url, json=body)
 
         except requests.exceptions.ConnectionError:
             raise GraphQLError(f"Failed to connect to service {self.service}")
