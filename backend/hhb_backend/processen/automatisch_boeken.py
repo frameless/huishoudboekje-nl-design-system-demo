@@ -18,8 +18,7 @@ def automatisch_boeken(customer_statement_message_id: int = None):
     _afspraken = {}
     _automatische_transacties = []
     _matching_transaction_ids = []
-    for transactie_id, afspraken in suggesties.items():  
-        logging.warning(len(afspraken))
+    for transactie_id, afspraken in suggesties.items():
         matching_afspraak = None
         if len(afspraken) == 1 and afspraken[0].zoektermen:
             matching_afspraak = afspraken[0]
