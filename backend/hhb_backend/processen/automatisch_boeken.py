@@ -22,7 +22,7 @@ def automatisch_boeken(customer_statement_message_id: int = None):
         matching_afspraak = None
         if len(afspraken) == 1 and afspraken[0].zoektermen:
             matching_afspraak = afspraken[0]
-        if len(afspraken) > 1 and all(afspraak.zoektermen and afspraak.burger_id == afspraken[0].burger_id for afspraak in afspraken):
+        if len(afspraken) > 1 and all(afspraak.zoektermen and afspraak.burger_id == afspraken[0].burger_id and afspraak.tegen_rekening_id == afspraken[0].tegen_rekening_id for afspraak in afspraken):
             matching_afspraak = min(afspraken, key=itemgetter('valid_from'))
         if matching_afspraak:
             _afspraken[matching_afspraak.id] = matching_afspraak
@@ -134,7 +134,6 @@ def transactie_matches_afspraak_organisatie(rekening: Rekening, afspraak: Afspra
     filtered_organisaties = filter(lambda organisatie: rekening.id in organisatie["rekening_ids"], organisaties)
     afdelingen = []
     for organisatie in filtered_organisaties:
-        logging.warning(organisatie)
         afdelingen.extend(organisatie["afdeling_ids"])
 
     return afspraak.afdeling_id in afdelingen
