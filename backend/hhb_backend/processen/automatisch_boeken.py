@@ -94,11 +94,15 @@ def transactie_suggesties(transactie_ids: List[int] = None, transactions: List[B
     organisatie_rekeningen_ids = []
     for organisatie in organisaties:
         organisatie_rekeningen_ids.extend(organisatie["rekening_ids"])
+
+    # Add new rekeningen ids 
+    organisatie_rekeningen_ids = list(filter(lambda id: id not in rekening_ids, organisatie_rekeningen_ids))
     rekening_ids.extend(organisatie_rekeningen_ids)
 
-    # Rekeningen ophalen van organisaties adhv ids
-    organisatie_rekeningen = hhb_dataloader().rekeningen.load(organisatie_rekeningen_ids)
-    rekeningen.extend(organisatie_rekeningen)
+    # Nieuwe rekeningen ophalen van organisaties adhv ids
+    if len(organisatie_rekeningen_ids) > 0:
+        organisatie_rekeningen = hhb_dataloader().rekeningen.load(organisatie_rekeningen_ids)
+        rekeningen.extend(organisatie_rekeningen)
 
     # Make a rekening searchable by iban
     iban_to_rekening = {}
