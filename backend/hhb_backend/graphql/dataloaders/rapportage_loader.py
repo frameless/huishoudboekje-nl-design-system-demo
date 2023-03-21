@@ -16,8 +16,12 @@ class RapportageLoader():
 
         except requests.exceptions.ConnectionError:
             raise GraphQLError(f"Failed to connect to service {self.service}")
+        
+        
+        if response.status_code == 204 or response.status_code == 400:
+            return None
 
-        if response.status_code != 200:
+        if response.status_code == 500:
             raise UpstreamError(response, f"Request to {url} {params} failed.")
         
         return response.json()["data"]

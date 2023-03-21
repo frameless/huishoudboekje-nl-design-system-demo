@@ -33,14 +33,14 @@ class RapportageController():
         transactions_info = self._hhb_repository.get_transactions_burger(burger_id)
 
         if not self.__correct_structure_requested_data(transactions_info, [self.TEGENREKENING, self.TRANSACTION_ID, self.RUBRIEK]):
-            '''No content'''
+            '''Not found'''
             return "No data found for burger", 204
 
         transaction_ids = [transaction[self.TRANSACTION_ID] for transaction in transactions_info]
         transactions_in_range = self._banktransactionservice_repository.get_transacties_in_range(start,end,transaction_ids)
 
         if not self.__correct_structure_requested_data(transactions_in_range, [self.TRANSACTIE_DATUM, self.BEDRAG]):
-            '''No content'''
+            '''Not found'''
             return "No data found in range", 204
 
         self.__transaform_transaction_amount(transactions_in_range)
