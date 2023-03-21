@@ -1,5 +1,27 @@
 # Huishoudboekje Changelog
 
+## 1.8.1
+
+Deze versie omvat minimale rapportage mogelijkheden in de front-end en aanpassingen in het automatisch boeken. Bij het automatisch boeken wordt nu ook gekeken naar de organisatie die bij een transactie hoort.
+
+### Patch Changes
+
+- 8e7ec0d6: transactie sugegsties now include afspraken with other tegenrekeningen but with the same organisatie that uses the tegenrekening from the transaction
+- 8e7ec0d6: organisatie service now has a endpoint to get organisaties and its afdelingen and rekeningen based on rekeningen ids
+- 9a090096: #1228 frontend can now request rapportage data for one burger
+- 0092247d: #1227 Implemented a graphql query in the backend so that rapportages for a burger can be requested. (!NOTE: backend now requires RAPPORTAGE_SERVICE_URL as env var to communicate with the rapportage service)
+- 743ac3b8: fixed gebruikersactiviteiten not updating the timestamp and iban being used as the entityId for rekeningenByIbans
+
+  ## Migration guide
+
+    > ⚠️ The rapportage service is now in use
+
+    The container for the backend requires an extra environment variables.
+
+    ```shell
+    RAPPORTAGE_SERVICE_URL="http://hhb-rapportageservice"
+    ```
+
 ## 1.8.0
 
 Deze versie omvat het oplossen van kleine problemen en de eerste stappen richting nieuwe rapportage functionaliteit.
