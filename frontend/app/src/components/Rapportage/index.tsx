@@ -42,12 +42,10 @@ const Rapportage = () => {
 
 	const onSelectRubriek = (value) => setFilterRubriekIds(value ? value.map(v => v.value) : []);
 	const onChangeGranularity = (value) => setGranularity(value);
-	
 	const $burgers = useGetBurgersQuery();
 	//const $rubrieken = useGetRubriekenQuery();
 
 	return (
-		
 		<Queryable query={$burgers} children={data => {
 
 			const burgers: Burger[] = data.burgers || [];
