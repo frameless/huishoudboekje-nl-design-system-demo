@@ -6,6 +6,8 @@ import Saldo from "./Saldo";
 import {humanJoin, formatBurgerName} from "../../utils/things";
 import SectionContainer from "../shared/SectionContainer";
 import InkomstenUitgaven from "./InkomstenUitgaven";
+import d from "../../utils/dayjs";
+import BalanceTable from "./BalanceTable";
 
 
 type RapportageComponentParams = {burgerIds: number[], startDate: Date, endDate: Date};
@@ -56,23 +58,25 @@ const RapportageComponent: React.FC<RapportageComponentParams> = ({burgerIds, st
 			const reports: [BurgerRapportage] = [data.burgerRapportage]
 
 			return (
-				<SectionContainer>
-					<Tabs isLazy variant={"solid"} align={"start"} colorScheme={"primary"}>
-						<Stack direction={"row"} as={TabList} spacing={2}>
-							<Tab>{t("charts.saldo.title")}</Tab>
-							<Tab>{t("charts.inkomstenUitgaven.title")}</Tab>
-						</Stack>
-						<TabPanels>
-							<TabPanel>
-								<Saldo transactions={reports} />
-							</TabPanel>
-							<TabPanel>
-								<InkomstenUitgaven transactions={reports} />
-							</TabPanel>
-						</TabPanels>
-					</Tabs>
-				</SectionContainer>
-				//<BalanceTable transactions={filteredTransactions} startDate={d(dateRange.from).format("L")} endDate={d(dateRange.through).format("L")} />
+				<>
+					<SectionContainer>
+						<Tabs isLazy variant={"solid"} align={"start"} colorScheme={"primary"}>
+							<Stack direction={"row"} spacing={2}>
+								<Tab>{t("charts.saldo.title")}</Tab>
+								<Tab>{t("charts.inkomstenUitgaven.title")}</Tab>
+							</Stack>
+							<TabPanels>
+								<TabPanel>
+									<Saldo transactions={reports} />
+								</TabPanel>
+								<TabPanel>
+									<InkomstenUitgaven transactions={reports} />
+								</TabPanel>
+							</TabPanels>
+						</Tabs>
+					</SectionContainer>
+					<BalanceTable transactions={reports} startDate={d(startDate).format("L")} endDate={d(endDate).format("L")} />
+				</>
 			)
 		}} />
 	);

@@ -15,8 +15,9 @@ type RichTransaction = BankTransaction & {
 	organisatie?: Organisatie,
 };
 
-type Transaction = RapportageTransactie & {
-	type: Type
+export type Transaction = RapportageTransactie & {
+	type: Type,
+	rubriek: string
 }
 
 export enum Granularity {
@@ -31,28 +32,8 @@ export const periodFormatForGranularity = {
 	[Granularity.Daily]: "DD-MM-YYYY",
 };
 
-function getTransactionsFromRapportageRubrieks(rapportageRubrieken: RapportageRubriek[], type: Type): Transaction[] {
-	const result: Transaction[] = [];
-	for (const rubriek of rapportageRubrieken ?? []) {
-		for (const transaction of rubriek.transacties ?? []) {
-			result.push({
-				...transaction,
-				type: Type.Inkomsten
-			})
-		}
-	}
-	return result;
-}
 
 export function createChartAggregation(burgerRapportages: BurgerRapportage[], granularity: Granularity) {
-	let _data: Transaction[] = [];
-
-	for (const rapportages of burgerRapportages) {
-		_data = _data.concat(getTransactionsFromRapportageRubrieks(rapportages.inkomsten ?? [], Type.Inkomsten))
-		_data = _data.concat(getTransactionsFromRapportageRubrieks(rapportages.uitgaven ?? [], Type.Uitgaven))
-	}
-
-
 	const reduceByPeriod = (granularity: Granularity = Granularity.Monthly) => (result, tr) => {
 		const period = d(tr.transactieDatum, "YYYY MM DD").format(periodFormatForGranularity[granularity]);
 
@@ -62,12 +43,20 @@ export function createChartAggregation(burgerRapportages: BurgerRapportage[], gr
 		return result;
 	};
 
-	const chartData = _data.reduce(reduceByPeriod(granularity), {});
+	const chartData = flattenTransactionArrays(burgerRapportages).reduce(reduceByPeriod(granularity));
 	return chartData;
 }
 
-export function createBalanceTableAggregation(burgerRapportages: BurgerRapportage[]){
-	
+export function createBalanceTableAggregation(burgerRapportages: BurgerRapportage[]) {
+	console.log(burgerRapportages)
+	const result = []
+	for (const transaction of flattenTransactionArrays(burgerRapportages)) {
+		result[transaction.type] = result[transaction.type] || [];
+		result[transaction.type][transaction.rubriek] = result[transaction.type][transaction.rubriek] || [];
+		result[transaction.type][transaction.rubriek].push(transaction);
+	}
+
+	return result;
 }
 
 // Todo: clean this up, can be more compact maybe?
@@ -123,3 +112,29 @@ export const createAggregation = (tr: BankTransaction[], granularity = Granulari
 
 	return [chartData, tableData, saldo];
 };
+
+
+function getTransactionsFromRapportageRubrieks(rapportageRubrieken: RapportageRubriek[], type: Type): Transaction[] {
+	const result: Transaction[] = [];
+	for (const rubriek of rapportageRubrieken ?? []) {
+		for (const transaction of rubriek.transacties ?? []) {
+			result.push({
+				...transaction,
+				type: type,
+				rubriek: rubriek.rubriek ?? "onbekend"
+			})
+		}
+	}
+	return result;
+}
+
+function flattenTransactionArrays(burgerRapportages: BurgerRapportage[]): Transaction[] {
+	let result: Transaction[] = [];
+
+	for (const rapportages of burgerRapportages) {
+		result = result.concat(getTransactionsFromRapportageRubrieks(rapportages.inkomsten ?? [], Type.Inkomsten))
+		result = result.concat(getTransactionsFromRapportageRubrieks(rapportages.uitgaven ?? [], Type.Uitgaven))
+	}
+
+	return result;
+}

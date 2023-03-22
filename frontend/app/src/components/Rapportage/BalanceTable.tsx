@@ -1,18 +1,19 @@
-import {Box, Divider, HStack, Stack, Text} from "@chakra-ui/react";
+import {Box, Divider, HStack, Stack, Text, VStack} from "@chakra-ui/react";
 import React from "react";
 import {Trans, useTranslation} from "react-i18next";
-import {BankTransaction} from "../../generated/graphql";
+import {BurgerRapportage, RapportageTransactie} from "../../generated/graphql";
 import d from "../../utils/dayjs";
 import {currencyFormat2} from "../../utils/things";
 import Section from "../shared/Section";
 import SectionContainer from "../shared/SectionContainer";
-import {createAggregation, Type} from "./Aggregator";
+import {createBalanceTableAggregation, Transaction, Type} from "./Aggregator";
 
-type BalanceTableProps = {transactions: BankTransaction[], startDate: string, endDate: string};
+type BalanceTableProps = {transactions: BurgerRapportage[], startDate: string, endDate: string};
 
 const BalanceTable: React.FC<BalanceTableProps> = ({transactions, startDate, endDate}) => {
 	const {t} = useTranslation();
-	const [, aggregationByOrganisatie, saldo] = createAggregation(transactions);
+	const aggregationByOrganisatie: Transaction[] = createBalanceTableAggregation(transactions);
+	const saldo = 0;
 
 	const translatedCategory = {
 		[Type.Inkomsten]: t("charts.inkomstenUitgaven.income"),
@@ -21,6 +22,7 @@ const BalanceTable: React.FC<BalanceTableProps> = ({transactions, startDate, end
 
 	return (
 		<SectionContainer>
+
 			<Section title={t("balance")}> {/* Todo: Add helperText (07-03-2022) */}
 				<Stack>
 					<Stack spacing={4}>
@@ -31,23 +33,30 @@ const BalanceTable: React.FC<BalanceTableProps> = ({transactions, startDate, end
 							}} />
 						</Text>
 
-						{Object.keys(aggregationByOrganisatie).map(c => {
-							const categories = Object.keys(aggregationByOrganisatie[c]).sort();
-							let total = 0;
+						{Object.keys(aggregationByOrganisatie).map(category => {
+							const total = 0;
 							return (
-								<Stack key={c} spacing={0}>
-									<Text fontWeight={"bold"}>{translatedCategory[c]}</Text>
-									{categories.map((r, i) => {
-										total += aggregationByOrganisatie[c][r];
+								<Stack key={0} spacing={0}>
+									<Text fontWeight={"bold"}>{translatedCategory[category]}</Text>
+									{Object.keys(aggregationByOrganisatie[category]).map((rubriek, rubriekKey) => {
 										return (
-											<Stack direction={"row"} key={i}>
-												<Box flex={2}>
-													<Text>{r === Type.Ongeboekt ? t("charts.inkomstenUitgaven.unbooked") : r}</Text>
+											<VStack alignItems={"left"} key={rubriekKey}>
+												<Box flex={1}>
+													<Text fontStyle={"italic"}>{rubriek === Type.Ongeboekt ? t("charts.inkomstenUitgaven.unbooked") : rubriek}</Text>
 												</Box>
-												<Box flex={1} textAlign={"right"}>
-													<Text fontWeight={"bold"}>{currencyFormat2(false).format(Math.abs(aggregationByOrganisatie[c][r]))}</Text>
-												</Box>
-											</Stack>
+												{Object.keys(aggregationByOrganisatie[category][rubriek]).map((transaction, key) => {
+													return (
+														<Stack direction={"row"} key={key}>
+															<Box flex={2} textAlign={"left"}>
+																<Text >{aggregationByOrganisatie[category][rubriek][transaction].rekeninghouder}</Text>
+															</Box>
+															<Box flex={2} textAlign={"right"}>
+																<Text fontWeight={"bold"}>{currencyFormat2(false).format(Math.abs(aggregationByOrganisatie[category][rubriek][transaction].bedrag))}</Text>
+															</Box>
+
+														</Stack>);
+												})};
+											</VStack>
 										);
 									})}
 									<HStack alignItems={"center"}>
