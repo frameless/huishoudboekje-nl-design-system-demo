@@ -22,9 +22,9 @@ const BalanceTable: React.FC<BalanceTableProps> = ({transactions, startDate, end
 	return (
 		<SectionContainer>
 			<Section title={t("balance")}> {/* Todo: Add helperText (07-03-2022) */}
-				<Stack className="print printweergave-balans">
+				<Stack className="print">
 					<Stack spacing={2}>
-						<Text>
+						<Text className="printweergave-space-bottom">
 							<Trans i18nKey={"reports.period"} components={{strong: <strong />}} values={{
 								from: startDate && d(startDate, "L").startOf("day").format("L"),
 								through: endDate && d(endDate, "L").endOf("day").format("L"),
@@ -59,7 +59,7 @@ const BalanceTable: React.FC<BalanceTableProps> = ({transactions, startDate, end
 											</VStack>
 										);
 									})}
-									<HStack className="printweergave-rapportage-totaal-lijn" w="15%" textAlign={"right"} position={"relative"} left={"75%"}>
+									<HStack w="15%" textAlign={"right"} position={"relative"} left={"75%"}>
 										<Divider borderColor={"black"} flex={1} pt={1} />
 										<Text fontWeight={"bold"} flex={0}>+</Text>
 									</HStack>
@@ -68,7 +68,7 @@ const BalanceTable: React.FC<BalanceTableProps> = ({transactions, startDate, end
 											<Text  className="do-not-print">{t(`total ${category}`)}</Text>
 										</Box>
 										<Box flex={2} textAlign={"right"}>
-											<Text  className="printweergave-rapportage-totaal" paddingRight={"6%"} fontWeight={"bold"}>{`€ ${currencyFormat2(false).format(Math.abs(total))}`}</Text>
+											<Text paddingRight={"6%"} fontWeight={"bold"}>{`€ ${currencyFormat2(false).format(Math.abs(total))}`}</Text>
 										</Box>
 									</Stack>
 								</Stack>
@@ -78,7 +78,7 @@ const BalanceTable: React.FC<BalanceTableProps> = ({transactions, startDate, end
 							<Divider borderColor={"black"} flex={1} pt={1} />
 							<Text fontWeight={"bold"} flex={0}>-</Text>
 						</HStack>
-						<Stack direction={"row"}>
+						<Stack className="printweergave-totaal" direction={"row"}>
 							<Box flex={2}>
 								<Text>{t("total income expenses in period")}</Text>
 							</Box>
