@@ -3,3 +3,44 @@
 		display: block;
 	}
 }
+
+@media print {
+	.do-not-print {
+		display: none;
+		visibility: hidden;
+		height: 0 !important;
+		padding: 0 !important;
+		margin: 0 !important;
+	}
+
+	body {
+		visibility: hidden;
+		height: 0;
+	}
+
+	
+	.print {
+		display: inline-flex;
+		visibility: visible;
+		max-width: 600px;
+		font-size: 15px !important;
+		padding-left: 50px !important;
+		padding-top: 0px !important;
+		margin: 0 !important;
+	}
+
+	.printweergave-balans {
+		padding-top: 0px;
+		padding-left: 30px;
+	}
+
+	.printweergave-rapportage-totaal {
+		padding-left: 600px;
+		max-width: 800px;
+	}
+
+	.printweergave-rapportage-totaal-lijn{
+		padding-left: 500px;
+		width: 575px;
+	}
+}

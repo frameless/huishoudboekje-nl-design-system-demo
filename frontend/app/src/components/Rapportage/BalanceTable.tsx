@@ -21,9 +21,8 @@ const BalanceTable: React.FC<BalanceTableProps> = ({transactions, startDate, end
 
 	return (
 		<SectionContainer>
-
 			<Section title={t("balance")}> {/* Todo: Add helperText (07-03-2022) */}
-				<Stack>
+				<Stack className="print printweergave-balans">
 					<Stack spacing={2}>
 						<Text>
 							<Trans i18nKey={"reports.period"} components={{strong: <strong />}} values={{
@@ -60,22 +59,22 @@ const BalanceTable: React.FC<BalanceTableProps> = ({transactions, startDate, end
 											</VStack>
 										);
 									})}
-									<HStack w="15%" textAlign={"right"} position={"relative"} left={"75%"}>
+									<HStack className="printweergave-rapportage-totaal-lijn" w="15%" textAlign={"right"} position={"relative"} left={"75%"}>
 										<Divider borderColor={"black"} flex={1} pt={1} />
 										<Text fontWeight={"bold"} flex={0}>+</Text>
 									</HStack>
 									<Stack paddingBottom={5} direction={"row"}>
 										<Box flex={1}>
-											<Text >{t(`total ${category}`)}</Text>
+											<Text  className="do-not-print">{t(`total ${category}`)}</Text>
 										</Box>
 										<Box flex={2} textAlign={"right"}>
-											<Text paddingRight={"6%"} fontWeight={"bold"}>{`€ ${currencyFormat2(false).format(Math.abs(total))}`}</Text>
+											<Text  className="printweergave-rapportage-totaal" paddingRight={"6%"} fontWeight={"bold"}>{`€ ${currencyFormat2(false).format(Math.abs(total))}`}</Text>
 										</Box>
 									</Stack>
 								</Stack>
 							);
 						})}
-						<HStack w="15%" textAlign={"right"} position={"relative"} left={"85%"} alignItems={"center"}>
+						<HStack className="do-not-print" w="15%" textAlign={"right"} position={"relative"} left={"85%"} alignItems={"center"}>
 							<Divider borderColor={"black"} flex={1} pt={1} />
 							<Text fontWeight={"bold"} flex={0}>-</Text>
 						</HStack>

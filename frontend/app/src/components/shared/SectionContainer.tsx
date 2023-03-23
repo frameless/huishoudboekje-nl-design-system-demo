@@ -11,7 +11,7 @@ const BaseSectionContainer = chakra(Stack, {
 });
 
 const SectionContainer: React.FC<StackProps> = (props) => (
-	<BaseSectionContainer spacing={5} divider={<Divider />} {...props} />
+	<BaseSectionContainer className="do-not-print" spacing={5} divider={<Divider />} {...props} />
 )
 
 export default SectionContainer;
