@@ -89,7 +89,7 @@ const BalanceTable: React.FC<BalanceTableProps> = ({transactions, startDate, end
 						</Stack>
 						<Stack paddingTop={5} direction={"row"}>
 							<Box flex={1}>
-								<Text fontWeight={"bold"}>{`${t("saldo balance")} ${d(endDate, "L").format("DD-MM-YYYY")}: €${currencyFormat2(false).format(saldos['Total'])}`}</Text>
+								<Text visibility={"hidden"} fontWeight={"bold"}>{`${t("saldo balance")} ${d(endDate, "L").format("DD-MM-YYYY")}: €${currencyFormat2(false).format(saldos['Total'])}`}</Text>
 							</Box>
 						</Stack>
 					</Stack>
