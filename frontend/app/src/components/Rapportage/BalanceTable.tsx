@@ -80,10 +80,10 @@ const BalanceTable: React.FC<BalanceTableProps> = ({transactions, startDate, end
 							<Text fontWeight={"bold"} flex={0}>-</Text>
 						</HStack>
 						<Stack direction={"row"}>
-							<Box flex={1}>
+							<Box flex={2}>
 								<Text>{t("total income expenses in period")}</Text>
 							</Box>
-							<Box flex={2} textAlign={"right"}>
+							<Box flex={2} textAlign={"right"} paddingRight={"6%"} >
 								<Text fontWeight={"bold"}>{`€ ${currencyFormat2(false).format(saldos['Total'])}`}</Text>
 							</Box>
 						</Stack>
