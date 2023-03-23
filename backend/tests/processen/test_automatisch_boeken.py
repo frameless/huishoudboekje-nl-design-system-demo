@@ -324,22 +324,27 @@ def test_automatisch_boeken_no_csm_multiple_suggesties(mocker: MockerFixture):
                 {"id": 2, "is_geboekt": False},
                 {"id": 3, "is_geboekt": False},
                 {"id": 4, "is_geboekt": False},
+                {"id": 5, "is_geboekt": False},
             ]}
         )
         mocker.patch(
             'hhb_backend.processen.automatisch_boeken.transactie_suggesties',
             return_value={
-                1: [Afspraak(id=11, rubriek_id= 21, zoektermen="test", burger_id="1", valid_from="2022-12-01")],
-                2: [Afspraak(id=12, rubriek_id= 21, zoektermen="test", burger_id="2", valid_from="2022-12-01")],
-                # This transaction will not be booked
-                3: [
-                    Afspraak(id=13, rubriek_id= 21, zoektermen="test", burger_id="1" ,valid_from="2022-12-01"),
-                    Afspraak(id=23, rubriek_id= 21, zoektermen="test", burger_id="2" ,valid_from="2022-12-01"),
-                ],
+                1: [Afspraak(id=11, rubriek_id= 21, zoektermen="test", burger_id="1", valid_from="2022-12-01", tegen_rekening_id="1")],
+                2: [Afspraak(id=12, rubriek_id= 21, zoektermen="test", burger_id="2", valid_from="2022-12-01", tegen_rekening_id="1")],
                 # This transaction will be booked
+                3: [
+                    Afspraak(id=15, rubriek_id= 21, zoektermen="test", burger_id="1", valid_from="2022-12-01", tegen_rekening_id="1"),
+                    Afspraak(id=26, rubriek_id= 21, zoektermen="test", burger_id="1", valid_from="2020-12-01", tegen_rekening_id="1"),
+                ],                
+                # These transaction will not be booked
                 4: [
-                    Afspraak(id=15, rubriek_id= 21, zoektermen="test", burger_id="1", valid_from="2022-12-01"),
-                    Afspraak(id=26, rubriek_id= 21, zoektermen="test", burger_id="1", valid_from="2020-12-01"),
+                    Afspraak(id=13, rubriek_id= 21, zoektermen="test", burger_id="1" ,valid_from="2022-12-01", tegen_rekening_id="1"),
+                    Afspraak(id=23, rubriek_id= 21, zoektermen="test", burger_id="2" ,valid_from="2022-12-01", tegen_rekening_id="1"),
+                ],
+                5: [
+                    Afspraak(id=13, rubriek_id= 21, zoektermen="test", burger_id="1" ,valid_from="2022-12-01", tegen_rekening_id="1"),
+                    Afspraak(id=23, rubriek_id= 21, zoektermen="test", burger_id="1" ,valid_from="2022-12-01", tegen_rekening_id="2"),
                 ],
             })
         mocker.patch(
@@ -349,12 +354,12 @@ def test_automatisch_boeken_no_csm_multiple_suggesties(mocker: MockerFixture):
 
         rubrieken_by_id = mock.get(
             f"{settings.HHB_SERVICES_URL}/rubrieken/?filter_ids=21",
-            json={"data": [{"id": 21, "grootboekrekening_id": "test"}]}
+            json={"data": [{"id": 21, "grootboekrekening_id": "1"}]}
         )
 
-        journaalpost_by_transaction = mock.get(f"{settings.HHB_SERVICES_URL}/journaalposten/?filter_transactions=1,2,4", json={"data": []})
+        journaalpost_by_transaction = mock.get(f"{settings.HHB_SERVICES_URL}/journaalposten/?filter_transactions=1,2,3", json={"data": []})
         journaalposten_post = mock.post(f"{settings.HHB_SERVICES_URL}/journaalposten/", json=post_echo_multi(30))
-        transactions_post = mock.post(f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/1,2,4", json=post_echo)
+        transactions_post = mock.post(f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/1,2,3", json=post_echo)
 
         result = automatisch_boeken()
         
@@ -365,18 +370,18 @@ def test_automatisch_boeken_no_csm_multiple_suggesties(mocker: MockerFixture):
         assert len(result) == 3
 
         assert result == [
-            {'afspraak': {'id': 11, 'rubriek_id': 21, 'zoektermen': 'test', 'burger_id':"1", 'valid_from':"2022-12-01"}, 'id': 31, 'is_automatisch_geboekt': True, 'transaction_id': 1, 'afspraak_id': 11, 'grootboekrekening_id': 'test'},
-            {'afspraak': {'id': 12, 'rubriek_id': 21, 'zoektermen': 'test', 'burger_id':"2", 'valid_from':"2022-12-01"}, 'id': 32, 'is_automatisch_geboekt': True, 'transaction_id': 2, 'afspraak_id': 12, 'grootboekrekening_id': 'test'},
-            {'afspraak': {'id': 26, 'rubriek_id': 21, 'zoektermen': 'test', 'burger_id':"1", 'valid_from':"2020-12-01"}, 'id': 33, 'is_automatisch_geboekt': True, 'transaction_id': 4, 'afspraak_id': 26, 'grootboekrekening_id': 'test'},
+            {'afspraak': {'id': 11, 'rubriek_id': 21, 'zoektermen': 'test', 'burger_id':"1", 'valid_from':"2022-12-01", 'tegen_rekening_id': "1"}, 'id': 31, 'is_automatisch_geboekt': True, 'transaction_id': 1, 'afspraak_id': 11, 'grootboekrekening_id': '1'},
+            {'afspraak': {'id': 12, 'rubriek_id': 21, 'zoektermen': 'test', 'burger_id':"2", 'valid_from':"2022-12-01", 'tegen_rekening_id': "1"}, 'id': 32, 'is_automatisch_geboekt': True, 'transaction_id': 2, 'afspraak_id': 12, 'grootboekrekening_id': '1'},
+            {'afspraak': {'id': 26, 'rubriek_id': 21, 'zoektermen': 'test', 'burger_id':"1", 'valid_from':"2020-12-01", 'tegen_rekening_id': "1"}, 'id': 33, 'is_automatisch_geboekt': True, 'transaction_id': 3, 'afspraak_id': 26, 'grootboekrekening_id': '1'},
         ]
         assert journaalposten_post.call_count == 1
         assert journaalposten_post.last_request.json() == [
-            {"afspraak_id": 11, "grootboekrekening_id": "test", "is_automatisch_geboekt": True, "transaction_id": 1},
-            {"afspraak_id": 12, "grootboekrekening_id": "test", "is_automatisch_geboekt": True, "transaction_id": 2},
-            {"afspraak_id": 26, "grootboekrekening_id": "test", "is_automatisch_geboekt": True, "transaction_id": 4},
+            {"afspraak_id": 11, "grootboekrekening_id": "1", "is_automatisch_geboekt": True, "transaction_id": 1},
+            {"afspraak_id": 12, "grootboekrekening_id": "1", "is_automatisch_geboekt": True, "transaction_id": 2},
+            {"afspraak_id": 26, "grootboekrekening_id": "1", "is_automatisch_geboekt": True, "transaction_id": 3},
         ]
         assert transactions_post.call_count == 1
-        assert transactions_post.last_request.json() == [{"id": 1, "is_geboekt": True}, {"id": 2, "is_geboekt": True}, {"id": 4, "is_geboekt": True}]
+        assert transactions_post.last_request.json() == [{"id": 1, "is_geboekt": True}, {"id": 2, "is_geboekt": True}, {"id": 3, "is_geboekt": True}]
 
         assert transactions_is_geboekt.call_count == 1
         assert rubrieken_by_id.call_count == 1
