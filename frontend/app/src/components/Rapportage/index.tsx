@@ -1,5 +1,5 @@
 import {Button, FormControl, FormLabel, Heading, Input, Stack, useDisclosure} from "@chakra-ui/react";
-import  {useState} from "react";
+import {useState} from "react";
 import DatePicker from "react-datepicker";
 import {useTranslation} from "react-i18next";
 import {useLocation} from "react-router-dom";
@@ -23,11 +23,11 @@ const Rapportage = () => {
 	const filterModal = useDisclosure();
 
 	const [dateRange, setDateRange] = useState<Required<DateRange>>({
-		from: d().subtract(1, "year").startOf("month").toDate(),
-		through: d().subtract(1, "month").endOf("month").toDate(),
+		from: d().startOf("month").toDate(),
+		through: d().endOf("month").toDate(),
 	});
 
-	const [granularity, setGranularity] = useState<Granularity>(Granularity.Monthly);
+	const [granularity, setGranularity] = useState<Granularity>(Granularity.Weekly);
 	const granularityOptions = {
 		[Granularity.Daily]: t("granularity.daily"),
 		[Granularity.Weekly]: t("granularity.weekly"),
@@ -93,11 +93,11 @@ const Rapportage = () => {
 										<Stack direction={"column"} spacing={5} flex={1}>
 											<FormControl as={Stack} flex={1}>
 												<FormLabel>{t("charts.filterBurgers")}</FormLabel>
-													<Select onChange={onSelectBurger} options={burgers.map(b => ({
-														key: b.id,
-														value: b.id,
-														label: formatBurgerName(b),
-													}))} styles={reactSelectStyles.default} isMulti isClearable={true} noOptionsMessage={() => t("select.noOptions")} maxMenuHeight={200} placeholder={t("charts.optionAllBurgers")} value={value} />
+												<Select onChange={onSelectBurger} options={burgers.map(b => ({
+													key: b.id,
+													value: b.id,
+													label: formatBurgerName(b),
+												}))} styles={reactSelectStyles.default} isMulti isClearable={true} noOptionsMessage={() => t("select.noOptions")} maxMenuHeight={200} placeholder={t("charts.optionAllBurgers")} value={value} />
 											</FormControl>
 											<FormControl as={Stack} flex={1}>
 												<FormLabel>{t("charts.filterRubrics")}</FormLabel>
@@ -118,7 +118,7 @@ const Rapportage = () => {
 										<Stack direction={["column", "row"]} spacing={5} flex={1}>
 											<FormControl as={Stack} flex={1}>
 												<FormLabel>{t("charts.granularity")}</FormLabel>
-												<RadioButtonGroup name={"granularity"} onChange={onChangeGranularity} defaultValue={Granularity.Monthly} value={granularity} options={granularityOptions} />
+												<RadioButtonGroup name={"granularity"} onChange={onChangeGranularity} defaultValue={Granularity.Weekly} value={granularity} options={granularityOptions} />
 											</FormControl>
 										</Stack>
 									</Stack>

@@ -30,8 +30,8 @@ const RapportageComponent: React.FC<RapportageComponentParams> = ({burgerIds, st
 	const $rapportage = useGetBurgerRapportageQuery({
 		variables: {
 			burger: burgerId,
-			start: startDate.toISOString().split("T")[0],
-			end: endDate.toISOString().split("T")[0]
+			start: d(startDate).format("YYYY-MM-DD"),
+			end: d(endDate).format("YYYY-MM-DD")
 		}
 	});
 
