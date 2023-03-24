@@ -5,6 +5,10 @@ import requests
 class HuishoudboekjeserviceRepository:
     HHB_SERVICES_URL = os.getenv('HHB_SERVICE_URL', "http://huishoudboekjeservice:8000")
 
-    def get_transactions_burger(self,burger_id):
-        response = requests.get(f"{self.HHB_SERVICES_URL}/burgers/{burger_id}/transacties")
+    def get_transactions_burgers(self,burger_ids, filter_rubrieken):
+        json = {
+            "burger_ids": burger_ids,
+            "filter_rubrieken": filter_rubrieken
+        }
+        response = requests.get(f"{self.HHB_SERVICES_URL}/burgers/transacties", json=json)
         return response.json()["data"]

@@ -5,7 +5,7 @@ import logging.config
 from flask import Flask, Response
 from flask_injector import FlaskInjector
 from rapportage_service.dependencies import configure
-from rapportage_service.views.RapportageView import RapportageView
+from rapportage_service.views.RapportageView import BurgerRapportageView
 
 
 def create_app(config_name='rapportage_service.config.Config', dependency_injection_configuration=configure):
@@ -35,7 +35,7 @@ def create_app(config_name='rapportage_service.config.Config', dependency_inject
 
     # Views
     routes = [
-        {"path": "/rapportage/<burger_id>", "view": RapportageView,
+        {"path": "/rapportage", "view": BurgerRapportageView,
          "name": "rapportage_burger"}
     ]
     for route in routes:
