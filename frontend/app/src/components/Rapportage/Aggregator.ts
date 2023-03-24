@@ -1,4 +1,5 @@
-import {BankTransaction, Organisatie, Rubriek} from "../../generated/graphql";
+import {Maybe} from "graphql/jsutils/Maybe";
+import {BankTransaction, BurgerRapportage, RapportageTransactie, RapportageRubriek, Organisatie, Rubriek, Scalars} from "../../generated/graphql";
 import d from "../../utils/dayjs";
 import {formatBurgerName, getOrganisatieForTransaction, getRubriekForTransaction} from "../../utils/things";
 
@@ -15,6 +16,11 @@ type RichTransaction = BankTransaction & {
 	organisatie?: Organisatie,
 };
 
+export type Transaction = RapportageTransactie & {
+	type: Type,
+	rubriek: string
+}
+
 export enum Granularity {
 	Monthly = "monthly",
 	Weekly = "weekly",
@@ -27,56 +33,74 @@ export const periodFormatForGranularity = {
 	[Granularity.Daily]: "DD-MM-YYYY",
 };
 
-// Todo: clean this up, can be more compact maybe?
-export const createAggregation = (tr: BankTransaction[], granularity = Granularity.Monthly) => {
-	// Enrich transaction with some useful data
-	const _data = tr.map(t => ({
-		...t,
-		dayjsDate: d(t.transactieDatum, "YYYY MM DD"),
-		rubriek: getRubriekForTransaction(t),
-		organisatie: getOrganisatieForTransaction(t),
-	}));
+export type Saldos = {
+	InkomstenTotal: Maybe<Scalars['Decimal']>,
+	UitgavenTotal: Maybe<Scalars['Decimal']>,
+	Total: Maybe<Scalars['Decimal']>,
+}
 
-	/* For chart */
-	const reduceByPeriod = (granularity: Granularity = Granularity.Monthly) => (result, tr) => {
-		const period = tr.dayjsDate.format(periodFormatForGranularity[granularity]);
-		const type = tr.isCredit ? Type.Inkomsten : Type.Uitgaven;
+export function createSaldos(burgerRapportages: BurgerRapportage[]) {
+	const result = [];
+	result[Type.Inkomsten] = 0;
+	result['Total'] = 0;
+	result[Type.Uitgaven] = 0
 
-		result[period] = result[period] || {};
-		result[period][type] = result[period][type] || 0;
-		result[period][type] += parseFloat(tr.bedrag);
-		return result;
-	};
+	for (const rapportage of burgerRapportages) {
+		result[Type.Inkomsten] += parseFloat(rapportage.totaalInkomsten);
+		result['Total'] += parseFloat(rapportage.totaal);
+		result[Type.Uitgaven] += parseFloat(rapportage.totaalUitgaven);
+	}
 
-	const chartData = _data.reduce(reduceByPeriod(granularity), {});
+	return result;
+}
 
-	const splitupFormat: {[Type.Inkomsten]: RichTransaction[], [Type.Uitgaven]: RichTransaction[]} = {
-		[Type.Inkomsten]: [],
-		[Type.Uitgaven]: [],
-	};
+export function createChartAggregation(burgerRapportages: BurgerRapportage[], granularity: Granularity) {
+	const _data = flattenTransactionArrays(burgerRapportages);
+	const chartData = [];
+	for (const entry of _data) {
+		const period = d(entry.transactieDatum, "YYYY MM DD").format(periodFormatForGranularity[granularity]);
+		if (chartData[period] == undefined) {
+			chartData[period] = [];
+		}
+		chartData[period][entry.type] = chartData[period][entry.type] || 0;
+		chartData[period][entry.type] += parseFloat(entry.bedrag);
 
-	const tableDataPrepare = _data.reduce((result, tr: RichTransaction) => {
-		result[tr.isCredit ? Type.Inkomsten : Type.Uitgaven].push(tr);
-		return result;
-	}, splitupFormat);
+	}
+	return chartData;
+}
 
-	/* For table */
-	const reduceByOrganisatie = (result, tr: RichTransaction) => {
-		const beneficiary = tr.organisatie?.naam || (tr.journaalpost?.afspraak?.burger ? formatBurgerName(tr.journaalpost?.afspraak?.burger) : undefined);
-		const index = beneficiary || "Niet afgeletterd"; // Todo: i18n / translate
-		result[index] = result[index] || 0;
-		result[index] += parseFloat(tr.bedrag);
-		return result;
-	};
+export function createBalanceTableAggregation(burgerRapportages: BurgerRapportage[]) {
+	const result = []
+	for (const transaction of flattenTransactionArrays(burgerRapportages)) {
+		result[transaction.type] = result[transaction.type] || [];
+		result[transaction.type][transaction.rubriek] = result[transaction.type][transaction.rubriek] || [];
+		result[transaction.type][transaction.rubriek].push(transaction);
+	}
 
-	const tableData = {
-		[Type.Inkomsten]: tableDataPrepare[Type.Inkomsten].reduce(reduceByOrganisatie, {}),
-		[Type.Uitgaven]: tableDataPrepare[Type.Uitgaven].reduce(reduceByOrganisatie, {}),
-	};
+	return result;
+}
 
-	const saldo = _data.reduce((result, tr: RichTransaction) => {
-		return result + parseFloat(tr.bedrag);
-	}, 0);
+function getTransactionsFromRapportageRubrieks(rapportageRubrieken: RapportageRubriek[], type: Type): Transaction[] {
+	const result: Transaction[] = [];
+	for (const rubriek of rapportageRubrieken ?? []) {
+		for (const transaction of rubriek.transacties ?? []) {
+			result.push({
+				...transaction,
+				type: type,
+				rubriek: rubriek.rubriek ?? "onbekend"
+			})
+		}
+	}
+	return result;
+}
 
-	return [chartData, tableData, saldo];
-};
+function flattenTransactionArrays(burgerRapportages: BurgerRapportage[]): Transaction[] {
+	let result: Transaction[] = [];
+
+	for (const rapportages of burgerRapportages) {
+		result = result.concat(getTransactionsFromRapportageRubrieks(rapportages.inkomsten ?? [], Type.Inkomsten))
+		result = result.concat(getTransactionsFromRapportageRubrieks(rapportages.uitgaven ?? [], Type.Uitgaven))
+	}
+
+	return result;
+}
