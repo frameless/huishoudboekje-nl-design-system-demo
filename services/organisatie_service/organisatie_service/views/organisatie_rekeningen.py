@@ -31,9 +31,9 @@ class OrganisatieRekeningenView(HHBView):
     
         result_list = [row2dict(row) for row in self.get_organisatie_rekeningen_by_rekening(rekeningen_ids)]
 
-        #sum combines all the lists, set makes it distinct values in a set type, list() to convert it back to a list
+        #set makes it distinct values in a set type, list() to convert it back to a list
         for result in result_list:
-            result["rekening_ids"] = list(set(sum(result["rekening_ids"], [])))
+            result["rekening_ids"] = list(set(result["rekening_ids"]))
 
         return {"data": result_list}, 200 
     
@@ -53,7 +53,7 @@ class OrganisatieRekeningenView(HHBView):
                     .filter(or_(*clauses))\
                     .with_entities(Afdeling.organisatie_id, \
                         func.array_agg(Afdeling.id).label("afdeling_ids"),\
-                        func.array_agg(Afdeling.rekeningen_ids).label("rekening_ids"))\
+                        func.array_concat_agg(Afdeling.rekeningen_ids).label("rekening_ids"))\
                     .group_by(Afdeling.organisatie_id)
         return organisatie_rekeningen
 
