@@ -15,7 +15,7 @@ const Page: React.FC<PageProps> = ({title, backButton, menu, right, children}) =
 			{backButton && <Box>{backButton}</Box>}
 
 			<Stack direction={"row"} justifyContent={"space-between"} alignItems={"center"}>
-				<Heading className="print" size={"lg"}>{title}</Heading>
+				<Heading className={"print"} size={"lg"}>{title}</Heading>
 				<HStack>
 					{right && <Box>{right}</Box>}
 					{menu}

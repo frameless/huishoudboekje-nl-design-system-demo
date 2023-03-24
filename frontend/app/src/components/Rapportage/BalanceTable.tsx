@@ -22,9 +22,9 @@ const BalanceTable: React.FC<BalanceTableProps> = ({transactions, startDate, end
 	return (
 		<SectionContainer>
 			<Section title={t("balance")}> {/* Todo: Add helperText (07-03-2022) */}
-				<Stack className="print">
+				<Stack className={"print"}>
 					<Stack spacing={2}>
-						<Text className="printweergave-space-bottom">
+						<Text className={"printweergave-space-bottom"}>
 							<Trans i18nKey={"reports.period"} components={{strong: <strong />}} values={{
 								from: startDate && d(startDate, "L").startOf("day").format("L"),
 								through: endDate && d(endDate, "L").endOf("day").format("L"),
@@ -65,7 +65,7 @@ const BalanceTable: React.FC<BalanceTableProps> = ({transactions, startDate, end
 									</HStack>
 									<Stack paddingBottom={5} direction={"row"}>
 										<Box flex={1}>
-											<Text  className="do-not-print">{t(`total ${category}`)}</Text>
+											<Text  className={"do-not-print"}>{t(`total ${category}`)}</Text>
 										</Box>
 										<Box flex={2} textAlign={"right"}>
 											<Text paddingRight={"6%"} fontWeight={"bold"}>{`€ ${currencyFormat2(false).format(Math.abs(total))}`}</Text>
@@ -74,11 +74,11 @@ const BalanceTable: React.FC<BalanceTableProps> = ({transactions, startDate, end
 								</Stack>
 							);
 						})}
-						<HStack className="do-not-print" w="15%" textAlign={"right"} position={"relative"} left={"85%"} alignItems={"center"}>
+						<HStack className={"do-not-print"} w="15%" textAlign={"right"} position={"relative"} left={"85%"} alignItems={"center"}>
 							<Divider borderColor={"black"} flex={1} pt={1} />
 							<Text fontWeight={"bold"} flex={0}>-</Text>
 						</HStack>
-						<Stack className="printweergave-totaal" direction={"row"}>
+						<Stack className={"printweergave-totaal"} direction={"row"}>
 							<Box flex={2}>
 								<Text>{t("total income expenses in period")}</Text>
 							</Box>

@@ -32,7 +32,7 @@ export const Section: React.FC<SectionProps> = ({
 			)}
 			{hasLeft && (
 				<Stack flex={1}>
-					<Stack className="do-not-print" align={"flex-start"}>
+					<Stack className={"do-not-print"} align={"flex-start"}>
 						{title && <Heading size={"md"}>{title}</Heading>}
 						{helperText && <Text fontSize={"md"} color={"gray.500"}>{helperText}</Text>}
 					</Stack>
