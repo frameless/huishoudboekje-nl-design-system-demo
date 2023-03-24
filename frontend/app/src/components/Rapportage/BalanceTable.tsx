@@ -74,11 +74,11 @@ const BalanceTable: React.FC<BalanceTableProps> = ({transactions, startDate, end
 								</Stack>
 							);
 						})}
-						<HStack className={"do-not-print"} w="15%" textAlign={"right"} position={"relative"} left={"85%"} alignItems={"center"}>
+						<HStack w="15%" textAlign={"right"} position={"relative"} left={"85%"} alignItems={"center"}>
 							<Divider borderColor={"black"} flex={1} pt={1} />
 							<Text fontWeight={"bold"} flex={0}>-</Text>
 						</HStack>
-						<Stack className={"printweergave-totaal"} direction={"row"}>
+						<Stack direction={"row"}>
 							<Box flex={2}>
 								<Text>{t("total income expenses in period")}</Text>
 							</Box>
