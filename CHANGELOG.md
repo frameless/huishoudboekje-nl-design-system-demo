@@ -1,5 +1,20 @@
 # Huishoudboekje Changelog
 
+## 1.8.2
+
+Deze versie omvat een bugfix bij het automatisch afboeken en de eerste versie van de nieuwe rapportage pagina met printweergave.
+
+### Patch Changes
+
+- f3b47ba9: changed UI for rapportage to fit the new data, changed balance section to reflect the designed printable version
+- fab19fbf: fixed totaal inkomsten en uitgaven section in rapportage balans not matching up with the rest of the page
+- 84379ef4: #1264 added better printweergave rapportage
+- 80f2528e: fixed bug with array_agg by creating a custom aggreagation
+
+## Migration guide
+
+  > ⚠️ The organisatieservice database has a new migration. This should go fine automatically.
+
 ## 1.8.1
 
 Deze versie omvat minimale rapportage mogelijkheden in de front-end en aanpassingen in het automatisch boeken. Bij het automatisch boeken wordt nu ook gekeken naar de organisatie die bij een transactie hoort.
@@ -14,13 +29,13 @@ Deze versie omvat minimale rapportage mogelijkheden in de front-end en aanpassin
 
   ## Migration guide
 
-    > ⚠️ The rapportage service is now in use
+  > ⚠️ The rapportage service is now in use
 
-    The container for the backend requires an extra environment variables.
+  The container for the backend requires an extra environment variables.
 
-    ```shell
-    RAPPORTAGE_SERVICE_URL="http://hhb-rapportageservice"
-    ```
+  ```shell
+  RAPPORTAGE_SERVICE_URL="http://hhb-rapportageservice"
+  ```
 
 ## 1.8.0
 
