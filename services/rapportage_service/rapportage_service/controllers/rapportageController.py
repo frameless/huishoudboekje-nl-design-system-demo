@@ -46,7 +46,22 @@ class RapportageController():
 
         self.__transaform_transaction_amount(transactions_in_range)
         rapportage_transactions = self.__add_info_to_transactions_in_range(transactions_info, transactions_in_range)
-        return {"data": [self.__generate_rapportage(burger_id, rapportage_transactions, start, end) for burger_id in burger_ids]}, 200
+        if len(burger_ids) > 0:
+            rapportages = [self.__generate_rapportage(burger_id, \
+                                        list(filter(lambda transaction: transaction[self.BURGER_ID] is burger_id, rapportage_transactions)),\
+                                        start,\
+                                        end)\
+                                for burger_id in burger_ids
+                        ]
+        else:
+            rapportages = [self.__generate_rapportage(None, \
+                                        rapportage_transactions,\
+                                        start,\
+                                        end)\
+                        ]
+
+        
+        return {"data": rapportages}, 200
     
 
     def __add_info_to_transactions_in_range(self, transactions_info, transactions_in_range):
@@ -58,12 +73,11 @@ class RapportageController():
     
 
     def __generate_rapportage(self, burger_id, transactions, start, end):
-        filtered_transactions = list(filter(lambda transaction: transaction[self.BURGER_ID] is burger_id, transactions))
         income = []
         expenses = []
         total_income = Decimal(0)
         total_expenses = Decimal(0)
-        for transaction in filtered_transactions:
+        for transaction in transactions:
             amount = transaction[self.BEDRAG]
             if amount > 0:
                 self.__add_transaction_to_list(income, transaction)
@@ -72,7 +86,7 @@ class RapportageController():
                 self.__add_transaction_to_list(expenses, transaction)
                 total_expenses += amount
         total = total_expenses + total_income
-        return {"burger_idd": burger_id,
+        return {"burger_id": burger_id,
                 "inkomsten": income,
                 "uitgaven" : expenses,
                 "totaal_inkomsten": total_income,
