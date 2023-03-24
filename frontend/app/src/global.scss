@@ -3,3 +3,34 @@
 		display: block;
 	}
 }
+
+@media print {
+	.do-not-print {
+		display: none;
+		visibility: hidden;
+		height: 0 !important;
+		padding: 0 !important;
+		margin: 0 !important;
+	}
+
+	body {
+		visibility: hidden;
+		height: 0;
+	}
+
+	
+	.print {
+		display: inline-flex;
+		visibility: visible;
+		max-width: 90%;
+		font-size: 15px !important;
+		padding-left: 50px !important;
+		padding-top: 0px !important;
+		margin: 0 !important;
+	}
+
+	.printweergave-space-bottom{
+		padding-top: 10px;
+		padding-bottom: 25px;
+	}
+}

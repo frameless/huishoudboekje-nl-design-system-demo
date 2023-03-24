@@ -58,7 +58,7 @@ const RapportageComponent: React.FC<RapportageComponentParams> = ({burgerIds, st
 			const reports: [BurgerRapportage] = [data.burgerRapportage]
 
 			return (
-				<>
+				<Stack className="do-not-print">
 					<SectionContainer>
 						<Tabs isLazy variant={"solid"} align={"start"} colorScheme={"primary"}>
 							<Stack direction={"row"} spacing={2}>
@@ -76,7 +76,7 @@ const RapportageComponent: React.FC<RapportageComponentParams> = ({burgerIds, st
 						</Tabs>
 					</SectionContainer>
 					<BalanceTable transactions={reports} startDate={d(startDate).format("L")} endDate={d(endDate).format("L")} />
-				</>
+				</Stack>
 			)
 		}} />
 	);

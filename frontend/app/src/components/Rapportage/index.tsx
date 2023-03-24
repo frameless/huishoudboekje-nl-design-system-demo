@@ -64,7 +64,7 @@ const Rapportage = () => {
 						{/* filteropties */}
 						{filterModal.isOpen && (
 							<Modal title={t("sections.filterOptions.title")} onClose={filterModal.onClose}>
-								<Stack>
+								<Stack className="do-not-print">
 									<Stack>
 										<Stack direction={["column", "row"]} spacing={5} flex={1}>
 											<FormControl as={Stack} flex={1} justifyContent={"flex-end"}>
@@ -126,7 +126,7 @@ const Rapportage = () => {
 							</Modal>
 						)}
 						{/* pagina */}
-						<Heading size={"sm"} fontWeight={"normal"}>{selectedBurgers.length > 0 ? humanJoin(selectedBurgers.map(b => formatBurgerName(b))) : t("allBurgers")}</Heading>
+						<Heading className="print" size={"sm"} fontWeight={"normal"}>{selectedBurgers.length > 0 ? humanJoin(selectedBurgers.map(b => formatBurgerName(b))) : t("allBurgers")}</Heading>
 						<RapportageComponent burgerIds={filterBurgerIds} startDate={dateRange.from} endDate={dateRange.through}></RapportageComponent>
 					</Page>
 				</RapportageContext.Provider>
