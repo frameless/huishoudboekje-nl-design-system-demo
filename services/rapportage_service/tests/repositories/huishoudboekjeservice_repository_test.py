@@ -14,14 +14,15 @@ def test_huishoudboekje_repository():
         mock_response = {
             "data": expected_result
         }
-        burger_id = 12
+        burger_ids = [12]
+        rubrieken = []
         
         adapter = requests_mock.Adapter()
-        adapter.register_uri('GET', f'/burgers/{burger_id}/transacties', json=mock_response)
+        adapter.register_uri('GET', f'/burgers/transacties', json=mock_response)
         request_mocker._adapter = adapter
 
         # ACT
-        result = sut.get_transactions_burger(burger_id)
+        result = sut.get_transactions_burgers(burger_ids, rubrieken)
 
         # ASSERT
         assert result == expected_result

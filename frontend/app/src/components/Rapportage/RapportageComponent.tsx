@@ -1,6 +1,6 @@
 import {Text, Tabs, Stack, Tab, TabPanels, TabPanel} from "@chakra-ui/react";
 import {useTranslation} from "react-i18next";
-import {BurgerRapportage, useGetBurgerRapportageQuery} from "../../generated/graphql";
+import {BurgerRapportage, useGetBurgerRapportagesQuery} from "../../generated/graphql";
 import Queryable from "../../utils/Queryable";
 import Saldo from "./Saldo";
 import {humanJoin, formatBurgerName} from "../../utils/things";
@@ -10,9 +10,9 @@ import d from "../../utils/dayjs";
 import BalanceTable from "./BalanceTable";
 
 
-type RapportageComponentParams = {burgerIds: number[], startDate: Date, endDate: Date};
+type RapportageComponentParams = {burgerIds: number[], startDate: Date, endDate: Date, rubrieken: number[]};
 
-const RapportageComponent: React.FC<RapportageComponentParams> = ({burgerIds, startDate, endDate}) => {
+const RapportageComponent: React.FC<RapportageComponentParams> = ({burgerIds, startDate, endDate, rubrieken}) => {
 	const {t} = useTranslation();
 
 	//Check here because it has to be correct data for the query
@@ -22,16 +22,13 @@ const RapportageComponent: React.FC<RapportageComponentParams> = ({burgerIds, st
 		startDate = today
 		endDate = today
 	}
-	let burgerId = -1
-	if (burgerIds.length === 1) {
-		burgerId = burgerIds[0]
-	}
 
-	const $rapportage = useGetBurgerRapportageQuery({
+	const $rapportage = useGetBurgerRapportagesQuery({
 		variables: {
-			burger: burgerId,
+			burgers: burgerIds,
 			start: d(startDate).format("YYYY-MM-DD"),
-			end: d(endDate).format("YYYY-MM-DD")
+			end: d(endDate).format("YYYY-MM-DD"),
+			rubrieken: rubrieken
 		}
 	});
 
@@ -41,22 +38,17 @@ const RapportageComponent: React.FC<RapportageComponentParams> = ({burgerIds, st
 			<Text color={"red"}>{t("reports.incorrectDateRange")}</Text>
 		)
 	}
-	if (burgerId === -1) {
-		return (
-			<Text color={"red"}>{t("reports.toManyBurgers")}</Text>
-		)
-	}
+
 	return (
 		<Queryable query={$rapportage} children={data => {
 
-			if (data.burgerRapportage === null) {
+			if (data.burgerRapportages === null) {
 				return (
 					<Text color={"red"}>{t("reports.noData")}</Text>
 				);
 			}
-
-			const reports: [BurgerRapportage] = [data.burgerRapportage]
-
+			const reports: [BurgerRapportage] = data.burgerRapportages
+			
 			return (
 				<Stack className="do-not-print">
 					<SectionContainer>

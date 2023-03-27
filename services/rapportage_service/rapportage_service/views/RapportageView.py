@@ -46,6 +46,8 @@ class BurgerRapportageView(MethodView):
         self.input_validate()
         burger_ids = request.json.get(self.BURGER_IDS_LIST_NAME)
         filter_rubrieken = request.json.get(self.RUBRIEKEN_FILTER_LIST_NAME)
+        if not filter_rubrieken:
+            filter_rubrieken = []
 
         start = request.args.get('startDate')
         end = request.args.get('endDate')
@@ -64,7 +66,6 @@ class BurgerRapportageView(MethodView):
         """ Not allowed """
         return {}, 405
     
-    #Copy from HHBView bc it is to generic, needs to be refactored, dont appove if this comment is stil here
     def input_validate(self):
         """ Validate input data """
         inputs = self.validator(request)

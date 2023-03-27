@@ -8,11 +8,15 @@ class RapportageLoader():
     service = RAPPORTAGE_SERVICE_URL
     model = "rapportage"
 
-    def load_rapportage_burger(self, burger_id, start_date, end_date):
+    def load_rapportage_burger(self, burger_ids, start_date, end_date, rubrieken_ids):
         try:
-            url = f"{self.service}/{self.model}/{burger_id}"
+            body = {
+                "burger_ids": burger_ids,
+                "filter_rubrieken": rubrieken_ids
+            }
+            url = f"{self.service}/{self.model}"
             params = {"startDate": start_date, "endDate": end_date}
-            response = requests.get(url, params=params)
+            response = requests.get(url, params=params, json=body)
 
         except requests.exceptions.ConnectionError:
             raise GraphQLError(f"Failed to connect to service {self.service}")

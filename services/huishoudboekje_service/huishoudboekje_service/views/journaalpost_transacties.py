@@ -31,8 +31,8 @@ class BurgerTransactiesView(HHBView):
     
     def get(self, **kwargs):
         """ 
-            GET /burgers/<burger_id>/transacties
-            Gets transactions that are related to a burger with tegenrekening rekeninghouder
+            GET /burgers/transacties
+            Gets transactions that are related to burgers with tegenrekening rekeninghouder
         """
         self.input_validate()
         burger_ids = request.json.get(self.BURGER_IDS_LIST_NAME)
