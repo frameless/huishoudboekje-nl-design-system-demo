@@ -29,9 +29,12 @@ class Burger(db.Model):
     email = Column(String)
     geboortedatum = Column(DateTime)
 
-    huishouden_id = Column(Integer, ForeignKey("huishoudens.id"), nullable=False)
+    huishouden_id = Column(Integer, ForeignKey(
+        "huishoudens.id"), nullable=False)
 
     bsn = Column(Integer, unique=True)
+
+    saldo = Column(Integer)
 
     # Relations from other models
     rekeningen = relationship(
@@ -56,7 +59,8 @@ def delete_orphaned_huishoudens(session):
     try:
         huishouden_ids = session.query(Burger.huishouden_id).all()
         huishouden_ids = {id for (id,) in huishouden_ids}
-        session.query(Huishouden).filter(Huishouden.id.not_in(huishouden_ids)).delete()
+        session.query(Huishouden).filter(
+            Huishouden.id.not_in(huishouden_ids)).delete()
     except OperationalError as error:
         logging.exception(error)
 

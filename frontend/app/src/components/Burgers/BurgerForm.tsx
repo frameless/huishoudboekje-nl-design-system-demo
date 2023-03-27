@@ -24,7 +24,7 @@ const BurgerForm: React.FC<BurgerFormProps> = ({burger, onSubmit, isLoading, isB
 	const {t} = useTranslation();
 	const isMobile = useBreakpointValue([true, null, null, false]);
 	const toast = useToaster();
-	const {bsn, voorletters, voornamen, achternaam, geboortedatum, email, huisnummer, postcode, straatnaam, plaatsnaam, telefoonnummer} = burger || {};
+	const {bsn, voorletters, voornamen, achternaam, geboortedatum, email, huisnummer, postcode, straatnaam, plaatsnaam, telefoonnummer, saldo} = burger || {};
 
 	const [form, {updateForm, toggleSubmitted, isFieldValid}] = useForm<zod.infer<typeof validator>>({
 		validator: validator,
@@ -57,6 +57,7 @@ const BurgerForm: React.FC<BurgerFormProps> = ({burger, onSubmit, isLoading, isB
 				...data,
 				...burger?.id && {id: burger?.id},
 				bsn: Number(data.bsn),
+				saldo: burger?.saldo ?? 0,
 				geboortedatum: d(data.geboortedatum, "L").format("YYYY-MM-DD"),
 			});
 		}
