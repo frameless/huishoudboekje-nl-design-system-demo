@@ -2,7 +2,7 @@
 
 ## 1.8.2
 
-Deze versie omvat een bugfix bij het automatisch afboeken. De opmaak en laadtijd van de  rapportagepagina zijn verbeterd. Ook is een  printweergave toegevoegd.
+Deze versie omvat een bugfix bij het automatisch afboeken. De opmaak en laadtijd van de rapportagepagina zijn verbeterd. Ook is een printweergave toegevoegd.
 
 ### Patch Changes
 
