@@ -50,7 +50,7 @@ const Rapportage = () => {
 
 			const burgers: Burger[] = data.burgers || [];
 			const selectedBurgers = burgers.filter(b => filterBurgerIds.includes(b.id!));
-			const value = burgers.filter(b => filterBurgerIds.includes(b.id!)).map(b => ({
+			const burgers_filter = burgers.filter(b => filterBurgerIds.includes(b.id!)).map(b => ({
 				key: b.id,
 				value: b.id,
 				label: formatBurgerName(b),
@@ -97,18 +97,23 @@ const Rapportage = () => {
 													key: b.id,
 													value: b.id,
 													label: formatBurgerName(b),
-												}))} styles={reactSelectStyles.default} isMulti isClearable={true} noOptionsMessage={() => t("select.noOptions")} maxMenuHeight={200} placeholder={t("charts.optionAllBurgers")} value={value} />
+												}))} styles={reactSelectStyles.default} isMulti isClearable={true} noOptionsMessage={() => t("select.noOptions")} maxMenuHeight={200} placeholder={t("charts.optionAllBurgers")} value={burgers_filter} />
 											</FormControl>
 											<FormControl as={Stack} flex={1}>
 												<FormLabel>{t("charts.filterRubrics")}</FormLabel>
 												<Queryable query={$rubrieken} children={data => {
 													const rubrieken: Rubriek[] = data.rubrieken || [];
+													const rubrieken_filter = rubrieken.filter(r => filterRubriekIds.includes(r.id!)).map(r => ({
+														key: r.id,
+														value: r.id,
+														label: r.naam,
+													}));
 													return (
 														<Select onChange={onSelectRubriek} options={rubrieken.map(r => ({
 															key: r.id,
 															value: r.id,
 															label: r.naam,
-														}))} styles={reactSelectStyles.default} isMulti isClearable={true} noOptionsMessage={() => t("select.noOptions")} maxMenuHeight={200} placeholder={t("charts.optionAllRubrics")} />
+														}))} styles={reactSelectStyles.default} isMulti isClearable={true} noOptionsMessage={() => t("select.noOptions")} maxMenuHeight={200} placeholder={t("charts.optionAllRubrics")} value={rubrieken_filter}  />
 													);
 												}} />
 											</FormControl>
