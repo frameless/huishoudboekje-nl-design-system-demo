@@ -25,7 +25,8 @@ class BurgerFactory():
             huisnummer: str = "5",
             postcode: str = "1234AB",
             plaatsnaam: str = "Hoofddorp",
-            huishouden_id: int = None
+            huishouden_id: int = None,
+            saldo: int = None
     ):
         if not huishouden_id:
             huishouden = self.huishouden_factory.createHuishouden()
@@ -45,6 +46,7 @@ class BurgerFactory():
             postcode=postcode,
             plaatsnaam=plaatsnaam,
             huishouden_id=huishouden_id,
+            saldo=saldo
         )
         self.dbsession.add(burger)
         self.dbsession.flush()
