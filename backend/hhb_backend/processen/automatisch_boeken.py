@@ -121,7 +121,9 @@ def transactie_suggesties(transactie_ids: List[int] = None, transactions: List[B
             continue
         
         # Passende rekening bij transactie ophalen
-        transactie_rekening: Rekening = iban_to_rekening[transaction.tegen_rekening]
+        transactie_rekening: Rekening = iban_to_rekening.get(transaction.tegen_rekening, None)
+        if not transactie_rekening:
+            continue
 
         # Transactie koppelen aan afspraken
         transactie_ids_with_afspraken[transaction.id] = [
