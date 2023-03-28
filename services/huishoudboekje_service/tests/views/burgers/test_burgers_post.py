@@ -28,7 +28,8 @@ def test_burgers_post_success(app, huishouden_factory):
                                      'voornamen': None,
                                      'plaatsnaam': None,
                                      'huishouden_id': huishouden.id,
-                                     'bsn': 223456789,}
+                                     'bsn': 223456789,
+                                     'saldo': 0}
 
 
 def test_burgers_post_input_json_validation_invalid_geboortedatum(app):

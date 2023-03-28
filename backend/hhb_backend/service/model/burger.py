@@ -15,3 +15,4 @@ class Burger(BaseModel):
     postcode: str
     plaatsnaam: str
     huishouden_id: int
+    saldo: int

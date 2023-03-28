@@ -28,7 +28,9 @@ class Burger(graphene.ObjectType):
     afspraken = graphene.List(lambda: afspraak.Afspraak)
     huishouden_id = graphene.Int()
     huishouden = graphene.Field(lambda: huishouden.Huishouden)
-    gebruikersactiviteiten = graphene.List(lambda: gebruikersactiviteit.GebruikersActiviteit)
+    saldo = graphene.Int()
+    gebruikersactiviteiten = graphene.List(
+        lambda: gebruikersactiviteit.GebruikersActiviteit)
 
     def resolve_iban(self, info):
         rekeningen = Burger.resolve_rekeningen(self, info)
@@ -55,8 +57,9 @@ class Burger(graphene.ObjectType):
 
     @staticmethod
     def bsn_length(bsn):
-        if len(str(bsn)) != 9 and len(str(bsn)) != 8 :
-            raise GraphQLError("BSN is not valid: BSN should consist of 8 or 9 digits.")
+        if len(str(bsn)) != 9 and len(str(bsn)) != 8:
+            raise GraphQLError(
+                "BSN is not valid: BSN should consist of 8 or 9 digits.")
 
     @staticmethod
     def bsn_elf_proef(bsn):
@@ -69,7 +72,8 @@ class Burger(graphene.ObjectType):
             else:
                 length = length - 1
         if total_sum % 11 != 0:
-            raise GraphQLError("BSN is not valid: BSN does not meet the 11-proef requirement.")
+            raise GraphQLError(
+                "BSN is not valid: BSN does not meet the 11-proef requirement.")
 
 
 class BurgersPaged(graphene.ObjectType):

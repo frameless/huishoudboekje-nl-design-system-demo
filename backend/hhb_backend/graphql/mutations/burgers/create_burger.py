@@ -31,6 +31,7 @@ class CreateBurgerInput(graphene.InputObjectType):
     plaatsnaam = graphene.String()
     rekeningen = graphene.List(lambda: rekening_input.RekeningInput)
     huishouden = graphene.Argument(huishouden_input.HuishoudenInput)
+    saldo = graphene.Int()
 
 
 class CreateBurger(graphene.Mutation):
@@ -50,7 +51,8 @@ class CreateBurger(graphene.Mutation):
 
         rekeningen = input.pop("rekeningen", None)
 
-        huishouden = create_huishouden_if_not_exists(huishouden=input.pop("huishouden", {}))
+        huishouden = create_huishouden_if_not_exists(
+            huishouden=input.pop("huishouden", {}))
         input["huishouden_id"] = huishouden.id
 
         response = requests.post(
@@ -63,7 +65,8 @@ class CreateBurger(graphene.Mutation):
 
         created_burger = burger.Burger(response.json()["data"])
         entities = [
-            GebruikersActiviteitEntity(entityType="burger", entityId=created_burger.id),
+            GebruikersActiviteitEntity(
+                entityType="burger", entityId=created_burger.id),
         ]
 
         if rekeningen:

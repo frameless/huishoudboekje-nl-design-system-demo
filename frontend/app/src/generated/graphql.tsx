@@ -187,6 +187,7 @@ export type Burger = {
   plaatsnaam?: Maybe<Scalars['String']>;
   postcode?: Maybe<Scalars['String']>;
   rekeningen?: Maybe<Array<Maybe<Rekening>>>;
+  saldo?: Maybe<Scalars['Int']>;
   straatnaam?: Maybe<Scalars['String']>;
   telefoonnummer?: Maybe<Scalars['String']>;
   voorletters?: Maybe<Scalars['String']>;
@@ -339,6 +340,7 @@ export type CreateBurgerInput = {
   plaatsnaam?: InputMaybe<Scalars['String']>;
   postcode?: InputMaybe<Scalars['String']>;
   rekeningen?: InputMaybe<Array<InputMaybe<RekeningInput>>>;
+  saldo?: InputMaybe<Scalars['Int']>;
   straatnaam?: InputMaybe<Scalars['String']>;
   telefoonnummer?: InputMaybe<Scalars['String']>;
   voorletters?: InputMaybe<Scalars['String']>;
