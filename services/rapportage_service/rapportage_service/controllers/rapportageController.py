@@ -12,6 +12,7 @@ class RapportageController():
 
     RUBRIEK = "rubriek"
     TRANSACTIES = "transacties"
+    BURGER_ID = "burger_id"
     TEGENREKENING = "rekeninghouder"
     TRANSACTIE_DATUM = "transactie_datum"
     BEDRAG = "bedrag"
@@ -26,13 +27,13 @@ class RapportageController():
         self._banktransactionservice_repository = banktransactionservice_repository
 
 
-    def get_rapportage_burger(self,burger_id, start, end):
+    def get_rapportage(self,burger_ids, filter_rubrieken, start, end):
         if not valid_date_range(start,end):
             return "Invalid date range", 400
         
-        transactions_info = self._hhb_repository.get_transactions_burger(burger_id)
+        transactions_info = self._hhb_repository.get_transactions_burgers(burger_ids, filter_rubrieken)
 
-        if not self.__correct_structure_requested_data(transactions_info, [self.TEGENREKENING, self.TRANSACTION_ID, self.RUBRIEK]):
+        if not self.__correct_structure_requested_data(transactions_info, [self.BURGER_ID, self.TEGENREKENING, self.TRANSACTION_ID, self.RUBRIEK]):
             '''Not found'''
             return "No data found for burger", 204
 
@@ -45,7 +46,22 @@ class RapportageController():
 
         self.__transaform_transaction_amount(transactions_in_range)
         rapportage_transactions = self.__add_info_to_transactions_in_range(transactions_info, transactions_in_range)
-        return {"data": self.__generate_rapportage(burger_id, rapportage_transactions, start, end)}, 200
+        if len(burger_ids) > 0:
+            rapportages = [self.__generate_rapportage(burger_id, \
+                                        list(filter(lambda transaction: transaction[self.BURGER_ID] is burger_id, rapportage_transactions)),\
+                                        start,\
+                                        end)\
+                                for burger_id in burger_ids
+                        ]
+        else:
+            rapportages = [self.__generate_rapportage(None, \
+                                        rapportage_transactions,\
+                                        start,\
+                                        end)\
+                        ]
+
+        
+        return {"data": rapportages}, 200
     
 
     def __add_info_to_transactions_in_range(self, transactions_info, transactions_in_range):

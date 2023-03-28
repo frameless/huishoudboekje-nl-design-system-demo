@@ -1168,7 +1168,7 @@ export type RootQuery = {
   bankTransactions?: Maybe<Array<Maybe<BankTransaction>>>;
   bankTransactionsPaged?: Maybe<BankTransactionsPaged>;
   burger?: Maybe<Burger>;
-  burgerRapportage?: Maybe<BurgerRapportage>;
+  burgerRapportages?: Maybe<Array<Maybe<BurgerRapportage>>>;
   burgers?: Maybe<Array<Maybe<Burger>>>;
   burgersPaged?: Maybe<BurgersPaged>;
   configuratie?: Maybe<Configuratie>;
@@ -1266,9 +1266,10 @@ export type RootQueryBurgerArgs = {
 
 
 /** The root of all queries  */
-export type RootQueryBurgerRapportageArgs = {
-  burgerId: Scalars['Int'];
+export type RootQueryBurgerRapportagesArgs = {
+  burgerIds: Array<InputMaybe<Scalars['Int']>>;
   endDate: Scalars['String'];
+  rubriekenIds?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
   startDate: Scalars['String'];
 };
 
@@ -2094,14 +2095,15 @@ export type GetBurgerGebeurtenissenQueryVariables = Exact<{
 
 export type GetBurgerGebeurtenissenQuery = { burgers?: Array<{ id?: number, voornamen?: string, voorletters?: string, achternaam?: string }>, gebruikersactiviteitenPaged?: { gebruikersactiviteiten?: Array<{ id?: number, timestamp?: any, gebruikerId?: string, action?: string, entities?: Array<{ entityType?: string, entityId?: string, huishouden?: { id?: number, burgers?: Array<{ id?: number, voorletters?: string, voornamen?: string, achternaam?: string }> }, burger?: { id?: number, voorletters?: string, voornamen?: string, achternaam?: string }, organisatie?: { id?: number, naam?: string, kvknummer?: string, vestigingsnummer?: string }, afspraak?: { id?: number, burger?: { id?: number, voornamen?: string, voorletters?: string, achternaam?: string }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string } } }, rekening?: { id?: number, iban?: string, rekeninghouder?: string }, customerStatementMessage?: { id?: number, filename?: string, bankTransactions?: Array<{ id?: number }> }, configuratie?: { id?: string, waarde?: string }, rubriek?: { id?: number, naam?: string }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, naam?: string } }, postadres?: { id?: string }, export?: { id?: number, naam?: string } }>, meta?: { userAgent?: string, ip?: Array<string>, applicationVersion?: string } }>, pageInfo?: { count?: number } } };
 
-export type GetBurgerRapportageQueryVariables = Exact<{
-  burger: Scalars['Int'];
+export type GetBurgerRapportagesQueryVariables = Exact<{
+  burgers: Array<Scalars['Int']> | Scalars['Int'];
   start: Scalars['String'];
   end: Scalars['String'];
+  rubrieken: Array<Scalars['Int']> | Scalars['Int'];
 }>;
 
 
-export type GetBurgerRapportageQuery = { burgerRapportage?: { startDatum?: string, eindDatum?: string, totaal?: any, totaalUitgaven?: any, totaalInkomsten?: any, burger?: { voornamen?: string }, inkomsten?: Array<{ rubriek?: string, transacties?: Array<{ bedrag?: any, transactieDatum?: string, rekeninghouder?: string }> }>, uitgaven?: Array<{ rubriek?: string, transacties?: Array<{ bedrag?: any, transactieDatum?: string, rekeninghouder?: string }> }> } };
+export type GetBurgerRapportagesQuery = { burgerRapportages?: Array<{ startDatum?: string, eindDatum?: string, totaal?: any, totaalUitgaven?: any, totaalInkomsten?: any, burger?: { voornamen?: string }, inkomsten?: Array<{ rubriek?: string, transacties?: Array<{ bedrag?: any, transactieDatum?: string, rekeninghouder?: string }> }>, uitgaven?: Array<{ rubriek?: string, transacties?: Array<{ bedrag?: any, transactieDatum?: string, rekeninghouder?: string }> }> }> };
 
 export type GetBurgersQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -4876,9 +4878,14 @@ export function useGetBurgerGebeurtenissenLazyQuery(baseOptions?: Apollo.LazyQue
 export type GetBurgerGebeurtenissenQueryHookResult = ReturnType<typeof useGetBurgerGebeurtenissenQuery>;
 export type GetBurgerGebeurtenissenLazyQueryHookResult = ReturnType<typeof useGetBurgerGebeurtenissenLazyQuery>;
 export type GetBurgerGebeurtenissenQueryResult = Apollo.QueryResult<GetBurgerGebeurtenissenQuery, GetBurgerGebeurtenissenQueryVariables>;
-export const GetBurgerRapportageDocument = gql`
-    query getBurgerRapportage($burger: Int!, $start: String!, $end: String!) {
-  burgerRapportage(burgerId: $burger, startDate: $start, endDate: $end) {
+export const GetBurgerRapportagesDocument = gql`
+    query getBurgerRapportages($burgers: [Int!]!, $start: String!, $end: String!, $rubrieken: [Int!]!) {
+  burgerRapportages(
+    burgerIds: $burgers
+    startDate: $start
+    endDate: $end
+    rubriekenIds: $rubrieken
+  ) {
     burger {
       voornamen
     }
@@ -4908,34 +4915,35 @@ export const GetBurgerRapportageDocument = gql`
     `;
 
 /**
- * __useGetBurgerRapportageQuery__
+ * __useGetBurgerRapportagesQuery__
  *
- * To run a query within a React component, call `useGetBurgerRapportageQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetBurgerRapportageQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetBurgerRapportagesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetBurgerRapportagesQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetBurgerRapportageQuery({
+ * const { data, loading, error } = useGetBurgerRapportagesQuery({
  *   variables: {
- *      burger: // value for 'burger'
+ *      burgers: // value for 'burgers'
  *      start: // value for 'start'
  *      end: // value for 'end'
+ *      rubrieken: // value for 'rubrieken'
  *   },
  * });
  */
-export function useGetBurgerRapportageQuery(baseOptions: Apollo.QueryHookOptions<GetBurgerRapportageQuery, GetBurgerRapportageQueryVariables>) {
+export function useGetBurgerRapportagesQuery(baseOptions: Apollo.QueryHookOptions<GetBurgerRapportagesQuery, GetBurgerRapportagesQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetBurgerRapportageQuery, GetBurgerRapportageQueryVariables>(GetBurgerRapportageDocument, options);
+        return Apollo.useQuery<GetBurgerRapportagesQuery, GetBurgerRapportagesQueryVariables>(GetBurgerRapportagesDocument, options);
       }
-export function useGetBurgerRapportageLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetBurgerRapportageQuery, GetBurgerRapportageQueryVariables>) {
+export function useGetBurgerRapportagesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetBurgerRapportagesQuery, GetBurgerRapportagesQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetBurgerRapportageQuery, GetBurgerRapportageQueryVariables>(GetBurgerRapportageDocument, options);
+          return Apollo.useLazyQuery<GetBurgerRapportagesQuery, GetBurgerRapportagesQueryVariables>(GetBurgerRapportagesDocument, options);
         }
-export type GetBurgerRapportageQueryHookResult = ReturnType<typeof useGetBurgerRapportageQuery>;
-export type GetBurgerRapportageLazyQueryHookResult = ReturnType<typeof useGetBurgerRapportageLazyQuery>;
-export type GetBurgerRapportageQueryResult = Apollo.QueryResult<GetBurgerRapportageQuery, GetBurgerRapportageQueryVariables>;
+export type GetBurgerRapportagesQueryHookResult = ReturnType<typeof useGetBurgerRapportagesQuery>;
+export type GetBurgerRapportagesLazyQueryHookResult = ReturnType<typeof useGetBurgerRapportagesLazyQuery>;
+export type GetBurgerRapportagesQueryResult = Apollo.QueryResult<GetBurgerRapportagesQuery, GetBurgerRapportagesQueryVariables>;
 export const GetBurgersDocument = gql`
     query getBurgers {
   burgers {

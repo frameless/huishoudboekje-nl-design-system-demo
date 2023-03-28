@@ -4,7 +4,7 @@ import DatePicker from "react-datepicker";
 import {useTranslation} from "react-i18next";
 import {useLocation} from "react-router-dom";
 import Select from "react-select";
-import {Burger, Rubriek, useGetBurgersQuery} from "../../generated/graphql";
+import {Burger, Rubriek, useGetBurgersQuery, useGetRubriekenQuery} from "../../generated/graphql";
 import {DateRange} from "../../models/models";
 import d from "../../utils/dayjs";
 import Queryable from "../../utils/Queryable";
@@ -43,14 +43,14 @@ const Rapportage = () => {
 	const onSelectRubriek = (value) => setFilterRubriekIds(value ? value.map(v => v.value) : []);
 	const onChangeGranularity = (value) => setGranularity(value);
 	const $burgers = useGetBurgersQuery();
-	//const $rubrieken = useGetRubriekenQuery();
+	const $rubrieken = useGetRubriekenQuery();
 
 	return (
 		<Queryable query={$burgers} children={data => {
 
 			const burgers: Burger[] = data.burgers || [];
 			const selectedBurgers = burgers.filter(b => filterBurgerIds.includes(b.id!));
-			const value = burgers.filter(b => filterBurgerIds.includes(b.id!)).map(b => ({
+			const burgers_filter = burgers.filter(b => filterBurgerIds.includes(b.id!)).map(b => ({
 				key: b.id,
 				value: b.id,
 				label: formatBurgerName(b),
@@ -97,21 +97,25 @@ const Rapportage = () => {
 													key: b.id,
 													value: b.id,
 													label: formatBurgerName(b),
-												}))} styles={reactSelectStyles.default} isMulti isClearable={true} noOptionsMessage={() => t("select.noOptions")} maxMenuHeight={200} placeholder={t("charts.optionAllBurgers")} value={value} />
+												}))} styles={reactSelectStyles.default} isMulti isClearable={true} noOptionsMessage={() => t("select.noOptions")} maxMenuHeight={200} placeholder={t("charts.optionAllBurgers")} value={burgers_filter} />
 											</FormControl>
 											<FormControl as={Stack} flex={1}>
 												<FormLabel>{t("charts.filterRubrics")}</FormLabel>
-												<p>Filteren op rubriek wordt momenteel niet ondersteund</p>
-												{/* <Queryable query={$rubrieken} children={data => {
+												<Queryable query={$rubrieken} children={data => {
 													const rubrieken: Rubriek[] = data.rubrieken || [];
+													const rubrieken_filter = rubrieken.filter(r => filterRubriekIds.includes(r.id!)).map(r => ({
+														key: r.id,
+														value: r.id,
+														label: r.naam,
+													}));
 													return (
 														<Select onChange={onSelectRubriek} options={rubrieken.map(r => ({
 															key: r.id,
 															value: r.id,
 															label: r.naam,
-														}))} styles={reactSelectStyles.default} isMulti isClearable={true} noOptionsMessage={() => t("select.noOptions")} maxMenuHeight={200} placeholder={t("charts.optionAllRubrics")} />
+														}))} styles={reactSelectStyles.default} isMulti isClearable={true} noOptionsMessage={() => t("select.noOptions")} maxMenuHeight={200} placeholder={t("charts.optionAllRubrics")} value={rubrieken_filter}  />
 													);
-												}} /> */}
+												}} />
 											</FormControl>
 										</Stack>
 
@@ -127,7 +131,7 @@ const Rapportage = () => {
 						)}
 						{/* pagina */}
 						<Heading className="print" size={"sm"} fontWeight={"normal"}>{selectedBurgers.length > 0 ? humanJoin(selectedBurgers.map(b => formatBurgerName(b))) : t("allBurgers")}</Heading>
-						<RapportageComponent burgerIds={filterBurgerIds} startDate={dateRange.from} endDate={dateRange.through}></RapportageComponent>
+						<RapportageComponent burgerIds={filterBurgerIds} startDate={dateRange.from} endDate={dateRange.through} rubrieken={filterRubriekIds}></RapportageComponent>
 					</Page>
 				</RapportageContext.Provider>
 			)

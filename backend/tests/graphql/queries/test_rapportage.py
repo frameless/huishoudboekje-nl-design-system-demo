@@ -4,7 +4,7 @@ from hhb_backend.graphql import settings
 def test_burger_rapportage(client):
     with requests_mock.Mocker() as rm:
         #ARRANGE
-        rapportage_service_mock_data = {"data": {
+        rapportage_service_mock_data = {"data": [{
             "burger_id" : 1,
             "start_datum": "2022-12-01",
             "eind_datum": "2022-12-01",
@@ -65,7 +65,7 @@ def test_burger_rapportage(client):
                 ]
                 }
             ]
-            }
+            }]
         }
         burger_mock_data = {"data": [{
                 "achternaam": "pieterson",
@@ -84,7 +84,7 @@ def test_burger_rapportage(client):
                 "voornamen": "piet pieter"
             }]}
 
-        rm.get(f"{settings.RAPPORTAGE_SERVICE_URL}/rapportage/1?startDate=2022-12-01&endDate=2022-12-01", json=rapportage_service_mock_data)
+        rm.get(f"{settings.RAPPORTAGE_SERVICE_URL}/rapportage?startDate=2022-12-01&endDate=2022-12-01", json=rapportage_service_mock_data)
         rm.get(f"{settings.HHB_SERVICES_URL}/burgers/?filter_ids=1",json=burger_mock_data)
         rm.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/")
 
@@ -93,8 +93,8 @@ def test_burger_rapportage(client):
             "/graphql",
             json={
                 "query": '''
-                query test($burger:Int!,$start:String!,$end:String!) {
-                    burgerRapportage(burgerId:$burger, startDate:$start, endDate:$end){
+                query test($burgers:[Int!]!,$start:String!,$end:String!,$rubrieken:[Int!]!) {
+                    burgerRapportages(burgerIds:$burgers, startDate:$start, endDate:$end, rubriekenIds:$rubrieken){
                         burger{
                             voornamen
                         }
@@ -122,13 +122,13 @@ def test_burger_rapportage(client):
                     }
                 }
                 ''',
-                "variables": {"burger": 1, "start":"2022-12-01", "end":"2022-12-01"}
+                "variables": {"burgers": [1], "start":"2022-12-01", "end":"2022-12-01", "rubrieken":[]}
             },
             content_type='application/json'
         )
 
         #ASSERT
-        assert response.json == {"data": {"burgerRapportage": {
+        assert response.json == {"data": {"burgerRapportages": [{
             "burger": {
                 "voornamen": "piet pieter"
             },
@@ -191,5 +191,5 @@ def test_burger_rapportage(client):
                 ]
                 }
             ]
-            }
+            }]
         }}
