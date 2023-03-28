@@ -34,7 +34,7 @@ class Burger(db.Model):
 
     bsn = Column(Integer, unique=True)
 
-    saldo = Column(Integer)
+    saldo = Column(Integer, nullable=False, server_default='0')
 
     # Relations from other models
     rekeningen = relationship(
