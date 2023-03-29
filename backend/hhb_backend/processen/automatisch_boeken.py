@@ -113,6 +113,9 @@ def transactie_suggesties(transactie_ids: List[int] = None, transactions: List[B
     afspraken = hhb_dataloader().afspraken.by_rekeningen(rekening_ids)
     if not afspraken:
         return {key: [] for key in transactie_ids}
+    
+    # Afspraken koppelen aan rekeningen
+    rekening_afspraken = {rekening.id: list(filter(lambda afspraak: rekening_matches_afspraak(rekening.id, afspraak, organisaties), afspraken)) for rekening in rekeningen}
 
     # Transacties koppelen aan een afspraak
     transactie_ids_with_afspraken = {}
@@ -128,19 +131,22 @@ def transactie_suggesties(transactie_ids: List[int] = None, transactions: List[B
         # Transactie koppelen aan afspraken
         transactie_ids_with_afspraken[transaction.id] = [
             afspraak
-            for afspraak in afspraken
-            if  (afspraak.tegen_rekening_id == transactie_rekening.id or transactie_matches_afspraak_organisatie(transactie_rekening, afspraak, organisaties))
+            for afspraak in rekening_afspraken[transactie_rekening.id]
+            if valid_afspraak(afspraak, to_date(transaction.transactie_datum))
             and match_zoekterm(afspraak, transaction.information_to_account_owner)
-            and valid_afspraak(afspraak, to_date(transaction.transactie_datum))
         ]
-
     return transactie_ids_with_afspraken
 
-def transactie_matches_afspraak_organisatie(rekening: Rekening, afspraak: Afspraak, organisaties):
-    filtered_organisaties = filter(lambda organisatie: rekening.id in organisatie["rekening_ids"], organisaties)
+def rekening_matches_afspraak(rekening_id, afspraak: Afspraak, organisaties):
+    if rekening_id == afspraak.tegen_rekening_id:
+        return True
+    
+    filtered_organisaties = filter(lambda organisatie: rekening_id in organisatie["rekening_ids"], organisaties)
     afdelingen = []
     for organisatie in filtered_organisaties:
         afdelingen.extend(organisatie["afdeling_ids"])
 
     return afspraak.afdeling_id in afdelingen
+
+
 
