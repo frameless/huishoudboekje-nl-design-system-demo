@@ -1,5 +1,15 @@
 # Huishoudboekje Changelog
 
+## 1.8.3
+
+Deze versie maakt het mogelijk inkomsten en uitgaven van meerdere burgers te bekijken in rapportage.
+
+### Patch Changes
+
+- 88d13292: #1270 Rapportage now works for more then one burger and can be filtered on rubriek
+- bfc6f395: Added saldo to burgers table of huishoudboekjeservice database, defaults to 0
+- dc488a96: Fixed automatisch afboeken error when there is an unknown iban
+
 ## 1.8.2
 
 Deze versie omvat een bugfix bij het automatisch afboeken. De opmaak en laadtijd van de rapportagepagina zijn verbeterd. Ook is een printweergave toegevoegd.
@@ -13,7 +23,7 @@ Deze versie omvat een bugfix bij het automatisch afboeken. De opmaak en laadtijd
 
 ## Migration guide
 
-  > ⚠️ The organisatieservice database has a new migration. This should go fine automatically.
+> ⚠️ The organisatieservice database has a new migration. This should go fine automatically.
 
 ## 1.8.1
 
