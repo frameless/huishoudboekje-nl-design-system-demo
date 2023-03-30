@@ -2,6 +2,8 @@
 
 ## 1.8.3
 
+Deze versie maakt het mogelijk inkomsten en uitgaven van meerdere burgers te bekijken in rapportage.
+
 ### Patch Changes
 
 - 88d13292: #1270 Rapportage now works for more then one burger and can be filtered on rubriek
