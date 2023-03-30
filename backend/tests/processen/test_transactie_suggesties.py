@@ -372,11 +372,11 @@ def test_transactie_suggesties_no_matches(test_request_context):
                 {'bedrag': None, 'customer_statement_message_id': 17, 'id': 7,
                  'information_to_account_owner': '/EREF/15814016000676480//CNTP/NL32INGB0000012345/INGBNL2A/J.Janssen///REMI/STRD/CUR/9001123412341234/',
                  'is_credit': None, 'is_geboekt': None, 'statement_line': '140220C32.00NTRF900112341234123408/',
-                 'tegen_rekening': 'NL04RABO5082680188', 'transactie_datum': None},
+                 'tegen_rekening': 'NL04RABO5082680188', 'transactie_datum': "2020-12-01"},
                 {'bedrag': None, 'customer_statement_message_id': 17, 'id': 8,
                  'information_to_account_owner': '/EREF/15614016000384600//CNTP/NL32INGB0000012345/INGBNL2A/INGBANK NV///REMI/STRD/CUR/1070123412341234/\n/SUM/4/4/134,46/36,58/\n\xad}',
                  'is_credit': None, 'is_geboekt': None, 'statement_line': '140220D-119.00NTRF107012341234123408/',
-                 'tegen_rekening': 'NL29ABNA5179205913', 'transactie_datum': None}]})
+                 'tegen_rekening': 'NL29ABNA5179205913', 'transactie_datum': "2020-12-01"}]})
 
         get_rekeningen = mock.get(
             f"{settings.HHB_SERVICES_URL}/rekeningen/?filter_ibans=NL04RABO5082680188,NL29ABNA5179205913", json={
@@ -389,12 +389,12 @@ def test_transactie_suggesties_no_matches(test_request_context):
             f"{settings.HHB_SERVICES_URL}/afspraken/?filter_rekening=2,3", json={
                 'data': [{'aantal_betalingen': 12,
                           'bedrag': 450000, 'omschrijving': 'Nog meer geld overmaken',
-                          'credit': True, 'valid_through': '2021-12-31', 'gebruiker_id': 1, 'id': 4,
+                          'credit': True, 'valid_from': '2019-12-31', 'valid_through': '2021-12-31', 'gebruiker_id': 1, 'id': 4,
                           'interval': 'P0Y1M0W0D', 'journaalposten': [], 'zoektermen': None, 'afdeling_id': None,
                           'overschrijvingen': [52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63], 'rubriek_id': None,
                           'valid_from': '2021-01-01', 'tegen_rekening_id': 2},
                          {'aantal_betalingen': 12,
-                          'bedrag': 4654654, 'omschrijving': 'Money', 'credit': True,
+                          'bedrag': 4654654, 'omschrijving': 'Money', 'credit': True, 'valid_from': '2019-12-31',
                           'valid_through': '2021-12-31', 'gebruiker_id': 1, 'id': 3, 'interval': 'P0Y1M0W0D',
                           'journaalposten': [], 'zoektermen': None, 'afdeling_id': None,
                           'overschrijvingen': [40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51], 'rubriek_id': None,
@@ -588,7 +588,7 @@ def test_transactie_suggesties_multiple_zoektermen_too_specific(test_request_con
         get_transactions = mock.get(
             f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/?filter_ids=7", json={'data': [
                 {'id': 7, 'information_to_account_owner': '15814016000676480 J.Janssen',
-                 'tegen_rekening': 'NL04RABO5082680188'},
+                 'tegen_rekening': 'NL04RABO5082680188', 'transactie_datum': '2023-12-01'},
             ]})
 
         get_rekeningen = mock.get(
@@ -601,14 +601,7 @@ def test_transactie_suggesties_multiple_zoektermen_too_specific(test_request_con
             f"{settings.HHB_SERVICES_URL}/afspraken/?filter_rekening=2", json={
                 'data': [
                     {'id': 4, 'zoektermen': ['15814016000676480', 'Janssen', 'Loon'],
-                     'tegen_rekening_id': 2},
-                ]})
-        
-        get_afspraken = mock.get(
-            f"{settings.HHB_SERVICES_URL}/afspraken/?filter_rekening=2", json={
-                'data': [
-                    {'id': 4, 'zoektermen': ['15814016000676480', 'Janssen', 'Loon'],
-                     'tegen_rekening_id': 2},
+                     'tegen_rekening_id': 2, 'valid_from': '2019-12-31', 'valid_through': '2024-12-31'},
                 ]})
         
         get_organisaties = mock.get(
@@ -735,6 +728,58 @@ def test_transactie_suggesties_matching_afspraak_on_organisatie_no_matching_zoek
         assert get_organisaties.call_count == 1
         assert get_organisatie_rekeningen.call_count == 1
         assert len(result[7]) == 0
+
+        # No leftover calls
+        assert not post_any.called
+        assert not get_any.called
+
+
+
+def test_transactie_suggesties_unknown_tegenrekening(test_request_context):
+ with requests_mock.Mocker() as mock:
+        get_any = mock.get(requests_mock.ANY, json={"data": []})
+        post_any = mock.post(requests_mock.ANY, json=post_echo)
+
+        get_transactions = mock.get(
+            f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/?filter_ids=7,8", json={'data': [
+                {'bedrag': None, 'customer_statement_message_id': 17, 'id': 7,
+                 'information_to_account_owner': '/EREF/15814016000676480//CNTP/NL32INGB0000012345/INGBNL2A/J.Janssen///REMI/STRD/CUR/9001123412351234/',
+                 'is_credit': None, 'is_geboekt': None, 'statement_line': '140220C32.00NTRF900112341235123408/',
+                 'tegen_rekening': 'NL04RABO5082680188', "transactie_datum": '2021-12-30'},
+                {'bedrag': None, 'customer_statement_message_id': 17, 'id': 8,
+                 'information_to_account_owner': '/EREF/15614016000384600//CNTP/NL32INGB0000012345/INGBNL2A/INGBANK NV///REMI/STRD/CUR/1070123412341234/\n/SUM/4/4/134,46/36,58/\n\xad}',
+                 'is_credit': None, 'is_geboekt': None, 'statement_line': '140220D-119.00NTRF107012341234123408/',
+                 'tegen_rekening': 'NL29ABNA5179205913', "transactie_datum": '2021-12-30'}]})
+
+        get_rekeningen = mock.get(
+            f"{settings.HHB_SERVICES_URL}/rekeningen/?filter_ibans=NL04RABO5082680188,NL29ABNA5179205913", json={
+                'data': [{'afspraken': [4], 'gebruikers': [], 'iban': 'NL04RABO5082680188', 'id': 2, 'organisaties': [],
+                          'rekeninghouder': 'Hema'}]})
+
+        get_afspraken = mock.get(
+            f"{settings.HHB_SERVICES_URL}/afspraken/?filter_rekening=2", json={
+                'data': [{'aantal_betalingen': 12,
+                          'bedrag': 450000, 'omschrijving': 'Nog meer geld overmaken',
+                          'credit': True, 'valid_through': '2021-12-31', 'gebruiker_id': 1, 'id': 4,
+                          'interval': 'P0Y1M0W0D', 'journaalposten': [], 'zoektermen': ['15814016000676480'],
+                          'afdeling_id': 20,
+                          'overschrijvingen': [52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63], 'rubriek_id': None,
+                          'valid_from': '2021-01-01', 'tegen_rekening_id': 2}
+                         ]})
+        
+        get_organisaties = mock.get(
+            f"{settings.ORGANISATIE_SERVICES_URL}/organisaties/rekeningen", json={
+                'data': [{"afdeling_ids": [20],"organisatie_id": 1,"rekening_ids": [2]}
+                ]})
+        
+        result = transactie_suggesties([7, 8])
+
+        assert get_transactions.call_count == 1
+        assert get_rekeningen.call_count == 1
+        assert get_afspraken.call_count == 1
+        assert get_organisaties.call_count == 1
+        assert len(result[7]) == 1
+        assert result[7][0]["id"] == 4
 
         # No leftover calls
         assert not post_any.called
