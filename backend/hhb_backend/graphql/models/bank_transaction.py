@@ -51,7 +51,7 @@ class BankTransaction(graphene.ObjectType):
 
     def resolve_suggesties(root, info):
         """ Get rubriek when requested """
-        suggesties = automatisch_boeken.transactie_suggesties(root.get("id"))
+        suggesties = automatisch_boeken.transactie_suggesties(root.get("id"), exact_zoekterm_matches=False)
 
         return [item for sublist in suggesties.values() for item in sublist]
 
