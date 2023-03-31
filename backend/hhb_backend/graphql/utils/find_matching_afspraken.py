@@ -80,10 +80,13 @@ def find_similar_afspraken_by_afspraak(main_afspraak):
 
 
 def match_similar_zoekterm(afspraak, target_text: str):
-    return afspraak.get("zoektermen") and len(list(filter(lambda item: item, search_zoektermen_afspraak_in_text(afspraak, target_text)))) > (len(afspraak.get("zoektermen", []))/3)
+    return afspraak.get("zoektermen") and matching_zoektermen_count(afspraak, target_text) > (len(afspraak.get("zoektermen", []))/3)
 
 def match_zoekterm(afspraak, target_text: str):
     return afspraak.get("zoektermen") and all(search_zoektermen_afspraak_in_text(afspraak, target_text))
+
+def matching_zoektermen_count(afspraak, target_text: str):
+    return len(list(filter(lambda item: item, search_zoektermen_afspraak_in_text(afspraak, target_text))))
 
 def search_zoektermen_afspraak_in_text(afspraak, target_text: str):
     return[
