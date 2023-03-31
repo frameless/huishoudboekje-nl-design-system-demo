@@ -20,6 +20,7 @@ from .rekening_loader import RekeningLoader
 from .rubriek_loader import RubriekLoader
 from .signaal_loader import SignaalLoader
 from .rapportage_loader import RapportageLoader
+from .saldo_loader import SaldoLoader
 
 
 class HHBDataLoader:
@@ -46,6 +47,7 @@ class HHBDataLoader:
         self.organisaties = OrganisatieLoader()
         self.overschrijvingen = OverschrijvingLoader()
         self.rapportage = RapportageLoader()
+        self.saldo = SaldoLoader()
 
     def __getitem__(self, item: str):
         return getattr(self, item)

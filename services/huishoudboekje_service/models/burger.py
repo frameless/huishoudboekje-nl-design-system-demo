@@ -1,6 +1,7 @@
 import logging
 
 from models.huishouden import Huishouden
+from models.saldo import Saldo
 from sqlalchemy import Column, DateTime, event, ForeignKey, Integer, Sequence, String
 from sqlalchemy.exc import OperationalError
 from sqlalchemy.orm import relationship, Session
@@ -44,6 +45,7 @@ class Burger(db.Model):
     )
     afspraken = relationship("Afspraak")
     huishouden = relationship("Huishouden", back_populates="burgers")
+    saldos = relationship("Saldo", back_populates="burger")
 
 
 """
@@ -65,11 +67,23 @@ def delete_orphaned_huishoudens(session):
         logging.exception(error)
 
 
+# def delete_orphaned_saldos(session):
+#     # don't let the request that updates/deletes a burger fail if the orphans can't be removed
+#     try:
+#         saldos = session.query(Burger.saldos).all()
+#         saldo_ids = {saldo.id for (saldo,) in saldos}
+#         session.query(Saldo).filter(
+#             saldos.id.not_in(saldo_ids)).delete()
+#     except OperationalError as error:
+#         logging.exception(error)
+
+
 @event.listens_for(Burger, "after_update")
 def receive_after_update(mapper, connection, target):
     @event.listens_for(Session, "after_flush", once=True)
     def receive_after_flush(session, context):
         delete_orphaned_huishoudens(session=session)
+        # delete_orphaned_saldos(session=session)
 
 
 @event.listens_for(Burger, "after_delete")
@@ -77,3 +91,4 @@ def receive_after_delete(mapper, connection, target):
     @event.listens_for(Session, "after_flush", once=True)
     def receive_after_flush(session, context):
         delete_orphaned_huishoudens(session=session)
+        # delete_orphaned_saldos(session=session)

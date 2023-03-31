@@ -18,7 +18,8 @@ from huishoudboekje_service.views import (
     ExportView,
     HuishoudenView,
     AfdelingView,
-    BurgerTransactiesView
+    BurgerTransactiesView,
+    SaldoView
 )
 from core_service import database
 
@@ -37,8 +38,8 @@ def create_app(config_name='huishoudboekje_service.config.Config'):
         level=app.config["LOG_LEVEL"],
         datefmt='%Y-%m-%d %H:%M:%S')
     logging.info(f"Starting {__name__} with {config_name}")
-    
-    # Werkzeug has their own logger which outputs info level URL calls. 
+
+    # Werkzeug has their own logger which outputs info level URL calls.
     # This can also cause parameters that are normally hidden to be logged
     logging.getLogger('werkzeug').setLevel(app.config["LOG_LEVEL"])
 
@@ -55,8 +56,8 @@ def create_app(config_name='huishoudboekje_service.config.Config'):
         {"path": "/burgers/<object_id>", "view": BurgerView,
             "name": "burger_detail_view"},
         {"path": "/burgers/<object_id>/rekeningen", "view": RekeningBurgerView,
-         "name": "burger_rekeningen_view"}, 
-         {"path": "/burgers/transacties",
+         "name": "burger_rekeningen_view"},
+        {"path": "/burgers/transacties",
             "view": BurgerTransactiesView, "name": "burger_transacties"},
         {"path": "/afspraken", "view": AfspraakView, "name": "afspraak_view"},
         {"path": "/afspraken/<object_id>", "view": AfspraakView,
@@ -92,6 +93,7 @@ def create_app(config_name='huishoudboekje_service.config.Config'):
             "name": "afdeling_detail_view"},
         {"path": "/afdelingen/<object_id>/rekeningen", "view": RekeningAfdelingView,
          "name": "afdeling_rekeningen_view"},
+        {"path": "/saldo", "view": SaldoView, "name": "saldo_view"}
     ]
     for route in routes:
         app.add_url_rule(
