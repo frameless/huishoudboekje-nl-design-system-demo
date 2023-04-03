@@ -5,7 +5,7 @@ from typing import List, Dict
 
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.utils.dates import to_date, valid_afspraak
-from hhb_backend.graphql.utils.find_matching_afspraken import match_zoekterm
+from hhb_backend.graphql.utils.find_matching_afspraken import match_zoekterm, match_similar_zoekterm, matching_zoektermen_count
 from hhb_backend.service.model.afspraak import Afspraak
 from hhb_backend.service.model.rekening import Rekening
 from hhb_backend.service.model.bank_transaction import BankTransaction
@@ -67,7 +67,7 @@ def get_transactions_to_write_off(customer_statement_message_id):
     return transactions
 
 
-def transactie_suggesties(transactie_ids: List[int] = None, transactions: List[BankTransaction] = None) -> Dict[int, List[Afspraak]]:
+def transactie_suggesties(transactie_ids: List[int] = None, transactions: List[BankTransaction] = None, exact_zoekterm_matches = True) -> Dict[int, List[Afspraak]]:
     if transactie_ids:
         if type(transactie_ids) != list:
             transactie_ids = [transactie_ids]
@@ -133,9 +133,20 @@ def transactie_suggesties(transactie_ids: List[int] = None, transactions: List[B
             afspraak
             for afspraak in rekening_afspraken[transactie_rekening.id]
             if valid_afspraak(afspraak, to_date(transaction.transactie_datum))
-            and match_zoekterm(afspraak, transaction.information_to_account_owner)
+            and afspraak_matches_zoekterm(afspraak, transaction.information_to_account_owner, exact_zoekterm_matches)
         ]
+
+        if not exact_zoekterm_matches:
+             transactie_ids_with_afspraken[transaction.id].sort(key=lambda afspraak: matching_zoektermen_count(afspraak, transaction.information_to_account_owner), reverse=True)
+
     return transactie_ids_with_afspraken
+
+
+def afspraak_matches_zoekterm(afspraak, target_text: str, exact_zoekterm_matches):
+    if exact_zoekterm_matches:
+        return match_zoekterm(afspraak, target_text)
+    else:
+        return match_similar_zoekterm(afspraak, target_text)
 
 def rekening_matches_afspraak(rekening_id, afspraak: Afspraak, organisaties):
     if rekening_id == afspraak.tegen_rekening_id:
