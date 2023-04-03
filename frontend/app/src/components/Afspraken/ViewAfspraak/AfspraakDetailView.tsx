@@ -25,6 +25,7 @@ import {
 	Tr,
 	useBreakpointValue,
 	useDisclosure,
+	VStack,
 	Wrap,
 	WrapItem,
 } from "@chakra-ui/react";
@@ -437,6 +438,19 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 							</Table>
 						</Stack>
 					)}
+				</Section>
+			</SectionContainer>
+
+			<SectionContainer>
+				<Section title={t("afspraakDetailView.section4.title")} helperText={t("afspraakDetailView.section4.helperText")}>
+					<HStack>
+						<DataItem label={t("afspraakDetailView.startDate")}>
+							<Text>{afspraak.validFrom}</Text>
+						</DataItem>
+						<DataItem label={t("afspraakDetailView.endDate")}>
+							<Text>{afspraak.validThrough ?? t("afspraakDetailView.noEndDate")}</Text>
+						</DataItem>
+					</HStack>
 				</Section>
 			</SectionContainer>
 

@@ -12,6 +12,8 @@ import Asterisk from "../shared/Asterisk";
 import {Section} from "../shared/Section";
 import SectionContainer from "../shared/SectionContainer";
 import AfspraakFormContext from "./EditAfspraak/context";
+import d from "../../utils/dayjs";
+import DatePicker from "react-datepicker";
 
 /**
  * This validator2 is required because Zod doesn't execute the superRefine directly, but only after the initial set of rules all pass.
@@ -34,6 +36,7 @@ const validator = zod.object({
 	postadresId: zod.string().min(1).optional(),
 	tegenRekeningId: zod.number().nonnegative(),
 	credit: zod.boolean(),
+	validFrom: zod.string()
 }).superRefine((data, ctx) => {
 	// Only require organisatieId, afdelingId and postadresId when type === organisatie.
 	if (data.type === "organisatie") {
@@ -58,9 +61,10 @@ type AfspraakFormProps = {
 
 const createInitialValues = (data, organisaties: Organisatie[]): Partial<zod.infer<typeof validator>> => {
 	if (!data) {
-		return {};
+		return {
+			validFrom: d().format("YYYY-MM-DD")
+		};
 	}
-
 	return {
 		type: data?.afdelingId ? "organisatie" : "burger",
 		afdelingId: data?.afdelingId,
@@ -71,6 +75,7 @@ const createInitialValues = (data, organisaties: Organisatie[]): Partial<zod.inf
 		postadresId: data?.postadresId,
 		rubriekId: data?.rubriekId,
 		tegenRekeningId: data?.tegenRekeningId,
+		validFrom: data?.validFrom
 	};
 };
 
@@ -143,6 +148,7 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, on
 		toast({
 			title: t("messages.genericError.title"),
 			error: t("global.formError"),
+
 		});
 	};
 
@@ -353,12 +359,31 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, on
 									</FormControl>
 								</Stack>
 							</>)}
-
-							<Stack align={"flex-end"}>
-								<Button type={"submit"} colorScheme={"primary"}>{t("global.actions.save")}</Button>
-								<Asterisk />
-							</Stack>
-
+						</Stack>
+					</Section>
+					<Section title={t("forms.afspraken.section3.title")} helperText={t("forms.afspraken.section3.helperText")}>
+						<Stack direction={["column", "row"]}>
+							<FormControl flex={1} isInvalid={!isFieldValid("validFrom")} isRequired>
+								<FormLabel>{t("afspraken.startdatum")}</FormLabel>
+								<InputGroup>
+									<DatePicker selected={d(form.validFrom).toDate() || d()}
+										dateFormat={"dd-MM-yyyy"}
+										startDate={d(form.validFrom).toDate()}
+										isClearable={false}
+										selectsRange={false}
+										showYearDropdown
+										dropdownMode={"select"}
+										onChange={(date) => {
+											updateForm("validFrom", d(date).format("YYYY-MM-DD"))
+										}}
+										customInput={(<Input />)} />
+								</InputGroup>
+								<FormErrorMessage>{t("afspraakDetailView.invalidValidFromError")}</FormErrorMessage>
+							</FormControl>
+						</Stack>
+						<Stack marginTop={5} align={"flex-end"}>
+							<Button type={"submit"} colorScheme={"primary"}>{t("global.actions.save")}</Button>
+							<Asterisk />
 						</Stack>
 					</Section>
 				</SectionContainer>

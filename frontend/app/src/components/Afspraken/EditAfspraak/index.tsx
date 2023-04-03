@@ -36,13 +36,14 @@ const EditAfspraak = () => {
 			}
 
 			const editAfspraakValues: UpdateAfspraakMutationVariables["input"] = {
-				bedrag: afspraak.bedrag,
+				bedrag: parseFloat(afspraak.bedrag),
 				credit: afspraak.credit,
 				rubriekId: afspraak.rubriek?.id,
 				omschrijving: afspraak.omschrijving,
 				tegenRekeningId: afspraak.tegenRekening?.id,
 				afdelingId: afspraak.afdeling?.id,
 				postadresId: afspraak.postadres?.id,
+				validFrom: afspraak.validFrom
 			};
 
 			const onSubmitForm = (data) => {
