@@ -43,6 +43,7 @@ import {
 	useDeleteAfspraakZoektermMutation,
 	useDeleteAlarmMutation,
 	useUpdateAlarmMutation,
+	useEndAfspraakMutation
 } from "../../../generated/graphql";
 import d from "../../../utils/dayjs";
 import {useFeatureFlag} from "../../../utils/features";
@@ -62,6 +63,7 @@ import SectionContainer from "../../shared/SectionContainer";
 import ZoektermenList from "../../shared/ZoektermenList";
 import AddAlarmModal from "./AddAlarmModal";
 import AfspraakDetailMenu from "./AfspraakDetailMenu";
+import AfspraakEndModal from "./AfspraakEndModal";
 
 const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 	const validator = useZoektermValidator();
@@ -75,6 +77,7 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 	const [zoektermTouched, setZoektermTouched] = useState<boolean>(false);
 	const betaalinstructieSchedule = useScheduleHelper(afspraak.betaalinstructie);
 	const alarmSchedule = useScheduleHelper(afspraak.alarm);
+	const endModal = useDisclosure();
 	const [addAfspraakZoekterm] = useAddAfspraakZoektermMutation({
 		refetchQueries: [
 			{query: GetAfspraakDocument, variables: {id: afspraak.id}},
@@ -84,6 +87,13 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 			setZoektermTouched(false);
 		},
 	});
+
+	const [endAfspraakMutation] = useEndAfspraakMutation({
+		refetchQueries: [
+			{query: GetAfspraakDocument, variables: {id: afspraak.id}},
+		],
+	});
+
 	const [deleteAfspraakZoekterm] = useDeleteAfspraakZoektermMutation({
 		refetchQueries: [
 			{query: GetAfspraakDocument, variables: {id: afspraak.id}},
@@ -109,6 +119,24 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 			{query: GetAfspraakDocument, variables: {id: afspraak.id}},
 		],
 	});
+
+	const onSubmitEndAfspraak = (validThrough: Date) => {
+		endAfspraakMutation({
+			variables: {
+				id: afspraak.id!,
+				validThrough: d(validThrough).format("YYYY-MM-DD"),
+			},
+		}).then(() => {
+			toast({
+				success: t("endAfspraak.successMessage", {date: d(validThrough).format("L")}),
+			});
+			endModal.onClose();
+		}).catch(err => {
+			toast({
+				error: err.message,
+			});
+		});
+	};
 
 	const toggleAlarmActive = () => {
 		if (!isSignalenEnabled) {
@@ -340,9 +368,6 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 						)}
 					</Stack>
 				</Section>
-			</SectionContainer>
-
-			<SectionContainer>
 				<Section title={t("afspraakDetailView.section2.title")} helperText={t("afspraakDetailView.section2.helperText")} left>
 					<Stack>
 						<Stack direction={["column", "row"]}>
@@ -356,10 +381,28 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 						</Stack>
 					</Stack>
 				</Section>
+				<Section title={t("afspraakDetailView.section3.title")} helperText={t("afspraakDetailView.section3.helperText")}>
+					<HStack>
+						<DataItem label={t("afspraakDetailView.startDate")}>
+							<Text>{afspraak.validFrom}</Text>
+						</DataItem>
+						<DataItem label={t("afspraakDetailView.endDate")}>
+							{afspraak.validThrough != null ? (
+								<Text>{afspraak.validThrough}</Text>
+							) : (
+								<>
+									{endModal.isOpen && <AfspraakEndModal startDate={afspraak.validFrom} onSubmit={onSubmitEndAfspraak} onClose={endModal.onClose} />}
+									<Button width={"130px"} type={"submit"} size={"sm"} colorScheme={"primary"} onClick={endModal.onOpen}>{t("afspraakDetailView.setEndDate")}</Button>
+								</>
+							)}
+
+						</DataItem>
+					</HStack>
+				</Section>
 			</SectionContainer>
 
 			<SectionContainer>
-				<Section title={t("afspraakDetailView.section3.title")} helperText={t("afspraakDetailView.section3.helperText")}>
+				<Section title={t("afspraakDetailView.section4.title")} helperText={t("afspraakDetailView.section4.helperText")}>
 					<Stack>
 						{isAfspraakActive(afspraak) ? (
 							<form onSubmit={onAddAfspraakZoekterm}>
@@ -438,19 +481,6 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 							</Table>
 						</Stack>
 					)}
-				</Section>
-			</SectionContainer>
-
-			<SectionContainer>
-				<Section title={t("afspraakDetailView.section4.title")} helperText={t("afspraakDetailView.section4.helperText")}>
-					<HStack>
-						<DataItem label={t("afspraakDetailView.startDate")}>
-							<Text>{afspraak.validFrom}</Text>
-						</DataItem>
-						<DataItem label={t("afspraakDetailView.endDate")}>
-							<Text>{afspraak.validThrough ?? t("afspraakDetailView.noEndDate")}</Text>
-						</DataItem>
-					</HStack>
 				</Section>
 			</SectionContainer>
 

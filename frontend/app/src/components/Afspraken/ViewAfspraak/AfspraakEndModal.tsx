@@ -9,14 +9,16 @@ import Modal from "../../shared/Modal";
 
 type AfspraakEndModalProps = {
 	onClose: VoidFunction,
-	onSubmit: (validThrough: Date) => void
+	onSubmit: (validThrough: Date) => void,
+	startDate: Date
 };
 
-const AfspraakEndModal: React.FC<AfspraakEndModalProps> = ({onClose, onSubmit}) => {
+const AfspraakEndModal: React.FC<AfspraakEndModalProps> = ({onClose, onSubmit, startDate}) => {
 	const validator = useDateValidator();
 	const {t} = useTranslation();
 	const toast = useToaster();
 	const [date, setDate] = useState<Date>(d().toDate());
+	const [showEndDateBeforeStartDateError, setShowEndDateBeforeStartDateError] = useState<boolean>(false);
 
 	const isValid = (): boolean => {
 		try {
@@ -36,6 +38,12 @@ const AfspraakEndModal: React.FC<AfspraakEndModalProps> = ({onClose, onSubmit}) 
 			});
 			return;
 		}
+		if (showEndDateBeforeStartDateError) {
+			toast({
+				error: t("errors.endDateBeforeStartDate")
+			});
+			return;
+		}
 
 		onSubmit(date);
 	};
@@ -48,16 +56,24 @@ const AfspraakEndModal: React.FC<AfspraakEndModalProps> = ({onClose, onSubmit}) 
 				<FormControl flex={1} isInvalid={!isValid()}>
 					<FormLabel>{t("schedule.endDate")}</FormLabel>
 					<DatePicker selected={date && d(date).isValid() ? date : null} dateFormat={"dd-MM-yyyy"}
+						isClearable={false}
+						selectsRange={false}
+						showYearDropdown
+						dropdownMode={"select"}
 						onChange={(value: Date) => {
 							if (value) {
 								setDate(d(value).startOf("day").toDate());
+								setShowEndDateBeforeStartDateError(d(startDate).isAfter(d(value)))
 							}
-						}} customInput={<Input type={"text"} isInvalid={!isValid()} />} />
+						}}
+						customInput={<Input type={"text"} isInvalid={!isValid()} />} />
 					<FormErrorMessage>{t("errors.invalidDateError")}</FormErrorMessage>
+					{showEndDateBeforeStartDateError === true && (<Text fontStyle={"italic"} color={"red.500"}>{t("errors.endDateBeforeStartDate")}</Text>)}
+
 				</FormControl>
 
 				<Flex justify={"flex-end"}>
-					<Button colorScheme={"primary"} onClick={onClickSubmit}>{t("global.actions.end")}</Button>
+					<Button disabled={showEndDateBeforeStartDateError} colorScheme={"primary"} onClick={onClickSubmit}>{t("global.actions.end")}</Button>
 				</Flex>
 			</Stack>
 		</Modal>
