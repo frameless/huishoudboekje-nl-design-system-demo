@@ -32,15 +32,19 @@ const BookingSection = ({transaction, rubrieken, afspraken}) => {
 		],
 	});
 
-	const options = {
+	const options: {
+		suggesties: Afspraak[]
+		afspraken: Afspraak[]
+		rubrieken: any
+	} = {
 		suggesties: suggesties,
-		afspraken: afspraken.filter(a => {
+		afspraken: Array.from(new Set(afspraken.filter(a => {
 			// Skip afspraken that are suggesties
 			if (suggesties.find(b => b.id === a.id)) {
 				return false;
 			}
 			return true;
-		}),
+		}))),
 		rubrieken: rubrieken.filter(r => r.grootboekrekening && r.grootboekrekening.id).sort((a: Rubriek, b: Rubriek) => {
 			return a.naam && b.naam && a.naam < b.naam ? -1 : 1;
 		}).map((r: Rubriek) => ({
