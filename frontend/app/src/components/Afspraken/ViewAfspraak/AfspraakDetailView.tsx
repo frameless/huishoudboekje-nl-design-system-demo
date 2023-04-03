@@ -384,15 +384,17 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 				<Section title={t("afspraakDetailView.section3.title")} helperText={t("afspraakDetailView.section3.helperText")}>
 					<HStack>
 						<DataItem label={t("afspraakDetailView.startDate")}>
-							<Text>{afspraak.validFrom}</Text>
+							<Text>{d(afspraak.validFrom).format("DD-MM-YYYY")}</Text>
 						</DataItem>
 						<DataItem label={t("afspraakDetailView.endDate")}>
 							{afspraak.validThrough != null ? (
-								<Text>{afspraak.validThrough}</Text>
+								<Text>{d(afspraak.validThrough).format("DD-MM-YYYY")}</Text>
 							) : (
 								<>
 									{endModal.isOpen && <AfspraakEndModal startDate={afspraak.validFrom} onSubmit={onSubmitEndAfspraak} onClose={endModal.onClose} />}
-									<Button width={"130px"} type={"submit"} size={"sm"} colorScheme={"primary"} onClick={endModal.onOpen}>{t("afspraakDetailView.setEndDate")}</Button>
+									<Box>
+										<Button width={"auto"} type={"submit"} size={"sm"} colorScheme={"primary"} onClick={endModal.onOpen}>{t("afspraakDetailView.setEndDate")}</Button>
+									</Box>
 								</>
 							)}
 
