@@ -33,7 +33,7 @@ const BurgerForm: React.FC<BurgerFormProps> = ({burger, onSubmit, isLoading, isB
 			voorletters,
 			voornamen,
 			achternaam,
-			geboortedatum: null,
+			geboortedatum: geboortedatum ? d(geboortedatum, "YYYY-MM-DD").format("L") : null,
 			email,
 			huisnummer,
 			postcode,
