@@ -185,6 +185,10 @@
         "handmatigGeboekt": "Handmatig afgeletterd",
         "ongeboekt": "Niet afgeletterd"
       },
+      "section3": {
+        "title": "Periode",
+        "helperText": "Kies een begindatum voor de periode."
+      },
       "titleCreate": "Afspraak toevoegen",
       "titleEdit": "Afspraak wijzigen"
     },
@@ -352,6 +356,7 @@
     "omschrijving": "Omschrijving",
     "bedrag": "Bedrag",
     "periodiek": "Periodiek",
+    "startdatum": "Startdatum",
     "vervolgAfspraak": {
       "title": "Vervolgafspraak toevoegen",
       "zoektermenHelperText": "De volgende zoektermen worden overgenomen bij de vervolgafspraak:",
@@ -379,6 +384,7 @@
     "invalidRubriekError": "Kies een rubriek.",
     "invalidOmschrijvingError": "Vul een omschrijving in.",
     "invalidBedragError": "Vul een geldig bedrag in.",
+    "invalidValidFromError": "Selecteer een geldige datum",
     "title": "Afspraak bekijken",
     "section1": {
       "title": "Partijen",
@@ -389,6 +395,10 @@
       "helperText": "Gegevens over de betaling."
     },
     "section3": {
+      "title": "Periode",
+      "helperText": "De periode waarin deze afspraak actief is."
+    },
+    "section4": {
       "title": "Afletteren",
       "helperText": "Voeg zoektermen toe voor het automatisch afletteren van geïmporteerde banktransacties."
     },
@@ -396,6 +406,9 @@
       "title": "Betaalinstructie",
       "helperText": "Instellingen voor een betaalinstructie."
     },
+    "startDate": "Startdatum",
+    "endDate": "Einddatum",
+    "setEndDate": "Beëindig Afspraak",
     "noBetaalinstructie": "Er is geen betaalinstructie ingesteld.",
     "alarm": {
       "title": "Alarm",
@@ -512,6 +525,7 @@
   },
   "bedrag": "Bedrag",
   "errors": {
+    "endDateBeforeStartDate": "De einddatum mag niet voor startdatum zijn.",
     "invalidDateError": "Vul een geldige datum in.",
     "straatnaam": {
       "generalError": "Vul een straatnaam in."

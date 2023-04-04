@@ -2070,7 +2070,7 @@ export type GetBurgerDetailsQueryVariables = Exact<{
 }>;
 
 
-export type GetBurgerDetailsQuery = { burger?: { id?: number, voorletters?: string, voornamen?: string, achternaam?: string, huishouden?: { id?: number }, afspraken?: Array<{ id?: number, bedrag?: any, credit?: boolean, omschrijving?: string, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string } }> } };
+export type GetBurgerDetailsQuery = { burger?: { id?: number, voorletters?: string, voornamen?: string, achternaam?: string, huishouden?: { id?: number }, afspraken?: Array<{ id?: number, bedrag?: any, credit?: boolean, omschrijving?: string, validThrough?: any, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string } }> } };
 
 export type GetBurgerPersonalDetailsQueryVariables = Exact<{
   id: Scalars['Int'];
@@ -4705,6 +4705,7 @@ export const GetBurgerDetailsDocument = gql`
       bedrag
       credit
       omschrijving
+      validThrough
       tegenRekening {
         id
         iban
