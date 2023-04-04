@@ -33,7 +33,7 @@ const BurgerForm: React.FC<BurgerFormProps> = ({burger, onSubmit, isLoading, isB
 			voorletters,
 			voornamen,
 			achternaam,
-			geboortedatum: d(geboortedatum, "YYYY-MM-DD").format("L"),
+			geboortedatum: null,
 			email,
 			huisnummer,
 			postcode,
@@ -109,12 +109,17 @@ const BurgerForm: React.FC<BurgerFormProps> = ({burger, onSubmit, isLoading, isB
 						<FormControl id={"geboortedatum"} isInvalid={!isFieldValid("geboortedatum")} >
 							<Stack spacing={1}>
 								<FormLabel>{t("forms.burgers.fields.geboortedatum")}</FormLabel>
-								<DatePicker selected={d(form.geboortedatum, "L").isValid() ? d(form.geboortedatum, "L").toDate() : null} dateFormat={"dd-MM-yyyy"} onChange={(value) => {
-									if(value){
-										updateForm("geboortedatum", d(value).format("L"));
-									} else {
-										updateForm("geboortedatum", null);
-									}
+								<DatePicker selected={d(form.geboortedatum, "L").isValid() ? d(form.geboortedatum, "L").toDate() : null} 
+											dateFormat={"dd-MM-yyyy"} 
+											isClearable={true} 
+											showYearDropdown
+											dropdownMode={"select"}
+											onChange={(value) => {
+												if(value){
+													updateForm("geboortedatum", d(value).format("L"));
+												} else {
+													updateForm("geboortedatum", null);
+											}
 								}} customInput={<Input type={"text"} />} />
 								<FormErrorMessage>{t("messages.burgers.invalidGeboortedatum")}</FormErrorMessage>
 							</Stack>
