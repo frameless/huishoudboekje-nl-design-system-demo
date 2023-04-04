@@ -77,7 +77,7 @@ const AfspraakDetailMenu: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 
 	return (<>
 		{deleteAlert.isOpen && <AfspraakDeleteAlert onConfirm={onClickDelete} onClose={deleteAlert.onClose} />}
-		{endModal.isOpen && <AfspraakEndModal onSubmit={onSubmitEndAfspraak} onClose={endModal.onClose} />}
+		{endModal.isOpen && <AfspraakEndModal startDate={afspraak.validFrom} onSubmit={onSubmitEndAfspraak} onClose={endModal.onClose} />}
 
 		<Menu>
 			<IconButton as={MenuButton} icon={<MenuIcon />} variant={"solid"} aria-label={"Open menu"} />
