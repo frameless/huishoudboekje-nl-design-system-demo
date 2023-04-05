@@ -118,12 +118,12 @@ def create_journaalposten(input, afspraken, transactions):
     update_transaction_service_is_geboekt(transactions, is_geboekt=True)
 
     # Feature flag: signalen
+    logging.info("Evaluating alarms...")
     if Unleash().is_enabled("signalen"):
-        logging.info("create_journaalpost mutation: Evaluating alarms...")
         if alarm_ids:
             evaluate_alarms(alarm_ids, journaalposten)
     else:
-        logging.info("create_journaalpost mutation: Skipping alarm evaluation.")
+        logging.info("Skipping alarm evaluation. Signalen is disabled")
 
     return journaalposten
 

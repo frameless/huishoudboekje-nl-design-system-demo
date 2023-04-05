@@ -51,7 +51,6 @@ class AddAfspraakZoekterm(graphene.Mutation):
             raise GraphQLError(f"Upstream API responded: {response.text}")
 
         result = response.json()["data"]
-        print(f"result {result}")
         afspraak = Afspraak(result)
 
         matching_afspraken = find_matching_afspraken_by_afspraak(afspraak)

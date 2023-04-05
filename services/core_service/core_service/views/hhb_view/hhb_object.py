@@ -47,14 +47,14 @@ class HHBObject:
 
     def update_using_request_data(self):
         """ Add data to object based on request input """
-        logging.info(f"{__name__}.update_using_request_data() , request.json.type: {type(request.json)} , request.json: {request.json}")
+        logging.debug(f"{__name__}.update_using_request_data() , request.json.type: {type(request.json)} , request.json: {request.json}")
         if type(request.json) == list:
             for item, hhb_object in zip(request.json, self.hhb_object):
                 for key, value in item.items():
                     setattr(hhb_object, key, value)
         else:
             for key, value in request.json.items():
-                logging.info(f"key: {key}, value: {value}, hhb_object: {self.hhb_object}")
+                logging.debug(f"key: {key}, value: {value}, hhb_object: {self.hhb_object}")
                 setattr(self.hhb_object, key, value)
 
     def commit_changes(self):

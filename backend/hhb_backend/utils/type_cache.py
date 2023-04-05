@@ -30,7 +30,7 @@ def get_type_hint(self, item) -> (bool, type):
 def _get_or_cache_class(cls):
     cache = _class_cache.get(cls)
     if not cache:
-        logging.info(f"caching class: {cls}")
+        logging.debug(f"caching class: {cls}")
         cache = _model_type(cls)
         _class_cache[cls] = cache
     return cache
@@ -39,7 +39,7 @@ def _get_or_cache_class(cls):
 def _get_or_cache_attributes(cls):
     cache = _attribute_cache.get(cls)
     if not cache:
-        logging.info(f"caching attributes: {cls}")
+        logging.debug(f"caching attributes: {cls}")
         cache = _attributes(cls)
         _attribute_cache[cls] = cache
     return cache

@@ -51,7 +51,7 @@ class AlarmHelper:
 
     @staticmethod
     def create(input):
-        logging.info(f"AlarmHelper.create: creating alarm... Input: {input}")
+        logging.debug(f"AlarmHelper.create: creating alarm... Input: {input}")
 
         # TODO eventually turn this back on, for testing purposes it is off
         # alarm_date = parser.parse(input.startDate).date()
@@ -88,13 +88,12 @@ class AlarmHelper:
                                                  json=update_afspraak, headers={"Content-type": "application/json"})
         if update_afspraak_response.status_code != 200:
             raise UpstreamError(update_afspraak_response, "Failed to update afspraak with new alarm.")
-
-        logging.info(f"AlarmHelper.create: created alarm. Response: {response_alarm}")
+        logging.debug(f"AlarmHelper.create: created alarm. Response: {response_alarm}")
         return AlarmHelper(alarm=response_alarm, previous=dict(), ok=True, burger_id=afspraak.burger_id)
 
     @staticmethod
     def delete(id):
-        logging.info(f"AlarmHelper.delete: deleting alarm... Id: {id}")
+        logging.debug(f"AlarmHelper.delete: deleting alarm... Id: {id}")
 
         previous = hhb_dataloader().alarms.load_one(id)
         if not previous:
@@ -110,13 +109,13 @@ class AlarmHelper:
         response = requests.delete(f"{settings.ALARMENSERVICE_URL}/alarms/{id}")
         if response.status_code != 204:
             raise UpstreamError(response, "Could not delete the alarm.")
-
-        logging.info(f"AlarmHelper.delete: deleted alarm. Id: {id}.")
+        logginf.info
+        logging.debug(f"AlarmHelper.delete: deleted alarm. Id: {id}.")
         return AlarmHelper(alarm=dict(), previous=previous, ok=True, burger_id=burger_id)
 
     @staticmethod
     def update(id: str, input: UpdateAlarmInput):
-        logging.info(f"AlarmHelper.update: updating alarm... Id: {id}, input: {input}")
+        logging.debug(f"AlarmHelper.update: updating alarm... Id: {id}, input: {input}")
 
         # TODO eventually turn this back on, for testing purposes it is off
         # if input.get("startDate"):
@@ -144,7 +143,7 @@ class AlarmHelper:
             raise UpstreamError(response, "Updating alarm failed.")
         response_alarm = response.json()['data']
 
-        logging.info(f"AlarmHelper.update: updated alarm {id}. Response: {response_alarm}.")
+        logging.debug(f"AlarmHelper.update: updated alarm {id}. Response: {response_alarm}.")
         return AlarmHelper(alarm=response_alarm, previous=previous_response, ok=True,
                            burger_id=afspraak_response.burger_id)
 
