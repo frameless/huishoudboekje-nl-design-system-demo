@@ -1,3 +1,4 @@
+import logging
 import graphene
 import requests
 
@@ -19,6 +20,7 @@ class DeleteJournaalpost(graphene.Mutation):
 
     @staticmethod
     def mutate(self, info, id):
+        logging.info(f"Deleting journaalpost {id}")
         previous = hhb_dataloader().journaalposten.load_one(id)
         if previous and previous.afspraak_id:
             previous.afspraak = hhb_dataloader().afspraken.load_one(previous.afspraak_id)

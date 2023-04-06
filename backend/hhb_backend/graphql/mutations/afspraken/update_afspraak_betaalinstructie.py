@@ -43,6 +43,7 @@ class UpdateAfspraakBetaalinstructie(graphene.Mutation):
     @staticmethod
     def mutate(self, info, afspraak_id: int, betaalinstructie: BetaalinstructieInput):
         """ Update the Afspraak """
+        logging.info(f"Updating afspraak: {afspraak_id}")
         previous = hhb_dataloader().afspraken.load_one(afspraak_id)
 
         if previous is None:

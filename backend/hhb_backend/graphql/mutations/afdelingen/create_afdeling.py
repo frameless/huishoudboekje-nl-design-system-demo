@@ -1,4 +1,5 @@
 """ GraphQL mutation for creating a new Afdeling """
+import logging
 import graphene
 import requests
 from graphql import GraphQLError
@@ -33,6 +34,7 @@ class CreateAfdeling(graphene.Mutation):
 
     def mutate(root, info, **kwargs):
         """ Create the new Afdeling """
+        logging.info("Creating afdeling")
         input = kwargs.pop("input")
         rekeningen = input.pop("rekeningen", None)
         postadressen = input.pop("postadressen", None)

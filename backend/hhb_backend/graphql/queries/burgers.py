@@ -1,4 +1,5 @@
 """ GraphQL Burgers query """
+import logging
 import graphene
 
 import hhb_backend.graphql.models.burger as burger
@@ -14,6 +15,7 @@ class BurgerQuery:
 
     @classmethod
     def resolver(cls, _, info, id):
+        logging.info(f"Get burger")
         result = hhb_dataloader().burgers.load_one(id)
         AuditLogging.create(
             action=info.field_name,
@@ -33,6 +35,7 @@ class BurgersQuery:
 
     @classmethod
     def resolver(cls, _, info, **kwargs):
+        logging.info(f"Get burgers")
         if "ids" in kwargs:
             burgers = hhb_dataloader().burgers.load(kwargs["ids"])
             AuditLogging.create(
@@ -107,6 +110,7 @@ class BurgersPagedQuery:
 
     @classmethod
     def resolver(cls, _, info, **kwargs):
+        logging.info(f"Get burgers paged")
         if "start" in kwargs and "limit" in kwargs:
             burgers = hhb_dataloader().burgers.load_paged(start=kwargs["start"], limit=kwargs["limit"])
         else:

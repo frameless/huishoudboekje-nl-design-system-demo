@@ -17,6 +17,7 @@ class DeleteSignaal(graphene.Mutation):
     @staticmethod
     def mutate(self, info, id):
         """ Mutatie voor het verwijderen van een bestaand signaal """
+        logging.info(f"Deleting signaal {id}")
         result = SignaalHelper.delete(id)
         previous = result.previous
 

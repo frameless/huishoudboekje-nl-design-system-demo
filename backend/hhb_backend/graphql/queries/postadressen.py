@@ -1,3 +1,4 @@
+import logging
 import graphene
 from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql.dataloaders import hhb_dataloader
@@ -10,6 +11,7 @@ class PostadresQuery:
 
     @classmethod
     def resolver(cls, _root, info, id):
+        logging.info(f"Get postadres")
         result = hhb_dataloader().postadressen.load_one(id)
         AuditLogging.create(
             action=info.field_name,
@@ -25,6 +27,7 @@ class PostadressenQuery:
 
     @classmethod
     def resolver(cls, _root, info, ids=None):
+        logging.info(f"Get postadressen")
         if ids:
             result = hhb_dataloader().postadressen.load(ids)
         else:

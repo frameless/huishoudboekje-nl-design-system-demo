@@ -1,4 +1,5 @@
 """ GraphQL mutatie voor het aanmaken van een Signaal """
+import logging
 import graphene
 
 import hhb_backend.graphql.models.signaal as graphene_signaal
@@ -17,6 +18,7 @@ class CreateSignaal(graphene.Mutation):
     @staticmethod
     def mutate(self, info, input: CreateSignaalInput):
         """ Mutatie voor het aanmaken van een nieuw Signaal """
+        logging.info(f"Creating signaal")
         response_signaal = SignaalHelper.create(input)
         signaal = response_signaal.signaal
 

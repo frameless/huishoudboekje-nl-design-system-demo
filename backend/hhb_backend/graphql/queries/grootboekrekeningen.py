@@ -1,4 +1,5 @@
 """ GraphQL Grootboekrekening query """
+import logging
 import graphene
 from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql.dataloaders import hhb_dataloader
@@ -11,6 +12,7 @@ class GrootboekrekeningQuery:
 
     @classmethod
     def resolver(cls, root, info, id):
+        logging.info(f"Get grootboekrekening")
         result = hhb_dataloader().grootboekrekeningen.load_one(id)
         AuditLogging.create(
             action=info.field_name,
@@ -28,6 +30,7 @@ class GrootboekrekeningenQuery:
 
     @classmethod
     def resolver(cls, root, info, ids=None):
+        logging.info(f"Get grootboekrekeningen")
         if ids:
             result = hhb_dataloader().grootboekrekeningen.load(ids)
         else:

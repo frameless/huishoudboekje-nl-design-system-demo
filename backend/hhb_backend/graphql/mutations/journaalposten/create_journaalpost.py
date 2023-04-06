@@ -40,6 +40,7 @@ class CreateJournaalpostAfspraak(graphene.Mutation):
     @staticmethod
     def mutate(self, info, input: List[CreateJournaalpostAfspraakInput]):
         """ Create the new Journaalpost """
+        logging.info(f"Creating journaalpost")
         # Validate that the references exist
         if len(input) == 0:
             raise GraphQLError("empty input")
@@ -140,6 +141,7 @@ class CreateJournaalpostGrootboekrekening(graphene.Mutation):
     @staticmethod
     def mutate(root, info, input, **_kwargs):
         """ Create the new Journaalpost """
+        logging.info(f"Creating journaalpost")
         # Validate that the references exist
         transaction = hhb_dataloader().bank_transactions.load_one(input.transaction_id)
         if not transaction:

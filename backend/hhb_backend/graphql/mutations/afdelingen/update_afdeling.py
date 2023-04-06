@@ -1,4 +1,5 @@
 """ GraphQL mutation for updating a Afdeling """
+import logging
 import graphene
 import requests
 
@@ -26,6 +27,7 @@ class UpdateAfdeling(graphene.Mutation):
     @staticmethod
     def mutate(root, info, id, **kwargs):
         """ Update the current Afdeling """
+        logging.info(f"Updating afdeling: {id}")
         previous = hhb_dataloader().afdelingen.load_one(id)
         if not previous:
             raise GraphQLError("Afdeling not found")

@@ -1,6 +1,7 @@
 """ GraphQL mutation for updating a Rubriek """
 
 import json
+import logging
 
 import graphene
 import requests
@@ -26,6 +27,7 @@ class UpdateRubriek(graphene.Mutation):
     @staticmethod
     def mutate(self, info, id, **kwargs):
         """ Update a Rubriek """
+        logging.info(f"Updating rubriek {id}")
         previous = hhb_dataloader().rubrieken.load_one(id)
         if (
             kwargs["grootboekrekening_id"]

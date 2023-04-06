@@ -1,4 +1,5 @@
 """ GraphQL Gebruikers query """
+import logging
 import graphene
 
 from hhb_backend.audit_logging import AuditLogging
@@ -16,6 +17,7 @@ class CustomerStatementMessageQuery:
 
     @classmethod
     def resolver(cls, _root, info, id):
+        logging.info(f"Get customer statement message")
         result = hhb_dataloader().csms.load_one(id)
 
         AuditLogging.create(
@@ -35,6 +37,7 @@ class CustomerStatementMessagesQuery:
 
     @classmethod
     def resolver(cls, _root, info, ids=None):
+        logging.info(f"Get customer statement messages")
         if ids:
             result = hhb_dataloader().csms.load(ids)
         else:

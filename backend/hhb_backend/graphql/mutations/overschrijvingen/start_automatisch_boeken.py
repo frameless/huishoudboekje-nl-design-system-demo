@@ -1,3 +1,4 @@
+import logging
 import graphene
 
 import hhb_backend.graphql.models.journaalpost as graphene_journaalpost
@@ -13,6 +14,7 @@ class StartAutomatischBoeken(graphene.Mutation):
 
     @staticmethod
     def mutate(self, info):
+        logging.info(f"Start automatisch boeken")
         journaalposten = automatisch_boeken.automatisch_boeken()
 
         AuditLogging.create(

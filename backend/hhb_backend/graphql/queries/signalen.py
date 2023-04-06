@@ -1,3 +1,4 @@
+import logging
 import graphene
 
 from hhb_backend.audit_logging import AuditLogging
@@ -11,6 +12,7 @@ class SignaalQuery:
 
     @classmethod
     def resolver(cls, _root, info, id):
+        logging.info(f"Get signaal")
         AuditLogging().create(
             action=info.field_name,
             entities=[
@@ -25,6 +27,7 @@ class SignalenQuery:
 
     @classmethod
     def resolver(cls, _root, info, ids=None):
+        logging.info(f"Get signalen")
         if ids:
             result = hhb_dataloader().signalen.load(ids)
         else:

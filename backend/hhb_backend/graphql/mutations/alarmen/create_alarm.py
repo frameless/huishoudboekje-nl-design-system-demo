@@ -1,4 +1,5 @@
 """ GraphQL mutatie voor het aanmaken van een Alarm """
+import logging
 import graphene
 
 import hhb_backend.graphql.models.alarm as graphene_alarm
@@ -18,6 +19,7 @@ class CreateAlarm(graphene.Mutation):
     @staticmethod
     def mutate(self, info, input: CreateAlarmInput):
         """ Mutatie voor het aanmaken van een nieuw Alarm """
+        logging.info("Creating alarm")
         response_alarm = AlarmHelper.create(input)
 
         AuditLogging.create(

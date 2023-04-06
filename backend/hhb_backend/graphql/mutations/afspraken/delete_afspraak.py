@@ -1,5 +1,6 @@
 """ GraphQL mutation for deleting a Afspraak """
 
+import logging
 import graphene
 import requests
 
@@ -22,6 +23,7 @@ class DeleteAfspraak(graphene.Mutation):
     @staticmethod
     def mutate(self, info, id):
         """ Delete current afspraak """
+        logging.info(f"Deleting afspraak: {id}")
         previous = hhb_dataloader().afspraken.load_one(id)
         if not previous:
             raise GraphQLError("Afspraak not found")

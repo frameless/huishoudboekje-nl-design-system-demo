@@ -44,6 +44,7 @@ class CreateAfspraak(graphene.Mutation):
     @staticmethod
     def mutate(self, info, input: CreateAfspraakInput):
         """ Create the new Afspraak """
+        logging.info("Creating afspraak")
 
         if "valid_from" not in input:
             input["valid_from"] = str(date.today())

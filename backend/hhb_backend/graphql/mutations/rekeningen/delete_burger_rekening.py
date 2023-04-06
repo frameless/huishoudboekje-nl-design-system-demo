@@ -1,5 +1,6 @@
 """ GraphQL mutation for deleting a Rekening from a Burger """
 
+import logging
 import graphene
 
 from graphql import GraphQLError
@@ -27,6 +28,7 @@ class DeleteBurgerRekening(graphene.Mutation):
     @staticmethod
     def mutate(self, info, rekening_id, burger_id):
         """ Delete rekening associations with either burger or organisation """
+        logging.info(f"Deleting rekening {rekening_id}")
         previous = hhb_dataloader().rekeningen.load_one(rekening_id)
         if not previous:
             raise GraphQLError("Rekening not found")

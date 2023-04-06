@@ -13,7 +13,6 @@ from hhb_backend.graphql.mutations.journaalposten.create_journaalpost import cre
 
 
 def automatisch_boeken(customer_statement_message_id: int = None):
-    logging.info("Automatisch boeken started")
     transactions = get_transactions_to_write_off(customer_statement_message_id)
     suggesties = transactie_suggesties(transactions=transactions)
     _afspraken = {}
@@ -31,8 +30,8 @@ def automatisch_boeken(customer_statement_message_id: int = None):
             _matching_transaction_ids.append(transactie_id)
 
     stats = Counter(len(s) for s in suggesties.values())
-    logging.debug(
-        f"automatisch_boeken: {', '.join([f'{transactions_count} transactions with {suggestion_count} suggestions' for suggestion_count, transactions_count in stats.items() if suggestion_count != 1])} were not processed.")
+    logging.info(
+        f"Automatisch_boeken: {', '.join([f'{transactions_count} transactions with {suggestion_count} suggestions' for suggestion_count, transactions_count in stats.items() if suggestion_count != 1])} were not processed.")
 
     if not _automatische_transacties:
         return None
@@ -57,7 +56,7 @@ def automatisch_boeken(customer_statement_message_id: int = None):
     return journaalposten_
 
 def get_transactions_to_write_off(customer_statement_message_id):
-    logging.info(f"automatisch_boeken: customer_statement_message_id={customer_statement_message_id}")
+    logging.info(f"Automatisch_boeken: customer_statement_message_id={customer_statement_message_id}")
     if customer_statement_message_id is not None:
         transactions = [
             transaction for

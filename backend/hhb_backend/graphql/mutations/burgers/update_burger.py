@@ -1,5 +1,6 @@
 """ GraphQL mutation for updating a Burger """
 import json
+import logging
 
 import graphene
 import requests
@@ -38,6 +39,7 @@ class UpdateBurger(graphene.Mutation):
     @staticmethod
     def mutate(self, info, id, **kwargs):
         """ Update the current Gebruiker/Burger """
+        logging.info(f"Updating burger {id}")
         previous = hhb_dataloader().burgers.load_one(id)
 
         bsn = kwargs.get("bsn")

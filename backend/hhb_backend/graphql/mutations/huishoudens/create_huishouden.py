@@ -1,5 +1,6 @@
 """ GraphQL mutation for creating a new Huishouden """
 
+import logging
 import graphene
 import requests
 
@@ -29,6 +30,7 @@ class CreateHuishouden(graphene.Mutation):
     @staticmethod
     def mutate(self, info, input: CreateHuishoudenInput):
         """Create a new Huishouden"""
+        logging.info("Creating huishouden")
         response = requests.post(
             f"{settings.HHB_SERVICES_URL}/huishoudens/", json=input
         )

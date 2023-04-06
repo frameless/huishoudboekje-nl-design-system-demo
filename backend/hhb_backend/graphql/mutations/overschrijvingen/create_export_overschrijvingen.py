@@ -1,6 +1,7 @@
 import hashlib
 import json
 from datetime import datetime
+import logging
 
 import graphene
 import requests
@@ -47,6 +48,7 @@ class CreateExportOverschrijvingen(graphene.Mutation):
     @staticmethod
     def mutate(self, info, **kwargs):
         """ Create the export file based on start and end date """
+        logging.info(f"Creating export file")
         start_datum_str = kwargs.pop("startDatum")
         eind_datum_str = kwargs.pop("eindDatum")
         start_datum = to_date(start_datum_str)

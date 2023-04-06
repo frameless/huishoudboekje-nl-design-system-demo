@@ -1,3 +1,4 @@
+import logging
 from typing import List
 
 import graphene
@@ -25,6 +26,7 @@ class AddHuishoudenBurger(graphene.Mutation):
     @staticmethod
     def mutate(self, info, huishouden_id: int, burger_ids: List[int]):
         """Add burgers to given huishouden"""
+        logging.info(f"Adding burger {burger_id} to huishouden {huishouden_id}")
         previous = hhb_dataloader().huishoudens.load_one(huishouden_id)
 
         if previous is None:

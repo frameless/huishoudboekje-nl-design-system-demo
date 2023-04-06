@@ -1,5 +1,6 @@
 """ GraphQL mutation for adding an Afspraak zoekterm """
 
+import logging
 import graphene
 import requests
 
@@ -28,7 +29,7 @@ class AddAfspraakZoekterm(graphene.Mutation):
     @staticmethod
     def mutate(root, info, afspraak_id: int, zoekterm):
         """ Add zoekterm to afspraak """
-
+        logging.info(f"Adding zoekterm for afspraak: {id}")
         previous: Afspraak = hhb_dataloader().afspraken.load_one(afspraak_id)
         if previous is None:
             raise GraphQLError("Afspraak not found")

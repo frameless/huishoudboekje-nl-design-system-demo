@@ -1,5 +1,6 @@
 """ GraphQL Gebruikers query """
 
+import logging
 import graphene
 
 import hhb_backend.graphql.models.bank_transaction as bank_transaction
@@ -15,6 +16,7 @@ class BankTransactionQuery:
 
     @classmethod
     def resolver(cls, _, info, id):
+        logging.info(f"Get banktransactie")
         AuditLogging.create(
             action=info.field_name,
             entities=[
@@ -29,6 +31,7 @@ class BankTransactionsQuery:
 
     @classmethod
     def resolver(cls, _, info, **kwargs):
+        logging.info(f"Get banktransacties")
         result = hhb_dataloader().bank_transactions.load_all(filters=kwargs.get("filters", None))
         AuditLogging.create(
             action=info.field_name,
@@ -50,6 +53,7 @@ class BankTransactionsPagedQuery:
 
     @classmethod
     def resolver(cls, _, info, filters=None, **kwargs):
+        logging.info(f"Get banktransacties paged")
         if "start" not in kwargs or "limit" not in kwargs:
             raise GraphQLError(f"Query needs params 'start', 'limit'. ")
 
