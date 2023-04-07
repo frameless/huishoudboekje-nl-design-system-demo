@@ -1,5 +1,6 @@
 """ GraphQL mutation for deleting a Organisatie """
 
+import logging
 import graphene
 import requests
 
@@ -22,6 +23,7 @@ class DeleteOrganisatie(graphene.Mutation):
     @staticmethod
     def mutate(self, info, id):
         """ Delete current organisatie """
+        logging.info(f"Deleting organisatie {id}")
         previous = hhb_dataloader().organisaties.load_one(id)
         if not previous:
             raise GraphQLError("Organisatie not found")

@@ -1,6 +1,7 @@
 """ GraphQL mutation for deleting a Burger """
 
 from datetime import datetime
+import logging
 
 import graphene
 import requests
@@ -24,6 +25,7 @@ class DeleteBurger(graphene.Mutation):
     @staticmethod
     def mutate(self, info, id):
         """Delete current burger"""
+        logging.info(f"Deleting burger {id}")
         previous = hhb_dataloader().burgers.load_one(id)
         if not previous:
             raise GraphQLError(f"Burger with id {id} not found")

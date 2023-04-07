@@ -1,3 +1,4 @@
+import logging
 import graphene
 
 import hhb_backend.graphql.models.huishouden as huishouden
@@ -13,6 +14,7 @@ class HuishoudenQuery:
 
     @classmethod
     def resolver(cls, _root, info, id):
+        logging.info(f"Get huishouden")
         result = hhb_dataloader().huishoudens.load_one(id)
         AuditLogging.create(
             action=info.field_name,
@@ -32,6 +34,7 @@ class HuishoudensQuery:
 
     @classmethod
     def resolver(cls, _root, info, ids=None, **kwargs):
+        logging.info(f"Get huishoudens")
         if ids:
             result = hhb_dataloader().huishoudens.load(ids)
             entities = [
@@ -60,6 +63,7 @@ class HuishoudensPagedQuery:
 
     @classmethod
     def resolver(cls, _root, info, **kwargs):
+        logging.info(f"Get huishoudens paged")
         if "start" not in kwargs or "limit" not in kwargs:
             raise GraphQLError(f"Query needs params 'start', 'limit'. ")
 

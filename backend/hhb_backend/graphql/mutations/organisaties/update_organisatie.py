@@ -1,4 +1,5 @@
 """ GraphQL mutation for updating a Organisatie """
+import logging
 import graphene
 import requests
 
@@ -25,6 +26,7 @@ class UpdateOrganisatie(graphene.Mutation):
     @staticmethod
     def mutate(self, info, id, **kwargs):
         """ Update the current Organisatie """
+        logging.info(f"Updating organisatie {id}")
         previous = hhb_dataloader().organisaties.load_one(id)
         if not previous:
             raise GraphQLError("Organisatie not found")

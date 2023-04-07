@@ -1,5 +1,6 @@
 """ GraphQL mutation for creating a new CustomerStatementMessage """
 import json
+import logging
 import re
 from datetime import datetime
 
@@ -34,6 +35,7 @@ class CreateCustomerStatementMessage(graphene.Mutation):
 
     @staticmethod
     def mutate(self, info, file):
+        logging.info(f"Creating csm")
         content = file.stream.read()
 
         if not content:

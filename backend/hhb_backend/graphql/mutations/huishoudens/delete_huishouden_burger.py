@@ -1,3 +1,4 @@
+import logging
 from typing import List
 
 import graphene
@@ -28,6 +29,7 @@ class DeleteHuishoudenBurger(graphene.Mutation):
     @staticmethod
     def mutate(root, info, huishouden_id: int, burger_ids: List[int]):
         """Move given burgers to new huishoudens"""
+        logging.info(f"Deleting huishouden burger")
         previous = hhb_dataloader().huishoudens.load_one(huishouden_id)
 
         if previous is None:

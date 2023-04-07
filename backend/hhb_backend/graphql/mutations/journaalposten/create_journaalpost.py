@@ -40,6 +40,7 @@ class CreateJournaalpostAfspraak(graphene.Mutation):
     @staticmethod
     def mutate(self, info, input: List[CreateJournaalpostAfspraakInput]):
         """ Create the new Journaalpost """
+        logging.info(f"Creating journaalpost")
         # Validate that the references exist
         if len(input) == 0:
             raise GraphQLError("empty input")
@@ -118,12 +119,12 @@ def create_journaalposten(input, afspraken, transactions):
     update_transaction_service_is_geboekt(transactions, is_geboekt=True)
 
     # Feature flag: signalen
+    logging.info("Evaluating alarms...")
     if Unleash().is_enabled("signalen"):
-        logging.info("create_journaalpost mutation: Evaluating alarms...")
         if alarm_ids:
             evaluate_alarms(alarm_ids, journaalposten)
     else:
-        logging.info("create_journaalpost mutation: Skipping alarm evaluation.")
+        logging.info("Skipping alarm evaluation. Signalen is disabled")
 
     return journaalposten
 
@@ -140,6 +141,7 @@ class CreateJournaalpostGrootboekrekening(graphene.Mutation):
     @staticmethod
     def mutate(root, info, input, **_kwargs):
         """ Create the new Journaalpost """
+        logging.info(f"Creating journaalpost")
         # Validate that the references exist
         transaction = hhb_dataloader().bank_transactions.load_one(input.transaction_id)
         if not transaction:

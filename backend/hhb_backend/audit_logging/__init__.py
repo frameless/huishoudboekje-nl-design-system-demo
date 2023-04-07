@@ -11,11 +11,11 @@ from datetime import datetime, timezone
 
 class AuditLogging:
     def __init__(self):
-        logging.info(f"AuditLogging: initialized")
+        logging.debug(f"AuditLogging: initialized")
 
     @staticmethod
     def create(action: str, entities: list[GebruikersActiviteitEntity] = None, before: any = None, after: any = None):
-        logging.info(f"AuditLogging: creating log...")
+        logging.debug(f"AuditLogging: creating log...")
 
         # Try to find the user
         user = None
@@ -47,12 +47,11 @@ class AuditLogging:
             },
         )
 
-        logging.info(f"AuditLogging: log item: {item}")
+        logging.debug(f"AuditLogging: log item: {item}")
 
         # Send the log item to the log service
         try:
             url = f"{LOG_SERVICE_URL}/gebruikersactiviteiten/"
-            print(f"url {url}")
 
             response = requests.post(
                 url,
@@ -67,10 +66,10 @@ class AuditLogging:
             )
 
             if response.status_code != 201:
-                logging.warning(
-                    f"AuditLogging: could not create audit log: {response.json()}")
+                logging.warning(f"AuditLogging: could not create audit log")
+                logging.debug(f"audit log: {response.json()}")
             else:
-                logging.info(f"AuditLogging: log created")
+                logging.debug(f"AuditLogging: log created")
                 logging.debug(f"AuditLogging: response {response}")
 
             return response

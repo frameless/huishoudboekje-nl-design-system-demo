@@ -1,4 +1,5 @@
 """ GraphQl Mutatie voor het verwijderen van een Signaal """
+import logging
 import graphene
 
 import hhb_backend.graphql.models.signaal as graphene_signaal
@@ -17,6 +18,7 @@ class DeleteSignaal(graphene.Mutation):
     @staticmethod
     def mutate(self, info, id):
         """ Mutatie voor het verwijderen van een bestaand signaal """
+        logging.info(f"Deleting signaal {id}")
         result = SignaalHelper.delete(id)
         previous = result.previous
 

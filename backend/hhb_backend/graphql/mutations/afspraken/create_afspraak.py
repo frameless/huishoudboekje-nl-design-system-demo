@@ -44,6 +44,7 @@ class CreateAfspraak(graphene.Mutation):
     @staticmethod
     def mutate(self, info, input: CreateAfspraakInput):
         """ Create the new Afspraak """
+        logging.info("Creating afspraak")
 
         if "valid_from" not in input:
             input["valid_from"] = str(date.today())
@@ -90,7 +91,7 @@ class CreateAfspraak(graphene.Mutation):
             try:
                 validate_afspraak_betaalinstructie(input.get("credit"), input.betaalinstructie)
             except Exception as e:
-                logging.info(f"Invalid betaalinstructie {e}")
+                logging.exception(f"Invalid betaalinstructie {e}")
                 raise e
 
         # final create call

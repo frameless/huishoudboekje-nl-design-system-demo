@@ -20,8 +20,8 @@ def command():
 def evaluate():
     """Evaluates all current active alarms"""
     if Unleash().is_enabled("signalen"):
-        logging.info("Evaluating all alarms...")
+        logging.info("Evaluating all alarms")
         evaluate_alarms()
-        logging.info("Done!")
+        logging.debug("Evaluated all alarms!")
     else:
-        logging.info("Skipping evaluation of alarms: feature flag 'signalen' is disabled.")
+        logging.info("Skipping alarm evaluation. Signalen is disabled")

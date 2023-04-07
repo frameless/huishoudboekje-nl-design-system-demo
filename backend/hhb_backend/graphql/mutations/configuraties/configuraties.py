@@ -1,3 +1,4 @@
+import logging
 import graphene
 import requests
 
@@ -23,6 +24,7 @@ class CreateConfiguratie(graphene.Mutation):
 
     @staticmethod
     def mutate(self, info, input):
+        logging.info(f"Creating configuatie")
         post_response = requests.post(
             f"{settings.HHB_SERVICES_URL}/configuratie",
             json=input,

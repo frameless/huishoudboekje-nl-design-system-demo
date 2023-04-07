@@ -1,5 +1,6 @@
 """ GraphQL mutation for deleting an Afspraak Betaalinstructie """
 
+import logging
 import graphene
 import requests
 
@@ -24,6 +25,7 @@ class DeleteAfspraakBetaalinstructie(graphene.Mutation):
     @staticmethod
     def mutate(self, info, afspraak_id: int):
         """ Update the Afspraak """
+        logging.info(f"Updating afspraak: {afspraak_id}")
 
         previous = hhb_dataloader().afspraken.load_one(afspraak_id)
 

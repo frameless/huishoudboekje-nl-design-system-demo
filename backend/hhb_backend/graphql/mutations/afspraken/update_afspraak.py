@@ -1,5 +1,6 @@
 """ GraphQL mutation for updating an Afspraak """
 
+import logging
 import graphene
 import requests
 
@@ -41,6 +42,7 @@ class UpdateAfspraak(graphene.Mutation):
     @staticmethod
     def mutate(self, info, id: int, input: UpdateAfspraakInput):
         """ Update the Afspraak """
+        logging.info(f"Updating afspraak: {id}")
 
         previous = hhb_dataloader().afspraken.load_one(id)
         if not previous:

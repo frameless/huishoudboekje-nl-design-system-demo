@@ -1,3 +1,4 @@
+import logging
 import graphene
 
 from hhb_backend.audit_logging import AuditLogging
@@ -11,6 +12,7 @@ class ConfiguratieQuery:
 
     @classmethod
     def resolver(cls, _, info, id):
+        logging.info(f"Get configuratie")
         result = hhb_dataloader().configuraties.load_one(id)
         AuditLogging.create(
             action=info.field_name,
@@ -28,6 +30,7 @@ class ConfiguratiesQuery:
 
     @classmethod
     def resolver(cls, _root, info, ids=None):
+        logging.info(f"Get configuraties")
         result = []
         if ids:
             result = hhb_dataloader().configuraties.load(ids)

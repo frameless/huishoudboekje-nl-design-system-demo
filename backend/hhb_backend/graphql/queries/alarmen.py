@@ -1,4 +1,5 @@
 """ GraphQL Alarmen query """
+import logging
 import graphene
 
 from hhb_backend.audit_logging import AuditLogging
@@ -12,6 +13,7 @@ class AlarmQuery:
 
     @classmethod
     def resolver(cls, _, info, id):
+        logging.info(f"Get alarm")
         AuditLogging.create(
             action=info.field_name,
             entities=[
@@ -26,6 +28,7 @@ class AlarmenQuery:
 
     @classmethod
     def resolver(cls, _, info, ids=None):
+        logging.info(f"Get alarmen")
         if ids:
             result = hhb_dataloader().alarms.load(ids)
         else:

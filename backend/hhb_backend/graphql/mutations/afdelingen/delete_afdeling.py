@@ -1,4 +1,5 @@
 """ GraphQL mutation for deleting a Afdeling """
+import logging
 import graphene
 import requests
 from graphql import GraphQLError
@@ -22,6 +23,7 @@ class DeleteAfdeling(graphene.Mutation):
 
     def mutate(self, info, id):
         """ Delete current afdeling """
+        logging.info(f"Deleting afdeling: {id}")
         previous = hhb_dataloader().afdelingen.load_one(id)
         if not previous:
             raise GraphQLError("Afdeling not found")

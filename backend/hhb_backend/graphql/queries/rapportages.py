@@ -1,4 +1,5 @@
 """ GraphQL Rapportage query """
+import logging
 import graphene
 
 from hhb_backend.audit_logging import AuditLogging
@@ -11,6 +12,7 @@ class BurgerRapportagesQuery:
 
     @classmethod
     def resolver(cls, _, info, burger_ids, start_date, end_date, rubrieken_ids):
+        logging.info(f"Get rapportages")
         result = hhb_dataloader().rapportage.load_rapportage_burger(burger_ids, start_date, end_date, rubrieken_ids)
         AuditLogging.create(
             action=info.field_name,

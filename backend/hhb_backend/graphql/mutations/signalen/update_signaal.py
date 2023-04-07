@@ -1,4 +1,5 @@
 """ GraphQl Mutatie voor het aanpassen van een Alarm """
+import logging
 import graphene
 
 import hhb_backend.graphql.models.signaal as graphene_signaal
@@ -19,6 +20,7 @@ class UpdateSignaal(graphene.Mutation):
     @staticmethod
     def mutate(self, info, id: str, input: UpdateSignaalInput):
         """ Mutatie voor het wijzigen van een bestaand Signaal """
+        logging.info(f"Updating signaal {id}")
         response = SignaalHelper.update(id, input)
         signaal = response.signaal
         previous = response.previous

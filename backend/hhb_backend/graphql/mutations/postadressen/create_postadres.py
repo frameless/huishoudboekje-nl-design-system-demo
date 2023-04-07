@@ -1,4 +1,5 @@
 """ GraphQL mutation for creating a new Postadres """
+import logging
 import graphene
 import requests
 
@@ -31,6 +32,7 @@ class CreatePostadres(graphene.Mutation):
     @staticmethod
     def mutate(self, info, **kwargs):
         """ Create the new Postadres """
+        logging.info(f"Creating postadres")
         input = kwargs.pop("input")
 
         ## check if afdeling exists

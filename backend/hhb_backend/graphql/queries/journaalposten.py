@@ -13,6 +13,7 @@ class JournaalpostQuery:
 
     @classmethod
     def resolver(cls, _root, info, id):
+        logging.info(f"Get journaalpost")
         result = hhb_dataloader().journaalposten.load_one(id)
         AuditLogging().create(
             action=info.field_name,
@@ -30,6 +31,7 @@ class JournaalpostenQuery:
 
     @classmethod
     def resolver(cls, _root, info, ids=None):
+        logging.info(f"Get journaalposten")
         if ids:
             result = hhb_dataloader().journaalposten.load(ids)
         result = hhb_dataloader().journaalposten.load_all()
@@ -51,6 +53,7 @@ class JournaalpostenTransactionRubriekQuery:
 
     @classmethod
     def resolver(cls, _root, info, transaction_ids=None):
+        logging.info(f"Get journaalpsoten rubriek")
         if transaction_ids:
             result = hhb_dataloader().journaalposten_transactie_rubriek.load(transaction_ids)
         else:

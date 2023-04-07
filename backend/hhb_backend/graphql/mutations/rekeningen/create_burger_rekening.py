@@ -1,5 +1,6 @@
 """ GraphQL mutation for creating a new Rekening with a Burger """
 
+import logging
 import graphene
 
 import hhb_backend.graphql.models.rekening as rekening
@@ -24,6 +25,7 @@ class CreateBurgerRekening(graphene.Mutation):
     @staticmethod
     def mutate(self, info, burger_id, rekening):
         """ Create the new Rekening """
+        logging.info(f"Creating rekening burger")
         result = create_burger_rekening(burger_id, rekening)
 
         AuditLogging.create(

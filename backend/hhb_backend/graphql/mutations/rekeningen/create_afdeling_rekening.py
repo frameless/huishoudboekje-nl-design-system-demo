@@ -1,5 +1,6 @@
 """ GraphQL mutation for creating a new Rekening with an Organisation """
 
+import logging
 import graphene
 
 import hhb_backend.graphql.models.rekening as graphene_rekening
@@ -24,6 +25,7 @@ class CreateAfdelingRekening(graphene.Mutation):
     @staticmethod
     def mutate(self, info, afdeling_id, rekening):
         """ Create the new Rekening """
+        logging.info(f"Creating rekening afdeling")
         result = create_afdeling_rekening(afdeling_id, rekening)
 
         AuditLogging.create(

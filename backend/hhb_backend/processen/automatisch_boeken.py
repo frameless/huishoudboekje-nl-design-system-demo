@@ -13,6 +13,7 @@ from hhb_backend.graphql.mutations.journaalposten.create_journaalpost import cre
 
 
 def automatisch_boeken(customer_statement_message_id: int = None):
+    logging.info(f"Start automatisch boeken")
     transactions = get_transactions_to_write_off(customer_statement_message_id)
     suggesties = transactie_suggesties(transactions=transactions)
     _afspraken = {}
@@ -31,7 +32,7 @@ def automatisch_boeken(customer_statement_message_id: int = None):
 
     stats = Counter(len(s) for s in suggesties.values())
     logging.info(
-        f"automatisch_boeken: {', '.join([f'{transactions_count} transactions with {suggestion_count} suggestions' for suggestion_count, transactions_count in stats.items() if suggestion_count != 1])} were not processed.")
+        f"Automatisch_boeken: {', '.join([f'{transactions_count} transactions with {suggestion_count} suggestions' for suggestion_count, transactions_count in stats.items() if suggestion_count != 1])} were not processed.")
 
     if not _automatische_transacties:
         return None
@@ -49,13 +50,14 @@ def automatisch_boeken(customer_statement_message_id: int = None):
 
     _matching_transactions = [t for t in transactions if t.id in _matching_transaction_ids]
     
+    logging.info("Creating journaalposten")
     journaalposten_ = create_journaalposten(json, _afspraken, _matching_transactions)
     
-    logging.info(f"automatisch boeken completed with {len(journaalposten_)}")
+    logging.info(f"automatisch boeken: {len(journaalposten_)} transacties afgeboekt")
     return journaalposten_
 
 def get_transactions_to_write_off(customer_statement_message_id):
-    logging.info(f"automatisch_boeken: customer_statement_message_id={customer_statement_message_id}")
+    logging.info(f"Automatisch_boeken: customer_statement_message_id={customer_statement_message_id}")
     if customer_statement_message_id is not None:
         transactions = [
             transaction for
@@ -68,6 +70,7 @@ def get_transactions_to_write_off(customer_statement_message_id):
 
 
 def transactie_suggesties(transactie_ids: List[int] = None, transactions: List[BankTransaction] = None, exact_zoekterm_matches = True) -> Dict[int, List[Afspraak]]:
+    logging.info("Collecting matching afspraken for transactions")
     if transactie_ids:
         if type(transactie_ids) != list:
             transactie_ids = [transactie_ids]

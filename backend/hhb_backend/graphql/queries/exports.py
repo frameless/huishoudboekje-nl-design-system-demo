@@ -1,4 +1,5 @@
 """ GraphQL Exports query """
+import logging
 import graphene
 
 from hhb_backend.audit_logging import AuditLogging
@@ -12,6 +13,7 @@ class ExportQuery:
 
     @classmethod
     def resolver(cls, _root, info, id):
+        logging.info(f"Get export")
         result = hhb_dataloader().exports.load_one(id)
 
         AuditLogging.create(
@@ -34,6 +36,7 @@ class ExportsQuery:
 
     @classmethod
     def resolver(cls, _root, info, ids=None, start_datum=None, eind_datum=None):
+        logging.info(f"Get exports")
         if ids:
             result = hhb_dataloader().exports.load(ids)
         elif start_datum and eind_datum:

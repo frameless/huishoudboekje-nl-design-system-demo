@@ -43,6 +43,7 @@ class UpdateAfspraakBetaalinstructie(graphene.Mutation):
     @staticmethod
     def mutate(self, info, afspraak_id: int, betaalinstructie: BetaalinstructieInput):
         """ Update the Afspraak """
+        logging.info(f"Updating afspraak: {afspraak_id}")
         previous = hhb_dataloader().afspraken.load_one(afspraak_id)
 
         if previous is None:
@@ -54,7 +55,7 @@ class UpdateAfspraakBetaalinstructie(graphene.Mutation):
         try:
             validate_afspraak_betaalinstructie(previous.credit, betaalinstructie)
         except Exception as e:
-            logging.info(f"Invalid betaalinstructie {e}")
+            logging.exception(f"Invalid betaalinstructie {e}")
             raise e
 
         response = requests.post(
