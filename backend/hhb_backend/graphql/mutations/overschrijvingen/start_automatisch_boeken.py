@@ -14,7 +14,6 @@ class StartAutomatischBoeken(graphene.Mutation):
 
     @staticmethod
     def mutate(self, info):
-        logging.info(f"Start automatisch boeken")
         journaalposten = automatisch_boeken.automatisch_boeken()
 
         AuditLogging.create(

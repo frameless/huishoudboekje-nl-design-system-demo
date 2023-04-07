@@ -1,4 +1,5 @@
 """ GraphQl Mutatie voor het verwijderen van een Signaal """
+import logging
 import graphene
 
 import hhb_backend.graphql.models.signaal as graphene_signaal

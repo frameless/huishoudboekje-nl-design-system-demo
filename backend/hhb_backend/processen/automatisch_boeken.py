@@ -13,6 +13,7 @@ from hhb_backend.graphql.mutations.journaalposten.create_journaalpost import cre
 
 
 def automatisch_boeken(customer_statement_message_id: int = None):
+    logging.info(f"Start automatisch boeken")
     transactions = get_transactions_to_write_off(customer_statement_message_id)
     suggesties = transactie_suggesties(transactions=transactions)
     _afspraken = {}
