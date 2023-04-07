@@ -86,6 +86,10 @@ def transactie_suggesties(transactie_ids: List[int] = None, transactions: List[B
 
     # Rekeningen ophalen adhv iban
     rekening_ibans = [transaction.tegen_rekening for transaction in transactions]
+    rekening_ibans = list(filter(lambda iban: iban, rekening_ibans))
+    if len(rekening_ibans) == 0:
+        return {key: [] for key in transactie_ids}
+    
     rekeningen = hhb_dataloader().rekeningen.by_ibans(rekening_ibans)
     if not rekeningen:
         return {key: [] for key in transactie_ids}
