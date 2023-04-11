@@ -26,11 +26,11 @@ const useForm = <T extends FormData>({initialValue = {}, validator}: UseFormPara
 			return true;
 		}
 
-		const parsed = validator.safeParse(form);
-		if (!isSubmitted) {
+		if (!isSubmitted && (form[field] == initialValue[field] || form[field] == "")) {
 			return true;
 		}
 
+		const parsed = validator.safeParse(form);
 		return parsed.success || !parsed.error.issues.find(issue => issue.path?.[0] === field);
 	};
 	const isValid = () => {
