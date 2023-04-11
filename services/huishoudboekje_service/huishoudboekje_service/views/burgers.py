@@ -50,6 +50,20 @@ class BurgerView(HHBView):
         "required": []
     }
 
+    def extend_post_with_extra_check(self, **kwargs):
+        """ Extend the post function with extra check and return a list of errors"""
+        errors = []
+        errors = self.check_if_bsn_already_exists(errors)
+        return errors
+
+    def check_if_bsn_already_exists(self, errors):
+        bsn = request.json.get("bsn", None)
+        if bsn:
+            result = Burger.query.filter(Burger.bsn == bsn).all()
+        if len(result) > 0:
+            errors.append("bsn already exists")
+        return errors
+
     def extend_get(self, **kwargs):
         """ Extend the get function with extra filter """
         self.add_filter_filter_huishouden()

@@ -119,10 +119,19 @@ class HHBView(MethodView):
         """
         object_id = self.get_object_id_from_kwargs(**kwargs)
         self.input_validate()
+
+        extended_check = self.extend_post_with_extra_check(**kwargs)
+        if not object_id and len(extended_check) > 0:
+            return {"errors": extended_check}, 400
+
         response_code = self.hhb_object.get_or_create(object_id)
         self.hhb_object.update_using_request_data()
         self.hhb_object.commit_changes()
         return {"data": self.hhb_object.json}, response_code
+
+    def extend_post_with_extra_check(self, **kwargs):
+        """ Extend the post function with extra check """
+        return []
 
     def delete(self, **kwargs):
         """ DELETE /<view_path>/<int:object_id>
