@@ -387,7 +387,7 @@ def create_mock_adapter(mocker: MockerFixture) -> Adapter:
         if request.path == "/customerstatementmessages/":
             return MockResponse({"data": {"id": 1}}, 201)
         elif request.path == "/banktransactions/":
-            return MockResponse({"data": {"id": 1}}, 201)
+            return MockResponse({"data": [{"id": 1},{"id": 2}]}, 201)
         elif request.path == "/gebruikersactiviteiten":
             return MockResponse({"data": {"id": 1}}, 201)
 
