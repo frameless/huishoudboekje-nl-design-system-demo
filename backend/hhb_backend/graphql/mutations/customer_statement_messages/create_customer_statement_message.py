@@ -120,9 +120,9 @@ class CreateCustomerStatementMessage(graphene.Mutation):
 
         entities = []
         for csm_item in csm:
-            for t in csm_item["bank_transactions"]:
+            for transaction in csm_item["bank_transactions"]:
                 entities.append(
-                    GebruikersActiviteitEntity(entityType="transaction", entityId=t)
+                    GebruikersActiviteitEntity(entityType="transaction", entityId=transaction["id"])
                 )
 
         entities.extend([
