@@ -2,6 +2,8 @@
 
 ## 1.8.4
 
+Deze versie omvat verbeteringen in gebruikerservaring en oplossingen voor een aantal problemen.
+
 ### Patch Changes
 
 - 56f22159: Mogelijkheid voor het toevoegen en wijzigen van de startdatum van een afspraak en zichtbaar maken in de detail view.
