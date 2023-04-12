@@ -9,6 +9,7 @@ export type UseFormResult<T extends FormData> = [T | Partial<T>, {
 	reset: VoidFunction,
 	isSubmitted: boolean,
 	toggleSubmitted: Dispatch<SetStateAction<boolean>>,
+	isFieldDirty: (field: string) => boolean,
 	isFieldValid: (field: string) => boolean,
 	isValid: () => boolean,
 }];
@@ -21,12 +22,16 @@ interface UseFormParams<T extends FormData> {
 const useForm = <T extends FormData>({initialValue = {}, validator}: UseFormParams<T>): UseFormResult<T> => {
 	const [form, setForm] = useState<T | Partial<T>>(initialValue);
 	const [isSubmitted, toggleSubmitted] = useState<boolean>(false);
+	const isFieldDirty = (field: keyof FormData) => {
+		const hasInitialValue = !!initialValue[field];
+		return hasInitialValue ? form[field] !== initialValue[field] : form[field] !== "";
+	};
 	const isFieldValid = (field: string) => {
 		if (!validator) {
 			return true;
 		}
 
-		if (!isSubmitted && (form[field] == initialValue[field] || form[field] == "")) {
+		if (!isSubmitted && isFieldDirty(field)) {
 			return true;
 		}
 
@@ -71,6 +76,7 @@ const useForm = <T extends FormData>({initialValue = {}, validator}: UseFormPara
 			reset,
 			isSubmitted,
 			toggleSubmitted,
+			isFieldDirty,
 			isFieldValid,
 			isValid,
 		},
