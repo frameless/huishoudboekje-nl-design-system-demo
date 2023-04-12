@@ -1,5 +1,26 @@
 # Huishoudboekje Changelog
 
+## 1.8.4
+
+Deze versie omvat verbeteringen in gebruikerservaring en oplossingen voor een aantal problemen.
+
+### Patch Changes
+
+- 56f22159: Mogelijkheid voor het toevoegen en wijzigen van de startdatum van een afspraak en zichtbaar maken in de detail view.
+- 36d7812a: When getting rekeningen by iban without adding an iban to the filter now returns nothing all rekeningen
+- f56ff5f5: Fixed wrong use of array slicing that caused unexpected behaviour when requesting data count is larger then the batch size
+- dd288bfb: Improved check if bsn is unique
+- 124b1bab: Fixed bug: wrong way adding gebruikersactiviteiten burger rapportage is now fixed
+- 4ca3d8ab: Geboortedatum is now optional
+- 10c3cbca: Fixed bug: wrong way adding transactions during creation of csm to auditlog is now fixed
+- a692aac6: Added logging in backend to get a better idea what is happening in the backend for debugging purposes (Logging level in backend can now be info, other services should stay on level warning)
+- 641f90ff: Transactie detail page now shows afspraken that have at least one matching zoekterm, ordered by matching zoekterm count.
+- d05859e4: Fixed bug in active afspraak filter burger pagina
+
+## Migration guide
+
+> ⚠️ The backend log level can be info, all other log levels should remain at level warning! If you do notice unwanted logs in the backend please let us know!
+
 ## 1.8.3
 
 Deze versie maakt het mogelijk inkomsten en uitgaven van meerdere burgers te bekijken in rapportage.
