@@ -48,8 +48,8 @@ def find_similar_afspraken_by_afspraak(main_afspraak):
 
         
     
-
     afspraken = hhb_dataloader().afspraken.by_rekening(main_afspraak.get("tegen_rekening_id"))
+    afspraken.extend(hhb_dataloader().afspraken.by_burger(main_afspraak.get("burger_id")))
 
     zoektermen_main = ' '.join(main_afspraak.get("zoektermen"))
     main_afspraak_valid_from = to_date(main_afspraak.get("valid_from"))

@@ -56,18 +56,6 @@ export const GetTransactieQuery = gql`
 					voorletters
 					achternaam
 				}
-				similarAfspraken {
-					id
-					omschrijving
-					bedrag
-					credit
-					zoektermen
-					burger {
-						voorletters
-						voornamen
-						achternaam
-					}
-				}
 			}
 		}
 		rubrieken {
@@ -79,4 +67,3 @@ export const GetTransactieQuery = gql`
 		}
 	}
 `;
-

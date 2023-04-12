@@ -24,19 +24,13 @@ const TransactieDetailPage = () => {
 	return (
 		<Queryable query={$transactie()} children={(data => {
 			const transactie: BankTransaction = data.bankTransaction;
-			const afspraken: Afspraak[] = []
-			transactie.suggesties?.forEach(suggestie => {
-				const similar = suggestie.similarAfspraken ? suggestie.similarAfspraken : []
-				afspraken.push(...similar)
-			})
-
 			const rubrieken: Rubriek[] = data.rubrieken;
 			if (!transactie?.id) {
 				return <PageNotFound />;
 			}
 			return (
 				<Page title={t("transaction")}>
-					<TransactieItemView transactie={transactie} afspraken={afspraken} rubrieken={rubrieken} />
+					<TransactieItemView transactie={transactie} rubrieken={rubrieken} />
 				</Page>
 			);
 		})} />
