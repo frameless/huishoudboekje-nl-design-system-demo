@@ -23,15 +23,15 @@ const useForm = <T extends FormData>({initialValue = {}, validator}: UseFormPara
 	const [form, setForm] = useState<T | Partial<T>>(initialValue);
 	const [isSubmitted, toggleSubmitted] = useState<boolean>(false);
 	const isFieldDirty = (field: keyof FormData) => {
-		const hasInitialValue = !!initialValue[field];
-		return hasInitialValue ? form[field] !== initialValue[field] : form[field] !== "";
+		//No check if it has an initial value, because the initial value can be undefined. 
+		//In the onchange the value changes from undefined to an empty string. The field is not dirty when the value is undefined.
+		return form[field] !== initialValue[field] && form[field] !== ""
 	};
 	const isFieldValid = (field: string) => {
 		if (!validator) {
 			return true;
 		}
-
-		if (!isSubmitted && isFieldDirty(field)) {
+		if (!isSubmitted && !isFieldDirty(field)) {
 			return true;
 		}
 
