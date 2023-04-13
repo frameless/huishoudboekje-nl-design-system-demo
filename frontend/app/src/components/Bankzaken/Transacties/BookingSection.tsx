@@ -58,10 +58,13 @@ const BookingSection = ({transaction, rubrieken}) => {
 
 	if(data != undefined && showExtraAfspraken){
 		data.afspraken?.forEach(afspraak => {
+			
 			const similar: Afspraak[] = afspraak.similarAfspraken ? afspraak.similarAfspraken : []
 			similarAfspraken.push(...similar)
 		})
-		similarAfspraken = similarAfspraken.filter(similarAfspraak => !suggesties.find(suggestie => suggestie.id === similarAfspraak.id))
+		const num = transaction.bedrag
+		similarAfspraken = Array.from(new Set(similarAfspraken.filter(similarAfspraak => !suggesties.find(suggestie => suggestie.id === similarAfspraak.id))
+										.sort((a, b) => Math.abs(a.bedrag - num) - Math.abs(b.bedrag - num))));
 		options.afspraken = similarAfspraken
 	}
 	if(data === undefined || !showExtraAfspraken){
