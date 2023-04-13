@@ -22,10 +22,13 @@ interface UseFormParams<T extends FormData> {
 const useForm = <T extends FormData>({initialValue = {}, validator}: UseFormParams<T>): UseFormResult<T> => {
 	const [form, setForm] = useState<T | Partial<T>>(initialValue);
 	const [isSubmitted, toggleSubmitted] = useState<boolean>(false);
-	const isFieldDirty = (field: keyof FormData) => {
-		//No check if it has an initial value, because the initial value can be undefined. 
+	const isFieldDirty = (field: string) => {
+		//No check if it has an initial value, because the initial value can be undefined.
 		//In the onchange the value changes from undefined to an empty string. The field is not dirty when the value is undefined.
-		return form[field] !== initialValue[field] && form[field] !== ""
+		if(field in form){
+			return form[field] !== initialValue[field] && form[field] !== ""
+		}
+		return false;
 	};
 	const isFieldValid = (field: string) => {
 		if (!validator) {
