@@ -80,9 +80,9 @@ class CreateExportOverschrijvingen(graphene.Mutation):
         for overschrijving in overschrijvingen:
             future_overschrijvingen = list(
                 filter(
-                    lambda o: not (
-                        o["afspraak_id"] == overschrijving.afspraak_id
-                        and o["datum"]
+                    lambda future_overschrijving: not (
+                        future_overschrijving["afspraak_id"] == overschrijving.afspraak_id
+                        and to_date(future_overschrijving["datum"])
                         == to_date(overschrijving.datum)
                     ),
                     future_overschrijvingen,
