@@ -2208,6 +2208,13 @@ export type GetSignalenQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetSignalenQuery = { signalen?: Array<{ id?: string, isActive?: boolean }> };
 
+export type GetSimilarAfsprakenQueryVariables = Exact<{
+  ids?: InputMaybe<Array<InputMaybe<Scalars['Int']>> | InputMaybe<Scalars['Int']>>;
+}>;
+
+
+export type GetSimilarAfsprakenQuery = { afspraken?: Array<{ id?: number, similarAfspraken?: Array<{ id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, burger?: { voorletters?: string, voornamen?: string, achternaam?: string } }> }> };
+
 export type GetSimpleBurgersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -2218,7 +2225,7 @@ export type GetTransactieQueryVariables = Exact<{
 }>;
 
 
-export type GetTransactieQuery = { bankTransaction?: { id?: number, informationToAccountOwner?: string, statementLine?: string, bedrag?: any, isCredit?: boolean, tegenRekeningIban?: string, transactieDatum?: any, tegenRekening?: { iban?: string, rekeninghouder?: string }, journaalpost?: { id?: number, isAutomatischGeboekt?: boolean, afspraak?: { id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, burger?: { voornamen?: string, voorletters?: string, achternaam?: string }, rubriek?: { id?: number, naam?: string } }, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } }, suggesties?: Array<{ id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, burger?: { voornamen?: string, voorletters?: string, achternaam?: string }, similarAfspraken?: Array<{ id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, burger?: { voorletters?: string, voornamen?: string, achternaam?: string } }> }> }, rubrieken?: Array<{ id?: number, naam?: string, grootboekrekening?: { id: string } }> };
+export type GetTransactieQuery = { bankTransaction?: { id?: number, informationToAccountOwner?: string, statementLine?: string, bedrag?: any, isCredit?: boolean, tegenRekeningIban?: string, transactieDatum?: any, tegenRekening?: { iban?: string, rekeninghouder?: string }, journaalpost?: { id?: number, isAutomatischGeboekt?: boolean, afspraak?: { id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, burger?: { voornamen?: string, voorletters?: string, achternaam?: string }, rubriek?: { id?: number, naam?: string } }, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } }, suggesties?: Array<{ id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, burger?: { voornamen?: string, voorletters?: string, achternaam?: string } }> }, rubrieken?: Array<{ id?: number, naam?: string, grootboekrekening?: { id: string } }> };
 
 export type GetTransactionItemFormDataQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -5717,6 +5724,53 @@ export function useGetSignalenLazyQuery(baseOptions?: Apollo.LazyQueryHookOption
 export type GetSignalenQueryHookResult = ReturnType<typeof useGetSignalenQuery>;
 export type GetSignalenLazyQueryHookResult = ReturnType<typeof useGetSignalenLazyQuery>;
 export type GetSignalenQueryResult = Apollo.QueryResult<GetSignalenQuery, GetSignalenQueryVariables>;
+export const GetSimilarAfsprakenDocument = gql`
+    query getSimilarAfspraken($ids: [Int]) {
+  afspraken(ids: $ids) {
+    id
+    similarAfspraken {
+      id
+      omschrijving
+      bedrag
+      credit
+      zoektermen
+      burger {
+        voorletters
+        voornamen
+        achternaam
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetSimilarAfsprakenQuery__
+ *
+ * To run a query within a React component, call `useGetSimilarAfsprakenQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetSimilarAfsprakenQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetSimilarAfsprakenQuery({
+ *   variables: {
+ *      ids: // value for 'ids'
+ *   },
+ * });
+ */
+export function useGetSimilarAfsprakenQuery(baseOptions?: Apollo.QueryHookOptions<GetSimilarAfsprakenQuery, GetSimilarAfsprakenQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetSimilarAfsprakenQuery, GetSimilarAfsprakenQueryVariables>(GetSimilarAfsprakenDocument, options);
+      }
+export function useGetSimilarAfsprakenLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetSimilarAfsprakenQuery, GetSimilarAfsprakenQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetSimilarAfsprakenQuery, GetSimilarAfsprakenQueryVariables>(GetSimilarAfsprakenDocument, options);
+        }
+export type GetSimilarAfsprakenQueryHookResult = ReturnType<typeof useGetSimilarAfsprakenQuery>;
+export type GetSimilarAfsprakenLazyQueryHookResult = ReturnType<typeof useGetSimilarAfsprakenLazyQuery>;
+export type GetSimilarAfsprakenQueryResult = Apollo.QueryResult<GetSimilarAfsprakenQuery, GetSimilarAfsprakenQueryVariables>;
 export const GetSimpleBurgersDocument = gql`
     query getSimpleBurgers {
   burgers {
@@ -5809,18 +5863,6 @@ export const GetTransactieDocument = gql`
         voornamen
         voorletters
         achternaam
-      }
-      similarAfspraken {
-        id
-        omschrijving
-        bedrag
-        credit
-        zoektermen
-        burger {
-          voorletters
-          voornamen
-          achternaam
-        }
       }
     }
   }

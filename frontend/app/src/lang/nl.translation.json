@@ -574,7 +574,9 @@
   "omschrijving": "Omschrijving",
   "rubriek": "Rubriek",
   "bookingSection": {
-    "noResults": "Er zijn geen afspraken gevonden. Voeg een afspraak toe, of kies een rubriek om deze transactie op af te letteren."
+    "noResults": "Er zijn geen afspraken gevonden. Voeg een afspraak toe, of kies een rubriek om deze transactie op af te letteren.",
+    "similarAfspraken": "Soortgelijke afspraken",
+    "noSimilarAfspraken": "Geen soortgelijke afspraken gevonden"
   },
   "filters": {
     "transactions": {

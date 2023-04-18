@@ -50,9 +50,11 @@ class BankTransaction(graphene.ObjectType):
             return hhb_dataloader().csms.load_one(root.get('customer_statement_message_id'))
 
     def resolve_suggesties(root, info):
-        """ Get rubriek when requested """
+        """ Get suggesties when requested """
+        if root.get('is_geboekt'):
+            return []
+        
         suggesties = automatisch_boeken.transactie_suggesties(root.get("id"), exact_zoekterm_matches=False)
-
         return [item for sublist in suggesties.values() for item in sublist]
 
 
