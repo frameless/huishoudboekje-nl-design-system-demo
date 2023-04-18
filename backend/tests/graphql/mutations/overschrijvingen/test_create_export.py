@@ -103,7 +103,7 @@ def test_create_export_success(client):
         assert fallback.call_count == 0
         assert rm1.call_count == 1
         assert rm2.call_count == 1
-        assert rm3.call_count == 2
+        assert rm3.call_count == 1
         assert rm4.call_count == 1
         assert rm5.call_count == 1
         assert rm6.call_count == 1
