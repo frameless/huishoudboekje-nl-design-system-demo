@@ -310,7 +310,7 @@ services:
       DATABASE_URL: "postgresql://hhb:hhb@db/logservice"
       LOG_LEVEL: DEBUG
     ports:
-      - 8005:8000
+      - 8012:8000
     depends_on:
       - db
 

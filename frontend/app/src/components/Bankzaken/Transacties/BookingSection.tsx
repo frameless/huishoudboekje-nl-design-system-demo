@@ -1,12 +1,14 @@
-import {Box, Button, FormControl, HStack, Stack, Tab, Table, TabList, TabPanel, TabPanels, Tabs, Tbody, Text, Th, Thead, Tr} from "@chakra-ui/react";
-import React from "react";
+import {Box, Button, Checkbox, FormControl, FormLabel, HStack, RangeSlider, RangeSliderFilledTrack, RangeSliderMark, RangeSliderThumb, RangeSliderTrack, Stack, Tab, Table, TabList, TabPanel, TabPanels, Tabs, Tbody, Text, Th, Thead, Tr} from "@chakra-ui/react";
+import React, { useState } from "react";
 import {useTranslation} from "react-i18next";
 import Select from "react-select";
-import {Afspraak, BankTransaction, GetTransactieDocument, Rubriek, useCreateJournaalpostAfspraakMutation, useCreateJournaalpostGrootboekrekeningMutation, useGetAfsprakenLazyQuery, useGetSimilarAfsprakenLazyQuery} from "../../../generated/graphql";
-import {useReactSelectStyles} from "../../../utils/things";
+import {Afspraak, Burger, BankTransaction, GetTransactieDocument, RootQuerySearchAfsprakenArgs, Rubriek, useCreateJournaalpostAfspraakMutation, useCreateJournaalpostGrootboekrekeningMutation, useGetBurgersQuery, useGetSearchAfsprakenLazyQuery, useGetSearchAfsprakenQuery, useGetAfsprakenLazyQuery, useGetSimilarAfsprakenLazyQuery} from "../../../generated/graphql";
+import {formatBurgerName, useReactSelectStyles} from "../../../utils/things";
 import useToaster from "../../../utils/useToaster";
 import SelectAfspraakOption from "../../shared/SelectAfspraakOption";
 import {TriangleDownIcon, TriangleUpIcon } from "@chakra-ui/icons";
+import usePagination from "../../../utils/usePagination";
+import Queryable from "../../../utils/Queryable";
 
 export function isSuggestie(suggestie: Afspraak, transaction: BankTransaction): boolean{
 	//Only check on zoektermen because the backend checks on iban (on organisation level)
@@ -124,6 +126,62 @@ const BookingSection = ({transaction, rubrieken}) => {
 			});
 		}
 	};
+	
+	const {offset, total, setTotal, goFirst, PaginationButtons} = usePagination({pageSize: 25});
+
+	const searchVariables : {
+		offset: number,
+		limit: number,
+		afspraken: number[] | undefined,
+		afdelingen: number[] | undefined,
+		burgers: number[] | undefined,
+		only_valid: boolean,
+		min_bedrag: number | undefined,
+		max_bedrag: number | undefined
+	}= {
+		offset: offset -1,
+		limit: 25,
+		afspraken: undefined,
+		afdelingen: undefined,
+		burgers: undefined,
+		only_valid: true,
+		min_bedrag: undefined,
+		max_bedrag: undefined
+	}
+
+	const [filterBurgerIds, setFilterBurgerIds] = useState<number[]>([]);
+	const $burgers = useGetBurgersQuery();
+	const onSelectBurger = (value) => {
+		setFilterBurgerIds(value ? value.map(v => v.value) : [])
+	};
+
+	const [sliderValue, setSliderValue] = useState([0, 5000])
+	const [onlyValidValue, setOnlyValid] = useState(true)
+
+	if(filterBurgerIds.length > 0){
+		searchVariables.burgers = filterBurgerIds
+	}else{
+		searchVariables.burgers = undefined
+	}
+	if(sliderValue[0] !== 0){
+		searchVariables.min_bedrag = sliderValue[0] * 100
+	}else{
+		searchVariables.min_bedrag = undefined
+	}
+	if(sliderValue[1] !== 5000){
+		searchVariables.max_bedrag = sliderValue[1] * 100
+	}else{
+		searchVariables.max_bedrag = undefined
+	}
+	searchVariables.only_valid = onlyValidValue
+	
+
+
+
+	const $searchAfspraken = useGetSearchAfsprakenQuery({
+		fetchPolicy: "no-cache",
+		variables: searchVariables
+	});
 
 	return (
 		<Stack>
@@ -132,6 +190,7 @@ const BookingSection = ({transaction, rubrieken}) => {
 					<TabList>
 						<Tab>Afspraak</Tab>
 						<Tab>Rubriek</Tab>
+						<Tab>Zoeken</Tab>
 					</TabList>
 				</HStack>
 				<TabPanels>
@@ -175,6 +234,97 @@ const BookingSection = ({transaction, rubrieken}) => {
 							<Select onChange={onSelectRubriek} options={options.rubrieken} isClearable={true} noOptionsMessage={() => t("select.noOptions")}
 								maxMenuHeight={350} styles={reactSelectStyles.default} />
 						</FormControl>
+					</TabPanel>
+					<TabPanel px={0}>
+						<Queryable query={$burgers} children={data => {
+							const burgers: Burger[] = data.burgers || [];
+							const burgers_filter = burgers.filter(b => filterBurgerIds.includes(b.id!)).map(b => ({
+								key: b.id,
+								value: b.id,
+								label: formatBurgerName(b),
+							}));
+							return (
+								<Stack direction={"column"} spacing={5} flex={1}>
+									<FormControl as={Stack} flex={1}>
+										<FormLabel>{t("charts.filterBurgers")}</FormLabel>
+										<Select onChange={onSelectBurger} options={burgers.map(b => ({
+											key: b.id,
+											value: b.id,
+											label: formatBurgerName(b),
+										}))} styles={reactSelectStyles.default} isMulti isClearable={true} noOptionsMessage={() => t("select.noOptions")} maxMenuHeight={200} placeholder={t("charts.optionAllBurgers")} value={burgers_filter} />
+									</FormControl>
+									<Checkbox isChecked={onlyValidValue} onChange={(e) => setOnlyValid(e.target.checked)}>Alleen actieve afspraken</Checkbox>
+									<FormControl as={Stack} flex={1}>
+										<FormLabel>{"Bedrag"}</FormLabel>
+										<RangeSlider aria-label={['min', 'max']} min={0} max={5000} step={50} defaultValue={[0, 5000]} onChange={(val) => setSliderValue(val)}>
+											<RangeSliderTrack>
+												<RangeSliderFilledTrack />
+											</RangeSliderTrack>
+											<RangeSliderMark
+												value={sliderValue[0]}
+												textAlign='center'
+												bg='blue.500'
+												color='white'
+												mt='-10'
+												ml='-5'
+												w='12'
+											>
+												{sliderValue[0] === 0 ? ("n.v.t") : ("€" + sliderValue[0])}
+											</RangeSliderMark>
+											<RangeSliderMark
+												value={sliderValue[1]}
+												textAlign='center'
+												bg='blue.500'
+												color='white'
+												mt='-10'
+												ml='-5'
+												w='12'
+											>
+												{sliderValue[1] === 5000 ? ("n.v.t") : ("€" + sliderValue[1])}
+											</RangeSliderMark>
+											<RangeSliderThumb index={0} />
+											<RangeSliderThumb index={1} />
+										</RangeSlider>
+									</FormControl>
+									{/* <Button size={"sm"} variant={"outline"} colorScheme={"primary"} onClick={onClickZoek}>{"Zoek"}</Button> */}
+									<Queryable query={$searchAfspraken} options={{hidePreviousResults: true}} children={(data) => {
+										const searchAfspraken: Afspraak[] = data?.searchAfspraken?.afspraken || [];
+										setTotal(data?.searchAfspraken?.pageInfo?.count || 0)
+										if(searchAfspraken.length < offset){
+											goFirst()
+										}
+										return (
+											<Stack spacing={2}>
+												{[...options.suggesties, ...options.afspraken].length === 0 ? (
+													<Text>{t("bookingSection.noResults")}</Text>
+												) : (
+													<Table size={"sm"}>
+														<Thead>
+															<Tr>
+																<Th>{t("burger")}</Th>
+																<Th>{t("afspraken.omschrijving")}</Th>
+																<Th>{t("afspraken.zoekterm")}</Th>
+																<Th />
+																<Th>{t("bedrag")}</Th>
+															</Tr>
+														</Thead>
+														<Tbody>
+															{searchAfspraken.map(afspraak => (
+																<SelectAfspraakOption key={afspraak.id} afspraak={afspraak} onClick={() => onSelectAfspraak(afspraak)} />
+															))}
+															
+														</Tbody>
+													</Table>
+												)}
+												<HStack justify={"center"}>
+													<PaginationButtons />
+												</HStack>
+											</Stack>
+									);
+								}} />
+								</Stack>
+							);
+						}} />
 					</TabPanel>
 				</TabPanels>
 			</Tabs>

@@ -18,7 +18,8 @@ from huishoudboekje_service.views import (
     ExportView,
     HuishoudenView,
     AfdelingView,
-    BurgerTransactiesView
+    BurgerTransactiesView,
+    AfsprakenSearchView
 )
 from core_service import database
 
@@ -59,6 +60,7 @@ def create_app(config_name='huishoudboekje_service.config.Config'):
          {"path": "/burgers/transacties",
             "view": BurgerTransactiesView, "name": "burger_transacties"},
         {"path": "/afspraken", "view": AfspraakView, "name": "afspraak_view"},
+        {"path": "/afspraken/search", "view": AfsprakenSearchView, "name": "afspraak_search_view"},
         {"path": "/afspraken/<object_id>", "view": AfspraakView,
             "name": "afspraak_detail_view"},
         {"path": "/rekeningen", "view": RekeningView, "name": "rekening_view"},
