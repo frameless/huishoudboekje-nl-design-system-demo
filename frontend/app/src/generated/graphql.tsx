@@ -2129,6 +2129,11 @@ export type GetBurgersQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetBurgersQuery = { burgers?: Array<{ id?: number, voornamen?: string, achternaam?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }> };
 
+export type GetBurgersAndOrganisatiesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetBurgersAndOrganisatiesQuery = { organisaties?: Array<{ id?: number, naam?: string, afdelingen?: Array<{ id?: number }> }>, burgers?: Array<{ id?: number, voornamen?: string, voorletters?: string, achternaam?: string }> };
+
 export type GetBurgersSearchQueryVariables = Exact<{
   search?: InputMaybe<Scalars['DynamicType']>;
 }>;
@@ -5025,6 +5030,50 @@ export function useGetBurgersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions
 export type GetBurgersQueryHookResult = ReturnType<typeof useGetBurgersQuery>;
 export type GetBurgersLazyQueryHookResult = ReturnType<typeof useGetBurgersLazyQuery>;
 export type GetBurgersQueryResult = Apollo.QueryResult<GetBurgersQuery, GetBurgersQueryVariables>;
+export const GetBurgersAndOrganisatiesDocument = gql`
+    query getBurgersAndOrganisaties {
+  organisaties {
+    id
+    naam
+    afdelingen {
+      id
+    }
+  }
+  burgers {
+    id
+    voornamen
+    voorletters
+    achternaam
+  }
+}
+    `;
+
+/**
+ * __useGetBurgersAndOrganisatiesQuery__
+ *
+ * To run a query within a React component, call `useGetBurgersAndOrganisatiesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetBurgersAndOrganisatiesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetBurgersAndOrganisatiesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetBurgersAndOrganisatiesQuery(baseOptions?: Apollo.QueryHookOptions<GetBurgersAndOrganisatiesQuery, GetBurgersAndOrganisatiesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetBurgersAndOrganisatiesQuery, GetBurgersAndOrganisatiesQueryVariables>(GetBurgersAndOrganisatiesDocument, options);
+      }
+export function useGetBurgersAndOrganisatiesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetBurgersAndOrganisatiesQuery, GetBurgersAndOrganisatiesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetBurgersAndOrganisatiesQuery, GetBurgersAndOrganisatiesQueryVariables>(GetBurgersAndOrganisatiesDocument, options);
+        }
+export type GetBurgersAndOrganisatiesQueryHookResult = ReturnType<typeof useGetBurgersAndOrganisatiesQuery>;
+export type GetBurgersAndOrganisatiesLazyQueryHookResult = ReturnType<typeof useGetBurgersAndOrganisatiesLazyQuery>;
+export type GetBurgersAndOrganisatiesQueryResult = Apollo.QueryResult<GetBurgersAndOrganisatiesQuery, GetBurgersAndOrganisatiesQueryVariables>;
 export const GetBurgersSearchDocument = gql`
     query getBurgersSearch($search: DynamicType) {
   burgers(search: $search) {

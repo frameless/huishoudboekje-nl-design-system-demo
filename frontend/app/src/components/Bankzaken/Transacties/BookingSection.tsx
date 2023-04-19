@@ -2,7 +2,7 @@ import {Box, Button, Checkbox, FormControl, FormLabel, HStack, RangeSlider, Rang
 import React, { useState } from "react";
 import {useTranslation} from "react-i18next";
 import Select from "react-select";
-import {Afspraak, Burger, BankTransaction, GetTransactieDocument, RootQuerySearchAfsprakenArgs, Rubriek, useCreateJournaalpostAfspraakMutation, useCreateJournaalpostGrootboekrekeningMutation, useGetBurgersQuery, useGetSearchAfsprakenLazyQuery, useGetSearchAfsprakenQuery, useGetAfsprakenLazyQuery, useGetSimilarAfsprakenLazyQuery} from "../../../generated/graphql";
+import {Afspraak, Burger, BankTransaction, GetTransactieDocument, RootQuerySearchAfsprakenArgs, Rubriek, useCreateJournaalpostAfspraakMutation, useCreateJournaalpostGrootboekrekeningMutation, useGetBurgersQuery, useGetSearchAfsprakenLazyQuery, useGetSearchAfsprakenQuery, useGetAfsprakenLazyQuery, useGetSimilarAfsprakenLazyQuery, useGetBurgersAndOrganisatiesQuery, Organisatie} from "../../../generated/graphql";
 import {formatBurgerName, useReactSelectStyles} from "../../../utils/things";
 import useToaster from "../../../utils/useToaster";
 import SelectAfspraakOption from "../../shared/SelectAfspraakOption";
@@ -150,39 +150,35 @@ const BookingSection = ({transaction, rubrieken}) => {
 	}
 
 	const [filterBurgerIds, setFilterBurgerIds] = useState<number[]>([]);
-	const $burgers = useGetBurgersQuery();
+	const [filterOrganisatieids, setFilterOrganisatieIds] = useState<number[]>([]);
+	const $burgersAndOrganisaties = useGetBurgersAndOrganisatiesQuery();
 	const onSelectBurger = (value) => {
 		setFilterBurgerIds(value ? value.map(v => v.value) : [])
+	};
+
+	const onSelectOrganisatie = (value) => {
+		setFilterOrganisatieIds(value ? value.map(v => v.value) : [])
 	};
 
 	const [sliderValue, setSliderValue] = useState([0, 5000])
 	const [onlyValidValue, setOnlyValid] = useState(true)
 
-	if(filterBurgerIds.length > 0){
-		searchVariables.burgers = filterBurgerIds
-	}else{
-		searchVariables.burgers = undefined
-	}
-	if(sliderValue[0] !== 0){
-		searchVariables.min_bedrag = sliderValue[0] * 100
-	}else{
-		searchVariables.min_bedrag = undefined
-	}
-	if(sliderValue[1] !== 5000){
-		searchVariables.max_bedrag = sliderValue[1] * 100
-	}else{
-		searchVariables.max_bedrag = undefined
-	}
+	searchVariables.burgers = filterBurgerIds.length > 0 ? filterBurgerIds : undefined
+	searchVariables.min_bedrag = sliderValue[0] !== 0 ? sliderValue[0] * 100 : undefined
+	searchVariables.max_bedrag = sliderValue[1] !== 5000 ? sliderValue[1] * 100 : undefined
 	searchVariables.only_valid = onlyValidValue
-	
-
-
-
+	if(filterOrganisatieids.length > 0){
+		const organisaties: Organisatie[] =  $burgersAndOrganisaties.data?.organisaties || []
+		const filteredOrganisaties = organisaties.filter(organisatie => organisatie.id? filterOrganisatieids.includes(organisatie.id) : false)
+		const afdelingen = filteredOrganisaties.map(organisatie => organisatie.afdelingen? organisatie.afdelingen : []).flat() || []
+		searchVariables.afdelingen =  afdelingen.map(afdeling => afdeling.id? afdeling.id : -1).filter(id => id !== -1)
+	}else {
+		searchVariables.afdelingen = undefined
+	}
 	const $searchAfspraken = useGetSearchAfsprakenQuery({
 		fetchPolicy: "no-cache",
 		variables: searchVariables
 	});
-
 	return (
 		<Stack>
 			<Tabs align={"end"}>
@@ -236,12 +232,18 @@ const BookingSection = ({transaction, rubrieken}) => {
 						</FormControl>
 					</TabPanel>
 					<TabPanel px={0}>
-						<Queryable query={$burgers} children={data => {
+						<Queryable query={$burgersAndOrganisaties} children={data => {
 							const burgers: Burger[] = data.burgers || [];
 							const burgers_filter = burgers.filter(b => filterBurgerIds.includes(b.id!)).map(b => ({
 								key: b.id,
 								value: b.id,
 								label: formatBurgerName(b),
+							}));
+							const organisaties: Organisatie[] = data.organisaties || [];
+							const organisaties_filter = organisaties.filter(o => filterOrganisatieids.includes(o.id!)).map(o => ({
+								key: o.id,
+								value: o.id,
+								label: o.naam,
 							}));
 							return (
 								<Stack direction={"column"} spacing={5} flex={1}>
@@ -252,6 +254,14 @@ const BookingSection = ({transaction, rubrieken}) => {
 											value: b.id,
 											label: formatBurgerName(b),
 										}))} styles={reactSelectStyles.default} isMulti isClearable={true} noOptionsMessage={() => t("select.noOptions")} maxMenuHeight={200} placeholder={t("charts.optionAllBurgers")} value={burgers_filter} />
+									</FormControl>
+									<FormControl as={Stack} flex={1}>
+										<FormLabel>{"Filter organisatie"}</FormLabel>
+										<Select onChange={onSelectOrganisatie} options={organisaties.map(o => ({
+											key: o.id,
+											value: o.id,
+											label: o.naam,
+										}))} styles={reactSelectStyles.default} isMulti isClearable={true} noOptionsMessage={() => t("select.noOptions")} maxMenuHeight={200} placeholder={"Alle organisaties"} value={organisaties_filter} />
 									</FormControl>
 									<Checkbox isChecked={onlyValidValue} onChange={(e) => setOnlyValid(e.target.checked)}>Alleen actieve afspraken</Checkbox>
 									<FormControl as={Stack} flex={1}>
