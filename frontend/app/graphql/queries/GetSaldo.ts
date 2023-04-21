@@ -1,14 +1,13 @@
 import {gql} from "@apollo/client";
 
 export const GetSaldoQuery = gql`
-    query getRubrieken {
-        rubrieken{
+    query getSaldo($burger_ids:[Int!], $date: String!) {
+        saldo(burgerIds: $burger_ids, date: $date) {
             id
-            naam
-            grootboekrekening{
-                id
-                naam
-            }
+            burgerId
+            begindatum
+            einddatum
+            saldo
         }
     }
 `;

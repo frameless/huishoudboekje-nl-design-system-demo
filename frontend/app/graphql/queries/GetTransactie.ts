@@ -27,6 +27,7 @@ export const GetTransactieQuery = gql`
 						voornamen
 						voorletters
 						achternaam
+						id
 					}
 					rubriek{
 						id
@@ -55,6 +56,7 @@ export const GetTransactieQuery = gql`
 					voornamen
 					voorletters
 					achternaam
+					id
 				}
 				similarAfspraken {
 					id
@@ -66,6 +68,7 @@ export const GetTransactieQuery = gql`
 						voorletters
 						voornamen
 						achternaam
+						id
 					}
 				}
 			}

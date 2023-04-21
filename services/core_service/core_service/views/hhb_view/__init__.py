@@ -8,9 +8,11 @@ from core_service.database import db
 from core_service.views.hhb_view.hhb_object import HHBObject
 from core_service.views.hhb_view.hhb_query import HHBQuery
 
+
 class InputValidator(Inputs):
     """ JSON validator for creating and editing a object """
     json = [JsonSchema(schema={})]
+
 
 class HHBView(MethodView):
     """ Base class for Huishoudboekje views """
@@ -53,7 +55,8 @@ class HHBView(MethodView):
                     return int(object_id)
                 elif re.match("^\\d+(?:,\\d+)+$", object_id):
                     return [int(s) for s in object_id.split(",")]
-            abort(make_response({"errors": [f"Supplied id '{object_id}' is not valid."]}, 400))
+            abort(make_response(
+                {"errors": [f"Supplied id '{object_id}' is not valid."]}, 400))
 
     @staticmethod
     def filter_in_string(name, cb):
@@ -67,7 +70,6 @@ class HHBView(MethodView):
 
         if ids:
             cb(ids)
-
 
     def get(self, **kwargs):
         """ GET /<view_path>/(<int:object_id>)?(columns=..,..,..)&(filter_ids=..,..,..))
@@ -119,10 +121,14 @@ class HHBView(MethodView):
         """
         object_id = self.get_object_id_from_kwargs(**kwargs)
         self.input_validate()
+        self.extend_post(**kwargs)
         response_code = self.hhb_object.get_or_create(object_id)
         self.hhb_object.update_using_request_data()
         self.hhb_object.commit_changes()
         return {"data": self.hhb_object.json}, response_code
+
+    def extend_post(self, **kwargs):
+        """ Allows code injection into the post method """
 
     def delete(self, **kwargs):
         """ DELETE /<view_path>/<int:object_id>

@@ -4,9 +4,11 @@ import React from "react";
 import {useTranslation} from "react-i18next";
 import {NavLink} from "react-router-dom";
 import {AppRoutes} from "../../../config/routes";
-import {BankTransaction, GetTransactieDocument, useDeleteJournaalpostMutation} from "../../../generated/graphql";
+import {BankTransaction, GetTransactieDocument, useDeleteJournaalpostMutation, GetSaldoDocument, useUpdateSaldoMutation} from "../../../generated/graphql";
 import {currencyFormat2, formatBurgerName} from "../../../utils/things";
 import useToaster from "../../../utils/useToaster";
+import {useLazyQuery} from "@apollo/client";
+import d from "../../../utils/dayjs";
 
 type BookingDetailsViewProps = {
 	transactie: BankTransaction
@@ -21,21 +23,49 @@ const BookingDetailsView: React.FC<BookingDetailsViewProps> = ({transactie}) => 
 		],
 	});
 
+	const [updateSaldo] = useUpdateSaldoMutation()
+	const [getSaldo, {loading, data}] = useLazyQuery(GetSaldoDocument, {
+		fetchPolicy: "no-cache"
+	})
 	const journaalpostAfspraak = transactie.journaalpost?.afspraak;
 	const journaalpostRubriek = transactie.journaalpost?.grootboekrekening?.rubriek;
 
 	const onDelete = () => {
 		const id = transactie.journaalpost?.id;
+		const burgerId = transactie?.journaalpost?.afspraak?.burger?.id
 
 		if (id) {
 			deleteJournaalpost({
 				variables: {id},
 			}).then(() => {
+
 				toast({success: t("messages.journals.deleteSuccessMessage")});
 			}).catch(err => {
 				console.error(err);
 				toast({error: err.message});
 			});
+			if (burgerId) {
+				getSaldo({
+					variables: {
+						burger_ids: [burgerId],
+						date: d(transactie.transactieDatum).format("YYYY-MM-DD")
+					}
+				}).then(
+					(result) => {
+						if (result.data.saldo.length > 0) {
+							const saldo = +result.data.saldo[0]?.saldo - +transactie.bedrag
+							updateSaldo({
+								variables: {
+									input: {
+										id: result.data.saldo[0]?.id,
+										saldo: saldo
+									}
+								}
+							})
+						}
+					}
+				)
+			}
 		}
 	};
 

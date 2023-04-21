@@ -25,6 +25,7 @@ import Page from "../../shared/Page";
 import PageNotFound from "../../shared/PageNotFound";
 import BurgerAfsprakenView from "./BurgerAfsprakenView";
 import BurgerSignalenView from "./BurgerSignalenView";
+import BurgerSaldoView from "./BurgerSaldoView";
 
 const BurgerDetailPage = () => {
 	const {id = ""} = useParams<{id: string}>();
@@ -157,6 +158,7 @@ const BurgerDetailPage = () => {
 						</MenuList>
 					</Menu>
 				)}>
+					<BurgerSaldoView burger={burger}></BurgerSaldoView>
 					{isSignalenEnabled && <BurgerSignalenView burger={burger} />}
 					<BurgerAfsprakenView burger={burger} />
 				</Page>

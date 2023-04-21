@@ -2,16 +2,21 @@ import {FormControl, HStack, Stack, Tab, Table, TabList, TabPanel, TabPanels, Ta
 import React from "react";
 import {useTranslation} from "react-i18next";
 import Select from "react-select";
-import {Afspraak, GetTransactieDocument, Rubriek, useCreateJournaalpostAfspraakMutation, useCreateJournaalpostGrootboekrekeningMutation} from "../../../generated/graphql";
+import {Afspraak, GetSaldoDocument, GetTransactieDocument, Rubriek, useCreateJournaalpostAfspraakMutation, useCreateJournaalpostGrootboekrekeningMutation, useCreateSaldoMutation, useGetSaldoQuery, useUpdateSaldoMutation} from "../../../generated/graphql";
 import {useReactSelectStyles} from "../../../utils/things";
 import useToaster from "../../../utils/useToaster";
 import SelectAfspraakOption from "../../shared/SelectAfspraakOption";
+import d from "../../../utils/dayjs";
+import {ApolloClient, InMemoryCache, useLazyQuery, useQuery} from "@apollo/client";
 
 const BookingSection = ({transaction, rubrieken, afspraken}) => {
 	const reactSelectStyles = useReactSelectStyles();
 	const toast = useToaster();
 	const {t} = useTranslation();
 	const suggesties: Afspraak[] = transaction.suggesties || [];
+
+	const [createSaldo] = useCreateSaldoMutation()
+	const [updateSaldo] = useUpdateSaldoMutation()
 
 	// const [evaluateAlarm] = useEvaluateAlarmMutation();
 	const [createJournaalpostAfspraak] = useCreateJournaalpostAfspraakMutation({
@@ -31,7 +36,9 @@ const BookingSection = ({transaction, rubrieken, afspraken}) => {
 			{query: GetTransactieDocument, variables: {id: transaction.id}},
 		],
 	});
-
+	const [getSaldo, {loading, data}] = useLazyQuery(GetSaldoDocument, {
+		fetchPolicy: "no-cache"
+	})
 	const options: {
 		suggesties: Afspraak[]
 		afspraken: Afspraak[]
@@ -85,9 +92,46 @@ const BookingSection = ({transaction, rubrieken, afspraken}) => {
 				console.error(err);
 				toast({error: err.message});
 			});
+			const transactionDate = transaction.transactieDatum
+			const burgerId: number = afspraak?.burger?.id ?? 0
+
+			getSaldo({
+				variables: {
+					burger_ids: [burgerId],
+					date: d(transactionDate).format("YYYY-MM-DD")
+				}
+			}).then(
+				(result) => {
+					if (result.data.saldo.length > 0) {
+						const saldo = parseFloat(result.data.saldo[0]?.saldo) + parseFloat(transaction.bedrag);
+						updateSaldo({
+							variables: {
+								input: {
+									id: result.data.saldo[0]?.id,
+									saldo: saldo
+								}
+							}
+						})
+					}
+					else if (result.data.saldo.length === 0) {
+						const startingDate = d(transactionDate).startOf("month").format("YYYY-MM-DD");
+						const endDate = d(transactionDate).endOf("month").format("YYYY-MM-DD");
+
+						createSaldo({
+							variables: {
+								input: {
+									begindatum: startingDate,
+									einddatum: endDate,
+									saldo: transaction.bedrag,
+									burgerId: burgerId
+								}
+							}
+						})
+					}
+				}
+			)
 		}
 	};
-
 	return (
 		<Stack>
 			<Tabs align={"end"}>

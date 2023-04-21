@@ -1,6 +1,7 @@
 import logging
 from collections import Counter
 from operator import itemgetter
+from time import sleep
 from typing import List, Dict
 
 from hhb_backend.graphql.dataloaders import hhb_dataloader
@@ -10,6 +11,7 @@ from hhb_backend.service.model.afspraak import Afspraak
 from hhb_backend.service.model.rekening import Rekening
 from hhb_backend.service.model.bank_transaction import BankTransaction
 from hhb_backend.graphql.mutations.journaalposten.create_journaalpost import create_journaalposten
+from hhb_backend.processen.saldo_berekenen import update_or_create_saldo
 
 
 def automatisch_boeken(customer_statement_message_id: int = None):
@@ -26,7 +28,8 @@ def automatisch_boeken(customer_statement_message_id: int = None):
             matching_afspraak = min(afspraken, key=itemgetter('valid_from'))
         if matching_afspraak:
             _afspraken[matching_afspraak.id] = matching_afspraak
-            _automatische_transacties.append({"transaction_id": transactie_id, "afspraak_id": matching_afspraak.id, "is_automatisch_geboekt": True})
+            _automatische_transacties.append(
+                {"transaction_id": transactie_id, "afspraak_id": matching_afspraak.id, "is_automatisch_geboekt": True})
             _matching_transaction_ids.append(transactie_id)
 
     stats = Counter(len(s) for s in suggesties.values())
@@ -45,21 +48,31 @@ def automatisch_boeken(customer_statement_message_id: int = None):
     for item in _automatische_transacties:
         afspraak = _afspraken[item["afspraak_id"]]
         rubriek = rubrieken[afspraak.rubriek_id]
-        json.append({**item, "grootboekrekening_id": rubriek.grootboekrekening_id})
+        json.append(
+            {**item, "grootboekrekening_id": rubriek.grootboekrekening_id})
 
-    _matching_transactions = [t for t in transactions if t.id in _matching_transaction_ids]
-    
-    journaalposten_ = create_journaalposten(json, _afspraken, _matching_transactions)
-    
+    _matching_transactions = [
+        t for t in transactions if t.id in _matching_transaction_ids]
+
+    journaalposten_ = create_journaalposten(
+        json, _afspraken, _matching_transactions)
+
     logging.info(f"automatisch boeken completed with {len(journaalposten_)}")
+
+    logging.info(f"beginnen met updaten van saldos..")
+    for journaalpost in journaalposten_:
+        update_or_create_saldo(journaalpost)
     return journaalposten_
 
+
 def get_transactions_to_write_off(customer_statement_message_id):
-    logging.info(f"automatisch_boeken: customer_statement_message_id={customer_statement_message_id}")
+    logging.info(
+        f"automatisch_boeken: customer_statement_message_id={customer_statement_message_id}")
     if customer_statement_message_id is not None:
         transactions = [
             transaction for
-            transaction in hhb_dataloader().bank_transactions.by_csm(customer_statement_message_id)
+            transaction in hhb_dataloader().bank_transactions.by_csm(
+                customer_statement_message_id)
             if not transaction.is_geboekt
         ]
     else:
@@ -67,7 +80,7 @@ def get_transactions_to_write_off(customer_statement_message_id):
     return transactions
 
 
-def transactie_suggesties(transactie_ids: List[int] = None, transactions: List[BankTransaction] = None, exact_zoekterm_matches = True) -> Dict[int, List[Afspraak]]:
+def transactie_suggesties(transactie_ids: List[int] = None, transactions: List[BankTransaction] = None, exact_zoekterm_matches=True) -> Dict[int, List[Afspraak]]:
     if transactie_ids:
         if type(transactie_ids) != list:
             transactie_ids = [transactie_ids]
@@ -77,26 +90,30 @@ def transactie_suggesties(transactie_ids: List[int] = None, transactions: List[B
         transactions = hhb_dataloader().bank_transactions.load(transactie_ids)
         if not transactions:
             return {key: [] for key in transactie_ids}
-    
+
     if transactions and not transactie_ids:
         transactie_ids = [transaction.id for transaction in transactions]
 
     # Rekeningen ophalen adhv iban
-    rekening_ibans = [transaction.tegen_rekening for transaction in transactions]
+    rekening_ibans = [
+        transaction.tegen_rekening for transaction in transactions]
     rekeningen = hhb_dataloader().rekeningen.by_ibans(rekening_ibans)
     if not rekeningen:
         return {key: [] for key in transactie_ids}
-  
-    rekening_ids = [rekening.id if rekening is not None else -1 for rekening in rekeningen]  
+
+    rekening_ids = [rekening.id if rekening is not None else -
+                    1 for rekening in rekeningen]
 
     # Orginisaties ophalen (organisaties_id, afdeling_ids, rekening_ids)
-    organisaties = hhb_dataloader().organisaties.organisatie_afdelingen_by_rekening_ids(rekening_ids)
+    organisaties = hhb_dataloader(
+    ).organisaties.organisatie_afdelingen_by_rekening_ids(rekening_ids)
     organisatie_rekeningen_ids = []
     for organisatie in organisaties:
         organisatie_rekeningen_ids.extend(organisatie["rekening_ids"])
 
-    # Add new rekeningen ids 
-    organisatie_rekeningen_ids = list(filter(lambda id: id not in rekening_ids, organisatie_rekeningen_ids))
+    # Add new rekeningen ids
+    organisatie_rekeningen_ids = list(
+        filter(lambda id: id not in rekening_ids, organisatie_rekeningen_ids))
     rekening_ids.extend(organisatie_rekeningen_ids)
 
     # Nieuwe rekeningen ophalen van organisaties adhv ids
@@ -113,18 +130,20 @@ def transactie_suggesties(transactie_ids: List[int] = None, transactions: List[B
     afspraken = hhb_dataloader().afspraken.by_rekeningen(rekening_ids)
     if not afspraken:
         return {key: [] for key in transactie_ids}
-    
+
     # Afspraken koppelen aan rekeningen
-    rekening_afspraken = {rekening.id: list(filter(lambda afspraak: rekening_matches_afspraak(rekening.id, afspraak, organisaties), afspraken)) for rekening in rekeningen}
+    rekening_afspraken = {rekening.id: list(filter(lambda afspraak: rekening_matches_afspraak(
+        rekening.id, afspraak, organisaties), afspraken)) for rekening in rekeningen}
 
     # Transacties koppelen aan een afspraak
     transactie_ids_with_afspraken = {}
     for transaction in transactions:
         if not transaction.tegen_rekening:
             continue
-        
+
         # Passende rekening bij transactie ophalen
-        transactie_rekening: Rekening = iban_to_rekening.get(transaction.tegen_rekening, None)
+        transactie_rekening: Rekening = iban_to_rekening.get(
+            transaction.tegen_rekening, None)
         if not transactie_rekening:
             continue
 
@@ -137,7 +156,8 @@ def transactie_suggesties(transactie_ids: List[int] = None, transactions: List[B
         ]
 
         if not exact_zoekterm_matches:
-             transactie_ids_with_afspraken[transaction.id].sort(key=lambda afspraak: matching_zoektermen_count(afspraak, transaction.information_to_account_owner), reverse=True)
+            transactie_ids_with_afspraken[transaction.id].sort(key=lambda afspraak: matching_zoektermen_count(
+                afspraak, transaction.information_to_account_owner), reverse=True)
 
     return transactie_ids_with_afspraken
 
@@ -148,16 +168,15 @@ def afspraak_matches_zoekterm(afspraak, target_text: str, exact_zoekterm_matches
     else:
         return match_similar_zoekterm(afspraak, target_text)
 
+
 def rekening_matches_afspraak(rekening_id, afspraak: Afspraak, organisaties):
     if rekening_id == afspraak.tegen_rekening_id:
         return True
-    
-    filtered_organisaties = filter(lambda organisatie: rekening_id in organisatie["rekening_ids"], organisaties)
+
+    filtered_organisaties = filter(
+        lambda organisatie: rekening_id in organisatie["rekening_ids"], organisaties)
     afdelingen = []
     for organisatie in filtered_organisaties:
         afdelingen.extend(organisatie["afdeling_ids"])
 
     return afspraak.afdeling_id in afdelingen
-
-
-

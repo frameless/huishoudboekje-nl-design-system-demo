@@ -1,27 +1,52 @@
 import logging
 
 from hhb_backend.graphql.dataloaders import hhb_dataloader
+from hhb_backend.graphql.datawriters import hhb_datawriter
+import calendar
+from datetime import datetime
+from hhb_backend.service.model import journaalpost
+from hhb_backend.service.model import afspraak
+from hhb_backend.service.model import bank_transaction
+from hhb_backend.service.model import saldo
 
 
-def saldo_berekenen(burger_ids):
-    """ Get saldo for burger_ids together """
-    transaction_ids = []
+def update_or_create_saldo(journaalpost, undo_saldo=False):
+    """ update or create the saldo based on transaction """
+    afspraak = hhb_dataloader().afspraken.load_one(
+        journaalpost['afspraak_id'])
+    transaction = hhb_dataloader().bank_transactions.load_one(
+        journaalpost['transaction_id'])
+    if afspraak and transaction:
+        date = datetime.strptime(
+            transaction.transactie_datum, '%Y-%m-%dT%H:%M:%S')
+        existing_saldo = hhb_dataloader().saldo.get_saldo(
+            [afspraak['burger_id']], date.strftime("%Y-%m-%d"))
+        if len(existing_saldo) == 1:
+            __update_existing_saldo(transaction, existing_saldo, undo_saldo)
+        if len(existing_saldo) == 0:
+            __create_new_saldo(
+                transaction, afspraak['burger_id'], date, undo_saldo)
 
-    if burger_ids:
-        for burger_id in burger_ids:
-            afspraken = hhb_dataloader().afspraken.by_burger(burger_id)
-            if afspraken:
-                for afspraak in afspraken:
-                    journaalposten_afspraak = hhb_dataloader().journaalposten.by_afspraak(afspraak.get('id'))
-                    if journaalposten_afspraak:
-                        for post in journaalposten_afspraak:
-                            id = post.get('transaction_id')
-                            transaction_ids.append(id)
-                    else:
-                        logging.info("Geen journaalposten_by_afspraak.")
-            
-        if not transaction_ids:
-            return {"bedrag": 0}
 
-    return hhb_dataloader().bank_transactions.saldo_many(transaction_ids)
-    
+def __create_new_saldo(transaction, burger_id, date, undo_saldo):
+    days_in_month = calendar.monthrange(date.year, date.month)[1]
+    startdate = f'{date.strftime("%Y-%m")}-01'
+    enddate = f'{date.strftime("%Y-%m")}-{days_in_month}'
+    json = []
+    closest_saldo = hhb_dataloader().saldo.get_closest_saldo([
+        burger_id], date)
+
+    prev_saldo = closest_saldo[0]["saldo"] if len(closest_saldo) > 0 else 0
+    saldo = prev_saldo - transaction.bedrag if undo_saldo else prev_saldo + transaction.bedrag
+
+    json.append({"burger_id": burger_id, "saldo": saldo,
+                "einddatum": enddate, "begindatum": startdate})
+    hhb_datawriter().saldo.post(json[0])
+
+
+def __update_existing_saldo(transaction, existing_saldo, undo_saldo):
+    new_saldo = existing_saldo[0]['saldo'] - transaction.bedrag if (
+        undo_saldo) else existing_saldo[0]['saldo'] + transaction.bedrag
+
+    id = existing_saldo[0]['id']
+    hhb_datawriter().saldo.put({"id": id, "saldo": new_saldo})

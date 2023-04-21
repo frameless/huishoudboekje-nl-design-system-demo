@@ -1,4 +1,5 @@
 """ GraphQL mutation for deleting a Organisatie """
+import logging
 import graphene
 import requests
 
@@ -10,6 +11,7 @@ from hhb_backend.graphql.models.customer_statement_message import (
     CustomerStatementMessage,
 )
 from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
+from hhb_backend.processen.saldo_berekenen import update_or_create_saldo
 
 
 class DeleteCustomerStatementMessage(graphene.Mutation):
@@ -27,16 +29,26 @@ class DeleteCustomerStatementMessage(graphene.Mutation):
 
         transactions = hhb_dataloader().bank_transactions.by_csm(id)
         transaction_ids = [t.id for t in transactions]
+        # {'bedrag': 76532, 'customer_statement_message_id': 37, 'id': 962,
+        #  'information_to_account_owner': 'NL09INGB4826953240
+        #   Loon ZOEKTERMPERSONA1 januari 2019', 'is_credit': True,
+        #  'is_geboekt': False, 'statement_line': '190125C765.32NMSC028',
+        #  'tegen_rekening': 'NL09INGB4826953240', 'transactie_datum': '2019-01-25T00:00:00'}
 
         journaalposten = hhb_dataloader().journaalposten.by_transactions(transaction_ids)
         for journaalpost in journaalposten:
             if journaalpost is not None:
-                response = requests.delete(f"{settings.HHB_SERVICES_URL}/journaalposten/{journaalpost['id']}")
+                # {'afspraak_id': 36, 'grootboekrekening_id': 'WBedHuiGweWat', 'id': 870, 'is_automatisch_geboekt': True, 'transaction_id': 950}
+                response = requests.delete(
+                    f"{settings.HHB_SERVICES_URL}/journaalposten/{journaalpost['id']}")
                 if not response.ok:
-                    raise GraphQLError(f"Upstream API responded: {response.text}")
+                    raise GraphQLError(
+                        f"Upstream API responded: {response.text}")
+                update_or_create_saldo(journaalpost, True)
 
         for transaction in transaction_ids:
-            response = requests.delete(f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/{transaction}")
+            response = requests.delete(
+                f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/{transaction}")
             if not response.ok:
                 raise GraphQLError(f"Upstream API responded: {response.text}")
 
@@ -44,12 +56,14 @@ class DeleteCustomerStatementMessage(graphene.Mutation):
             f"{settings.TRANSACTIE_SERVICES_URL}/customerstatementmessages/{id}"
         )
         if not delete_response_hhb.ok:
-            raise GraphQLError(f"Upstream API responded: {delete_response_hhb.text}")
+            raise GraphQLError(
+                f"Upstream API responded: {delete_response_hhb.text}")
 
         AuditLogging.create(
             action=info.field_name,
             entities=[
-                GebruikersActiviteitEntity(entityType="customerStatementMessage", entityId=id)
+                GebruikersActiviteitEntity(
+                    entityType="customerStatementMessage", entityId=id)
             ],
             before=dict(customerStatementMessage=previous),
         )
