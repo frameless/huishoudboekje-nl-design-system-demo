@@ -1,19 +1,20 @@
 import {Box, Divider, HStack, Stack, Text, VStack} from "@chakra-ui/react";
 import React from "react";
 import {Trans, useTranslation} from "react-i18next";
-import {BurgerRapportage, RapportageTransactie} from "../../generated/graphql";
+import {BurgerRapportage, RapportageTransactie, Saldo} from "../../generated/graphql";
 import d from "../../utils/dayjs";
 import {currencyFormat2} from "../../utils/things";
 import Section from "../shared/Section";
 import SectionContainer from "../shared/SectionContainer";
-import {createBalanceTableAggregation, createSaldos, Transaction, Type} from "./Aggregator";
+import {createBalanceTableAggregation, createSaldos, getStartingSaldo, Transaction, Type} from "./Aggregator";
 
-type BalanceTableProps = {transactions: BurgerRapportage[], startDate: string, endDate: string};
+type BalanceTableProps = {transactions: BurgerRapportage[], startDate: string, endDate: string, startSaldos: Saldo[]};
 
-const BalanceTable: React.FC<BalanceTableProps> = ({transactions, startDate, endDate}) => {
+const BalanceTable: React.FC<BalanceTableProps> = ({transactions, startDate, endDate, startSaldos}) => {
 	const {t} = useTranslation();
 	const aggregationByOrganisatie: Transaction[] = createBalanceTableAggregation(transactions);
 	const saldos = createSaldos(transactions)
+	const startSaldo = getStartingSaldo(startSaldos)
 	const translatedCategory = {
 		[Type.Inkomsten]: t("charts.inkomstenUitgaven.income"),
 		[Type.Uitgaven]: t("charts.inkomstenUitgaven.expenses"),
@@ -65,7 +66,7 @@ const BalanceTable: React.FC<BalanceTableProps> = ({transactions, startDate, end
 									</HStack>
 									<Stack paddingBottom={5} direction={"row"}>
 										<Box flex={1}>
-											<Text  className={"do-not-print"}>{t(`total ${category}`)}</Text>
+											<Text className={"do-not-print"}>{t(`total ${category}`)}</Text>
 										</Box>
 										<Box flex={2} textAlign={"right"}>
 											<Text paddingRight={"6%"} fontWeight={"bold"}>{`€ ${currencyFormat2(false).format(Math.abs(total))}`}</Text>
@@ -86,11 +87,12 @@ const BalanceTable: React.FC<BalanceTableProps> = ({transactions, startDate, end
 								<Text fontWeight={"bold"}>{`€ ${currencyFormat2(false).format(saldos['Total'])}`}</Text>
 							</Box>
 						</Stack>
-						<Stack paddingTop={5} direction={"row"}>
+						<HStack direction={"row"}>
 							<Box flex={1}>
-								<Text visibility={"hidden"} fontWeight={"bold"}>{`${t("saldo balance")} ${d(endDate, "L").format("DD-MM-YYYY")}: €${currencyFormat2(false).format(saldos['Total'])}`}</Text>
+								<Text>{t("end saldo at") + " " + d(endDate, "L").endOf("day").format("L")}:
+									{` € ${currencyFormat2(false).format(startSaldo + saldos['Total'])}`}</Text>
 							</Box>
-						</Stack>
+						</HStack>
 					</Stack>
 				</Stack>
 			</Section>

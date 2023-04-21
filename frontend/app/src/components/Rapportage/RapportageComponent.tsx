@@ -1,14 +1,12 @@
 import {Text, Tabs, Stack, Tab, TabPanels, TabPanel} from "@chakra-ui/react";
 import {useTranslation} from "react-i18next";
-import {BurgerRapportage, Saldo as startSaldo, useCreateSaldoMutation, useGetBurgerRapportagesQuery, useGetSaldoClosestToQuery, useGetSaldoQuery} from "../../generated/graphql";
+import {BurgerRapportage, Saldo as startSaldo, useGetBurgerRapportagesQuery, useGetSaldoClosestToQuery} from "../../generated/graphql";
 import Queryable from "../../utils/Queryable";
 import Saldo from "./Saldo";
-import {humanJoin, formatBurgerName} from "../../utils/things";
 import SectionContainer from "../shared/SectionContainer";
 import InkomstenUitgaven from "./InkomstenUitgaven";
 import d from "../../utils/dayjs";
 import BalanceTable from "./BalanceTable";
-import {useQuery} from "@apollo/client";
 
 
 type RapportageComponentParams = {burgerIds: number[], startDate: Date, endDate: Date, rubrieken: number[]};
@@ -78,7 +76,7 @@ const RapportageComponent: React.FC<RapportageComponentParams> = ({burgerIds, st
 									</TabPanels>
 								</Tabs>
 							</SectionContainer>
-							<BalanceTable transactions={reports} startDate={d(startDate).format("L")} endDate={d(endDate).format("L")} />
+							<BalanceTable transactions={reports} startDate={d(startDate).format("L")} endDate={d(endDate).format("L")} startSaldos={startSaldos} />
 						</Stack>
 					)
 				}} />
