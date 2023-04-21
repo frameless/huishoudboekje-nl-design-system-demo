@@ -1,4 +1,4 @@
-import {Box, Button, Checkbox, Divider, FormControl, FormLabel, HStack, Input, InputGroup, InputRightElement, RangeSlider, RangeSliderFilledTrack, RangeSliderMark, RangeSliderThumb, RangeSliderTrack, Stack, Tab, Table, TabList, TabPanel, TabPanels, Tabs, Tbody, Text, Th, Thead, Tr} from "@chakra-ui/react";
+import {Box, Button, Checkbox, Divider, FormControl, FormLabel, HStack, Input, InputGroup, InputRightElement, Radio, RadioGroup, RangeSlider, RangeSliderFilledTrack, RangeSliderMark, RangeSliderThumb, RangeSliderTrack, Stack, Tab, Table, TabList, TabPanel, TabPanels, Tabs, Tbody, Text, Th, Thead, Tr, useRadioGroup} from "@chakra-ui/react";
 import React, { useState } from "react";
 import {useTranslation} from "react-i18next";
 import Select from "react-select";
@@ -136,7 +136,7 @@ const BookingSection = ({transaction, rubrieken}) => {
 		afspraken: number[] | undefined,
 		afdelingen: number[] | undefined,
 		burgers: number[] | undefined,
-		only_valid: boolean,
+		only_valid: boolean | undefined,
 		min_bedrag: number | undefined,
 		max_bedrag: number | undefined,
 		zoektermen: string[] | undefined
@@ -172,7 +172,21 @@ const BookingSection = ({transaction, rubrieken}) => {
 		goFirst()
 	};
 
-	const [onlyValidValue, setOnlyValid] = useState(true)
+
+	const [valid, setOnlyValid] = useState(true)
+
+	const onChangeValidRadio = (value) => {
+		if(value === '1'){
+			onSetOnlyValid(true)
+		}
+		if(value === '2'){
+			onSetOnlyValid(false)			
+		}
+		if(value === '3'){
+			onSetOnlyValid(undefined)			
+		}
+	}
+
 	const onSetOnlyValid = (value) => {
 		setOnlyValid(value)
 		goFirst()
@@ -184,7 +198,7 @@ const BookingSection = ({transaction, rubrieken}) => {
 	searchVariables.burgers = filterBurgerIds.length > 0 ? filterBurgerIds : undefined
 	searchVariables.min_bedrag = sliderValue[0] !== 0 ? sliderValue[0] * 100 : undefined
 	searchVariables.max_bedrag = sliderValue[1] !== 5000 ? sliderValue[1] * 100 : undefined
-	searchVariables.only_valid = onlyValidValue
+	searchVariables.only_valid = valid
 	if(filterOrganisatieids.length > 0){
 		const organisaties: Organisatie[] =  $burgersAndOrganisaties.data?.organisaties || []
 		const filteredOrganisaties = organisaties.filter(organisatie => organisatie.id? filterOrganisatieids.includes(organisatie.id) : false)
@@ -322,9 +336,9 @@ const BookingSection = ({transaction, rubrieken}) => {
 													color='white'
 													mt='-10'
 													ml='-5'
-													w='12'
+													w='20'
 												>
-													{sliderValue[0] === 0 ? ("") : ("€" + sliderValue[0])}
+													{"€" + sliderValue[0]}
 												</RangeSliderMark>
 												<RangeSliderMark
 													value={sliderValue[1]}
@@ -333,22 +347,34 @@ const BookingSection = ({transaction, rubrieken}) => {
 													color='white'
 													mt='-10'
 													ml='-5'
-													w='12'
+													w='20'
 												>
-													{sliderValue[1] === 5000 ? ("") : ("€" + sliderValue[1])}
+													{"€" + sliderValue[1]}
 												</RangeSliderMark>
 												<RangeSliderThumb index={0} />
 												<RangeSliderThumb index={1} />
 											</RangeSlider>
 										</FormControl>
-										<Checkbox flex={1} isChecked={onlyValidValue} onChange={(e) => onSetOnlyValid(e.target.checked)}>Alleen actieve afspraken</Checkbox>
 									</HStack>
+									<RadioGroup defaultValue='1' onChange={onChangeValidRadio}>
+											<Stack spacing={5} direction='row'>
+												<Radio colorScheme='blue' value='1'>
+												Actief
+												</Radio>
+												<Radio colorScheme='blue' value='2'>
+												Beëindigd
+												</Radio>
+												<Radio colorScheme='blue' value='3'>
+												Alle
+												</Radio>
+											</Stack>
+										</RadioGroup>
 									<FormLabel flex={1}>{"Zoek in omschrijving en zoektermen"}</FormLabel>
 									<form onSubmit={onAddzoekterm}>
 										<InputGroup size={"md"}>
 												<Input id={"zoektermen"} onChange={e => setZoekterm(e.target.value)} value={zoekterm || ""} />
 												<InputRightElement width={"auto"} pr={1}>
-													<Button type={"submit"} size={"sm"} colorScheme={"primary"}>{t("global.actions.save")}</Button>
+													<Button type={"submit"} size={"sm"} colorScheme={"primary"}>{"Zoeken"}</Button>
 												</InputRightElement>
 										</InputGroup>
 										<ZoektermenList zoektermen={zoektermen} onClickDelete={(zoekterm: string) => onDeleteZoekterm(zoekterm)} />

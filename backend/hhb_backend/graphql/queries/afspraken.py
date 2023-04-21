@@ -1,10 +1,8 @@
 """ GraphQL Afspraken query """
 from decimal import Decimal
 import logging
-from hhb_backend.graphql.dataloaders.afspraak_loader import AfsprakenFilterBuilder
-from hhb_backend.graphql.scalars.bedrag import Bedrag
+from hhb_backend.graphql.dataloaders.afspraak_loader_concept import AfsprakenGetRequestBuilder
 import graphene
-from graphql import GraphQLError
 
 import hhb_backend.graphql.models.afspraak as afspraak
 from hhb_backend.audit_logging import AuditLogging
@@ -64,7 +62,7 @@ class SearchAfsprakenQuery:
     def resolver(cls, _, info, offset=None, limit=None, afspraak_ids=None, burger_ids=None, afdeling_ids=None, only_valid=None, min_bedrag=None, max_bedrag=None, zoektermen=None):
         logging.info(f"Get afspraken paged")
 
-        afspraken_filter_builder = AfsprakenFilterBuilder()
+        afspraken_filter_builder = AfsprakenGetRequestBuilder()
         if limit is not None and offset is not None:
             afspraken_filter_builder.paged(limit, offset)
 
@@ -89,8 +87,8 @@ class SearchAfsprakenQuery:
         if zoektermen is not None:
             afspraken_filter_builder.by_zoektermen(zoektermen)
 
-        result = hhb_dataloader().afspraken.load_search(afspraken_filter_builder.request_filter)
-
+        result = hhb_dataloader().afspraken_concept.load_all(afspraken_filter_builder.request)
+        
         AuditLogging.create(
             action=info.field_name,
             entities=[
