@@ -57,10 +57,11 @@ class SearchAfsprakenQuery:
                                 afdeling_ids=graphene.List(graphene.Int),
                                 only_valid=graphene.Boolean(), 
                                 min_bedrag=graphene.Int(),
-                                max_bedrag=graphene.Int())
+                                max_bedrag=graphene.Int(),
+                                zoektermen=graphene.List(graphene.String))
 
     @classmethod
-    def resolver(cls, _, info, offset=None, limit=None, afspraak_ids=None, burger_ids=None, afdeling_ids=None, only_valid=None, min_bedrag=None, max_bedrag=None):
+    def resolver(cls, _, info, offset=None, limit=None, afspraak_ids=None, burger_ids=None, afdeling_ids=None, only_valid=None, min_bedrag=None, max_bedrag=None, zoektermen=None):
         logging.info(f"Get afspraken paged")
 
         afspraken_filter_builder = AfsprakenFilterBuilder()
@@ -84,6 +85,9 @@ class SearchAfsprakenQuery:
 
         if max_bedrag is not None:
             afspraken_filter_builder.by_max_bedrag(max_bedrag)
+
+        if zoektermen is not None:
+            afspraken_filter_builder.by_zoektermen(zoektermen)
 
         result = hhb_dataloader().afspraken.load_search(afspraken_filter_builder.request_filter)
 

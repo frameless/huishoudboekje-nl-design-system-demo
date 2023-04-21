@@ -1,14 +1,15 @@
-import {Box, Button, Checkbox, FormControl, FormLabel, HStack, RangeSlider, RangeSliderFilledTrack, RangeSliderMark, RangeSliderThumb, RangeSliderTrack, Stack, Tab, Table, TabList, TabPanel, TabPanels, Tabs, Tbody, Text, Th, Thead, Tr} from "@chakra-ui/react";
+import {Box, Button, Checkbox, Divider, FormControl, FormLabel, HStack, Input, InputGroup, InputRightElement, RangeSlider, RangeSliderFilledTrack, RangeSliderMark, RangeSliderThumb, RangeSliderTrack, Stack, Tab, Table, TabList, TabPanel, TabPanels, Tabs, Tbody, Text, Th, Thead, Tr} from "@chakra-ui/react";
 import React, { useState } from "react";
 import {useTranslation} from "react-i18next";
 import Select from "react-select";
-import {Afspraak, Burger, BankTransaction, GetTransactieDocument, RootQuerySearchAfsprakenArgs, Rubriek, useCreateJournaalpostAfspraakMutation, useCreateJournaalpostGrootboekrekeningMutation, useGetBurgersQuery, useGetSearchAfsprakenLazyQuery, useGetSearchAfsprakenQuery, useGetAfsprakenLazyQuery, useGetSimilarAfsprakenLazyQuery, useGetBurgersAndOrganisatiesQuery, Organisatie} from "../../../generated/graphql";
+import {Afspraak, Burger, BankTransaction, GetTransactieDocument, Rubriek, useCreateJournaalpostAfspraakMutation, useCreateJournaalpostGrootboekrekeningMutation, useGetSimilarAfsprakenLazyQuery, useGetBurgersAndOrganisatiesQuery, Organisatie, useGetSearchAfsprakenQuery} from "../../../generated/graphql";
 import {formatBurgerName, useReactSelectStyles} from "../../../utils/things";
 import useToaster from "../../../utils/useToaster";
 import SelectAfspraakOption from "../../shared/SelectAfspraakOption";
 import {TriangleDownIcon, TriangleUpIcon } from "@chakra-ui/icons";
 import usePagination from "../../../utils/usePagination";
 import Queryable from "../../../utils/Queryable";
+import ZoektermenList from "../../shared/ZoektermenList";
 
 export function isSuggestie(suggestie: Afspraak, transaction: BankTransaction): boolean{
 	//Only check on zoektermen because the backend checks on iban (on organisation level)
@@ -137,7 +138,8 @@ const BookingSection = ({transaction, rubrieken}) => {
 		burgers: number[] | undefined,
 		only_valid: boolean,
 		min_bedrag: number | undefined,
-		max_bedrag: number | undefined
+		max_bedrag: number | undefined,
+		zoektermen: string[] | undefined
 	}= {
 		offset: offset -1,
 		limit: 25,
@@ -146,7 +148,8 @@ const BookingSection = ({transaction, rubrieken}) => {
 		burgers: undefined,
 		only_valid: true,
 		min_bedrag: undefined,
-		max_bedrag: undefined
+		max_bedrag: undefined,
+		zoektermen: undefined
 	}
 
 	const [filterBurgerIds, setFilterBurgerIds] = useState<number[]>([]);
@@ -154,14 +157,29 @@ const BookingSection = ({transaction, rubrieken}) => {
 	const $burgersAndOrganisaties = useGetBurgersAndOrganisatiesQuery();
 	const onSelectBurger = (value) => {
 		setFilterBurgerIds(value ? value.map(v => v.value) : [])
+		goFirst()
 	};
 
 	const onSelectOrganisatie = (value) => {
 		setFilterOrganisatieIds(value ? value.map(v => v.value) : [])
+		goFirst()
 	};
 
 	const [sliderValue, setSliderValue] = useState([0, 5000])
+
+	const onSetSliderValue = (value) => {
+		setSliderValue(value)
+		goFirst()
+	};
+
 	const [onlyValidValue, setOnlyValid] = useState(true)
+	const onSetOnlyValid = (value) => {
+		setOnlyValid(value)
+		goFirst()
+	};
+
+	const [zoekterm, setZoekterm] = useState<string>("");
+	const [zoektermen, setZoektermen] = useState<string[]>([]);
 
 	searchVariables.burgers = filterBurgerIds.length > 0 ? filterBurgerIds : undefined
 	searchVariables.min_bedrag = sliderValue[0] !== 0 ? sliderValue[0] * 100 : undefined
@@ -175,10 +193,33 @@ const BookingSection = ({transaction, rubrieken}) => {
 	}else {
 		searchVariables.afdelingen = undefined
 	}
+	searchVariables.zoektermen = zoektermen.length > 0 ? zoektermen : undefined
+
+
+
+	const onAddzoekterm = (e) => {
+		e.preventDefault();
+		const list : string[] = []
+		list.push(zoekterm)
+		const newZoektermen = zoektermen.concat(list)
+		setZoektermen(newZoektermen)
+		setZoekterm("")
+	};
+
+	const onDeleteZoekterm = (value) => {
+		const list : string[] = zoektermen.slice()
+		const index = zoektermen.indexOf(value)
+		list.splice(index,1)
+		setZoektermen(list)
+		setZoekterm(zoekterm)
+	}
+
 	const $searchAfspraken = useGetSearchAfsprakenQuery({
 		fetchPolicy: "no-cache",
 		variables: searchVariables
 	});
+
+
 	return (
 		<Stack>
 			<Tabs align={"end"}>
@@ -247,62 +288,73 @@ const BookingSection = ({transaction, rubrieken}) => {
 							}));
 							return (
 								<Stack direction={"column"} spacing={5} flex={1}>
-									<FormControl as={Stack} flex={1}>
-										<FormLabel>{t("charts.filterBurgers")}</FormLabel>
-										<Select onChange={onSelectBurger} options={burgers.map(b => ({
-											key: b.id,
-											value: b.id,
-											label: formatBurgerName(b),
-										}))} styles={reactSelectStyles.default} isMulti isClearable={true} noOptionsMessage={() => t("select.noOptions")} maxMenuHeight={200} placeholder={t("charts.optionAllBurgers")} value={burgers_filter} />
-									</FormControl>
-									<FormControl as={Stack} flex={1}>
-										<FormLabel>{"Filter organisatie"}</FormLabel>
-										<Select onChange={onSelectOrganisatie} options={organisaties.map(o => ({
-											key: o.id,
-											value: o.id,
-											label: o.naam,
-										}))} styles={reactSelectStyles.default} isMulti isClearable={true} noOptionsMessage={() => t("select.noOptions")} maxMenuHeight={200} placeholder={"Alle organisaties"} value={organisaties_filter} />
-									</FormControl>
-									<Checkbox isChecked={onlyValidValue} onChange={(e) => setOnlyValid(e.target.checked)}>Alleen actieve afspraken</Checkbox>
-									<FormControl as={Stack} flex={1}>
-										<FormLabel>{"Bedrag"}</FormLabel>
-										<RangeSlider aria-label={['min', 'max']} min={0} max={5000} step={50} defaultValue={[0, 5000]} onChange={(val) => setSliderValue(val)}>
-											<RangeSliderTrack>
-												<RangeSliderFilledTrack />
-											</RangeSliderTrack>
-											<RangeSliderMark
-												value={sliderValue[0]}
-												textAlign='center'
-												bg='blue.500'
-												color='white'
-												mt='-10'
-												ml='-5'
-												w='12'
-											>
-												{sliderValue[0] === 0 ? ("n.v.t") : ("€" + sliderValue[0])}
-											</RangeSliderMark>
-											<RangeSliderMark
-												value={sliderValue[1]}
-												textAlign='center'
-												bg='blue.500'
-												color='white'
-												mt='-10'
-												ml='-5'
-												w='12'
-											>
-												{sliderValue[1] === 5000 ? ("n.v.t") : ("€" + sliderValue[1])}
-											</RangeSliderMark>
-											<RangeSliderThumb index={0} />
-											<RangeSliderThumb index={1} />
-										</RangeSlider>
-									</FormControl>
-									{/* <Button size={"sm"} variant={"outline"} colorScheme={"primary"} onClick={onClickZoek}>{"Zoek"}</Button> */}
+									<HStack >
+										<FormControl as={Stack} flex={1}>
+											<FormLabel>{t("charts.filterBurgers")}</FormLabel>
+											<Select onChange={onSelectBurger} options={burgers.map(b => ({
+												key: b.id,
+												value: b.id,
+												label: formatBurgerName(b),
+											}))} styles={reactSelectStyles.default} isMulti isClearable={true} noOptionsMessage={() => t("select.noOptions")} maxMenuHeight={200} placeholder={t("charts.optionAllBurgers")} value={burgers_filter} />
+										</FormControl>
+										<FormControl as={Stack} flex={1}>
+											<FormLabel>{"Filter organisatie"}</FormLabel>
+											<Select onChange={onSelectOrganisatie} options={organisaties.map(o => ({
+												key: o.id,
+												value: o.id,
+												label: o.naam,
+											}))} styles={reactSelectStyles.default} isMulti isClearable={true} noOptionsMessage={() => t("select.noOptions")} maxMenuHeight={200} placeholder={"Alle organisaties"} value={organisaties_filter} />
+										</FormControl>
+									</HStack>
+									<HStack paddingTop={5} spacing={10} flex={2}>
+										<FormLabel >{"Bedrag"}</FormLabel>
+										<FormControl as={Stack} flex={1}>
+											<RangeSlider aria-label={['min', 'max']} min={0} max={5000} step={50} defaultValue={[0, 5000]} onChange={(val) => onSetSliderValue(val)}>
+												<RangeSliderTrack>
+													<RangeSliderFilledTrack />
+												</RangeSliderTrack>
+												<RangeSliderMark
+													value={sliderValue[0]}
+													textAlign='center'
+													bg='blue.500'
+													color='white'
+													mt='-10'
+													ml='-5'
+													w='12'
+												>
+													{sliderValue[0] === 0 ? ("") : ("€" + sliderValue[0])}
+												</RangeSliderMark>
+												<RangeSliderMark
+													value={sliderValue[1]}
+													textAlign='center'
+													bg='blue.500'
+													color='white'
+													mt='-10'
+													ml='-5'
+													w='12'
+												>
+													{sliderValue[1] === 5000 ? ("") : ("€" + sliderValue[1])}
+												</RangeSliderMark>
+												<RangeSliderThumb index={0} />
+												<RangeSliderThumb index={1} />
+											</RangeSlider>
+										</FormControl>
+										<Checkbox flex={1} isChecked={onlyValidValue} onChange={(e) => onSetOnlyValid(e.target.checked)}>Alleen actieve afspraken</Checkbox>
+									</HStack>
+									<FormLabel flex={1}>{"Zoek in omschrijving en zoektermen"}</FormLabel>
+									<form onSubmit={onAddzoekterm}>
+										<InputGroup size={"md"}>
+												<Input id={"zoektermen"} onChange={e => setZoekterm(e.target.value)} value={zoekterm || ""} />
+												<InputRightElement width={"auto"} pr={1}>
+													<Button type={"submit"} size={"sm"} colorScheme={"primary"}>{t("global.actions.save")}</Button>
+												</InputRightElement>
+										</InputGroup>
+										<ZoektermenList zoektermen={zoektermen} onClickDelete={(zoekterm: string) => onDeleteZoekterm(zoekterm)} />
+									</form>
+									<Divider></Divider>
 									<Queryable query={$searchAfspraken} options={{hidePreviousResults: true}} children={(data) => {
 										const searchAfspraken: Afspraak[] = data?.searchAfspraken?.afspraken || [];
 										setTotal(data?.searchAfspraken?.pageInfo?.count || 0)
-										if(searchAfspraken.length < offset){
-											goFirst()
-										}
 										return (
 											<Stack spacing={2}>
 												{[...options.suggesties, ...options.afspraken].length === 0 ? (

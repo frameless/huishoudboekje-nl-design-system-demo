@@ -2,7 +2,7 @@
 
 from datetime import datetime
 from flask.views import MethodView
-from sqlalchemy import or_, and_
+from sqlalchemy import  func, or_, and_ , String
 from flask import request
 from models.afspraak import Afspraak
 from core_service.utils import row2dict
@@ -22,6 +22,7 @@ class AfsprakenSearchView(MethodView):
         only_valid = request.json.get("only_valid")
         min_bedrag = request.json.get("min_bedrag")
         max_bedrag = request.json.get("max_bedrag")
+        zoektermen = request.json.get("zoektermen")
 
         result =  Afspraak.query
         if afspraak_ids:
@@ -42,6 +43,11 @@ class AfsprakenSearchView(MethodView):
 
         if max_bedrag:
             result = result.filter(Afspraak.bedrag < max_bedrag)
+
+        if zoektermen:
+            clausesOmschrijving = [func.lower(Afspraak.omschrijving).like(f"%{term.lower()}%")for term in zoektermen]            
+            clausesZoektermen = [func.lower(Afspraak.zoektermen.cast(String)).like(f"%{term.lower()}%")for term in zoektermen]
+            result = result.filter(and_(or_(and_(*clausesZoektermen), and_(*clausesOmschrijving))))
 
         if offset is not None and limit is not None:
             count = result.count()

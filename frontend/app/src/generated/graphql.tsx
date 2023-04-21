@@ -1478,6 +1478,7 @@ export type RootQuerySearchAfsprakenArgs = {
   minBedrag?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
   onlyValid?: InputMaybe<Scalars['Boolean']>;
+  zoektermen?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
 
@@ -2231,6 +2232,7 @@ export type GetSearchAfsprakenQueryVariables = Exact<{
   only_valid?: InputMaybe<Scalars['Boolean']>;
   min_bedrag?: InputMaybe<Scalars['Int']>;
   max_bedrag?: InputMaybe<Scalars['Int']>;
+  zoektermen?: InputMaybe<Array<InputMaybe<Scalars['String']>> | InputMaybe<Scalars['String']>>;
 }>;
 
 
@@ -5712,7 +5714,7 @@ export type GetRubriekenConfiguratieQueryHookResult = ReturnType<typeof useGetRu
 export type GetRubriekenConfiguratieLazyQueryHookResult = ReturnType<typeof useGetRubriekenConfiguratieLazyQuery>;
 export type GetRubriekenConfiguratieQueryResult = Apollo.QueryResult<GetRubriekenConfiguratieQuery, GetRubriekenConfiguratieQueryVariables>;
 export const GetSearchAfsprakenDocument = gql`
-    query getSearchAfspraken($offset: Int, $limit: Int, $afspraken: [Int], $afdelingen: [Int], $burgers: [Int], $only_valid: Boolean, $min_bedrag: Int, $max_bedrag: Int) {
+    query getSearchAfspraken($offset: Int, $limit: Int, $afspraken: [Int], $afdelingen: [Int], $burgers: [Int], $only_valid: Boolean, $min_bedrag: Int, $max_bedrag: Int, $zoektermen: [String]) {
   searchAfspraken(
     offset: $offset
     limit: $limit
@@ -5722,6 +5724,7 @@ export const GetSearchAfsprakenDocument = gql`
     onlyValid: $only_valid
     minBedrag: $min_bedrag
     maxBedrag: $max_bedrag
+    zoektermen: $zoektermen
   ) {
     afspraken {
       id
@@ -5764,6 +5767,7 @@ export const GetSearchAfsprakenDocument = gql`
  *      only_valid: // value for 'only_valid'
  *      min_bedrag: // value for 'min_bedrag'
  *      max_bedrag: // value for 'max_bedrag'
+ *      zoektermen: // value for 'zoektermen'
  *   },
  * });
  */

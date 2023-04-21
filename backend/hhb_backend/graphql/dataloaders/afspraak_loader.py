@@ -83,3 +83,6 @@ class AfsprakenFilterBuilder():
     
     def by_max_bedrag(self, max_bedrag: int):
         self._request_filter.add_to_body("max_bedrag", max_bedrag)
+
+    def by_zoektermen(self, zoektermen: list[str]):
+        self._request_filter.add_to_body("zoektermen", zoektermen)
