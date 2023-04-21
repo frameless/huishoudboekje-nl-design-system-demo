@@ -45,9 +45,8 @@ class AfsprakenSearchView(MethodView):
             result = result.filter(Afspraak.bedrag < max_bedrag)
 
         if zoektermen:
-            clausesOmschrijving = [func.lower(Afspraak.omschrijving).like(f"%{term.lower()}%")for term in zoektermen]            
-            clausesZoektermen = [func.lower(Afspraak.zoektermen.cast(String)).like(f"%{term.lower()}%")for term in zoektermen]
-            result = result.filter(and_(or_(and_(*clausesZoektermen), and_(*clausesOmschrijving))))
+            clauses = [or_(func.lower(Afspraak.omschrijving).like(f"%{term.lower()}%"), func.lower(Afspraak.zoektermen.cast(String)).like(f"%{term.lower()}%")) for term in zoektermen]
+            result = result.filter(and_(*clauses))
 
         if offset is not None and limit is not None:
             count = result.count()

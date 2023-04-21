@@ -204,6 +204,7 @@ const BookingSection = ({transaction, rubrieken}) => {
 		const newZoektermen = zoektermen.concat(list)
 		setZoektermen(newZoektermen)
 		setZoekterm("")
+		goFirst()
 	};
 
 	const onDeleteZoekterm = (value) => {
@@ -212,6 +213,7 @@ const BookingSection = ({transaction, rubrieken}) => {
 		list.splice(index,1)
 		setZoektermen(list)
 		setZoekterm(zoekterm)
+		goFirst()
 	}
 
 	const $searchAfspraken = useGetSearchAfsprakenQuery({
