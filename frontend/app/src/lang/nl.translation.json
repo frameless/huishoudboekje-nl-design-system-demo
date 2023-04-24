@@ -576,7 +576,18 @@
   "bookingSection": {
     "noResults": "Er zijn geen afspraken gevonden. Voeg een afspraak toe, of kies een rubriek om deze transactie op af te letteren.",
     "similarAfspraken": "Soortgelijke afspraken",
-    "noSimilarAfspraken": "Geen soortgelijke afspraken gevonden"
+    "noSimilarAfspraken": "Geen soortgelijke afspraken gevonden",
+    "afspraak" : "Afspraak",
+    "rubriek" : "Rubriek",
+    "sugestions": "Suggesties",
+    "search": "Zoeken",
+    "searchOmschrijvingAndTerms" : "Zoek in omschrijving en zoektermen",
+    "organisation" : "Filter organisaties",
+    "amount" : "bedrag",
+    "active" : "Actief",
+    "ended": "Beëindigd",
+    "all": "Alle",
+    "allOrganisations": "Alle organisaties"
   },
   "filters": {
     "transactions": {
