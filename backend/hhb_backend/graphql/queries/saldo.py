@@ -17,8 +17,9 @@ class SaldoQuery:
         AuditLogging.create(
             action=info.field_name,
             entities=[
-                GebruikersActiviteitEntity(entityType="saldo", entityId=id)
-                for id in burger_ids
+                GebruikersActiviteitEntity(
+                    entityType="saldo", entityId=entry["id"])
+                for entry in result
             ]
         )
         return result
@@ -34,8 +35,9 @@ class SaldoClosestQuery:
         AuditLogging.create(
             action=info.field_name,
             entities=[
-                GebruikersActiviteitEntity(entityType="saldo", entityId=id)
-                for id in burger_ids
+                GebruikersActiviteitEntity(
+                    entityType="saldo", entityId=entry["id"])
+                for entry in result
             ]
         )
         return result
@@ -51,8 +53,9 @@ class SaldoRangeQuery:
         AuditLogging.create(
             action=info.field_name,
             entities=[
-                GebruikersActiviteitEntity(entityType="saldo", entityId=id)
-                for id in burger_ids
+                GebruikersActiviteitEntity(
+                    entityType="saldo", entityId=entry["id"])
+                for entry in result
             ]
         )
         return result
@@ -68,8 +71,9 @@ class SaldosQuery:
         AuditLogging.create(
             action=info.field_name,
             entities=[
-                GebruikersActiviteitEntity(entityType="saldo", entityId=id)
-                for id in burger_ids
+                GebruikersActiviteitEntity(
+                    entityType="saldo", entityId=entry["id"])
+                for entry in result
             ]
         )
         return result

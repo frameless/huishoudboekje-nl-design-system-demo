@@ -33,6 +33,7 @@ class UpdateSaldo(graphene.Mutation):
     def mutate(self, info, input):
         """ Create the new Saldo """
 
+        logging.info("updating saldo..")
         response = requests.put(
             f"{settings.HHB_SERVICES_URL}/saldo/",
             data=json.dumps(input, default=str),

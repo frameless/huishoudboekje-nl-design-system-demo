@@ -59,7 +59,7 @@ def automatisch_boeken(customer_statement_message_id: int = None):
 
     logging.info(f"automatisch boeken completed with {len(journaalposten_)}")
 
-    logging.info(f"beginnen met updaten van saldos..")
+    logging.info(f"Updating saldos accordingly...")
     for journaalpost in journaalposten_:
         update_or_create_saldo(journaalpost)
     return journaalposten_

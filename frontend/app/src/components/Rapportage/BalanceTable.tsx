@@ -13,8 +13,9 @@ type BalanceTableProps = {transactions: BurgerRapportage[], startDate: string, e
 const BalanceTable: React.FC<BalanceTableProps> = ({transactions, startDate, endDate, startSaldos}) => {
 	const {t} = useTranslation();
 	const aggregationByOrganisatie: Transaction[] = createBalanceTableAggregation(transactions);
-	const saldos = createSaldos(transactions)
 	const startSaldo = getStartingSaldo(startSaldos)
+	const saldos = createSaldos(transactions)
+	const saldoDate = d(endDate, "L") <= d().endOf("day") ? d(endDate, "L").endOf("day") : d().endOf("day")
 	const translatedCategory = {
 		[Type.Inkomsten]: t("charts.inkomstenUitgaven.income"),
 		[Type.Uitgaven]: t("charts.inkomstenUitgaven.expenses"),
@@ -88,8 +89,8 @@ const BalanceTable: React.FC<BalanceTableProps> = ({transactions, startDate, end
 							</Box>
 						</Stack>
 						<HStack direction={"row"}>
-							<Box flex={1}>
-								<Text>{t("end saldo at") + " " + d(endDate, "L").endOf("day").format("L")}:
+							<Box flex={1} paddingTop={"30px"}>
+								<Text>{t("end saldo at") + " " + saldoDate.format("L")}:
 									{` € ${currencyFormat2(false).format(startSaldo + saldos['Total'])}`}</Text>
 							</Box>
 						</HStack>

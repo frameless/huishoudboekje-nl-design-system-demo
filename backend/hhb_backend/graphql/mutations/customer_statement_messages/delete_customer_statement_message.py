@@ -29,16 +29,10 @@ class DeleteCustomerStatementMessage(graphene.Mutation):
 
         transactions = hhb_dataloader().bank_transactions.by_csm(id)
         transaction_ids = [t.id for t in transactions]
-        # {'bedrag': 76532, 'customer_statement_message_id': 37, 'id': 962,
-        #  'information_to_account_owner': 'NL09INGB4826953240
-        #   Loon ZOEKTERMPERSONA1 januari 2019', 'is_credit': True,
-        #  'is_geboekt': False, 'statement_line': '190125C765.32NMSC028',
-        #  'tegen_rekening': 'NL09INGB4826953240', 'transactie_datum': '2019-01-25T00:00:00'}
 
         journaalposten = hhb_dataloader().journaalposten.by_transactions(transaction_ids)
         for journaalpost in journaalposten:
             if journaalpost is not None:
-                # {'afspraak_id': 36, 'grootboekrekening_id': 'WBedHuiGweWat', 'id': 870, 'is_automatisch_geboekt': True, 'transaction_id': 950}
                 response = requests.delete(
                     f"{settings.HHB_SERVICES_URL}/journaalposten/{journaalpost['id']}")
                 if not response.ok:

@@ -62,34 +62,28 @@ class SaldoView(HHBView):
         closest_to = request.args.get("closest_to")
         startdate = request.args.get("startdate")
         enddate = request.args.get("enddate")
+        data = None
         if (burger_ids == None):
             return {}, 403
 
         elif (date != None):
-            result_list = [row2dict(row) for row in self.__get_saldos(
-                burger_ids, date)]
-            return {"data": result_list}, 200
+            data = self.__get_saldos(burger_ids, date)
 
         elif (startdate != None and enddate != None):
             data = self.__get_saldos_by_daterange(
                 burger_ids, startdate, enddate)
-            result_list = [row2dict(row) for row in data]
-            return {"data": result_list}, 200
 
         elif (closest_to != None):
             data = self.__get_closest_saldo_to_date(burger_ids, closest_to)
-            if (data != None):
-                result_list = [row2dict(row) for row in data]
-                return {"data": result_list}, 200
-            return {"data": []}, 200
 
         elif (burger_ids != None):
-            data = self.__get_saldos_by_burger_ids(
-                burger_ids)
-            if (data != None):
-                result_list = [row2dict(row) for row in data]
-                return {"data": result_list}, 200
-            return {}, 200
+            data = self.__get_saldos_by_burger_ids(burger_ids)
+
+        if (data != None):
+            result_list = [row2dict(row) for row in data]
+            return {"data": result_list}, 200
+        elif (data == None):
+            return {"data": []}, 200
 
         else:
             return {}, 403

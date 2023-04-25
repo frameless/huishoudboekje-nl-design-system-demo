@@ -7,23 +7,32 @@ import SectionContainer from "../../shared/SectionContainer";
 import SignalenListView from "../../Signalen/SignalenListView";
 import d from "../../../utils/dayjs";
 import Queryable from "../../../utils/Queryable";
+import {currencyFormat2} from "../../../utils/things";
+import {Exception} from "sass";
+import PageNotFound from "../../shared/PageNotFound";
 
 
 const BurgerSaldoView: React.FC<{burger: Burger}> = ({burger}) => {
     const {t} = useTranslation();
 
+    if (burger.id == null) {
+        return <SectionContainer>
+            <Text>Invalid burgerId</Text>
+        </SectionContainer>
+    }
     const $saldo = useGetSaldoQuery({
         variables: {
-            burger_ids: [burger.id ?? -1],
+            burger_ids: [burger.id],
             date: d().format("YYYY-MM-DD")
         },
+        fetchPolicy: "no-cache"
     })
-
     const $closestSaldo = useGetSaldoClosestToQuery({
         variables: {
-            burger_ids: [burger.id ?? -1],
+            burger_ids: [burger.id],
             date: d().format("YYYY-MM-DD")
-        }
+        },
+        fetchPolicy: "no-cache"
     })
 
     return (
@@ -34,8 +43,7 @@ const BurgerSaldoView: React.FC<{burger: Burger}> = ({burger}) => {
                     <SectionContainer>
                         <Section title={t("forms.burgers.sections.saldo.title")}>
                             <Stack spacing={1} flex={1}>
-                                <FormLabel>{t("forms.burgers.sections.saldo.title")}</FormLabel>
-                                <Text>{saldo[0].saldo}</Text>
+                                <Text>{` € ${currencyFormat2(false).format(saldo[0].saldo)}`}</Text>
                             </Stack>
                         </Section>
                     </SectionContainer>
@@ -49,8 +57,7 @@ const BurgerSaldoView: React.FC<{burger: Burger}> = ({burger}) => {
                             <SectionContainer>
                                 <Section title={t("forms.burgers.sections.saldo.title")}>
                                     <Stack spacing={1} flex={1}>
-                                        <FormLabel>{t("forms.burgers.sections.saldo.title")}</FormLabel>
-                                        <Text>{saldo.length > 0 ? saldo[0].saldo : t("forms.burgers.sections.saldo.noSaldo")}</Text>
+                                        <Text>{saldo.length > 0 ? ` € ${currencyFormat2(false).format(saldo[0].saldo)}` : ` € ${currencyFormat2(false).format(0)}`}</Text>
                                     </Stack>
                                 </Section>
                             </SectionContainer>
