@@ -1,7 +1,6 @@
 import logging
 from collections import Counter
 from operator import itemgetter
-from time import sleep
 from typing import List, Dict
 
 from hhb_backend.graphql.dataloaders import hhb_dataloader
