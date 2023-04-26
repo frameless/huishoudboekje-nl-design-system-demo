@@ -3,7 +3,6 @@ import {useTranslation} from "react-i18next";
 import {BurgerRapportage, useGetBurgerRapportagesQuery} from "../../generated/graphql";
 import Queryable from "../../utils/Queryable";
 import Saldo from "./Saldo";
-import {humanJoin, formatBurgerName} from "../../utils/things";
 import SectionContainer from "../shared/SectionContainer";
 import InkomstenUitgaven from "./InkomstenUitgaven";
 import d from "../../utils/dayjs";

@@ -60,8 +60,8 @@ class BurgerView(HHBView):
         bsn = request.json.get("bsn", None)
         if bsn:
             result = Burger.query.filter(Burger.bsn == bsn).all()
-        if len(result) > 0:
-            errors.append("bsn already exists")
+            if len(result) > 0:
+                errors.append("bsn already exists")
         return errors
 
     def extend_get(self, **kwargs):
