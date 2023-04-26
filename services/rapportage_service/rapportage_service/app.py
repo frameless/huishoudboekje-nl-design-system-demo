@@ -47,6 +47,7 @@ def create_app(config_name='rapportage_service.config.Config', dependency_inject
 
     # Initialize Flask-Injector. This needs to be run after you attached all
     # views, handlers, context processors and template globals.
+    app.before_first_request_funcs = []
     FlaskInjector(app=app, modules=[dependency_injection_configuration])
     return app
 
