@@ -38,7 +38,8 @@ class DeleteCustomerStatementMessage(graphene.Mutation):
                 if not response.ok:
                     raise GraphQLError(
                         f"Upstream API responded: {response.text}")
-                update_or_create_saldo(journaalpost, True)
+                if journaalpost.afspraak_id != None:
+                    update_or_create_saldo(journaalpost, True)
 
         for transaction in transaction_ids:
             response = requests.delete(

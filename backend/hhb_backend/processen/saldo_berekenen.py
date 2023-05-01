@@ -12,20 +12,19 @@ from hhb_backend.service.model import saldo
 
 def update_or_create_saldo(journaalpost, undo_saldo=False):
     """ update or create the saldo based on transaction """
-    afspraak = hhb_dataloader().afspraken.load_one(
-        journaalpost['afspraak_id'])
     transaction = hhb_dataloader().bank_transactions.load_one(
         journaalpost['transaction_id'])
-    if afspraak and transaction:
+
+    if transaction:
         date = datetime.strptime(
             transaction.transactie_datum, '%Y-%m-%dT%H:%M:%S')
         existing_saldo = hhb_dataloader().saldo.get_saldo(
-            [afspraak['burger_id']], date.strftime("%Y-%m-%d"))
+            [journaalpost["afspraak"]['burger_id']], date.strftime("%Y-%m-%d"))
         if len(existing_saldo) == 1:
             __update_existing_saldo(transaction, existing_saldo, undo_saldo)
         if len(existing_saldo) == 0:
             __create_new_saldo(
-                transaction, afspraak['burger_id'], date, undo_saldo)
+                transaction, journaalpost["afspraak"]['burger_id'], date, undo_saldo)
 
 
 def __create_new_saldo(transaction, burger_id, date, undo_saldo):

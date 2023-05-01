@@ -1,15 +1,12 @@
-import {Checkbox, CheckboxGroup, FormControl, FormLabel, Stack, Text} from "@chakra-ui/react";
-import React, {useState} from "react";
+import {Stack, Text} from "@chakra-ui/react";
+import React from "react";
 import {useTranslation} from "react-i18next";
-import {Burger, Saldo, Signaal, useGetSaldoClosestToQuery, useGetSaldoQuery} from "../../../generated/graphql";
+import {Burger, Saldo, useGetSaldoClosestToQuery, useGetSaldoQuery} from "../../../generated/graphql";
 import Section from "../../shared/Section";
 import SectionContainer from "../../shared/SectionContainer";
-import SignalenListView from "../../Signalen/SignalenListView";
 import d from "../../../utils/dayjs";
 import Queryable from "../../../utils/Queryable";
 import {currencyFormat2} from "../../../utils/things";
-import {Exception} from "sass";
-import PageNotFound from "../../shared/PageNotFound";
 
 
 const BurgerSaldoView: React.FC<{burger: Burger}> = ({burger}) => {
