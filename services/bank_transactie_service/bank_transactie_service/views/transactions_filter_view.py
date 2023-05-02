@@ -1,9 +1,8 @@
 """ MethodView for /afspraken/search path """
-import logging
 from core_service.utils import valid_date
 from core_service.views.basic_view.basic_filter_view import BasicFilterView
 from models.bank_transaction import BankTransaction
-from sqlalchemy import  func, or_, and_ , String
+from sqlalchemy import  func, and_
 
 
 class BanktransactionFilterView(BasicFilterView):
