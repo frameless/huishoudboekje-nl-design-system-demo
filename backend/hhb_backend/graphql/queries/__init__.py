@@ -4,7 +4,7 @@ import graphene
 from .afdelingen import AfdelingQuery, AfdelingenQuery
 from .afspraken import AfspraakQuery, SearchAfsprakenQuery, AfsprakenQuery
 from .alarmen import AlarmenQuery, AlarmQuery
-from .bank_transactions import BankTransactionQuery, BankTransactionsQuery, BankTransactionsPagedQuery
+from .bank_transactions import BankTransactionQuery, BankTransactionsQuery, BankTransactionsPagedQuery, BankTransactionsSearchQuery
 from .burgers import BurgersQuery, BurgerQuery, BurgersPagedQuery
 from .configuraties import ConfiguratieQuery, ConfiguratiesQuery
 from .customer_statement_messages import CustomerStatementMessageQuery, CustomerStatementMessagesQuery
@@ -70,6 +70,7 @@ class RootQuery(graphene.ObjectType):
     signalen = SignalenQuery.return_type
     burger_rapportages = BurgerRapportagesQuery.return_type
     search_afspraken = SearchAfsprakenQuery.return_type
+    search_transacties = BankTransactionsSearchQuery.return_type
 
     def resolve_burger(root, info, **kwargs):
         return BurgerQuery.resolver(root, info, **kwargs)
@@ -208,3 +209,6 @@ class RootQuery(graphene.ObjectType):
 
     def resolve_search_afspraken(root, info, **kwargs):
         return SearchAfsprakenQuery.resolver(root, info, **kwargs)
+    
+    def resolve_search_transacties(root, info, **kwargs):
+        return BankTransactionsSearchQuery.resolver(root, info, **kwargs)

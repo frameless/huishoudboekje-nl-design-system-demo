@@ -20,7 +20,7 @@ class DataLoaderConcept():
 
     """
 
-    def load_all(self, request: GetRequestObject) -> dict:
+    def load_request(self, request: GetRequestObject) -> dict:
         """
          Loads the request object
          """

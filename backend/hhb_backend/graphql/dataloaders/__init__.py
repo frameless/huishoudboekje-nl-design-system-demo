@@ -2,7 +2,6 @@ from flask import request
 
 from .afdeling_loader import AfdelingLoader
 from .afspraak_loader import AfspraakLoader
-from .afspraak_loader_concept import AfspraakLoaderConcept
 from .alarm_loader import AlarmLoader
 from .bank_transaction_loader import BankTransactionLoader
 from .burger_loader import BurgerLoader
@@ -23,6 +22,10 @@ from .signaal_loader import SignaalLoader
 from .rapportage_loader import RapportageLoader
 from .saldo_loader import SaldoLoader
 
+from .afspraak_loader_concept import AfspraakLoaderConcept
+from .transactie_loader_concept import TransactieLoaderConcept
+from .journaalpost_loader_concept import JournaalpostLoaderConcept
+
 
 class HHBDataLoader:
     """ Main Dataloader class for HHB """
@@ -30,7 +33,6 @@ class HHBDataLoader:
     def __init__(self):
         self.afdelingen = AfdelingLoader()
         self.afspraken = AfspraakLoader()
-        self.afspraken_concept = AfspraakLoaderConcept()
         self.alarms = AlarmLoader()
         self.bank_transactions = BankTransactionLoader()
         self.burgers = BurgerLoader()
@@ -50,6 +52,11 @@ class HHBDataLoader:
         self.overschrijvingen = OverschrijvingLoader()
         self.rapportage = RapportageLoader()
         self.saldo = SaldoLoader()
+
+        
+        self.afspraken_concept = AfspraakLoaderConcept()
+        self.transacties_concept = TransactieLoaderConcept()
+        self.journaalposten_concept = JournaalpostLoaderConcept()
 
     def __getitem__(self, item: str):
         return getattr(self, item)
