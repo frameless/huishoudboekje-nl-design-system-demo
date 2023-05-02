@@ -13,7 +13,7 @@ type TransactieItemViewProps = {
 	rubrieken?: Rubriek[],
 };
 
-const TransactieItemView: React.FC<TransactieItemViewProps> = ({transactie, afspraken, rubrieken}) => {
+const TransactieItemView: React.FC<TransactieItemViewProps> = ({transactie, rubrieken}) => {
 	const {t} = useTranslation();
 
 	return (
@@ -27,7 +27,7 @@ const TransactieItemView: React.FC<TransactieItemViewProps> = ({transactie, afsp
 				</Section>
 			) : (
 				<Section title={t("pages.transactieDetails.afletteren.title")} helperText={t("pages.transactieDetails.afletteren.helperText")}>
-					<BookingSection transaction={transactie} rubrieken={rubrieken || []} afspraken={afspraken || []} />
+					<BookingSection transaction={transactie} rubrieken={rubrieken || []} />
 				</Section>
 			)}
 		</SectionContainer>

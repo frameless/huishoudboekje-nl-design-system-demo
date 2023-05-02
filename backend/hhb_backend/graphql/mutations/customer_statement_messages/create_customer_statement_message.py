@@ -1,5 +1,6 @@
 """ GraphQL mutation for creating a new CustomerStatementMessage """
 import json
+import logging
 import re
 from datetime import datetime
 
@@ -34,6 +35,7 @@ class CreateCustomerStatementMessage(graphene.Mutation):
 
     @staticmethod
     def mutate(self, info, file):
+        logging.info(f"Creating csm")
         content = file.stream.read()
 
         if not content:
@@ -118,9 +120,9 @@ class CreateCustomerStatementMessage(graphene.Mutation):
 
         entities = []
         for csm_item in csm:
-            for t in csm_item["bank_transactions"]:
+            for transaction in csm_item["bank_transactions"]:
                 entities.append(
-                    GebruikersActiviteitEntity(entityType="transaction", entityId=t)
+                    GebruikersActiviteitEntity(entityType="transaction", entityId=transaction["id"])
                 )
 
         entities.extend([

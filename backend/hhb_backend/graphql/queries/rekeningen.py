@@ -1,3 +1,4 @@
+import logging
 import graphene
 
 from hhb_backend.audit_logging import AuditLogging
@@ -11,6 +12,7 @@ class RekeningQuery:
 
     @classmethod
     def resolver(cls, _root, info, id):
+        logging.info(f"Get rekening")
         result = hhb_dataloader().rekeningen.load_one(id)
         AuditLogging.create(
             action=info.field_name,
@@ -26,6 +28,7 @@ class RekeningenQuery:
 
     @classmethod
     def resolver(cls, _root, info, ids=None):
+        logging.info(f"Get rekeningen")
         if ids:
             result = hhb_dataloader().rekeningen.load(ids)
         else:
@@ -47,6 +50,7 @@ class RekeningenByIbansQuery:
 
     @classmethod
     def resolver(cls, _root, info, ibans=None):
+        logging.info(f"Get rekeningen by iban")
         if ibans:
             result = hhb_dataloader().rekeningen.by_ibans(ibans)
         else:

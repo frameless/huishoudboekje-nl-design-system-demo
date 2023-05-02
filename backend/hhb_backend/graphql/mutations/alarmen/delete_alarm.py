@@ -1,4 +1,5 @@
 """ GraphQl Mutatie voor het verwijderen van een Alarm """
+import logging
 import graphene
 
 import hhb_backend.graphql.models.alarm as graphene_alarm
@@ -18,6 +19,7 @@ class DeleteAlarm(graphene.Mutation):
     @staticmethod
     def mutate(self, info, id):
         """ Mutatie voor het verwijderen van een bestaand Alarm """
+        logging.info("Deleting alarm")
         result = AlarmHelper.delete(id)
 
         AuditLogging.create(

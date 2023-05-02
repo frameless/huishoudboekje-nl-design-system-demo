@@ -1,6 +1,7 @@
 """ GraphQL mutation for creating a new Rubriek """
 
 import json
+import logging
 
 import graphene
 import requests
@@ -24,6 +25,7 @@ class CreateRubriek(graphene.Mutation):
     @staticmethod
     def mutate(self, info, **kwargs):
         """ Create the new Rubriek """
+        logging.info(f"Creating rubriek")
         if (
             kwargs["grootboekrekening_id"]
             and hhb_dataloader().grootboekrekeningen.load_one(kwargs['grootboekrekening_id']) is None

@@ -1,4 +1,5 @@
 """ GraphQL Gebruikers query """
+import logging
 import graphene
 
 from hhb_backend.audit_logging import AuditLogging
@@ -12,6 +13,7 @@ class AfdelingQuery:
 
     @classmethod
     def resolver(cls, _, info, id):
+        logging.info(f"Get afdeling")
         result = hhb_dataloader().afdelingen.load_one(id)
         AuditLogging.create(
             action=info.field_name,
@@ -27,6 +29,7 @@ class AfdelingenQuery:
 
     @classmethod
     def resolver(cls, _, info, ids=None):
+        logging.info(f"Get afdelingen")
         if ids:
             result = hhb_dataloader().afdelingen.load(ids)
         else:

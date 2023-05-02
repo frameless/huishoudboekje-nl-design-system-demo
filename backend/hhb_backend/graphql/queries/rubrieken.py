@@ -1,3 +1,4 @@
+import logging
 import graphene
 
 from hhb_backend.audit_logging import AuditLogging
@@ -11,6 +12,7 @@ class RubriekQuery:
 
     @classmethod
     def resolver(cls, _root, info, id):
+        logging.info(f"Get rubriek")
         result = hhb_dataloader().rubrieken.load_one(id)
         AuditLogging.create(
             action=info.field_name,
@@ -26,6 +28,7 @@ class RubriekenQuery:
 
     @classmethod
     def resolver(cls, _root, info, ids=None):
+        logging.info(f"Get rubrieken")
         if ids:
             result = hhb_dataloader().rubrieken.load(ids)
         else:

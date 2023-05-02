@@ -1,19 +1,75 @@
-import {FormControl, HStack, Stack, Tab, Table, TabList, TabPanel, TabPanels, Tabs, Tbody, Text, Th, Thead, Tr} from "@chakra-ui/react";
+import {Box, Button, FormControl, HStack, Stack, Tab, Table, TabList, TabPanel, TabPanels, Tabs, Tbody, Text, Th, Thead, Tr} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
 import Select from "react-select";
-import {Afspraak, GetSaldoDocument, GetTransactieDocument, Rubriek, useCreateJournaalpostAfspraakMutation, useCreateJournaalpostGrootboekrekeningMutation, useCreateSaldoMutation, useGetSaldoQuery, useUpdateSaldoMutation} from "../../../generated/graphql";
+import {Afspraak, BankTransaction, GetTransactieDocument, Rubriek, useCreateJournaalpostAfspraakMutation, useCreateJournaalpostGrootboekrekeningMutation, useGetSimilarAfsprakenLazyQuery, useCreateSaldoMutation, useGetSaldoQuery, useUpdateSaldoMutation} from "../../../generated/graphql";
 import {useReactSelectStyles} from "../../../utils/things";
 import useToaster from "../../../utils/useToaster";
 import SelectAfspraakOption from "../../shared/SelectAfspraakOption";
-import d from "../../../utils/dayjs";
-import {ApolloClient, InMemoryCache, useLazyQuery, useQuery} from "@apollo/client";
+import {TriangleDownIcon, TriangleUpIcon} from "@chakra-ui/icons";
 
-const BookingSection = ({transaction, rubrieken, afspraken}) => {
+export function isSuggestie(suggestie: Afspraak, transaction: BankTransaction): boolean {
+	//Only check on zoektermen because the backend checks on iban (on organisation level)
+	if (suggestie.zoektermen?.every(zoekterm => transaction.informationToAccountOwner?.includes(zoekterm))) {
+		return true
+	}
+	return false
+}
+
+const BookingSection = ({transaction, rubrieken}) => {
 	const reactSelectStyles = useReactSelectStyles();
 	const toast = useToaster();
 	const {t} = useTranslation();
 	const suggesties: Afspraak[] = transaction.suggesties || [];
+	const ids = suggesties ? suggesties.map(suggestie => suggestie.id ? suggestie.id : -1).filter(id => id != -1) : []
+	const [showExtraAfspraken, setShowExtraAfspraken] = React.useState(false);
+
+	const [getSimilarAfspraken, {loading, error, data}] = useGetSimilarAfsprakenLazyQuery({
+		variables: {
+			ids: ids
+		},
+	});
+
+	const options: {
+		suggesties: Afspraak[]
+		afspraken: Afspraak[]
+		rubrieken: any
+	} = {
+		suggesties: suggesties,
+		afspraken: [],
+		rubrieken: rubrieken.filter(rubriek => rubriek.grootboekrekening && rubriek.grootboekrekening.id).sort((a: Rubriek, b: Rubriek) => {
+			return a.naam && b.naam && a.naam < b.naam ? -1 : 1;
+		}).map((rubriek: Rubriek) => ({
+			key: rubriek.id,
+			label: rubriek.naam,
+			value: rubriek.grootboekrekening!.id,
+		})),
+	};
+
+
+	let similarAfspraken: Afspraak[] = []
+
+	const toggleShowExtraAfspraken = () => {
+		setShowExtraAfspraken(!showExtraAfspraken)
+		if (data == undefined && ids.length > 0) {
+			getSimilarAfspraken()
+		}
+	}
+
+	if (data != undefined && showExtraAfspraken) {
+		data.afspraken?.forEach(afspraak => {
+
+			const similar: Afspraak[] = afspraak.similarAfspraken ? afspraak.similarAfspraken : []
+			similarAfspraken.push(...similar)
+		})
+		const num = transaction.bedrag
+		similarAfspraken = Array.from(new Set(similarAfspraken.filter(similarAfspraak => !suggesties.find(suggestie => suggestie.id === similarAfspraak.id))
+			.sort((a, b) => Math.abs(a.bedrag - num) - Math.abs(b.bedrag - num))));
+		options.afspraken = similarAfspraken
+	}
+	if (data === undefined || !showExtraAfspraken) {
+		options.afspraken = []
+	}
 
 	const [createSaldo] = useCreateSaldoMutation()
 	const [updateSaldo] = useUpdateSaldoMutation()
@@ -36,30 +92,10 @@ const BookingSection = ({transaction, rubrieken, afspraken}) => {
 			{query: GetTransactieDocument, variables: {id: transaction.id}},
 		],
 	});
+
 	const [getSaldo, {loading, data}] = useLazyQuery(GetSaldoDocument, {
 		fetchPolicy: "no-cache"
 	})
-	const options: {
-		suggesties: Afspraak[]
-		afspraken: Afspraak[]
-		rubrieken: any
-	} = {
-		suggesties: suggesties,
-		afspraken: Array.from(new Set(afspraken.filter(a => {
-			// Skip afspraken that are suggesties
-			if (suggesties.find(b => b.id === a.id)) {
-				return false;
-			}
-			return true;
-		}))),
-		rubrieken: rubrieken.filter(r => r.grootboekrekening && r.grootboekrekening.id).sort((a: Rubriek, b: Rubriek) => {
-			return a.naam && b.naam && a.naam < b.naam ? -1 : 1;
-		}).map((r: Rubriek) => ({
-			key: r.id,
-			label: r.naam,
-			value: r.grootboekrekening!.id,
-		})),
-	};
 
 	const onSelectRubriek = (val) => {
 		const foundRubriek = rubrieken.find(r => r.grootboekrekening?.id === val.value);
@@ -158,8 +194,8 @@ const BookingSection = ({transaction, rubrieken, afspraken}) => {
 										</Tr>
 									</Thead>
 									<Tbody>
-										{options.suggesties.map(a => (
-											<SelectAfspraakOption key={a.id} afspraak={a} isSuggestion={options.suggesties.length === 1} onClick={() => onSelectAfspraak(a)} />
+										{options.suggesties.map(suggestie => (
+											<SelectAfspraakOption key={suggestie.id} afspraak={suggestie} isSuggestion={isSuggestie(suggestie, transaction)} onClick={() => onSelectAfspraak(suggestie)} />
 										))}
 										{options.afspraken.map(a => (
 											<SelectAfspraakOption key={a.id} afspraak={a} onClick={() => onSelectAfspraak(a)} />
@@ -167,6 +203,14 @@ const BookingSection = ({transaction, rubrieken, afspraken}) => {
 									</Tbody>
 								</Table>
 							)}
+							<Box>
+								<Text>
+									{!loading && showExtraAfspraken && similarAfspraken.length === 0 ? t("bookingSection.noSimilarAfspraken") : ""}
+								</Text>
+								<Button isLoading={loading} leftIcon={showExtraAfspraken ? <TriangleUpIcon /> : <TriangleDownIcon />} colorScheme={"primary"} size={"sm"} onClick={toggleShowExtraAfspraken} >
+									{t("bookingSection.similarAfspraken")}
+								</Button>
+							</Box>
 						</Stack>
 					</TabPanel>
 					<TabPanel px={0}>

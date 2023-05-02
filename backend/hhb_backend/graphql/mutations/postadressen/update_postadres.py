@@ -1,4 +1,5 @@
 """ GraphQL mutation for updating a Postadres """
+import logging
 import graphene
 import requests
 
@@ -25,6 +26,7 @@ class UpdatePostadres(graphene.Mutation):
     @staticmethod
     def mutate(self, info, id, **kwargs):
         """ Update the current Postadres """
+        logging.info(f"Updating postadres {id}")
         previous = hhb_dataloader().postadressen.load_one(id)
         if not previous:
             raise GraphQLError("Postadres not found")

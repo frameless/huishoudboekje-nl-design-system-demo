@@ -1,4 +1,5 @@
 """ GraphQL mutation for creating a new Organisatie """
+import logging
 import graphene
 
 from hhb_backend.audit_logging import AuditLogging
@@ -24,6 +25,7 @@ class CreateOrganisatie(graphene.Mutation):
     @staticmethod
     def mutate(self, info, input: CreateOrganisatieInput):
         """ Create the new Organisatie """
+        logging.info(f"Creating organisatie")
 
         Organisatie.unique_kvk_vestigingsnummer(input.kvknummer, input.get("vestigingsnummer"))
         result = hhb_datawriter().organisaties.post(input)

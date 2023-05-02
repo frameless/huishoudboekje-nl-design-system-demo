@@ -144,6 +144,7 @@ module.exports = {
 		"react/no-unstable-nested-components": ["warn", {
 			allowAsProps: true,
 		}],
+		"eqeqeq": ["warn", "always"],
 		// Other ideas for rules to add:
 		// "complexity": ["warn", {
 		// 	max: 20,

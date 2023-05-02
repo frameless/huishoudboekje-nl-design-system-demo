@@ -1,4 +1,5 @@
 """ GraphQL Afspraken query """
+import logging
 import graphene
 
 import hhb_backend.graphql.models.afspraak as afspraak
@@ -12,6 +13,7 @@ class AfspraakQuery:
 
     @classmethod
     def resolver(cls, _, info, id):
+        logging.info(f"Get afspraak")
         AuditLogging.create(
             action=info.field_name,
             entities=[
@@ -26,6 +28,7 @@ class AfsprakenQuery:
 
     @classmethod
     def resolver(cls, _, info, ids=None):
+        logging.info(f"Get afspraken")
         if ids:
             result = hhb_dataloader().afspraken.load(ids)
         else:

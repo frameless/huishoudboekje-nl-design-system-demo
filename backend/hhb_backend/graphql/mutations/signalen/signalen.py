@@ -35,7 +35,7 @@ class SignaalHelper:
 
     @staticmethod
     def create(input: CreateSignaalInput):
-        logging.info(f"SignaalHelper.create: creating signaal... Input: {input}")
+        logging.debug(f"SignaalHelper.create: creating signaal... Input: {input}")
 
         create_signaal_response = requests.post(f"{settings.SIGNALENSERVICE_URL}/signals/", json=input,
                                                 headers={"Content-type": "application/json"})
@@ -44,12 +44,12 @@ class SignaalHelper:
 
         response_signaal = create_signaal_response.json()["data"]
 
-        logging.info(f"SignaalHelper.create: created signaal. Response: {response_signaal}")
+        logging.debug(f"SignaalHelper.create: created signaal. Response: {response_signaal}")
         return SignaalHelper(response_signaal, dict())
 
     @staticmethod
     def delete(id):
-        logging.info(f"SignaalHelper.delete: deleting signaal... Id: {id}")
+        logging.debug(f"SignaalHelper.delete: deleting signaal... Id: {id}")
 
         previous = hhb_dataloader().signalen.load_one(id)
         if not previous:
@@ -59,12 +59,12 @@ class SignaalHelper:
         if response.status_code != 204:
             raise GraphQLError(f"Upstream API responded: {response.json()}")
 
-        logging.info(f"SignaalHelper.delete: deleted signaal. Id: {id}")
+        logging.debug(f"SignaalHelper.delete: deleted signaal. Id: {id}")
         return SignaalHelper(dict(), previous)
 
     @staticmethod
     def update(id: str, input: UpdateSignaalInput):
-        logging.info(f"SignaalHelper.update: updating signaal... id {id}, input: {input}")
+        logging.debug(f"SignaalHelper.update: updating signaal... id {id}, input: {input}")
         previous = hhb_dataloader().signalen.load_one(id)
 
         response = requests.put(f"{settings.SIGNALENSERVICE_URL}/signals/{id}", json=input,
@@ -73,5 +73,5 @@ class SignaalHelper:
             raise GraphQLError(f"Upstream API responded: {response.json()}")
         response_signaal = response.json()['data']
 
-        logging.info(f"SignaalHelper.update: updated signaal. Id {id}, input: {input}.")
+        logging.debug(f"SignaalHelper.update: updated signaal. Id {id}, input: {input}.")
         return SignaalHelper(response_signaal, previous)

@@ -1,3 +1,4 @@
+import logging
 import graphene
 
 import hhb_backend.graphql.models.journaalpost as graphene_journaalpost

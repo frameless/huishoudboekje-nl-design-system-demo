@@ -15,6 +15,7 @@ class GebruikersActiviteitQuery:
 
     @staticmethod
     def resolver(self, info, **kwargs):
+        logging.info(f"Get gebruikers activiteit")
         AuditLogging.create(
             action=info.field_name,
             entities=[
@@ -36,7 +37,8 @@ class GebruikersActiviteitenQuery:
 
     @staticmethod
     def resolver(self, info, *args, **kwargs):
-        print(f"GebruikersActiviteitenQuery.resolver: info: {info}, args: {args}, kwargs: {kwargs}")
+        logging.info(f"Get gebruikers activiteiten")
+        logging.debug(f"GebruikersActiviteitenQuery.resolver: info: {info}, args: {args}, kwargs: {kwargs}")
 
         if (
             not kwargs.get("ids")
@@ -94,6 +96,7 @@ class GebruikersActiviteitenPagedQuery:
 
     @staticmethod
     def resolver(self, info, **kwargs):
+        logging.info(f"Get gebruikers activiteiten paged")
         if "start" not in kwargs or "limit" not in kwargs:
             raise GraphQLError(f"Query needs params 'start', 'limit'. ")
 

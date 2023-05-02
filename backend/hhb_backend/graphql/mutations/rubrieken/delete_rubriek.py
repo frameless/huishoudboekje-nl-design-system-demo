@@ -1,5 +1,6 @@
 """ GraphQL mutation for deleting a Rubriek """
 
+import logging
 import graphene
 import requests
 
@@ -21,6 +22,7 @@ class DeleteRubriek(graphene.Mutation):
     @staticmethod
     def mutate(self, info, id):
         """ Delete current rubriek """
+        logging.info(f"Deleting rubriek {id}")
         previous = hhb_dataloader().rubrieken.load_one(id)
 
         # Check if in use by afspraken

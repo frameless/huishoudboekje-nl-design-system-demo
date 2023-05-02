@@ -44,6 +44,7 @@ class CreateBurger(graphene.Mutation):
     @staticmethod
     def mutate(self, info, input):
         """ Create the new Burger """
+        logging.info("Creating burger")
 
         bsn = input.get('bsn')
         graphene_burger.Burger.bsn_length(bsn)

@@ -1,4 +1,5 @@
 """ GraphQL Rapportage query """
+import logging
 import graphene
 
 from hhb_backend.audit_logging import AuditLogging
@@ -11,11 +12,10 @@ class BurgerRapportagesQuery:
 
     @classmethod
     def resolver(cls, _, info, burger_ids, start_date, end_date, rubrieken_ids):
+        logging.info(f"Get rapportages")
         result = hhb_dataloader().rapportage.load_rapportage_burger(burger_ids, start_date, end_date, rubrieken_ids)
         AuditLogging.create(
             action=info.field_name,
-            entities=[
-                GebruikersActiviteitEntity(entityType="burger_rapportage", entityId=burger_ids)
-            ]
+            entities=[GebruikersActiviteitEntity(entityType="burger_rapportage", entityId=burger_id) for burger_id in burger_ids] if len(burger_ids) > 0 else []
         )
         return result

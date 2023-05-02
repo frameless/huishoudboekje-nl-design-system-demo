@@ -25,6 +25,7 @@ class DeleteCustomerStatementMessage(graphene.Mutation):
     @staticmethod
     def mutate(self, info, id):
         """ Delete current Customer Statement Message """
+        logging.info(f"Deleting csm {id}")
         previous = hhb_dataloader().csms.load_one(id)
 
         transactions = hhb_dataloader().bank_transactions.by_csm(id)

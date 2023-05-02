@@ -1,3 +1,4 @@
+import logging
 import graphene
 import requests
 
@@ -23,6 +24,7 @@ class DeletePostadres(graphene.Mutation):
     @staticmethod
     def mutate(self, info, id, afdeling_id):
         """ Delete current postadres """
+        logging.info(f"Deleting postadres {id}")
         previous = hhb_dataloader().postadressen.load_one(id)
         if not previous:
             raise GraphQLError("postadres not found")

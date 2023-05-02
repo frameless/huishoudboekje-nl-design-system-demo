@@ -1,5 +1,6 @@
 """ GraphQL mutation for adding an Afspraak zoekterm """
 
+import logging
 import graphene
 import requests
 from graphql import GraphQLError
@@ -28,7 +29,7 @@ class DeleteAfspraakZoekterm(graphene.Mutation):
     @staticmethod
     def mutate(self, info, afspraak_id: int, zoekterm):
         """ Delete zoekterm to afspraak """
-
+        logging.info(f"Updating afspraak: {afspraak_id}")
         previous = hhb_dataloader().afspraken.load_one(afspraak_id)
 
         if previous is None:

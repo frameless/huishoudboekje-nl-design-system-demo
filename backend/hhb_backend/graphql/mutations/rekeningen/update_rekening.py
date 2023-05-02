@@ -1,5 +1,6 @@
 """ GraphQL mutation for updating an existing Rekening """
 
+import logging
 import graphene
 import requests
 
@@ -26,6 +27,7 @@ class UpdateRekening(graphene.Mutation):
     @staticmethod
     def mutate(self, info, id, rekening):
         """ Create the new Rekening """
+        logging.info(f"Updating rekening {id}")
         previous = hhb_dataloader().rekeningen.load_one(id)
 
         if previous is None:

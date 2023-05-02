@@ -1,5 +1,6 @@
 """ GraphQL mutation for deleting a Huishouden """
 
+import logging
 import graphene
 import requests
 
@@ -22,6 +23,7 @@ class DeleteHuishouden(graphene.Mutation):
     @staticmethod
     def mutate(self, info, id):
         """ Delete current huishouden """
+        logging.info(f"Deleting huishouden {id}")
 
         previous = hhb_dataloader().huishoudens.load_one(id)
         if not previous:

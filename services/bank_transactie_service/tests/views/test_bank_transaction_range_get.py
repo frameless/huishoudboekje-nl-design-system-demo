@@ -5,7 +5,8 @@ from datetime import date
 def test_bank_transaction_get_range_no_json(client):
     """ Test /banktransactions/range path """
     response = client.get(f'/banktransactions/range?startDate=2019-01-20&endDate=2019-03-20')
-    assert response.status_code == 400
+    #I use an or here because different results local and pipeline. Both are valid responses to no json.
+    assert response.status_code == 415 or response.status_code == 400
 
 def test_bank_transaction_get_range_wrong_json(client):
     """ Test /banktransactions/range path """
