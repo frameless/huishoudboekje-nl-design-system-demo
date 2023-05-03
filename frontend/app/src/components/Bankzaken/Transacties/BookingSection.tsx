@@ -2,11 +2,13 @@ import {Box, Button, FormControl, HStack, Stack, Tab, Table, TabList, TabPanel, 
 import React from "react";
 import {useTranslation} from "react-i18next";
 import Select from "react-select";
-import {Afspraak, BankTransaction, GetTransactieDocument, Rubriek, useCreateJournaalpostAfspraakMutation, useCreateJournaalpostGrootboekrekeningMutation, useGetSimilarAfsprakenLazyQuery, useCreateSaldoMutation, useGetSaldoQuery, useUpdateSaldoMutation} from "../../../generated/graphql";
+import {Afspraak, BankTransaction, GetTransactieDocument, Rubriek, useCreateJournaalpostAfspraakMutation, useCreateJournaalpostGrootboekrekeningMutation, useGetSimilarAfsprakenLazyQuery, useCreateSaldoMutation, useGetSaldoQuery, useUpdateSaldoMutation, GetSaldoDocument} from "../../../generated/graphql";
 import {useReactSelectStyles} from "../../../utils/things";
 import useToaster from "../../../utils/useToaster";
 import SelectAfspraakOption from "../../shared/SelectAfspraakOption";
 import {TriangleDownIcon, TriangleUpIcon} from "@chakra-ui/icons";
+import d from "../../../utils/dayjs";
+import {useLazyQuery} from "@apollo/client/react/hooks/useLazyQuery";
 
 export function isSuggestie(suggestie: Afspraak, transaction: BankTransaction): boolean {
 	//Only check on zoektermen because the backend checks on iban (on organisation level)
@@ -24,11 +26,14 @@ const BookingSection = ({transaction, rubrieken}) => {
 	const ids = suggesties ? suggesties.map(suggestie => suggestie.id ? suggestie.id : -1).filter(id => id != -1) : []
 	const [showExtraAfspraken, setShowExtraAfspraken] = React.useState(false);
 
-	const [getSimilarAfspraken, {loading, error, data}] = useGetSimilarAfsprakenLazyQuery({
+
+	const [getSimilarAfspraken, similairAfsprakenQuery] = useGetSimilarAfsprakenLazyQuery({
 		variables: {
 			ids: ids
 		},
 	});
+
+
 
 	const options: {
 		suggesties: Afspraak[]
@@ -51,13 +56,13 @@ const BookingSection = ({transaction, rubrieken}) => {
 
 	const toggleShowExtraAfspraken = () => {
 		setShowExtraAfspraken(!showExtraAfspraken)
-		if (data == undefined && ids.length > 0) {
+		if (similairAfsprakenQuery.data == undefined && ids.length > 0) {
 			getSimilarAfspraken()
 		}
 	}
 
-	if (data != undefined && showExtraAfspraken) {
-		data.afspraken?.forEach(afspraak => {
+	if (similairAfsprakenQuery.data != undefined && showExtraAfspraken) {
+		similairAfsprakenQuery.data.afspraken?.forEach(afspraak => {
 
 			const similar: Afspraak[] = afspraak.similarAfspraken ? afspraak.similarAfspraken : []
 			similarAfspraken.push(...similar)
@@ -67,7 +72,7 @@ const BookingSection = ({transaction, rubrieken}) => {
 			.sort((a, b) => Math.abs(a.bedrag - num) - Math.abs(b.bedrag - num))));
 		options.afspraken = similarAfspraken
 	}
-	if (data === undefined || !showExtraAfspraken) {
+	if (similairAfsprakenQuery.data === undefined || !showExtraAfspraken) {
 		options.afspraken = []
 	}
 
@@ -93,7 +98,7 @@ const BookingSection = ({transaction, rubrieken}) => {
 		],
 	});
 
-	const [getSaldo, {loading, data}] = useLazyQuery(GetSaldoDocument, {
+	const [getSaldo] = useLazyQuery(GetSaldoDocument, {
 		fetchPolicy: "no-cache"
 	})
 
@@ -205,9 +210,9 @@ const BookingSection = ({transaction, rubrieken}) => {
 							)}
 							<Box>
 								<Text>
-									{!loading && showExtraAfspraken && similarAfspraken.length === 0 ? t("bookingSection.noSimilarAfspraken") : ""}
+									{!similairAfsprakenQuery.loading && showExtraAfspraken && similarAfspraken.length === 0 ? t("bookingSection.noSimilarAfspraken") : ""}
 								</Text>
-								<Button isLoading={loading} leftIcon={showExtraAfspraken ? <TriangleUpIcon /> : <TriangleDownIcon />} colorScheme={"primary"} size={"sm"} onClick={toggleShowExtraAfspraken} >
+								<Button isLoading={similairAfsprakenQuery.loading} leftIcon={showExtraAfspraken ? <TriangleUpIcon /> : <TriangleDownIcon />} colorScheme={"primary"} size={"sm"} onClick={toggleShowExtraAfspraken} >
 									{t("bookingSection.similarAfspraken")}
 								</Button>
 							</Box>

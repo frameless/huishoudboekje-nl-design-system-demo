@@ -63,11 +63,13 @@ def automatisch_boeken(customer_statement_message_id: int = None):
     logging.info(f"Updating saldos accordingly...")
     for journaalpost in journaalposten_:
         update_or_create_saldo(journaalpost)
+
     return journaalposten_
 
 
 def get_transactions_to_write_off(customer_statement_message_id):
-    logging.info(f"Automatisch_boeken: customer_statement_message_id={customer_statement_message_id}")
+    logging.info(
+        f"Automatisch_boeken: customer_statement_message_id={customer_statement_message_id}")
     if customer_statement_message_id is not None:
         transactions = [
             transaction for
@@ -80,7 +82,7 @@ def get_transactions_to_write_off(customer_statement_message_id):
     return transactions
 
 
-def transactie_suggesties(transactie_ids: List[int] = None, transactions: List[BankTransaction] = None, exact_zoekterm_matches = True) -> Dict[int, List[Afspraak]]:
+def transactie_suggesties(transactie_ids: List[int] = None, transactions: List[BankTransaction] = None, exact_zoekterm_matches=True) -> Dict[int, List[Afspraak]]:
     logging.info("Collecting matching afspraken for transactions")
     if transactie_ids:
         if type(transactie_ids) != list:
@@ -96,11 +98,12 @@ def transactie_suggesties(transactie_ids: List[int] = None, transactions: List[B
         transactie_ids = [transaction.id for transaction in transactions]
 
     # Rekeningen ophalen adhv iban
-    rekening_ibans = [transaction.tegen_rekening for transaction in transactions]
+    rekening_ibans = [
+        transaction.tegen_rekening for transaction in transactions]
     rekening_ibans = list(filter(lambda iban: iban, rekening_ibans))
     if len(rekening_ibans) == 0:
         return {key: [] for key in transactie_ids}
-    
+
     rekeningen = hhb_dataloader().rekeningen.by_ibans(rekening_ibans)
     if not rekeningen:
         return {key: [] for key in transactie_ids}

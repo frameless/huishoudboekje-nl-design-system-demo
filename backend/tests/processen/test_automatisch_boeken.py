@@ -1,4 +1,3 @@
-import logging
 import pytest
 import requests_mock
 from pytest_mock import MockerFixture
