@@ -151,6 +151,18 @@ export type BankTransactionFilter = {
   transactieDatum?: InputMaybe<ComplexFilterType>;
 };
 
+export type BankTransactionSearchFilter = {
+  automatischGeboekt?: InputMaybe<Scalars['Boolean']>;
+  burgerIds?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
+  endDate?: InputMaybe<Scalars['String']>;
+  ibans?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  maxBedrag?: InputMaybe<Scalars['Int']>;
+  minBedrag?: InputMaybe<Scalars['Int']>;
+  onlyBooked?: InputMaybe<Scalars['Boolean']>;
+  onlyCredit?: InputMaybe<Scalars['Boolean']>;
+  startDate?: InputMaybe<Scalars['String']>;
+};
+
 export type BankTransactionsPaged = {
   banktransactions?: Maybe<Array<Maybe<BankTransaction>>>;
   pageInfo?: Maybe<PageInfo>;
@@ -1232,6 +1244,7 @@ export type RootQuery = {
   saldoClosest?: Maybe<Array<Maybe<Saldo>>>;
   saldoRange?: Maybe<Array<Maybe<Saldo>>>;
   searchAfspraken?: Maybe<AfsprakenPaged>;
+  searchTransacties?: Maybe<BankTransactionsPaged>;
   signaal?: Maybe<Signaal>;
   signalen?: Maybe<Array<Maybe<Signaal>>>;
 };
@@ -1523,6 +1536,14 @@ export type RootQuerySearchAfsprakenArgs = {
   offset?: InputMaybe<Scalars['Int']>;
   onlyValid?: InputMaybe<Scalars['Boolean']>;
   zoektermen?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+};
+
+
+/** The root of all queries  */
+export type RootQuerySearchTransactiesArgs = {
+  filters?: InputMaybe<BankTransactionSearchFilter>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
 };
 
 
@@ -2380,6 +2401,15 @@ export type GetTransactiesQueryVariables = Exact<{
 
 
 export type GetTransactiesQuery = { bankTransactionsPaged?: { banktransactions?: Array<{ id?: number, informationToAccountOwner?: string, statementLine?: string, bedrag?: any, isCredit?: boolean, tegenRekeningIban?: string, transactieDatum?: any }>, pageInfo?: { count?: number, limit?: number, start?: number } } };
+
+export type SearchTransactiesQueryVariables = Exact<{
+  offset: Scalars['Int'];
+  limit: Scalars['Int'];
+  filters?: InputMaybe<BankTransactionSearchFilter>;
+}>;
+
+
+export type SearchTransactiesQuery = { searchTransacties?: { banktransactions?: Array<{ id?: number, informationToAccountOwner?: string, statementLine?: string, bedrag?: any, isCredit?: boolean, isGeboekt?: boolean, transactieDatum?: any, journaalpost?: { id?: number }, tegenRekening?: { iban?: string, rekeninghouder?: string } }>, pageInfo?: { count?: number, limit?: number, start?: number } } };
 
 export const CustomerStatementMessageFragmentDoc = gql`
     fragment CustomerStatementMessage on CustomerStatementMessage {
@@ -6450,3 +6480,60 @@ export function useGetTransactiesLazyQuery(baseOptions?: Apollo.LazyQueryHookOpt
 export type GetTransactiesQueryHookResult = ReturnType<typeof useGetTransactiesQuery>;
 export type GetTransactiesLazyQueryHookResult = ReturnType<typeof useGetTransactiesLazyQuery>;
 export type GetTransactiesQueryResult = Apollo.QueryResult<GetTransactiesQuery, GetTransactiesQueryVariables>;
+export const SearchTransactiesDocument = gql`
+    query searchTransacties($offset: Int!, $limit: Int!, $filters: BankTransactionSearchFilter) {
+  searchTransacties(offset: $offset, limit: $limit, filters: $filters) {
+    banktransactions {
+      id
+      informationToAccountOwner
+      statementLine
+      bedrag
+      isCredit
+      isGeboekt
+      transactieDatum
+      journaalpost {
+        id
+      }
+      tegenRekening {
+        iban
+        rekeninghouder
+      }
+    }
+    pageInfo {
+      count
+      limit
+      start
+    }
+  }
+}
+    `;
+
+/**
+ * __useSearchTransactiesQuery__
+ *
+ * To run a query within a React component, call `useSearchTransactiesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSearchTransactiesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSearchTransactiesQuery({
+ *   variables: {
+ *      offset: // value for 'offset'
+ *      limit: // value for 'limit'
+ *      filters: // value for 'filters'
+ *   },
+ * });
+ */
+export function useSearchTransactiesQuery(baseOptions: Apollo.QueryHookOptions<SearchTransactiesQuery, SearchTransactiesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<SearchTransactiesQuery, SearchTransactiesQueryVariables>(SearchTransactiesDocument, options);
+      }
+export function useSearchTransactiesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SearchTransactiesQuery, SearchTransactiesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<SearchTransactiesQuery, SearchTransactiesQueryVariables>(SearchTransactiesDocument, options);
+        }
+export type SearchTransactiesQueryHookResult = ReturnType<typeof useSearchTransactiesQuery>;
+export type SearchTransactiesLazyQueryHookResult = ReturnType<typeof useSearchTransactiesLazyQuery>;
+export type SearchTransactiesQueryResult = Apollo.QueryResult<SearchTransactiesQuery, SearchTransactiesQueryVariables>;

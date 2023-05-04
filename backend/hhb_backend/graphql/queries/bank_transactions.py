@@ -9,7 +9,7 @@ import hhb_backend.graphql.models.bank_transaction as bank_transaction
 from graphql import GraphQLError
 from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql.dataloaders import hhb_dataloader
-from hhb_backend.graphql.filters.bank_transactions import BankTransactionFilter
+from hhb_backend.graphql.filters.bank_transactions import BankTransactionFilter, BankTransactionSearchFilter
 from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
 
 
@@ -79,58 +79,52 @@ class BankTransactionsSearchQuery:
         bank_transaction.BankTransactionsPaged,
         offset=graphene.Int(),
         limit=graphene.Int(),
-        burger_ids = graphene.List(graphene.Int),
-        automatisch_geboekt = graphene.Boolean(),
-        min_bedrag = graphene.Int(),
-        max_bedrag = graphene.Int(),
-        start_date = graphene.String(),
-        end_date = graphene.String(),
-        ibans = graphene.List(graphene.String),
-        only_booked = graphene.Boolean(),
-        only_credit = graphene.Boolean()
+        filters = BankTransactionSearchFilter()
     )
 
     @classmethod
-    def resolver(cls, _, info, offset=None, limit=None, burger_ids=None, automatisch_geboekt=None, min_bedrag=None,max_bedrag=None, start_date=None, end_date=None, ibans=None, only_booked=None, only_credit=None, **kwargs):
+    def resolver(cls, _, info, offset=None, limit=None, filters: BankTransactionSearchFilter=None, **kwargs):
         logging.info(f"Get banktransacties search")
 
+        transactionsBuilder = TransactionGetRequestBuilder()
         journaalpostBuilder = JournaalpostGetRequestBuilder()
         transaction_ids = None
         journaalposten = None
 
-        if burger_ids is not None or automatisch_geboekt is not None:
+        if filters is not None:
 
-            if burger_ids is not None:
-                journaalpostBuilder.by_burger_ids(burger_ids)
+            if filters.burger_ids is not None or filters.automatisch_geboekt is not None:
+                if filters.burger_ids is not None:
+                    journaalpostBuilder.by_burger_ids(filters.burger_ids)
 
-            if automatisch_geboekt is not None:
-                journaalpostBuilder.by_automatically_booked(automatisch_geboekt)
+                if filters.automatisch_geboekt is not None:
+                    journaalpostBuilder.by_automatically_booked(filters.automatisch_geboekt)
 
-            journaalposten = hhb_dataloader().journaalposten_concept.load_request(journaalpostBuilder.request).get("journaalposten", {})
-            transaction_ids = [journaalpost.get("transaction_id", None) for journaalpost in journaalposten if journaalpost.get("transaction_id", None) is not None]  
+                journaalposten = hhb_dataloader().journaalposten_concept.load_request(journaalpostBuilder.request).get("journaalposten", {})
+                transaction_ids = [journaalpost.get("transaction_id", None) for journaalpost in journaalposten if journaalpost.get("transaction_id", None) is not None]  
 
-        transactionsBuilder = TransactionGetRequestBuilder()
 
-        if transaction_ids is not None:
-            transactionsBuilder.by_ids(transaction_ids)
+            if transaction_ids is not None:
+                transactionsBuilder.by_ids(transaction_ids)
 
-        if min_bedrag is not None or max_bedrag is not None:
-            transactionsBuilder.by_bedrag(min_bedrag=min_bedrag, max_bedrag=max_bedrag)
+            if filters.min_bedrag is not None or filters.max_bedrag is not None:
+                transactionsBuilder.by_bedrag(min_bedrag=filters.min_bedrag, max_bedrag=filters.max_bedrag)
 
-        if start_date is not None or end_date is not None:
-            transactionsBuilder.by_date(start_date=start_date, end_date=end_date)
+            if filters.start_date is not None or filters.end_date is not None:
+                transactionsBuilder.by_date(start_date=filters.start_date, end_date=filters.end_date)
 
-        if ibans is not None:
-            transactionsBuilder.by_ibans(ibans)
+            if filters.ibans is not None:
+                transactionsBuilder.by_ibans(filters.ibans)
+            
+            if filters.only_booked is not None:
+                transactionsBuilder.by_booked(filters.only_booked)
+
+            if filters.only_credit is not None:
+                transactionsBuilder.by_credit(filters.only_credit)
+
         
-        if only_booked is not None:
-            transactionsBuilder.by_booked(only_booked)
-
-        if only_credit is not None:
-            transactionsBuilder.by_credit(only_credit)
-
         if offset is not None and limit is not None:
-            transactionsBuilder.paged(limit=limit, offset=offset)
+                transactionsBuilder.paged(limit=limit, offset=offset)
 
         transactions = hhb_dataloader().transacties_concept.load_request(transactionsBuilder.request)
 

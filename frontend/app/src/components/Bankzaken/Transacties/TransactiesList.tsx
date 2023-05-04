@@ -1,4 +1,4 @@
-import {Box, FormLabel, Stack, useBreakpointValue} from "@chakra-ui/react";
+import {Box, FormLabel, Stack} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
 import d from "../../../utils/dayjs";
@@ -12,7 +12,6 @@ type TransactiesListProps = {
 
 const TransactiesList: React.FC<TransactiesListProps> = ({transacties}) => {
 	const {t} = useTranslation();
-	const isMobile = useBreakpointValue([true, null, null, false]);
 
 	/* Group transacties by date */
 	const bt = transacties.reduce((result, t) => {
@@ -29,12 +28,9 @@ const TransactiesList: React.FC<TransactiesListProps> = ({transacties}) => {
 	return (
 		<Stack direction={"column"} spacing={5}>
 			<Stack direction={"row"} align={"center"}>
-				<Box flex={2} textAlign={"left"}>
+				<Box paddingLeft={9} flex={2} textAlign={"left"}>
 					<FormLabel>{t("transacties.tegenrekening")}</FormLabel>
 				</Box>
-				{!isMobile && <Box flex={1} textAlign={"left"}>
-					<FormLabel>{t("transacties.rubriek")}</FormLabel>
-				</Box>}
 				<Box flex={0} minWidth={120}>
 					<FormLabel>{t("transacties.bedrag")}</FormLabel>
 				</Box>
@@ -42,7 +38,7 @@ const TransactiesList: React.FC<TransactiesListProps> = ({transacties}) => {
 
 			{Object.keys(bt).map((transactionDate, i) => (
 				<Stack key={i} spacing={1}>
-					<Box>
+					<Box paddingLeft={9}>
 						<FormLabel>{transactionDate}</FormLabel>
 					</Box>
 					<Box>
