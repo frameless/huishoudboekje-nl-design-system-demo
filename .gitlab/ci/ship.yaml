@@ -2,7 +2,7 @@
 ship-mijn-omgeving:
   stage: ship
   image:
-    name: ${DOCKER_PROXY}node:18-alpine
+    name: ${DOCKER_PROXY}node:20-alpine
   needs: [ ]
   variables:
     NPM_CACHE_DIR: "${CI_PROJECT_DIR}/.cache/npm"
