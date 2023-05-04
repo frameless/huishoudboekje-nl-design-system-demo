@@ -1,5 +1,4 @@
 from typing import List
-
 from hhb_backend.graphql.dataloaders.base_loader import DataLoader
 from hhb_backend.graphql.settings import HHB_SERVICES_URL
 from hhb_backend.service.model.afspraak import Afspraak
@@ -29,3 +28,4 @@ class AfspraakLoader(DataLoader[Afspraak]):
             'valid_from': valid_from,
             'valid_through': valid_through
         })
+    
