@@ -34,7 +34,7 @@ const RapportageComponent: React.FC<RapportageComponentParams> = ({burgerIds, st
 	const $saldoStart = useGetSaldoClosestToQuery({
 		variables: {
 			burger_ids: burgerIds,
-			date: d(endDate).format("YYYY-MM-DD")
+			date: d(startDate).format("YYYY-MM-DD")
 		},
 		fetchPolicy: "cache-and-network"
 	})
