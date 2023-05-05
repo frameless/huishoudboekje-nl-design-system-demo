@@ -1,4 +1,5 @@
 """ MethodView for /afspraken/search path """
+import logging
 from core_service.utils import valid_date
 from core_service.views.basic_view.basic_filter_view import BasicFilterView
 from models.bank_transaction import BankTransaction
@@ -29,10 +30,10 @@ class BanktransactionFilterView(BasicFilterView):
             new_query = new_query.filter(BankTransaction.id.in_(ids))
 
         if min_bedrag is not None:
-            new_query = new_query.filter(BankTransaction.bedrag > min_bedrag)
+            new_query = new_query.filter(func.abs(BankTransaction.bedrag) > min_bedrag)
 
         if max_bedrag is not None:
-            new_query = new_query.filter(BankTransaction.bedrag < max_bedrag)
+            new_query = new_query.filter(func.abs(BankTransaction.bedrag) < max_bedrag)
 
         if start_date is not None and valid_date(start_date):
             new_query = new_query.filter(BankTransaction.transactie_datum >= start_date)
@@ -51,6 +52,6 @@ class BanktransactionFilterView(BasicFilterView):
 
         if zoektermen:
             clauses = [func.lower(BankTransaction.information_to_account_owner).like(f"%{term.lower()}%") for term in zoektermen]
-            new_query =  query.filter(and_(*clauses))
-        
+            new_query =  new_query.filter(and_(*clauses))
+
         return new_query #misschien later mogelijk maken om errors terug te kunnen geven
