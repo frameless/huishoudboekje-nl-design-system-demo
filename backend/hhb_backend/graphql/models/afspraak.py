@@ -1,4 +1,5 @@
 """ Afspraak model as used in GraphQL queries """
+from hhb_backend.graphql.models.pageinfo import PageInfo
 import graphene
 
 import hhb_backend.graphql.models.afdeling as afdeling
@@ -150,3 +151,9 @@ class Afspraak(graphene.ObjectType):
 
     def resolve_similar_afspraken(self, info):
         return find_similar_afspraken_by_afspraak(self) 
+
+class AfsprakenPaged(graphene.ObjectType):
+    afspraken = graphene.List(
+        Afspraak
+    )
+    page_info = graphene.Field(lambda: PageInfo)

@@ -53,7 +53,7 @@ const AppRoutesNew = {
 	betaalinstructiesExport: `/${RouteNames.bankzaken}/${RouteNames.betaalinstructies}/${RouteNames.export}`,
 	configuratie: `/${RouteNames.configuratie}`,
 	rapportage: `/${RouteNames.rapportage}`,
-	rapportageBurger: `/${RouteNames.rapportage}?burgerId=:ids`,
+	rapportageBurger: `/${RouteNames.rapportage}`,
 	gebeurtenissen: `/${RouteNames.gebeurtenissen}`,
 	status: `/${RouteNames.status}`,
 	notFound: `/${RouteNames.notFound}`,
@@ -124,9 +124,14 @@ export const AppRoutes = {
 	Betaalinstructies: generatePath(AppRoutesNew.betaalinstructies),
 	Configuratie: generatePath(AppRoutesNew.configuratie),
 	Rapportage: generatePath(AppRoutesNew.rapportage),
-	RapportageBurger: (burgerIds: string[]) => generatePath(AppRoutesNew.rapportageBurger, {
-		ids: burgerIds.join(","),
-	}),
+	RapportageBurger: (burgerIds: string[]) => {
+		const url = generatePath(AppRoutesNew.rapportageBurger)
+		const params = new URLSearchParams({
+			burgerId: burgerIds.join(",")
+		}).toString()
+		return url + "?" + params
+	}
+	,
 	Gebeurtenissen: generatePath(AppRoutesNew.gebeurtenissen),
 	Status: generatePath(AppRoutesNew.status),
 	NotFound: generatePath(AppRoutesNew.notFound),

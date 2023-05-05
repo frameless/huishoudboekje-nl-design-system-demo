@@ -97,6 +97,11 @@ export type AfspraakOverschrijvingenArgs = {
   startDatum?: InputMaybe<Scalars['Date']>;
 };
 
+export type AfsprakenPaged = {
+  afspraken?: Maybe<Array<Maybe<Afspraak>>>;
+  pageInfo?: Maybe<PageInfo>;
+};
+
 /** Model om vast te stellen op basis van welke regels een signaal aangemaakt moet worden  */
 export type Alarm = {
   afspraak?: Maybe<Afspraak>;
@@ -1226,6 +1231,7 @@ export type RootQuery = {
   saldo?: Maybe<Array<Maybe<Saldo>>>;
   saldoClosest?: Maybe<Array<Maybe<Saldo>>>;
   saldoRange?: Maybe<Array<Maybe<Saldo>>>;
+  searchAfspraken?: Maybe<AfsprakenPaged>;
   signaal?: Maybe<Signaal>;
   signalen?: Maybe<Array<Maybe<Signaal>>>;
 };
@@ -1503,6 +1509,20 @@ export type RootQuerySaldoRangeArgs = {
   burgerIds?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
   enddate?: InputMaybe<Scalars['String']>;
   startdate?: InputMaybe<Scalars['String']>;
+};
+
+
+/** The root of all queries  */
+export type RootQuerySearchAfsprakenArgs = {
+  afdelingIds?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
+  afspraakIds?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
+  burgerIds?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  maxBedrag?: InputMaybe<Scalars['Int']>;
+  minBedrag?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  onlyValid?: InputMaybe<Scalars['Boolean']>;
+  zoektermen?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
 
@@ -2185,6 +2205,11 @@ export type GetBurgersQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetBurgersQuery = { burgers?: Array<{ id?: number, voornamen?: string, achternaam?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }> };
 
+export type GetBurgersAndOrganisatiesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetBurgersAndOrganisatiesQuery = { organisaties?: Array<{ id?: number, naam?: string, afdelingen?: Array<{ id?: number }> }>, burgers?: Array<{ id?: number, voornamen?: string, voorletters?: string, achternaam?: string }> };
+
 export type GetBurgersSearchQueryVariables = Exact<{
   search?: InputMaybe<Scalars['DynamicType']>;
 }>;
@@ -2297,6 +2322,21 @@ export type GetSaldoByDateRangeQueryVariables = Exact<{
 
 
 export type GetSaldoByDateRangeQuery = { saldoRange?: Array<{ burgerId?: number, begindatum?: string, einddatum?: string, saldo?: any }> };
+
+export type GetSearchAfsprakenQueryVariables = Exact<{
+  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']>;
+  afspraken?: InputMaybe<Array<InputMaybe<Scalars['Int']>> | InputMaybe<Scalars['Int']>>;
+  afdelingen?: InputMaybe<Array<InputMaybe<Scalars['Int']>> | InputMaybe<Scalars['Int']>>;
+  burgers?: InputMaybe<Array<InputMaybe<Scalars['Int']>> | InputMaybe<Scalars['Int']>>;
+  only_valid?: InputMaybe<Scalars['Boolean']>;
+  min_bedrag?: InputMaybe<Scalars['Int']>;
+  max_bedrag?: InputMaybe<Scalars['Int']>;
+  zoektermen?: InputMaybe<Array<InputMaybe<Scalars['String']>> | InputMaybe<Scalars['String']>>;
+}>;
+
+
+export type GetSearchAfsprakenQuery = { searchAfspraken?: { afspraken?: Array<{ id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, burger?: { voornamen?: string, voorletters?: string, achternaam?: string } }>, pageInfo?: { count?: number, limit?: number, start?: number } } };
 
 export type GetSignalenAndBurgersQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -5172,6 +5212,50 @@ export function useGetBurgersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions
 export type GetBurgersQueryHookResult = ReturnType<typeof useGetBurgersQuery>;
 export type GetBurgersLazyQueryHookResult = ReturnType<typeof useGetBurgersLazyQuery>;
 export type GetBurgersQueryResult = Apollo.QueryResult<GetBurgersQuery, GetBurgersQueryVariables>;
+export const GetBurgersAndOrganisatiesDocument = gql`
+    query getBurgersAndOrganisaties {
+  organisaties {
+    id
+    naam
+    afdelingen {
+      id
+    }
+  }
+  burgers {
+    id
+    voornamen
+    voorletters
+    achternaam
+  }
+}
+    `;
+
+/**
+ * __useGetBurgersAndOrganisatiesQuery__
+ *
+ * To run a query within a React component, call `useGetBurgersAndOrganisatiesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetBurgersAndOrganisatiesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetBurgersAndOrganisatiesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetBurgersAndOrganisatiesQuery(baseOptions?: Apollo.QueryHookOptions<GetBurgersAndOrganisatiesQuery, GetBurgersAndOrganisatiesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetBurgersAndOrganisatiesQuery, GetBurgersAndOrganisatiesQueryVariables>(GetBurgersAndOrganisatiesDocument, options);
+      }
+export function useGetBurgersAndOrganisatiesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetBurgersAndOrganisatiesQuery, GetBurgersAndOrganisatiesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetBurgersAndOrganisatiesQuery, GetBurgersAndOrganisatiesQueryVariables>(GetBurgersAndOrganisatiesDocument, options);
+        }
+export type GetBurgersAndOrganisatiesQueryHookResult = ReturnType<typeof useGetBurgersAndOrganisatiesQuery>;
+export type GetBurgersAndOrganisatiesLazyQueryHookResult = ReturnType<typeof useGetBurgersAndOrganisatiesLazyQuery>;
+export type GetBurgersAndOrganisatiesQueryResult = Apollo.QueryResult<GetBurgersAndOrganisatiesQuery, GetBurgersAndOrganisatiesQueryVariables>;
 export const GetBurgersSearchDocument = gql`
     query getBurgersSearch($search: DynamicType) {
   burgers(search: $search) {
@@ -5929,6 +6013,75 @@ export function useGetSaldoByDateRangeLazyQuery(baseOptions?: Apollo.LazyQueryHo
 export type GetSaldoByDateRangeQueryHookResult = ReturnType<typeof useGetSaldoByDateRangeQuery>;
 export type GetSaldoByDateRangeLazyQueryHookResult = ReturnType<typeof useGetSaldoByDateRangeLazyQuery>;
 export type GetSaldoByDateRangeQueryResult = Apollo.QueryResult<GetSaldoByDateRangeQuery, GetSaldoByDateRangeQueryVariables>;
+export const GetSearchAfsprakenDocument = gql`
+    query getSearchAfspraken($offset: Int, $limit: Int, $afspraken: [Int], $afdelingen: [Int], $burgers: [Int], $only_valid: Boolean, $min_bedrag: Int, $max_bedrag: Int, $zoektermen: [String]) {
+  searchAfspraken(
+    offset: $offset
+    limit: $limit
+    afspraakIds: $afspraken
+    afdelingIds: $afdelingen
+    burgerIds: $burgers
+    onlyValid: $only_valid
+    minBedrag: $min_bedrag
+    maxBedrag: $max_bedrag
+    zoektermen: $zoektermen
+  ) {
+    afspraken {
+      id
+      omschrijving
+      bedrag
+      credit
+      zoektermen
+      burger {
+        voornamen
+        voorletters
+        achternaam
+      }
+    }
+    pageInfo {
+      count
+      limit
+      start
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetSearchAfsprakenQuery__
+ *
+ * To run a query within a React component, call `useGetSearchAfsprakenQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetSearchAfsprakenQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetSearchAfsprakenQuery({
+ *   variables: {
+ *      offset: // value for 'offset'
+ *      limit: // value for 'limit'
+ *      afspraken: // value for 'afspraken'
+ *      afdelingen: // value for 'afdelingen'
+ *      burgers: // value for 'burgers'
+ *      only_valid: // value for 'only_valid'
+ *      min_bedrag: // value for 'min_bedrag'
+ *      max_bedrag: // value for 'max_bedrag'
+ *      zoektermen: // value for 'zoektermen'
+ *   },
+ * });
+ */
+export function useGetSearchAfsprakenQuery(baseOptions?: Apollo.QueryHookOptions<GetSearchAfsprakenQuery, GetSearchAfsprakenQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetSearchAfsprakenQuery, GetSearchAfsprakenQueryVariables>(GetSearchAfsprakenDocument, options);
+      }
+export function useGetSearchAfsprakenLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetSearchAfsprakenQuery, GetSearchAfsprakenQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetSearchAfsprakenQuery, GetSearchAfsprakenQueryVariables>(GetSearchAfsprakenDocument, options);
+        }
+export type GetSearchAfsprakenQueryHookResult = ReturnType<typeof useGetSearchAfsprakenQuery>;
+export type GetSearchAfsprakenLazyQueryHookResult = ReturnType<typeof useGetSearchAfsprakenLazyQuery>;
+export type GetSearchAfsprakenQueryResult = Apollo.QueryResult<GetSearchAfsprakenQuery, GetSearchAfsprakenQueryVariables>;
 export const GetSignalenAndBurgersDocument = gql`
     query getSignalenAndBurgers {
   signalen {
