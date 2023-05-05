@@ -1,11 +1,11 @@
 import {Box, Button, Divider, FormControl, FormLabel, HStack, Input, InputGroup, InputRightElement, Radio, RadioGroup, RangeSlider, RangeSliderFilledTrack, RangeSliderMark, RangeSliderThumb, RangeSliderTrack, Stack, Tab, Table, TabList, TabPanel, TabPanels, Tabs, Tbody, Text, Th, Thead, Tr} from "@chakra-ui/react";
-import React, { useState } from "react";
+import React, {useState} from "react";
 import {useTranslation} from "react-i18next";
 import Select from "react-select";
-import {Afspraak, Burger, BankTransaction, GetTransactieDocument, Rubriek, useCreateJournaalpostAfspraakMutation, useCreateJournaalpostGrootboekrekeningMutation, useGetSimilarAfsprakenLazyQuery, useGetBurgersAndOrganisatiesQuery, Organisatie, useGetSearchAfsprakenQuery} from "../../../generated/graphql";
+import {Afspraak, Burger, BankTransaction, GetTransactieDocument, GetSaldoDocument, Rubriek, useCreateJournaalpostAfspraakMutation, useCreateJournaalpostGrootboekrekeningMutation, useGetSimilarAfsprakenLazyQuery, useGetBurgersAndOrganisatiesQuery, Organisatie, useGetSearchAfsprakenQuery, useCreateSaldoMutation, useUpdateSaldoMutation} from "../../../generated/graphql";
 import useToaster from "../../../utils/useToaster";
 import SelectAfspraakOption from "../../shared/SelectAfspraakOption";
-import {TriangleDownIcon, TriangleUpIcon } from "@chakra-ui/icons";
+import {TriangleDownIcon, TriangleUpIcon} from "@chakra-ui/icons";
 import usePagination from "../../../utils/usePagination";
 import Queryable from "../../../utils/Queryable";
 import ZoektermenList from "../../shared/ZoektermenList";
@@ -183,7 +183,7 @@ const BookingSection = ({transaction, rubrieken}) => {
 	};
 	const {offset, setTotal, goFirst, PaginationButtons} = usePagination({pageSize: 25});
 
-	const searchVariables : {
+	const searchVariables: {
 		offset: number,
 		limit: number,
 		afspraken: number[] | undefined,
@@ -193,8 +193,8 @@ const BookingSection = ({transaction, rubrieken}) => {
 		min_bedrag: number | undefined,
 		max_bedrag: number | undefined,
 		zoektermen: string[] | undefined
-	}= {
-		offset: offset -1,
+	} = {
+		offset: offset - 1,
 		limit: 25,
 		afspraken: undefined,
 		afdelingen: undefined,
@@ -228,13 +228,13 @@ const BookingSection = ({transaction, rubrieken}) => {
 	const [valid, setOnlyValid] = useState(true)
 
 	const onChangeValidRadio = (value) => {
-		if(value === "1"){
+		if (value === "1") {
 			onSetOnlyValid(true)
 		}
-		if(value === "2"){
+		if (value === "2") {
 			onSetOnlyValid(false)
 		}
-		if(value === "3"){
+		if (value === "3") {
 			onSetOnlyValid(undefined)
 		}
 	}
@@ -251,13 +251,13 @@ const BookingSection = ({transaction, rubrieken}) => {
 	searchVariables.min_bedrag = sliderValue[0] !== 0 ? sliderValue[0] * 100 : undefined
 	searchVariables.max_bedrag = sliderValue[1] !== 5000 ? sliderValue[1] * 100 : undefined
 	searchVariables.only_valid = valid
-	if(filterOrganisatieids.length > 0){
-		const organisaties: Organisatie[] =  $burgersAndOrganisaties.data?.organisaties || []
-		const filteredOrganisaties = organisaties.filter(organisatie => organisatie.id? filterOrganisatieids.includes(organisatie.id) : false)
-		const afdelingen = filteredOrganisaties.map(organisatie => organisatie.afdelingen? organisatie.afdelingen : []).flat() || []
-		searchVariables.afdelingen =  afdelingen.map(afdeling => afdeling.id? afdeling.id : -1).filter(id => id !== -1)
+	if (filterOrganisatieids.length > 0) {
+		const organisaties: Organisatie[] = $burgersAndOrganisaties.data?.organisaties || []
+		const filteredOrganisaties = organisaties.filter(organisatie => organisatie.id ? filterOrganisatieids.includes(organisatie.id) : false)
+		const afdelingen = filteredOrganisaties.map(organisatie => organisatie.afdelingen ? organisatie.afdelingen : []).flat() || []
+		searchVariables.afdelingen = afdelingen.map(afdeling => afdeling.id ? afdeling.id : -1).filter(id => id !== -1)
 	}
-	else{
+	else {
 		searchVariables.afdelingen = undefined
 	}
 	searchVariables.zoektermen = zoektermen.length > 0 ? zoektermen : undefined
@@ -266,7 +266,7 @@ const BookingSection = ({transaction, rubrieken}) => {
 
 	const onAddzoekterm = (e) => {
 		e.preventDefault();
-		const list : string[] = []
+		const list: string[] = []
 		list.push(zoekterm)
 		const newZoektermen = zoektermen.concat(list)
 		setZoektermen(newZoektermen)
@@ -275,9 +275,9 @@ const BookingSection = ({transaction, rubrieken}) => {
 	};
 
 	const onDeleteZoekterm = (value) => {
-		const list : string[] = zoektermen.slice()
+		const list: string[] = zoektermen.slice()
 		const index = zoektermen.indexOf(value)
-		list.splice(index,1)
+		list.splice(index, 1)
 		setZoektermen(list)
 		setZoekterm(zoekterm)
 		goFirst()
@@ -333,9 +333,9 @@ const BookingSection = ({transaction, rubrieken}) => {
 										)}
 										<Box>
 											<Text>
-												{!loading && showExtraAfspraken && similarAfspraken.length === 0 ? t("bookingSection.noSimilarAfspraken") : ""}
+												{!similairAfsprakenQuery.loading && showExtraAfspraken && similarAfspraken.length === 0 ? t("bookingSection.noSimilarAfspraken") : ""}
 											</Text>
-											<Button  isLoading={loading} leftIcon={showExtraAfspraken ? <TriangleUpIcon /> : <TriangleDownIcon />} colorScheme={"primary"} size={"sm"} onClick={toggleShowExtraAfspraken} >
+											<Button isLoading={similairAfsprakenQuery.loading} leftIcon={showExtraAfspraken ? <TriangleUpIcon /> : <TriangleDownIcon />} colorScheme={"primary"} size={"sm"} onClick={toggleShowExtraAfspraken} >
 												{t("bookingSection.similarAfspraken")}
 											</Button>
 										</Box>
