@@ -116,6 +116,12 @@ def test_automatisch_boeken_no_csm_success_single(mocker: MockerFixture):
         )
 
         mock.get(
+            f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids=11",
+            json={"data": [{'id': 11, 'burger_id': 1,
+                            'rubriek_id': 21, 'zoektermen': 'test'}]}
+        )
+
+        mock.get(
             f"{settings.HHB_SERVICES_URL}/saldo?date=2023-10-01",
             json={"data": [{'begindatum': '2023-10-01T00:00:00', 'burger_id': 1,
                             'einddatum': '2023-10-31T00:00:00', 'id': 1, 'saldo': -68652}]}
@@ -208,6 +214,18 @@ def test_automatisch_boeken_no_csm_success_multiple(mocker: MockerFixture):
                             'einddatum': '2023-10-31T00:00:00', 'id': 1, 'saldo': -68652}]}
         )
 
+        mock.get(
+            f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids=11",
+            json={"data": [{'id': 11, 'burger_id': 1,
+                            'rubriek_id': 21, 'zoektermen': 'test'}]}
+        )
+
+        mock.get(
+            f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids=12",
+            json={"data": [{'id': 12, 'burger_id': 1,
+                            'rubriek_id': 21, 'zoektermen': 'test'}]}
+        )
+
         mocker.patch(
             'hhb_backend.processen.automatisch_boeken.transactie_suggesties',
             return_value={
@@ -292,6 +310,12 @@ def test_automatisch_boeken_csm_success_multiple(mocker: MockerFixture):
             f"{settings.HHB_SERVICES_URL}/saldo?date=2023-10-01",
             json={"data": [{'begindatum': '2023-10-01T00:00:00', 'burger_id': 1,
                             'einddatum': '2023-10-31T00:00:00', 'id': 1, 'saldo': -68652}]}
+        )
+
+        mock.get(
+            f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids=11",
+            json={"data": [{'id': 11, 'burger_id': 1,
+                            'rubriek_id': 21, 'zoektermen': 'test'}]}
         )
 
         mock.put(
@@ -439,6 +463,41 @@ def test_automatisch_boeken_no_csm_multiple_suggesties(mocker: MockerFixture):
                                 'einddatum': '2023-10-31T00:00:00', 'id': i, 'saldo': -68652}]}
             )
 
+        mock.get(
+            f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids=11",
+            json={"data": [{'id': 11, 'burger_id': 1,
+                            'rubriek_id': 21, 'zoektermen': 'test'}]}
+        )
+
+        mock.get(
+            f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids=12",
+            json={"data": [{'id': 12, 'burger_id': 1,
+                            'rubriek_id': 21, 'zoektermen': 'test'}]}
+        )
+
+        mock.get(
+            f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids=13",
+            json={"data": [{'id': 13, 'burger_id': 1,
+                            'rubriek_id': 21, 'zoektermen': 'test'}]}
+        )
+
+        mock.get(
+            f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids=15",
+            json={"data": [{'id': 15, 'burger_id': 1,
+                            'rubriek_id': 21, 'zoektermen': 'test'}]}
+        )
+
+        mock.get(
+            f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids=26",
+            json={"data": [{'id': 26, 'burger_id': 1,
+                            'rubriek_id': 21, 'zoektermen': 'test'}]}
+        )
+
+        mock.get(
+            f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids=23",
+            json={"data": [{'id': 23, 'burger_id': 1,
+                            'rubriek_id': 21, 'zoektermen': 'test'}]}
+        )
         mocker.patch(
             'hhb_backend.processen.automatisch_boeken.transactie_suggesties',
             return_value={

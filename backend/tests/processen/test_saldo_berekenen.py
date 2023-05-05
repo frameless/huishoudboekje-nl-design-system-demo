@@ -37,6 +37,12 @@ def test_adding_saldo__when_not_exist__should_create_new_saldo(test_request_cont
             json={"data": [{'begindatum': '2023-10-01T00:00:00', 'burger_id': 1,
                             'einddatum': '2023-10-31T00:00:00', 'id': 1, 'saldo': saldo}]}
         )
+
+        mock.get(
+            f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids=1",
+            json={"data": [{'id': 1, 'burger_id': 1,
+                            'rubriek_id': 21, 'zoektermen': 'test'}]}
+        )
         # Act
         update_or_create_saldo(test_journaalpost)
 
@@ -71,6 +77,12 @@ def test_adding_saldo__wwhen_already_exist__should_put_to_existing_saldo(test_re
             f"{settings.HHB_SERVICES_URL}/saldo?date={date.strftime('%Y-%m-%d')}",
             json={"data": [{'begindatum': '2023-07-01T00:00:00', 'burger_id': 1,
                             'einddatum': '2023-07-31T00:00:00', 'id': 1, 'saldo': saldo}]}
+        )
+
+        mock.get(
+            f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids=1",
+            json={"data": [{'id': 1, 'burger_id': 1,
+                            'rubriek_id': 21, 'zoektermen': 'test'}]}
         )
         # Act
         update_or_create_saldo(test_journaalpost)
@@ -107,6 +119,12 @@ def test_undo_saldo__when_not_exist__should_create_new_saldo_with_reverse_transa
             json={"data": [{'begindatum': '2023-10-01T00:00:00', 'burger_id': 1,
                             'einddatum': '2023-10-31T00:00:00', 'id': 1, 'saldo': saldo}]}
         )
+
+        mock.get(
+            f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids=1",
+            json={"data": [{'id': 1, 'burger_id': 1,
+                            'rubriek_id': 21, 'zoektermen': 'test'}]}
+        )
         # Act
         update_or_create_saldo(test_journaalpost, undo_saldo=True)
 
@@ -141,6 +159,12 @@ def test_adding_saldo__wwhen_already_exist__should_put_to_existing_saldo_with_re
             f"{settings.HHB_SERVICES_URL}/saldo?date={date.strftime('%Y-%m-%d')}",
             json={"data": [{'begindatum': '2023-07-01T00:00:00', 'burger_id': 1,
                             'einddatum': '2023-07-31T00:00:00', 'id': 1, 'saldo': saldo}]}
+        )
+
+        mock.get(
+            f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids=1",
+            json={"data": [{'id': 1, 'burger_id': 1,
+                            'rubriek_id': 21, 'zoektermen': 'test'}]}
         )
         # Act
         update_or_create_saldo(test_journaalpost, undo_saldo=True)
