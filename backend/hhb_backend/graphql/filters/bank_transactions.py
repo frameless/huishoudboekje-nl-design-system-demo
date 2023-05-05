@@ -25,3 +25,4 @@ class BankTransactionSearchFilter(graphene.InputObjectType):
     ibans = graphene.List(graphene.String)
     only_booked = graphene.Boolean()
     only_credit = graphene.Boolean()
+    zoektermen = graphene.List(graphene.String)

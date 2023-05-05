@@ -37,3 +37,7 @@ class TransactionGetRequestBuilder(GetRequestBuilder):
     def by_credit(self, only_credit: bool):
         self._request.add_to_filter("only_credit", only_credit)
         return self
+
+    def by_zoektermen(self, zoektermen: list[str]):
+        self._request.add_to_filter("zoektermen", zoektermen)
+        return self

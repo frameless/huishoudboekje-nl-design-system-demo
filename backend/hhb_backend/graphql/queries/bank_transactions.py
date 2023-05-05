@@ -122,6 +122,8 @@ class BankTransactionsSearchQuery:
             if filters.only_credit is not None:
                 transactionsBuilder.by_credit(filters.only_credit)
 
+            if filters.zoektermen is not None:
+                transactionsBuilder.by_zoektermen(filters.zoektermen)
         
         if offset is not None and limit is not None:
                 transactionsBuilder.paged(limit=limit, offset=offset)
@@ -136,23 +138,25 @@ class BankTransactionsSearchQuery:
             ],
         )
 
-        #This is (maybe) not necessary when batching is implemented but for now it makes it faster :)
-        if journaalposten is None:
-            transaction_ids = [transaction.get("id", -1) for transaction in transactions.get("banktransactions",[]) if transaction.get("is_geboekt", False)]
-            if len(transaction_ids) > 0:
-                journaalpostBuilder.by_transation_ids(transation_ids=transaction_ids)
-                journaalposten = hhb_dataloader().journaalposten_concept.load_request(journaalpostBuilder.request).get("journaalposten", {})
+        if len(transactions.get("banktransactions",[]))>0:
+            #This is (maybe) not necessary when batching is implemented but for now it makes it faster :)
+            if journaalposten is None:
+                transaction_ids = [transaction.get("id", -1) for transaction in transactions.get("banktransactions",[]) if transaction.get("is_geboekt", False)]
+                if len(transaction_ids) > 0:
+                    journaalpostBuilder.by_transation_ids(transation_ids=transaction_ids)
+                    journaalposten = hhb_dataloader().journaalposten_concept.load_request(journaalpostBuilder.request).get("journaalposten", {})
 
-        if journaalposten is not None:
+            if journaalposten is not None:
+                for transaction in transactions.get("banktransactions",[]):
+                    transaction_journaalpost = next((journaalpost for journaalpost in journaalposten if journaalpost["transaction_id"] == transaction["id"]), None)
+                    if transaction_journaalpost is not None:
+                        transaction["journaalpost"] = transaction_journaalpost
+
+            ibans = [transaction.get("tegen_rekening", "") for transaction in transactions.get("banktransactions",[])]
+            rekeningen = hhb_dataloader().rekeningen.by_ibans(ibans)
             for transaction in transactions.get("banktransactions",[]):
-                transaction_journaalpost = next((journaalpost for journaalpost in journaalposten if journaalpost["transaction_id"] == transaction["id"]), None)
-                if transaction_journaalpost is not None:
-                    transaction["journaalpost"] = transaction_journaalpost
-
-        rekeningen = hhb_dataloader().rekeningen.by_ibans([transaction.get("tegen_rekening", "") for transaction in transactions.get("banktransactions",[])])
-        for transaction in transactions.get("banktransactions",[]):
-            transaction_rekening = next((rekening for rekening in rekeningen if rekening["iban"] == transaction["tegen_rekening"]), None)
-            if transaction_rekening is not None:
-                transaction["rekening"] = transaction_rekening
+                transaction_rekening = next((rekening for rekening in rekeningen if rekening["iban"] == transaction["tegen_rekening"]), None)
+                if transaction_rekening is not None:
+                    transaction["rekening"] = transaction_rekening
 
         return transactions

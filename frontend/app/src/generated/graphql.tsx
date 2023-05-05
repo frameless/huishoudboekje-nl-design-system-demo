@@ -161,6 +161,7 @@ export type BankTransactionSearchFilter = {
   onlyBooked?: InputMaybe<Scalars['Boolean']>;
   onlyCredit?: InputMaybe<Scalars['Boolean']>;
   startDate?: InputMaybe<Scalars['String']>;
+  zoektermen?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
 export type BankTransactionsPaged = {
@@ -2303,6 +2304,11 @@ export type GetRekeningQueryVariables = Exact<{
 
 
 export type GetRekeningQuery = { rekening?: { id?: number, iban?: string, rekeninghouder?: string } };
+
+export type GetRekeningenQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetRekeningenQuery = { rekeningen?: Array<{ id?: number, rekeninghouder?: string, iban?: string }> };
 
 export type GetReportingDataQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -5748,6 +5754,42 @@ export function useGetRekeningLazyQuery(baseOptions?: Apollo.LazyQueryHookOption
 export type GetRekeningQueryHookResult = ReturnType<typeof useGetRekeningQuery>;
 export type GetRekeningLazyQueryHookResult = ReturnType<typeof useGetRekeningLazyQuery>;
 export type GetRekeningQueryResult = Apollo.QueryResult<GetRekeningQuery, GetRekeningQueryVariables>;
+export const GetRekeningenDocument = gql`
+    query getRekeningen {
+  rekeningen {
+    id
+    rekeninghouder
+    iban
+  }
+}
+    `;
+
+/**
+ * __useGetRekeningenQuery__
+ *
+ * To run a query within a React component, call `useGetRekeningenQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetRekeningenQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetRekeningenQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetRekeningenQuery(baseOptions?: Apollo.QueryHookOptions<GetRekeningenQuery, GetRekeningenQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetRekeningenQuery, GetRekeningenQueryVariables>(GetRekeningenDocument, options);
+      }
+export function useGetRekeningenLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetRekeningenQuery, GetRekeningenQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetRekeningenQuery, GetRekeningenQueryVariables>(GetRekeningenDocument, options);
+        }
+export type GetRekeningenQueryHookResult = ReturnType<typeof useGetRekeningenQuery>;
+export type GetRekeningenLazyQueryHookResult = ReturnType<typeof useGetRekeningenLazyQuery>;
+export type GetRekeningenQueryResult = Apollo.QueryResult<GetRekeningenQuery, GetRekeningenQueryVariables>;
 export const GetReportingDataDocument = gql`
     query getReportingData {
   burgers {

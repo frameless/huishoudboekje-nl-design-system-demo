@@ -30,11 +30,11 @@ const TransactieItem: React.FC<TransactieItemProps> = ({transactie: bt, ...props
 			}}>
 				{bt.isGeboekt ? (
 					<Tag colorScheme={"green"} size={"sm"} variant={"subtle"}>
-						<Icon boxSize={"10px"} as={CheckIcon} />
+						<Icon as={CheckIcon} />
 					</Tag>
 				) : (
 					<Tag colorScheme={"red"} size={"sm"} variant={"subtle"}>
-						<Icon boxSize={"10px"} as={WarningIcon} />
+						<Icon as={WarningIcon} />
 					</Tag>
 				)}
 				<Box flex={2}>
