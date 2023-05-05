@@ -3,7 +3,7 @@ import React from "react";
 import {useTranslation} from "react-i18next";
 import Select from "react-select";
 import {Afspraak, BankTransaction, GetTransactieDocument, Rubriek, useCreateJournaalpostAfspraakMutation, useCreateJournaalpostGrootboekrekeningMutation, useGetSimilarAfsprakenLazyQuery, useCreateSaldoMutation, useGetSaldoQuery, useUpdateSaldoMutation, GetSaldoDocument} from "../../../generated/graphql";
-import {useReactSelectStyles} from "../../../utils/things";
+import {floatMathOperation, MathOperation, useReactSelectStyles} from "../../../utils/things";
 import useToaster from "../../../utils/useToaster";
 import SelectAfspraakOption from "../../shared/SelectAfspraakOption";
 import {TriangleDownIcon, TriangleUpIcon} from "@chakra-ui/icons";
@@ -120,6 +120,12 @@ const BookingSection = ({transaction, rubrieken}) => {
 		}
 	};
 
+	function calculateNewSaldo(oldSaldo, newSaldo) {
+		let saldo = (+oldSaldo * 100) + (+newSaldo * 100)
+		saldo = saldo / 100
+		return saldo
+	}
+
 	const onSelectAfspraak = (afspraak: Afspraak) => {
 		const transactionId = transaction?.id;
 		const afspraakId = afspraak.id;
@@ -144,7 +150,7 @@ const BookingSection = ({transaction, rubrieken}) => {
 			}).then(
 				(result) => {
 					if (result.data.saldo.length > 0) {
-						const saldo = parseFloat(result.data.saldo[0]?.saldo) + parseFloat(transaction.bedrag);
+						const saldo = floatMathOperation(result.data.saldo[0]?.saldo, transaction.bedrag, 2, MathOperation.Plus);
 						updateSaldo({
 							variables: {
 								input: {

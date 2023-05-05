@@ -15,7 +15,7 @@ const BalanceTable: React.FC<BalanceTableProps> = ({transactions, startDate, end
 	const aggregationByOrganisatie: Transaction[] = createBalanceTableAggregation(transactions);
 	const startSaldo = getStartingSaldo(startSaldos)
 	const saldos = createSaldos(transactions)
-	const saldoDate = d(endDate, "L") <= d().endOf("day") ? d(endDate, "L").endOf("day") : d().endOf("day")
+	const saldoDate = d(endDate, "L")
 	const translatedCategory = {
 		[Type.Inkomsten]: t("charts.inkomstenUitgaven.income"),
 		[Type.Uitgaven]: t("charts.inkomstenUitgaven.expenses"),
