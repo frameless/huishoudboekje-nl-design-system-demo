@@ -93,7 +93,7 @@ const server = (prefix: string = "/auth") => {
 	app.use(prefix, authRouter);
 
 	// Endpoint for testing the health of this service
-	app.get("/health", (req, res, next) => {
+	app.get("/health", (req, res) => {
 		res.status(200).send("alive");
 	});
 
