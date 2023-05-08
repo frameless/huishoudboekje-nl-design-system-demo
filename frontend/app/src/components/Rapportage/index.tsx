@@ -8,7 +8,7 @@ import {Burger, Rubriek, useGetBurgersQuery, useGetRubriekenQuery} from "../../g
 import {DateRange} from "../../models/models";
 import d from "../../utils/dayjs";
 import Queryable from "../../utils/Queryable";
-import {formatBurgerName, humanJoin, useReactSelectStyles} from "../../utils/things";
+import {formatBurgerName, getBurgerHhbId, humanJoin, useReactSelectStyles} from "../../utils/things";
 import RadioButtonGroup from "../shared/RadioButtonGroup";
 import Modal from "../shared/Modal";
 import Page from "../shared/Page";
@@ -53,7 +53,7 @@ const Rapportage = () => {
 			const burgers_filter = burgers.filter(b => filterBurgerIds.includes(b.id!)).map(b => ({
 				key: b.id,
 				value: b.id,
-				label: formatBurgerName(b),
+				label: formatBurgerName(b) + " " + getBurgerHhbId(b),
 			}));
 
 			return (
@@ -96,7 +96,7 @@ const Rapportage = () => {
 												<Select onChange={onSelectBurger} options={burgers.map(b => ({
 													key: b.id,
 													value: b.id,
-													label: formatBurgerName(b),
+													label: formatBurgerName(b) + " " + getBurgerHhbId(b),
 												}))} styles={reactSelectStyles.default} isMulti isClearable={true} noOptionsMessage={() => t("select.noOptions")} maxMenuHeight={200} placeholder={t("charts.optionAllBurgers")} value={burgers_filter} />
 											</FormControl>
 											<FormControl as={Stack} flex={1}>
@@ -130,7 +130,7 @@ const Rapportage = () => {
 							</Modal>
 						)}
 						{/* pagina */}
-						<Heading className="print" size={"sm"} fontWeight={"normal"}>{selectedBurgers.length > 0 ? humanJoin(selectedBurgers.map(b => formatBurgerName(b))) : t("allBurgers")}</Heading>
+						<Heading className="print" size={"sm"} fontWeight={"normal"}>{selectedBurgers.length > 0 ? humanJoin(selectedBurgers.map(b => formatBurgerName(b) + " " + getBurgerHhbId(b))) : t("allBurgers")}</Heading>
 						<RapportageComponent burgerIds={filterBurgerIds} startDate={dateRange.from} endDate={dateRange.through} rubrieken={filterRubriekIds}></RapportageComponent>
 					</Page>
 				</RapportageContext.Provider>
