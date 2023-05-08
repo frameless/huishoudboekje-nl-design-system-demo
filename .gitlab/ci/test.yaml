@@ -6,7 +6,7 @@
   stage: test
   needs: [ ]
   image:
-    name: ${DOCKER_PROXY}node:18-alpine
+    name: ${DOCKER_PROXY}node:20-alpine
   variables:
     NPM_CACHE_DIR: "${CI_PROJECT_DIR}/.cache/npm"
     CYPRESS_INSTALL_BINARY: "0"
@@ -86,7 +86,7 @@ backend-burgers-test:
   stage: test
   needs: [ ]
   image:
-    name: ${DOCKER_PROXY}node:18-alpine
+    name: ${DOCKER_PROXY}node:20-alpine
   variables:
     NPM_CACHE_DIR: "${CI_PROJECT_DIR}/.cache/npm"
     CYPRESS_INSTALL_BINARY: "0"
@@ -122,7 +122,7 @@ postadressenservice-test:
   stage: test
   needs: [ ]
   image:
-    name: ${DOCKER_PROXY}node:18-bullseye-slim
+    name: ${DOCKER_PROXY}node:20-bullseye-slim
   variables:
     NPM_CACHE_DIR: "${CI_PROJECT_DIR}/.cache/npm"
     CYPRESS_INSTALL_BINARY: "0"
@@ -159,7 +159,7 @@ alarmenservice-test:
   stage: test
   needs: [ ]
   image:
-    name: ${DOCKER_PROXY}node:18-bullseye-slim
+    name: ${DOCKER_PROXY}node:20-bullseye-slim
   variables:
     NPM_CACHE_DIR: "${CI_PROJECT_DIR}/.cache/npm"
     CYPRESS_INSTALL_BINARY: "0"
@@ -196,7 +196,7 @@ signalenservice-test:
   stage: test
   needs: [ ]
   image:
-    name: ${DOCKER_PROXY}node:18-bullseye-slim
+    name: ${DOCKER_PROXY}node:20-bullseye-slim
   variables:
     NPM_CACHE_DIR: "${CI_PROJECT_DIR}/.cache/npm"
     CYPRESS_INSTALL_BINARY: "0"
@@ -233,7 +233,7 @@ unleashservice-test:
   stage: test
   needs: [ ]
   image:
-    name: ${DOCKER_PROXY}node:18-alpine
+    name: ${DOCKER_PROXY}node:20-alpine
   variables:
     NPM_CACHE_DIR: "${CI_PROJECT_DIR}/.cache/npm"
     CYPRESS_INSTALL_BINARY: "0"
@@ -323,7 +323,7 @@ changeset:
   stage: test
   needs: [ ]
   image:
-    name: ${DOCKER_PROXY}node:18-alpine
+    name: ${DOCKER_PROXY}node:20-alpine
   variables:
     NPM_CACHE_DIR: "${CI_PROJECT_DIR}/.cache/npm"
     CYPRESS_INSTALL_BINARY: "0"
