@@ -587,7 +587,7 @@
     "search": "Zoeken",
     "searchOmschrijvingAndTerms" : "Zoek in omschrijving en zoektermen",
     "organisation" : "Filter organisaties",
-    "amount" : "bedrag",
+    "amount" : "Bedrag",
     "active" : "Actief",
     "ended": "Beëindigd",
     "all": "Alle",
@@ -617,7 +617,24 @@
   },
   "transactionsPage": {
     "title": "Banktransacties",
-    "helperText": "Dit is een lijst van alle banktransacties in het Huishoudboekje."
+    "helperText": "Dit is een lijst van alle banktransacties in het Huishoudboekje.",
+    "filters": {
+      "status": "Status",
+      "direction": "Richting",
+      "unbooked": "Niet geboekt",
+      "booked": "Geboekt",
+      "all": "Alle",
+      "incomes": "Inkomsten",
+      "expenses": "Uitgaven",
+      "description": "Zoeken in omschrijving",
+      "active": "Uitgebreide filters actief",
+      "from": "Periode van",
+      "to": "Periode tot",
+      "accounts": "Filter op rekeningen",
+      "extensive": "Uitgebreid zoeken",
+      "count": "Aantal gevonden transacties",
+      "none": "Geen"
+    }
   },
   "transaction": "Transactie",
   "form": {
