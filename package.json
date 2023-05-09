@@ -29,6 +29,6 @@
   },
   "homepage": "https://gitlab.com/commonground/huishoudboekje/app-new#readme",
   "dependencies": {
-    "@changesets/cli": "^2.25.2"
+    "@changesets/cli": "^2.26.1"
   }
 }
