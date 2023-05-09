@@ -634,7 +634,10 @@
       "burgers": "Burgers",
       "extensive": "Uitgebreid zoeken",
       "count": "Aantal gevonden transacties",
-      "none": "Geen"
+      "none": "Geen",
+      "amountFrom": "Bedrag van",
+      "amountTo": "Bedrag tot",
+      "amountwarning": "Bedrag tot kan niet lager zijn dan bedrag van"
     }
   },
   "transaction": "Transactie",

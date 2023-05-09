@@ -1,4 +1,4 @@
-import {Button, ButtonGroup, Collapse, FormControl, FormLabel, HStack, Icon, Input, InputGroup, InputRightElement, Radio, RadioGroup, RangeSlider, RangeSliderFilledTrack, RangeSliderMark, RangeSliderThumb, RangeSliderTrack, Stack, Tag, Text, VStack, useDisclosure} from "@chakra-ui/react";
+import {Button, ButtonGroup, Collapse, FormControl, FormLabel, HStack, Icon, Input, InputGroup, InputLeftAddon, InputRightElement, NumberInput, NumberInputField, Radio, RadioGroup, Stack, Tag, Text, useDisclosure} from "@chakra-ui/react";
 import {useState} from "react";
 import {useTranslation} from "react-i18next";
 import {useStartAutomatischBoekenMutation, useSearchTransactiesQuery, BankTransaction, SearchTransactiesQueryVariables, useGetBurgersQuery, Burger, Rekening, SearchTransactiesDocument, useGetRekeningenQuery} from "../../../generated/graphql";
@@ -37,13 +37,13 @@ const Transactions = () => {
 
 	const defaultValueRadio = (value) => {
 		if(value === undefined ){
-            return "3"
+			return "3"
 		}
 		if(value){
-            return "2"
+			return "2"
 		}
 		else {
-            return "1"
+			return "1"
         }
 	}
 
@@ -68,7 +68,7 @@ const Transactions = () => {
 
 	const onSelectBurger = (value) => {
 		const newValue = value ? value.map(v => v.value) : []
-		setFilterBurgerIds(newValue)		
+		setFilterBurgerIds(newValue)
 		setBanktransactieFilters({
 			...banktransactieFilters,
 			burgerIds: newValue.length > 0 ? newValue : undefined
@@ -77,7 +77,7 @@ const Transactions = () => {
 
 	const onSelectRekening = (value) => {
 		const newValue = value ? value.map(v => v.value) : []
-		setFilterRekeingIbans(newValue)		
+		setFilterRekeingIbans(newValue)
 		setBanktransactieFilters({
 			...banktransactieFilters,
 			ibans: newValue.length > 0 ? newValue : undefined
@@ -107,7 +107,6 @@ const Transactions = () => {
 		}
 	}
 
-	
 	const [zoekterm, setZoekterm] = useState<string>("");
 	const [zoektermen, setZoektermen] = useState<string[]>(banktransactieFilters.zoektermen || []);
 	const onAddzoekterm = (e) => {
@@ -136,22 +135,38 @@ const Transactions = () => {
 		setZoekterm(zoekterm)
 		goFirst()
 	}
-	const defaultValueSlider = () => {
-		const min = banktransactieFilters.minBedrag ? banktransactieFilters.minBedrag / 100 : 0
-		const max = banktransactieFilters.maxBedrag ? banktransactieFilters.maxBedrag / 100 : 5000
-		const value = [min , max]
-		return value
+
+	const defaultvalueBedrag = (value) => {
+		return value ? (value / 100).toString() : ""
 	}
-	const [sliderValue, setSliderValue] = useState(defaultValueSlider())
-	const onSetSliderValue = (value) => {
+
+	const [minBedrag, setMinBedrag] = useState(defaultvalueBedrag(banktransactieFilters.minBedrag))
+	const [maxBedrag, setMaxBedrag] = useState(defaultvalueBedrag(banktransactieFilters.maxBedrag))
+
+	const onChangeMaxbedrag = (valueAsString) =>{
+		setMaxBedrag(valueAsString)
 		setBanktransactieFilters({
 			...banktransactieFilters,
-			minBedrag: value[0] === 0 ? undefined : value[0] * 100,
-			maxBedrag: value[1] === 5000  ? undefined : value[1] * 100
+			maxBedrag: valueAsString !== "" ? Math.round(+valueAsString * 100) : undefined
 		})
-		setSliderValue(value)
-	};
+	}
+	const onChangeMinbedrag = (valueAsString) =>{
+		setMinBedrag(valueAsString)
+		setBanktransactieFilters({
+			...banktransactieFilters,
+			minBedrag: valueAsString !== "" ? Math.round(+valueAsString * 100) : undefined
+		})
+	}
 
+	const invalidBedrag = () =>{
+		let result = false;
+		if(banktransactieFilters.maxBedrag !== undefined && banktransactieFilters.minBedrag !== undefined){
+			if(banktransactieFilters.maxBedrag < banktransactieFilters.minBedrag){
+				result = true
+			}
+		}
+		return result
+	}
 
 	const queryVariables : SearchTransactiesQueryVariables = {
 		offset: offset -1,
@@ -162,6 +177,7 @@ const Transactions = () => {
 	const $transactions = useSearchTransactiesQuery({
 		fetchPolicy: "no-cache", // This "no-cache" is to make sure the list is refreshed after uploading a Bankafschrift in CsmUploadModal.tsx (24-02-2022)
 		variables: queryVariables,
+		context: {debounceKey: "banktransactieFilters"},
 		onCompleted: data => {
 			if (data && total !== data.searchTransacties?.pageInfo?.count) {
 				setTotal(data.searchTransacties?.pageInfo?.count);
@@ -304,8 +320,8 @@ const Transactions = () => {
 																			key: rekening.iban,
 																			value: rekening.iban,
 																			label: rekening.rekeninghouder,
-																		}))} 
-																		styles={reactSelectStyles.default} isMulti isClearable={true} noOptionsMessage={() => t("select.noOptions")} maxMenuHeight={200} 
+																		}))}
+																		styles={reactSelectStyles.default} isMulti isClearable={true} noOptionsMessage={() => t("select.noOptions")} maxMenuHeight={200}
 																		placeholder={t("transactionsPage.filters.none")} value={rekeningen_filter} />
 																	</FormControl>
 																</HStack>
@@ -320,7 +336,7 @@ const Transactions = () => {
 															label: formatBurgerName(b),
 														}));
 														return (
-															<Stack direction={"column"} spacing={5} flex={1}>
+															<Stack direction={"column"} spacing={5} flex={1}  paddingLeft={15}>
 																<HStack>
 																	<FormControl as={Stack} flex={1}>
 																		<FormLabel>{t("transactionsPage.filters.burgers")}</FormLabel>
@@ -330,7 +346,7 @@ const Transactions = () => {
 																			label: formatBurgerName(b),
 																		}))}
 																		isDisabled={blockBookedFilters()}
-																		styles={reactSelectStyles.default} isMulti isClearable={true} noOptionsMessage={() => t("select.noOptions")} maxMenuHeight={200} 
+																		styles={reactSelectStyles.default} isMulti isClearable={true} noOptionsMessage={() => t("select.noOptions")} maxMenuHeight={200}
 																		placeholder={blockBookedFilters() ? t("transactionsPage.filters.none") : t("charts.optionAllBurgers")} value={burgers_filter} />
 																	</FormControl>
 																</HStack>
@@ -338,22 +354,44 @@ const Transactions = () => {
 														);
 													}} />
 												</HStack>
-												<FormControl paddingRight={100}>
-													<FormLabel paddingBottom={10}  >{t("bookingSection.amount")}</FormLabel>
-													<RangeSlider aria-label={["min", "max"]} min={0} max={5000} step={50} defaultValue={defaultValueSlider()} onChange={(val) => onSetSliderValue(val)}>
-														<RangeSliderTrack>
-															<RangeSliderFilledTrack />
-														</RangeSliderTrack>
-														<RangeSliderMark value={sliderValue[0]} textAlign={"center"} bg={"blue.500"} color={"white"} mt={-10} ml={-5} w={20}>
-															{"€" + sliderValue[0]}
-														</RangeSliderMark>
-														<RangeSliderMark value={sliderValue[1]} textAlign={"center"} bg={"blue.500"} color={"white"} mt={-10} ml={-5} w={20}>
-															{"€" + sliderValue[1]}
-														</RangeSliderMark>
-														<RangeSliderThumb index={0} />
-														<RangeSliderThumb index={1} />
-													</RangeSlider>
-												</FormControl>
+												<HStack>
+													<FormControl>
+														<FormLabel>{t("transactionsPage.filters.amountFrom")}</FormLabel>
+														<InputGroup>
+															<InputLeftAddon>€</InputLeftAddon>
+															<NumberInput w={"100%"} precision={2} value={minBedrag}>
+																<NumberInputField borderLeftRadius={0}
+																	onChange={(value) => {
+																		onChangeMinbedrag(value.target.value)
+																	}}
+																	value={minBedrag}
+																	placeholder={t("transactionsPage.filters.none")}
+																/>
+															</NumberInput>
+														</InputGroup>
+													</FormControl>
+													<FormControl  paddingLeft={15}>
+														<FormLabel>{t("transactionsPage.filters.amountTo")}</FormLabel>
+														<InputGroup>
+															<InputLeftAddon>€</InputLeftAddon>
+															<NumberInput w={"100%"} precision={2} value={maxBedrag}>
+																<NumberInputField borderLeftRadius={0}
+																	onChange={(value) => {
+																		onChangeMaxbedrag(value.target.value)
+																	}}
+																	value={maxBedrag}
+																	placeholder={t("transactionsPage.filters.none")}
+																/>
+															</NumberInput>
+														</InputGroup>
+													</FormControl>
+												</HStack>
+												{ invalidBedrag() ?
+													<Tag colorScheme={"red"} size={"md"} variant={"subtle"}>
+														<Icon as={WarningTwoIcon} />
+														{t("transactionsPage.filters.amountwarning")}
+													</Tag>: ""
+												}
 												<FormLabel paddingBottom={"10px"}>
 													<FormLabel>
 														{t("transactionsPage.filters.description")}
@@ -371,7 +409,7 @@ const Transactions = () => {
 											</Stack>
 										</Collapse>
 										<Button leftIcon={isOpen ? <TriangleUpIcon /> : <TriangleDownIcon />} colorScheme={"blue"} variant={"outline"} onClick={onToggle}>{t("transactionsPage.filters.extensive")}</Button>
-										{extraFiltersUsed() && !isOpen? 
+										{extraFiltersUsed() && !isOpen?
 											<Tag colorScheme={"red"} size={"md"} variant={"subtle"}>
 												<Icon as={WarningTwoIcon} />
 												{t("transactionsPage.filters.active")}

@@ -30,10 +30,10 @@ class BanktransactionFilterView(BasicFilterView):
             new_query = new_query.filter(BankTransaction.id.in_(ids))
 
         if min_bedrag is not None:
-            new_query = new_query.filter(func.abs(BankTransaction.bedrag) > min_bedrag)
+            new_query = new_query.filter(func.abs(BankTransaction.bedrag) >= min_bedrag)
 
         if max_bedrag is not None:
-            new_query = new_query.filter(func.abs(BankTransaction.bedrag) < max_bedrag)
+            new_query = new_query.filter(func.abs(BankTransaction.bedrag) <= max_bedrag)
 
         if start_date is not None and valid_date(start_date):
             new_query = new_query.filter(BankTransaction.transactie_datum >= start_date)
