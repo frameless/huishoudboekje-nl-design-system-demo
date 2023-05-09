@@ -1,7 +1,7 @@
 import {Button, ButtonGroup, Collapse, FormControl, FormLabel, HStack, Icon, Input, InputGroup, InputLeftAddon, InputRightElement, NumberInput, NumberInputField, Radio, RadioGroup, Stack, Tag, Text, useDisclosure} from "@chakra-ui/react";
 import {useState} from "react";
 import {useTranslation} from "react-i18next";
-import {useStartAutomatischBoekenMutation, useSearchTransactiesQuery, BankTransaction, SearchTransactiesQueryVariables, useGetBurgersQuery, Burger, Rekening, SearchTransactiesDocument, useGetRekeningenQuery} from "../../../generated/graphql";
+import {useStartAutomatischBoekenMutation, useSearchTransactiesQuery, BankTransaction, SearchTransactiesQueryVariables, useGetBurgersQuery, Burger, Rekening, SearchTransactiesDocument, useGetRekeningenQuery, useGetOrganisatieQuery, useGetOrganisatiesQuery, Organisatie, useGetSimpleOrganisatiesQuery} from "../../../generated/graphql";
 import Queryable from "../../../utils/Queryable";
 import useHandleMutation from "../../../utils/useHandleMutation";
 import usePagination from "../../../utils/usePagination";
@@ -63,8 +63,10 @@ const Transactions = () => {
 
 	const [filterBurgerIds, setFilterBurgerIds] = useState<number[]>(banktransactieFilters.burgerIds || []);
 	const [filterRekeningIbans, setFilterRekeingIbans] = useState<string[]>(banktransactieFilters.ibans || []);
+	const [filterOrganisatieIds, setFilterOrganisatieIds] = useState<number[]>(banktransactieFilters.organisatieIds || []);
 	const $burgers = useGetBurgersQuery();
 	const $rekeningen = useGetRekeningenQuery();
+	const $organisaties = useGetSimpleOrganisatiesQuery();
 
 	const onSelectBurger = (value) => {
 		const newValue = value ? value.map(v => v.value) : []
@@ -72,6 +74,15 @@ const Transactions = () => {
 		setBanktransactieFilters({
 			...banktransactieFilters,
 			burgerIds: newValue.length > 0 ? newValue : undefined
+		})
+	};
+
+	const onSelectOrganisatie = (value) => {
+		const newValue = value ? value.map(v => v.value) : []
+		setFilterOrganisatieIds(newValue)
+		setBanktransactieFilters({
+			...banktransactieFilters,
+			organisatieIds: newValue.length > 0 ? newValue : undefined
 		})
 	};
 
@@ -319,7 +330,7 @@ const Transactions = () => {
 																		<Select  onChange={onSelectRekening} options={rekeningen.map(rekening => ({
 																			key: rekening.iban,
 																			value: rekening.iban,
-																			label: rekening.rekeninghouder,
+																			label: rekening.rekeninghouder + " (" + rekening.iban + ")",
 																		}))}
 																		styles={reactSelectStyles.default} isMulti isClearable={true} noOptionsMessage={() => t("select.noOptions")} maxMenuHeight={200}
 																		placeholder={t("transactionsPage.filters.none")} value={rekeningen_filter} />
@@ -328,7 +339,32 @@ const Transactions = () => {
 															</Stack>
 														);
 													}} />
-													<Queryable query={$burgers} children={data => {
+													<Queryable query={$organisaties} children={data => {
+														const organisaties: Organisatie[] = data.organisaties || [];
+														const organisatie_filter = organisaties.filter(organisatie => filterOrganisatieIds.includes(organisatie.id!)).map(organisatie => ({
+															key: organisatie.id,
+															value: organisatie.id,
+															label: organisatie.naam,
+														}));
+														return (
+															<Stack direction={"column"} spacing={5} flex={1}  paddingLeft={15}>
+																<HStack>
+																	<FormControl as={Stack} flex={1}>
+																		<FormLabel>{t("transactionsPage.filters.organisatie")}</FormLabel>
+																		<Select  onChange={onSelectOrganisatie} options={organisaties.map(organisatie => ({
+																			key: organisatie.id,
+																			value: organisatie.id,
+																			label: organisatie.naam,
+																		}))}
+																		styles={reactSelectStyles.default} isMulti isClearable={true} noOptionsMessage={() => t("select.noOptions")} maxMenuHeight={200}
+																		placeholder={t("transactionsPage.filters.none")} value={organisatie_filter} />
+																	</FormControl>
+																</HStack>
+															</Stack>
+														);
+													}} />
+												</HStack>
+												<Queryable query={$burgers} children={data => {
 														const burgers: Burger[] = data.burgers || [];
 														const burgers_filter = burgers.filter(b => filterBurgerIds.includes(b.id!)).map(b => ({
 															key: b.id,
@@ -336,9 +372,9 @@ const Transactions = () => {
 															label: formatBurgerName(b),
 														}));
 														return (
-															<Stack direction={"column"} spacing={5} flex={1}  paddingLeft={15}>
+															<Stack direction={"column"} spacing={5} flex={1}>
 																<HStack>
-																	<FormControl as={Stack} flex={1}>
+																	<FormControl as={Stack} flex={1} paddingBottom={15}>
 																		<FormLabel>{t("transactionsPage.filters.burgers")}</FormLabel>
 																		<Select  onChange={onSelectBurger} options={burgers.map(b => ({
 																			key: b.id,
@@ -353,8 +389,7 @@ const Transactions = () => {
 															</Stack>
 														);
 													}} />
-												</HStack>
-												<HStack>
+												<HStack paddingBottom={15}>
 													<FormControl>
 														<FormLabel>{t("transactionsPage.filters.amountFrom")}</FormLabel>
 														<InputGroup>

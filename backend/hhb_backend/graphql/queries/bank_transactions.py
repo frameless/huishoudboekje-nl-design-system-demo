@@ -113,8 +113,20 @@ class BankTransactionsSearchQuery:
             if filters.start_date is not None or filters.end_date is not None:
                 transactionsBuilder.by_date(start_date=filters.start_date, end_date=filters.end_date)
 
+            ibans = []
+
+            if filters.organisatie_ids is not None:
+                afdelingen = hhb_dataloader().afdelingen.by_organisaties(filters.organisatie_ids)
+                afdeling_ids = [afdeling.id for afdeling in afdelingen]
+                rekeningen = hhb_dataloader().rekeningen.by_afdelingen(afdeling_ids)
+                rekening_ibans = [rekening.iban for rekening in rekeningen]
+                ibans.extend(rekening_ibans)
+
             if filters.ibans is not None:
-                transactionsBuilder.by_ibans(filters.ibans)
+                ibans.extend(filters.ibans)
+
+            if len(ibans) > 0:
+                transactionsBuilder.by_ibans(ibans)
             
             if filters.only_booked is not None:
                 transactionsBuilder.by_booked(filters.only_booked)

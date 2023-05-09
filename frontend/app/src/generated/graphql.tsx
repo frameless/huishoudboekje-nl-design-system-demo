@@ -160,6 +160,7 @@ export type BankTransactionSearchFilter = {
   minBedrag?: InputMaybe<Scalars['Int']>;
   onlyBooked?: InputMaybe<Scalars['Boolean']>;
   onlyCredit?: InputMaybe<Scalars['Boolean']>;
+  organisatieIds?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
   startDate?: InputMaybe<Scalars['String']>;
   zoektermen?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };

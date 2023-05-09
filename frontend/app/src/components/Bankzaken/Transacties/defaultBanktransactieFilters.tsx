@@ -10,5 +10,6 @@ export const defaultBanktransactieFilters: BankTransactionSearchFilter = {
 	onlyBooked: false,
 	onlyCredit: undefined,
 	ibans: undefined,
-	zoektermen: undefined
+	zoektermen: undefined,
+	organisatieIds: undefined
 };
