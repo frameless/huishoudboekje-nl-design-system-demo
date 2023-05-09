@@ -2,27 +2,28 @@ import {BoxProps, Heading, Spinner, Stack, Text, useToken} from "@chakra-ui/reac
 import React, {useContext} from "react";
 import {useTranslation} from "react-i18next";
 import ChakraChart, {chartProps} from "../../config/theme/custom/Chart";
-import {BankTransaction, BurgerRapportage} from "../../generated/graphql";
+import {BankTransaction, BurgerRapportage, Saldo as StartSaldo} from "../../generated/graphql";
 import {prepareChartData} from "../../utils/things";
-import {createChartAggregation} from "./Aggregator";
+import {createChartAggregation, getStartingSaldo} from "./Aggregator";
 import {RapportageContext} from "./context";
 
-const Saldo: React.FC<BoxProps & {transactions: BurgerRapportage[]}> = ({transactions}) => {
+const Saldo: React.FC<BoxProps & {transactions: BurgerRapportage[], startSaldos: StartSaldo[]}> = ({transactions, startSaldos}) => {
 	const {t} = useTranslation();
 	const [colorSaldo] = useToken("colors", ["blue.300"]);
 	const {startDate, endDate, granularity} = useContext(RapportageContext);
 
 	const aggregation = createChartAggregation(transactions, granularity);
+	let startSaldo = getStartingSaldo(startSaldos)
 
 	const columns = [t("interval.month", {count: 2}), t("charts.saldo.title")];
 	const chartTemplate = prepareChartData(startDate, endDate, granularity, columns.length - 1);
 	const generateChartData = (chartTemplate, aggregation) => {
-		let saldo = 0;
+		let saldo = startSaldo
 		return chartTemplate.map(chartItem => {
 			const [period] = chartItem;
 			const {income = 0, expenses = 0} = aggregation[period] || {};
 			saldo += income + expenses;
-
+			startSaldo += income + expenses
 			return [
 				period,
 				saldo,

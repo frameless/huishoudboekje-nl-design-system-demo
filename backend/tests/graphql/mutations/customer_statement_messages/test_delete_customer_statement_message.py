@@ -5,9 +5,11 @@ from hhb_backend.graphql import settings
 
 def test_delete_csm(client):
     with requests_mock.Mocker() as rm:
-        fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
+        fallback = rm.register_uri(
+            requests_mock.ANY, requests_mock.ANY, status_code=404)
 
-        log_post = rm.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", json={"data": {"id": 1}})
+        log_post = rm.post(
+            f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", json={"data": {"id": 1}})
         get_csm = rm.get(
             f"{settings.TRANSACTIE_SERVICES_URL}/customerstatementmessages/?filter_ids=2",
             json={"data": [{'account_identification': 'NL69INGB0123456789EUR', 'bank_transactions': [11, 12],
@@ -20,9 +22,11 @@ def test_delete_csm(client):
         )
         get_journaalpost = rm.get(
             f"{settings.HHB_SERVICES_URL}/journaalposten/?filter_transactions=11,12",
-            json={"data": [{"id": 1, "transaction_id": 11, "afspraak_id": None}]},
+            json={
+                "data": [{"id": 1, "transaction_id": 11, "afspraak_id": None}]},
             status_code=200,
         )
+
         delete_journaalpost = rm.delete(
             f"{settings.HHB_SERVICES_URL}/journaalposten/1", status_code=200
         )

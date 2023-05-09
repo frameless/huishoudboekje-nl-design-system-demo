@@ -48,7 +48,7 @@ class RapportageController():
         rapportage_transactions = self.__add_info_to_transactions_in_range(transactions_info, transactions_in_range)
         if len(burger_ids) > 0:
             rapportages = [self.__generate_rapportage(burger_id, \
-                                        list(filter(lambda transaction: transaction[self.BURGER_ID] is burger_id, rapportage_transactions)),\
+                                        list(filter(lambda transaction: transaction[self.BURGER_ID] == burger_id, rapportage_transactions)),\
                                         start,\
                                         end)\
                                 for burger_id in burger_ids

@@ -1,9 +1,8 @@
 import {Text, Tabs, Stack, Tab, TabPanels, TabPanel} from "@chakra-ui/react";
 import {useTranslation} from "react-i18next";
-import {BurgerRapportage, useGetBurgerRapportagesQuery} from "../../generated/graphql";
+import {BurgerRapportage, Saldo as startSaldo, useGetBurgerRapportagesQuery, useGetSaldoClosestToQuery} from "../../generated/graphql";
 import Queryable from "../../utils/Queryable";
 import Saldo from "./Saldo";
-import {humanJoin, formatBurgerName} from "../../utils/things";
 import SectionContainer from "../shared/SectionContainer";
 import InkomstenUitgaven from "./InkomstenUitgaven";
 import d from "../../utils/dayjs";
@@ -32,6 +31,14 @@ const RapportageComponent: React.FC<RapportageComponentParams> = ({burgerIds, st
 		}
 	});
 
+	const $saldoStart = useGetSaldoClosestToQuery({
+		variables: {
+			burger_ids: burgerIds,
+			date: d(startDate).format("YYYY-MM-DD")
+		},
+		fetchPolicy: "cache-and-network"
+	})
+
 	//Return here because react gives errors if it doesnt render the same amount of hooks (the query) each time
 	if (!correctDate) {
 		return (
@@ -41,34 +48,38 @@ const RapportageComponent: React.FC<RapportageComponentParams> = ({burgerIds, st
 
 	return (
 		<Queryable query={$rapportage} children={data => {
-
 			if (data.burgerRapportages === null) {
 				return (
 					<Text color={"red"}>{t("reports.noData")}</Text>
 				);
 			}
 			const reports: [BurgerRapportage] = data.burgerRapportages
-			
+
 			return (
-				<Stack className="do-not-print">
-					<SectionContainer>
-						<Tabs isLazy variant={"solid"} align={"start"} colorScheme={"primary"}>
-							<Stack direction={"row"} spacing={2}>
-								<Tab>{t("charts.saldo.title")}</Tab>
-								<Tab>{t("charts.inkomstenUitgaven.title")}</Tab>
-							</Stack>
-							<TabPanels>
-								<TabPanel>
-									<Saldo transactions={reports} />
-								</TabPanel>
-								<TabPanel>
-									<InkomstenUitgaven transactions={reports} />
-								</TabPanel>
-							</TabPanels>
-						</Tabs>
-					</SectionContainer>
-					<BalanceTable transactions={reports} startDate={d(startDate).format("L")} endDate={d(endDate).format("L")} />
-				</Stack>
+				<Queryable query={$saldoStart} children={data => {
+					const startSaldos: [startSaldo] = data.saldoClosest
+					return (
+						<Stack className="do-not-print">
+							<SectionContainer>
+								<Tabs isLazy variant={"solid"} align={"start"} colorScheme={"primary"}>
+									<Stack direction={"row"} spacing={2}>
+										<Tab>{t("charts.saldo.title")}</Tab>
+										<Tab>{t("charts.inkomstenUitgaven.title")}</Tab>
+									</Stack>
+									<TabPanels>
+										<TabPanel>
+											<Saldo transactions={reports} startSaldos={startSaldos} />
+										</TabPanel>
+										<TabPanel>
+											<InkomstenUitgaven transactions={reports} />
+										</TabPanel>
+									</TabPanels>
+								</Tabs>
+							</SectionContainer>
+							<BalanceTable transactions={reports} startDate={d(startDate).format("L")} endDate={d(endDate).format("L")} startSaldos={startSaldos} />
+						</Stack>
+					)
+				}} />
 			)
 		}} />
 	);
