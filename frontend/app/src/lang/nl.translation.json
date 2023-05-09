@@ -621,8 +621,8 @@
     "filters": {
       "status": "Status",
       "direction": "Richting",
-      "unbooked": "Niet geboekt",
-      "booked": "Geboekt",
+      "unbooked": "Niet afgeletterd",
+      "booked": "Afgeletterd",
       "all": "Alle",
       "incomes": "Inkomsten",
       "expenses": "Uitgaven",

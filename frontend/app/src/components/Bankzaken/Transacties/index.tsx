@@ -224,11 +224,11 @@ const Transactions = () => {
 												<FormLabel>{t("transactionsPage.filters.direction")}</FormLabel>
 												<RadioGroup defaultValue={defaultValueRadio(banktransactieFilters.onlyCredit)} onChange={onChangeCreditRadio}>
 													<Stack spacing={5} direction={"row"}>
-														<Radio colorScheme={"blue"} value={"1"}>
-															{t("transactionsPage.filters.expenses")}
-														</Radio>
 														<Radio colorScheme={"blue"} value={"2"}>
 															{t("transactionsPage.filters.incomes")}
+														</Radio>
+														<Radio colorScheme={"blue"} value={"1"}>
+															{t("transactionsPage.filters.expenses")}
 														</Radio>
 														<Radio colorScheme={"blue"} value={"3"}>
 															{t("transactionsPage.filters.all")}
@@ -274,7 +274,6 @@ const Transactions = () => {
 												<Stack>
 													<FormLabel>{t("filters.transactions.pageSize")}</FormLabel>
 													<ButtonGroup size={"sm"} isAttached>
-														<Button colorScheme={pageSize === 25 ? "primary" : "gray"} onClick={() => setPageSize(25)}>25</Button>
 														<Button colorScheme={pageSize === 50 ? "primary" : "gray"} onClick={() => setPageSize(50)}>50</Button>
 														<Button colorScheme={pageSize === 100 ? "primary" : "gray"} onClick={() => setPageSize(100)}>100</Button>
 														<Button colorScheme={pageSize === 250 ? "primary" : "gray"} onClick={() => setPageSize(250)}>250</Button>
