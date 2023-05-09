@@ -63,7 +63,7 @@ def test_delete_csm(client):
             content_type="application/json",
         )
 
-        # assert fallback.call_count == 0
+        assert fallback.call_count == 0
         assert get_banktransacties.call_count == 1
         assert log_post.call_count == 1
         assert get_csm.call_count == 1
