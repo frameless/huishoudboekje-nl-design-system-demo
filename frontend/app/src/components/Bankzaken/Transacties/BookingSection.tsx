@@ -1,19 +1,21 @@
 import {Box, Button, Divider, FormControl, FormLabel, HStack, Input, InputGroup, InputRightElement, Radio, RadioGroup, RangeSlider, RangeSliderFilledTrack, RangeSliderMark, RangeSliderThumb, RangeSliderTrack, Stack, Tab, Table, TabList, TabPanel, TabPanels, Tabs, Tbody, Text, Th, Thead, Tr} from "@chakra-ui/react";
-import React, { useState } from "react";
+import React, {useState} from "react";
 import {useTranslation} from "react-i18next";
 import Select from "react-select";
-import {Afspraak, Burger, BankTransaction, GetTransactieDocument, Rubriek, useCreateJournaalpostAfspraakMutation, useCreateJournaalpostGrootboekrekeningMutation, useGetSimilarAfsprakenLazyQuery, useGetBurgersAndOrganisatiesQuery, Organisatie, useGetSearchAfsprakenQuery} from "../../../generated/graphql";
-import {formatBurgerName, useReactSelectStyles} from "../../../utils/things";
+import {Afspraak, Burger, BankTransaction, GetTransactieDocument, GetSaldoDocument, Rubriek, useCreateJournaalpostAfspraakMutation, useCreateJournaalpostGrootboekrekeningMutation, useGetSimilarAfsprakenLazyQuery, useGetBurgersAndOrganisatiesQuery, Organisatie, useGetSearchAfsprakenQuery, useCreateSaldoMutation, useUpdateSaldoMutation} from "../../../generated/graphql";
 import useToaster from "../../../utils/useToaster";
 import SelectAfspraakOption from "../../shared/SelectAfspraakOption";
-import {TriangleDownIcon, TriangleUpIcon } from "@chakra-ui/icons";
+import {TriangleDownIcon, TriangleUpIcon} from "@chakra-ui/icons";
 import usePagination from "../../../utils/usePagination";
 import Queryable from "../../../utils/Queryable";
 import ZoektermenList from "../../shared/ZoektermenList";
+import {floatMathOperation, MathOperation, useReactSelectStyles, formatBurgerName} from "../../../utils/things";
+import d from "../../../utils/dayjs";
+import {useLazyQuery} from "@apollo/client/react/hooks/useLazyQuery";
 
-export function isSuggestie(suggestie: Afspraak, transaction: BankTransaction): boolean{
+export function isSuggestie(suggestie: Afspraak, transaction: BankTransaction): boolean {
 	//Only check on zoektermen because the backend checks on iban (on organisation level)
-	if( suggestie.zoektermen?.every(zoekterm => transaction.informationToAccountOwner?.includes(zoekterm))){
+	if (suggestie.zoektermen?.every(zoekterm => transaction.informationToAccountOwner?.includes(zoekterm))) {
 		return true
 	}
 	return false
@@ -24,14 +26,17 @@ const BookingSection = ({transaction, rubrieken}) => {
 	const toast = useToaster();
 	const {t} = useTranslation();
 	const suggesties: Afspraak[] = transaction.suggesties || [];
-	const ids = suggesties ? suggesties.map( suggestie => suggestie.id ? suggestie.id : -1).filter(id => id !== -1) : []
+	const ids = suggesties ? suggesties.map(suggestie => suggestie.id ? suggestie.id : -1).filter(id => id != -1) : []
 	const [showExtraAfspraken, setShowExtraAfspraken] = React.useState(false);
 
-	const [getSimilarAfspraken, { loading, data }] = useGetSimilarAfsprakenLazyQuery({
+
+	const [getSimilarAfspraken, similairAfsprakenQuery] = useGetSimilarAfsprakenLazyQuery({
 		variables: {
 			ids: ids
 		},
 	});
+
+
 
 	const options: {
 		suggesties: Afspraak[]
@@ -52,13 +57,14 @@ const BookingSection = ({transaction, rubrieken}) => {
 
 	const toggleShowExtraAfspraken = () => {
 		setShowExtraAfspraken(!showExtraAfspraken)
-		if (data === undefined && ids.length > 0){
+		if (similairAfsprakenQuery.data == undefined && ids.length > 0) {
 			getSimilarAfspraken()
 		}
 	}
 
-	if(data !== undefined && showExtraAfspraken){
-		data.afspraken?.forEach(afspraak => {
+	if (similairAfsprakenQuery.data != undefined && showExtraAfspraken) {
+		similairAfsprakenQuery.data.afspraken?.forEach(afspraak => {
+
 			const similar: Afspraak[] = afspraak.similarAfspraken ? afspraak.similarAfspraken : []
 			similarAfspraken.push(...similar)
 		})
@@ -67,9 +73,12 @@ const BookingSection = ({transaction, rubrieken}) => {
 			.sort((a, b) => Math.abs(a.bedrag - num) - Math.abs(b.bedrag - num))));
 		options.afspraken = similarAfspraken
 	}
-	if(data === undefined || !showExtraAfspraken){
+	if (similairAfsprakenQuery.data === undefined || !showExtraAfspraken) {
 		options.afspraken = []
 	}
+
+	const [createSaldo] = useCreateSaldoMutation()
+	const [updateSaldo] = useUpdateSaldoMutation()
 
 	// const [evaluateAlarm] = useEvaluateAlarmMutation();
 	const [createJournaalpostAfspraak] = useCreateJournaalpostAfspraakMutation({
@@ -91,6 +100,10 @@ const BookingSection = ({transaction, rubrieken}) => {
 		],
 	});
 
+	const [getSaldo] = useLazyQuery(GetSaldoDocument, {
+		fetchPolicy: "no-cache"
+	})
+
 	const onSelectRubriek = (val) => {
 		const foundRubriek = rubrieken.find(r => r.grootboekrekening?.id === val.value);
 
@@ -109,6 +122,12 @@ const BookingSection = ({transaction, rubrieken}) => {
 		}
 	};
 
+	function calculateNewSaldo(oldSaldo, newSaldo) {
+		let saldo = (+oldSaldo * 100) + (+newSaldo * 100)
+		saldo = saldo / 100
+		return saldo
+	}
+
 	const onSelectAfspraak = (afspraak: Afspraak) => {
 		const transactionId = transaction?.id;
 		const afspraakId = afspraak.id;
@@ -122,11 +141,49 @@ const BookingSection = ({transaction, rubrieken}) => {
 				console.error(err);
 				toast({error: err.message});
 			});
+			const transactionDate = transaction.transactieDatum
+			const burgerId: number = afspraak?.burger?.id ?? 0
+
+			getSaldo({
+				variables: {
+					burger_ids: [burgerId],
+					date: d(transactionDate).format("YYYY-MM-DD")
+				}
+			}).then(
+				(result) => {
+					if (result.data.saldo.length > 0) {
+						const saldo = floatMathOperation(result.data.saldo[0]?.saldo, transaction.bedrag, 2, MathOperation.Plus);
+						updateSaldo({
+							variables: {
+								input: {
+									id: result.data.saldo[0]?.id,
+									saldo: saldo
+								}
+							}
+						})
+					}
+					else if (result.data.saldo.length === 0) {
+						const startingDate = d(transactionDate).startOf("month").format("YYYY-MM-DD");
+						const endDate = d(transactionDate).endOf("month").format("YYYY-MM-DD");
+
+						createSaldo({
+							variables: {
+								input: {
+									begindatum: startingDate,
+									einddatum: endDate,
+									saldo: transaction.bedrag,
+									burgerId: burgerId
+								}
+							}
+						})
+					}
+				}
+			)
 		}
 	};
 	const {offset, setTotal, goFirst, PaginationButtons} = usePagination({pageSize: 25});
 
-	const searchVariables : {
+	const searchVariables: {
 		offset: number,
 		limit: number,
 		afspraken: number[] | undefined,
@@ -136,8 +193,8 @@ const BookingSection = ({transaction, rubrieken}) => {
 		min_bedrag: number | undefined,
 		max_bedrag: number | undefined,
 		zoektermen: string[] | undefined
-	}= {
-		offset: offset -1,
+	} = {
+		offset: offset - 1,
 		limit: 25,
 		afspraken: undefined,
 		afdelingen: undefined,
@@ -171,13 +228,13 @@ const BookingSection = ({transaction, rubrieken}) => {
 	const [valid, setOnlyValid] = useState(true)
 
 	const onChangeValidRadio = (value) => {
-		if(value === "1"){
+		if (value === "1") {
 			onSetOnlyValid(true)
 		}
-		if(value === "2"){
+		if (value === "2") {
 			onSetOnlyValid(false)
 		}
-		if(value === "3"){
+		if (value === "3") {
 			onSetOnlyValid(undefined)
 		}
 	}
@@ -194,13 +251,13 @@ const BookingSection = ({transaction, rubrieken}) => {
 	searchVariables.min_bedrag = sliderValue[0] !== 0 ? sliderValue[0] * 100 : undefined
 	searchVariables.max_bedrag = sliderValue[1] !== 5000 ? sliderValue[1] * 100 : undefined
 	searchVariables.only_valid = valid
-	if(filterOrganisatieids.length > 0){
-		const organisaties: Organisatie[] =  $burgersAndOrganisaties.data?.organisaties || []
-		const filteredOrganisaties = organisaties.filter(organisatie => organisatie.id? filterOrganisatieids.includes(organisatie.id) : false)
-		const afdelingen = filteredOrganisaties.map(organisatie => organisatie.afdelingen? organisatie.afdelingen : []).flat() || []
-		searchVariables.afdelingen =  afdelingen.map(afdeling => afdeling.id? afdeling.id : -1).filter(id => id !== -1)
+	if (filterOrganisatieids.length > 0) {
+		const organisaties: Organisatie[] = $burgersAndOrganisaties.data?.organisaties || []
+		const filteredOrganisaties = organisaties.filter(organisatie => organisatie.id ? filterOrganisatieids.includes(organisatie.id) : false)
+		const afdelingen = filteredOrganisaties.map(organisatie => organisatie.afdelingen ? organisatie.afdelingen : []).flat() || []
+		searchVariables.afdelingen = afdelingen.map(afdeling => afdeling.id ? afdeling.id : -1).filter(id => id !== -1)
 	}
-	else{
+	else {
 		searchVariables.afdelingen = undefined
 	}
 	searchVariables.zoektermen = zoektermen.length > 0 ? zoektermen : undefined
@@ -209,7 +266,7 @@ const BookingSection = ({transaction, rubrieken}) => {
 
 	const onAddzoekterm = (e) => {
 		e.preventDefault();
-		const list : string[] = []
+		const list: string[] = []
 		list.push(zoekterm)
 		const newZoektermen = zoektermen.concat(list)
 		setZoektermen(newZoektermen)
@@ -218,9 +275,9 @@ const BookingSection = ({transaction, rubrieken}) => {
 	};
 
 	const onDeleteZoekterm = (value) => {
-		const list : string[] = zoektermen.slice()
+		const list: string[] = zoektermen.slice()
 		const index = zoektermen.indexOf(value)
-		list.splice(index,1)
+		list.splice(index, 1)
 		setZoektermen(list)
 		setZoekterm(zoekterm)
 		goFirst()
@@ -276,9 +333,9 @@ const BookingSection = ({transaction, rubrieken}) => {
 										)}
 										<Box>
 											<Text>
-												{!loading && showExtraAfspraken && similarAfspraken.length === 0 ? t("bookingSection.noSimilarAfspraken") : ""}
+												{!similairAfsprakenQuery.loading && showExtraAfspraken && similarAfspraken.length === 0 ? t("bookingSection.noSimilarAfspraken") : ""}
 											</Text>
-											<Button  isLoading={loading} leftIcon={showExtraAfspraken ? <TriangleUpIcon /> : <TriangleDownIcon />} colorScheme={"primary"} size={"sm"} onClick={toggleShowExtraAfspraken} >
+											<Button isLoading={similairAfsprakenQuery.loading} leftIcon={showExtraAfspraken ? <TriangleUpIcon /> : <TriangleDownIcon />} colorScheme={"primary"} size={"sm"} onClick={toggleShowExtraAfspraken} >
 												{t("bookingSection.similarAfspraken")}
 											</Button>
 										</Box>

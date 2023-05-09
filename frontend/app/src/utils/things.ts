@@ -37,6 +37,13 @@ export const Regex = {
 
 export const Months = ["jan", "feb", "mrt", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"];
 
+export enum MathOperation {
+	Plus,
+	Minus,
+	Divide,
+	Times
+}
+
 type DrawerContextProps = {
 	onClose: () => void
 };
@@ -175,6 +182,29 @@ export const truncateText = (str: string, maxLength = 50) => {
 
 	return str;
 };
+
+export function floatMathOperation(left, right, decimals: number, operation: MathOperation) {
+	const modifier: number = 10 ^ decimals;
+	const leftModified = +left * modifier;
+	const rightModified = +right * modifier;
+	let result = 0;
+	switch (operation) {
+		case MathOperation.Plus:
+			result = leftModified + rightModified
+			break;
+		case MathOperation.Minus:
+			result = leftModified - rightModified
+			break;
+		case MathOperation.Divide:
+			result = leftModified / rightModified
+			break;
+		case MathOperation.Times:
+			result = leftModified * rightModified
+			break;
+		default: throw new TypeError('operation not supported')
+	}
+	return result / modifier
+}
 
 export const isAfspraakActive = (afspraak: Afspraak) => {
 	const {validThrough} = afspraak;

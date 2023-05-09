@@ -23,8 +23,8 @@ const Rapportage = () => {
 	const filterModal = useDisclosure();
 
 	const [dateRange, setDateRange] = useState<Required<DateRange>>({
-		from: d().startOf("month").toDate(),
-		through: d().endOf("month").toDate(),
+		from: d().startOf("month").subtract(1, "month").toDate(),
+		through: d().endOf("month").subtract(1, "month").toDate(),
 	});
 
 	const [granularity, setGranularity] = useState<Granularity>(Granularity.Weekly);
@@ -113,7 +113,7 @@ const Rapportage = () => {
 															key: r.id,
 															value: r.id,
 															label: r.naam,
-														}))} styles={reactSelectStyles.default} isMulti isClearable={true} noOptionsMessage={() => t("select.noOptions")} maxMenuHeight={200} placeholder={t("charts.optionAllRubrics")} value={rubrieken_filter}  />
+														}))} styles={reactSelectStyles.default} isMulti isClearable={true} noOptionsMessage={() => t("select.noOptions")} maxMenuHeight={200} placeholder={t("charts.optionAllRubrics")} value={rubrieken_filter} />
 													);
 												}} />
 											</FormControl>

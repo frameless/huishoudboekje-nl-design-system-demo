@@ -233,6 +233,10 @@
         "signalen": {
           "title": "Signalen",
           "detailText": "Signalen van de burger."
+        },
+        "saldo": {
+          "title": "Saldo",
+          "noSaldo": "Geen saldo beschikbaar voor burger"
         }
       },
       "fields": {
@@ -849,7 +853,7 @@
   },
   "balance": "Balans",
   "reports": {
-    "period": "Rapportageperiode: van <strong>{{from}}</strong> tot en met <strong>{{through}}</strong>.",
+    "period": "Rapportageperiode: van <strong>{{from}}</strong> tot en met <strong>{{through}}</strong>",
     "title": "Rapportage",
     "noData": "Geen data gevonden van de gegeven burger(s) in de gegeven periode",
     "toManyBurgers": "Selecteer één burger (Ondersteuning voor meerdere burgers is nog niet geïmplementeerd)",
@@ -859,6 +863,7 @@
   "total income": "Totaal Inkomsten",
   "total expenses": "Totaal Uitgaven",
   "total income expenses in period": "Totaal inkomsten en uitgaven in periode",
+  "end saldo at": "Saldo in Huishoudboekje op",
   "saldo": "Saldo",
   "granularity": {
     "daily": "Dag",

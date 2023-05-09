@@ -11,6 +11,7 @@ from hhb_backend.graphql.models.customer_statement_message import (
     CustomerStatementMessage,
 )
 from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
+from hhb_backend.processen.saldo_berekenen import update_or_create_saldo
 
 
 class DeleteCustomerStatementMessage(graphene.Mutation):
@@ -33,12 +34,17 @@ class DeleteCustomerStatementMessage(graphene.Mutation):
         journaalposten = hhb_dataloader().journaalposten.by_transactions(transaction_ids)
         for journaalpost in journaalposten:
             if journaalpost is not None:
-                response = requests.delete(f"{settings.HHB_SERVICES_URL}/journaalposten/{journaalpost['id']}")
+                response = requests.delete(
+                    f"{settings.HHB_SERVICES_URL}/journaalposten/{journaalpost['id']}")
                 if not response.ok:
-                    raise GraphQLError(f"Upstream API responded: {response.text}")
+                    raise GraphQLError(
+                        f"Upstream API responded: {response.text}")
+                if journaalpost.afspraak_id != None:
+                    update_or_create_saldo(journaalpost, True)
 
         for transaction in transaction_ids:
-            response = requests.delete(f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/{transaction}")
+            response = requests.delete(
+                f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/{transaction}")
             if not response.ok:
                 raise GraphQLError(f"Upstream API responded: {response.text}")
 
@@ -46,12 +52,14 @@ class DeleteCustomerStatementMessage(graphene.Mutation):
             f"{settings.TRANSACTIE_SERVICES_URL}/customerstatementmessages/{id}"
         )
         if not delete_response_hhb.ok:
-            raise GraphQLError(f"Upstream API responded: {delete_response_hhb.text}")
+            raise GraphQLError(
+                f"Upstream API responded: {delete_response_hhb.text}")
 
         AuditLogging.create(
             action=info.field_name,
             entities=[
-                GebruikersActiviteitEntity(entityType="customerStatementMessage", entityId=id)
+                GebruikersActiviteitEntity(
+                    entityType="customerStatementMessage", entityId=id)
             ],
             before=dict(customerStatementMessage=previous),
         )

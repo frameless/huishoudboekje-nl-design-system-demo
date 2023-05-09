@@ -1,5 +1,5 @@
 import {Maybe} from "graphql/jsutils/Maybe";
-import {BankTransaction, BurgerRapportage, RapportageTransactie, RapportageRubriek, Organisatie, Rubriek, Scalars} from "../../generated/graphql";
+import {BankTransaction, BurgerRapportage, RapportageTransactie, RapportageRubriek, Organisatie, Rubriek, Scalars, Saldo} from "../../generated/graphql";
 import d from "../../utils/dayjs";
 import {formatBurgerName, getOrganisatieForTransaction, getRubriekForTransaction} from "../../utils/things";
 
@@ -78,6 +78,14 @@ export function createBalanceTableAggregation(burgerRapportages: BurgerRapportag
 	}
 
 	return result;
+}
+
+export function getStartingSaldo(saldos: Saldo[]) {
+	let startingSaldo = 0;
+	for (const saldo of saldos) {
+		startingSaldo += parseFloat(saldo.saldo);
+	}
+	return startingSaldo;
 }
 
 function getTransactionsFromRapportageRubrieks(rapportageRubrieken: RapportageRubriek[], type: Type): Transaction[] {

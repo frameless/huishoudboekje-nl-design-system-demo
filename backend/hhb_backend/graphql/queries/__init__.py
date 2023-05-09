@@ -18,7 +18,7 @@ from .organisaties import OrganisatieQuery, OrganisatiesQuery
 from .postadressen import PostadressenQuery, PostadresQuery
 from .rekeningen import RekeningQuery, RekeningenByIbansQuery, RekeningenQuery
 from .rubrieken import RubriekQuery, RubriekenQuery
-from .saldo import SaldoQuery
+from .saldo import SaldoClosestQuery, SaldoQuery, SaldoRangeQuery
 from .signalen import SignaalQuery, SignalenQuery
 from .rapportages import BurgerRapportagesQuery
 
@@ -62,6 +62,8 @@ class RootQuery(graphene.ObjectType):
     postadres = PostadresQuery.return_type
     postadressen = PostadressenQuery.return_type
     saldo = SaldoQuery.return_type
+    saldo_range = SaldoRangeQuery.return_type
+    saldo_closest = SaldoClosestQuery.return_type
     alarm = AlarmQuery.return_type
     alarmen = AlarmenQuery.return_type
     signaal = SignaalQuery.return_type
@@ -195,7 +197,13 @@ class RootQuery(graphene.ObjectType):
 
     def resolve_saldo(root, info, **kwargs):
         return SaldoQuery.resolver(root, info, **kwargs)
-    
+
+    def resolve_saldo_range(root, info, **kwargs):
+        return SaldoRangeQuery.resolver(root, info, **kwargs)
+
+    def resolve_saldo_closest(root, info, **kwargs):
+        return SaldoClosestQuery.resolver(root, info, **kwargs)
+
     def resolve_burger_rapportages(root, info, **kwargs):
         return BurgerRapportagesQuery.resolver(root, info, **kwargs)
     
