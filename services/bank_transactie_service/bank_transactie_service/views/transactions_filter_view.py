@@ -54,4 +54,4 @@ class BanktransactionFilterView(BasicFilterView):
             clauses = [func.lower(BankTransaction.information_to_account_owner).like(f"%{term.lower()}%") for term in zoektermen]
             new_query =  new_query.filter(and_(*clauses))
 
-        return new_query #misschien later mogelijk maken om errors terug te kunnen geven
+        return new_query

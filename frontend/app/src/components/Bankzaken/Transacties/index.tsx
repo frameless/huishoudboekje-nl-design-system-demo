@@ -224,14 +224,14 @@ const Transactions = () => {
 												<FormLabel>{t("transactionsPage.filters.direction")}</FormLabel>
 												<RadioGroup defaultValue={defaultValueRadio(banktransactieFilters.onlyCredit)} onChange={onChangeCreditRadio}>
 													<Stack spacing={5} direction={"row"}>
+														<Radio colorScheme={"blue"} value={"3"}>
+															{t("transactionsPage.filters.all")}
+														</Radio>
 														<Radio colorScheme={"blue"} value={"2"}>
 															{t("transactionsPage.filters.incomes")}
 														</Radio>
 														<Radio colorScheme={"blue"} value={"1"}>
 															{t("transactionsPage.filters.expenses")}
-														</Radio>
-														<Radio colorScheme={"blue"} value={"3"}>
-															{t("transactionsPage.filters.all")}
 														</Radio>
 													</Stack>
 												</RadioGroup>
@@ -250,6 +250,7 @@ const Transactions = () => {
 																	startDate: value ? d(value).format("YYYY-MM-DD"): undefined
 																});
 															}}
+															showYearDropdown={true}
 															customInput={<Input type={"text"} />}
 															isClearable={true}
 														/>
@@ -264,6 +265,7 @@ const Transactions = () => {
 																	endDate: value ? d(value).format("YYYY-MM-DD"): undefined
 																});
 															}}
+															showYearDropdown={true}
 															customInput={<Input type={"text"} />}
 															isClearable={true}
 														/>
@@ -321,7 +323,7 @@ const Transactions = () => {
 															<Stack direction={"column"} spacing={5} flex={1}>
 																<HStack>
 																	<FormControl as={Stack} flex={1}>
-																		<FormLabel>{t("charts.filterBurgers")}</FormLabel>
+																		<FormLabel>{t("transactionsPage.filters.burgers")}</FormLabel>
 																		<Select  onChange={onSelectBurger} options={burgers.map(b => ({
 																			key: b.id,
 																			value: b.id,

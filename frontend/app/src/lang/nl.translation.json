@@ -620,7 +620,7 @@
     "helperText": "Dit is een lijst van alle banktransacties in het Huishoudboekje.",
     "filters": {
       "status": "Status",
-      "direction": "Richting",
+      "direction": "Betaalrichting",
       "unbooked": "Niet afgeletterd",
       "booked": "Afgeletterd",
       "all": "Alle",
@@ -628,9 +628,10 @@
       "expenses": "Uitgaven",
       "description": "Zoeken in omschrijving",
       "active": "Uitgebreide filters actief",
-      "from": "Periode van",
-      "to": "Periode tot",
-      "accounts": "Filter op rekeningen",
+      "from": "Datum van",
+      "to": "Datum tot",
+      "accounts": "Rekeningen",
+      "burgers": "Burgers",
       "extensive": "Uitgebreid zoeken",
       "count": "Aantal gevonden transacties",
       "none": "Geen"
