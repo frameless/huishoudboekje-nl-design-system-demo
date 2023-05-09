@@ -1,4 +1,5 @@
 import {PrismaClientInitializationError} from "@prisma/client/runtime/library";
+import log from "loglevel";
 import {ZodError} from "zod";
 
 enum ErrorCodes {
@@ -46,7 +47,7 @@ export class UnknownError extends HttpError {
 
 	constructor(err) {
 		super();
-		console.error("Unknown Error", {err});
+		log.error("Unknown Error", {err});
 	}
 
 }
@@ -57,7 +58,7 @@ export const errorHandler = (err, req, res, next) => {
 	}
 
 	if (process.env.NODE_ENV !== "test") {
-		console.error("[ERROR]", err);
+		log.error("[ERROR]", err);
 	}
 
 	if (err instanceof PrismaClientInitializationError) {

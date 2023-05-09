@@ -1,3 +1,5 @@
+import log from "loglevel";
+
 export const getConfig = () => {
 	const {
 		NODE_ENV,
@@ -16,31 +18,31 @@ export const getConfig = () => {
 	let missingEnvvarsError = false;
 	if (!process.env.JWT_SECRET) {
 		missingEnvvarsError = true;
-		console.error("ERROR: Missing environment variable JWT_SECRET");
+		log.error("ERROR: Missing environment variable JWT_SECRET");
 	}
 	if (!process.env.JWT_AUDIENCE) {
 		missingEnvvarsError = true;
-		console.error("ERROR: Missing environment variable JWT_AUDIENCE");
+		log.error("ERROR: Missing environment variable JWT_AUDIENCE");
 	}
 	if (!process.env.JWT_ISSUER) {
 		missingEnvvarsError = true;
-		console.error("ERROR: Missing environment variable JWT_ISSUER");
+		log.error("ERROR: Missing environment variable JWT_ISSUER");
 	}
 	if (!process.env.OIDC_BASE_URL) {
 		missingEnvvarsError = true;
-		console.error("ERROR: Missing environment variable OIDC_BASE_URL");
+		log.error("ERROR: Missing environment variable OIDC_BASE_URL");
 	}
 	if (!process.env.OIDC_CLIENT_ID) {
 		missingEnvvarsError = true;
-		console.error("ERROR: Missing environment variable OIDC_CLIENT_ID");
+		log.error("ERROR: Missing environment variable OIDC_CLIENT_ID");
 	}
 	if (!process.env.OIDC_CLIENT_SECRET) {
 		missingEnvvarsError = true;
-		console.error("ERROR: Missing environment variable OIDC_CLIENT_SECRET");
+		log.error("ERROR: Missing environment variable OIDC_CLIENT_SECRET");
 	}
 	if (!process.env.OIDC_ISSUER_URL) {
 		missingEnvvarsError = true;
-		console.error("ERROR: Missing environment variable OIDC_ISSUER_URL");
+		log.error("ERROR: Missing environment variable OIDC_ISSUER_URL");
 	}
 
 	if (missingEnvvarsError) {

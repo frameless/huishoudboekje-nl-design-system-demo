@@ -5,6 +5,7 @@ import express from "express";
 import {auth} from "express-openid-connect";
 import {getConfig} from "./config";
 import SessionHelper from "./SessionHelper";
+import log from "loglevel";
 
 const config = getConfig();
 
@@ -61,7 +62,7 @@ const server = (prefix: string = "/auth") => {
 			// Check with the OIDC provider if the user is authenticated.
 			if (req.oidc.isAuthenticated()) {
 				const tokenContent = req.oidc.user;
-				console.log("OIDC provider found an authenticated user:", tokenContent);
+				log.debug("OIDC provider found an authenticated user:", tokenContent);
 
 				// Check if the token is expired, if so, try to refresh.
 				const isExpired = req.oidc.accessToken?.isExpired();
@@ -70,7 +71,8 @@ const server = (prefix: string = "/auth") => {
 				}
 
 				const user = await req.oidc.fetchUserInfo();
-				console.log("User found:", user);
+				log.info("User found:");
+				log.debug("User found:", user);
 
 				sessionHelper.createSession(res, user);
 				return res.json({
@@ -80,11 +82,11 @@ const server = (prefix: string = "/auth") => {
 			}
 		}
 		catch (err) {
-			console.log("OIDC provider didn't recognize user.", err);
+			log.error("OIDC provider didn't recognize user.");
 		}
 
 		// If no user was found, deny access.
-		console.log("No user found.");
+		log.info("No user found.");
 		sessionHelper.destroySession(res);
 		return res.status(401).json({ok: false, message: "Unauthorized"});
 	});
@@ -99,7 +101,7 @@ const server = (prefix: string = "/auth") => {
 
 	return {
 		start: () => app.listen(config.port, () => {
-			console.log(`Server is running on port ${config.port}.`);
+			log.info(`Server is running on port ${config.port}.`);
 		}),
 	};
 };

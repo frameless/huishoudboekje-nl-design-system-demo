@@ -21,6 +21,7 @@
     "test:coverage": "npm run test -- --coverage"
   },
   "dependencies": {
+    "loglevel": "^1.8.1",
     "nodemon": "^2.0.20",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
