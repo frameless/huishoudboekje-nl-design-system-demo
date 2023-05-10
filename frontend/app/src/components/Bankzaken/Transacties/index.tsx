@@ -1,7 +1,7 @@
-import {Button, ButtonGroup, Collapse, FormControl, FormLabel, HStack, Icon, Input, InputGroup, InputLeftAddon, InputRightElement, NumberInput, NumberInputField, Radio, RadioGroup, Stack, Tag, Text, useDisclosure} from "@chakra-ui/react";
+import {Box, Button, ButtonGroup, Collapse, FormControl, FormLabel, HStack, Icon, IconButton, Input, InputGroup, InputLeftAddon, InputRightElement, NumberInput, NumberInputField, Radio, RadioGroup, Spinner, Stack, Tag, Text, useDisclosure} from "@chakra-ui/react";
 import {useState} from "react";
 import {useTranslation} from "react-i18next";
-import {useStartAutomatischBoekenMutation, useSearchTransactiesQuery, BankTransaction, SearchTransactiesQueryVariables, useGetBurgersQuery, Burger, Rekening, SearchTransactiesDocument, useGetRekeningenQuery, useGetOrganisatieQuery, useGetOrganisatiesQuery, Organisatie, useGetSimpleOrganisatiesQuery} from "../../../generated/graphql";
+import {useStartAutomatischBoekenMutation, useSearchTransactiesQuery, BankTransaction, SearchTransactiesQueryVariables, useGetBurgersQuery, Burger, Rekening, SearchTransactiesDocument, useGetRekeningenQuery, Organisatie, useGetSimpleOrganisatiesQuery} from "../../../generated/graphql";
 import Queryable from "../../../utils/Queryable";
 import useHandleMutation from "../../../utils/useHandleMutation";
 import usePagination from "../../../utils/usePagination";
@@ -16,7 +16,7 @@ import Select from "react-select";
 import DatePicker from "react-datepicker";
 import d from "../../../utils/dayjs";
 import ZoektermenList from "../../shared/ZoektermenList";
-import { TriangleUpIcon, TriangleDownIcon, WarningTwoIcon } from "@chakra-ui/icons";
+import { TriangleUpIcon, TriangleDownIcon, WarningTwoIcon, RepeatIcon } from "@chakra-ui/icons";
 
 
 const Transactions = () => {
@@ -203,6 +203,7 @@ const Transactions = () => {
 			setBanktransactieQueryVariables(queryVariables);
 			setTimeLAstUpdate(new Date())
 		},
+		notifyOnNetworkStatusChange: true
 	});
 
 	const [startAutomatischBoeken] = useStartAutomatischBoekenMutation({
@@ -460,12 +461,32 @@ const Transactions = () => {
 								</Stack>
 							</Stack>
 							<Stack paddingTop={15}>
+								<Stack>
+									<HStack justify={"space-between"}>
+										<HStack>
+											<Text>{t("transactionsPage.timeUpdated")}: {d(timeLastUpdate).format("HH:mm:ss")}</Text>
+											<IconButton
+												icon={<RepeatIcon />}
+												size={"xs"}
+												onClick={() => {
+													$transactions.refetch();
+												} } aria-label={"reload"}
+												>
+												reload
+											</IconButton>
+										</HStack>
+										{transacties.length > 0 ? (
+											<HStack>
+												<Text>{t("transactionsPage.filters.count")}: </Text>
+												<Box width={30}> {$transactions.loading ? <Spinner size={"xs"}/> : total}</Box>
+											</HStack>
+										) : (
+											<Text/>
+										)}
+									</HStack>
+								</Stack>
 								{transacties.length > 0 ? (
 									<Stack>
-										<HStack justify={"space-between"}>
-											<Text>{t("transactionsPage.timeUpdated")}: {d(timeLastUpdate).format("HH:mm")}</Text>
-											<Text>{t("transactionsPage.filters.count")}: {total}</Text>
-										</HStack>
 										<TransactiesList transacties={transacties} />
 										<HStack justify={"center"}>
 											<PaginationButtons />
@@ -473,7 +494,6 @@ const Transactions = () => {
 									</Stack>
 								) : (
 									<Stack>
-										<Text>{t("transactionsPage.timeUpdated")}: {d(timeLastUpdate).format("HH:mm")}</Text>
 										<Text>{t("messages.transactions.noResults")}</Text>
 									</Stack>
 								)}
