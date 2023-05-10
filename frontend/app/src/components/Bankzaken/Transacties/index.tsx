@@ -25,6 +25,8 @@ const Transactions = () => {
 	const {offset, total, pageSize, setTotal, setPageSize ,goFirst, PaginationButtons} = usePagination({pageSize: 50});
 	const handleMutation = useHandleMutation();
 
+	const [timeLastUpdate, setTimeLAstUpdate] = useState<Date | undefined>(undefined);
+
 	const banktransactieFilters = useStore(store => store.banktransactieFilters || defaultBanktransactieFilters);
 	const setBanktransactieFilters = useStore(store => store.setBanktransactieFilters);
 
@@ -187,6 +189,8 @@ const Transactions = () => {
 		filters: banktransactieFilters,
 	};
 
+	
+
 	const $transactions = useSearchTransactiesQuery({
 		fetchPolicy: "no-cache", // This "no-cache" is to make sure the list is refreshed after uploading a Bankafschrift in CsmUploadModal.tsx (24-02-2022)
 		variables: queryVariables,
@@ -197,6 +201,7 @@ const Transactions = () => {
 				goFirst();
 			}
 			setBanktransactieQueryVariables(queryVariables);
+			setTimeLAstUpdate(new Date())
 		},
 	});
 
@@ -457,7 +462,8 @@ const Transactions = () => {
 							<Stack paddingTop={15}>
 								{transacties.length > 0 ? (
 									<Stack>
-										<HStack justify={"end"}>
+										<HStack justify={"space-between"}>
+											<Text>{t("transactionsPage.timeUpdated")}: {d(timeLastUpdate).format("HH:mm")}</Text>
 											<Text>{t("transactionsPage.filters.count")}: {total}</Text>
 										</HStack>
 										<TransactiesList transacties={transacties} />
@@ -466,7 +472,10 @@ const Transactions = () => {
 										</HStack>
 									</Stack>
 								) : (
-									<Text>{t("messages.transactions.noResults")}</Text>
+									<Stack>
+										<Text>{t("transactionsPage.timeUpdated")}: {d(timeLastUpdate).format("HH:mm")}</Text>
+										<Text>{t("messages.transactions.noResults")}</Text>
+									</Stack>
 								)}
 							</Stack>
 						</Section>

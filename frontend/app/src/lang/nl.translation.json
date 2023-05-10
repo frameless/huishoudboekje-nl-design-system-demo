@@ -616,6 +616,7 @@
     }
   },
   "transactionsPage": {
+    "timeUpdated": "Laatste update",
     "title": "Banktransacties",
     "helperText": "Dit is een lijst van alle banktransacties in het Huishoudboekje.",
     "filters": {
