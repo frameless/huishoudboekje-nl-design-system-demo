@@ -71,7 +71,6 @@ class RootQuery(graphene.ObjectType):
     burger_rapportages = BurgerRapportagesQuery.return_type
     search_afspraken = SearchAfsprakenQuery.return_type
 
-
     def resolve_burger(root, info, **kwargs):
         return BurgerQuery.resolver(root, info, **kwargs)
 
@@ -206,6 +205,6 @@ class RootQuery(graphene.ObjectType):
 
     def resolve_burger_rapportages(root, info, **kwargs):
         return BurgerRapportagesQuery.resolver(root, info, **kwargs)
-    
+
     def resolve_search_afspraken(root, info, **kwargs):
         return SearchAfsprakenQuery.resolver(root, info, **kwargs)
