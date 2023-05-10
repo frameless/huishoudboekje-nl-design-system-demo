@@ -219,8 +219,7 @@ services:
       - 5000:8000
 
   backend-test:
-    <<: *x-backend
-    <<: *x-py-tests
+    <<: [ *x-py-tests, *x-backend ]
 
   backend-burgers:
     <<: *x-backend-burgers
@@ -255,8 +254,7 @@ services:
       - db
 
   huishoudboekjeservice-test:
-    <<: *x-huishoudboekjeservice
-    <<: *x-py-tests
+    <<: [ *x-py-tests, *x-huishoudboekjeservice ]
 
   organisatieservice:
     <<: *x-organisatieservice
@@ -270,8 +268,7 @@ services:
       - db
 
   organisatieservice-test:
-    <<: *x-organisatieservice
-    <<: *x-py-tests
+    <<: [ *x-py-tests, *x-organisatieservice ]
 
   banktransactieservice:
     <<: *x-banktransactieservice
@@ -285,8 +282,7 @@ services:
       - db
 
   banktransactieservice-test:
-    <<: *x-banktransactieservice
-    <<: *x-py-tests
+    <<: [ *x-py-tests, *x-banktransactieservice ]
 
   grootboekservice:
     <<: *x-grootboekservice
@@ -300,8 +296,7 @@ services:
       - db
 
   grootboekservice-test:
-    <<: *x-organisatieservice
-    <<: *x-py-tests
+    <<: [ *x-py-tests, *x-organisatieservice ]
 
   logservice:
     <<: *x-logservice
@@ -315,8 +310,7 @@ services:
       - db
 
   logservice-test:
-    <<: *x-logservice
-    <<: *x-py-tests
+    <<: [ *x-py-tests, *x-logservice ]
 
   # Trail of history: port 8006 used to be in use by the contactcatalogus, but we deprecated this service in favor of the postadressenservice.
 
@@ -332,8 +326,7 @@ services:
       - db
 
   postadressenservice-test:
-    <<: *x-postadressenservice
-    <<: *x-js-tests
+    <<: [ *x-js-tests, *x-postadressenservice ]
 
   alarmenservice:
     <<: *x-alarmenservice
@@ -347,8 +340,7 @@ services:
       - db
 
   alarmenservice-test:
-    <<: *x-alarmenservice
-    <<: *x-js-tests
+    <<: [ *x-js-tests, *x-alarmenservice ]
 
   signalenservice:
     <<: *x-signalenservice
@@ -362,8 +354,7 @@ services:
       - db
 
   signalenservice-test:
-    <<: *x-signalenservice
-    <<: *x-js-tests
+    <<: [ *x-js-tests, *x-signalenservice ]
 
   unleashservice:
     <<: *x-unleashservice
@@ -380,7 +371,6 @@ services:
       LOG_LEVEL: DEBUG
     ports:
       - 8011:8000
-      
+
   rapportageservice-test:
-    <<: *x-rapportageservice
-    <<: *x-py-tests
+    <<: [ *x-py-tests, *x-rapportageservice ]

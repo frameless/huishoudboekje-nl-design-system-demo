@@ -1,4 +1,4 @@
-import {PrismaClientInitializationError} from "@prisma/client/runtime";
+import {PrismaClientInitializationError} from "@prisma/client/runtime/library";
 import {ZodError} from "zod";
 
 enum ErrorCodes {

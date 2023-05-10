@@ -1,5 +1,5 @@
-import {Request} from "express";
 import {Prisma} from "@prisma/client";
+import {Request} from "express";
 
 export const addFilterByIds = (req: Request): Partial<Prisma.AlarmWhereInput> => {
 	const bFilterIds: string = req.body.filter_ids;
