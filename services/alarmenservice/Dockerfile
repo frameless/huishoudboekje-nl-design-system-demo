@@ -1,5 +1,5 @@
 ARG DOCKER_PROXY=''
-FROM ${DOCKER_PROXY}bitnami/node:18
+FROM ${DOCKER_PROXY}bitnami/node:20
 WORKDIR /app
 
 COPY ./package*.json /app/
