@@ -1,6 +1,7 @@
 import express from "express";
 import healthRouter from "./health";
 import unleashClient from "./unleash";
+import log from "loglevel";
 
 const isFeatureEnabled = (feature: string, context?: Record<string, any>): boolean => {
 	const _context = {
@@ -8,8 +9,8 @@ const isFeatureEnabled = (feature: string, context?: Record<string, any>): boole
 		...context,
 	};
 	const isEnabled = unleashClient.isEnabled(feature, _context);
-	console.info("Feature flag request:");
-	console.table([
+	log.debug("Feature flag request:");
+	log.debug([
 		{feature, context: _context, result: isEnabled},
 	]);
 

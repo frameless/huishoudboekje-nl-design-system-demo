@@ -344,7 +344,7 @@ services:
 
   signalenservice:
     <<: *x-signalenservice
-    container_name: signalenservice
+    container_name: signalenservice 
     environment:
       DATABASE_URL: "postgresql://hhb:hhb@db/signalenservice?connect_timeout=300"
       LOG_LEVEL: DEBUG

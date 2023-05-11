@@ -3,6 +3,7 @@ import express from "express";
 import apiV1Router from "./api-v1";
 import {errorHandler} from "./errorHandlers";
 import healthRouter from "./health";
+import log from "loglevel";
 
 const app = express();
 const DATABASE_URL = process.env.DATABASE_URL;
@@ -12,9 +13,9 @@ if (!DATABASE_URL && process.env.NODE_ENV !== "test") {
 }
 
 const logger = () => (req, res, next) => {
-	console.log("[EVENT]", `Incoming request: ${req.method} ${req.url}`);
+	log.debug("[EVENT]", `Incoming request: ${req.method} ${req.url}`);
 	if (req.body) {
-		console.log("[EVENT]", "Body:", req.body);
+		log.debug("[EVENT]", "Body:", req.body);
 	}
 	next();
 };

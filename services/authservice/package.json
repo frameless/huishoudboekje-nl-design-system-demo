@@ -27,6 +27,7 @@
     "express": "^4.18.2",
     "express-openid-connect": "^2.15.0",
     "jsonwebtoken": "^9.0.0",
+    "loglevel": "^1.8.1",
     "nodemon": "^2.0.22",
     "typescript": "^4.9.5"
   },
