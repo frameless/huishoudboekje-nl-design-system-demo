@@ -6,7 +6,6 @@ from flask import Flask, Response
 from flask_migrate import Migrate
 
 from bank_transactie_service.views.bank_transaction import BankTransactionView
-from bank_transactie_service.views.saldo import SaldoView
 from bank_transactie_service.views.customer_statement_message import CustomerStatementMessageView
 from core_service import database
 from bank_transactie_service.views.bank_transaction_range import BanktransactionRangeView
@@ -54,10 +53,6 @@ def create_app(config_name='bank_transactie_service.config.Config'):
          "name": "banktransaction_detail_view"},
         {"path": "/banktransactions/range", "view": BanktransactionRangeView,
          "name": "banktransaction_range_view"},
-        {"path": "/banktransactions/saldo/<object_id>", "view": SaldoView,
-         "name": "banktransaction_saldo_view"},
-        {"path": "/banktransactions/saldo", "view": SaldoView,
-         "name": "banktransaction_total_saldo_view"}
     ]
     for route in routes:
         app.add_url_rule(

@@ -35,17 +35,17 @@ mock_bank_transactions = {
     34: {"id": 34, "is_credit": False, "bedrag": 6000, "transactie_datum": "2021-12-07"},
 }
 mock_alarmen = {alarm1_id:
-                    {"id": alarm1_id,
-                     "isActive": True,
-                     "afspraakId": 13,
-                     "startDate": "2021-12-07",
-                     "datumMargin": 1,
-                     "bedrag": 8000,
-                     "bedragMargin": 1000,
-                     "byDay": ["Wednesday", "Friday"],
-                     "byMonth": [],
-                     "byMonthDay": []
-                     },
+                {"id": alarm1_id,
+                 "isActive": True,
+                 "afspraakId": 13,
+                 "startDate": "2021-12-07",
+                 "datumMargin": 1,
+                 "bedrag": 8000,
+                 "bedragMargin": 1000,
+                 "byDay": ["Wednesday", "Friday"],
+                 "byMonth": [],
+                 "byMonthDay": []
+                 },
                 alarm3_id: {"id": alarm3_id,
                             "is_active": True,
                             "afspraak_id": 13,
@@ -128,7 +128,7 @@ def setup_services(mock):
 
     journaalposten.append({"id": 22, "afspraak_id": 12, "transaction_id": 33})
 
-    bank_transactions_update = mock.post(
+    bank_transactions_update = mock.put(
         # requests_mock.ANY,
         re.compile(f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/.*"),
         json=echo_json_data,
@@ -146,22 +146,26 @@ def setup_services(mock):
         json=mock_rubrieken,
     )
     grootboekrekeningen_adapter = mock.get(
-        re.compile(f"{settings.GROOTBOEK_SERVICE_URL}/grootboekrekeningen/\\?filter_ids=.*"),
+        re.compile(
+            f"{settings.GROOTBOEK_SERVICE_URL}/grootboekrekeningen/\\?filter_ids=.*"),
         json=get_grootboekrekeningen,
     )
     journaalposten_get_adapter = mock.get(
-        re.compile(f"{settings.HHB_SERVICES_URL}/journaalposten/\\?filter_transactions=.*"),
+        re.compile(
+            f"{settings.HHB_SERVICES_URL}/journaalposten/\\?filter_transactions=.*"),
         json=get_journaalposten,
     )
     joornaalposten_adapter = mock.post(
         re.compile(f"{settings.HHB_SERVICES_URL}/journaalposten/.*"), json=create_journaalpost_service
     )
     journaalposten_get_ids_adapter = mock.get(
-        re.compile(f"{settings.HHB_SERVICES_URL}/journaalposten/\\?filter_ids=.*"),
+        re.compile(
+            f"{settings.HHB_SERVICES_URL}/journaalposten/\\?filter_ids=.*"),
         json=get_journaalposten,
     )
     bank_transactions_adapter = mock.get(
-        re.compile(f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/\\?filter_ids=.*"),
+        re.compile(
+            f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/\\?filter_ids=.*"),
         json=get_transactions
     )
     alarmen_get_adapter = mock.get(
@@ -169,7 +173,8 @@ def setup_services(mock):
         json=get_alarmen
     )
     active_alarmen_adapter = mock.get(
-        re.compile(f"{settings.ALARMENSERVICE_URL}/alarms/\\?filter_active=true"),
+        re.compile(
+            f"{settings.ALARMENSERVICE_URL}/alarms/\\?filter_active=true"),
         json={"data": [mock_alarmen[alarm1_id]]}
     )
     alarmen_post_adapter = mock.post(
@@ -185,7 +190,8 @@ def setup_services(mock):
         json={"data": mock_signalen}, status_code=201
     )
 
-    mock.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", json={"data": {"id": 1}})
+    mock.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/",
+              json={"data": {"id": 1}})
 
     return {
         "afspraken": afspraken_adapter,
@@ -376,7 +382,8 @@ def test_create_journaalpost_afspraak(client, mocker):
     with requests_mock.Mocker() as mock:
         adapters = setup_services(mock)
 
-        mocker.patch("hhb_backend.feature_flags.Unleash.is_enabled", mock_feature_flag("signalen", True))
+        mocker.patch("hhb_backend.feature_flags.Unleash.is_enabled",
+                     mock_feature_flag("signalen", True))
 
         response = client.post(
             "/graphql",
@@ -482,7 +489,8 @@ def test_create_journaalpost_afspraak_journaalpost_exists(client):
 def test_create_journaalpost_per_afspraak(client, mocker):
     with requests_mock.Mocker() as mock:
         adapters = setup_services(mock)
-        mocker.patch("hhb_backend.feature_flags.Unleash.is_enabled", mock_feature_flag("signalen", True))
+        mocker.patch("hhb_backend.feature_flags.Unleash.is_enabled",
+                     mock_feature_flag("signalen", True))
 
         response = client.post(
             "/graphql",
@@ -504,8 +512,10 @@ def test_create_journaalpost_per_afspraak(client, mocker):
                         }
                     }""",
                 "variables": {"input": [
-                    {"transactionId": 31, "afspraakId": 11, "isAutomatischGeboekt": True},
-                    {"transactionId": 32, "afspraakId": 12, "isAutomatischGeboekt": True},
+                    {"transactionId": 31, "afspraakId": 11,
+                        "isAutomatischGeboekt": True},
+                    {"transactionId": 32, "afspraakId": 12,
+                        "isAutomatischGeboekt": True},
                 ]},
             },
         )
@@ -551,7 +561,8 @@ def test_create_journaalpost_automatically_evaluate_alarms_no_signal_created(cli
     """Tests create journaalpost and if it automatically evaluates the alarms of the afspraken in the journaalposten, next alarm created, no signaal created."""
     with requests_mock.Mocker() as mock:
         adapters = setup_services(mock)
-        mocker.patch("hhb_backend.feature_flags.Unleash.is_enabled", mock_feature_flag("signalen", True))
+        mocker.patch("hhb_backend.feature_flags.Unleash.is_enabled",
+                     mock_feature_flag("signalen", True))
 
         response = client.post(
             "/graphql",
@@ -572,9 +583,9 @@ def test_create_journaalpost_automatically_evaluate_alarms_no_signal_created(cli
             },
             content_type="application/json",
         )
-        
+
         assert adapters["afspraken"].call_count == 3
-        assert adapters["afspraken_post"].call_count == 1 
+        assert adapters["afspraken_post"].call_count == 1
         assert adapters["transacties"].call_count == 3
         assert adapters["transacties_update"].call_count == 1
         assert adapters["grootboekrekeningen"].call_count == 0
@@ -607,7 +618,8 @@ def test_create_journaalpost_automatically_evaluate_alarms_signal_created(client
     """Tests if create journaalposten automatally evaluates alarms, next alarm created, signal created."""
     with requests_mock.Mocker() as mock:
         adapters = setup_services(mock)
-        mocker.patch("hhb_backend.feature_flags.Unleash.is_enabled", mock_feature_flag("signalen", True))
+        mocker.patch("hhb_backend.feature_flags.Unleash.is_enabled",
+                     mock_feature_flag("signalen", True))
 
         response = client.post(
             "/graphql",
@@ -628,9 +640,9 @@ def test_create_journaalpost_automatically_evaluate_alarms_signal_created(client
             },
             content_type="application/json",
         )
-        
+
         assert adapters["afspraken"].call_count == 3
-        assert adapters["afspraken_post"].call_count == 1 
+        assert adapters["afspraken_post"].call_count == 1
         assert adapters["transacties"].call_count == 3
         assert adapters["transacties_update"].call_count == 1
         assert adapters["grootboekrekeningen"].call_count == 0
