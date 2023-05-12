@@ -463,6 +463,14 @@ const Transactions = () => {
 							<Stack paddingTop={15}>
 								<Stack>
 									<HStack justify={"space-between"}>
+										{transacties.length > 0 ? (
+											<HStack>
+												<Text>{t("transactionsPage.filters.count")}: </Text>
+												<Box width={30}> {$transactions.loading ? <Spinner size={"xs"}/> : total}</Box>
+											</HStack>
+										) : (
+											<Text/>
+										)}
 										<HStack>
 											<Text>{t("transactionsPage.timeUpdated")}: {d(timeLastUpdate).format("HH:mm:ss")}</Text>
 											<IconButton
@@ -475,14 +483,6 @@ const Transactions = () => {
 												reload
 											</IconButton>
 										</HStack>
-										{transacties.length > 0 ? (
-											<HStack>
-												<Text>{t("transactionsPage.filters.count")}: </Text>
-												<Box width={30}> {$transactions.loading ? <Spinner size={"xs"}/> : total}</Box>
-											</HStack>
-										) : (
-											<Text/>
-										)}
 									</HStack>
 								</Stack>
 								{transacties.length > 0 ? (
