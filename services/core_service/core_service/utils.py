@@ -43,8 +43,17 @@ def get_all(query):
 
 def valid_date_range(startDate,endDate):
     '''Checks if both dates in the range are valid and that the end date is after start date'''
-    dateformat = '%Y-%m-%d'
     try:
-        return datetime.datetime.strptime(endDate, dateformat) > datetime.datetime.strptime(startDate, dateformat)
+        return  string_to_date(endDate) > string_to_date(startDate)
     except:
         return False
+    
+def valid_date(date):
+    try:
+        return  string_to_date(date)
+    except:
+        return False
+
+def string_to_date(date):
+    dateformat = '%Y-%m-%d'
+    return datetime.datetime.strptime(date, dateformat)

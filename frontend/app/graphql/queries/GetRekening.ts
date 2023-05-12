@@ -9,3 +9,14 @@ export const GetRekeningQuery = gql`
         }
     }
 `;
+
+export const GetRekeningenQuery = gql`
+    query getRekeningen {
+        rekeningen{
+            id
+            rekeninghouder
+            iban
+        }
+    }
+`;
+

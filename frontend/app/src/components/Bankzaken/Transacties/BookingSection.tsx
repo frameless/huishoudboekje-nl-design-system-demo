@@ -266,12 +266,14 @@ const BookingSection = ({transaction, rubrieken}) => {
 
 	const onAddzoekterm = (e) => {
 		e.preventDefault();
-		const list: string[] = []
-		list.push(zoekterm)
-		const newZoektermen = zoektermen.concat(list)
-		setZoektermen(newZoektermen)
-		setZoekterm("")
-		goFirst()
+		if(zoekterm !== ""){
+			const list: string[] = []
+			list.push(zoekterm)
+			const newZoektermen = zoektermen.concat(list)
+			setZoektermen(newZoektermen)
+			setZoekterm("")
+			goFirst()
+		}
 	};
 
 	const onDeleteZoekterm = (value) => {

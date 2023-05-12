@@ -1,197 +1,474 @@
-import {Button, ButtonGroup, Checkbox, Flex, FormControl, FormLabel, HStack, Input, Stack, Text, useDisclosure} from "@chakra-ui/react";
-import React, {useEffect, useState} from "react";
-import DatePicker from "react-datepicker";
+import {Button, ButtonGroup, Collapse, FormControl, FormLabel, HStack, Icon, Input, InputGroup, InputLeftAddon, InputRightElement, NumberInput, NumberInputField, Radio, RadioGroup, Stack, Tag, Text, useDisclosure} from "@chakra-ui/react";
+import {useState} from "react";
 import {useTranslation} from "react-i18next";
-import Select from "react-select";
-import { GetTransactiesDocument, Rekening, JournaalpostTransactieRubriek, useGetAdditionalTransactionDataQuery, useGetTransactiesQuery, useStartAutomatischBoekenMutation} from "../../../generated/graphql";
-import {BanktransactieFilters} from "../../../models/models";
-import useStore from "../../../store";
+import {useStartAutomatischBoekenMutation, useSearchTransactiesQuery, BankTransaction, SearchTransactiesQueryVariables, useGetBurgersQuery, Burger, Rekening, SearchTransactiesDocument, useGetRekeningenQuery, useGetOrganisatieQuery, useGetOrganisatiesQuery, Organisatie, useGetSimpleOrganisatiesQuery} from "../../../generated/graphql";
 import Queryable from "../../../utils/Queryable";
-import {createQueryParamsFromFilters, useReactSelectStyles} from "../../../utils/things";
 import useHandleMutation from "../../../utils/useHandleMutation";
 import usePagination from "../../../utils/usePagination";
-import Modal from "../../shared/Modal";
 import Page from "../../shared/Page";
 import Section from "../../shared/Section";
 import SectionContainer from "../../shared/SectionContainer";
-import {defaultBanktransactieFilters} from "./defaultBanktransactieFilters";
-import { TransactionSimple } from "./TransactieOverzichtObject";
 import TransactiesList from "./TransactiesList";
+import useStore from "../../../store";
+import { defaultBanktransactieFilters } from "./defaultBanktransactieFilters";
+import { formatBurgerName, useReactSelectStyles } from "../../../utils/things";
+import Select from "react-select";
+import DatePicker from "react-datepicker";
+import d from "../../../utils/dayjs";
+import ZoektermenList from "../../shared/ZoektermenList";
+import { TriangleUpIcon, TriangleDownIcon, WarningTwoIcon } from "@chakra-ui/icons";
+
 
 const Transactions = () => {
 	const {t} = useTranslation();
 	const reactSelectStyles = useReactSelectStyles();
-	const [customPageSize, setCustomPageSize] = useState<number>(50);
-	const {offset, total, setTotal, goFirst, PaginationButtons} = usePagination({pageSize: customPageSize});
+	const {offset, total, pageSize, setTotal, setPageSize ,goFirst, PaginationButtons} = usePagination({pageSize: 50});
 	const handleMutation = useHandleMutation();
-	const filterModal = useDisclosure();
 
-	const banktransactieFilters = useStore(store => store.banktransactieFilters) || defaultBanktransactieFilters;
+	const banktransactieFilters = useStore(store => store.banktransactieFilters || defaultBanktransactieFilters);
 	const setBanktransactieFilters = useStore(store => store.setBanktransactieFilters);
+
 	const setBanktransactieQueryVariables = useStore(store => store.setBanktransactieQueryVariables);
-
-	useEffect(() => {
-		// If no filters are set at all, reset to default filters.
-		if (Object.keys(banktransactieFilters).length === 0) {
-			setBanktransactieFilters(defaultBanktransactieFilters);
-		}
-	}, [setBanktransactieFilters, banktransactieFilters]);
-
-	const queryVariables = {
-		offset,
-		limit: customPageSize,
-		filters: createQueryParamsFromFilters(banktransactieFilters),
-	};
-
-	const transactions = useGetTransactiesQuery({
-		fetchPolicy: "no-cache", // This "no-cache" is to make sure the list is refreshed after uploading a Bankafschrift in CsmUploadModal.tsx (24-02-2022)
-		variables: queryVariables,
-		onCompleted: data => {
-			if (data && total !== data.bankTransactionsPaged?.pageInfo?.count) {
-				setTotal(data.bankTransactionsPaged?.pageInfo?.count);
-				goFirst();
-			}
-
-			setBanktransactieQueryVariables(queryVariables);
-		},
-	});
-
-	const transacties: TransactionSimple[] = transactions.data?.bankTransactionsPaged?.banktransactions || []
-	const ibans = transacties.filter(transactie => transactie.tegenRekeningIban !== null).map(transactie => transactie.tegenRekeningIban? transactie.tegenRekeningIban : "")
-	const transaction_ids = transacties.filter(transactie => transactie.id !== null).map(transactie => transactie.id? transactie.id : -1)
-
-	const $additionalTransactionData = useGetAdditionalTransactionDataQuery({
-		fetchPolicy: "no-cache",
-		variables: {ibans: ibans, transaction_ids: transaction_ids}
-	})
-
-	const [startAutomatischBoeken] = useStartAutomatischBoekenMutation({
-		refetchQueries: [
-			{query: GetTransactiesDocument, variables: queryVariables},
-		],
-	});
 
 	const onClickStartBoekenButton = () => {
 		handleMutation(startAutomatischBoeken(), t("messages.automatischBoeken.successMessage"));
 	};
 
-	const isCreditSelectOptions = [
-		{key: 0, value: "all", label: t("filters.transactions.isCredit.all")},
-		{key: 1, value: "income", label: t("filters.transactions.isCredit.income")},
-		{key: 2, value: "expenses", label: t("filters.transactions.isCredit.expenses")},
-	];
+
+	const defaultValueRadio = (value) => {
+		if(value === undefined ){
+			return "3"
+		}
+		if(value){
+			return "2"
+		}
+		else {
+			return "1"
+        }
+	}
+
+	const onChangeCreditRadio = (value) => {
+        let onlyCredit : boolean | undefined = undefined
+		if(value === "1"){
+            onlyCredit = false
+		}
+		if(value === "2"){
+            onlyCredit = true
+		}
+		setBanktransactieFilters({
+			...banktransactieFilters,
+			onlyCredit: onlyCredit
+		})
+	}
+
+	const [filterBurgerIds, setFilterBurgerIds] = useState<number[]>(banktransactieFilters.burgerIds || []);
+	const [filterRekeningIbans, setFilterRekeingIbans] = useState<string[]>(banktransactieFilters.ibans || []);
+	const [filterOrganisatieIds, setFilterOrganisatieIds] = useState<number[]>(banktransactieFilters.organisatieIds || []);
+	const $burgers = useGetBurgersQuery();
+	const $rekeningen = useGetRekeningenQuery();
+	const $organisaties = useGetSimpleOrganisatiesQuery();
+
+	const onSelectBurger = (value) => {
+		const newValue = value ? value.map(v => v.value) : []
+		setFilterBurgerIds(newValue)
+		setBanktransactieFilters({
+			...banktransactieFilters,
+			burgerIds: newValue.length > 0 ? newValue : undefined
+		})
+	};
+
+	const onSelectOrganisatie = (value) => {
+		const newValue = value ? value.map(v => v.value) : []
+		setFilterOrganisatieIds(newValue)
+		setBanktransactieFilters({
+			...banktransactieFilters,
+			organisatieIds: newValue.length > 0 ? newValue : undefined
+		})
+	};
+
+	const onSelectRekening = (value) => {
+		const newValue = value ? value.map(v => v.value) : []
+		setFilterRekeingIbans(newValue)
+		setBanktransactieFilters({
+			...banktransactieFilters,
+			ibans: newValue.length > 0 ? newValue : undefined
+		})
+	};
+
+    const onChangeBookedRadio = (value) => {
+        let onlyBooked : boolean | undefined = undefined
+		if(value === "1"){
+            onlyBooked = false
+		}
+		if(value === "2"){
+            onlyBooked = true
+		}
+		setBanktransactieFilters({
+			...banktransactieFilters,
+			onlyBooked: onlyBooked,
+			burgerIds: !onlyBooked ? undefined : banktransactieFilters.burgerIds
+		})
+		if(onlyBooked !== undefined && !onlyBooked){
+			if(filterBurgerIds.length > 0){
+				setFilterBurgerIds([])
+			}
+			if(filterBurgerIds.length > 0){
+				setFilterRekeingIbans([])
+			}
+		}
+	}
+
+	const [zoekterm, setZoekterm] = useState<string>("");
+	const [zoektermen, setZoektermen] = useState<string[]>(banktransactieFilters.zoektermen || []);
+	const onAddzoekterm = (e) => {
+		e.preventDefault();
+		if(zoekterm !== ""){
+			const list : string[] = []
+			list.push(zoekterm)
+			const newZoektermen = zoektermen.concat(list)
+			setBanktransactieFilters({
+				...banktransactieFilters,
+				zoektermen: newZoektermen.length > 0 ? newZoektermen : undefined
+			})
+			setZoektermen(newZoektermen)
+			setZoekterm("")
+			goFirst()
+		}
+	};
+
+	const onDeleteZoekterm = (value) => {
+		const list : string[] = zoektermen.slice()
+		const index = zoektermen.indexOf(value)
+		list.splice(index,1)
+		setBanktransactieFilters({
+			...banktransactieFilters,
+			zoektermen: list.length > 0 ? list : undefined
+		})
+		setZoektermen(list)
+		setZoekterm(zoekterm)
+		goFirst()
+	}
+
+	const defaultvalueBedrag = (value) => {
+		return value ? (value / 100).toString() : ""
+	}
+
+	const [minBedrag, setMinBedrag] = useState(defaultvalueBedrag(banktransactieFilters.minBedrag))
+	const [maxBedrag, setMaxBedrag] = useState(defaultvalueBedrag(banktransactieFilters.maxBedrag))
+
+	const onChangeMaxbedrag = (valueAsString) =>{
+		setMaxBedrag(valueAsString)
+		setBanktransactieFilters({
+			...banktransactieFilters,
+			maxBedrag: valueAsString !== "" ? Math.round(+valueAsString * 100) : undefined
+		})
+	}
+	const onChangeMinbedrag = (valueAsString) =>{
+		setMinBedrag(valueAsString)
+		setBanktransactieFilters({
+			...banktransactieFilters,
+			minBedrag: valueAsString !== "" ? Math.round(+valueAsString * 100) : undefined
+		})
+	}
+
+	const invalidBedrag = () =>{
+		let result = false;
+		if(banktransactieFilters.maxBedrag !== undefined && banktransactieFilters.minBedrag !== undefined){
+			if(banktransactieFilters.maxBedrag < banktransactieFilters.minBedrag){
+				result = true
+			}
+		}
+		return result
+	}
+
+	const queryVariables : SearchTransactiesQueryVariables = {
+		offset: offset -1,
+		limit: pageSize,
+		filters: banktransactieFilters,
+	};
+
+	const $transactions = useSearchTransactiesQuery({
+		fetchPolicy: "no-cache", // This "no-cache" is to make sure the list is refreshed after uploading a Bankafschrift in CsmUploadModal.tsx (24-02-2022)
+		variables: queryVariables,
+		context: {debounceKey: "banktransactieFilters"},
+		onCompleted: data => {
+			if (data && total !== data.searchTransacties?.pageInfo?.count) {
+				setTotal(data.searchTransacties?.pageInfo?.count);
+				goFirst();
+			}
+			setBanktransactieQueryVariables(queryVariables);
+		},
+	});
+
+	const [startAutomatischBoeken] = useStartAutomatischBoekenMutation({
+		refetchQueries: [
+			{query: SearchTransactiesDocument, variables: queryVariables},
+		],
+	});
+
+	const blockBookedFilters = () =>{
+		return !banktransactieFilters.onlyBooked
+	}
+
+	const extraFiltersUsed = () => {
+		return banktransactieFilters.minBedrag !== undefined ||
+			banktransactieFilters.maxBedrag !== undefined ||
+			banktransactieFilters.zoektermen !== undefined ||
+			banktransactieFilters.ibans !== undefined ||
+			banktransactieFilters.burgerIds !== undefined
+	}
+
+	const { isOpen, onToggle } = useDisclosure()
 
 	return (
 		<Page title={t("forms.bankzaken.sections.transactions.title")} right={(
 			<Button size={"sm"} variant={"outline"} colorScheme={"primary"} onClick={onClickStartBoekenButton}>{t("global.actions.startBoeken")}</Button>
 		)}>
-			{filterModal.isOpen && (
-				<Modal title={t("sections.filterOptions.title")} onClose={filterModal.onClose}>
-					<form onSubmit={(e) => {
-						e.preventDefault();
-						filterModal.onClose();
-					}}>
-						<Stack>
-							<FormControl>
-								<FormLabel>{t("filters.transactions.type.title")}</FormLabel>
-								<Checkbox isChecked={banktransactieFilters.onlyUnbooked} onChange={e => setBanktransactieFilters({
-									...banktransactieFilters,
-									onlyUnbooked: e.target.checked,
-								})}>{t("filters.transactions.type.onlyUnbooked")}</Checkbox>
-							</FormControl>
-
-							<FormControl>
-								<FormLabel>{t("filters.transactions.isCredit.title")}</FormLabel>
-								<Select id={"tegenrekening"} isClearable={true} noOptionsMessage={() => t("filters.transactions.isCredit.choose")} maxMenuHeight={350}
-									options={isCreditSelectOptions} value={banktransactieFilters.isCredit ? isCreditSelectOptions.find(o => o.value === banktransactieFilters.isCredit) : null}
-									onChange={(result) => {
-										setBanktransactieFilters({
-											...banktransactieFilters,
-											isCredit: result?.value as BanktransactieFilters["isCredit"],
-										});
-									}} styles={reactSelectStyles.default} />
-							</FormControl>
-
-							<HStack>
-								<FormControl as={Stack} flex={1} justifyContent={"flex-end"}>
-									<FormLabel>{t("global.period")}</FormLabel>
-									<DatePicker selected={banktransactieFilters.dateRange?.from || null}
-										dateFormat={"dd-MM-yyyy"} isClearable={true} selectsRange={true}
-										startDate={banktransactieFilters.dateRange?.from} endDate={banktransactieFilters.dateRange?.through}
-										onChange={(value: [Date, Date]) => {
-											if (value) {
-												const [from, through] = value;
-												if (!from && !through) {
-													setBanktransactieFilters({
-														...banktransactieFilters,
-														dateRange: undefined,
-													});
-												}
-												else {
-													setBanktransactieFilters({
-														...banktransactieFilters,
-														dateRange: {from, through},
-													});
-												}
-											}
-										}} customInput={(<Input />)} />
-								</FormControl>
-							</HStack>
-
-							<FormControl>
-								<FormLabel>{t("filters.transactions.pageSize")}</FormLabel>
-								<ButtonGroup size={"sm"} isAttached>
-									<Button colorScheme={customPageSize === 25 ? "primary" : "gray"} onClick={() => setCustomPageSize(25)}>25</Button>
-									<Button colorScheme={customPageSize === 50 ? "primary" : "gray"} onClick={() => setCustomPageSize(50)}>50</Button>
-									<Button colorScheme={customPageSize === 100 ? "primary" : "gray"} onClick={() => setCustomPageSize(100)}>100</Button>
-									<Button colorScheme={customPageSize === 250 ? "primary" : "gray"} onClick={() => setCustomPageSize(250)}>250</Button>
-								</ButtonGroup>
-							</FormControl>
-
-							<Flex justify={"flex-end"}>
-								<Button type={"submit"} colorScheme={"primary"}>{t("global.actions.save")}</Button>
-							</Flex>
-						</Stack>
-					</form>
-				</Modal>
-			)}
-
 			<SectionContainer>
-				<Queryable query={$additionalTransactionData} children={(data) => {
-					const rekeningen: Rekening[] = data.rekeningenByIbans || [];
-					const journaalposten: JournaalpostTransactieRubriek[] = data.journaalpostenTransactieRubriek
-					transacties.forEach(transactie => {
-						transactie.tegenRekening = rekeningen.find(rekening => rekening.iban == transactie.tegenRekeningIban)
-						const journaalpost = journaalposten.find(post => post.transactionId == transactie.id)
-						if(journaalpost !== undefined){
-							transactie.rubriek = journaalpost?.afspraakRubriekNaam || journaalpost?.grootboekrekeningRubriekNaam
-						}
-					})
-
-					/* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-					const filtersActive = Object.values(queryVariables.filters).filter(q => ![null, undefined].includes(q as any)).length > 0;
-
+				<Queryable query={$transactions} children={(data) => {
+					const transacties : BankTransaction[] = data.searchTransacties?.banktransactions || []
 					return (
-						<Section title={t("transactionsPage.title")} helperText={t("transactionsPage.helperText")} right={(
-							<HStack justify={"flex-end"} spacing={3}>
-								{filtersActive && (
-									<Text fontSize={"sm"}>{t("sections.filterOptions.filtersActiveWarning")}</Text>
-								)}
-								<Button size={"sm"} colorScheme={"primary"} variant={"outline"} onClick={() => filterModal.onOpen()}>
-									{t("sections.filterOptions.title")}
-								</Button>
-							</HStack>
-						)}>
-							{transacties.length > 0 ? (
+						<Section title={t("transactionsPage.title")} helperText={t("transactionsPage.helperText")}>
+							<Stack>
 								<Stack>
-									<TransactiesList transacties={transacties} />
-									<HStack justify={"center"}>
-										<PaginationButtons />
-									</HStack>
+									<Stack>
+										<HStack>
+											<FormControl>
+												<FormLabel>{t("transactionsPage.filters.status")}</FormLabel>
+												<RadioGroup defaultValue={defaultValueRadio(banktransactieFilters.onlyBooked)} onChange={onChangeBookedRadio}>
+													<Stack spacing={5} direction={"row"}>
+														<Radio colorScheme={"blue"} value={"1"}>
+															{t("transactionsPage.filters.unbooked")}
+														</Radio>
+														<Radio colorScheme={"blue"} value={"2"}>
+															{t("transactionsPage.filters.booked")}
+														</Radio>
+														<Radio colorScheme={"blue"} value={"3"}>
+															{t("transactionsPage.filters.all")}
+														</Radio>
+													</Stack>
+												</RadioGroup>
+											</FormControl>
+											<FormControl paddingLeft={15}>
+												<FormLabel>{t("transactionsPage.filters.direction")}</FormLabel>
+												<RadioGroup defaultValue={defaultValueRadio(banktransactieFilters.onlyCredit)} onChange={onChangeCreditRadio}>
+													<Stack spacing={5} direction={"row"}>
+														<Radio colorScheme={"blue"} value={"3"}>
+															{t("transactionsPage.filters.all")}
+														</Radio>
+														<Radio colorScheme={"blue"} value={"2"}>
+															{t("transactionsPage.filters.incomes")}
+														</Radio>
+														<Radio colorScheme={"blue"} value={"1"}>
+															{t("transactionsPage.filters.expenses")}
+														</Radio>
+													</Stack>
+												</RadioGroup>
+											</FormControl>
+										</HStack>
+										<HStack>
+											<FormControl>
+												<HStack>
+													<FormControl>
+														<FormLabel>{t("transactionsPage.filters.from")}</FormLabel>
+														<DatePicker selected={banktransactieFilters.startDate ? new Date(banktransactieFilters.startDate) : null}
+															dateFormat={"dd-MM-yyyy"}
+															onChange={(value: Date) => {
+																setBanktransactieFilters({
+																	...banktransactieFilters,
+																	startDate: value ? d(value).format("YYYY-MM-DD"): undefined
+																});
+															}}
+															showYearDropdown={true}
+															customInput={<Input type={"text"} />}
+															isClearable={true}
+														/>
+													</FormControl>
+													<FormControl>
+														<FormLabel>{t("transactionsPage.filters.to")}</FormLabel>
+														<DatePicker selected={banktransactieFilters.endDate ? new Date(banktransactieFilters.endDate) : null}
+															dateFormat={"dd-MM-yyyy"}
+															onChange={(value: Date) => {
+																setBanktransactieFilters({
+																	...banktransactieFilters,
+																	endDate: value ? d(value).format("YYYY-MM-DD"): undefined
+																});
+															}}
+															showYearDropdown={true}
+															customInput={<Input type={"text"} />}
+															isClearable={true}
+														/>
+													</FormControl>
+												</HStack>
+											</FormControl>
+											<FormControl paddingLeft={15}>
+												<Stack>
+													<FormLabel>{t("filters.transactions.pageSize")}</FormLabel>
+													<ButtonGroup size={"sm"} isAttached>
+														<Button colorScheme={pageSize === 50 ? "primary" : "gray"} onClick={() => setPageSize(50)}>50</Button>
+														<Button colorScheme={pageSize === 100 ? "primary" : "gray"} onClick={() => setPageSize(100)}>100</Button>
+														<Button colorScheme={pageSize === 250 ? "primary" : "gray"} onClick={() => setPageSize(250)}>250</Button>
+													</ButtonGroup>
+												</Stack>
+											</FormControl>
+										</HStack>
+									</Stack>
+									<Stack>
+										<Collapse in={isOpen} animateOpacity>
+											<Stack paddingBottom={"20px"}>
+												<HStack paddingBottom={"10px"}>
+													<Queryable query={$rekeningen} children={data => {
+														const rekeningen: Rekening[] = data.rekeningen || [];
+														const rekeningen_filter = rekeningen.filter(rekening => filterRekeningIbans.includes(rekening.iban!)).map(rekening => ({
+															key: rekening.iban,
+															value: rekening.iban,
+															label: rekening.rekeninghouder,
+														}));
+														return (
+															<Stack direction={"column"} spacing={5} flex={1}>
+																<HStack >
+																	<FormControl as={Stack} flex={1}>
+																		<FormLabel>{t("transactionsPage.filters.accounts")}</FormLabel>
+																		<Select  onChange={onSelectRekening} options={rekeningen.map(rekening => ({
+																			key: rekening.iban,
+																			value: rekening.iban,
+																			label: rekening.rekeninghouder + " (" + rekening.iban + ")",
+																		}))}
+																		styles={reactSelectStyles.default} isMulti isClearable={true} noOptionsMessage={() => t("select.noOptions")} maxMenuHeight={200}
+																		placeholder={t("transactionsPage.filters.none")} value={rekeningen_filter} />
+																	</FormControl>
+																</HStack>
+															</Stack>
+														);
+													}} />
+													<Queryable query={$organisaties} children={data => {
+														const organisaties: Organisatie[] = data.organisaties || [];
+														const organisatie_filter = organisaties.filter(organisatie => filterOrganisatieIds.includes(organisatie.id!)).map(organisatie => ({
+															key: organisatie.id,
+															value: organisatie.id,
+															label: organisatie.naam,
+														}));
+														return (
+															<Stack direction={"column"} spacing={5} flex={1}  paddingLeft={15}>
+																<HStack>
+																	<FormControl as={Stack} flex={1}>
+																		<FormLabel>{t("transactionsPage.filters.organisatie")}</FormLabel>
+																		<Select  onChange={onSelectOrganisatie} options={organisaties.map(organisatie => ({
+																			key: organisatie.id,
+																			value: organisatie.id,
+																			label: organisatie.naam,
+																		}))}
+																		styles={reactSelectStyles.default} isMulti isClearable={true} noOptionsMessage={() => t("select.noOptions")} maxMenuHeight={200}
+																		placeholder={t("transactionsPage.filters.none")} value={organisatie_filter} />
+																	</FormControl>
+																</HStack>
+															</Stack>
+														);
+													}} />
+												</HStack>
+												<Queryable query={$burgers} children={data => {
+														const burgers: Burger[] = data.burgers || [];
+														const burgers_filter = burgers.filter(b => filterBurgerIds.includes(b.id!)).map(b => ({
+															key: b.id,
+															value: b.id,
+															label: formatBurgerName(b),
+														}));
+														return (
+															<Stack direction={"column"} spacing={5} flex={1}>
+																<HStack>
+																	<FormControl as={Stack} flex={1} paddingBottom={15}>
+																		<FormLabel>{t("transactionsPage.filters.burgers")}</FormLabel>
+																		<Select  onChange={onSelectBurger} options={burgers.map(b => ({
+																			key: b.id,
+																			value: b.id,
+																			label: formatBurgerName(b),
+																		}))}
+																		isDisabled={blockBookedFilters()}
+																		styles={reactSelectStyles.default} isMulti isClearable={true} noOptionsMessage={() => t("select.noOptions")} maxMenuHeight={200}
+																		placeholder={blockBookedFilters() ? t("transactionsPage.filters.none") : t("charts.optionAllBurgers")} value={burgers_filter} />
+																	</FormControl>
+																</HStack>
+															</Stack>
+														);
+													}} />
+												<HStack paddingBottom={15}>
+													<FormControl>
+														<FormLabel>{t("transactionsPage.filters.amountFrom")}</FormLabel>
+														<InputGroup>
+															<InputLeftAddon>€</InputLeftAddon>
+															<NumberInput w={"100%"} precision={2} value={minBedrag}>
+																<NumberInputField borderLeftRadius={0}
+																	onChange={(value) => {
+																		onChangeMinbedrag(value.target.value)
+																	}}
+																	value={minBedrag}
+																	placeholder={t("transactionsPage.filters.none")}
+																/>
+															</NumberInput>
+														</InputGroup>
+													</FormControl>
+													<FormControl  paddingLeft={15}>
+														<FormLabel>{t("transactionsPage.filters.amountTo")}</FormLabel>
+														<InputGroup>
+															<InputLeftAddon>€</InputLeftAddon>
+															<NumberInput w={"100%"} precision={2} value={maxBedrag}>
+																<NumberInputField borderLeftRadius={0}
+																	onChange={(value) => {
+																		onChangeMaxbedrag(value.target.value)
+																	}}
+																	value={maxBedrag}
+																	placeholder={t("transactionsPage.filters.none")}
+																/>
+															</NumberInput>
+														</InputGroup>
+													</FormControl>
+												</HStack>
+												{ invalidBedrag() ?
+													<Tag colorScheme={"red"} size={"md"} variant={"subtle"}>
+														<Icon as={WarningTwoIcon} />
+														{t("transactionsPage.filters.amountwarning")}
+													</Tag>: ""
+												}
+												<FormLabel paddingBottom={"10px"}>
+													<FormLabel>
+														{t("transactionsPage.filters.description")}
+													</FormLabel>
+													<form onSubmit={onAddzoekterm}>
+															<InputGroup size={"md"}>
+																<Input id={"zoektermen"} onChange={e => setZoekterm(e.target.value)} value={zoekterm || ""} />
+																<InputRightElement width={"auto"} pr={1}>
+																	<Button type={"submit"} size={"sm"} colorScheme={"primary"}>Zoeken</Button>
+																</InputRightElement>
+															</InputGroup>
+															<ZoektermenList zoektermen={zoektermen} onClickDelete={(zoekterm: string) => onDeleteZoekterm(zoekterm)} />
+													</form>
+												</FormLabel>
+											</Stack>
+										</Collapse>
+										<Button leftIcon={isOpen ? <TriangleUpIcon /> : <TriangleDownIcon />} colorScheme={"blue"} variant={"outline"} onClick={onToggle}>{t("transactionsPage.filters.extensive")}</Button>
+										{extraFiltersUsed() && !isOpen?
+											<Tag colorScheme={"red"} size={"md"} variant={"subtle"}>
+												<Icon as={WarningTwoIcon} />
+												{t("transactionsPage.filters.active")}
+											</Tag>: ""}
+									</Stack>
 								</Stack>
-							) : (
-								<Text>{t("messages.transactions.noResults")}</Text>
-							)}
+							</Stack>
+							<Stack paddingTop={15}>
+								{transacties.length > 0 ? (
+									<Stack>
+										<HStack justify={"end"}>
+											<Text>{t("transactionsPage.filters.count")}: {total}</Text>
+										</HStack>
+										<TransactiesList transacties={transacties} />
+										<HStack justify={"center"}>
+											<PaginationButtons />
+										</HStack>
+									</Stack>
+								) : (
+									<Text>{t("messages.transactions.noResults")}</Text>
+								)}
+							</Stack>
 						</Section>
 					);
 				}} />

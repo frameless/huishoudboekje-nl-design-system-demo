@@ -1,6 +1,15 @@
-import {BanktransactieFilters} from "../../../models/models";
+import { BankTransactionSearchFilter } from "../../../generated/graphql";
 
-export const defaultBanktransactieFilters: BanktransactieFilters = {
-	onlyUnbooked: false,
-	isCredit: "all",
+export const defaultBanktransactieFilters: BankTransactionSearchFilter = {
+	automatischGeboekt: undefined,
+	burgerIds: undefined,
+	endDate: undefined,
+	startDate: undefined,
+	minBedrag: undefined,
+	maxBedrag: undefined,
+	onlyBooked: false,
+	onlyCredit: undefined,
+	ibans: undefined,
+	zoektermen: undefined,
+	organisatieIds: undefined
 };
