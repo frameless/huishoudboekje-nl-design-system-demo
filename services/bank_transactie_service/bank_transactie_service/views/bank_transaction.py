@@ -1,6 +1,8 @@
 """ MethodView for /customerstatementmessages/ path """
+import logging
 from flask import request, abort, make_response
 from sqlalchemy import func
+from sqlalchemy.orm.exc import NoResultFound
 
 from models.bank_transaction import BankTransaction
 from core_service.views.hhb_view import HHBView
@@ -57,7 +59,8 @@ class BankTransactionView(HHBView):
         """ Add filter_csms filter """
 
         def add_filter(csms):
-            self.hhb_query.query = self.hhb_query.query.filter(self.hhb_model.customer_statement_message_id.in_(csms))
+            self.hhb_query.query = self.hhb_query.query.filter(
+                self.hhb_model.customer_statement_message_id.in_(csms))
 
         BankTransactionView.filter_in_string('filter_csms', add_filter)
 
@@ -68,3 +71,37 @@ class BankTransactionView(HHBView):
         if (filter_is_geboekt := request.args.get('filter_is_geboekt', type=to_bool)) is not None:
             self.hhb_query.query = self.hhb_query.query.filter(
                 func.coalesce(self.hhb_model.is_geboekt, False) == filter_is_geboekt)
+
+    def put(self, **kwargs):
+        ids = []
+        items = []
+        if (isinstance(request.json, list)):
+            for item in request.json:
+                try:
+                    id = item.get("id")
+                    ids.append(id)
+                    items.append(item)
+                except NoResultFound:
+                    return {}, 404
+
+        else:
+            try:
+                ids.append(request.json.get("id"))
+                items.append(request.json)
+            except NoResultFound:
+                return {}, 404
+
+        index = 0
+        for id in ids:
+            self.__update_bank_transaction(id, items[index])
+            index += 1
+        self.hhb_object.commit_changes()
+
+        return {}, 201
+
+    def __update_bank_transaction(self, id, values):
+        result = BankTransaction.query\
+            .filter(BankTransaction.id == id)\
+            .update(values, synchronize_session='evaluate')
+
+        return result
