@@ -1,5 +1,28 @@
 # Huishoudboekje Changelog
 
+## 1.9.0
+
+### Minor Changes
+
+- 61915508: Saldo implementatie toegevoegd aan de applicatie. De applicatie houdt nu (per maand) een saldo bij op het moment dat er transacties
+  zijn aangemaakt of verwijderd. Saldo is zichtbaar op burgerpagina (momentopname) en in rapportage ( per geselcteerde periode)
+
+### Patch Changes
+
+- d341c729: Added search functionality transactions page
+- d90bdd38: Fixed bug rapportage not showing data
+- 0378de32: Detail transaction page now has a button to load extra afspraken instead of loading them right away
+- e93baba2: Added the option to search afspraken on the transaction page
+- 05b8aea3: typescript services now should use the given LOG_LEVEL
+- b7448b7e: Added new migration grootboekservice with (re)load data, comma seperation replaced with semicolon
+- 19b29b0c: Added a time indecation when the data was last loaded with a refresh button on the transactions page
+- 062fbece: Fixed bug with betaalinstructies
+- 10216503: hhb nummer toegevoegd onder rapportage en burgers
+- d90bdd38: Fixed bug query paramater rappartage url after updating versions
+- d90bdd38: Fixed bug unexpected behaviour bsn check when adding huishoudens
+- 37a0ea48: Formfields are now also validated before submit if they have a (new) value
+- 04186cc7: Updated dependencies of root package.
+
 ## 1.8.4
 
 Deze versie omvat verbeteringen in gebruikerservaring en oplossingen voor een aantal problemen.
