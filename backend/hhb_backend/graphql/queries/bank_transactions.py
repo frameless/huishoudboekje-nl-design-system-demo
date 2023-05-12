@@ -103,7 +103,6 @@ class BankTransactionsSearchQuery:
                 journaalposten = hhb_dataloader().journaalposten_concept.load_request(journaalpostBuilder.request).get("journaalposten", {})
                 transaction_ids = [journaalpost.get("transaction_id", None) for journaalpost in journaalposten if journaalpost.get("transaction_id", None) is not None]  
 
-
             if transaction_ids is not None:
                 transactionsBuilder.by_ids(transaction_ids)
 
@@ -150,7 +149,7 @@ class BankTransactionsSearchQuery:
             ],
         )
 
-        if len(transactions.get("banktransactions",[]))>0:
+        if len(transactions.get("banktransactions",[])) > 0:
             #This is (maybe) not necessary when batching is implemented but for now it makes it faster :)
             if journaalposten is None:
                 transaction_ids = [transaction.get("id", -1) for transaction in transactions.get("banktransactions",[]) if transaction.get("is_geboekt", False)]
@@ -159,10 +158,19 @@ class BankTransactionsSearchQuery:
                     journaalposten = hhb_dataloader().journaalposten_concept.load_request(journaalpostBuilder.request).get("journaalposten", {})
 
             if journaalposten is not None:
-                for transaction in transactions.get("banktransactions",[]):
-                    transaction_journaalpost = next((journaalpost for journaalpost in journaalposten if journaalpost["transaction_id"] == transaction["id"]), None)
-                    if transaction_journaalpost is not None:
-                        transaction["journaalpost"] = transaction_journaalpost
+                grootboekrekening_ids = [journaalpost["grootboekrekening_id"] for journaalpost in journaalposten]
+                rubrieken = hhb_dataloader().rubrieken.by_grootboekrekeningen(grootboekrekening_ids)
+                for journaalpost in journaalposten:
+                    journaalpost_rubriek = next((rubriek for rubriek in rubrieken if journaalpost["grootboekrekening_id"] == rubriek["grootboekrekening_id"]), None)
+                    if journaalpost_rubriek is not None:
+                        journaalpost["rubriek"] = journaalpost_rubriek
+
+            if journaalposten is None:
+                journaalposten = []
+
+            for transaction in transactions.get("banktransactions",[]):
+                transaction_journaalpost = next((journaalpost for journaalpost in journaalposten if journaalpost["transaction_id"] == transaction["id"]), -1)
+                transaction["journaalpost"] = transaction_journaalpost
 
             ibans = [transaction.get("tegen_rekening", "") for transaction in transactions.get("banktransactions",[])]
             rekeningen = hhb_dataloader().rekeningen.by_ibans(ibans)

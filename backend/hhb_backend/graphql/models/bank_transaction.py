@@ -53,7 +53,10 @@ class BankTransaction(graphene.ObjectType):
         if not journaalpost:
             result =  hhb_dataloader().journaalposten.by_transaction(root.get('id'))
         else:
-            result = journaalpost
+            if journaalpost == -1:
+                result = None
+            else:
+                result = journaalpost
         return result
 
     def resolve_customer_statement_message(root, info):

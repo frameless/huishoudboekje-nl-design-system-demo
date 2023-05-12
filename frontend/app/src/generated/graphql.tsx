@@ -716,6 +716,7 @@ export type Journaalpost = {
   grootboekrekening?: Maybe<Grootboekrekening>;
   id?: Maybe<Scalars['Int']>;
   isAutomatischGeboekt?: Maybe<Scalars['Boolean']>;
+  rubriek?: Maybe<Rubriek>;
   transaction?: Maybe<BankTransaction>;
 };
 
@@ -2416,7 +2417,7 @@ export type SearchTransactiesQueryVariables = Exact<{
 }>;
 
 
-export type SearchTransactiesQuery = { searchTransacties?: { banktransactions?: Array<{ id?: number, informationToAccountOwner?: string, statementLine?: string, bedrag?: any, isCredit?: boolean, isGeboekt?: boolean, transactieDatum?: any, journaalpost?: { id?: number }, tegenRekening?: { iban?: string, rekeninghouder?: string } }>, pageInfo?: { count?: number, limit?: number, start?: number } } };
+export type SearchTransactiesQuery = { searchTransacties?: { banktransactions?: Array<{ id?: number, informationToAccountOwner?: string, statementLine?: string, bedrag?: any, isCredit?: boolean, isGeboekt?: boolean, transactieDatum?: any, journaalpost?: { id?: number, rubriek?: { naam?: string } }, tegenRekening?: { iban?: string, rekeninghouder?: string } }>, pageInfo?: { count?: number, limit?: number, start?: number } } };
 
 export const CustomerStatementMessageFragmentDoc = gql`
     fragment CustomerStatementMessage on CustomerStatementMessage {
@@ -6536,6 +6537,9 @@ export const SearchTransactiesDocument = gql`
       transactieDatum
       journaalpost {
         id
+        rubriek {
+          naam
+        }
       }
       tegenRekening {
         iban

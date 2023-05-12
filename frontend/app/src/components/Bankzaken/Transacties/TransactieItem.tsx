@@ -50,6 +50,13 @@ const TransactieItem: React.FC<TransactieItemProps> = ({transactie: bt, ...props
 						</Text>
 					)}
 				</Box>
+				<Box flex={0} minWidth={250}>
+					<Stack direction={"row"} justifyContent={"space-between"}>
+						<Text>
+							{bt.journaalpost?.rubriek ? bt.journaalpost?.rubriek.naam : ""}
+						</Text>
+					</Stack>
+				</Box>
 				<Box flex={0} minWidth={120}>
 					<Stack direction={"row"} justifyContent={"space-between"}>
 						<Text>&euro;</Text>

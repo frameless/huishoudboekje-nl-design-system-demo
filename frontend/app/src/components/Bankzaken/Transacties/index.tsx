@@ -122,16 +122,18 @@ const Transactions = () => {
 	const [zoektermen, setZoektermen] = useState<string[]>(banktransactieFilters.zoektermen || []);
 	const onAddzoekterm = (e) => {
 		e.preventDefault();
-		const list : string[] = []
-		list.push(zoekterm)
-		const newZoektermen = zoektermen.concat(list)
-		setBanktransactieFilters({
-			...banktransactieFilters,
-			zoektermen: newZoektermen.length > 0 ? newZoektermen : undefined
-		})
-		setZoektermen(newZoektermen)
-		setZoekterm("")
-		goFirst()
+		if(zoekterm !== ""){
+			const list : string[] = []
+			list.push(zoekterm)
+			const newZoektermen = zoektermen.concat(list)
+			setBanktransactieFilters({
+				...banktransactieFilters,
+				zoektermen: newZoektermen.length > 0 ? newZoektermen : undefined
+			})
+			setZoektermen(newZoektermen)
+			setZoekterm("")
+			goFirst()
+		}
 	};
 
 	const onDeleteZoekterm = (value) => {

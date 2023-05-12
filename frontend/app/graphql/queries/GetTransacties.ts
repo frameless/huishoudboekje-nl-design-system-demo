@@ -34,6 +34,9 @@ export const GetSearchTransactiesQuery = gql`
                 transactieDatum
                 journaalpost{
                     id
+                    rubriek{
+                        naam
+                    }
                 }
                 tegenRekening{
                     iban

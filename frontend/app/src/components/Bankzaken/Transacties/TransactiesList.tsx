@@ -31,6 +31,9 @@ const TransactiesList: React.FC<TransactiesListProps> = ({transacties}) => {
 				<Box paddingLeft={9} flex={2} textAlign={"left"}>
 					<FormLabel>{t("transacties.tegenrekening")}</FormLabel>
 				</Box>
+				<Box flex={0} minWidth={250}>
+					<FormLabel>{t("transacties.rubriek")}</FormLabel>
+				</Box>
 				<Box flex={0} minWidth={120}>
 					<FormLabel>{t("transacties.bedrag")}</FormLabel>
 				</Box>
