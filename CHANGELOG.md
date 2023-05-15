@@ -2,6 +2,14 @@
 
 ## 1.9.0
 
+Deze versie omvat weergave van saldo en diverse opties voor zoeken en filteren.
+
+Je bekijkt het saldo op de balans van een deelnemende inwoner op het scherm van deze deelnemer. Het saldo omvat alle banktransacties die afgeletterd zijn op een afspraak van die deelnemer.
+
+Het totale saldo op de balans en een saldo van meerdere deelnemers bekijk je op het scherm rapportage. Standaard wordt het totale saldo getoond.
+
+In het overzicht met alle banktransacties kun je zoeken naar tekst in omschrijvingen van banktransacties en filteren op: status aflettering, betaalrichting, boekdatum, tegenrekening, tegenrekeninghouder, gekoppelde burger en bedrag. Standaard worden alleen niet-afgeletterde banktransacties getoond en zijn uitgebreide opties voor zoeken en filteren verborgen.
+
 ### Minor Changes
 
 - 61915508: Saldo implementatie toegevoegd aan de applicatie. De applicatie houdt nu (per maand) een saldo bij op het moment dat er transacties
