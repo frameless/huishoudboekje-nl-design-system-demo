@@ -64,6 +64,7 @@ import ZoektermenList from "../../shared/ZoektermenList";
 import AddAlarmModal from "./AddAlarmModal";
 import AfspraakDetailMenu from "./AfspraakDetailMenu";
 import AfspraakEndModal from "./AfspraakEndModal";
+import BurgerContextContainer from "../../Burgers/BurgerContextContainer";
 
 const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 	const validator = useZoektermValidator();
@@ -333,7 +334,7 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 					</AlertDescription>
 				</Alert>
 			)}
-
+			<BurgerContextContainer burger={afspraak.burger}/>
 			<SectionContainer>
 				<Section title={t("afspraakDetailView.section1.title")} helperText={t("afspraakDetailView.section1.helperText")} left>
 					<Stack>

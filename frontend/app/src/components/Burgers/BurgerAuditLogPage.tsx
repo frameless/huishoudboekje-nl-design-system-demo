@@ -11,6 +11,7 @@ import BackButton from "../shared/BackButton";
 import Page from "../shared/Page";
 import Section from "../shared/Section";
 import SectionContainer from "../shared/SectionContainer";
+import BurgerContextContainer from "./BurgerContextContainer";
 
 const BurgerAuditLogPage = () => {
 	const {id = ""} = useParams<{id: string}>();
@@ -31,6 +32,7 @@ const BurgerAuditLogPage = () => {
 			const gs: GebruikersActiviteit[] = data.gebruikersactiviteitenPaged?.gebruikersactiviteiten || [];
 			return (
 				<Page title={t("pages.burgerGebeurtenissen.title", {name: formatBurgerName(burger)})} backButton={<BackButton to={AppRoutes.ViewBurger(id)} />}>
+					<BurgerContextContainer burger={burger}/>
 					<SectionContainer>
 						<Section title={t("pages.gebeurtenissen.title")} helperText={t("pages.gebeurtenissen.helperTextBurger")} right={<PaginationButtons />}>
 							<GebeurtenissenTableView gebeurtenissen={gs} />

@@ -717,7 +717,11 @@
   },
   "backToBurgersList": "Terug naar alle burgers",
   "burgers": {
-    "burgers": "Burgers"
+    "burgers": "Burgers",
+    "context": {
+      "title": "Burger",
+      "noBurger": "Burger niet bekend"
+    }
   },
   "configuratie": "Configuratie",
   "configuratieForm": {
