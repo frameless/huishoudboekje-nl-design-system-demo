@@ -9,7 +9,7 @@ import {TriangleDownIcon, TriangleUpIcon} from "@chakra-ui/icons";
 import usePagination from "../../../utils/usePagination";
 import Queryable from "../../../utils/Queryable";
 import ZoektermenList from "../../shared/ZoektermenList";
-import {floatMathOperation, MathOperation, useReactSelectStyles, formatBurgerName} from "../../../utils/things";
+import {floatMathOperation, MathOperation, useReactSelectStyles, formatBurgerName, getBurgerHhbId} from "../../../utils/things";
 import d from "../../../utils/dayjs";
 import {useLazyQuery} from "@apollo/client/react/hooks/useLazyQuery";
 
@@ -349,7 +349,7 @@ const BookingSection = ({transaction, rubrieken}) => {
 										const burgers_filter = burgers.filter(b => filterBurgerIds.includes(b.id!)).map(b => ({
 											key: b.id,
 											value: b.id,
-											label: formatBurgerName(b),
+											label: formatBurgerName(b)  + " " + getBurgerHhbId(b),
 										}));
 										const organisaties: Organisatie[] = data.organisaties || [];
 										const organisaties_filter = organisaties.filter(o => filterOrganisatieids.includes(o.id!)).map(o => ({
@@ -365,7 +365,7 @@ const BookingSection = ({transaction, rubrieken}) => {
 														<Select onChange={onSelectBurger} options={burgers.map(b => ({
 															key: b.id,
 															value: b.id,
-															label: formatBurgerName(b),
+															label: formatBurgerName(b)  + " " + getBurgerHhbId(b),
 														}))} styles={reactSelectStyles.default} isMulti isClearable={true} noOptionsMessage={() => t("select.noOptions")} maxMenuHeight={200} placeholder={t("charts.optionAllBurgers")} value={burgers_filter} />
 													</FormControl>
 													<FormControl as={Stack} flex={1}>
