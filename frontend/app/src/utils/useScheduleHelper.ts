@@ -4,70 +4,60 @@ import {Schedule} from "../models/models";
 import d from "./dayjs";
 import {humanJoin, Months} from "./things";
 
+
+const SECONDS_IN_YEAR = 3600 * 24 * 365;
+
 const useScheduleHelper = (schedule?: Schedule | Betaalinstructie) => {
 	const {t} = useTranslation();
-
 	return {
 		toString: (): string => {
 			if (!schedule) {
 				return t("schedule.unknown");
 			}
+			// Todo: this happens when there is a startDate and endDate, but no byMonth, byMonthDay, or byDay
+			let result = JSON.stringify(schedule, null, 2);
 
 			const {byDay, byMonth = [], byMonthDay = [], startDate, endDate} = schedule;
-
+			let periodLongerThenOrYear = true;
+			if (endDate !== undefined) {
+				periodLongerThenOrYear = Math.abs(d(startDate, "YYYY-MM-DD")
+					.diff(d(endDate, "YYYY-MM-DD"), "seconds")) >= SECONDS_IN_YEAR;
+			}
+			console.log(schedule)
 			if (byDay && byDay.length > 0) {
 				if (byDay.length === 7) {
-					return t("schedule.everyDay");
+					result = t("schedule.everyDay");
 				}
 
-				return [t("schedule.everyWeek"), t("schedule.onDays", {days: humanJoin(byDay.map(d => t("schedule." + String(DayOfWeek[d]).toLowerCase())))})].join(" ");
+				result = [t("schedule.everyWeek"), t("schedule.onDays", {days: humanJoin(byDay.map(d => t("schedule." + String(DayOfWeek[d]).toLowerCase())))})].join(" ");
 			}
-
-			if (byMonth.length > 0 && byMonthDay.length > 0) {
-				const str = [];
-
-				if (startDate && endDate) {
-					const dStartDate = d(startDate, "YYYY-MM-DD");
-					const dEndDate = d(endDate, "YYYY-MM-DD");
-					const periodLength = Math.abs(dStartDate.diff(dEndDate, "seconds"));
-					const onceDate = d().year(dStartDate.year()).month(byMonth[0] - 1).date(byMonthDay[0]);
-
-					if (!onceDate.isValid()) {
-						return t("unknown");
+			if (byMonth.length > 0 && byMonthDay.length > 0 && startDate !== endDate) {
+				const scheduleStrings = [];
+				if (byMonth.length > 0) {
+					if (byMonth.length >= 12 && periodLongerThenOrYear) {
+						scheduleStrings.push(t("schedule.everyMonth"));
 					}
-
-					if (periodLength <= 3600 * 24 * 365) {
-						str.push(t("schedule.onceOnDate", {date: onceDate.format("L")}));
-					}
-				}
-				else {
-					if (byMonth.length > 0) {
-						if (byMonth.length >= 12) {
-							str.push(t("schedule.everyMonth"));
+					else {
+						if (periodLongerThenOrYear) {
+							scheduleStrings.push(t("schedule.everyYear"));
 						}
-						else {
-							str.push(t("schedule.everyYear"), t("schedule.inMonths", {months: humanJoin(byMonth.map(b => t("months." + Months[b - 1])))}));
-						}
-					}
-
-					if (byMonthDay.length > 0) {
-						str.push(t("schedule.onDates", {dates: humanJoin(byMonthDay.map(b => b + "e"))}));
+						scheduleStrings.push(t("schedule.inMonths", {
+							months: humanJoin(byMonth.map(b => t("months." + Months[b - 1])))
+						}), t("schedule.onDates", {
+							dates: humanJoin(byMonthDay.map(b => b + "e"))
+						}));
 					}
 				}
-
-				if (str.length === 0) {
-					return t("schedule.eenmalig");
-				}
-
-				return str.join(" ");
+				result = scheduleStrings.join(" ");
+			}
+			if (startDate === endDate) {
+				result = t("schedule.onceOnDate", {date: d(startDate, "YYYY-MM-DD").format("DD-MM-YYYY")})
 			}
 
-			if(byMonth.length === 0 || byMonthDay.length === 0 || !byDay){
-				return t("schedule.eenmalig");
+			if (byMonth.length === 0 && byMonthDay.length === 0 && !byDay) {
+				result = t("schedule.eenmalig");
 			}
-
-			// Todo: this happens when there is a startDate and endDate, but no byMonth, byMonthDay, or byDay
-			return JSON.stringify(schedule, null, 2);
+			return result;
 		},
 	};
 };
