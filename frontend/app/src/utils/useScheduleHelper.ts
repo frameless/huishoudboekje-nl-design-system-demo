@@ -23,7 +23,6 @@ const useScheduleHelper = (schedule?: Schedule | Betaalinstructie) => {
 				periodLongerThenOrYear = Math.abs(d(startDate, "YYYY-MM-DD")
 					.diff(d(endDate, "YYYY-MM-DD"), "seconds")) >= SECONDS_IN_YEAR;
 			}
-			console.log(schedule)
 			if (byDay && byDay.length > 0) {
 				if (byDay.length === 7) {
 					result = t("schedule.everyDay");
