@@ -107,10 +107,10 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "i18next-parser": "^7.0.3",
     "jest-junit": "^15.0.0",
-    "nwsapi": "^2.2.2",
+    "nwsapi": "2.2.2",
     "storybook-dark-mode": "^2.0.4",
     "storybook-react-i18next": "^1.1.2",
-    "webpack": "^5.75.0"
+    "webpack": "^5.82.0"
   },
   "overrides": {
     "loader-utils@^2.0.0 <2.0.3": "^2.0.3"
