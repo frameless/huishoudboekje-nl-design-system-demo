@@ -424,7 +424,7 @@ const BookingSection = ({transaction, rubrieken}) => {
 													setTotal(data?.searchAfspraken?.pageInfo?.count || 0)
 													return (
 														<Stack spacing={2}>
-															{[...options.suggesties, ...options.afspraken].length === 0 ? (
+															{searchAfspraken.length === 0 ? (
 																<Text>{t("bookingSection.noResults")}</Text>
 															) : (
 																<Table size={"sm"}>
