@@ -4,8 +4,8 @@ import React from "react";
 import {useTranslation} from "react-i18next";
 import {NavLink} from "react-router-dom";
 import {AppRoutes} from "../../../config/routes";
-import {BankTransaction, GetTransactieDocument, useDeleteJournaalpostMutation, GetSaldoDocument, useUpdateSaldoMutation} from "../../../generated/graphql";
-import {MathOperation, currencyFormat2, floatMathOperation, formatBurgerName} from "../../../utils/things";
+import {BankTransaction, GetTransactieDocument, useDeleteJournaalpostMutation, GetSaldoDocument, useUpdateSaldoMutation, Burger} from "../../../generated/graphql";
+import {MathOperation, currencyFormat2, floatMathOperation, formatBurgerName, getBurgerHhbId} from "../../../utils/things";
 import useToaster from "../../../utils/useToaster";
 import {useLazyQuery} from "@apollo/client";
 import d from "../../../utils/dayjs";
@@ -77,7 +77,7 @@ const BookingDetailsView: React.FC<BookingDetailsViewProps> = ({transactie}) => 
 					<Box flex={1}>
 						<FormLabel>{t("burger")}</FormLabel>
 						<Box>
-							<Text>{formatBurgerName(journaalpostAfspraak.burger)}</Text>
+							<Text>{formatBurgerName(journaalpostAfspraak.burger) + " (" + getBurgerHhbId(journaalpostAfspraak.burger as Burger) + ")"}</Text>
 						</Box>
 					</Box>
 					<Box flex={1}>
