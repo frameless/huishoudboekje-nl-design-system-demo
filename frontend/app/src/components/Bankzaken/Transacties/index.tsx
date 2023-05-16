@@ -11,7 +11,7 @@ import SectionContainer from "../../shared/SectionContainer";
 import TransactiesList from "./TransactiesList";
 import useStore from "../../../store";
 import { defaultBanktransactieFilters } from "./defaultBanktransactieFilters";
-import { formatBurgerName, useReactSelectStyles } from "../../../utils/things";
+import { formatBurgerName, getBurgerHhbId, useReactSelectStyles } from "../../../utils/things";
 import Select from "react-select";
 import DatePicker from "react-datepicker";
 import d from "../../../utils/dayjs";
@@ -377,7 +377,7 @@ const Transactions = () => {
 														const burgers_filter = burgers.filter(b => filterBurgerIds.includes(b.id!)).map(b => ({
 															key: b.id,
 															value: b.id,
-															label: formatBurgerName(b),
+															label: formatBurgerName(b)   + " " + getBurgerHhbId(b),
 														}));
 														return (
 															<Stack direction={"column"} spacing={5} flex={1}>
@@ -387,7 +387,7 @@ const Transactions = () => {
 																		<Select  onChange={onSelectBurger} options={burgers.map(b => ({
 																			key: b.id,
 																			value: b.id,
-																			label: formatBurgerName(b),
+																			label: formatBurgerName(b) + " " + getBurgerHhbId(b),
 																		}))}
 																		isDisabled={blockBookedFilters()}
 																		styles={reactSelectStyles.default} isMulti isClearable={true} noOptionsMessage={() => t("select.noOptions")} maxMenuHeight={200}
