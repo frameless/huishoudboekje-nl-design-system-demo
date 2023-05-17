@@ -77,7 +77,7 @@ const BookingDetailsView: React.FC<BookingDetailsViewProps> = ({transactie}) => 
 					<Box flex={1}>
 						<FormLabel>{t("burger")}</FormLabel>
 						<Box>
-							<Text>{formatBurgerName(journaalpostAfspraak.burger) + " (" + getBurgerHhbId(journaalpostAfspraak.burger as Burger) + ")"}</Text>
+							<Text>{formatBurgerName(journaalpostAfspraak.burger) + " " + getBurgerHhbId(journaalpostAfspraak.burger as Burger)}</Text>
 						</Box>
 					</Box>
 					<Box flex={1}>
