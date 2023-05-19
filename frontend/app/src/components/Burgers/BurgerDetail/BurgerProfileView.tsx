@@ -8,27 +8,33 @@ import d from "../../../utils/dayjs";
 import {getBurgerHhbId} from "../../../utils/things";
 import Section from "../../shared/Section";
 import SectionContainer from "../../shared/SectionContainer";
+import BurgerContextContainer from "../BurgerContextContainer";
 
 const BurgerProfileView: React.FC<{burger: Burger}> = ({burger}) => {
 	const {t} = useTranslation();
 
 	return (
 		<SectionContainer>
-			<Section title={t("forms.burgers.sections.personal.title")} helperText={t("forms.burgers.sections.personal.detailText")} right={(
-				<Button colorScheme={"primary"} variant={"outline"} size={"sm"} as={NavLink} to={AppRoutes.EditBurger(String(burger.id))}>{t("global.actions.edit")}</Button>
-			)}>
+			<Section title={t("burgers.context.title")}>
 				<Stack>
 					<Stack spacing={2} mb={1} direction={["column", "row"]}>
 						<Stack spacing={1} flex={1}>
 							<FormLabel>{t("forms.burgers.fields.hhbId")}</FormLabel>
 							<Text>{getBurgerHhbId(burger)}</Text>
 						</Stack>
-						<Stack spacing={1} flex={1}>
-							<FormLabel>{t("forms.burgers.fields.bsn")}</FormLabel>
-							<Text>{burger.bsn}</Text>
-						</Stack>
 					</Stack>
-					<Stack spacing={2} mb={1} direction={["column", "row"]}>
+				</Stack>
+			</Section>
+			<Section title={t("forms.burgers.sections.personal.title")} helperText={t("forms.burgers.sections.personal.detailText")} right={(
+				<Button colorScheme={"primary"} variant={"outline"} size={"sm"} as={NavLink} to={AppRoutes.EditBurger(String(burger.id))}>{t("global.actions.edit")}</Button>
+			)}>
+				<Stack spacing={2} mb={1} direction={["column", "row"]}>
+					<Stack spacing={1} flex={1}>
+						<FormLabel>{t("forms.burgers.fields.bsn")}</FormLabel>
+						<Text>{burger.bsn}</Text>
+					</Stack>
+				</Stack>
+				<Stack spacing={2} mb={1} direction={["column", "row"]}>
 						<Stack direction={["column", "row"]} spacing={1} flex={1}>
 							<Stack spacing={1} flex={1}>
 								<FormLabel>{t("forms.burgers.fields.initials")}</FormLabel>
@@ -44,6 +50,7 @@ const BurgerProfileView: React.FC<{burger: Burger}> = ({burger}) => {
 							<Text>{burger.achternaam}</Text>
 						</Stack>
 					</Stack>
+				<Stack>
 					<Stack spacing={2} mb={1} direction={["column", "row"]}>
 						<Stack spacing={1} flex={1}>
 							<FormLabel>{t("forms.burgers.fields.dateOfBirth")}</FormLabel>
