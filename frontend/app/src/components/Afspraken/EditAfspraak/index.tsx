@@ -10,6 +10,7 @@ import Page from "../../shared/Page";
 import PageNotFound from "../../shared/PageNotFound";
 import AfspraakForm from "../AfspraakForm";
 import AfspraakFormContext, {AfspraakFormContextType} from "./context";
+import BurgerContextContainer from "../../Burgers/BurgerContextContainer";
 
 const EditAfspraak = () => {
 	const {id = ""} = useParams<{id: string}>();
@@ -78,6 +79,7 @@ const EditAfspraak = () => {
 			return (
 				<Page title={t("forms.afspraken.titleEdit")} backButton={<BackButton to={AppRoutes.ViewAfspraak(String(afspraak.id))} />}>
 					<AfspraakFormContext.Provider value={ctxValue}>
+						<BurgerContextContainer burger={afspraak.burger}/>
 						<AfspraakForm burgerRekeningen={afspraak.burger?.rekeningen || []} values={editAfspraakValues} onSubmit={onSubmitForm} isLoading={$updateAfspraakMutation.loading} />
 					</AfspraakFormContext.Provider>
 				</Page>

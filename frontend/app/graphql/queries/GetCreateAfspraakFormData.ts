@@ -6,6 +6,10 @@ import {RubriekFragment} from "../fragments/Rubriek";
 export const GetCreateAfspraakFormDataQuery = gql`
     query getCreateAfspraakFormData($burgerId: Int!) {
         burger(id: $burgerId){
+            id
+            voorletters
+            voornamen
+            achternaam
             rekeningen{
                 ...Rekening
             }
