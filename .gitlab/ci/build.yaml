@@ -94,7 +94,7 @@ build-docker-images-parallel:
     matrix:
       - NAME: frontend
         DOCKERATTRIBUTES: "./frontend"
-        DIR: ./frotend
+        DIR: ./frontend
       - NAME: backend
         DOCKERATTRIBUTES: "./backend"
         DIR: ./backend
