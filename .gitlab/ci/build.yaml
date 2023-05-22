@@ -67,7 +67,7 @@ build-tagged-images:
     - branches@commonground/huishoudboekje/app-new
 
 
-build-docker-images-test:
+build-docker-images-parallel:
   stage: build
   image: registry.gitlab.com/commonground/huishoudboekje/review-app-deployer:latest
   needs: [ ]
@@ -89,7 +89,7 @@ build-docker-images-test:
     refs:
       - branches@commonground/huishoudboekje/app-new
     changes:
-      -  $DIR
+      - $DIR
   parallel:
     matrix:
       - NAME: frontend
