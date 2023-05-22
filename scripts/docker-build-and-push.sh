@@ -13,12 +13,12 @@ docker build -t $CI_REGISTRY_IMAGE/postadressenservice:$IMAGE_TAG    --build-arg
 docker build -t $CI_REGISTRY_IMAGE/alarmenservice:$IMAGE_TAG         --build-arg "DOCKER_PROXY=$DOCKER_PROXY"   ./services/alarmenservice
 docker build -t $CI_REGISTRY_IMAGE/signalenservice:$IMAGE_TAG        --build-arg "DOCKER_PROXY=$DOCKER_PROXY"   ./services/signalenservice
 docker build -t $CI_REGISTRY_IMAGE/authservice:$IMAGE_TAG            --build-arg "DOCKER_PROXY=$DOCKER_PROXY"   ./services/authservice
-docker build -t $CI_REGISTRY_IMAGE/banktransactieservice:$IMAGE_TAG  --build-arg "DOCKER_PROXY=$DOCKER_PROXY"   --file=./services/bank_transactie_service/Dockerfile  services
-docker build -t $CI_REGISTRY_IMAGE/grootboekservice:$IMAGE_TAG       --build-arg "DOCKER_PROXY=$DOCKER_PROXY"   --file=./services/grootboek_service/Dockerfile        services
-docker build -t $CI_REGISTRY_IMAGE/huishoudboekjeservice:$IMAGE_TAG  --build-arg "DOCKER_PROXY=$DOCKER_PROXY"   --file=./services/huishoudboekje_service/Dockerfile   services
-docker build -t $CI_REGISTRY_IMAGE/logservice:$IMAGE_TAG             --build-arg "DOCKER_PROXY=$DOCKER_PROXY"   --file=./services/log_service/Dockerfile              services
-docker build -t $CI_REGISTRY_IMAGE/organisatieservice:$IMAGE_TAG     --build-arg "DOCKER_PROXY=$DOCKER_PROXY"   --file=./services/organisatie_service/Dockerfile      services
-docker build -t $CI_REGISTRY_IMAGE/rapportageservice:$IMAGE_TAG      --build-arg "DOCKER_PROXY=$DOCKER_PROXY"   --file=./services/rapportage_service/Dockerfile       services
+docker build -t $CI_REGISTRY_IMAGE/banktransactieservice:$IMAGE_TAG  --build-arg "DOCKER_PROXY=$DOCKER_PROXY"   ./services/bank_transactie_service
+docker build -t $CI_REGISTRY_IMAGE/grootboekservice:$IMAGE_TAG       --build-arg "DOCKER_PROXY=$DOCKER_PROXY"   ./services/grootboek_service
+docker build -t $CI_REGISTRY_IMAGE/huishoudboekjeservice:$IMAGE_TAG  --build-arg "DOCKER_PROXY=$DOCKER_PROXY"   ./services/huishoudboekje_service
+docker build -t $CI_REGISTRY_IMAGE/logservice:$IMAGE_TAG             --build-arg "DOCKER_PROXY=$DOCKER_PROXY"   ./services/log_service
+docker build -t $CI_REGISTRY_IMAGE/organisatieservice:$IMAGE_TAG     --build-arg "DOCKER_PROXY=$DOCKER_PROXY"   ./services/organisatie_service
+docker build -t $CI_REGISTRY_IMAGE/rapportageservice:$IMAGE_TAG      --build-arg "DOCKER_PROXY=$DOCKER_PROXY"   ./services/rapportage_service
 
 # Push all docker images to the registry
 docker push $CI_REGISTRY_IMAGE/frontend:$IMAGE_TAG
