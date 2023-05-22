@@ -67,7 +67,7 @@ build-tagged-images:
     - branches@commonground/huishoudboekje/app-new
 
 
-build-docker-images-dev:
+build-docker-images-test:
   stage: build
   image: registry.gitlab.com/commonground/huishoudboekje/review-app-deployer:latest
   needs: [ ]

@@ -31,7 +31,7 @@
 deploy-deployment-master:
   <<: *deploy
   needs:
-    - build-images-dev
+    - build-docker-images-test
   environment:
     name: demo
     url: https://demo.huishoudboekje.demoground.nl/
@@ -54,7 +54,7 @@ deploy-deployment-master:
 deploy-deployment-acceptance:
   <<: *deploy
   needs:
-    - build-images-dev
+    - build-docker-images-test
   environment:
     name: acc
     url: https://acc.huishoudboekje.demoground.nl/
@@ -77,7 +77,7 @@ deploy-deployment-acceptance:
 deploy-deployment-test:
   <<: *deploy
   needs:
-    - build-images-dev
+    - build-docker-images-test
     - build-storybook
   environment:
     name: test
@@ -102,7 +102,7 @@ deploy-deployment-test:
 deploy-deployment-review:
   <<: *deploy
   needs:
-    - build-images-dev
+    - build-docker-images-test
     - build-storybook
   environment:
     name: review/$CI_COMMIT_REF_SLUG
