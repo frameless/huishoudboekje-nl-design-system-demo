@@ -16,13 +16,14 @@ const useScheduleHelper = (schedule?: Schedule | Betaalinstructie) => {
 
 			const {byDay, byMonth = [], byMonthDay = [], startDate, endDate} = schedule;
 			let periodLongerThenOrYear = true;
-			if (endDate !== undefined) {
+			if (endDate !== undefined && endDate !== null) {
+				console.log(endDate)
 				const dateStart = d(startDate, "YYYY-MM-DD").toDate();
 				const dateEnd = d(endDate, "YYYY-MM-DD").toDate();
 				dateStart.setFullYear(dateStart.getFullYear() + 1)
 				dateStart.setHours(0, 0, 0, 0)
 				dateEnd.setHours(0, 0, 0, 0)
-				periodLongerThenOrYear = dateStart.getTime() < dateEnd.getTime()
+				periodLongerThenOrYear = dateStart.getTime() <= dateEnd.getTime()
 			}
 			if (byDay && byDay.length > 0) {
 				if (byDay.length === 7) {
@@ -35,7 +36,10 @@ const useScheduleHelper = (schedule?: Schedule | Betaalinstructie) => {
 				const scheduleStrings = [];
 				if (byMonth.length > 0) {
 					if (byMonth.length >= 12 && periodLongerThenOrYear) {
-						scheduleStrings.push(t("schedule.everyMonth"));
+						scheduleStrings.push(t("schedule.everyMonth"), t("schedule.onDates", {
+							dates: humanJoin(byMonthDay.map(b => b + "e"))
+						})
+						);
 					}
 					else {
 						if (periodLongerThenOrYear) {
