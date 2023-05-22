@@ -1,12 +1,12 @@
-import {WarningIcon} from "@chakra-ui/icons";
-import {Box, BoxProps, Flex, Stack, Tag, TagLabel, TagLeftIcon, Text, Tooltip, useBreakpointValue} from "@chakra-ui/react";
+import {CheckIcon, WarningIcon} from "@chakra-ui/icons";
+import {Box, BoxProps, Icon, Stack, Tag, Text, Tooltip, useBreakpointValue} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
 import {useNavigate} from "react-router-dom";
 import {AppRoutes} from "../../../config/routes";
 import {currencyFormat2, formatIBAN} from "../../../utils/things";
 import PrettyIban from "../../shared/PrettyIban";
-import {TransactionSimple} from "./TransactieOverzichtObject";
+import { BankTransaction } from "../../../generated/graphql";
 
 const hoverStyles = {
 	_hover: {
@@ -16,19 +16,27 @@ const hoverStyles = {
 };
 
 type TransactieItemProps = BoxProps & {
-	transactie: TransactionSimple
+	transactie: BankTransaction
 };
 
 const TransactieItem: React.FC<TransactieItemProps> = ({transactie: bt, ...props}) => {
 	const {t} = useTranslation();
 	const isMobile = useBreakpointValue([true, null, null, false]);
 	const navigate = useNavigate();
-
 	return (
 		<Box px={2} mx={-2} {...!isMobile && hoverStyles}>
 			<Stack direction={"row"} alignItems={"center"} justifyContent={"center"} {...props} onClick={() => {
 				navigate(AppRoutes.ViewTransactie(String(bt.id)));
 			}}>
+				{bt.isGeboekt ? (
+					<Tag colorScheme={"green"} size={"sm"} variant={"subtle"}>
+						<Icon as={CheckIcon} />
+					</Tag>
+				) : (
+					<Tag colorScheme={"red"} size={"sm"} variant={"subtle"}>
+						<Icon as={WarningIcon} />
+					</Tag>
+				)}
 				<Box flex={2}>
 					{bt.tegenRekening ? (
 						<Text>
@@ -42,29 +50,19 @@ const TransactieItem: React.FC<TransactieItemProps> = ({transactie: bt, ...props
 						</Text>
 					)}
 				</Box>
-
-				{!isMobile && (
-					<Flex flex={1} width={"100%"} alignItems={"center"}>
-						{bt.rubriek ? (
-							<Text fontSize={"sm"}>{bt.rubriek}</Text>
-						) : (
-							<Tag colorScheme={"red"} size={"sm"} variant={"subtle"}>
-								<TagLeftIcon boxSize={"12px"} as={WarningIcon} />
-								<TagLabel>
-									{t("unbooked")}
-								</TagLabel>
-							</Tag>
-						)}
-					</Flex>
-				)}
-
+				<Box flex={0} minWidth={250}>
+					<Stack direction={"row"} justifyContent={"space-between"}>
+						<Text>
+							{bt.journaalpost?.rubriek ? bt.journaalpost?.rubriek.naam : ""}
+						</Text>
+					</Stack>
+				</Box>
 				<Box flex={0} minWidth={120}>
 					<Stack direction={"row"} justifyContent={"space-between"}>
 						<Text>&euro;</Text>
 						<Text>{currencyFormat2(false).format(bt.bedrag)}</Text>
 					</Stack>
 				</Box>
-
 			</Stack>
 		</Box>
 	);

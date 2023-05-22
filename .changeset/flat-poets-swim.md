@@ -2,4 +2,4 @@
 "huishoudboekje": patch
 ---
 
-Fixed bug with betaalinstructies
+Added burger context card

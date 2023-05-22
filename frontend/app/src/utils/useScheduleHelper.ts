@@ -4,9 +4,6 @@ import {Schedule} from "../models/models";
 import d from "./dayjs";
 import {humanJoin, Months} from "./things";
 
-
-const SECONDS_IN_YEAR = 3600 * 24 * 365;
-
 const useScheduleHelper = (schedule?: Schedule | Betaalinstructie) => {
 	const {t} = useTranslation();
 	return {
@@ -20,10 +17,13 @@ const useScheduleHelper = (schedule?: Schedule | Betaalinstructie) => {
 			const {byDay, byMonth = [], byMonthDay = [], startDate, endDate} = schedule;
 			let periodLongerThenOrYear = true;
 			if (endDate !== undefined) {
-				periodLongerThenOrYear = Math.abs(d(startDate, "YYYY-MM-DD")
-					.diff(d(endDate, "YYYY-MM-DD"), "seconds")) >= SECONDS_IN_YEAR;
+				const dateStart = d(startDate, "YYYY-MM-DD").toDate();
+				const dateEnd = d(endDate, "YYYY-MM-DD").toDate();
+				dateStart.setFullYear(dateStart.getFullYear() + 1)
+				dateStart.setHours(0, 0, 0, 0)
+				dateEnd.setHours(0, 0, 0, 0)
+				periodLongerThenOrYear = dateStart.getTime() < dateEnd.getTime()
 			}
-			console.log(schedule)
 			if (byDay && byDay.length > 0) {
 				if (byDay.length === 7) {
 					result = t("schedule.everyDay");

@@ -40,6 +40,8 @@ The data models are managed using Alembic and Prisma migration scripts and that 
 > symlinks should be working.
 > ![afbeelding](https://gitlab.com/commonground/huishoudboekje/app-new/uploads/faccef92aea1ada494d3384de02103d8/afbeelding.png)
 
+Also, do make sure that (at least from Windows 11 onwards) Developer Mode had been turned on. See: [Microsoft](https://learn.microsoft.com/en-us/windows/apps/get-started/enable-your-device-for-development)
+
 To setup the frontend application, see the [Frontend README](./frontend/app/README.md). \
 To setup the backend applications, there are a few different ways you can set up your local backend development
 environment:

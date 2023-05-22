@@ -20,7 +20,8 @@ from huishoudboekje_service.views import (
     AfdelingView,
     BurgerTransactiesView,
     SaldoView,
-    AfsprakenSearchView
+    AfsprakenFilterView,
+    JournaalpostenFilterView
 )
 from core_service import database
 
@@ -61,8 +62,7 @@ def create_app(config_name='huishoudboekje_service.config.Config'):
         {"path": "/burgers/transacties",
             "view": BurgerTransactiesView, "name": "burger_transacties"},
         {"path": "/afspraken", "view": AfspraakView, "name": "afspraak_view"},
-        {"path": "/afspraken/search", "view": AfsprakenSearchView,
-            "name": "afspraak_search_view"},
+        {"path": "/afspraken/filter", "view": AfsprakenFilterView, "name": "afspraak_filter_view"},
         {"path": "/afspraken/<object_id>", "view": AfspraakView,
             "name": "afspraak_detail_view"},
         {"path": "/rekeningen", "view": RekeningView, "name": "rekening_view"},
@@ -74,6 +74,8 @@ def create_app(config_name='huishoudboekje_service.config.Config'):
             "view": JournaalpostRubriekView, "name": "journaalpost_rubriek_view"},
         {"path": "/journaalposten/<object_id>", "view": JournaalpostView,
             "name": "journaalpost_detail_view"},
+        {"path": "/journaalposten/filter", "view": JournaalpostenFilterView,
+            "name": "journaalpost_filter_view"},
         {"path": "/rubrieken", "view": RubriekView, "name": "rubriek_view"},
         {"path": "/rubrieken/<object_id>", "view": RubriekView,
             "name": "rubriek_detail_view"},

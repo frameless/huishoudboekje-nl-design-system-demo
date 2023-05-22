@@ -1,7 +1,7 @@
 """ GraphQL Afspraken query """
 from decimal import Decimal
 import logging
-from hhb_backend.graphql.dataloaders.afspraak_loader_concept import AfsprakenGetRequestBuilder
+from hhb_backend.graphql.dataloaders.request_builders.afspraak_request_builder import AfsprakenGetRequestBuilder
 import graphene
 
 import hhb_backend.graphql.models.afspraak as afspraak
@@ -87,7 +87,7 @@ class SearchAfsprakenQuery:
         if zoektermen is not None:
             afspraken_filter_builder.by_zoektermen(zoektermen)
 
-        result = hhb_dataloader().afspraken_concept.load_all(afspraken_filter_builder.request)
+        result = hhb_dataloader().afspraken_concept.load_request(afspraken_filter_builder.request)
         
         AuditLogging.create(
             action=info.field_name,

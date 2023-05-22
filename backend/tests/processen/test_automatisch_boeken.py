@@ -157,7 +157,7 @@ def test_automatisch_boeken_no_csm_success_single(mocker: MockerFixture):
 
         journaalposten_post = mock.post(
             f"{settings.HHB_SERVICES_URL}/journaalposten/", json=journaalposten_post_echo)
-        transactions_post = mock.post(
+        transactions_post = mock.put(
             f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/1",
             json=post_echo
         )
@@ -254,7 +254,7 @@ def test_automatisch_boeken_no_csm_success_multiple(mocker: MockerFixture):
 
         journaalposten_post = mock.post(
             f"{settings.HHB_SERVICES_URL}/journaalposten/", json=post_echo_multi(30))
-        transactions_post = mock.post(
+        transactions_post = mock.put(
             f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/1,2", json=post_echo)
 
         result = automatisch_boeken()
@@ -344,7 +344,7 @@ def test_automatisch_boeken_csm_success_multiple(mocker: MockerFixture):
 
         journaalposten_post = mock.post(
             f"{settings.HHB_SERVICES_URL}/journaalposten/", json=post_echo_multi(30))
-        transactions_post = mock.post(
+        transactions_post = mock.put(
             f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/1", json=post_echo)
 
         result = automatisch_boeken(1)
@@ -406,7 +406,7 @@ def test_automatisch_boeken_no_csm_failure_journaalpost_exists(mocker: MockerFix
             status_code=409
         )
 
-        transactions_post = mock.post(
+        transactions_post = mock.put(
             f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/1",
             json=post_echo
         )
@@ -538,7 +538,7 @@ def test_automatisch_boeken_no_csm_multiple_suggesties(mocker: MockerFixture):
             f"{settings.HHB_SERVICES_URL}/journaalposten/?filter_transactions=1,2,3", json={"data": []})
         journaalposten_post = mock.post(
             f"{settings.HHB_SERVICES_URL}/journaalposten/", json=post_echo_multi(30))
-        transactions_post = mock.post(
+        transactions_post = mock.put(
             f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/1,2,3", json=post_echo)
 
         result = automatisch_boeken()

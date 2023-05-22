@@ -113,11 +113,11 @@ export const useReactSelectStyles = () => {
 		default: {
 			control: (provided) => ({
 				...provided,
-				borderColor: inputBorderColor,
+				borderColor: inputBorderColor
 			}),
 			option: (provided) => ({
 				...provided,
-				textAlign: "left",
+				textAlign: "left"
 			}),
 		},
 		error: {
@@ -234,7 +234,7 @@ export const createQueryParamsFromFilters = (filters: Partial<BanktransactieFilt
 			all: undefined,
 			income: true,
 			expenses: false,
-		}[_filters.isCredit || defaultBanktransactieFilters.isCredit],
+		}[_filters.isCredit || "all"],
 		..._filters.dateRange && _filters.dateRange.from && _filters.dateRange.through && {
 			transactieDatum: {
 				BETWEEN: [d(_filters.dateRange.from).format("YYYY-MM-DD"), d(_filters.dateRange.through).format("YYYY-MM-DD") || undefined],

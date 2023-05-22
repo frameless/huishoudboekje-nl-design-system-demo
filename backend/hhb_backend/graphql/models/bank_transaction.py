@@ -37,12 +37,27 @@ class BankTransaction(graphene.ObjectType):
             return tegen_rekening
 
     def resolve_tegen_rekening(root, info):
+        #This is (maybe) not necessary when batching is implemented
+        #----
+        rekening = root.get('rekening')
+        if rekening:
+            return rekening
+        #----
         tegen_rekening = root.get('tegen_rekening')
         if tegen_rekening:
             return hhb_dataloader().rekeningen.by_iban(tegen_rekening)
 
     def resolve_journaalpost(root, info):
-        return hhb_dataloader().journaalposten.by_transaction(root.get('id'))
+        #This is (maybe) not necessary this way when batching is implemented
+        journaalpost = root.get('journaalpost')
+        if not journaalpost:
+            result =  hhb_dataloader().journaalposten.by_transaction(root.get('id'))
+        else:
+            if journaalpost == -1:
+                result = None
+            else:
+                result = journaalpost
+        return result
 
     def resolve_customer_statement_message(root, info):
         """ Get customer_statement_message when requested """

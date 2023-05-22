@@ -587,7 +587,7 @@
     "search": "Zoeken",
     "searchOmschrijvingAndTerms" : "Zoek in omschrijving en zoektermen",
     "organisation" : "Filter organisaties",
-    "amount" : "bedrag",
+    "amount" : "Bedrag",
     "active" : "Actief",
     "ended": "Beëindigd",
     "all": "Alle",
@@ -616,8 +616,31 @@
     }
   },
   "transactionsPage": {
+    "timeUpdated": "Laatste update",
     "title": "Banktransacties",
-    "helperText": "Dit is een lijst van alle banktransacties in het Huishoudboekje."
+    "helperText": "Dit is een lijst van alle banktransacties in het Huishoudboekje.",
+    "filters": {
+      "status": "Status",
+      "direction": "Betaalrichting",
+      "unbooked": "Niet afgeletterd",
+      "booked": "Afgeletterd",
+      "all": "Alle",
+      "incomes": "Inkomsten",
+      "expenses": "Uitgaven",
+      "description": "Zoeken in omschrijving",
+      "active": "Uitgebreide filters actief",
+      "from": "Datum van",
+      "to": "Datum tot",
+      "accounts": "Rekeningen",
+      "burgers": "Burgers",
+      "extensive": "Uitgebreid zoeken",
+      "count": "Aantal gevonden transacties",
+      "none": "Geen",
+      "amountFrom": "Bedrag van",
+      "amountTo": "Bedrag tot",
+      "amountwarning": "Bedrag tot kan niet lager zijn dan bedrag van",
+      "organisatie": "Organisatie"
+    }
   },
   "transaction": "Transactie",
   "form": {
@@ -694,7 +717,11 @@
   },
   "backToBurgersList": "Terug naar alle burgers",
   "burgers": {
-    "burgers": "Burgers"
+    "burgers": "Burgers",
+    "context": {
+      "title": "Burger",
+      "noBurger": "Burger niet bekend"
+    }
   },
   "configuratie": "Configuratie",
   "configuratieForm": {
