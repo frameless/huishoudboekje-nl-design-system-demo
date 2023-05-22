@@ -89,5 +89,5 @@ build-docker-images-new:
   parallel:
     matrix:
       - NAME: logservice
-        DOCKER-ATTRIBUTES: --file=./services/log_service/Dockerfile services
+        DOCKER-ATTRIBUTES: "--file=./services/log_service/Dockerfile services"
 
