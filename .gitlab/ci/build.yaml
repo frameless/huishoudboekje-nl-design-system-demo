@@ -83,7 +83,7 @@ build-docker-images-new:
     - export DOCKER_CONFIG=/tmp/docker-config-$CI_JOB_ID
     - mkdir -p $DOCKER_CONFIG && echo $DOCKER_AUTH_CONFIG > $DOCKER_CONFIG/config.json
     - echo "$CI_REGISTRY_PASSWORD" | docker login $CI_REGISTRY --username $CI_REGISTRY_USER --password-stdin
-    - echo $NAME $DOCKER-ATTRIBUTES
+    - docker build -t $CI_REGISTRY_IMAGE/$NAME:$IMAGE_TAG $DOCKER-ATTRIBUTES
   only:
     - branches@commonground/huishoudboekje/app-new
   parallel:
