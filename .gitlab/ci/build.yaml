@@ -65,3 +65,29 @@ build-tagged-images:
     - tags
   except:
     - branches@commonground/huishoudboekje/app-new
+
+
+build-docker-images-new:
+  <<: *retry
+  stage: build
+  image: registry.gitlab.com/commonground/huishoudboekje/review-app-deployer:latest
+  needs: [ ]
+  services:
+    - docker:20.10.22-dind
+  tags:
+    - cg
+    - docker
+  only:
+    - branches@commonground/huishoudboekje/app-new
+  variables:
+    DOCKER_TLS_CERTDIR: "/certs"
+    CYPRESS_INSTALL_BINARY: "0"
+  script:
+    - export DOCKER_CONFIG=/tmp/docker-config-$CI_JOB_ID
+    - mkdir -p $DOCKER_CONFIG && echo $DOCKER_AUTH_CONFIG > $DOCKER_CONFIG/config.json
+    - echo "$CI_REGISTRY_PASSWORD" | docker login $CI_REGISTRY --username $CI_REGISTRY_USER --password-stdin
+    - sh ./scripts/docker-build-and-push.sh
+  parallel:
+    matrix:
+      - NAME: logservice
+        PATH: --file=./services/log_service/Dockerfile services
