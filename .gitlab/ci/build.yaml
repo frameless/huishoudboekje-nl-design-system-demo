@@ -87,7 +87,6 @@ build-docker-images-test:
     - docker push $CI_REGISTRY_IMAGE/$NAME:$IMAGE_TAG
   only:
     - branches@commonground/huishoudboekje/app-new
-  rules:
     - changes:
       -  $DIR
   parallel:
