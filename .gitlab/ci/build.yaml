@@ -87,34 +87,51 @@ build-docker-images-test:
     - docker push $CI_REGISTRY_IMAGE/$NAME:$IMAGE_TAG
   only:
     - branches@commonground/huishoudboekje/app-new
+  rules:
+    - changes:
+      -  $DIR
   parallel:
     matrix:
       - NAME: frontend
         DOCKERATTRIBUTES: "./frontend"
+        DIR: ./frotend
       - NAME: backend
         DOCKERATTRIBUTES: "./backend"
+        DIR: ./backend
       - NAME: backendburgers
         DOCKERATTRIBUTES: "./backend-burgers"
+        DIR: ./backend-burgers
       - NAME: unleashservice
         DOCKERATTRIBUTES: "./services/unleashservice"
+        DIR: ./services/unleashservice
       - NAME: postadressenservice
         DOCKERATTRIBUTES: "./services/postadressenservice"
+        DIR: ./services/postadressenservice
       - NAME: alarmenservice
         DOCKERATTRIBUTES: "./services/alarmenservice"
+        DIR: ./services/alarmenservice
       - NAME: signalenservice
         DOCKERATTRIBUTES: "./services/signalenservice"
+        DIR: ./services/signalenservice
       - NAME: authservice
         DOCKERATTRIBUTES: "./services/authservice"
+        DIR: ./services/authservice
       - NAME: banktransactieservice
         DOCKERATTRIBUTES: "--file=./services/bank_transactie_service/Dockerfile services"
+        DIR: ./services/banktransactieservice
       - NAME: grootboekservice
         DOCKERATTRIBUTES: "--file=./services/grootboek_service/Dockerfile services"
+        DIR: ./services/grootboekservice
       - NAME: huishoudboekjeservice
         DOCKERATTRIBUTES: "--file=./services/huishoudboekje_service/Dockerfile services"
+        DIR: ./services/huishoudboekjeservice
       - NAME: logservice
         DOCKERATTRIBUTES: "--file=./services/log_service/Dockerfile services"
+        DIR: ./services/logservice
       - NAME: organisatieservice
         DOCKERATTRIBUTES: "--file=./services/organisatie_service/Dockerfile services"
+        DIR: ./services/organisatieservice
       - NAME: rapportageservice
         DOCKERATTRIBUTES: "--file=./services/rapportage_service/Dockerfile services"
+        DIR: ./services/rapportageservice
 
