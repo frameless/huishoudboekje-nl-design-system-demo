@@ -88,7 +88,7 @@ build-docker-images-test:
   only:
     refs:
       - branches@commonground/huishoudboekje/app-new
-    - changes:
+    changes:
       -  $DIR
   parallel:
     matrix:
