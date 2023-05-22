@@ -51,10 +51,10 @@ build-storybook:
     - acceptance
 
 # Build docker images with default tag ("branchName-commitSha").
-build-images-dev:
-  <<: *build-docker-images
-  only:
-    - branches@commonground/huishoudboekje/app-new
+# build-images-dev:
+#   <<: *build-docker-images
+#   only:
+#     - branches@commonground/huishoudboekje/app-new
 
 # Build docker images with the name of the tag as the image tag.
 build-tagged-images:
@@ -67,7 +67,7 @@ build-tagged-images:
     - branches@commonground/huishoudboekje/app-new
 
 
-build-docker-images-new:
+build-docker-images-dev:
   stage: build
   image: registry.gitlab.com/commonground/huishoudboekje/review-app-deployer:latest
   needs: [ ]
@@ -84,10 +84,37 @@ build-docker-images-new:
     - mkdir -p $DOCKER_CONFIG && echo $DOCKER_AUTH_CONFIG > $DOCKER_CONFIG/config.json
     - echo "$CI_REGISTRY_PASSWORD" | docker login $CI_REGISTRY --username $CI_REGISTRY_USER --password-stdin
     - docker build -t $CI_REGISTRY_IMAGE/$NAME:$IMAGE_TAG $DOCKERATTRIBUTES
+    - docker push $CI_REGISTRY_IMAGE/$NAME:$IMAGE_TAG
   only:
     - branches@commonground/huishoudboekje/app-new
   parallel:
     matrix:
+      - NAME: frontend
+        DOCKERATTRIBUTES: "./frontend"
+      - NAME: backend
+        DOCKERATTRIBUTES: "./backend"
+      - NAME: backendburgers
+        DOCKERATTRIBUTES: "./backend-burgers"
+      - NAME: unleashservice
+        DOCKERATTRIBUTES: "./services/unleashservice"
+      - NAME: postadressenservice
+        DOCKERATTRIBUTES: "./services/postadressenservice"
+      - NAME: alarmenservice
+        DOCKERATTRIBUTES: "./services/alarmenservice"
+      - NAME: signalenservice
+        DOCKERATTRIBUTES: "./services/signalenservice"
+      - NAME: authservice
+        DOCKERATTRIBUTES: "./services/authservice"
+      - NAME: banktransactieservice
+        DOCKERATTRIBUTES: "--file=./services/bank_transactie_service/Dockerfile services"
+      - NAME: grootboekservice
+        DOCKERATTRIBUTES: "--file=./services/grootboek_service/Dockerfile services"
+      - NAME: huishoudboekjeservice
+        DOCKERATTRIBUTES: "--file=./services/huishoudboekje_service/Dockerfile services"
       - NAME: logservice
         DOCKERATTRIBUTES: "--file=./services/log_service/Dockerfile services"
+      - NAME: organisatieservice
+        DOCKERATTRIBUTES: "--file=./services/organisatie_service/Dockerfile services"
+      - NAME: rapportageservice
+        DOCKERATTRIBUTES: "--file=./services/rapportage_service/Dockerfile services"
 
