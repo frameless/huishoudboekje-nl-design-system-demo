@@ -88,8 +88,8 @@ build-docker-images-parallel:
   only:
     refs:
       - branches@commonground/huishoudboekje/app-new
-    # changes:
-    #   - $DIR
+    changes:
+      - $DIR
   parallel:
     matrix:
       - NAME: frontend
