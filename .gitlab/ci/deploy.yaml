@@ -31,8 +31,7 @@
 deploy-deployment-master:
   <<: *deploy
   needs:
-    - job: build-docker-images-parallel
-      optional: true
+    - build-docker-images-parallel
   environment:
     name: demo
     url: https://demo.huishoudboekje.demoground.nl/
@@ -55,8 +54,7 @@ deploy-deployment-master:
 deploy-deployment-acceptance:
   <<: *deploy
   needs:
-    - job: build-docker-images-parallel
-      optional: true
+    - build-docker-images-parallel
   environment:
     name: acc
     url: https://acc.huishoudboekje.demoground.nl/
@@ -79,10 +77,8 @@ deploy-deployment-acceptance:
 deploy-deployment-test:
   <<: *deploy
   needs:
-    - job: build-docker-images-parallel
-      optional: true
-    - job: build-storybook
-      optional: false
+    - build-docker-images-parallel
+    - build-storybook
   environment:
     name: test
     url: https://test.huishoudboekje.demoground.nl/
@@ -106,10 +102,8 @@ deploy-deployment-test:
 deploy-deployment-review:
   <<: *deploy
   needs:
-    - job: build-docker-images-parallel
-      optional: true
-    - job: build-storybook
-      optional: false
+    - build-docker-images-parallel
+    - build-storybook
   environment:
     name: review/$CI_COMMIT_REF_SLUG
     url: https://hhb-$CI_COMMIT_REF_SLUG.nlx.reviews/
