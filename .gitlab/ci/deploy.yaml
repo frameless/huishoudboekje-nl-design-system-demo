@@ -81,7 +81,8 @@ deploy-deployment-test:
   needs:
     - job: build-docker-images-parallel
       optional: true
-    - build-storybook
+    - job: build-storybook
+      optional: false
   environment:
     name: test
     url: https://test.huishoudboekje.demoground.nl/
@@ -107,7 +108,8 @@ deploy-deployment-review:
   needs:
     - job: build-docker-images-parallel
       optional: true
-    - build-storybook
+    - job: build-storybook
+      optional: false
   environment:
     name: review/$CI_COMMIT_REF_SLUG
     url: https://hhb-$CI_COMMIT_REF_SLUG.nlx.reviews/
