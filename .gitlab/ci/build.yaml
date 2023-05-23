@@ -20,8 +20,10 @@
     - export DOCKER_CONFIG=/tmp/docker-config-$CI_JOB_ID
     - mkdir -p $DOCKER_CONFIG && echo $DOCKER_AUTH_CONFIG > $DOCKER_CONFIG/config.json
     - echo "$CI_REGISTRY_PASSWORD" | docker login $CI_REGISTRY --username $CI_REGISTRY_USER --password-stdin
+    - docker pull $CI_REGISTRY_IMAGE/$NAME:$IMAGE_TAG || docker pull $CI_REGISTRY_IMAGE/$NAME:latest || true
     - docker build -t $CI_REGISTRY_IMAGE/$NAME:$IMAGE_TAG $DOCKERATTRIBUTES
     - docker push $CI_REGISTRY_IMAGE/$NAME:$IMAGE_TAG
+    - if [$CI_COMMIT_TAG == $IMAGE_TAG]; then docker push $CI_REGISTRY_IMAGE/$NAME:latest; fi
   parallel:
     matrix:
       - NAME: frontend
