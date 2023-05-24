@@ -12,9 +12,10 @@ alarms_cli = Blueprint('alarms', __name__)
 @alarms_cli.cli.command("evaluate")
 def command():
     """Makes the excution async"""
-    loop = asyncio.get_event_loop()
-    asyncio.run(evaluate())
-    loop.close()
+    # loop = asyncio.get_event_loop()
+    # asyncio.run(evaluate())
+    # loop.close()
+    evaluate()
 
 
 def evaluate():
