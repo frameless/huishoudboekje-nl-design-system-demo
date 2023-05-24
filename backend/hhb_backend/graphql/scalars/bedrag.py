@@ -1,5 +1,4 @@
 from decimal import Context, ROUND_HALF_DOWN
-import logging
 import re
 from decimal import Decimal
 
