@@ -1,4 +1,5 @@
 from decimal import Context, ROUND_HALF_DOWN
+import logging
 import re
 from decimal import Decimal
 
@@ -22,4 +23,5 @@ class Bedrag(Scalar):
 
     @staticmethod
     def parse_value(value):
+        value = str(value)
         return int(Decimal(value) * 100)
