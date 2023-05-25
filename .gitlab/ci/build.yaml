@@ -20,7 +20,38 @@
     - export DOCKER_CONFIG=/tmp/docker-config-$CI_JOB_ID
     - mkdir -p $DOCKER_CONFIG && echo $DOCKER_AUTH_CONFIG > $DOCKER_CONFIG/config.json
     - echo "$CI_REGISTRY_PASSWORD" | docker login $CI_REGISTRY --username $CI_REGISTRY_USER --password-stdin
-    - sh ./scripts/docker-build-and-push.sh
+    - docker build -t $CI_REGISTRY_IMAGE/$NAME:$IMAGE_TAG $DOCKERATTRIBUTES
+    - docker push $CI_REGISTRY_IMAGE/$NAME:$IMAGE_TAG
+  parallel:
+    matrix:
+      - NAME: frontend
+        DOCKERATTRIBUTES: "./frontend"
+      - NAME: backend
+        DOCKERATTRIBUTES: "./backend"
+      - NAME: backendburgers
+        DOCKERATTRIBUTES: "./backend-burgers"
+      - NAME: unleashservice
+        DOCKERATTRIBUTES: "./services/unleashservice"
+      - NAME: postadressenservice
+        DOCKERATTRIBUTES: "./services/postadressenservice"
+      - NAME: alarmenservice
+        DOCKERATTRIBUTES: "./services/alarmenservice"
+      - NAME: signalenservice
+        DOCKERATTRIBUTES: "./services/signalenservice"
+      - NAME: authservice
+        DOCKERATTRIBUTES: "./services/authservice"
+      - NAME: banktransactieservice
+        DOCKERATTRIBUTES: "--file=./services/bank_transactie_service/Dockerfile services"
+      - NAME: grootboekservice
+        DOCKERATTRIBUTES: "--file=./services/grootboek_service/Dockerfile services"
+      - NAME: huishoudboekjeservice
+        DOCKERATTRIBUTES: "--file=./services/huishoudboekje_service/Dockerfile services"
+      - NAME: logservice
+        DOCKERATTRIBUTES: "--file=./services/log_service/Dockerfile services"
+      - NAME: organisatieservice
+        DOCKERATTRIBUTES: "--file=./services/organisatie_service/Dockerfile services"
+      - NAME: rapportageservice
+        DOCKERATTRIBUTES: "--file=./services/rapportage_service/Dockerfile services"
 
 .build-storybook: &build-storybook
   <<: *retry
@@ -65,3 +96,7 @@ build-tagged-images:
     - tags
   except:
     - branches@commonground/huishoudboekje/app-new
+
+
+
+
