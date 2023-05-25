@@ -1,6 +1,6 @@
 .load-sample-data: &load-sample-data
   stage: data
-  image: registry.gitlab.com/commonground/huishoudboekje/data-importer/data-importer:1.5.1
+  image: registry.gitlab.com/commonground/huishoudboekje/data-importer/data-importer:1.5.4
   variables:
     CYPRESS_INSTALL_BINARY: "0"
     APP_HOST: hhb-$CI_COMMIT_REF_SLUG.nlx.reviews
@@ -11,6 +11,7 @@
   before_script:
     - set -e
     - export GRAPHQL_API_URL=https://${APP_HOST}/api/graphql
+    - export LOG_LEVEL=INFO
     - export DATA_PATH=/builds/$CI_PROJECT_PATH/sampleData/import.json
     - cd /app
     - echo "Generating API key..."
