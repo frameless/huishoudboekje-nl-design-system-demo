@@ -1,4 +1,3 @@
-import asyncio
 import logging
 from flask import Blueprint
 
@@ -11,17 +10,14 @@ alarms_cli = Blueprint('alarms', __name__)
 
 @alarms_cli.cli.command("evaluate")
 def command():
-    """Makes the excution async"""
-    loop = asyncio.get_event_loop()
-    asyncio.run(evaluate())
-    loop.close()
+    evaluate()
 
 
 def evaluate():
     """Evaluates all current active alarms"""
     if Unleash().is_enabled("signalen"):
         logging.info("Evaluating all alarms")
-        evaluate_alarms()
+        logging.info(evaluate_alarms())
         logging.debug("Evaluated all alarms!")
     else:
         logging.info("Skipping alarm evaluation. Signalen is disabled")

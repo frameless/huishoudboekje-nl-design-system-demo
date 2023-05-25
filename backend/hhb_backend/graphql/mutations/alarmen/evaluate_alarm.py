@@ -42,6 +42,7 @@ class EvaluateAlarms(graphene.Mutation):
             raise GraphQLError("Feature signalen is disabled")
 
         triggered_alarms = evaluate_alarms(ids=ids)
+        
         AuditLogging.create(
             action=info.field_name,
             entities=[(
@@ -65,7 +66,6 @@ class EvaluateAlarm(graphene.Mutation):
             raise GraphQLError("Feature signalen is disabled")
 
         evaluated_alarm = evaluate_one_alarm(id)
-
         AuditLogging.create(
             action=info.field_name,
             entities=[
@@ -173,7 +173,11 @@ def should_create_next_alarm(alarm: Alarm, alarm_check_date: date, active_alarms
         # add new alarm in sequence if it does not exist yet
         next_alarm_already_exists = does_next_alarm_exist(next_alarm_date, alarm, active_alarms)
         if not next_alarm_already_exists:
-            return create_alarm(alarm)
+            try:
+                return create_alarm(alarm)
+            except:
+                logging.warning("Creating alarm failed")
+                return None
 
     return None
 
