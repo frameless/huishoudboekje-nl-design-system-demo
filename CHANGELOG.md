@@ -1,5 +1,18 @@
 # Huishoudboekje Changelog
 
+## 1.9.1
+
+Deze versie omvat een oplossing voor een probleem bij het periodiek beoordelen van alarmen. Daarnaast is het duidelijker gemaakt bij welke burger je werkt door naam en Huishoudboekje-identificatienummer op diverse plekken te tonen.
+
+### Patch Changes
+
+- 9d09818b: bugfix - afspraken search result was empty when transaction had no suggestions
+- b0e12170: Added burger context card
+- 312bc4ff: Added burger huishoudboekje id afgeletterde transactie
+- eef2c6d8: Added extra check in evaluating alarms to prevent error from stopping the evaluation of other alarms. Note: error is not fixed yet.
+- bc1af70c: Fixed possible rouding issue when creating afspraken
+- d8034910: Added hhb id in afsprakenand transaction filter burger option
+
 ## 1.9.0
 
 Deze versie omvat weergave van saldo en diverse opties voor zoeken en filteren.
