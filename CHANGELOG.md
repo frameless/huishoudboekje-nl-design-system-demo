@@ -2,6 +2,8 @@
 
 ## 1.9.1
 
+Deze versie omvat een oplossing voor een probleem bij het periodiek beoordelen van alarmen. Daarnaast is het duidelijker gemaakt bij welke burger je werkt door naam en Huishoudboekje-identificatienummer op diverse plekken te tonen.
+
 ### Patch Changes
 
 - 9d09818b: bugfix - afspraken search result was empty when transaction had no suggestions
