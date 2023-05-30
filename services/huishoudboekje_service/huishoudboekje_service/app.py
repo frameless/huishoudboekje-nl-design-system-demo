@@ -98,7 +98,7 @@ def create_app(config_name='huishoudboekje_service.config.Config'):
             "name": "afdeling_detail_view"},
         {"path": "/afdelingen/<object_id>/rekeningen", "view": RekeningAfdelingView,
          "name": "afdeling_rekeningen_view"},
-        {"path": "/saldo", "view": SaldoView, "name": "saldo_view"}
+        {"path": "/saldooooooooo", "view": SaldoView, "name": "saldo_view"}
     ]
     for route in routes:
         app.add_url_rule(
