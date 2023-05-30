@@ -22,7 +22,8 @@
     - export DOCKER_CONFIG=/tmp/docker-config-$CI_JOB_ID
     - mkdir -p $DOCKER_CONFIG && echo $DOCKER_AUTH_CONFIG > $DOCKER_CONFIG/config.json
     - echo "$CI_REGISTRY_PASSWORD" | docker login $CI_REGISTRY --username $CI_REGISTRY_USER --password-stdin
-    - docker build --build-arg BUILDKIT_INLINE_CACHE=$BUILDKIT_INLINE_CACHE --cache-from $CI_REGISTRY_IMAGE/$NAME:$IMAGE_TAG -t $CI_REGISTRY_IMAGE/$NAME:$IMAGE_TAG $DOCKERATTRIBUTES
+    - docker build --build-arg BUILDKIT_INLINE_CACHE=$BUILDKIT_INLINE_CACHE --cache-from $CI_REGISTRY_IMAGE/$NAME:$CI_COMMIT_REF_SLUG -t $CI_REGISTRY_IMAGE/$NAME:$IMAGE_TAG -t $CI_REGISTRY_IMAGE/$NAME:$CI_COMMIT_REF_SLUG $DOCKERATTRIBUTES
+    - docker push $CI_REGISTRY_IMAGE/$NAME:$CI_COMMIT_REF_SLUG
     - docker push $CI_REGISTRY_IMAGE/$NAME:$IMAGE_TAG
   parallel:
     matrix:
@@ -73,7 +74,8 @@
     - export DOCKER_CONFIG=/tmp/docker-config-$CI_JOB_ID
     - mkdir -p $DOCKER_CONFIG && echo $DOCKER_AUTH_CONFIG > $DOCKER_CONFIG/config.json
     - echo "$CI_REGISTRY_PASSWORD" | docker login $CI_REGISTRY --username $CI_REGISTRY_USER --password-stdin
-    - docker build --build-arg BUILDKIT_INLINE_CACHE=$BUILDKIT_INLINE_CACHE --cache-from $CI_REGISTRY_IMAGE/storybook:$IMAGE_TAG -t $CI_REGISTRY_IMAGE/storybook:$IMAGE_TAG --build-arg "DOCKER_PROXY=$DOCKER_PROXY" --file=./frontend/storybook.Dockerfile frontend
+    - docker build --build-arg BUILDKIT_INLINE_CACHE=$BUILDKIT_INLINE_CACHE --cache-from $CI_REGISTRY_IMAGE/storybook:$CI_COMMIT_REF_SLUG -t $CI_REGISTRY_IMAGE/storybook:$CI_COMMIT_REF_SLUG -t $CI_REGISTRY_IMAGE/storybook:$IMAGE_TAG --build-arg "DOCKER_PROXY=$DOCKER_PROXY" --file=./frontend/storybook.Dockerfile frontend
+    - docker push $CI_REGISTRY_IMAGE/storybook:$CI_COMMIT_REF_SLUG
     - docker push $CI_REGISTRY_IMAGE/storybook:$IMAGE_TAG
 
 # Build the Storybook docker image
