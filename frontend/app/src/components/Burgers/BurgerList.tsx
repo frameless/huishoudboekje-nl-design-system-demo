@@ -37,7 +37,7 @@ const BurgerList = () => {
 	};
 
 	return (
-		<Page title={t("burgers.burgers")"TETSTSTSTSTSTST"} right={(
+		<Page title={t("burgers.burgers") + " TEST"} right={(
 			<InputGroup>
 				<InputLeftElement>
 					<SearchIcon color={"gray.300"} />
