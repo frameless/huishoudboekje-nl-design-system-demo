@@ -6,10 +6,10 @@
 .build-docker-images: &build-docker-images
   <<: *retry
   stage: build
-  image: registry.gitlab.com/commonground/huishoudboekje/review-app-deployer:latest
+  image: docker:24.0.2-git
   needs: [ ]
   services:
-    - docker:20.10.22-dind
+    - docker:24.0.2-dind
   tags:
     - cg
     - docker
@@ -57,10 +57,10 @@
 .build-storybook: &build-storybook
   <<: *retry
   stage: build
-  image: registry.gitlab.com/commonground/huishoudboekje/review-app-deployer:latest
+  image: docker:24.0.2-git
   needs: [ ]
   services:
-    - docker:20.10.22-dind
+    - docker:24.0.2-dind
   tags:
     - cg
     - docker
