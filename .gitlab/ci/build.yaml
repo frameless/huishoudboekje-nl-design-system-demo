@@ -14,6 +14,8 @@
     - cg
     - docker
   variables:
+    DOCKER_BUILDKIT: 1
+    BUILDKIT_INLINE_CACHE: 1
     DOCKER_TLS_CERTDIR: "/certs"
     CYPRESS_INSTALL_BINARY: "0"
   script:
@@ -21,7 +23,7 @@
     - mkdir -p $DOCKER_CONFIG && echo $DOCKER_AUTH_CONFIG > $DOCKER_CONFIG/config.json
     - echo "$CI_REGISTRY_PASSWORD" | docker login $CI_REGISTRY --username $CI_REGISTRY_USER --password-stdin
     - docker pull $CI_REGISTRY_IMAGE/$NAME:$IMAGE_TAG || true
-    - docker build --cache-from $CI_REGISTRY_IMAGE/$NAME:$IMAGE_TAG -t $CI_REGISTRY_IMAGE/$NAME:$IMAGE_TAG $DOCKERATTRIBUTES
+    - docker build --build-arg BUILDKIT_INLINE_CACHE=${BUILDKIT_INLINE_CACHE}--cache-from $CI_REGISTRY_IMAGE/$NAME:$IMAGE_TAG -t $CI_REGISTRY_IMAGE/$NAME:$IMAGE_TAG $DOCKERATTRIBUTES
     - docker push $CI_REGISTRY_IMAGE/$NAME:$IMAGE_TAG
   parallel:
     matrix:
