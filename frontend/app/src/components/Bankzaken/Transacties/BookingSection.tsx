@@ -1,11 +1,11 @@
-import {Box, Button, Divider, FormControl, FormLabel, HStack, Input, InputGroup, InputLeftAddon, InputRightElement, NumberInput, NumberInputField, Radio, RadioGroup, RangeSlider, RangeSliderFilledTrack, RangeSliderMark, RangeSliderThumb, RangeSliderTrack, Stack, Tab, Table, TabList, TabPanel, TabPanels, Tabs, Tbody, Text, Th, Thead, Tr} from "@chakra-ui/react";
+import {Box, Button, Divider, FormControl, FormLabel, HStack, Icon, Input, InputGroup, InputLeftAddon, InputRightElement, NumberInput, NumberInputField, Radio, RadioGroup, RangeSlider, RangeSliderFilledTrack, RangeSliderMark, RangeSliderThumb, RangeSliderTrack, Stack, Tab, Table, TabList, TabPanel, TabPanels, Tabs, Tag, Tbody, Text, Th, Thead, Tr} from "@chakra-ui/react";
 import React, {useState} from "react";
 import {useTranslation} from "react-i18next";
 import Select from "react-select";
 import {Afspraak, Burger, BankTransaction, GetTransactieDocument, GetSaldoDocument, Rubriek, useCreateJournaalpostAfspraakMutation, useCreateJournaalpostGrootboekrekeningMutation, useGetSimilarAfsprakenLazyQuery, useGetBurgersAndOrganisatiesQuery, Organisatie, useGetSearchAfsprakenQuery, useCreateSaldoMutation, useUpdateSaldoMutation} from "../../../generated/graphql";
 import useToaster from "../../../utils/useToaster";
 import SelectAfspraakOption from "../../shared/SelectAfspraakOption";
-import {TriangleDownIcon, TriangleUpIcon} from "@chakra-ui/icons";
+import {TriangleDownIcon, TriangleUpIcon, WarningTwoIcon} from "@chakra-ui/icons";
 import usePagination from "../../../utils/usePagination";
 import Queryable from "../../../utils/Queryable";
 import ZoektermenList from "../../shared/ZoektermenList";
@@ -200,7 +200,15 @@ const BookingSection = ({transaction, rubrieken}) => {
 
 	const [minBedrag, setMinBedrag] = useState(searchVariables.min_bedrag)
 	const [maxBedrag, setMaxBedrag] = useState(searchVariables.max_bedrag)
-
+	const invalidBedrag = () => {
+		let result = false;
+		if (maxBedrag !== undefined && minBedrag !== undefined) {
+			if (+maxBedrag < +minBedrag) {
+				result = true
+			}
+		}
+		return result
+	}
 	const onChangeMaxbedrag = (valueAsString) => {
 		setMaxBedrag(valueAsString)
 		searchVariables.max_bedrag = valueAsString !== "" ? Math.round(+valueAsString * 100) : undefined
@@ -410,6 +418,12 @@ const BookingSection = ({transaction, rubrieken}) => {
 														</InputGroup>
 													</FormControl>
 												</HStack>
+												{invalidBedrag() ?
+													<Tag colorScheme={"red"} size={"md"} variant={"subtle"}>
+														<Icon as={WarningTwoIcon} />
+														{t("transactionsPage.filters.amountwarning")}
+													</Tag> : ""
+												}
 												<RadioGroup defaultValue={"1"} onChange={onChangeValidRadio}>
 													<Stack spacing={5} direction={"row"}>
 														<Radio colorScheme={"blue"} value={"1"}>
