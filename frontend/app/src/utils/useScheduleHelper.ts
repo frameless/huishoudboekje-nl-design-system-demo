@@ -17,7 +17,6 @@ const useScheduleHelper = (schedule?: Schedule | Betaalinstructie) => {
 			const {byDay, byMonth = [], byMonthDay = [], startDate, endDate} = schedule;
 			let periodLongerThenOrYear = true;
 			if (endDate !== undefined && endDate !== null) {
-				console.log(endDate)
 				const dateStart = d(startDate, "YYYY-MM-DD").toDate();
 				const dateEnd = d(endDate, "YYYY-MM-DD").toDate();
 				dateStart.setFullYear(dateStart.getFullYear() + 1)
@@ -29,37 +28,40 @@ const useScheduleHelper = (schedule?: Schedule | Betaalinstructie) => {
 				if (byDay.length === 7) {
 					result = t("schedule.everyDay");
 				}
-
-				result = [t("schedule.everyWeek"), t("schedule.onDays", {days: humanJoin(byDay.map(d => t("schedule." + String(DayOfWeek[d]).toLowerCase())))})].join(" ");
-			}
-			if (byMonth.length > 0 && byMonthDay.length > 0 && startDate !== endDate) {
-				const scheduleStrings = [];
-				if (byMonth.length > 0) {
-					if (byMonth.length >= 12 && periodLongerThenOrYear) {
-						scheduleStrings.push(t("schedule.everyMonth"), t("schedule.onDates", {
-							dates: humanJoin(byMonthDay.map(b => b + "e"))
-						})
-						);
-					}
-					else {
-						if (periodLongerThenOrYear) {
-							scheduleStrings.push(t("schedule.everyYear"));
-						}
-						scheduleStrings.push(t("schedule.inMonths", {
-							months: humanJoin(byMonth.map(b => t("months." + Months[b - 1])))
-						}), t("schedule.onDates", {
-							dates: humanJoin(byMonthDay.map(b => b + "e"))
-						}));
-					}
+				else {
+					result = [t("schedule.everyWeek"), t("schedule.onDays", {days: humanJoin(byDay.map(d => t("schedule." + String(DayOfWeek[d]).toLowerCase())))})].join(" ");
 				}
-				result = scheduleStrings.join(" ");
+			}
+			if (byMonth !== null) {
+				if (byMonth.length > 0 && byMonthDay.length > 0 && startDate !== endDate) {
+					const scheduleStrings = [];
+					if (byMonth.length > 0) {
+						if (byMonth.length >= 12 && periodLongerThenOrYear) {
+							scheduleStrings.push(t("schedule.everyMonth"), t("schedule.onDates", {
+								dates: humanJoin(byMonthDay.map(b => b + "e"))
+							})
+							);
+						}
+						else {
+							if (periodLongerThenOrYear) {
+								scheduleStrings.push(t("schedule.everyYear"));
+							}
+							scheduleStrings.push(t("schedule.inMonths", {
+								months: humanJoin(byMonth.map(b => t("months." + Months[b - 1])))
+							}), t("schedule.onDates", {
+								dates: humanJoin(byMonthDay.map(b => b + "e"))
+							}));
+						}
+					}
+					result = scheduleStrings.join(" ");
+				}
+
+				if (byMonth.length === 0 && byMonthDay.length === 0 && !byDay) {
+					result = t("schedule.eenmalig");
+				}
 			}
 			if (startDate === endDate) {
 				result = t("schedule.onceOnDate", {date: d(startDate, "YYYY-MM-DD").format("DD-MM-YYYY")})
-			}
-
-			if (byMonth.length === 0 && byMonthDay.length === 0 && !byDay) {
-				result = t("schedule.eenmalig");
 			}
 			return result;
 		},
