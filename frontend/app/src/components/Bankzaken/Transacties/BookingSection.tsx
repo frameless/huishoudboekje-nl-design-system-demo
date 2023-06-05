@@ -1,4 +1,4 @@
-import {Box, Button, Divider, FormControl, FormLabel, HStack, Input, InputGroup, InputRightElement, Radio, RadioGroup, RangeSlider, RangeSliderFilledTrack, RangeSliderMark, RangeSliderThumb, RangeSliderTrack, Stack, Tab, Table, TabList, TabPanel, TabPanels, Tabs, Tbody, Text, Th, Thead, Tr} from "@chakra-ui/react";
+import {Box, Button, Divider, FormControl, FormLabel, HStack, Input, InputGroup, InputLeftAddon, InputRightElement, NumberInput, NumberInputField, Radio, RadioGroup, RangeSlider, RangeSliderFilledTrack, RangeSliderMark, RangeSliderThumb, RangeSliderTrack, Stack, Tab, Table, TabList, TabPanel, TabPanels, Tabs, Tbody, Text, Th, Thead, Tr} from "@chakra-ui/react";
 import React, {useState} from "react";
 import {useTranslation} from "react-i18next";
 import Select from "react-select";
@@ -35,7 +35,6 @@ const BookingSection = ({transaction, rubrieken}) => {
 			ids: ids
 		},
 	});
-
 
 
 	const options: {
@@ -122,12 +121,6 @@ const BookingSection = ({transaction, rubrieken}) => {
 		}
 	};
 
-	function calculateNewSaldo(oldSaldo, newSaldo) {
-		let saldo = (+oldSaldo * 100) + (+newSaldo * 100)
-		saldo = saldo / 100
-		return saldo
-	}
-
 	const onSelectAfspraak = (afspraak: Afspraak) => {
 		const transactionId = transaction?.id;
 		const afspraakId = afspraak.id;
@@ -205,6 +198,21 @@ const BookingSection = ({transaction, rubrieken}) => {
 		zoektermen: undefined
 	}
 
+	const [minBedrag, setMinBedrag] = useState(searchVariables.min_bedrag)
+	const [maxBedrag, setMaxBedrag] = useState(searchVariables.max_bedrag)
+
+	const onChangeMaxbedrag = (valueAsString) => {
+		setMaxBedrag(valueAsString)
+		searchVariables.max_bedrag = valueAsString !== "" ? Math.round(+valueAsString * 100) : undefined
+		goFirst()
+	}
+
+	const onChangeMinbedrag = (valueAsString) => {
+		setMinBedrag(valueAsString)
+		searchVariables.min_bedrag = valueAsString !== "" ? Math.round(+valueAsString * 100) : undefined
+		goFirst()
+	}
+
 	const [filterBurgerIds, setFilterBurgerIds] = useState<number[]>([]);
 	const [filterOrganisatieids, setFilterOrganisatieIds] = useState<number[]>([]);
 	const $burgersAndOrganisaties = useGetBurgersAndOrganisatiesQuery();
@@ -215,13 +223,6 @@ const BookingSection = ({transaction, rubrieken}) => {
 
 	const onSelectOrganisatie = (value) => {
 		setFilterOrganisatieIds(value ? value.map(v => v.value) : [])
-		goFirst()
-	};
-
-	const [sliderValue, setSliderValue] = useState([0, 5000])
-
-	const onSetSliderValue = (value) => {
-		setSliderValue(value)
 		goFirst()
 	};
 
@@ -248,8 +249,8 @@ const BookingSection = ({transaction, rubrieken}) => {
 	const [zoektermen, setZoektermen] = useState<string[]>([]);
 
 	searchVariables.burgers = filterBurgerIds.length > 0 ? filterBurgerIds : undefined
-	searchVariables.min_bedrag = sliderValue[0] !== 0 ? sliderValue[0] * 100 : undefined
-	searchVariables.max_bedrag = sliderValue[1] !== 5000 ? sliderValue[1] * 100 : undefined
+	searchVariables.min_bedrag = minBedrag ? +minBedrag * 100 : undefined
+	searchVariables.max_bedrag = maxBedrag ? +maxBedrag * 100 : undefined
 	searchVariables.only_valid = valid
 	if (filterOrganisatieids.length > 0) {
 		const organisaties: Organisatie[] = $burgersAndOrganisaties.data?.organisaties || []
@@ -266,7 +267,7 @@ const BookingSection = ({transaction, rubrieken}) => {
 
 	const onAddzoekterm = (e) => {
 		e.preventDefault();
-		if(zoekterm !== ""){
+		if (zoekterm !== "") {
 			const list: string[] = []
 			list.push(zoekterm)
 			const newZoektermen = zoektermen.concat(list)
@@ -349,7 +350,7 @@ const BookingSection = ({transaction, rubrieken}) => {
 										const burgers_filter = burgers.filter(b => filterBurgerIds.includes(b.id!)).map(b => ({
 											key: b.id,
 											value: b.id,
-											label: formatBurgerName(b)  + " " + getBurgerHhbId(b),
+											label: formatBurgerName(b) + " " + getBurgerHhbId(b),
 										}));
 										const organisaties: Organisatie[] = data.organisaties || [];
 										const organisaties_filter = organisaties.filter(o => filterOrganisatieids.includes(o.id!)).map(o => ({
@@ -365,7 +366,7 @@ const BookingSection = ({transaction, rubrieken}) => {
 														<Select onChange={onSelectBurger} options={burgers.map(b => ({
 															key: b.id,
 															value: b.id,
-															label: formatBurgerName(b)  + " " + getBurgerHhbId(b),
+															label: formatBurgerName(b) + " " + getBurgerHhbId(b),
 														}))} styles={reactSelectStyles.default} isMulti isClearable={true} noOptionsMessage={() => t("select.noOptions")} maxMenuHeight={200} placeholder={t("charts.optionAllBurgers")} value={burgers_filter} />
 													</FormControl>
 													<FormControl as={Stack} flex={1}>
@@ -377,22 +378,36 @@ const BookingSection = ({transaction, rubrieken}) => {
 														}))} styles={reactSelectStyles.default} isMulti isClearable={true} noOptionsMessage={() => t("select.noOptions")} maxMenuHeight={200} placeholder={t("bookingSection.allOrganisations")} value={organisaties_filter} />
 													</FormControl>
 												</HStack>
-												<HStack paddingTop={5} spacing={10} flex={2}>
-													<FormLabel >{t("bookingSection.amount")}</FormLabel>
-													<FormControl as={Stack} flex={1}>
-														<RangeSlider aria-label={["min", "max"]} min={0} max={5000} step={50} defaultValue={[0, 5000]} onChange={(val) => onSetSliderValue(val)}>
-															<RangeSliderTrack>
-																<RangeSliderFilledTrack />
-															</RangeSliderTrack>
-															<RangeSliderMark value={sliderValue[0]} textAlign={"center"} bg={"blue.500"} color={"white"} mt={-10} ml={-5} w={20}>
-																{"€" + sliderValue[0]}
-															</RangeSliderMark>
-															<RangeSliderMark value={sliderValue[1]} textAlign={"center"} bg={"blue.500"} color={"white"} mt={-10} ml={-5} w={20}>
-																{"€" + sliderValue[1]}
-															</RangeSliderMark>
-															<RangeSliderThumb index={0} />
-															<RangeSliderThumb index={1} />
-														</RangeSlider>
+												<HStack paddingBottom={15}>
+													<FormControl>
+														<FormLabel>{t("transactionsPage.filters.amountFrom")}</FormLabel>
+														<InputGroup>
+															<InputLeftAddon>€</InputLeftAddon>
+															<NumberInput w={"100%"} precision={2} value={minBedrag}>
+																<NumberInputField borderLeftRadius={0}
+																	onChange={(value) => {
+																		onChangeMinbedrag(value.target.value)
+																	}}
+																	value={minBedrag}
+																	placeholder={t("transactionsPage.filters.none")}
+																/>
+															</NumberInput>
+														</InputGroup>
+													</FormControl>
+													<FormControl paddingLeft={15}>
+														<FormLabel>{t("transactionsPage.filters.amountTo")}</FormLabel>
+														<InputGroup>
+															<InputLeftAddon>€</InputLeftAddon>
+															<NumberInput w={"100%"} precision={2} value={maxBedrag}>
+																<NumberInputField borderLeftRadius={0}
+																	onChange={(value) => {
+																		onChangeMaxbedrag(value.target.value)
+																	}}
+																	value={maxBedrag}
+																	placeholder={t("transactionsPage.filters.none")}
+																/>
+															</NumberInput>
+														</InputGroup>
 													</FormControl>
 												</HStack>
 												<RadioGroup defaultValue={"1"} onChange={onChangeValidRadio}>
