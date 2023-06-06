@@ -1,5 +1,13 @@
 # Huishoudboekje Changelog
 
+## 1.9.2
+
+Bugfix
+
+### Patch Changes
+
+- bugfix weekelijkse betalingen
+
 ## 1.9.1
 
 Deze versie omvat een oplossing voor een probleem bij het periodiek beoordelen van alarmen. Daarnaast is het duidelijker gemaakt bij welke burger je werkt door naam en Huishoudboekje-identificatienummer op diverse plekken te tonen.
