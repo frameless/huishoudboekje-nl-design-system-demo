@@ -211,13 +211,11 @@ const BookingSection = ({transaction, rubrieken}) => {
 	}
 	const onChangeMaxbedrag = (valueAsString) => {
 		setMaxBedrag(valueAsString)
-		searchVariables.max_bedrag = valueAsString !== "" ? Math.round(+valueAsString * 100) : undefined
 		goFirst()
 	}
 
 	const onChangeMinbedrag = (valueAsString) => {
 		setMinBedrag(valueAsString)
-		searchVariables.min_bedrag = valueAsString !== "" ? Math.round(+valueAsString * 100) : undefined
 		goFirst()
 	}
 
@@ -257,8 +255,8 @@ const BookingSection = ({transaction, rubrieken}) => {
 	const [zoektermen, setZoektermen] = useState<string[]>([]);
 
 	searchVariables.burgers = filterBurgerIds.length > 0 ? filterBurgerIds : undefined
-	searchVariables.min_bedrag = minBedrag ? +minBedrag * 100 : undefined
-	searchVariables.max_bedrag = maxBedrag ? +maxBedrag * 100 : undefined
+	searchVariables.min_bedrag = minBedrag ? Math.round(+minBedrag * 100) : undefined
+	searchVariables.max_bedrag = maxBedrag ? Math.round(+maxBedrag * 100) : undefined
 	searchVariables.only_valid = valid
 	if (filterOrganisatieids.length > 0) {
 		const organisaties: Organisatie[] = $burgersAndOrganisaties.data?.organisaties || []
