@@ -14,3 +14,4 @@ class Config(object):
     LOG_LEVEL = os.getenv("LOG_LEVEL", "WARNING")
     PREFIX = os.environ.get('PREFIX', '/api')
     REQUIRE_AUTH = os.getenv("REQUIRE_AUTH", True)
+    USE_GRAPHIQL = os.getenv("USE_GRAPHIQL", False)
