@@ -2,7 +2,7 @@ import {Button, FormControl, FormErrorMessage, FormLabel, Input, InputGroup, Inp
 import React, {useContext, useEffect} from "react";
 import {useTranslation} from "react-i18next";
 import Select from "react-select";
-import {Afdeling, Organisatie, Postadres, Rekening, UpdateAfspraakInput} from "../../generated/graphql";
+import {Afdeling, Organisatie, Postadres, Rekening, UpdateAfspraakInput, useGetOrganisatieLazyQuery} from "../../generated/graphql";
 import {useReactSelectStyles} from "../../utils/things";
 import useForm from "../../utils/useForm";
 import useSelectProps from "../../utils/useSelectProps";
@@ -111,7 +111,9 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, on
 		rubrieken = [],
 	} = useContext(AfspraakFormContext);
 
-	const selectedOrganisatie = organisaties.find(s => s.id === form.organisatieId);
+	
+	const [getOrganisatie, $organisatie] = useGetOrganisatieLazyQuery();
+	const selectedOrganisatie = $organisatie.data?.organisatie
 	const afdelingen = selectedOrganisatie?.afdelingen || [];
 	const rekeningen = afdelingen.find(a => a.id === form.afdelingId)?.rekeningen || [];
 	const postadressen = afdelingen.find(a => a.id === form.afdelingId)?.postadressen || [];
@@ -210,31 +212,31 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, on
 											{...defaultProps}
 											id={"organisatie"}
 											options={organisatieOptions}
-											value={selectedOrganisatie ? organisatieOptions.find(o => o.value === selectedOrganisatie.id) : null}
+											value={form.organisatieId ? (selectedOrganisatie ? organisatieOptions.find(o => o.value === selectedOrganisatie.id) : null) : null}
 											styles={isFieldValid("organisatieId") && isFieldValid2("organisatieId") ? reactSelectStyles.default : reactSelectStyles.error}
 											onChange={result => {
 												const organisatieId = result?.value;
-												const organisatie = organisaties.find(o => o.id === organisatieId);
-												updateForm("organisatieId", organisatie?.id);
-												updateForm("afdelingId", undefined);
-												updateForm("postadresId", undefined);
-												updateForm("tegenRekeningId", undefined);
-
-												if (!organisatie) {
-													return;
+												if(organisatieId !== null && organisatieId !== undefined){
+													updateForm("organisatieId", organisatieId)
+													updateForm("afdelingId", undefined);
+													updateForm("postadresId", undefined);
+													updateForm("tegenRekeningId", undefined);
+													getOrganisatie({
+														variables: {id: Number(organisatieId)}
+													})
+												}else {
+													updateForm("organisatieId", undefined);
+													updateForm("afdelingId", undefined);
+													updateForm("postadresId", undefined);
+													updateForm("tegenRekeningId", undefined);
 												}
-
-												/* If the organisatie has only one afdeling, fill it in */
-												const afdelingen: Afdeling[] = organisatie?.afdelingen || [];
-												if (afdelingen.length === 1) {
-													tryAutofillFields(afdelingen[0]);
-												}
+												
 											}}
 										/>
 										<FormErrorMessage>{t("forms.afspraak.invalidOrganisatieError")}</FormErrorMessage>
 									</FormControl>
 								</Stack>
-
+								
 								<Stack direction={["column", "row"]}>
 									<FormControl flex={1} isInvalid={!isFieldValid("afdelingId") || !isFieldValid2("afdelingId")} isRequired>
 										<FormLabel>{t("afdeling")}</FormLabel>
@@ -283,7 +285,7 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, on
 											components={components.ReverseMultiLine}
 											noOptionsMessage={() => t("forms.afspraken.select.noRekeningenOptionsMessage")}
 											options={rekeningOptions}
-											value={form.tegenRekeningId ? rekeningOptions.find(o => o.value === form.tegenRekeningId) : rekeningOptions.find(o => o.value === "empty")}
+											value={form.tegenRekeningId ? rekeningOptions.find(o => o.value === form.tegenRekeningId) : null}
 											styles={isFieldValid("tegenRekeningId") ? reactSelectStyles.default : reactSelectStyles.error}
 											onChange={(result) => updateForm("tegenRekeningId", result?.value)}
 										/>

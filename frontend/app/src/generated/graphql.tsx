@@ -2251,7 +2251,7 @@ export type GetCreateAfspraakFormDataQueryVariables = Exact<{
 }>;
 
 
-export type GetCreateAfspraakFormDataQuery = { burger?: { id?: number, voorletters?: string, voornamen?: string, achternaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, rubrieken?: Array<{ id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } }>, organisaties?: Array<{ id?: number, naam?: string, kvknummer?: string, vestigingsnummer?: string, afdelingen?: Array<{ id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }> }> };
+export type GetCreateAfspraakFormDataQuery = { burger?: { id?: number, voorletters?: string, voornamen?: string, achternaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, rubrieken?: Array<{ id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, credit?: boolean } }>, organisaties?: Array<{ id?: number, naam?: string, kvknummer?: string, vestigingsnummer?: string }> };
 
 export type GetCsmsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -5374,11 +5374,14 @@ export const GetCreateAfspraakFormDataDocument = gql`
     voornamen
     achternaam
     rekeningen {
-      ...Rekening
+      id
+      iban
+      rekeninghouder
     }
   }
   rubrieken {
-    ...Rubriek
+    id
+    naam
     grootboekrekening {
       id
       naam
@@ -5386,12 +5389,13 @@ export const GetCreateAfspraakFormDataDocument = gql`
     }
   }
   organisaties {
-    ...Organisatie
+    id
+    naam
+    kvknummer
+    vestigingsnummer
   }
 }
-    ${RekeningFragmentDoc}
-${RubriekFragmentDoc}
-${OrganisatieFragmentDoc}`;
+    `;
 
 /**
  * __useGetCreateAfspraakFormDataQuery__

@@ -1,7 +1,4 @@
 import {gql} from "@apollo/client";
-import {OrganisatieFragment} from "../fragments/Organisatie";
-import {RekeningFragment} from "../fragments/Rekening";
-import {RubriekFragment} from "../fragments/Rubriek";
 
 export const GetCreateAfspraakFormDataQuery = gql`
     query getCreateAfspraakFormData($burgerId: Int!) {
@@ -11,11 +8,14 @@ export const GetCreateAfspraakFormDataQuery = gql`
             voornamen
             achternaam
             rekeningen{
-                ...Rekening
+                id
+                iban
+                rekeninghouder
             }
         }
         rubrieken {
-            ...Rubriek
+            id
+            naam
             grootboekrekening{
                 id
                 naam
@@ -23,10 +23,10 @@ export const GetCreateAfspraakFormDataQuery = gql`
             }
         }
         organisaties {
-            ...Organisatie
+            id
+            naam
+            kvknummer
+            vestigingsnummer
         }
     }
-    ${RekeningFragment}
-    ${RubriekFragment}
-    ${OrganisatieFragment}
 `;
