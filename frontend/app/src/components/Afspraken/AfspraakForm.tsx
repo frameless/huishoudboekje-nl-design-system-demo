@@ -1,5 +1,5 @@
 import {Button, FormControl, FormErrorMessage, FormLabel, Input, InputGroup, InputLeftElement, Radio, RadioGroup, Spinner, Stack} from "@chakra-ui/react";
-import React, {useContext, useEffect} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import {useTranslation} from "react-i18next";
 import Select from "react-select";
 import {Afdeling, Organisatie, Postadres, Rekening, UpdateAfspraakInput, useGetOrganisatieLazyQuery} from "../../generated/graphql";
@@ -55,11 +55,12 @@ const validator = zod.object({
 type AfspraakFormProps = {
 	burgerRekeningen: Rekening[],
 	onSubmit: (values) => void,
+	organisatie?: Organisatie,
 	values?: UpdateAfspraakInput,
 	isLoading?: boolean
 };
 
-const createInitialValues = (data, organisaties: Organisatie[]): Partial<zod.infer<typeof validator>> => {
+const createInitialValues = (data, organisatiesId): Partial<zod.infer<typeof validator>> => {
 	if (!data) {
 		return {
 			validFrom: d().format("YYYY-MM-DD")
@@ -71,7 +72,7 @@ const createInitialValues = (data, organisaties: Organisatie[]): Partial<zod.inf
 		bedrag: data?.bedrag,
 		credit: data?.credit,
 		omschrijving: data?.omschrijving,
-		organisatieId: organisaties.find(o => o.afdelingen?.find(a => data?.afdelingId === a.id))?.id,
+		organisatieId: organisatiesId,
 		postadresId: data?.postadresId,
 		rubriekId: data?.rubriekId,
 		tegenRekeningId: data?.tegenRekeningId,
@@ -79,7 +80,7 @@ const createInitialValues = (data, organisaties: Organisatie[]): Partial<zod.inf
 	};
 };
 
-const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, onSubmit, isLoading = false}) => {
+const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, organisatie, onSubmit, isLoading = false}) => {
 	const toast = useToaster();
 	const {t} = useTranslation();
 	const [form, {updateForm, setForm, toggleSubmitted, isSubmitted, isValid, isFieldValid}] = useForm<zod.infer<typeof validator>>({
@@ -111,15 +112,25 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, on
 		rubrieken = [],
 	} = useContext(AfspraakFormContext);
 
-	
 	const [getOrganisatie, $organisatie] = useGetOrganisatieLazyQuery();
-	const selectedOrganisatie = $organisatie.data?.organisatie
+
+	const getSelectedOrganisatie = (organisatieId) => {
+		let selected : Organisatie | undefined = undefined;
+		if(organisatie && organisatieId === organisatie.id){
+			selected = organisatie
+		} else {
+			selected = $organisatie.data?.organisatie
+		}
+		return selected
+	}
+
+	const selectedOrganisatie = form.organisatieId ?  getSelectedOrganisatie(form.organisatieId) : undefined
 	const afdelingen = selectedOrganisatie?.afdelingen || [];
 	const rekeningen = afdelingen.find(a => a.id === form.afdelingId)?.rekeningen || [];
 	const postadressen = afdelingen.find(a => a.id === form.afdelingId)?.postadressen || [];
 
 	useEffect(() => {
-		setForm(createInitialValues(values, organisaties));
+		setForm(createInitialValues(values, organisatie ? organisatie.id : undefined));
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [values, organisaties]);
 
@@ -221,9 +232,7 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, on
 													updateForm("afdelingId", undefined);
 													updateForm("postadresId", undefined);
 													updateForm("tegenRekeningId", undefined);
-													getOrganisatie({
-														variables: {id: Number(organisatieId)}
-													})
+													getOrganisatie({variables: {id: Number(organisatieId)}})
 												}else {
 													updateForm("organisatieId", undefined);
 													updateForm("afdelingId", undefined);

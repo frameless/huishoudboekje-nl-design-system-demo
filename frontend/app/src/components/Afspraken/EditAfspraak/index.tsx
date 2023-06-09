@@ -80,7 +80,7 @@ const EditAfspraak = () => {
 				<Page title={t("forms.afspraken.titleEdit")} backButton={<BackButton to={AppRoutes.ViewAfspraak(String(afspraak.id))} />}>
 					<AfspraakFormContext.Provider value={ctxValue}>
 						<BurgerContextContainer burger={afspraak.burger}/>
-						<AfspraakForm burgerRekeningen={afspraak.burger?.rekeningen || []} values={editAfspraakValues} onSubmit={onSubmitForm} isLoading={$updateAfspraakMutation.loading} />
+						<AfspraakForm burgerRekeningen={afspraak.burger?.rekeningen || []} values={editAfspraakValues} organisatie={afspraak.afdeling?.organisatie} onSubmit={onSubmitForm} isLoading={$updateAfspraakMutation.loading} />
 					</AfspraakFormContext.Provider>
 				</Page>
 			);
