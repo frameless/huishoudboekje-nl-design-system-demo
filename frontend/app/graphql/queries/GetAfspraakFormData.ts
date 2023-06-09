@@ -1,15 +1,62 @@
 import {gql} from "@apollo/client";
 import {AfspraakFragment} from "../fragments/Afspraak";
-import {OrganisatieFragment} from "../fragments/Organisatie";
-import {RubriekFragment} from "../fragments/Rubriek";
 
 export const GetAfspraakFormDataQuery = gql`
     query getAfspraakFormData($afspraakId: Int!) {
         afspraak(id: $afspraakId){
-            ...Afspraak
+            id
+            omschrijving
+            bedrag
+            credit
+            zoektermen
+            validFrom
+            validThrough
+            burger {
+                id
+                bsn
+                voornamen
+                voorletters
+                achternaam
+                plaatsnaam
+                rekeningen {
+                    id
+                    iban
+                    rekeninghouder
+                }
+            }
+            afdeling {
+                id
+                organisatie {
+                    id
+                    naam
+                    kvknummer
+                    vestigingsnummer
+                    afdelingen {
+                        ...Afdeling
+                    }
+                }
+            }
+            postadres {
+                ...Postadres
+            }
+            tegenRekening {
+                id
+                iban
+                rekeninghouder
+            }
+            rubriek {
+                id
+                naam
+                grootboekrekening{
+                    id
+                    naam
+                    credit
+                }
+            }
         }
         rubrieken {
-            ...Rubriek
+            id
+            naam
             grootboekrekening{
                 id
                 naam
@@ -17,10 +64,11 @@ export const GetAfspraakFormDataQuery = gql`
             }
         }
         organisaties {
-            ...Organisatie
+            id
+            naam
+            kvknummer
+            vestigingsnummer
         }
     }
     ${AfspraakFragment}
-    ${RubriekFragment}
-    ${OrganisatieFragment}
 `;
