@@ -1327,7 +1327,7 @@ export type RootQueryBurgerRapportagesArgs = {
 /** The root of all queries  */
 export type RootQueryBurgersArgs = {
   ids?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
-  search?: InputMaybe<Scalars['DynamicType']>;
+  search?: InputMaybe<Scalars['String']>;
 };
 
 
@@ -2235,7 +2235,7 @@ export type GetBurgersAndOrganisatiesQueryVariables = Exact<{ [key: string]: nev
 export type GetBurgersAndOrganisatiesQuery = { organisaties?: Array<{ id?: number, naam?: string, afdelingen?: Array<{ id?: number }> }>, burgers?: Array<{ id?: number, voornamen?: string, voorletters?: string, achternaam?: string }> };
 
 export type GetBurgersSearchQueryVariables = Exact<{
-  search?: InputMaybe<Scalars['DynamicType']>;
+  search?: InputMaybe<Scalars['String']>;
 }>;
 
 
@@ -5346,7 +5346,7 @@ export type GetBurgersAndOrganisatiesQueryHookResult = ReturnType<typeof useGetB
 export type GetBurgersAndOrganisatiesLazyQueryHookResult = ReturnType<typeof useGetBurgersAndOrganisatiesLazyQuery>;
 export type GetBurgersAndOrganisatiesQueryResult = Apollo.QueryResult<GetBurgersAndOrganisatiesQuery, GetBurgersAndOrganisatiesQueryVariables>;
 export const GetBurgersSearchDocument = gql`
-    query getBurgersSearch($search: DynamicType) {
+    query getBurgersSearch($search: String) {
   burgers(search: $search) {
     id
     voornamen
