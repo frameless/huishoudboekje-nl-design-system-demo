@@ -232,14 +232,27 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, or
 													updateForm("afdelingId", undefined);
 													updateForm("postadresId", undefined);
 													updateForm("tegenRekeningId", undefined);
-													getOrganisatie({variables: {id: Number(organisatieId)}})
+													getOrganisatie({
+														variables: {id: Number(organisatieId)},
+														onCompleted: (data)=>{
+															/* If the organisatie has only one afdeling, fill it in */
+															const afdelingen: Afdeling[] = data?.organisatie?.afdelingen || [];
+															if (afdelingen.length === 1) {
+																tryAutofillFields(afdelingen[0]);
+															}
+														}
+													})
 												}else {
 													updateForm("organisatieId", undefined);
 													updateForm("afdelingId", undefined);
 													updateForm("postadresId", undefined);
 													updateForm("tegenRekeningId", undefined);
 												}
-												
+												/* If the organisatie has only one afdeling, fill it in */
+												const afdelingen: Afdeling[] = organisatie?.afdelingen || [];
+												if (afdelingen.length === 1) {
+													tryAutofillFields(afdelingen[0]);
+												}
 											}}
 										/>
 										<FormErrorMessage>{t("forms.afspraak.invalidOrganisatieError")}</FormErrorMessage>
