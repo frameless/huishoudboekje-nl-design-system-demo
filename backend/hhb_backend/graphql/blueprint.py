@@ -6,13 +6,13 @@ from hhb_backend.graphql import schema
 from lib.graphene_file_upload import FileUploadGraphQLView
 
 
-def create_blueprint():
+def create_blueprint(USE_GRAPHIQL):
     bp = Blueprint('graphql', __name__)
-
+    useGraphiql = True if USE_GRAPHIQL == "1" else False
     view = FileUploadGraphQLView.as_view(
         'graphql',
         schema=schema.graphql_schema,
-        graphiql=True,
+        graphiql=useGraphiql,
         batch=True,
         middleware=[
             ErrorReportingMiddleware()
@@ -33,7 +33,8 @@ class ErrorReportingMiddleware(object):
             return next(root, info, **args)
         except Exception as e:
             logging.exception(
-                "An error occurred while resolving field {}.{}".format(info.parent_type.name, info.field_name)
+                "An error occurred while resolving field {}.{}".format(
+                    info.parent_type.name, info.field_name)
             )
             logging.error(e)
             raise e

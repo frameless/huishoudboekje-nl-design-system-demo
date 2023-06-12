@@ -72,3 +72,5 @@ spec:
               value: "http://hhb-unleashservice"
             - name: RAPPORTAGE_SERVICE_URL
               value: "http://hhb-rapportageservice"
+            - name: USE_GRAPHIQL
+              value: "0"

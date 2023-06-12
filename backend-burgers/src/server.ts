@@ -10,11 +10,15 @@ import {isDev} from "./utils/things";
 
 dotenv.config();
 
+const isProduction = process.env.NODE_ENV === 'production'
+
 const server = new ApolloServer({
 	schema,
 	cors: {
 		credentials: true,
 	},
+	playground: !isProduction,
+	introspection: !isProduction,
 	dataSources: () => ({
 		huishoudboekjeservice: new Huishoudboekjeservice(),
 		organisatieservice: new Organisatieservice(),
