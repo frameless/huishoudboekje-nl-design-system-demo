@@ -2,6 +2,8 @@
 
 ## 1.9.3
 
+Deze versie omvat verbeteringen voor de laadtijd van een aantal schermen.
+
 ## Migration guide
 
 > ⚠️ The backend now uses the environment variable USE_GRAPHIQL that will determine the use of the graphiql interface. This will default to "0" if not set. For production environments this should be set to "0"!
