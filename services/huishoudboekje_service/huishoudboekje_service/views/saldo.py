@@ -9,7 +9,6 @@ from core_service.inputs.inputs import Inputs
 from core_service.inputs.validators import JsonSchema
 from flask import request, abort, make_response
 from sqlalchemy import select, text, and_
-from core_service.database import db
 from core_service.utils import row2dict
 from core_service.inputs.validators import JsonSchema
 from core_service.views.hhb_view.hhb_object import HHBObject

@@ -29,8 +29,8 @@ class BurgerQuery:
 class BurgersQuery:
     return_type = graphene.List(
         burger.Burger,
-        ids=graphene.List(graphene.Int),
-        search=DynamicType()
+        search=graphene.String(),
+        ids=graphene.List(graphene.Int)
     )
 
     @classmethod
@@ -41,7 +41,8 @@ class BurgersQuery:
             AuditLogging.create(
                 action=info.field_name,
                 entities=[
-                    GebruikersActiviteitEntity(entityType="burger", entityId=id)
+                    GebruikersActiviteitEntity(
+                        entityType="burger", entityId=id)
                     for id in kwargs["ids"]
                 ]
             )
@@ -49,52 +50,25 @@ class BurgersQuery:
 
         if "search" in kwargs:
             search = str(kwargs["search"]).lower()
-            if search:            
-                burger_ids = set()
-                afspraken_ids = set()
-
-                burgers = hhb_dataloader().burgers.load_all(filters=kwargs.get("filters", None))
-                for burger in burgers:
-                    if search in str(burger['achternaam']).lower() or \
-                        search in str(burger['voornamen']).lower() or \
-                        search in str(burger['bsn']).lower():
-                        burger_ids.add(burger["id"])
-
-                rekeningen = hhb_dataloader().rekeningen.load_all(filters=kwargs.get("filters", None))
-                for rekening in rekeningen:
-                    if search in str(rekening['iban']).lower() or \
-                        search in str(rekening['rekeninghouder']).lower():
-                        for burger_id in rekening["burgers"]:
-                            if burger_id:
-                                burger_ids.add(burger_id)
-                        for afspraak_id in rekening["afspraken"]:
-                            afspraken_ids.add(afspraak_id)
-
-                afspraken = hhb_dataloader().afspraken.load_all(filters=kwargs.get("filters", None))
-                for afspraak in afspraken:
-                    if valid_afspraak(afspraak) and afspraak["burger_id"]:
-                        if afspraak["id"] in afspraken_ids or search in str(afspraak['zoektermen']).lower():
-                            burger_ids.add(afspraak["burger_id"])
-
-                result = []
-                for burger in burgers:
-                    if burger["id"] in burger_ids:
-                        result.append(burger)
-
+            if search:
+                burgers = hhb_dataloader().burgers.get_burger_search(
+                    search)
                 AuditLogging.create(
                     action=info.field_name,
                     entities=[
-                        GebruikersActiviteitEntity(entityType="burger", entityId=burger["id"])
-                        for burger in result
+                        GebruikersActiviteitEntity(
+                            entityType="burger", entityId=burger["id"])
+                        for burger in burgers
                     ]
                 )
-                return result
+                return burgers
 
         burgers = hhb_dataloader().burgers.load_all(filters=kwargs.get("filters", None))
         AuditLogging.create(
             action=info.field_name,
             entities=[
-                GebruikersActiviteitEntity(entityType="burger", entityId=burger.id)
+                GebruikersActiviteitEntity(
+                    entityType="burger", entityId=burger.id)
                 for burger in burgers
             ] if "filters" in kwargs else []
         )
@@ -112,14 +86,16 @@ class BurgersPagedQuery:
     def resolver(cls, _, info, **kwargs):
         logging.info(f"Get burgers paged")
         if "start" in kwargs and "limit" in kwargs:
-            burgers = hhb_dataloader().burgers.load_paged(start=kwargs["start"], limit=kwargs["limit"])
+            burgers = hhb_dataloader().burgers.load_paged(
+                start=kwargs["start"], limit=kwargs["limit"])
         else:
             burgers = hhb_dataloader().burgers.load_all()
 
         AuditLogging.create(
             action=info.field_name,
             entities=[
-                GebruikersActiviteitEntity(entityType="burger", entityId=burger["id"])
+                GebruikersActiviteitEntity(
+                    entityType="burger", entityId=burger["id"])
                 for burger in burgers["burgers"]
             ] if "start" in kwargs and "limit" in kwargs else []
         )
