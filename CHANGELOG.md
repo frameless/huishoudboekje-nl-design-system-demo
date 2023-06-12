@@ -1,5 +1,17 @@
 # Huishoudboekje Changelog
 
+## 1.9.3
+
+## Migration guide
+
+> ⚠️ The backend now uses the environment variable USE_GRAPHIQL that will determine the use of the graphiql interface. This will default to "0" if not set. For production environments this should be set to "0"!
+
+### Patch Changes
+
+- 04608ee9: Added USE_GRAPHIQL environment variable for the backend that will determine the use of the graphiql interface. If set to "1" the interface will be enabled, otherwise disabled. Defaults to "0" on k8s and "1" for docker local development
+- 1e4976bd: Improved loeading speed create and edit afspraak pages
+- 8b04312a: Optimized burger search functionality to increase performance
+
 ## 1.9.2
 
 Bugfix
