@@ -21,6 +21,7 @@ metadata:
   labels:
     name: hhb-database-pvc
 spec:
+  storageClassName: "managed-csi"
   accessModes:
     - ReadWriteOnce
   resources:
