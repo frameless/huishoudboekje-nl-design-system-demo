@@ -1,7 +1,0 @@
-{
-    "iss": "local",
-    "aud": "huishoudboekje-medewerkers",
-    "roles": [
-        "huishoudboekje.user"
-    ]
-}
