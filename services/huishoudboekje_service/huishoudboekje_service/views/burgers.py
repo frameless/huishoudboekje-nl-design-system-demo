@@ -108,10 +108,15 @@ class BurgerView(HHBView):
     def search_for_burgers(self, searchable_value):
         search_value = '%'+searchable_value+'%'
         check_date = date.today()
+        # Query searches multiple locations for the requested value
+        # Important note: should be outerjoin because otherwise Burgers with no (active) Afspraak or Rekening cannot be found
+        # Ilike is a case-insensitive version of LIKE in sql
+        # array_to_string is a function specific to PostgreSQL. The func. is an sqlAlchemy function that puts *any* function after it into sql which is why this works
         query = db.session.query(Burger)\
-            .join(Afspraak, Burger.id == Afspraak.burger_id)\
-            .join(RekeningBurger, Burger.id == RekeningBurger.burger_id)\
-            .join(Rekening, Rekening.id == RekeningBurger.rekening_id)\
+            .outerjoin(Afspraak, and_(Burger.id == Afspraak.burger_id, and_(and_(Afspraak.valid_from is not None, Afspraak.valid_from < check_date),
+                                                                            or_(Afspraak.valid_through == None, Afspraak.valid_through > check_date))))\
+            .outerjoin(RekeningBurger, Burger.id == RekeningBurger.burger_id)\
+            .outerjoin(Rekening, Rekening.id == RekeningBurger.rekening_id)\
             .filter(or_(Burger.achternaam.ilike(search_value),
                         Burger.voornamen.ilike(search_value),
                         cast(Burger.bsn, String).ilike(search_value),
@@ -121,8 +126,6 @@ class BurgerView(HHBView):
                         and_(Afspraak.burger_id != None,
                              func.array_to_string(Afspraak.zoektermen, ' ', '*').ilike(search_value))
                         ))\
-            .where(and_(and_(Afspraak.valid_from is not None, Afspraak.valid_from < check_date),
-                        or_(Afspraak.valid_through == None, Afspraak.valid_through > check_date)))\
             .group_by(Burger.id)\
             .all()
         return query
