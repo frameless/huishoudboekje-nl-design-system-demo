@@ -6,7 +6,7 @@ metadata:
     name: hhb-authservice-ingress
 spec:
   rules:
-    - host: ${APP_HOST}
+    - host: huishoudboekje.example.com
       http:
         paths:
           - path: /auth

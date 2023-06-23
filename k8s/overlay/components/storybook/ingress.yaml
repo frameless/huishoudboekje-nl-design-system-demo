@@ -6,7 +6,7 @@ metadata:
     name: hhb-storybook-ingress
 spec:
   rules:
-    - host: sb-${APP_HOST}
+    - host: sb-huishoudboekje.example.com
       http:
         paths:
           - path: /
