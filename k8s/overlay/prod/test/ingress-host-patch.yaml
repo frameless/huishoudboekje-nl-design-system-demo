@@ -1,0 +1,6 @@
+- op: replace
+  path: /spec/rules/0/host
+  value: "test.huishoudboekje.demoground.nl"
+- op: replace
+  path: /spec/tls/0/hosts/0
+  value: "test.huishoudboekje.demoground.nl"
