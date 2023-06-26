@@ -74,17 +74,7 @@ export JWT_AUDIENCE=${JWT_AUDIENCE:-$HHB_APP_HOST}
 export JWT_EXPIRES_IN=${JWT_EXPIRES_IN:-"30d"}
 export JWT_SECRET=${JWT_SECRET:-"this should come from a secret envvar"}
 
-
-# Debugging
-echo CI_COMMIT_REF_SLUG = $CI_COMMIT_REF_SLUG
-echo CI_COMMIT_SHORT_SHA = $CI_COMMIT_SHORT_SHA
-echo BRANCH_NAME = $BRANCH_NAME
-echo COMMIT_SHA = $COMMIT_SHA
-echo IMAGE_TAG = $IMAGE_TAG
-echo APP_HOST = $APP_HOST
-echo test = $OIDC_CLIENT_SECRET
-
-cd k8s/overlay/cluster
+cd k8s/overlay/hhb-cluster
 
 echo "Applying envvars."
 envsubst < components/configmaps/sample.kustomization.yaml > components/configmaps/kustomization.yaml
