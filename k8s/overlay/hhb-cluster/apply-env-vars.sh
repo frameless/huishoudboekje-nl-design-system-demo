@@ -14,8 +14,6 @@ export IMAGE_TAG=${IMAGE_TAG:-$BRANCH_NAME-$COMMIT_SHA}
 # The registry in which the images for the application are stored.
 export IMAGE_REGISTRY="registry.gitlab.com/commonground/huishoudboekje/app-new"
 
-# Use the provided NAMESPACE or "huishoudboekje" as the default namespace.
-export NAMESPACE=${NAMESPACE:-"huishoudboekje"}
 
 # Use the provided APP_HOST or "huishoudboekje.example.com" as the default.
 export APP_HOST=${APP_HOST:-"huishoudboekje.example.com"}
@@ -83,7 +81,6 @@ echo CI_COMMIT_SHORT_SHA = $CI_COMMIT_SHORT_SHA
 echo BRANCH_NAME = $BRANCH_NAME
 echo COMMIT_SHA = $COMMIT_SHA
 echo IMAGE_TAG = $IMAGE_TAG
-echo NAMESPACE = $NAMESPACE
 echo APP_HOST = $APP_HOST
 echo test = $OIDC_CLIENT_SECRET
 
