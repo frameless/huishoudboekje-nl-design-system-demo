@@ -85,30 +85,14 @@ echo COMMIT_SHA = $COMMIT_SHA
 echo IMAGE_TAG = $IMAGE_TAG
 echo NAMESPACE = $NAMESPACE
 echo APP_HOST = $APP_HOST
-echo DEPLOYMENT_DIST_DIR = $DEPLOYMENT_DIST_DIR
+echo test = $OIDC_CLIENT_SECRET
 
-
-
-if [ $USE_LETSENCRYPT == 1 ]; then
-  echo "Adding patches that adds the letsencrypt annotation and TLS configuration..."
-  cp ../overlay/patches/use-letsencrypt/ingress-patches.yaml patch_letsencrypt.yaml
-  echo "- patch_letsencrypt.yaml" >> kustomization.yaml
-fi
-
-echo "Generate secrets.yaml and add as resource"
-envsubst < ../templates/secrets.yaml > secrets.yaml
-kustomize edit add resource secrets.yaml
-
-echo "Add default overlay as resource"
-kustomize edit add resource ../overlay/default
-
-cd ../../
-echo "Building Kustomize..."
-kustomize build k8s/$DEPLOYMENT_DIST_DIR > k8s/$DEPLOYMENT_DIST_DIR/single_deploy_file_.yaml
+cd k8s/overlay/cluster
 
 echo "Applying envvars."
-envsubst < k8s/$DEPLOYMENT_DIST_DIR/single_deploy_file_.yaml > k8s/$DEPLOYMENT_DIST_DIR/single_deploy_file.yaml
-rm -rf k8s/$DEPLOYMENT_DIST_DIR/single_deploy_file_.yaml
+envsubst < components/configmaps/sample.kustomization.yaml > components/configmaps/kustomization.yaml
+envsubst < components/set-images/sample.kustomization.yaml > components/set-images/kustomization.yaml
+envsubst < review/sample.ingress-host-patch.yaml > review/ingress-host-patch.yaml
+envsubst < review/sample.ingress-sb-host-patch.yaml > review/ingress-sb-host-patch.yaml
 
-echo "You will find your files in $DEPLOYMENT_DIST_DIR."
-echo "To deploy, run 'sh k8s/deploy.sh'"
+
