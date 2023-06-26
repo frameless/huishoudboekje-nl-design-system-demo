@@ -18,16 +18,6 @@
     - cg
     - docker
 
-# Deploy template for all environments
-# .deploy: &deploy
-#   <<: *deployer
-#   <<: *retry
-#   stage: deploy
-#   script:
-#     - sh ./k8s/build.sh
-#     - sh ./k8s/deploy.sh
-#     - echo -e Deployment is done! Go check out the running app at https://${APP_HOST}
-
 #
 # demo.huishoudboekje is (currently) not used
 #
@@ -83,6 +73,7 @@
 deploy-deployment-test:
   <<: *deployer
   <<: *retry
+  stage: deploy
   needs:
     - build-images-dev
   environment:
@@ -113,6 +104,7 @@ deploy-deployment-review:
   needs:
     - build-images-dev
     - build-storybook
+  stage: deploy
   environment:
     name: review/$CI_COMMIT_REF_SLUG
     url: https://hhb-$CI_COMMIT_REF_SLUG.nlx.reviews/
