@@ -90,10 +90,10 @@ deploy-deployment-test:
     JWT_AUDIENCE: test.huishoudboekje.demoground.nl
     JWT_SECRET: testtest
   script:
-    - sh ./k8s/overlay/cluster/apply-env-vars.sh
+    - sh ./k8s/overlay/hhb-cluste/apply-env-vars.sh
     - kubectl config use-context commonground/huishoudboekje/app-new:hhb-prod
-    - kubectl kustomize ./k8s/overlay/cluster/prod/test
-    - kubectl apply -k ./k8s/overlay/cluster/prod/test --namespace=$NAMESPACE
+    - kubectl kustomize ./k8s/overlay/hhb-cluste/prod/test
+    - kubectl apply -k ./k8s/overlay/hhb-cluste/prod/test --namespace=$NAMESPACE
   only:
     - develop
 
@@ -121,11 +121,11 @@ deploy-deployment-review:
     JWT_AUDIENCE: hhb-$CI_COMMIT_REF_SLUG.nlx.reviews
     JWT_SECRET: koen-hhb-$CI_COMMIT_REF_SLUG
   script:
-    - sh ./k8s/overlay/cluster/apply-env-vars.sh
+    - sh ./k8s/overlay/hhb-cluste/apply-env-vars.sh
     - kubectl config use-context commonground/huishoudboekje/app-new:hhb-review
     - kubectl create ns $NAMESPACE || true
-    - kubectl kustomize ./k8s/overlay/cluster/review
-    - kubectl apply -k ./k8s/overlay/cluster/review --namespace=$NAMESPACE
+    - kubectl kustomize ./k8s/overlay/hhb-cluster/review
+    - kubectl apply -k ./k8s/overlay/hhb-cluste/review --namespace=$NAMESPACE
   only:
     - branches@commonground/huishoudboekje/app-new
   except:
