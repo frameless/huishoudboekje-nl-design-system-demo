@@ -28,64 +28,69 @@
     - sh ./k8s/deploy.sh
     - echo -e Deployment is done! Go check out the running app at https://${APP_HOST}
 
-deploy-deployment-master:
-  <<: *deploy
-  needs:
-    - build-images-dev
-  environment:
-    name: demo
-    url: https://demo.huishoudboekje.demoground.nl/
-  variables:
-    APP_HOST: "demo.huishoudboekje.demoground.nl"
-    NAMESPACE: "hhb-demo"
-    USE_LETSENCRYPT: 1
-    UNLEASH_OTAP: production
-    OIDC_BASE_URL: "https://demo.huishoudboekje.demoground.nl"
-    OIDC_ISSUER_URL: https://keycloak.huishoudboekje.demoground.nl/realms/huishoudboekje/
-    OIDC_CLIENT_ID: huishoudboekje-medewerkers
-    JWT_ISSUER: demo.huishoudboekje.demoground.nl
-    JWT_AUDIENCE: demo.huishoudboekje.demoground.nl
-    JWT_SECRET: demodemo
-  before_script:
-    - kubectl config use-context commonground/huishoudboekje/app-new:hhb-prod
-  only:
-    - master
+#
+# demo.huishoudboekje is (currently) not used
+#
+# deploy-deployment-master:
+#   <<: *deploy
+#   needs:
+#     - build-images-dev
+#   environment:
+#     name: demo
+#     url: https://demo.huishoudboekje.demoground.nl/
+#   variables:
+#     APP_HOST: "demo.huishoudboekje.demoground.nl"
+#     NAMESPACE: "hhb-demo"
+#     USE_LETSENCRYPT: 1
+#     UNLEASH_OTAP: production
+#     OIDC_BASE_URL: "https://demo.huishoudboekje.demoground.nl"
+#     OIDC_ISSUER_URL: https://keycloak.huishoudboekje.demoground.nl/realms/huishoudboekje/
+#     OIDC_CLIENT_ID: huishoudboekje-medewerkers
+#     JWT_ISSUER: demo.huishoudboekje.demoground.nl
+#     JWT_AUDIENCE: demo.huishoudboekje.demoground.nl
+#     JWT_SECRET: demodemo
+#   before_script:
+#     - kubectl config use-context commonground/huishoudboekje/app-new:hhb-prod
+#   only:
+#     - master
 
-deploy-deployment-acceptance:
-  <<: *deploy
-  needs:
-    - build-images-dev
-  environment:
-    name: acc
-    url: https://acc.huishoudboekje.demoground.nl/
-  variables:
-    APP_HOST: "acc.huishoudboekje.demoground.nl"
-    NAMESPACE: "hhb-acc"
-    USE_LETSENCRYPT: 1
-    UNLEASH_OTAP: acceptance
-    OIDC_BASE_URL: "https://acc.huishoudboekje.demoground.nl"
-    OIDC_ISSUER_URL: https://keycloak.huishoudboekje.demoground.nl/realms/huishoudboekje/
-    OIDC_CLIENT_ID: huishoudboekje-medewerkers
-    JWT_ISSUER: acc.huishoudboekje.demoground.nl
-    JWT_AUDIENCE: acc.huishoudboekje.demoground.nl
-    JWT_SECRET: accaccacc
-  before_script:
-    - kubectl config use-context commonground/huishoudboekje/app-new:hhb-prod
-  only:
-    - acceptance
+#
+# acc.huishoudboekje is (currently) not used
+#
+# deploy-deployment-acceptance:
+#   <<: *deploy
+#   needs:
+#     - build-images-dev
+#   environment:
+#     name: acc
+#     url: https://acc.huishoudboekje.demoground.nl/
+#   variables:
+#     APP_HOST: "acc.huishoudboekje.demoground.nl"
+#     NAMESPACE: "hhb-acc"
+#     USE_LETSENCRYPT: 1
+#     UNLEASH_OTAP: acceptance
+#     OIDC_BASE_URL: "https://acc.huishoudboekje.demoground.nl"
+#     OIDC_ISSUER_URL: https://keycloak.huishoudboekje.demoground.nl/realms/huishoudboekje/
+#     OIDC_CLIENT_ID: huishoudboekje-medewerkers
+#     JWT_ISSUER: acc.huishoudboekje.demoground.nl
+#     JWT_AUDIENCE: acc.huishoudboekje.demoground.nl
+#     JWT_SECRET: accaccacc
+#   before_script:
+#     - kubectl config use-context commonground/huishoudboekje/app-new:hhb-prod
+#   only:
+#     - acceptance
 
 deploy-deployment-test:
-  <<: *deploy
+  <<: *deployer
+  <<: *retry
   needs:
     - build-images-dev
-    - build-storybook
   environment:
     name: test
     url: https://test.huishoudboekje.demoground.nl/
   variables:
     APP_HOST: "test.huishoudboekje.demoground.nl"
     NAMESPACE: "hhb-test"
-    USE_LETSENCRYPT: 1
     UNLEASH_OTAP: test
     OIDC_BASE_URL: "https://test.huishoudboekje.demoground.nl"
     OIDC_ISSUER_URL: https://keycloak.huishoudboekje.demoground.nl/realms/huishoudboekje/
@@ -93,14 +98,18 @@ deploy-deployment-test:
     JWT_ISSUER: test.huishoudboekje.demoground.nl
     JWT_AUDIENCE: test.huishoudboekje.demoground.nl
     JWT_SECRET: testtest
-  before_script:
+  script:
+    - sh ./k8s/overlay/cluster/apply-env-vars.sh
     - kubectl config use-context commonground/huishoudboekje/app-new:hhb-prod
+    - kubectl kustomize ./k8s/overlay/cluster/prod/test
+    - kubectl apply -k ./k8s/overlay/cluster/prod/test --namespace=$NAMESPACE
   only:
     - develop
 
 # Deploy for review cluster
 deploy-deployment-review:
-  <<: *deploy
+  <<: *deployer
+  <<: *retry
   needs:
     - build-images-dev
     - build-storybook
@@ -112,7 +121,6 @@ deploy-deployment-review:
   variables:
     APP_HOST: "hhb-$CI_COMMIT_REF_SLUG.nlx.reviews"
     NAMESPACE: "hhb-$CI_COMMIT_REF_SLUG"
-    USE_LETSENCRYPT: 0
     UNLEASH_OTAP: development
     OIDC_BASE_URL: "https://hhb-$CI_COMMIT_REF_SLUG.nlx.reviews"
     OIDC_ISSUER_URL: https://keycloak.huishoudboekje.demoground.nl/realms/huishoudboekje/
@@ -120,9 +128,12 @@ deploy-deployment-review:
     JWT_ISSUER: hhb-$CI_COMMIT_REF_SLUG.nlx.reviews
     JWT_AUDIENCE: hhb-$CI_COMMIT_REF_SLUG.nlx.reviews
     JWT_SECRET: koen-hhb-$CI_COMMIT_REF_SLUG
-  before_script:
+  script:
+    - sh ./k8s/overlay/cluster/apply-env-vars.sh
     - kubectl config use-context commonground/huishoudboekje/app-new:hhb-review
     - kubectl create ns $NAMESPACE || true
+    - kubectl kustomize ./k8s/overlay/cluster/review
+    - kubectl apply -k ./k8s/overlay/cluster/review --namespace=$NAMESPACE
   only:
     - branches@commonground/huishoudboekje/app-new
   except:

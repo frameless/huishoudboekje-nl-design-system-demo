@@ -84,6 +84,7 @@ build-storybook:
   only:
     - branches@commonground/huishoudboekje/app-new
   except:
+    - develop
     - master
     - acceptance
 
