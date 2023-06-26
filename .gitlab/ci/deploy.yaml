@@ -19,14 +19,14 @@
     - docker
 
 # Deploy template for all environments
-.deploy: &deploy
-  <<: *deployer
-  <<: *retry
-  stage: deploy
-  script:
-    - sh ./k8s/build.sh
-    - sh ./k8s/deploy.sh
-    - echo -e Deployment is done! Go check out the running app at https://${APP_HOST}
+# .deploy: &deploy
+#   <<: *deployer
+#   <<: *retry
+#   stage: deploy
+#   script:
+#     - sh ./k8s/build.sh
+#     - sh ./k8s/deploy.sh
+#     - echo -e Deployment is done! Go check out the running app at https://${APP_HOST}
 
 #
 # demo.huishoudboekje is (currently) not used
