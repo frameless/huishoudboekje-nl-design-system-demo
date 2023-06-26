@@ -6,6 +6,7 @@ components:
   - ../components/managed-csi
   - ../components/letsencrypt
   - ../../components/configmaps
+  - ../../components/set-images
 patches:
  - target:
       group: networking.k8s.io
