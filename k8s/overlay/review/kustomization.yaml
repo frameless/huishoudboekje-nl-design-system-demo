@@ -5,6 +5,7 @@ resources:
 components:
   - ../components/configmaps
   - ../components/storybook
+  - ../components/set-images
 patches:
 - target:
     group: networking.k8s.io
