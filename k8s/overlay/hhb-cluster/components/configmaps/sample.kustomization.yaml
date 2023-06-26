@@ -11,6 +11,9 @@ configMapGenerator:
   - JWT_AUDIENCE=${JWT_AUDIENCE}
   - JWT_EXPIRES_IN=${JWT_EXPIRES_IN}
   - JWT_SECRET=${JWT_SECRET}
+- name: unleash-config
+  literals:
+  - UNLEASH_OTAP=${UNLEASH_OTAP}
 - name: postgres-config
   literals:
   - POSTGRESQL_HOSTNAME=${POSTGRESQL_HOSTNAME}
