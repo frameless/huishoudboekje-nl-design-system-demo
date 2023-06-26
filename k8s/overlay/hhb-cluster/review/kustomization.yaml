@@ -3,9 +3,9 @@ kind: Kustomization
 resources:
   - ../../../base
 components:
+  - ../../components/storybook
   - ../components/configmaps
   - ../components/set-images
-  - ../../components/storybook
 patches:
 - target:
     group: networking.k8s.io
@@ -18,3 +18,4 @@ patches:
     kind: Ingress
     name: hhb-storybook-ingress
   path: ingress-sb-host-patch.yaml
+  
