@@ -12,6 +12,7 @@ import useHandleMutation from "../../../utils/useHandleMutation";
 import Page from "../../shared/Page";
 import Section from "../../shared/Section";
 import SectionContainer from "../../shared/SectionContainer";
+import { MathOperation, currencyFormat2, floatMathOperation } from "../../../utils/things";
 
 const Betaalinstructies = () => {
 	const {t} = useTranslation();
@@ -78,7 +79,9 @@ const Betaalinstructies = () => {
 								<Stack spacing={4}>
 									{exports.map((e) => {
 										const href = AppRoutes.Export(e.id);
-
+										const overschrijvingen = (e.overschrijvingen || [])
+										let total = 0;
+										overschrijvingen.forEach(overschrijving => total = floatMathOperation(total, overschrijving.bedrag, 2, MathOperation.Plus))
 										return (
 											<HStack justify={"space-between"} key={e.id}>
 												<Stack>
@@ -93,7 +96,11 @@ const Betaalinstructies = () => {
 														</Stack>
 														<Stack direction={"row"}>
 															<FormLabel>{t("export.nOverschrijvingen")}</FormLabel>
-															<Text fontSize={"sm"}>{(e.overschrijvingen || []).length}</Text>
+															<Text fontSize={"sm"}>{overschrijvingen.length}</Text>
+														</Stack>
+														<Stack direction={"row"}>
+															<FormLabel>{t("export.totaalBedrag")}</FormLabel>
+															<Text fontSize={"sm"}>€{currencyFormat2(false).format(total)}</Text>
 														</Stack>
 														<Stack direction={"row"}>
 															<FormLabel>{t("checksum.sha265")}</FormLabel>

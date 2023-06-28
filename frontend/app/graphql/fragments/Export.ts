@@ -10,6 +10,7 @@ export const ExportFragment = gql`
         sha256
         overschrijvingen {
             id
+            bedrag
         }
     }
 `;
