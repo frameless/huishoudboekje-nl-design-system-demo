@@ -115,7 +115,7 @@ const FollowUpAfspraak = () => {
 					)}
 
 					<AfspraakFormContext.Provider value={ctxValue}>
-						<AfspraakForm burgerRekeningen={afspraak.burger?.rekeningen || []} values={values} onSubmit={createFollowupAfspraak} />
+						<AfspraakForm burgerRekeningen={afspraak.burger?.rekeningen || []} organisatie={afspraak.afdeling?.organisatie} values={values} onSubmit={createFollowupAfspraak} />
 					</AfspraakFormContext.Provider>
 				</Page>
 			);
