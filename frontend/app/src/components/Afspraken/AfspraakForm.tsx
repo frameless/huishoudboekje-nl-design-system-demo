@@ -146,13 +146,14 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, or
 		toggleSubmitted(true);
 
 		if (isValid()) {
-			delete form.type;
-			delete form.organisatieId;
+			const values = structuredClone(form)
+			delete values.type;
+			delete values.organisatieId;
 
 			onSubmit({
-				...form,
-				afdelingId: form.afdelingId || null, // Explicitly pass to make it null.
-				postadresId: form.postadresId || null, // Explicitly pass to make it null.
+				...values,
+				afdelingId: values.afdelingId || null, // Explicitly pass to make it null.
+				postadresId: values.postadresId || null, // Explicitly pass to make it null.
 			});
 			return;
 		}
