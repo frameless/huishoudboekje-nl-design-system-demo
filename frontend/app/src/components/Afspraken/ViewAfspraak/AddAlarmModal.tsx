@@ -219,7 +219,8 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 										<Input
 											type={"number"}
 											pattern={"^\\d*"}
-											value={form.bedragMargin ? form.bedragMargin : 0}
+											defaultValue={0}
+											// value={parseInt(form.bedragMargin && form.bedragMargin > 0 ? form.bedragMargin.toString() : "0")}
 											min={0}
 											step={1}
 											onChange={e => updateForm("bedragMargin", parseInt(e.target.value))}
