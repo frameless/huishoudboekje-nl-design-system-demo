@@ -34,6 +34,7 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 		validator,
 		initialValue: {
 			bedrag: parseFloat(afspraak.bedrag),
+			bedragMargin: 0,
 			isPeriodiek: Periodiek.Periodiek,
 			repeatType: RepeatType.Month,
 			byMonth: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
@@ -201,11 +202,11 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 										<InputLeftElement zIndex={0}>&euro;</InputLeftElement>
 										<Input
 											type={"number"}
-											pattern={"^\d*,{0,1}\d*$"}
-											value={form.bedrag || 0}
+											pattern={"^\\d*(,{0,1}\\d{0,2})$"}
+											value={form.bedrag ? form.bedrag : 0}
 											min={0}
 											step={.01}
-											onChange={e => updateForm("bedrag", parseFloat(e.target.value))}
+											onChange={e => updateForm("bedrag", parseFloat(e.target.value.toString().replace(',','.')))}
 										/>
 									</InputGroup>
 									<FormErrorMessage>{t("alarmForm.errors.invalidBedragError")}</FormErrorMessage>
@@ -217,11 +218,11 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 										<InputLeftElement zIndex={0}>&euro;</InputLeftElement>
 										<Input
 											type={"number"}
-											pattern={"^\d*,{0,1}\d*$"}
-											value={form.bedragMargin || 0}
+											pattern={"^\\d*"}
+											value={form.bedragMargin ? form.bedragMargin : 0}
 											min={0}
-											step={.01}
-											onChange={e => updateForm("bedragMargin", parseFloat(e.target.value))}
+											step={1}
+											onChange={e => updateForm("bedragMargin", parseInt(e.target.value))}
 										/>
 									</InputGroup>
 									<FormErrorMessage>{t("alarmForm.errors.invalidBedragMarginError")}</FormErrorMessage>
