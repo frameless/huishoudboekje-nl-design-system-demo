@@ -1,7 +1,7 @@
 import {Maybe} from "graphql/jsutils/Maybe";
 import {BankTransaction, BurgerRapportage, RapportageTransactie, RapportageRubriek, Organisatie, Rubriek, Scalars, Saldo} from "../../generated/graphql";
 import d from "../../utils/dayjs";
-import {formatBurgerName, getOrganisatieForTransaction, getRubriekForTransaction} from "../../utils/things";
+import { Dayjs } from "dayjs";
 
 // @i18n: t("charts.inkomstenUitgaven.income") t("charts.inkomstenUitgaven.expenses") t("charts.inkomstenUitgaven.unbooked")
 export enum Type {
@@ -54,8 +54,8 @@ export function createSaldos(burgerRapportages: BurgerRapportage[]) {
 	return result;
 }
 
-export function createChartAggregation(burgerRapportages: BurgerRapportage[], granularity: Granularity) {
-	const _data = flattenTransactionArrays(burgerRapportages);
+export function createChartAggregation(startDate: Dayjs, burgerRapportages: BurgerRapportage[], granularity: Granularity) {
+	const _data = flattenTransactionArrays(burgerRapportages).filter(transaction => transaction.transactieDatum? d(transaction.transactieDatum).isSameOrAfter(startDate) : false);
 	const chartData = [];
 	for (const entry of _data) {
 		const period = d(entry.transactieDatum, "YYYY MM DD").format(periodFormatForGranularity[granularity]);
@@ -69,14 +69,14 @@ export function createChartAggregation(burgerRapportages: BurgerRapportage[], gr
 	return chartData;
 }
 
-export function createBalanceTableAggregation(burgerRapportages: BurgerRapportage[]) {
+export function createBalanceTableAggregation(startDate: Dayjs, burgerRapportages: BurgerRapportage[]) {
+	const _data = flattenTransactionArrays(burgerRapportages).filter(transaction => transaction.transactieDatum? d(transaction.transactieDatum).isSameOrAfter(startDate) : false);
 	const result = []
-	for (const transaction of flattenTransactionArrays(burgerRapportages)) {
+	for (const transaction of _data) {
 		result[transaction.type] = result[transaction.type] || [];
 		result[transaction.type][transaction.rubriek] = result[transaction.type][transaction.rubriek] || [];
 		result[transaction.type][transaction.rubriek].push(transaction);
 	}
-
 	return result;
 }
 

@@ -2,7 +2,7 @@ import {BoxProps, Heading, Spinner, Stack, Text, useToken} from "@chakra-ui/reac
 import React, {useContext} from "react";
 import {useTranslation} from "react-i18next";
 import ChakraChart from "../../config/theme/custom/Chart";
-import {BankTransaction, BurgerRapportage} from "../../generated/graphql";
+import {BurgerRapportage} from "../../generated/graphql";
 import {prepareChartData} from "../../utils/things";
 import {createChartAggregation} from "./Aggregator";
 import {RapportageContext} from "./context";
@@ -13,7 +13,7 @@ const InkomstenUitgaven: React.FC<BoxProps & {transactions: BurgerRapportage[]}>
 	const [colorInkomsten, colorUitgaven] = useToken("colors", ["green.300", "red.300"]);
 	const {startDate, endDate, granularity} = useContext(RapportageContext);
 
-	const aggregation = createChartAggregation(transactions, granularity);
+	const aggregation = createChartAggregation(startDate,transactions, granularity);
 
 	const columns = [t("interval.period"), t("charts.inkomstenUitgaven.income"), t("charts.inkomstenUitgaven.expenses")];
 	const chartTemplate = prepareChartData(startDate, endDate, granularity, columns.length - 1);

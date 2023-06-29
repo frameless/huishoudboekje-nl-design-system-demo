@@ -25,10 +25,11 @@ const RapportageComponent: React.FC<RapportageComponentParams> = ({burgerIds, st
 	const $rapportage = useGetBurgerRapportagesQuery({
 		variables: {
 			burgers: burgerIds,
-			start: d(startDate).format("YYYY-MM-DD"),
+			start: d(startDate).startOf("month").format("YYYY-MM-DD"),
 			end: d(endDate).format("YYYY-MM-DD"),
 			rubrieken: rubrieken
-		}
+		},
+		fetchPolicy: "no-cache"
 	});
 
 	const $saldoStart = useGetSaldoClosestToQuery({
@@ -76,7 +77,7 @@ const RapportageComponent: React.FC<RapportageComponentParams> = ({burgerIds, st
 									</TabPanels>
 								</Tabs>
 							</SectionContainer>
-							<BalanceTable transactions={reports} startDate={d(startDate).format("L")} endDate={d(endDate).format("L")} startSaldos={startSaldos} />
+							<BalanceTable transactions={reports} startDate={d(startDate)} endDate={d(endDate)} startSaldos={startSaldos} />
 						</Stack>
 					)
 				}} />

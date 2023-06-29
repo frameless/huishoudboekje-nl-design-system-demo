@@ -2,7 +2,7 @@ import {BoxProps, Heading, Spinner, Stack, Text, useToken} from "@chakra-ui/reac
 import React, {useContext} from "react";
 import {useTranslation} from "react-i18next";
 import ChakraChart, {chartProps} from "../../config/theme/custom/Chart";
-import {BankTransaction, BurgerRapportage, Saldo as StartSaldo} from "../../generated/graphql";
+import {BurgerRapportage, Saldo as StartSaldo} from "../../generated/graphql";
 import {prepareChartData} from "../../utils/things";
 import {createChartAggregation, getStartingSaldo} from "./Aggregator";
 import {RapportageContext} from "./context";
@@ -12,7 +12,7 @@ const Saldo: React.FC<BoxProps & {transactions: BurgerRapportage[], startSaldos:
 	const [colorSaldo] = useToken("colors", ["blue.300"]);
 	const {startDate, endDate, granularity} = useContext(RapportageContext);
 
-	const aggregation = createChartAggregation(transactions, granularity);
+	const aggregation = createChartAggregation(startDate, transactions, granularity);
 	let startSaldo = getStartingSaldo(startSaldos)
 
 	const columns = [t("interval.month", {count: 2}), t("charts.saldo.title")];

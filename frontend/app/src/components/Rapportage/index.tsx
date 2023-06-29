@@ -23,8 +23,8 @@ const Rapportage = () => {
 	const filterModal = useDisclosure();
 
 	const [dateRange, setDateRange] = useState<Required<DateRange>>({
-		from: d().startOf("month").subtract(1, "month").toDate(),
-		through: d().endOf("month").subtract(1, "month").toDate(),
+		from: d().subtract(1, "month").startOf("month").toDate(),
+		through: d().subtract(1, "month").endOf("month").toDate(),
 	});
 
 	const [granularity, setGranularity] = useState<Granularity>(Granularity.Weekly);
