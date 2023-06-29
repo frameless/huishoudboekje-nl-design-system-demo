@@ -34,7 +34,6 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 		validator,
 		initialValue: {
 			bedrag: parseFloat(afspraak.bedrag),
-			bedragMargin: 0,
 			isPeriodiek: Periodiek.Periodiek,
 			repeatType: RepeatType.Month,
 			byMonth: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
@@ -220,9 +219,10 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 											type={"number"}
 											pattern={"^\\d*"}
 											defaultValue={0}
-											// value={parseInt(form.bedragMargin && form.bedragMargin > 0 ? form.bedragMargin.toString() : "0")}
+											value={parseInt(form.bedragMargin && form.bedragMargin > 0 ? form.bedragMargin.toString() : "0")}
 											min={0}
 											step={1}
+											onKeyUp = {e => updateForm("bedragMargin", parseInt((e.target as HTMLInputElement).value))}
 											onChange={e => updateForm("bedragMargin", parseInt(e.target.value))}
 										/>
 									</InputGroup>
