@@ -201,7 +201,7 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 										<InputLeftElement zIndex={0}>&euro;</InputLeftElement>
 										<Input
 											type={"number"}
-											pattern={"^[^.]*$"}
+											pattern={"^\d*,{0,1}\d*$"}
 											value={form.bedrag || ""}
 											min={0}
 											step={.01}
@@ -217,7 +217,7 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 										<InputLeftElement zIndex={0}>&euro;</InputLeftElement>
 										<Input
 											type={"number"}
-											pattern={"^[^.]*$"}
+											pattern={"^\d*,{0,1}\d*$"}
 											value={form.bedragMargin || ""}
 											min={0}
 											step={.01}
