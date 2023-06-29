@@ -49,7 +49,6 @@ const FollowUpAfspraak = () => {
 					variables: {
 						input: {
 							burgerId: afspraak.burger.id,
-							validFrom: d(afspraak.validThrough, "YYYY-MM-DD").add(1, "day").format("YYYY-MM-DD"),
 							...input,
 						},
 					},
@@ -85,6 +84,7 @@ const FollowUpAfspraak = () => {
 				afdelingId: afspraak.afdeling?.id,
 				tegenRekeningId: afspraak.tegenRekening?.id,
 				postadresId: afspraak.postadres?.id,
+				validFrom: d(afspraak.validThrough, "YYYY-MM-DD").add(1, "day").format("YYYY-MM-DD")
 			};
 
 			const ctxValue: FollowUpAfspraakFormContextType = {
