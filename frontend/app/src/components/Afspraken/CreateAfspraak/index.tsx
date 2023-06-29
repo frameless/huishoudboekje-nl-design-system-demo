@@ -2,7 +2,7 @@ import React from "react";
 import {useTranslation} from "react-i18next";
 import {useNavigate, useParams} from "react-router-dom";
 import {AppRoutes} from "../../../config/routes";
-import {useCreateAfspraakMutation, useGetCreateAfspraakFormDataQuery} from "../../../generated/graphql";
+import {GetBurgerDetailsDocument, useCreateAfspraakMutation, useGetCreateAfspraakFormDataQuery} from "../../../generated/graphql";
 import Queryable from "../../../utils/Queryable";
 import useToaster from "../../../utils/useToaster";
 import BackButton from "../../shared/BackButton";
@@ -34,6 +34,9 @@ const CreateAfspraak = () => {
 					bedrag: String(values.bedrag),
 				},
 			},
+			refetchQueries: [
+				{query: GetBurgerDetailsDocument, variables: {id: parseInt(id)}},
+			],
 		}).then(result => {
 			toast({
 				success: t("messages.createAfspraakSuccess"),
