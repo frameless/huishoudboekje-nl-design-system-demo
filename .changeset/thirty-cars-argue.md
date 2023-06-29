@@ -2,4 +2,4 @@
 "huishoudboekje": patch
 ---
 
-Follow up start date automatically filled in with previous start date plus 1
+Follow up start date automatically filled in with previous end date plus 1
