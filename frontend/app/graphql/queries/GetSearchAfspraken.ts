@@ -10,6 +10,7 @@ export const GetSearchAfspraken = gql`
 				credit
 				zoektermen
 				burger {
+                    id
 					voornamen
 					voorletters
 					achternaam
