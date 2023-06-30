@@ -2365,7 +2365,7 @@ export type GetSearchAfsprakenQueryVariables = Exact<{
 }>;
 
 
-export type GetSearchAfsprakenQuery = { searchAfspraken?: { afspraken?: Array<{ id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, burger?: { voornamen?: string, voorletters?: string, achternaam?: string } }>, pageInfo?: { count?: number, limit?: number, start?: number } } };
+export type GetSearchAfsprakenQuery = { searchAfspraken?: { afspraken?: Array<{ id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, burger?: { id?: number, voornamen?: string, voorletters?: string, achternaam?: string } }>, pageInfo?: { count?: number, limit?: number, start?: number } } };
 
 export type GetSignalenAndBurgersQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -6166,6 +6166,7 @@ export const GetSearchAfsprakenDocument = gql`
       credit
       zoektermen
       burger {
+        id
         voornamen
         voorletters
         achternaam
