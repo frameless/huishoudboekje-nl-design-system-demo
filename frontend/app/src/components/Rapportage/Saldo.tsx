@@ -7,13 +7,12 @@ import {prepareChartData} from "../../utils/things";
 import {createChartAggregation, getStartingSaldo} from "./Aggregator";
 import {RapportageContext} from "./context";
 
-const Saldo: React.FC<BoxProps & {transactions: BurgerRapportage[], startSaldos: StartSaldo[]}> = ({transactions, startSaldos}) => {
+const Saldo: React.FC<BoxProps & {transactions: BurgerRapportage[], startSaldo: number}> = ({transactions, startSaldo}) => {
 	const {t} = useTranslation();
 	const [colorSaldo] = useToken("colors", ["blue.300"]);
 	const {startDate, endDate, granularity} = useContext(RapportageContext);
 
 	const aggregation = createChartAggregation(startDate, transactions, granularity);
-	let startSaldo = getStartingSaldo(startSaldos)
 
 	const columns = [t("interval.month", {count: 2}), t("charts.saldo.title")];
 	const chartTemplate = prepareChartData(startDate, endDate, granularity, columns.length - 1);
