@@ -1,20 +1,20 @@
 import {Box, Divider, HStack, Stack, Text, VStack} from "@chakra-ui/react";
 import React from "react";
 import {Trans, useTranslation} from "react-i18next";
-import {BurgerRapportage, RapportageTransactie, Saldo} from "../../generated/graphql";
+import {BurgerRapportage, Saldo} from "../../generated/graphql";
 import d from "../../utils/dayjs";
 import {currencyFormat2} from "../../utils/things";
 import Section from "../shared/Section";
 import SectionContainer from "../shared/SectionContainer";
-import {createBalanceTableAggregation, createSaldos, getStartingSaldo, Transaction, Type} from "./Aggregator";
+import {createBalanceTableAggregation, createSaldos, Offsets, Transaction, Type} from "./Aggregator";
+import { Dayjs } from "dayjs";
 
-type BalanceTableProps = {transactions: BurgerRapportage[], startDate: string, endDate: string, startSaldos: Saldo[]};
+type BalanceTableProps = {transactions: BurgerRapportage[], startDate: Dayjs, endDate: Dayjs, startSaldo: number, offsets: Offsets};
 
-const BalanceTable: React.FC<BalanceTableProps> = ({transactions, startDate, endDate, startSaldos}) => {
+const BalanceTable: React.FC<BalanceTableProps> = ({transactions, startDate, endDate, startSaldo, offsets}) => {
 	const {t} = useTranslation();
-	const aggregationByOrganisatie: Transaction[] = createBalanceTableAggregation(transactions);
-	const startSaldo = getStartingSaldo(startSaldos)
-	const saldos = createSaldos(transactions)
+	const aggregationByOrganisatie: Transaction[] = createBalanceTableAggregation(startDate, transactions);
+	const saldos = createSaldos(transactions, offsets)
 	const saldoDate = d(endDate, "L")
 	const translatedCategory = {
 		[Type.Inkomsten]: t("charts.inkomstenUitgaven.income"),

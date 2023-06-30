@@ -7,6 +7,8 @@ import SectionContainer from "../shared/SectionContainer";
 import InkomstenUitgaven from "./InkomstenUitgaven";
 import d from "../../utils/dayjs";
 import BalanceTable from "./BalanceTable";
+import { calculateOffset, getStartingSaldo } from "./Aggregator";
+import { MathOperation, floatMathOperation } from "../../utils/things";
 
 
 type RapportageComponentParams = {burgerIds: number[], startDate: Date, endDate: Date, rubrieken: number[]};
@@ -25,10 +27,11 @@ const RapportageComponent: React.FC<RapportageComponentParams> = ({burgerIds, st
 	const $rapportage = useGetBurgerRapportagesQuery({
 		variables: {
 			burgers: burgerIds,
-			start: d(startDate).format("YYYY-MM-DD"),
+			start: d(startDate).startOf("month").format("YYYY-MM-DD"),
 			end: d(endDate).format("YYYY-MM-DD"),
 			rubrieken: rubrieken
-		}
+		},
+		fetchPolicy: "no-cache"
 	});
 
 	const $saldoStart = useGetSaldoClosestToQuery({
@@ -58,6 +61,8 @@ const RapportageComponent: React.FC<RapportageComponentParams> = ({burgerIds, st
 			return (
 				<Queryable query={$saldoStart} children={data => {
 					const startSaldos: [startSaldo] = data.saldoClosest
+					const offsets = calculateOffset(d(startDate), reports);
+					const startSaldo = floatMathOperation(getStartingSaldo(startSaldos), offsets.TotalOffset, 2 , MathOperation.Plus);
 					return (
 						<Stack className="do-not-print">
 							<SectionContainer>
@@ -68,7 +73,7 @@ const RapportageComponent: React.FC<RapportageComponentParams> = ({burgerIds, st
 									</Stack>
 									<TabPanels>
 										<TabPanel>
-											<Saldo transactions={reports} startSaldos={startSaldos} />
+											<Saldo transactions={reports} startSaldo={startSaldo} />
 										</TabPanel>
 										<TabPanel>
 											<InkomstenUitgaven transactions={reports} />
@@ -76,7 +81,7 @@ const RapportageComponent: React.FC<RapportageComponentParams> = ({burgerIds, st
 									</TabPanels>
 								</Tabs>
 							</SectionContainer>
-							<BalanceTable transactions={reports} startDate={d(startDate).format("L")} endDate={d(endDate).format("L")} startSaldos={startSaldos} />
+							<BalanceTable transactions={reports} startDate={d(startDate)} endDate={d(endDate)} startSaldo={startSaldo} offsets={offsets} />
 						</Stack>
 					)
 				}} />

@@ -1,7 +1,8 @@
 import {Maybe} from "graphql/jsutils/Maybe";
 import {BankTransaction, BurgerRapportage, RapportageTransactie, RapportageRubriek, Organisatie, Rubriek, Scalars, Saldo} from "../../generated/graphql";
 import d from "../../utils/dayjs";
-import {formatBurgerName, getOrganisatieForTransaction, getRubriekForTransaction} from "../../utils/things";
+import { Dayjs } from "dayjs";
+import { MathOperation, floatMathOperation } from "../../utils/things";
 
 // @i18n: t("charts.inkomstenUitgaven.income") t("charts.inkomstenUitgaven.expenses") t("charts.inkomstenUitgaven.unbooked")
 export enum Type {
@@ -33,13 +34,19 @@ export const periodFormatForGranularity = {
 	[Granularity.Daily]: "DD-MM-YYYY",
 };
 
+export type Offsets = {
+	ExpensesOffset: number, 
+	IncomesOffset: number, 
+	TotalOffset: number
+}
+
 export type Saldos = {
 	InkomstenTotal: Maybe<Scalars['Decimal']>,
 	UitgavenTotal: Maybe<Scalars['Decimal']>,
 	Total: Maybe<Scalars['Decimal']>,
 }
 
-export function createSaldos(burgerRapportages: BurgerRapportage[]) {
+export function createSaldos(burgerRapportages: BurgerRapportage[], offsets: Offsets) {
 	const result = [];
 	result[Type.Inkomsten] = 0;
 	result['Total'] = 0;
@@ -51,11 +58,15 @@ export function createSaldos(burgerRapportages: BurgerRapportage[]) {
 		result[Type.Uitgaven] += parseFloat(rapportage.totaalUitgaven);
 	}
 
+	result[Type.Inkomsten] = floatMathOperation(result[Type.Inkomsten], offsets.IncomesOffset, 2, MathOperation.Minus);
+	result['Total'] = floatMathOperation(result['Total'], offsets.TotalOffset, 2, MathOperation.Minus);
+	result[Type.Uitgaven] = floatMathOperation(result[Type.Uitgaven], offsets.ExpensesOffset, 2, MathOperation.Minus);
+
 	return result;
 }
 
-export function createChartAggregation(burgerRapportages: BurgerRapportage[], granularity: Granularity) {
-	const _data = flattenTransactionArrays(burgerRapportages);
+export function createChartAggregation(startDate: Dayjs, burgerRapportages: BurgerRapportage[], granularity: Granularity) {
+	const _data = flattenTransactionArrays(burgerRapportages).filter(transaction => transaction.transactieDatum? d(transaction.transactieDatum).isSameOrAfter(startDate) : false);
 	const chartData = [];
 	for (const entry of _data) {
 		const period = d(entry.transactieDatum, "YYYY MM DD").format(periodFormatForGranularity[granularity]);
@@ -69,14 +80,14 @@ export function createChartAggregation(burgerRapportages: BurgerRapportage[], gr
 	return chartData;
 }
 
-export function createBalanceTableAggregation(burgerRapportages: BurgerRapportage[]) {
+export function createBalanceTableAggregation(startDate: Dayjs, burgerRapportages: BurgerRapportage[]) {
+	const _data = flattenTransactionArrays(burgerRapportages).filter(transaction => transaction.transactieDatum? d(transaction.transactieDatum).isSameOrAfter(startDate) : false);
 	const result = []
-	for (const transaction of flattenTransactionArrays(burgerRapportages)) {
+	for (const transaction of _data) {
 		result[transaction.type] = result[transaction.type] || [];
 		result[transaction.type][transaction.rubriek] = result[transaction.type][transaction.rubriek] || [];
 		result[transaction.type][transaction.rubriek].push(transaction);
 	}
-
 	return result;
 }
 
@@ -86,6 +97,21 @@ export function getStartingSaldo(saldos: Saldo[]) {
 		startingSaldo += parseFloat(saldo.saldo);
 	}
 	return startingSaldo;
+}
+
+export function calculateOffset(startDate: Dayjs, burgerRapportages: BurgerRapportage[]) : Offsets{
+	const _data = flattenTransactionArrays(burgerRapportages).filter(transaction => transaction.transactieDatum? d(transaction.transactieDatum).isBefore(startDate) : false);
+	const result = []
+	let expensesOffset = 0
+	let incomesOffset = 0
+	for (const transaction of _data) {
+		if(transaction.type === Type.Uitgaven){
+			expensesOffset = floatMathOperation(expensesOffset, parseFloat(transaction.bedrag), 2, MathOperation.Plus)
+		} else if (transaction.type === Type.Inkomsten) {
+			incomesOffset = floatMathOperation(incomesOffset, parseFloat(transaction.bedrag), 2, MathOperation.Plus)
+		}
+	}
+	return {ExpensesOffset: expensesOffset, IncomesOffset: incomesOffset, TotalOffset: floatMathOperation(expensesOffset, incomesOffset, 2, MathOperation.Plus)};
 }
 
 function getTransactionsFromRapportageRubrieks(rapportageRubrieken: RapportageRubriek[], type: Type): Transaction[] {
