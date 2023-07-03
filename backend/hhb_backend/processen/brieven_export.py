@@ -22,6 +22,8 @@ class HHBCsvDialect(csv.Dialect):
 
 
 brieven_fields = [
+    "betaalrichting",
+    "status.afspraak",
     "organisatie.naam",
     "organisatie.postadres.adresregel1",
     "organisatie.postadres.postcode",
@@ -31,9 +33,7 @@ brieven_fields = [
     "burger.naam",
     "burger.postadres.adresregel1",
     "burger.postadres.postcode",
-    "burger.postadres.plaats",
-    "betaalrichting",
-    "status.afspraak"
+    "burger.postadres.plaats"
 ]
 
 
@@ -181,10 +181,11 @@ def create_row(afdeling, afspraak, burger, current_date_str):
     straat = adres.get("street", {})
     huisnummer = adres.get("houseNumber", {})
 
-    row = {
-        "organisatie.naam": organisatie["naam"] if "naam" in organisatie else "",
-        "organisatie.postadres.adresregel1": ""
-    }
+    row = {}
+    row["betaalrichting"] = "credit" if afspraak["credit"] is True else "debet"
+    row["status.afspraak"] = afspraak["valid_through"] if afspraak["valid_through"] else ""
+    row["organisatie.naam"] =  organisatie["naam"] if "naam" in organisatie else ""
+    row["organisatie.postadres.adresregel1"] = ""
     if straat and huisnummer:
         row[
             "organisatie.postadres.adresregel1"] = f"{straat} {huisnummer}"
@@ -198,7 +199,5 @@ def create_row(afdeling, afspraak, burger, current_date_str):
         row["burger.postadres.adresregel1"] = f"{burger['straatnaam']} {burger['huisnummer']}"
     row["burger.postadres.postcode"] = burger["postcode"] if burger["postcode"] else ""
     row["burger.postadres.plaats"] = burger["plaatsnaam"] if burger["plaatsnaam"] else ""
-    row["betaalrichting"] = "credit" if afspraak["credit"] is True else "debet"
-    row["status.afspraak"] = afspraak["valid_through"] if afspraak["valid_through"] else ""
 
     return row
