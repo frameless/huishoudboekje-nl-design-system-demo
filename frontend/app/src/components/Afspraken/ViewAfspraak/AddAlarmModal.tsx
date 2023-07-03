@@ -73,6 +73,8 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 		{key: RepeatType.Month, value: RepeatType.Month, label: t("schedule.repeatType_month")},
 	];
 
+	const allMonths = Array.from({length: 12}).map((x, i) => i + 1);
+
 	const onClickSubmit = (e) => {
 		e.preventDefault();
 		toggleSubmitted(true);
@@ -156,7 +158,6 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 											onChange={(val) => {
 												updateForm("repeatType", val?.value);
 												updateForm("byDay", undefined);
-												const allMonths = Array.from({length: 12}).map((x, i) => i + 1);
 												updateForm("byMonth", val?.value === RepeatType.Month ? allMonths : undefined);
 											}}
 										/>
@@ -165,7 +166,12 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 								</FormControl>
 
 								{form.repeatType === RepeatType.Week && (<>
-									<WeekDaySelector value={form.byDay || []} onChange={(value => updateForm("byDay", value))} isInvalid={!isFieldValid("byDay") || !isFieldValid2("byDay")} isRequired={true} />
+									<WeekDaySelector 
+										value={form.byDay || []} 
+										onChange={(value => updateForm("byDay", value))} 
+										isInvalid={!isFieldValid("byDay") || !isFieldValid2("byDay")} 
+										isRequired={true} 
+									/>
 
 									<FormControl flex={1} isInvalid={!isFieldValid("datumMargin") || !isFieldValid2("datumMargin")} isRequired>
 										<FormLabel>{t("alarmForm.datumMargin")}</FormLabel>
@@ -175,7 +181,12 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 								</>)}
 
 								{form.repeatType === RepeatType.Month && (<>
-									<MonthSelector value={form.byMonth || []} onChange={(value => updateForm("byMonth", value))} isInvalid={!isFieldValid("byMonth")} isRequired={true} />
+									<MonthSelector 
+										value={form.byMonth || []} 
+										onChange={(value => updateForm("byMonth", value))} 
+										isInvalid={!isFieldValid("byMonth")} 
+										isRequired={true} 
+									/>
 
 									<FormControl flex={1} isInvalid={!isFieldValid("byMonthDay") || !isFieldValid2("byMonthDay")} isRequired>
 										<FormLabel>{t("alarmForm.byMonthDay")}</FormLabel>
