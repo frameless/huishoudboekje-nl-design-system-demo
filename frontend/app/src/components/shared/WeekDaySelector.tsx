@@ -1,4 +1,13 @@
-import {Checkbox, CheckboxGroup, FormControl, FormErrorMessage, FormLabel, Wrap, WrapItem} from "@chakra-ui/react";
+import { 
+	Checkbox, 
+	CheckboxGroup, 
+	FormControl, 
+	FormErrorMessage, 
+	FormLabel,
+	Text, 
+	Wrap, 
+	WrapItem
+} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
 import {DayOfWeek} from "../../generated/graphql";
@@ -10,10 +19,16 @@ type WeekDaySelectorProps = {
     onChange: (day: DayOfWeek[]) => void,
 };
 
+let showInitially = true;
+
+
 const WeekDaySelector: React.FC<WeekDaySelectorProps> = ({isInvalid = false, isRequired = false, value, onChange}) => {
 	const {t} = useTranslation();
 
-	return (
+	return (<>
+		<Text>
+			Is initial {showInitially ? 'true' : 'false'} <span onClick={e => showInitially = !showInitially}>CLICK</span>
+		</Text>
 		<FormControl flex={1} isInvalid={isInvalid} isRequired={isRequired}>
 			<FormLabel>{t("schedule.byDay")}</FormLabel>
 			<CheckboxGroup colorScheme={"primary"} defaultValue={[]} value={value || []} onChange={(val: DayOfWeek[]) => onChange(val)}>
@@ -29,7 +44,7 @@ const WeekDaySelector: React.FC<WeekDaySelectorProps> = ({isInvalid = false, isR
 			</CheckboxGroup>
 			<FormErrorMessage>{t("schedule.invalidByDayError")}</FormErrorMessage>
 		</FormControl>
-	);
+	</>);
 };
 
 export default WeekDaySelector;
