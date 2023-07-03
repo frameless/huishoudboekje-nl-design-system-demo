@@ -481,7 +481,19 @@
     "sep": "september",
     "oct": "oktober",
     "nov": "november",
-    "dec": "december"
+    "dec": "december",
+    "m1": "Januari",
+    "m2": "Februari",
+    "m3": "Maart",
+    "m4": "April",
+    "m5": "Mei",
+    "m6": "Juni",
+    "m7": "Juli",
+    "m8": "Augustus",
+    "m9": "September",
+    "m10": "Oktober",
+    "m11": "November",
+    "m12": "December"
   },
   "addAlarmModal": {
     "title": "Alarm toevoegen",
@@ -499,7 +511,9 @@
     "datumMargin": "Toegestane afwijking (in dagen)",
     "byMonthDay": "Dag in de maand",
     "bedrag": "Bedrag verwachte betaling",
-    "bedragMargin": "Toegestane afwijking bedrag (in euro's)"
+    "bedragMargin": "Toegestane afwijking bedrag (in euro's)",
+    "allMonths": "Alle maanden",
+    "allWeekDays": "Alle weekdagen"
   },
   "deleteAfspraak": {
     "confirmModalTitle": "Afspraak verwijderen",
