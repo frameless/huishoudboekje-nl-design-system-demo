@@ -1,6 +1,8 @@
-import {Checkbox, CheckboxGroup, FormControl, FormErrorMessage, FormLabel, SimpleGrid} from "@chakra-ui/react";
-import React from "react";
+import {Checkbox, CheckboxGroup, FormControl, FormErrorMessage, FormLabel, IconButton, SimpleGrid, Text} from "@chakra-ui/react";
+import React, {useState} from "react";
+import {EditIcon} from "@chakra-ui/icons"
 import {useTranslation} from "react-i18next";
+import {NavLink} from "react-router-dom";
 
 type MonthSelectorProps = {
 	isInvalid?: boolean,
@@ -9,11 +11,25 @@ type MonthSelectorProps = {
 	onChange: (months: number[]) => void,
 };
 
+
+
 const MonthSelector: React.FC<MonthSelectorProps> = ({isInvalid = false, isRequired = false, value, onChange}) => {
 	const {t} = useTranslation();
+	const [isOpen, setIsOpen] = useState(value?.length == 0 ? true : false);
 
-	return (
-		<FormControl flex={1} isInvalid={isInvalid} isRequired={isRequired}>
+	function toggle() {
+		setIsOpen((isOpen) => !isOpen);
+	}
+
+	let toggleText = t("alarmForm.allMonths")
+
+	if (value.length < 12) {
+		const availableMonths = (value || [])?.map(x => t("months.m"+x))
+		toggleText = availableMonths.join(', ')
+	}
+
+	return (<>
+		{isOpen && <FormControl flex={1} isInvalid={isInvalid} isRequired={isRequired}>
 			<FormLabel>{t("schedule.byMonth")}</FormLabel>
 			<CheckboxGroup colorScheme={"primary"} defaultValue={[]} value={(value || [])?.map(x => String(x)) || []} onChange={(val: string[]) => onChange(val.map(x => parseInt(x)))}>
 				<SimpleGrid columns={2}>
@@ -32,8 +48,9 @@ const MonthSelector: React.FC<MonthSelectorProps> = ({isInvalid = false, isRequi
 				</SimpleGrid>
 			</CheckboxGroup>
 			<FormErrorMessage>{t("schedule.invalidByMonthError")}</FormErrorMessage>
-		</FormControl>
-	);
+		</FormControl>}
+		{!isOpen && <Text>{toggleText} <IconButton as={NavLink} colorScheme={"primary"} variant={"ghost"} size={"sm"} icon={<EditIcon/>} aria-label={t("global.actions.edit")} onClick={toggle}></IconButton></Text>}
+	</>);
 };
 
 export default MonthSelector;
