@@ -1,10 +1,26 @@
-import { FormLabel, Stack, Tag, TagLabel, TagLeftIcon, Text } from "@chakra-ui/react";
-import { Burger } from "../../generated/graphql";
+import { 
+    IconButton, 
+    FormLabel, 
+    Stack, 
+    Tag, 
+    TagLabel, 
+    TagLeftIcon, 
+    Text 
+} from "@chakra-ui/react";
+import { 
+    Afspraak,
+    Burger,
+} from "../../generated/graphql";
+import { 
+    ViewIcon, 
+    WarningTwoIcon 
+} from "@chakra-ui/icons";
 import Section from "../shared/Section";
 import SectionContainer from "../shared/SectionContainer";
-import { WarningTwoIcon } from "@chakra-ui/icons";
 import {useTranslation} from "react-i18next";
 import { getBurgerHhbId } from "../../utils/things";
+import {NavLink, useNavigate} from "react-router-dom";
+import {AppRoutes} from "../../config/routes";
 
 const BurgerContextContainer = (data : {burger : Burger | undefined}) => {
 	const {t} = useTranslation();
@@ -24,7 +40,7 @@ const BurgerContextContainer = (data : {burger : Burger | undefined}) => {
                             <Stack spacing={2} mb={1} direction={["column", "row"]}>
                                 <Stack spacing={1} flex={1}>
                                     <FormLabel>{t("forms.burgers.fields.hhbId")}</FormLabel>
-                                    <Text>{getBurgerHhbId(burger)}</Text>
+                                    <Text>{getBurgerHhbId(burger)} <IconButton as={NavLink} to={AppRoutes.ViewBurger(String(data?.burger?.id))} variant={"ghost"} size={"sm"} icon={<ViewIcon />} aria-label={t("global.actions.view")} /></Text>
                                 </Stack>
                             </Stack>
                             <Stack spacing={2} mb={1} direction={["column", "row"]}>
