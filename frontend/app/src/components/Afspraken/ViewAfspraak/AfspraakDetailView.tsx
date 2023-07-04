@@ -25,7 +25,6 @@ import {
 	Tr,
 	useBreakpointValue,
 	useDisclosure,
-	VStack,
 	Wrap,
 	WrapItem,
 } from "@chakra-ui/react";
@@ -334,7 +333,7 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 					</AlertDescription>
 				</Alert>
 			)}
-			<BurgerContextContainer burger={afspraak.burger}/>
+			<BurgerContextContainer burger={afspraak.burger} showburgericon={true} />
 			<SectionContainer>
 				<Section title={t("afspraakDetailView.section1.title")} helperText={t("afspraakDetailView.section1.helperText")} left>
 					<Stack>
