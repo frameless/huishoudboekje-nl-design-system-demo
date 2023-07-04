@@ -158,13 +158,15 @@ def date_in_past(date_input):
 
 
 # get ByDay, ByMonth and ByMonthDay from alarm
-def generate_alarm_date(alarm, start_date: date = date.today(), alarm_date: date = None) -> date:
+def generate_alarm_date(alarm, start_date: date = None, alarm_date: date = None) -> date:
     # Create next Alarm in the sequence based on byDay, byMonth, byMonthDay cycle
     by_day = alarm.get("byDay", [])
     by_month = alarm.get("byMonth", [])
     by_month_day = alarm.get("byMonthDay", [])
 
     # the next alarm date from start_date
+    if not start_date:
+        start_date = date.today()
     future = max(alarm_date, start_date) if alarm_date else start_date
 
     # https://dateutil.readthedocs.io/en/latest/examples.html#rrule-examples

@@ -162,7 +162,7 @@ def should_create_next_alarm(alarm: Alarm, alarm_check_date: date, active_alarms
     # only generate next alarm if byDay, byMonth, and/or byMonthDay is present
     if alarm.byDay or alarm.byMonth or alarm.byMonthDay:
         # generate next alarm in the sequence
-        next_alarm_date = generate_alarm_date(alarm, alarm_check_date)
+        next_alarm_date = generate_alarm_date(alarm, alarm_date=alarm_check_date)
 
         # check if the end date is past or not
         end_date = alarm.endDate
