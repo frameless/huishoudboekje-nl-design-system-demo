@@ -489,7 +489,7 @@
   },
   "alarmForm": {
     "repeated": "Periodiek",
-    "editRepeated": "Aanpassen",
+    "editRepeated": "Meer opties",
     "date": "Datum verwachte betaling",
     "errors": {
       "invalidDateError": "Vul een geldige datum in.",
