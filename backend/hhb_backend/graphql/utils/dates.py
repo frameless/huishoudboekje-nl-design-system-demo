@@ -16,7 +16,7 @@ def to_date(date_str: str | date | datetime = None) -> date:
         return None
 
 
-def valid_afspraak(afspraak: Afspraak, check_date=date.today()):
+def valid_afspraak(afspraak: Afspraak, check_date=date.today(), future_afspraak_allowed=False):
     """Check if an afspraak is valid on a specified date.
 
     - If the valid_from date is in the future from today, the afspraak is not valid.
@@ -40,7 +40,7 @@ def valid_afspraak(afspraak: Afspraak, check_date=date.today()):
     if afspraak.valid_from:
         valid_from = to_date(afspraak.valid_from)
         today = date.today()
-        if valid_from > today or check_date < valid_from:
+        if (not future_afspraak_allowed and valid_from > today) or check_date < valid_from:
             return False
 
     if afspraak.valid_through:
