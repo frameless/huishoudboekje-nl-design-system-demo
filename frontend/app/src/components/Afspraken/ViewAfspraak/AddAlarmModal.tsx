@@ -30,10 +30,11 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 	const {t} = useTranslation();
 	const toast = useToaster();
 	const reactSelectStyles = useReactSelectStyles();
+
 	const [form, {setForm, updateForm, toggleSubmitted, isSubmitted, isFieldValid, reset}] = useForm<zod.infer<typeof validator>>({
 		validator,
 		initialValue: {
-			startDate: d(afspraak.validFrom).toDate(),
+			startDate: d(afspraak.validFrom).isSameOrAfter(d(), 'date') ? d(afspraak.validFrom).toDate() : d().toDate(),
 			bedrag: parseFloat(afspraak.bedrag),
 			isPeriodiek: Periodiek.Periodiek,
 			repeatType: RepeatType.Month,
@@ -103,16 +104,7 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 			toast({error: t("global.formError"), title: t("messages.genericError.title")});
 		}
 	};
-
-	const startDateDefaultValue = ()=> {
-		if(form.startDate){
-			return d(form.startDate).toDate()
-		}else if(d(afspraak.validFrom).isSameOrAfter(d(), 'date')){
-			return d(afspraak.validFrom).toDate()
-		}else {
-			return d().toDate()
-		}
-	}
+	
 
 	return (
 		<Modal title={t("addAlarmModal.title")} onClose={onClose}>
@@ -177,21 +169,24 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 									</Box>
 									<FormErrorMessage>{t("schedule.invalidPeriodiekError")}</FormErrorMessage>
 								</FormControl>
-								<FormControl flex={1} isInvalid={!isFieldValid("startDate")}>
-									<FormLabel>{t("alarmForm.startDate")}</FormLabel>
-									<DatePicker selected={startDateDefaultValue()}
-										dateFormat={"dd-MM-yyyy"}
-										dropdownMode={"select"}
-										onChange={(date) => {
-											if(date){
-												updateForm("startDate",date)
-											}
-										}}
-										customInput={(<Input />)} />
-									<FormErrorMessage>{t("afspraakDetailView.invalidValidFromError")}</FormErrorMessage>
-								</FormControl>
+								
 								{form.repeatType === RepeatType.Week && (<>
 									<WeekDaySelector value={form.byDay || []} onChange={(value => updateForm("byDay", value))} isInvalid={!isFieldValid("byDay") || !isFieldValid2("byDay")} isRequired={true} />
+
+									<FormControl flex={1} isInvalid={!isFieldValid("startDate")}>
+										<FormLabel>{t("alarmForm.startDate")}</FormLabel>
+										<DatePicker selected={form.startDate}
+											dateFormat={"dd-MM-yyyy"}
+											showYearDropdown={true}
+											dropdownMode={"select"}
+											onChange={(date) => {
+												if(date){
+													updateForm("startDate",date)
+												}
+											}}
+											customInput={(<Input />)} />
+										<FormErrorMessage>{t("afspraakDetailView.invalidValidFromError")}</FormErrorMessage>
+									</FormControl>
 
 									<FormControl flex={1} isInvalid={!isFieldValid("datumMargin") || !isFieldValid2("datumMargin")} isRequired>
 										<FormLabel>{t("alarmForm.datumMargin")}</FormLabel>
@@ -203,12 +198,27 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 								{form.repeatType === RepeatType.Month && (<>
 									<MonthSelector value={form.byMonth || []} onChange={(value => updateForm("byMonth", value))} isInvalid={!isFieldValid("byMonth")} isRequired={true} />
 
+									<FormControl flex={1} isInvalid={!isFieldValid("startDate")}>
+										<FormLabel>{t("alarmForm.startDate")}</FormLabel>
+										<DatePicker selected={form.startDate}
+											dateFormat={"dd-MM-yyyy"}
+											showYearDropdown={true}
+											dropdownMode={"select"}
+											onChange={(date) => {
+												if(date){
+													updateForm("startDate",date)
+												}
+											}}
+											customInput={(<Input />)} />
+										<FormErrorMessage>{t("afspraakDetailView.invalidValidFromError")}</FormErrorMessage>
+									</FormControl>
+
 									<FormControl flex={1} isInvalid={!isFieldValid("byMonthDay") || !isFieldValid2("byMonthDay")} isRequired>
 										<FormLabel>{t("alarmForm.byMonthDay")}</FormLabel>
 										<Input type={"number"} value={form.byMonthDay || ""} onChange={e => updateForm("byMonthDay", parseInt(e.target.value))} min={0} max={28} />
 										<FormErrorMessage>{t("alarmForm.errors.invalidMonthDayError")}</FormErrorMessage>
 									</FormControl>
-
+							
 									<FormControl flex={1} isInvalid={!isFieldValid("datumMargin") || !isFieldValid2("datumMargin")} isRequired>
 										<FormLabel>{t("alarmForm.datumMargin")}</FormLabel>
 										<Input type={"number"} value={form.datumMargin ?? ""} onChange={e => setForm(x => ({
