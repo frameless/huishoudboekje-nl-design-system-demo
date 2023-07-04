@@ -1,6 +1,7 @@
 import {Periodiek} from "../components/shared/PeriodiekSelector";
 import {DayOfWeek} from "../generated/graphql";
 import {RepeatType} from "../models/models";
+import d from "../utils/dayjs";
 import zod from "../utils/zod";
 
 const useAlarmValidator = () => {
@@ -10,6 +11,7 @@ const useAlarmValidator = () => {
 		bedrag: zod.number().min(0),
 		bedragMargin: zod.number().min(0),
 		date: zod.date().optional(),
+		startDate: zod.date().refine((date)=> d(date).isSameOrAfter(d(), 'date')).optional(),
 		datumMargin: zod.number().min(0).optional(),
 		byDay: zod.array(zod.nativeEnum(DayOfWeek)).min(1).optional(),
 		byMonth: zod.array(zod.number().min(1).max(12)).min(1).max(12).optional(),

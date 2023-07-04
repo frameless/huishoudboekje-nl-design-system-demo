@@ -62,16 +62,21 @@ class AlarmHelper:
         if (input.get("byMonth") or input.get("byMonthDay")) and not (input.get("byMonth") and input.get("byMonthDay")):
             raise GraphQLError("Either both byMonth and byMonthDay are required, or neither.")
 
-        if not input.get("endDate"):
-            if input.get("startDate"):
-                raise GraphQLError("It is not possible to have a startDate for a repetitive alarm.")
-            # can't use attributes to set data
-            input["startDate"] = generate_alarm_date(input).isoformat()
 
         afspraak_id = input["afspraakId"]
         afspraak = hhb_dataloader().afspraken.load_one(afspraak_id)
         if not afspraak:
             raise GraphQLError(f"Afspraak not found.")
+        
+        if not input.get("endDate"):
+            if input.get("startDate"):
+                startDate = to_date(input["startDate"])
+                if startDate >= to_date(afspraak.valid_from):
+                    input["startDate"] = generate_alarm_date(input, start_date=startDate).isoformat()
+                else:
+                    raise GraphQLError("De startdatum van het alarm kan niet voor de startatum van de afspraak zijn.")
+            else:
+                input["startDate"] = generate_alarm_date(input).isoformat()
 
         start_date_alarm = to_date(input["startDate"])
         if not valid_afspraak(afspraak, start_date_alarm, future_afspraak_allowed=True):
@@ -153,15 +158,14 @@ def date_in_past(date_input):
 
 
 # get ByDay, ByMonth and ByMonthDay from alarm
-def generate_alarm_date(alarm, alarm_date: date = None) -> date:
+def generate_alarm_date(alarm, start_date: date = date.today(), alarm_date: date = None) -> date:
     # Create next Alarm in the sequence based on byDay, byMonth, byMonthDay cycle
     by_day = alarm.get("byDay", [])
     by_month = alarm.get("byMonth", [])
     by_month_day = alarm.get("byMonthDay", [])
 
-    # the next alarm date from today
-    today = date.today()
-    future = max(alarm_date, today) if alarm_date else today
+    # the next alarm date from start_date
+    future = max(alarm_date, start_date) if alarm_date else start_date
 
     # https://dateutil.readthedocs.io/en/latest/examples.html#rrule-examples
     is_weekly = by_day and not by_month and not by_month_day
