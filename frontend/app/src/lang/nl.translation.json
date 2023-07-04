@@ -481,25 +481,15 @@
     "sep": "september",
     "oct": "oktober",
     "nov": "november",
-    "dec": "december",
-    "m1": "Januari",
-    "m2": "Februari",
-    "m3": "Maart",
-    "m4": "April",
-    "m5": "Mei",
-    "m6": "Juni",
-    "m7": "Juli",
-    "m8": "Augustus",
-    "m9": "September",
-    "m10": "Oktober",
-    "m11": "November",
-    "m12": "December"
+    "dec": "december"
   },
   "addAlarmModal": {
     "title": "Alarm toevoegen",
     "helperText": "Stel een alarm in om een signaal te krijgen wanneer een betaling uitblijft."
   },
   "alarmForm": {
+    "repeated": "Periodiek",
+    "editRepeated": "Aanpassen",
     "date": "Datum verwachte betaling",
     "errors": {
       "invalidDateError": "Vul een geldige datum in.",
@@ -511,9 +501,7 @@
     "datumMargin": "Toegestane afwijking (in dagen)",
     "byMonthDay": "Dag in de maand",
     "bedrag": "Bedrag verwachte betaling",
-    "bedragMargin": "Toegestane afwijking bedrag (in euro's)",
-    "allMonths": "Alle maanden",
-    "allWeekDays": "Alle weekdagen"
+    "bedragMargin": "Toegestane afwijking bedrag (in euro's)"
   },
   "deleteAfspraak": {
     "confirmModalTitle": "Afspraak verwijderen",
@@ -595,14 +583,14 @@
     "noResults": "Er zijn geen afspraken gevonden. Voeg een afspraak toe, of kies een rubriek om deze transactie op af te letteren.",
     "similarAfspraken": "Soortgelijke afspraken",
     "noSimilarAfspraken": "Geen soortgelijke afspraken gevonden",
-    "afspraak" : "Afspraak",
-    "rubriek" : "Rubriek",
+    "afspraak": "Afspraak",
+    "rubriek": "Rubriek",
     "sugestions": "Suggesties",
     "search": "Zoeken",
-    "searchOmschrijvingAndTerms" : "Zoek in omschrijving en zoektermen",
-    "organisation" : "Filter organisaties",
-    "amount" : "Bedrag",
-    "active" : "Actief",
+    "searchOmschrijvingAndTerms": "Zoek in omschrijving en zoektermen",
+    "organisation": "Filter organisaties",
+    "amount": "Bedrag",
+    "active": "Actief",
     "ended": "Beëindigd",
     "all": "Alle",
     "allOrganisations": "Alle organisaties"
