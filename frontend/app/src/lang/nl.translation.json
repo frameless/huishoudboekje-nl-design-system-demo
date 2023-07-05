@@ -461,7 +461,8 @@
     "everyMonth": "Elke maand",
     "everyYear": "Elk jaar",
     "inMonths": "in {{months}}",
-    "onDates": "op de {{dates}}"
+    "onDates": "op de {{dates}}",
+    "nextExpected": "Eerstvolgende datum"
   },
   "afspraakBetaalinstructie": {
     "title": "Betaalinstructie instellen",
@@ -496,6 +497,7 @@
       "invalidBedragError": "Vul een bedrag in.",
       "invalidBedragMarginError": "Vul een bedrag in."
     },
+    "startDate": "Startdatum (kan niet in het verleden zijn)",
     "datumMargin": "Toegestane afwijking (in dagen)",
     "byMonthDay": "Dag in de maand",
     "bedrag": "Bedrag verwachte betaling",

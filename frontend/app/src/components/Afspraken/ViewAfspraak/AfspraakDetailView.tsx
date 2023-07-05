@@ -548,6 +548,15 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 										</DataItem>
 									)}
 								</Stack>
+								{!afspraak.alarm?.endDate && afspraak.alarm?.startDate && (
+									<Stack>
+										<DataItem label={t("schedule.nextExpected")}>
+											<HStack>
+												<Text>{d(afspraak.alarm.startDate).format("L")}</Text>
+											</HStack>
+										</DataItem>
+									</Stack>
+								)}
 								<Stack direction={["column", null, null, "row"]}>
 									<DataItem label={t("bedrag")}>
 										<HStack>
