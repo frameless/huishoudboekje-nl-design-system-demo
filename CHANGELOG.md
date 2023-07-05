@@ -1,5 +1,25 @@
 # Huishoudboekje Changelog
 
+## 1.9.4
+
+Deze versie omvat verbeteringen op basis van functionele acceptatie.
+
+### Patch Changes
+
+- 83cfe850: Fixed bug eenmalig alarm day greater then 28 could not be used
+- 88c68027: Burger page is now refreshed automatically after adding a new afspraak
+- 49549c2c: Changed order brieven export fields
+- 6af09493: Incorrect validation error after submiting afspraak form fixed.
+- 7d67d677:
+- 5f7a0350: Startdate rapportage no longer has an effect on the saldo
+- 8f35e210: Startdate alarm can now be manually set
+- 6bfbe005: Voor het toevoegen van alarmen is het nu standaard maandelijks, elke maand. Dit kan gewijzigd worden met een Aanpassen sectie.
+- fcc35561: added icon for nav to burger specific page from added afspraak
+- 541851b6: Follow up afspraak: organisatie now filled in form automatically
+- 3ec7f0ca: Alarm can be added to future afspraak if the start date of the alarm is in the afspraak period"
+- 247704eb: betaalinstructie weekly day and monthly day is automatically filled based on startDate when selecting type
+- 1faf772a: Follow up start date automatically filled in with previous end date plus 1
+
 ## 1.9.3
 
 Deze versie omvat verbeteringen voor de laadtijd van een aantal schermen.
