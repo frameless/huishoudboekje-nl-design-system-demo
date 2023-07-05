@@ -2,7 +2,7 @@
 
 ## 1.9.4
 
-Deze versie omvat verbeteringen op basis van functionele acceptatie.
+Deze versie omvat verbeteringen aan functionaliteit bij het navigeren in de context van een burger, het exporteren van gegegvens, het beheren van afspraken, betaalinstructies en alarmen.
 
 ### Patch Changes
 
