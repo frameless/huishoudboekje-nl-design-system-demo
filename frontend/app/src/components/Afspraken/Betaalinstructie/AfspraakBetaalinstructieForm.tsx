@@ -117,6 +117,32 @@ const AfspraakBetaalinstructieForm: React.FC<AfspraakBetaalinstructieProps> = ({
 		{key: RepeatType.Year, value: RepeatType.Year, label: t("schedule.repeatType_year")},
 	];
 
+	const getDayOfWeekFromStartDate = () => {
+		switch(form.startDate?.getDay()){
+			case 1: 
+				return [DayOfWeek.Monday]
+			case 2: 
+				return [DayOfWeek.Tuesday]
+			case 3: 
+				return [DayOfWeek.Wednesday]
+			case 4: 
+				return [DayOfWeek.Thursday]
+			case 5: 
+				return [DayOfWeek.Friday]
+			case 6: 
+				return [DayOfWeek.Saturday]
+			case 0: 
+				return [DayOfWeek.Sunday]
+			default:
+				return undefined
+		}
+	}
+
+	const getDayOfMonth = () => {
+		const day = form.startDate?.getDate();
+		return day ? day > 28 ? [28] : [day] : undefined
+	}
+
 	return (
 		<SectionContainer>
 			<Section title={t("afspraakBetaalinstructie.title")} helperText={t("afspraakBetaalinstructie.helperText")}>
@@ -213,9 +239,9 @@ const AfspraakBetaalinstructieForm: React.FC<AfspraakBetaalinstructieProps> = ({
 												const allMonths = Array.from({length: 12}).map((x, i) => i + 1);
 												setForm(data => ({
 													...data,
-													byDay: undefined,
+													byDay: val?.value === RepeatType.Week ? getDayOfWeekFromStartDate() : undefined, 
 													byMonth: val?.value === RepeatType.Month ? allMonths : undefined,
-													byMonthDay: data.byMonthDay && form.repeatType === RepeatType.Week ? data.byMonthDay : undefined,
+													byMonthDay: val?.value === RepeatType.Month ? getDayOfMonth() : undefined,
 												}));
 											}}
 										/>

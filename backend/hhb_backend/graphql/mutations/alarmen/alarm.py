@@ -74,7 +74,7 @@ class AlarmHelper:
             raise GraphQLError(f"Afspraak not found.")
 
         start_date_alarm = to_date(input["startDate"])
-        if not valid_afspraak(afspraak, start_date_alarm):
+        if not valid_afspraak(afspraak, start_date_alarm, future_afspraak_allowed=True):
             raise GraphQLError("The afspraak is not active.")
 
         create_alarm_response = requests.post(f"{settings.ALARMENSERVICE_URL}/alarms/", json=input,

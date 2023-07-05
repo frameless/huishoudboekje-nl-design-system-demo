@@ -1,4 +1,5 @@
-import {Button, FormLabel, Stack, Text} from "@chakra-ui/react";
+import {Button, FormLabel, Stack, IconButton, Text} from "@chakra-ui/react";
+import {ViewIcon} from "@chakra-ui/icons";
 import React from "react";
 import {useTranslation} from "react-i18next";
 import {NavLink} from "react-router-dom";
@@ -20,7 +21,7 @@ const BurgerProfileView: React.FC<{burger: Burger}> = ({burger}) => {
 					<Stack spacing={2} mb={1} direction={["column", "row"]}>
 						<Stack spacing={1} flex={1}>
 							<FormLabel>{t("forms.burgers.fields.hhbId")}</FormLabel>
-							<Text>{getBurgerHhbId(burger)}</Text>
+							<Text>{getBurgerHhbId(burger)} <IconButton as={NavLink} to={AppRoutes.ViewBurger(String(burger?.id))} variant={"ghost"} size={"sm"} icon={<ViewIcon />} aria-label={t("global.actions.view")} /></Text>
 						</Stack>
 					</Stack>
 				</Stack>
