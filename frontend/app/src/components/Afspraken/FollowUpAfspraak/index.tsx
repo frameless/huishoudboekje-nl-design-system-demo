@@ -66,7 +66,7 @@ const FollowUpAfspraak = () => {
 							   toast({
 								   success: t("messages.createAfspraakSuccess"),
 							   });
-							   navigate(AppRoutes.ViewAfspraak(String(createdAfspraakId)));
+							   navigate(AppRoutes.ViewAfspraak(String(createdAfspraakId)), {replace: true});
 						   })
 						   .catch(err => {
 							   toast({
