@@ -1,4 +1,12 @@
-import {Checkbox, CheckboxGroup, FormControl, FormErrorMessage, FormLabel, Wrap, WrapItem} from "@chakra-ui/react";
+import { 
+	Checkbox, 
+	CheckboxGroup, 
+	FormControl, 
+	FormErrorMessage, 
+	FormLabel,
+	Wrap, 
+	WrapItem
+} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
 import {DayOfWeek} from "../../generated/graphql";
@@ -9,6 +17,7 @@ type WeekDaySelectorProps = {
     value: DayOfWeek[],
     onChange: (day: DayOfWeek[]) => void,
 };
+
 
 const WeekDaySelector: React.FC<WeekDaySelectorProps> = ({isInvalid = false, isRequired = false, value, onChange}) => {
 	const {t} = useTranslation();

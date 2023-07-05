@@ -1,5 +1,5 @@
-import {Box, Button, FormControl, FormErrorMessage, FormLabel, HStack, Input, InputGroup, InputLeftElement, Stack, Text} from "@chakra-ui/react";
-import React from "react";
+import {Box, Button, FormControl, FormErrorMessage, FormLabel, HStack, Input, InputGroup, InputLeftElement, Stack, Text, VStack} from "@chakra-ui/react";
+import React, {useState} from "react";
 import DatePicker from "react-datepicker";
 import {useTranslation} from "react-i18next";
 import Select from "react-select";
@@ -17,6 +17,7 @@ import Modal from "../../shared/Modal";
 import MonthSelector from "../../shared/MonthSelector";
 import PeriodiekSelector, {Periodiek} from "../../shared/PeriodiekSelector";
 import WeekDaySelector from "../../shared/WeekDaySelector";
+import DataItem from "../../shared/DataItem";
 
 type AddAlarmModalProps = {
 	afspraak: Afspraak,
@@ -29,6 +30,7 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 	const eenmaligValidator = useEenmaligAlarmValidator();
 	const {t} = useTranslation();
 	const toast = useToaster();
+	const [showOptions, setShowOptions] = useState(false);
 	const reactSelectStyles = useReactSelectStyles();
 
 	const [form, {setForm, updateForm, toggleSubmitted, isSubmitted, isFieldValid, reset}] = useForm<zod.infer<typeof validator>>({
@@ -41,6 +43,11 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 			byMonth: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
 		},
 	});
+
+	function toggleOptions() {
+		setShowOptions(!showOptions)
+	}
+
 	const $configuratie = useGetConfiguratieQuery({
 		onCompleted: data => {
 			const configuraties: Record<string, string> = (data.configuraties || []).reduce((result, c) => {
@@ -75,6 +82,8 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 		{key: RepeatType.Month, value: RepeatType.Month, label: t("schedule.repeatType_month")},
 	];
 
+	const allMonths = Array.from({length: 12}).map((x, i) => i + 1);
+
 	const onClickSubmit = (e) => {
 		e.preventDefault();
 		toggleSubmitted(true);
@@ -104,7 +113,7 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 			toast({error: t("global.formError"), title: t("messages.genericError.title")});
 		}
 	};
-	
+
 
 	return (
 		<Modal title={t("addAlarmModal.title")} onClose={onClose}>
@@ -116,13 +125,28 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 
 					<Queryable query={$configuratie} children={() => (
 						<Stack>
+							{!showOptions && <Stack>
+								<DataItem label={t("alarmForm.repeated")}>
+									<HStack justify={"space-between"}>
+										<VStack spacing={2}>
+											<Text>{t("schedule.everyMonth")}</Text>
+										</VStack>
+										<VStack spacing={2}>
+											<Button _hover={{bg: "white"}} fontWeight={"normal"} backgroundColor={"white"} textColor={"blue"} onClick={toggleOptions}>{t("alarmForm.editRepeated")}</Button>
+										</VStack>
+									</HStack>
+								</DataItem>
+							</Stack>
 
-							<PeriodiekSelector value={form.isPeriodiek} isInvalid={!isFieldValid("isPeriodiek")} onChange={p => {
-								reset();
-								updateForm("isPeriodiek", p);
-							}} isRequired />
+							}
+							{showOptions &&
+								<PeriodiekSelector value={form.isPeriodiek} isInvalid={!isFieldValid("isPeriodiek")} onChange={p => {
+									reset();
+									updateForm("isPeriodiek", p);
+								}} isRequired />
+							}
 
-							{form.isPeriodiek === Periodiek.Eenmalig && (<>
+							{showOptions && form.isPeriodiek === Periodiek.Eenmalig && (<>
 								<FormControl flex={1} isInvalid={!isFieldValid("date") || !isFieldValid2("date")} isRequired>
 									<FormLabel>{t("alarmForm.date")}</FormLabel>
 									<DatePicker selected={form.date} dateFormat={"dd-MM-yyyy"}
@@ -148,30 +172,36 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 							</>)}
 
 							{form.isPeriodiek === Periodiek.Periodiek && (<>
-								<FormControl flex={1} isInvalid={!isFieldValid("repeatType")} isRequired>
-									<FormLabel>{t("schedule.repeatType")}</FormLabel>
-									<Box flex={1}>
-										<Select
-											value={repeatTypeOptions.find(r => r.value === form.repeatType)}
-											isClearable={false}
-											noOptionsMessage={() => t("schedule.repeatTypeChoose")}
-											maxMenuHeight={200}
-											options={repeatTypeOptions}
-											placeholder={t("select.placeholder")}
-											styles={!isFieldValid("repeatType") ? reactSelectStyles.error : reactSelectStyles.default}
-											onChange={(val) => {
-												updateForm("repeatType", val?.value);
-												updateForm("byDay", undefined);
-												const allMonths = Array.from({length: 12}).map((x, i) => i + 1);
-												updateForm("byMonth", val?.value === RepeatType.Month ? allMonths : undefined);
-											}}
-										/>
-									</Box>
-									<FormErrorMessage>{t("schedule.invalidPeriodiekError")}</FormErrorMessage>
-								</FormControl>
-								
+								{showOptions &&
+									<FormControl flex={1} isInvalid={!isFieldValid("repeatType")} isRequired>
+										<FormLabel>{t("schedule.repeatType")}</FormLabel>
+										<Box flex={1}>
+											<Select
+												value={repeatTypeOptions.find(r => r.value === form.repeatType)}
+												isClearable={false}
+												noOptionsMessage={() => t("schedule.repeatTypeChoose")}
+												maxMenuHeight={200}
+												options={repeatTypeOptions}
+												placeholder={t("select.placeholder")}
+												styles={!isFieldValid("repeatType") ? reactSelectStyles.error : reactSelectStyles.default}
+												onChange={(val) => {
+													updateForm("repeatType", val?.value);
+													updateForm("byDay", undefined);
+													updateForm("byMonth", val?.value === RepeatType.Month ? allMonths : undefined);
+												}}
+											/>
+										</Box>
+										<FormErrorMessage>{t("schedule.invalidPeriodiekError")}</FormErrorMessage>
+									</FormControl>
+								}
+
 								{form.repeatType === RepeatType.Week && (<>
-									<WeekDaySelector value={form.byDay || []} onChange={(value => updateForm("byDay", value))} isInvalid={!isFieldValid("byDay") || !isFieldValid2("byDay")} isRequired={true} />
+									<WeekDaySelector
+										value={form.byDay || []}
+										onChange={(value => updateForm("byDay", value))}
+										isInvalid={!isFieldValid("byDay") || !isFieldValid2("byDay")}
+										isRequired={true}
+									/>
 
 									<FormControl flex={1} isInvalid={!isFieldValid("startDate")}>
 										<FormLabel>{t("alarmForm.startDate")}</FormLabel>
@@ -180,8 +210,8 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 											showYearDropdown={true}
 											dropdownMode={"select"}
 											onChange={(date) => {
-												if(date){
-													updateForm("startDate",date)
+												if (date) {
+													updateForm("startDate", date)
 												}
 											}}
 											customInput={(<Input />)} />
@@ -196,7 +226,14 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 								</>)}
 
 								{form.repeatType === RepeatType.Month && (<>
-									<MonthSelector value={form.byMonth || []} onChange={(value => updateForm("byMonth", value))} isInvalid={!isFieldValid("byMonth")} isRequired={true} />
+									{showOptions &&
+										<MonthSelector
+											value={form.byMonth || []}
+											onChange={(value => updateForm("byMonth", value))}
+											isInvalid={!isFieldValid("byMonth")}
+											isRequired={true}
+										/>
+									}
 
 									<FormControl flex={1} isInvalid={!isFieldValid("startDate")}>
 										<FormLabel>{t("alarmForm.startDate")}</FormLabel>
@@ -205,8 +242,8 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 											showYearDropdown={true}
 											dropdownMode={"select"}
 											onChange={(date) => {
-												if(date){
-													updateForm("startDate",date)
+												if (date) {
+													updateForm("startDate", date)
 												}
 											}}
 											customInput={(<Input />)} />
@@ -218,7 +255,7 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 										<Input type={"number"} value={form.byMonthDay || ""} onChange={e => updateForm("byMonthDay", parseInt(e.target.value))} min={0} max={28} />
 										<FormErrorMessage>{t("alarmForm.errors.invalidMonthDayError")}</FormErrorMessage>
 									</FormControl>
-							
+
 									<FormControl flex={1} isInvalid={!isFieldValid("datumMargin") || !isFieldValid2("datumMargin")} isRequired>
 										<FormLabel>{t("alarmForm.datumMargin")}</FormLabel>
 										<Input type={"number"} value={form.datumMargin ?? ""} onChange={e => setForm(x => ({
@@ -229,6 +266,7 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 									</FormControl>
 								</>)}
 							</>)}
+
 
 							{form.isPeriodiek !== undefined && (<>
 								<FormControl flex={1} isInvalid={!isFieldValid("bedrag")} isRequired>
@@ -241,7 +279,7 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 											value={form.bedrag ? form.bedrag : 0}
 											min={0}
 											step={.01}
-											onChange={e => updateForm("bedrag", parseFloat(e.target.value.toString().replace(',','.')))}
+											onChange={e => updateForm("bedrag", parseFloat(e.target.value.toString().replace(',', '.')))}
 										/>
 									</InputGroup>
 									<FormErrorMessage>{t("alarmForm.errors.invalidBedragError")}</FormErrorMessage>
@@ -257,7 +295,7 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 											value={form.bedragMargin && form.bedragMargin > 0 ? parseInt(form.bedragMargin.toString()) : undefined}
 											min={0}
 											step={1}
-											onKeyUp = {e => updateForm("bedragMargin", parseInt((e.target as HTMLInputElement).value))}
+											onKeyUp={e => updateForm("bedragMargin", parseInt((e.target as HTMLInputElement).value))}
 											onChange={e => updateForm("bedragMargin", parseInt(e.target.value))}
 										/>
 									</InputGroup>
