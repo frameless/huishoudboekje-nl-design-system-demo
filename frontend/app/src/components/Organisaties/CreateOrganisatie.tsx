@@ -34,7 +34,7 @@ const CreateOrganisatie = () => {
 
 			const {id} = result?.data?.createOrganisatie?.organisatie || {};
 			if (id) {
-				navigate(AppRoutes.Organisatie(String(id)));
+				navigate(AppRoutes.Organisatie(String(id)), {replace: true});
 			}
 		}).catch(handleSaveOrganisatieErrors);
 	};
