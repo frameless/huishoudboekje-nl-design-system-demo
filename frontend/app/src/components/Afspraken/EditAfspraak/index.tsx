@@ -62,7 +62,7 @@ const EditAfspraak = () => {
 					toast({
 						success: t("messages.updateAfspraakSuccess"),
 					});
-					navigate(AppRoutes.ViewAfspraak(String(afspraak.id)));
+					navigate(AppRoutes.ViewAfspraak(String(afspraak.id)), {replace: true});
 				}).catch(err => {
 					toast.closeAll();
 					toast({

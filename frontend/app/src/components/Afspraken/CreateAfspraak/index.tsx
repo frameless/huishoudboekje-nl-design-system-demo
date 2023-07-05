@@ -43,7 +43,7 @@ const CreateAfspraak = () => {
 			});
 
 			if (result.data?.createAfspraak?.afspraak?.id) {
-				navigate(AppRoutes.ViewAfspraak(String(result.data?.createAfspraak.afspraak.id)));
+				navigate(AppRoutes.ViewAfspraak(String(result.data?.createAfspraak.afspraak.id)), {replace: true});
 			}
 		}).catch(error => {
 			toast({
