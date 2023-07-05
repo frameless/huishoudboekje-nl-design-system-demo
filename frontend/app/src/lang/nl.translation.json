@@ -494,7 +494,7 @@
     "errors": {
       "invalidDateError": "Vul een geldige datum in.",
       "invalidDatumMarginError": "Vul een aantal dagen in.",
-      "invalidMonthDayError": "Vul een dag van de maand in. Bijvoorbeeld: 24.",
+      "invalidMonthDayError": "Vul een dag van de maand in vanaf de 1ste tot en met 28ste",
       "invalidBedragError": "Vul een bedrag in.",
       "invalidBedragMarginError": "Vul een bedrag in."
     },
