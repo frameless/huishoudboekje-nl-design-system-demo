@@ -67,7 +67,7 @@ const EditBurger = () => {
 			toast({
 				success: t("messages.burgers.updateSuccessMessage"),
 			});
-			navigate(AppRoutes.ViewBurgerPersonalDetails(id));
+			navigate(AppRoutes.ViewBurgerPersonalDetails(id), {replace: true});
 		}).catch(handleSaveBurgerErrors(t));
 	};
 
