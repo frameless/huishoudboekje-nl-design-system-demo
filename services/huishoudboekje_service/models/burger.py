@@ -1,18 +1,18 @@
 import logging
-
+from core_service.database import db
 from models.huishouden import Huishouden
 from models.saldo import Saldo
-from sqlalchemy import Column, DateTime, event, ForeignKey, Integer, Sequence, String
+from sqlalchemy import Column, DateTime, event, ForeignKey, Integer, Sequence, String, func
 from sqlalchemy.exc import OperationalError
 from sqlalchemy.orm import relationship, Session
-
-from core_service.database import db
+from sqlalchemy.dialects.postgresql import UUID
 
 
 class Burger(db.Model):
     __tablename__ = "burgers"
 
     id = Column(Integer, Sequence("burgers_id_seq"), primary_key=True)
+    uuid = Column(UUID, default = func.gen_random_uuid(), nullable = False, unique = True, index = True)
 
     # Name fields
     voornamen = Column(String)
@@ -30,8 +30,16 @@ class Burger(db.Model):
     email = Column(String)
     geboortedatum = Column(DateTime)
 
-    huishouden_id = Column(Integer, ForeignKey(
-        "huishoudens.id"), nullable=False)
+    huishouden_id = Column(
+        Integer,
+        ForeignKey("huishoudens.id"), 
+        nullable=False
+    )
+    # huishouden_uuid = Column(
+    #     UUID,
+    #     ForeignKey("huishoudens.uuid"), 
+    #     nullable=False
+    # )
 
     bsn = Column(Integer, unique=True)
 
