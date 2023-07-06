@@ -7,6 +7,8 @@ const validator = zod.object({
 	id: zod.string().nonempty(),
 	afspraakId: zod.number().optional(),
 	signaalId: zod.string().optional(),
+	afspraakUuid: zod.string().optional(),
+	signaalUuid: zod.string().optional(),
 	isActive: zod.boolean().optional(),
 	startDate: zod.string().optional(),
 	endDate: zod.string().optional(),
