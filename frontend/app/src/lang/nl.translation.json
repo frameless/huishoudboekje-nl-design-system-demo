@@ -574,7 +574,8 @@
     "noResults": "Er zijn geen bankafschriften gevonden."
   },
   "export": {
-    "nOverschrijvingen": "Overschrijvingen"
+    "nOverschrijvingen": "Overschrijvingen",
+    "totaalBedrag": "Totaalbedrag"
   },
   "checksum": {
     "sha265": "Controlegetal (SHA-256)"
