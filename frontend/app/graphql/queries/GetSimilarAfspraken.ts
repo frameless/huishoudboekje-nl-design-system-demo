@@ -10,6 +10,8 @@ export const GetSimilarAfspraken = gql`
                 bedrag
                 credit
                 zoektermen
+                validThrough
+                validFrom
                 burger {
                     voorletters
                     voornamen
