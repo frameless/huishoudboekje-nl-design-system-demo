@@ -4,6 +4,14 @@
 	}
 }
 
+.only-show-on-print {
+	display: none;
+	visibility: hidden;
+	height: 0 !important;
+	padding: 0 !important;
+	margin: 0 !important;
+}
+
 @media print {
 	.do-not-print {
 		display: none;
