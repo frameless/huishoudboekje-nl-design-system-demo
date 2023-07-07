@@ -7,8 +7,9 @@ import SectionContainer from "../shared/SectionContainer";
 import InkomstenUitgaven from "./InkomstenUitgaven";
 import d from "../../utils/dayjs";
 import BalanceTable from "./BalanceTable";
-import { calculateOffset, getStartingSaldo } from "./Aggregator";
+import { Granularity, calculateOffset, getStartingSaldo } from "./Aggregator";
 import { MathOperation, floatMathOperation } from "../../utils/things";
+import { useState } from "react";
 
 
 type RapportageComponentParams = {burgerIds: number[], startDate: Date, endDate: Date, rubrieken: number[]};
@@ -49,6 +50,14 @@ const RapportageComponent: React.FC<RapportageComponentParams> = ({burgerIds, st
 		)
 	}
 
+
+	const [granularity, setGranularity] = useState<Granularity>(Granularity.Weekly);
+	const granularityOptions = {
+		[Granularity.Daily]: t("granularity.daily"),
+		[Granularity.Weekly]: t("granularity.weekly"),
+		[Granularity.Monthly]: t("granularity.monthly"),
+	};
+
 	return (
 		<Queryable query={$rapportage} children={data => {
 			if (data.burgerRapportages === null) {
@@ -73,10 +82,10 @@ const RapportageComponent: React.FC<RapportageComponentParams> = ({burgerIds, st
 									</Stack>
 									<TabPanels>
 										<TabPanel>
-											<Saldo transactions={reports} startSaldo={startSaldo} />
+											<Saldo transactions={reports} startSaldo={startSaldo} granularity={granularity} setGranularity={setGranularity} granularityOptions={granularityOptions}/>
 										</TabPanel>
 										<TabPanel>
-											<InkomstenUitgaven transactions={reports} />
+											<InkomstenUitgaven transactions={reports} granularity={granularity} setGranularity={setGranularity} granularityOptions={granularityOptions}/>
 										</TabPanel>
 									</TabPanels>
 								</Tabs>
