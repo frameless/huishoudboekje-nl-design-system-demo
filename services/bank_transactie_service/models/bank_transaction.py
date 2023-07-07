@@ -9,7 +9,7 @@ class BankTransaction(db.Model):
     __tablename__ = 'bank_transactions'
 
     id = Column(Integer, Sequence("bank_transactions_id_seq"), primary_key=True)
-    uuid = Column(UUID, nullable = False, unique = True, index = True)
+    uuid = Column(UUID, default = str(GEN_UUID.uuid4()), nullable = False, unique = True, index = True)
 
     # 20
     customer_statement_message_id = Column(
