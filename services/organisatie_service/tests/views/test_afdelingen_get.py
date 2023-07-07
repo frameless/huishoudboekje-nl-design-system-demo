@@ -7,9 +7,11 @@ def test_afdelingen_get_success_all(client, dbsession, afdeling_factory):
     afdeling2 = afdeling_factory.createAfdeling()
 
     response = client.get(f'/afdelingen/')
+    responseJson = response.json["data"]
+    responseJson.remove('uuid')
     assert response.status_code == 200
     assert dbsession.query(Afdeling).count() == 2
-    assert response.json["data"] == [afdeling1.to_dict(), afdeling2.to_dict()]
+    assert responseJson == [afdeling1.to_dict(), afdeling2.to_dict()]
 
 
 def test_afdelingen_get_filter_ids(client, dbsession, afdeling_factory):
