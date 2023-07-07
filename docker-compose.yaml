@@ -298,7 +298,7 @@ services:
       - db
 
   grootboekservice-test:
-    <<: [ *x-py-tests, *x-organisatieservice ]
+    <<: [ *x-py-tests, *x-grootboekservice ]
 
   logservice:
     <<: *x-logservice
