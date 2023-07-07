@@ -1,4 +1,4 @@
-import {FormControl, HStack, Heading, Text, Input} from "@chakra-ui/react";
+import {FormControl, HStack, Heading, Text, Input, Stack} from "@chakra-ui/react";
 import {useState} from "react";
 import DatePicker from "react-datepicker";
 import {useTranslation} from "react-i18next";
@@ -45,62 +45,64 @@ const Rapportage = () => {
 			return (
 				<RapportageContext.Provider value={{startDate: d(startDate), endDate: d(endDate)}}>
 				{/* filteropties */}
-					<Page title={t("reports.title")} right={(
-						<FormControl className="do-not-print" minWidth={300}>
-							<Select onChange={onSelectBurger} options={burgers.map(b => ({
-								key: b.id,
-								value: b.id,
-								label: formatBurgerName(b) + " " + getBurgerHhbId(b),
-							}))} styles={reactSelectStyles.default} isMulti isClearable={true} noOptionsMessage={() => t("select.noOptions")} maxMenuHeight={200} placeholder={t("charts.optionAllBurgers")} value={burgers_filter} />
-						</FormControl>
-					)}>
+					<Page title={t("reports.title")}>
 						<SectionContainer>
-							<HStack className="do-not-print" alignItems={"start"}>
-								<HStack width={"50%"}>
-									<FormControl maxWidth={"40%"}>
-										<DatePicker selected={startDate || null}
-											dateFormat={"dd-MM-yyyy"}
-											onChange={(value: Date) => {
-												setStartDate(value)
-											}}
-											showYearDropdown
-											dropdownMode={"select"}
-											customInput={<Input/>}
-										/>
-									</FormControl>
-									<Text maxWidth={"20%"}fontSize='sm'>{t("reports.till")}</Text>
-									<FormControl maxWidth={"40%"}>
-										<DatePicker selected={endDate || null}
-											dateFormat={"dd-MM-yyyy"}
-											onChange={(value: Date) => {
-												setEndDate(value)
-											}}
-											showYearDropdown
-											dropdownMode={"select"}
-											customInput={<Input/>}
-										/>
-									</FormControl>
-								</HStack>
-								<HStack width={"50%"}>
-									<FormControl >
-										<Queryable query={$rubrieken} children={data => {
-											const rubrieken: Rubriek[] = data.rubrieken || [];
-											const rubrieken_filter = rubrieken.filter(r => filterRubriekIds.includes(r.id!)).map(r => ({
-												key: r.id,
-												value: r.id,
-												label: r.naam,
-											}));
-											return (
-												<Select onChange={onSelectRubriek} options={rubrieken.map(r => ({
+							<Stack className="do-not-print" alignItems={"start"}>
+								<HStack width={"100%"}>
+									<HStack width={"50%"}>
+										<FormControl maxWidth={"40%"}>
+											<DatePicker selected={startDate || null}
+												dateFormat={"dd-MM-yyyy"}
+												onChange={(value: Date) => {
+													setStartDate(value)
+												}}
+												showYearDropdown
+												dropdownMode={"select"}
+												customInput={<Input/>}
+											/>
+										</FormControl>
+										<Text maxWidth={"20%"}fontSize='sm'>{t("reports.till")}</Text>
+										<FormControl maxWidth={"40%"}>
+											<DatePicker selected={endDate || null}
+												dateFormat={"dd-MM-yyyy"}
+												onChange={(value: Date) => {
+													setEndDate(value)
+												}}
+												showYearDropdown
+												dropdownMode={"select"}
+												customInput={<Input/>}
+											/>
+										</FormControl>
+									</HStack>
+									<HStack width={"50%"}>
+										<FormControl >
+											<Queryable query={$rubrieken} children={data => {
+												const rubrieken: Rubriek[] = data.rubrieken || [];
+												const rubrieken_filter = rubrieken.filter(r => filterRubriekIds.includes(r.id!)).map(r => ({
 													key: r.id,
 													value: r.id,
 													label: r.naam,
-												}))} styles={reactSelectStyles.default} isMulti isClearable={true} noOptionsMessage={() => t("select.noOptions")} maxMenuHeight={200} placeholder={t("charts.optionAllRubrics")} value={rubrieken_filter} />
-											);
-										}} />
-									</FormControl>
+												}));
+												return (
+													<Select onChange={onSelectRubriek} options={rubrieken.map(r => ({
+														key: r.id,
+														value: r.id,
+														label: r.naam,
+													}))} styles={reactSelectStyles.default} isMulti isClearable={true} noOptionsMessage={() => t("select.noOptions")} maxMenuHeight={200} placeholder={t("charts.optionAllRubrics")} value={rubrieken_filter} />
+												);
+											}} />
+										</FormControl>
+									</HStack>
 								</HStack>
-							</HStack>
+								<FormControl className="do-not-print" minWidth={300}>
+									<Select onChange={onSelectBurger} options={burgers.map(b => ({
+										key: b.id,
+										value: b.id,
+										label: formatBurgerName(b) + " " + getBurgerHhbId(b),
+									}))} styles={reactSelectStyles.default} isMulti isClearable={true} noOptionsMessage={() => t("select.noOptions")} maxMenuHeight={200} placeholder={t("charts.optionAllBurgers")} value={burgers_filter} />
+								</FormControl>
+							</Stack>
+
 						</SectionContainer>
 						{/* pagina */}
 						<Heading className="only-show-on-print print"  size={"sm"} fontWeight={"normal"}>{selectedBurgers.length > 0 ? humanJoin(selectedBurgers.map(b => formatBurgerName(b) + " " + getBurgerHhbId(b))) : t("allBurgers")}</Heading>
