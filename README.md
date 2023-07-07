@@ -36,7 +36,7 @@ The data models are managed using Alembic and Prisma migration scripts and that 
 > Huishoudboekje uses symbolic links. If you're working on Windows, you need to explicitly enable symbolic links in Git,
 > otherwise these links will just appear as text files and things will not work as expected.
 >
-> Once symbolic links are enabled, please use: `git clone -c core.symlinks=true` when you clone this repository, and
+> Once symbolic links are enabled, please use `git clone -c core.symlinks=true` when you clone this repository, and
 > symlinks should be working.
 > ![afbeelding](https://gitlab.com/commonground/huishoudboekje/app-new/uploads/faccef92aea1ada494d3384de02103d8/afbeelding.png)
 
