@@ -35,7 +35,7 @@ def upgrade():
         connection.execute(
             f"UPDATE gebruikersactiviteiten SET uuid='{str(GEN_UUID.uuid4())}' WHERE id = '{row['id']}'")
 
-    op.alter_column('gebruikersactiviteiten', 'uuid', nullable=False)
+    op.alter_column('gebruikersactiviteiten', 'uuid', nullable=False, server_default=sa.text("'{}'".format(str(GEN_UUID.uuid4()))))
 
 
 

@@ -16,7 +16,11 @@ def test_burgers_post_success(app, huishouden_factory):
                                       data=json.dumps(burger_data), content_type='application/json')
 
     assert response.status_code == 201
-    assert response.json["data"] == {'achternaam': None,
+
+    responseJson = response.json["data"]
+    responseJson.pop('uuid')
+
+    assert responseJson == {'achternaam': None,
                                      'email': 'a@b.c',
                                      'geboortedatum': '2020-01-01T00:00:00',
                                      'huisnummer': None,

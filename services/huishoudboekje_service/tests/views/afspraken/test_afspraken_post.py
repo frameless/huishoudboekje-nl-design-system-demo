@@ -42,7 +42,11 @@ def test_afspraken_post_new_afspraak_minimum(client, session):
     afspraak_dict_min["rubriek_id"] = None
     afspraak_dict_min["valid_from"] = "2020-10-01T00:00:00"
     afspraak_dict_min["valid_through"] = "2020-10-01T00:00:00"
-    assert response.json["data"] == afspraak_dict_min
+    
+    responseJson = response.json["data"]
+    responseJson.pop('uuid')
+
+    assert responseJson == afspraak_dict_min
     assert session.query(Afspraak).count() == 1
 
 def test_afspraken_post_new_afspraak_full(client, session, 
@@ -103,7 +107,11 @@ def test_afspraken_post_new_afspraak_full(client, session,
     afspraak_dict_full["alarm_id"] = "38d25c77-8cd5-4bbe-9a73-633ec7847795"
     afspraak_dict_full["valid_from"] = "2020-10-01T00:00:00"
     afspraak_dict_full["valid_through"] = "2022-10-01T00:00:00"
-    assert response.json["data"] == afspraak_dict_full
+
+    responseJson = response.json["data"]
+    responseJson.pop('uuid')
+
+    assert responseJson == afspraak_dict_full
     assert session.query(Afspraak).count() == 1
 
 

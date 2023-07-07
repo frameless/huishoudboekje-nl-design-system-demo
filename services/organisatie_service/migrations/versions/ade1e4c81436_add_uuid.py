@@ -59,7 +59,7 @@ def upgrade():
         for row in content:
             connection.execute(f"UPDATE {tableToEdit} SET uuid='{str(GEN_UUID.uuid4())}' WHERE id = {row['id']}")
 
-        op.alter_column(tableToEdit, 'uuid', nullable=False)
+        op.alter_column(tableToEdit, 'uuid', nullable=False, server_default=sa.text("'{}'".format(str(GEN_UUID.uuid4()))))
 
 
     for tableReferenceEdit in tableReferenceEdits:
