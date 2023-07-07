@@ -1,14 +1,14 @@
 from core_service.database import db
-from sqlalchemy import Column, Integer, String, Sequence, ForeignKey, DateTime, Boolean
+from sqlalchemy import Column, Integer, String, Sequence, ForeignKey, DateTime, Boolean, func
 from sqlalchemy.orm import relationship
 from sqlalchemy.dialects.postgresql import UUID
-from sqlalchemy import func as SaFunction
+
 
 class BankTransaction(db.Model):
     __tablename__ = 'bank_transactions'
 
     id = Column(Integer, Sequence("bank_transactions_id_seq"), primary_key=True)
-    uuid = Column(UUID, default = SaFunction.gen_random_uuid(), nullable = False, unique = True, index = True)
+    uuid = Column(UUID, default = func.gen_random_uuid(), nullable = False, unique = True, index = True)
 
     # 20
     customer_statement_message_id = Column(
