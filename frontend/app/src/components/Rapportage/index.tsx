@@ -63,7 +63,8 @@ const Rapportage = () => {
 											onChange={(value: Date) => {
 												setStartDate(value)
 											}}
-											showYearDropdown={true}
+											showYearDropdown
+											dropdownMode={"select"}
 											customInput={<Input/>}
 										/>
 									</FormControl>
@@ -74,7 +75,8 @@ const Rapportage = () => {
 											onChange={(value: Date) => {
 												setEndDate(value)
 											}}
-											showYearDropdown={true}
+											showYearDropdown
+											dropdownMode={"select"}
 											customInput={<Input/>}
 										/>
 									</FormControl>
