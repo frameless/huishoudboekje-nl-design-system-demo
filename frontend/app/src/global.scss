@@ -37,8 +37,13 @@
 		margin: 0 !important;
 	}
 
-	.printweergave-space-bottom{
-		padding-top: 10px;
-		padding-bottom: 25px;
+	.printweergave-periode{
+		display: inline-flex;
+		visibility: visible;
+		max-width: 90%;
+		font-size: 15px !important;
+		margin: 0 !important;
+		padding-top: 10px !important;
+		padding-bottom: 25px !important;
 	}
 }

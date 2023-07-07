@@ -40,7 +40,7 @@ const Saldo: React.FC<BoxProps & {transactions: BurgerRapportage[], startSaldo: 
 
 
 	return (
-		<Stack>
+		<Stack height={"600px"}>
 			<HStack justifyContent={"space-between"}>
 				<Stack>
 					<Text fontSize={"md"} color={"gray.500"}>{t("charts.saldo.helperText")}</Text>
