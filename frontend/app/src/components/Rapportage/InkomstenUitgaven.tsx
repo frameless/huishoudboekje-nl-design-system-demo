@@ -35,8 +35,7 @@ const InkomstenUitgaven: React.FC<BoxProps & {transactions: BurgerRapportage[], 
 	];
 
 	return (
-		<Stack>
-
+		<Stack  height={"600px"}>
 			<HStack justifyContent={"space-between"}>
 				<Stack>
 					<Text fontSize={"md"} color={"gray.500"}>{t("charts.inkomstenUitgaven.helperText")}</Text>

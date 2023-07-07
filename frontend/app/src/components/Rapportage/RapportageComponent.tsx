@@ -71,10 +71,14 @@ const RapportageComponent: React.FC<RapportageComponentParams> = ({burgerIds, st
 							<SectionContainer>
 								<Tabs isLazy variant={"solid"} align={"start"} colorScheme={"primary"}>
 									<Stack direction={"row"} spacing={2}>
+										<Tab>{t("balance")}</Tab>
 										<Tab>{t("charts.saldo.title")}</Tab>
 										<Tab>{t("charts.inkomstenUitgaven.title")}</Tab>
 									</Stack>
 									<TabPanels>
+										<TabPanel>
+											<BalanceTable transactions={reports} startDate={d(startDate)} endDate={d(endDate)} startSaldo={startSaldo} offsets={offsets} />
+										</TabPanel>
 										<TabPanel>
 											<Saldo transactions={reports} startSaldo={startSaldo} granularity={granularity} setGranularity={setGranularity} granularityOptions={granularityOptions}/>
 										</TabPanel>
@@ -84,7 +88,6 @@ const RapportageComponent: React.FC<RapportageComponentParams> = ({burgerIds, st
 									</TabPanels>
 								</Tabs>
 							</SectionContainer>
-							<BalanceTable transactions={reports} startDate={d(startDate)} endDate={d(endDate)} startSaldo={startSaldo} offsets={offsets} />
 						</Stack>
 					)
 				}} />

@@ -23,11 +23,11 @@ const BalanceTable: React.FC<BalanceTableProps> = ({transactions, startDate, end
 	};
 	const dataFound = Object.keys(aggregationByOrganisatie).length !== 0
 	return (
-		<SectionContainer>
-			<Section title={t("balance")}> {/* Todo: Add helperText (07-03-2022) */}
+		<SectionContainer  minHeight={"600px"}>
+			<Section> {/* Todo: Add helperText (07-03-2022) */}
 				<Stack className={"print"}>
 					<Stack spacing={2}>
-						<Text className={"printweergave-space-bottom"}>
+						<Text className={" only-show-on-print printweergave-periode"}>
 							<Trans i18nKey={"reports.period"} components={{strong: <strong />}} values={{
 								from: startDate && d(startDate, "L").startOf("day").format("L"),
 								through: endDate && d(endDate, "L").endOf("day").format("L"),
