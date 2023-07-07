@@ -1,15 +1,14 @@
-from sqlalchemy import Column, Integer, String, Sequence, DateTime
+from sqlalchemy import Column, Integer, String, Sequence, DateTime, func
 from sqlalchemy.orm import relationship
 from core_service.database import db
 from sqlalchemy.dialects.postgresql import UUID
-import uuid as GEN_UUID
 
 
 class CustomerStatementMessage(db.Model):
     __tablename__ = 'customer_statement_messages'
 
     id = Column(Integer, Sequence("customer_statement_messages_id_seq"), primary_key=True)
-    uuid = Column(UUID, default = str(GEN_UUID.uuid4()), nullable = False, unique = True, index = True)
+    uuid = Column(UUID, default = func.gen_random_uuid(), nullable = False, unique = True, index = True)
 
     upload_date = Column(DateTime, nullable=False)
     raw_data = Column(String, nullable=False)
