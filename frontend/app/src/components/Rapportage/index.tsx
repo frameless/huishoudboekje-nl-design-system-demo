@@ -48,7 +48,7 @@ const Rapportage = () => {
 					<Page title={t("reports.title")}>
 						<SectionContainer>
 							<Stack className="do-not-print" alignItems={"start"}>
-								<HStack width={"100%"}>
+								<HStack width={"100%"} alignItems={"start"}>
 									<HStack width={"50%"}>
 										<FormControl maxWidth={"40%"}>
 											<DatePicker selected={startDate || null}
