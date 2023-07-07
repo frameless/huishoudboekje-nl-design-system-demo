@@ -55,9 +55,9 @@ const Rapportage = () => {
 						</FormControl>
 					)}>
 						<SectionContainer>
-							<HStack className="do-not-print">
+							<HStack className="do-not-print" alignItems={"start"}>
 								<HStack width={"50%"}>
-									<FormControl maxWidth={150}>
+									<FormControl maxWidth={"40%"}>
 										<DatePicker selected={startDate || null}
 											dateFormat={"dd-MM-yyyy"}
 											onChange={(value: Date) => {
@@ -67,8 +67,8 @@ const Rapportage = () => {
 											customInput={<Input/>}
 										/>
 									</FormControl>
-									<Text fontSize='sm'>{t("reports.till")}</Text>
-									<FormControl maxWidth={150}>
+									<Text maxWidth={"20%"}fontSize='sm'>{t("reports.till")}</Text>
+									<FormControl maxWidth={"40%"}>
 										<DatePicker selected={endDate || null}
 											dateFormat={"dd-MM-yyyy"}
 											onChange={(value: Date) => {
