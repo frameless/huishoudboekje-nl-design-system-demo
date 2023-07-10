@@ -1,4 +1,4 @@
-import {FormControl, HStack, Heading, Text, Input, Stack} from "@chakra-ui/react";
+import {FormControl, HStack, Heading, Text, Input, Stack, Button, VStack, Box} from "@chakra-ui/react";
 import {useState} from "react";
 import DatePicker from "react-datepicker";
 import {useTranslation} from "react-i18next";
@@ -27,6 +27,16 @@ const Rapportage = () => {
 		setFilterBurgerIds(value ? value.map(v => v.value) : [])
 	};
 
+	const setCurrentMonth = () =>{
+		setStartDate(d().startOf("month").toDate())
+		setEndDate(d().endOf("month").toDate())
+	}
+
+	const setLastMonth = () =>{
+		setStartDate(d().subtract(1, "month").startOf("month").toDate())
+		setEndDate(d().subtract(1, "month").endOf("month").toDate())
+	}
+
 	const onSelectRubriek = (value) => setFilterRubriekIds(value ? value.map(v => v.value) : []);
 	const $burgers = useGetBurgersQuery();
 	const $rubrieken = useGetRubriekenQuery();
@@ -54,24 +64,38 @@ const Rapportage = () => {
 											<DatePicker selected={startDate || null}
 												dateFormat={"dd-MM-yyyy"}
 												onChange={(value: Date) => {
-													setStartDate(value)
+													if(value){
+														setStartDate(value)
+													}
 												}}
 												showYearDropdown
 												dropdownMode={"select"}
 												customInput={<Input/>}
-											/>
+											>
+												<Box>
+													<Button width={"45%"} marginX={"2.5%"} colorScheme={"primary"} size={"xs"} onClick={setCurrentMonth}>{t("reports.currentMonth")}</Button>
+													<Button width={"45%"} marginX={"2.5%"} colorScheme={"primary"} size={"xs"} onClick={setLastMonth}>{t("reports.lastMonth")}</Button>
+												</Box>
+											</DatePicker>
 										</FormControl>
 										<Text maxWidth={"20%"}fontSize='sm'>{t("reports.till")}</Text>
 										<FormControl maxWidth={"40%"}>
 											<DatePicker selected={endDate || null}
 												dateFormat={"dd-MM-yyyy"}
 												onChange={(value: Date) => {
-													setEndDate(value)
+													if(value){
+														setEndDate(value)
+													}
 												}}
 												showYearDropdown
 												dropdownMode={"select"}
 												customInput={<Input/>}
-											/>
+											>
+												<Box>
+													<Button width={"45%"} marginX={"2.5%"} colorScheme={"primary"} size={"xs"} onClick={setCurrentMonth}>{t("reports.currentMonth")}</Button>
+													<Button width={"45%"} marginX={"2.5%"} colorScheme={"primary"} size={"xs"} onClick={setLastMonth}>{t("reports.lastMonth")}</Button>
+												</Box>
+											</DatePicker>
 										</FormControl>
 									</HStack>
 									<HStack width={"50%"}>
