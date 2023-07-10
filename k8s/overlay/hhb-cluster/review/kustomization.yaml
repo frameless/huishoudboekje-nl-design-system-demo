@@ -18,4 +18,9 @@ patches:
     kind: Ingress
     name: hhb-storybook-ingress
   path: ingress-sb-host-patch.yaml
-  
+- target:
+    version: v1
+    kind: Deployment
+    name: hhb-database
+  path: resources-databse-patch.yaml
+
