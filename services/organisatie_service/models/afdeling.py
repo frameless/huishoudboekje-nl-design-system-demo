@@ -22,6 +22,7 @@ class Afdeling(db.Model):
     def to_dict(self):
         return {
             "id": self.id,
+            "uuid": self.uuid,
             "naam": self.naam,
             "organisatie_id": self.organisatie_id,
             "postadressen_ids": self.postadressen_ids,
