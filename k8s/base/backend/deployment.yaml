@@ -47,9 +47,15 @@ spec:
               memory: 256Mi
           env:
             - name: JWT_AUDIENCE
-              value: ${JWT_AUDIENCE}
+              valueFrom: 
+                configMapKeyRef:
+                  name: authservice-config
+                  key: JWT_AUDIENCE
             - name: JWT_SECRET
-              value: ${JWT_SECRET}
+              valueFrom: 
+                configMapKeyRef:
+                  name: authservice-config
+                  key: JWT_SECRET
             - name: PREFIX
               value: "/api"
             - name: HHB_SERVICE_URL

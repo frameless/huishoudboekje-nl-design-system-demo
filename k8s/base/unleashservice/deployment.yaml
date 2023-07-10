@@ -56,4 +56,7 @@ spec:
             - name: UNLEASH_APPNAME
               value: "huishoudboekje"
             - name: UNLEASH_OTAP
-              value: ${UNLEASH_OTAP}
+              valueFrom: 
+                configMapKeyRef:
+                  name: unleash-config
+                  key: UNLEASH_OTAP

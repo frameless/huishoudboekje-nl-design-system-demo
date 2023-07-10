@@ -6,7 +6,7 @@ metadata:
     name: hhb-backendburgers-ingress
 spec:
   rules:
-    - host: ${APP_HOST}
+    - host: huishoudboekje.example.com
       http:
         paths:
           - path: /api/burgers
