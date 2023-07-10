@@ -52,6 +52,8 @@ export const GetTransactieQuery = gql`
 				bedrag
 				credit
 				zoektermen
+				validFrom
+				validThrough
 				burger {
 					voornamen
 					voorletters
