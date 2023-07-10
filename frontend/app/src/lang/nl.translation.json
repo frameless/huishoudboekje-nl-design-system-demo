@@ -886,7 +886,7 @@
   },
   "balance": "Balans",
   "reports": {
-    "period": "Rapportageperiode: van <strong>{{from}}</strong> tot en met <strong>{{through}}</strong>",
+    "period": "Van <strong>{{from}}</strong> tot en met <strong>{{through}}</strong>",
     "title": "Rapportage",
     "noData": "Geen transacties gevonden van de gegeven burger(s) in de gegeven periode",
     "toManyBurgers": "Selecteer één burger (Ondersteuning voor meerdere burgers is nog niet geïmplementeerd)",

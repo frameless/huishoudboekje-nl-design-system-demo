@@ -30,9 +30,8 @@
 	.print {
 		display: inline-flex;
 		visibility: visible;
-		max-width: 90%;
-		font-size: 15px !important;
-		padding-left: 50px !important;
+		min-width: 200%;
+		font-size: 20px !important;
 		padding-top: 0px !important;
 		margin: 0 !important;
 	}
@@ -41,9 +40,9 @@
 		display: inline-flex;
 		visibility: visible;
 		max-width: 90%;
-		font-size: 15px !important;
+		font-size: 20px !important;
 		margin: 0 !important;
 		padding-top: 10px !important;
-		padding-bottom: 25px !important;
+		padding-bottom: 50px !important;
 	}
 }
