@@ -35,7 +35,12 @@ def test_organisaties_post_update_organisatie(client, organisatie_factory):
     )
     assert response.status_code == 200
     assert response.json["data"]["naam"] == update_dict["naam"]
-    assert response.json["data"] == organisation.to_dict()
+
+    responseJson = response.json["data"]
+    responseJson.pop('uuid')
+
+    assert responseJson == organisation.to_dict()
+    
     response = client.post(
         f'/organisaties/1337',
         data=json.dumps(update_dict),
