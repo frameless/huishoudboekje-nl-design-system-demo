@@ -12,7 +12,7 @@ import useHandleMutation from "../../../utils/useHandleMutation";
 import Page from "../../shared/Page";
 import Section from "../../shared/Section";
 import SectionContainer from "../../shared/SectionContainer";
-import { MathOperation, currencyFormat2, floatMathOperation } from "../../../utils/things";
+import {MathOperation, currencyFormat2, floatMathOperation} from "../../../utils/things";
 
 const Betaalinstructies = () => {
 	const {t} = useTranslation();
@@ -41,9 +41,11 @@ const Betaalinstructies = () => {
 
 	const onChangeStartDate = (value: [Date, Date]) => {
 		const [from, through] = value;
-		setDateRange(() => ({
-			from, through,
-		}));
+		if (value) {
+			setDateRange(() => ({
+				from, through,
+			}));
+		}
 	};
 
 	return (
