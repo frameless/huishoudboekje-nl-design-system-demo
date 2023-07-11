@@ -115,8 +115,8 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, or
 	const [getOrganisatie, $organisatie] = useGetOrganisatieLazyQuery();
 
 	const getSelectedOrganisatie = (organisatieId) => {
-		let selected : Organisatie | undefined = undefined;
-		if(organisatie && organisatieId === organisatie.id){
+		let selected: Organisatie | undefined = undefined;
+		if (organisatie && organisatieId === organisatie.id) {
 			selected = organisatie
 		} else {
 			selected = $organisatie.data?.organisatie
@@ -124,7 +124,7 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, or
 		return selected
 	}
 
-	const selectedOrganisatie = form.organisatieId ?  getSelectedOrganisatie(form.organisatieId) : undefined
+	const selectedOrganisatie = form.organisatieId ? getSelectedOrganisatie(form.organisatieId) : undefined
 	const afdelingen = selectedOrganisatie?.afdelingen || [];
 	const rekeningen = afdelingen.find(a => a.id === form.afdelingId)?.rekeningen || [];
 	const postadressen = afdelingen.find(a => a.id === form.afdelingId)?.postadressen || [];
@@ -228,14 +228,14 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, or
 											styles={isFieldValid("organisatieId") && isFieldValid2("organisatieId") ? reactSelectStyles.default : reactSelectStyles.error}
 											onChange={result => {
 												const organisatieId = result?.value;
-												if(organisatieId !== null && organisatieId !== undefined){
+												if (organisatieId !== null && organisatieId !== undefined) {
 													updateForm("organisatieId", organisatieId)
 													updateForm("afdelingId", undefined);
 													updateForm("postadresId", undefined);
 													updateForm("tegenRekeningId", undefined);
 													getOrganisatie({
 														variables: {id: Number(organisatieId)},
-														onCompleted: (data)=>{
+														onCompleted: (data) => {
 															/* If the organisatie has only one afdeling, fill it in */
 															const afdelingen: Afdeling[] = data?.organisatie?.afdelingen || [];
 															if (afdelingen.length === 1) {
@@ -243,7 +243,7 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, or
 															}
 														}
 													})
-												}else {
+												} else {
 													updateForm("organisatieId", undefined);
 													updateForm("afdelingId", undefined);
 													updateForm("postadresId", undefined);
@@ -259,7 +259,7 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, or
 										<FormErrorMessage>{t("forms.afspraak.invalidOrganisatieError")}</FormErrorMessage>
 									</FormControl>
 								</Stack>
-								
+
 								<Stack direction={["column", "row"]}>
 									<FormControl flex={1} isInvalid={!isFieldValid("afdelingId") || !isFieldValid2("afdelingId")} isRequired>
 										<FormLabel>{t("afdeling")}</FormLabel>
@@ -399,7 +399,8 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, or
 										showYearDropdown
 										dropdownMode={"select"}
 										onChange={(date) => {
-											updateForm("validFrom", d(date).format("YYYY-MM-DD"))
+											if (date)
+												updateForm("validFrom", d(date).format("YYYY-MM-DD"))
 										}}
 										customInput={(<Input />)} />
 								</InputGroup>
