@@ -60,13 +60,7 @@ const RapportageComponent: React.FC<RapportageComponentParams> = ({burgerIds, st
 
 	return (
 		<Queryable query={$rapportage} children={data => {
-			if (data.burgerRapportages === null) {
-				return (
-					<Text color={"red"}>{t("reports.noData")}</Text>
-				);
-			}
-			const reports: [BurgerRapportage] = data.burgerRapportages
-
+			const reports: [BurgerRapportage] = data.burgerRapportages || []
 			return (
 				<Queryable query={$saldoStart} children={data => {
 					const startSaldos: [startSaldo] = data.saldoClosest
