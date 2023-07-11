@@ -9,7 +9,7 @@ metadata:
 spec:
   tls:
     - hosts:
-        - ${APP_HOST}
+        - huishoudboekje.example.com
       secretName: medewerker-frontend-ingress-tls
 ---
 apiVersion: networking.k8s.io/v1
@@ -23,7 +23,7 @@ metadata:
 spec:
   tls:
     - hosts:
-        - ${APP_HOST}
+        - huishoudboekje.example.com
       secretName: medewerker-frontend-ingress-tls
 ---
 apiVersion: networking.k8s.io/v1
@@ -37,7 +37,7 @@ metadata:
 spec:
   tls:
     - hosts:
-        - ${APP_HOST}
+        - huishoudboekje.example.com
       secretName: medewerker-frontend-ingress-tls
 #---
 #apiVersion: networking.k8s.io/v1
@@ -51,7 +51,7 @@ spec:
 #spec:
 #  tls:
 #    - hosts:
-#        - ${APP_HOST}
+#        - huishoudboekje.example.com
 #      secretName: medewerker-frontend-ingress-tls
 ---
 apiVersion: networking.k8s.io/v1
@@ -65,19 +65,19 @@ metadata:
 spec:
   tls:
     - hosts:
-        - ${APP_HOST}
+        - huishoudboekje.example.com
       secretName: medewerker-frontend-ingress-tls
----
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: hhb-storybook-ingress
-  labels:
-    name: hhb-storybook-ingress
-  annotations:
-    cert-manager.io/cluster-issuer: letsencrypt-prod
-spec:
-  tls:
-    - hosts:
-        - sb-${APP_HOST}
-      secretName: medewerker-frontend-ingress-tls
+# ---
+# apiVersion: networking.k8s.io/v1
+# kind: Ingress
+# metadata:
+#   name: hhb-storybook-ingress
+#   labels:
+#     name: hhb-storybook-ingress
+#   annotations:
+#     cert-manager.io/cluster-issuer: letsencrypt-prod
+# spec:
+#   tls:
+#     - hosts:
+#         - sb-huishoudboekje.example.com
+#       secretName: medewerker-frontend-ingress-tls

@@ -285,7 +285,8 @@ const Transactions = () => {
 																	startDate: value ? d(value).format("YYYY-MM-DD") : undefined
 																});
 															}}
-															showYearDropdown={true}
+															showYearDropdown
+															dropdownMode={"select"}
 															customInput={<Input type={"text"} />}
 															isClearable={true}
 														/>
@@ -300,16 +301,8 @@ const Transactions = () => {
 																	endDate: value ? d(value).format("YYYY-MM-DD") : undefined
 																});
 															}}
-															onChangeRaw={(val) => {
-																if (!isNaN(Date.parse(val.toString()))) {
-																	const value = d(val.toString()).format("YYYY-MM-DD")
-																	setBanktransactieFilters({
-																		...banktransactieFilters,
-																		endDate: value ? d(value).format("YYYY-MM-DD") : undefined
-																	});
-																}
-															}}
-															showYearDropdown={true}
+															showYearDropdown
+															dropdownMode={"select"}
 															customInput={<Input type={"text"} />}
 															isClearable={true}
 														/>

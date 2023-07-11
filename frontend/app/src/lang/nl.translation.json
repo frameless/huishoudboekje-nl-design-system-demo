@@ -162,7 +162,8 @@
     "period": "Periode",
     "time": "Tijd",
     "date": "Datum",
-    "startDate": "Startdatum"
+    "startDate": "Startdatum",
+    "endDate": "Einddatum"
   },
   "forms": {
     "afspraken": {
@@ -889,7 +890,8 @@
     "title": "Rapportage",
     "noData": "Geen data gevonden van de gegeven burger(s) in de gegeven periode",
     "toManyBurgers": "Selecteer één burger (Ondersteuning voor meerdere burgers is nog niet geïmplementeerd)",
-    "incorrectDateRange": "De gegeven periode is niet correct"
+    "incorrectDateRange": "De gegeven periode is niet correct",
+    "till": "tot en met "
   },
   "total": "Totaal",
   "total income": "Totaal Inkomsten",

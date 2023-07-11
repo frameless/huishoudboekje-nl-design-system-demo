@@ -9,6 +9,8 @@ export const GetSearchAfspraken = gql`
 				bedrag
 				credit
 				zoektermen
+                validFrom
+                validThrough
 				burger {
                     id
 					voornamen
