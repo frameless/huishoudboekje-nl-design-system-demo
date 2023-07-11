@@ -78,6 +78,7 @@ describe("Alarm CRUD (operations)", () => {
 		it("should update the Alarm", async () => {
 			const newAlarm: Omit<Alarm, "id"> = {
 				afspraakId: 999,
+				afspraakUuid: "",
 				bedrag: 999,
 				bedragMargin: 99,
 				byDay: [DayOfWeek.Wednesday],
@@ -88,6 +89,7 @@ describe("Alarm CRUD (operations)", () => {
 				datumMargin: 10,
 				isActive: false,
 				signaalId: "71d65065-2eb9-4f44-8f16-44d1e5a4d6f7",
+				signaalUuid: ""
 			};
 
 			prismaMock.alarm.update.mockResolvedValue({

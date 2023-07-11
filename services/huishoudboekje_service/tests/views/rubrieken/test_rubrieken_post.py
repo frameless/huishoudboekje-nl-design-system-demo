@@ -18,7 +18,9 @@ def test_rubrieken_post_new_rubriek(client, session):
     )
     assert response.status_code == 201
     rubriek_dict["id"] = 1
-    assert response.json["data"] == rubriek_dict
+    responseJson = response.json["data"]
+    responseJson.pop('uuid')
+    assert responseJson == rubriek_dict
     assert session.query(Rubriek).count() == 1
 
 
@@ -36,7 +38,9 @@ def test_rubrieken_post_unique_409(client, session):
     )
     assert response.status_code == 201
     rubriek_dict["id"] = 1
-    assert response.json["data"] == rubriek_dict
+    responseJson = response.json["data"]
+    responseJson.pop('uuid')
+    assert responseJson == rubriek_dict
     assert session.query(Rubriek).count() == 1
     rubriek_dict = {
         "naam": "Gas2",

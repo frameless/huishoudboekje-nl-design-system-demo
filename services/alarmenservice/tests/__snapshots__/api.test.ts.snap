@@ -11,6 +11,7 @@ exports[`Alarm CRUD (operations) Given the Alarm does not exist should create th
 {
   "data": {
     "afspraakId": 1,
+    "afspraakUuid": "",
     "bedrag": 955,
     "bedragMargin": 75,
     "byDay": [],
@@ -45,6 +46,7 @@ exports[`Alarm CRUD (operations) Given the Alarm exists should return Alarms fil
   "data": [
     {
       "afspraakId": 1,
+      "afspraakUuid": "",
       "bedrag": 955,
       "bedragMargin": 75,
       "byDay": [],
@@ -72,6 +74,7 @@ exports[`Alarm CRUD (operations) Given the Alarm exists should return Alarms fil
     },
     {
       "afspraakId": 2,
+      "afspraakUuid": "",
       "bedrag": 299.99,
       "bedragMargin": 15.9,
       "byDay": [],
@@ -107,6 +110,7 @@ exports[`Alarm CRUD (operations) Given the Alarm exists should return Alarms fil
   "data": [
     {
       "afspraakId": 1,
+      "afspraakUuid": "",
       "bedrag": 955,
       "bedragMargin": 75,
       "byDay": [],
@@ -134,6 +138,7 @@ exports[`Alarm CRUD (operations) Given the Alarm exists should return Alarms fil
     },
     {
       "afspraakId": 2,
+      "afspraakUuid": "",
       "bedrag": 299.99,
       "bedragMargin": 15.9,
       "byDay": [],
@@ -169,6 +174,7 @@ exports[`Alarm CRUD (operations) Given the Alarm exists should return all Alarms
   "data": [
     {
       "afspraakId": 1,
+      "afspraakUuid": "",
       "bedrag": 955,
       "bedragMargin": 75,
       "byDay": [],
@@ -196,6 +202,7 @@ exports[`Alarm CRUD (operations) Given the Alarm exists should return all Alarms
     },
     {
       "afspraakId": 2,
+      "afspraakUuid": "",
       "bedrag": 299.99,
       "bedragMargin": 15.9,
       "byDay": [],
@@ -223,6 +230,7 @@ exports[`Alarm CRUD (operations) Given the Alarm exists should return all Alarms
     },
     {
       "afspraakId": 44,
+      "afspraakUuid": "",
       "bedrag": 32.05,
       "bedragMargin": 12,
       "byDay": [
@@ -237,6 +245,7 @@ exports[`Alarm CRUD (operations) Given the Alarm exists should return all Alarms
     },
     {
       "afspraakId": 3,
+      "afspraakUuid": "",
       "bedrag": 1200.12,
       "bedragMargin": 75,
       "byDay": [],
@@ -264,6 +273,7 @@ exports[`Alarm CRUD (operations) Given the Alarm exists should return only activ
   "data": [
     {
       "afspraakId": 2,
+      "afspraakUuid": "",
       "bedrag": 299.99,
       "bedragMargin": 15.9,
       "byDay": [],
@@ -291,6 +301,7 @@ exports[`Alarm CRUD (operations) Given the Alarm exists should return only activ
     },
     {
       "afspraakId": 3,
+      "afspraakUuid": "",
       "bedrag": 1200.12,
       "bedragMargin": 75,
       "byDay": [],
@@ -318,6 +329,7 @@ exports[`Alarm CRUD (operations) Given the Alarm exists should return only inact
   "data": [
     {
       "afspraakId": 1,
+      "afspraakUuid": "",
       "bedrag": 955,
       "bedragMargin": 75,
       "byDay": [],
@@ -345,6 +357,7 @@ exports[`Alarm CRUD (operations) Given the Alarm exists should return only inact
     },
     {
       "afspraakId": 44,
+      "afspraakUuid": "",
       "bedrag": 32.05,
       "bedragMargin": 12,
       "byDay": [
@@ -366,6 +379,7 @@ exports[`Alarm CRUD (operations) Given the Alarm exists should return the Alarm 
 {
   "data": {
     "afspraakId": 1,
+    "afspraakUuid": "",
     "bedrag": 955,
     "bedragMargin": 75,
     "byDay": [],
@@ -399,6 +413,7 @@ exports[`Alarm CRUD (operations) Given the Alarm exists should update the Alarm 
 {
   "data": {
     "afspraakId": 999,
+    "afspraakUuid": "",
     "bedrag": 999,
     "bedragMargin": 99,
     "byDay": [
@@ -411,6 +426,7 @@ exports[`Alarm CRUD (operations) Given the Alarm exists should update the Alarm 
     "id": "d9c00acb-8d04-4cf0-9be4-061f33b3357d",
     "isActive": false,
     "signaalId": "71d65065-2eb9-4f44-8f16-44d1e5a4d6f7",
+    "signaalUuid": "",
     "startDate": "2033-12-31",
   },
   "ok": true,
