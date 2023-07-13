@@ -891,7 +891,9 @@
     "noData": "Geen transacties gevonden van de gegeven burger(s) in de gegeven periode",
     "toManyBurgers": "Selecteer één burger (Ondersteuning voor meerdere burgers is nog niet geïmplementeerd)",
     "incorrectDateRange": "De gegeven periode is niet correct",
-    "till": "tot en met "
+    "till": "tot en met ",
+    "currentMonth": "Huidige maand",
+    "lastMonth": "Vorige maand"
   },
   "total": "Totaal",
   "total income": "Totaal Inkomsten",
