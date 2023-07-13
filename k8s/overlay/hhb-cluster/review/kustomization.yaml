@@ -3,7 +3,6 @@ kind: Kustomization
 resources:
   - ../../../base
 components:
-  - ../../components/storybook
   - ../components/configmaps
   - ../components/set-images
 patches:
@@ -21,6 +20,5 @@ patches:
 - target:
     version: v1
     kind: Deployment
-    name: hhb-database
-  path: resources-databse-patch.yaml
+  path: resources-remove-patch.yaml
 
