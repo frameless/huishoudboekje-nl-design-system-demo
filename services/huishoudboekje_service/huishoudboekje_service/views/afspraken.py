@@ -128,7 +128,7 @@ class AfspraakView(HHBView):
                 and_(
                     or_(
                         self.hhb_model.valid_through == None,
-                        self.hhb_model.valid_through > valid_from
+                        self.hhb_model.valid_through >= valid_from
                     ),
                     self.hhb_model.valid_from <= valid_through
                 )
