@@ -1,3 +1,4 @@
+import logging
 from sepaxml import SepaTransfer
 import uuid
 
@@ -8,7 +9,7 @@ def create_export_string(overschrijvingen, afspraken, tegen_rekeningen, config_v
         "name": "Huishoudboekje " + config_values['derdengeldenrekening_rekeninghouder'],
         "IBAN": config_values["derdengeldenrekening_iban"],
         "BIC": config_values["derdengeldenrekening_bic"],
-        "batch": False,
+        "batch": True,
         "currency": "EUR",  # ISO 4217
     }
     sepa = SepaTransfer(config, schema="pain.001.001.03", clean=True)
@@ -27,4 +28,6 @@ def create_export_string(overschrijvingen, afspraken, tegen_rekeningen, config_v
         }
         sepa.add_payment(payment)
 
-    return sepa.export(validate=True)
+    sepaxmlstring = sepa.export(validate=True).decode()
+    sepaxmlstring = sepaxmlstring.replace("<BtchBookg>true</BtchBookg>", "<BtchBookg>false</BtchBookg>")
+    return sepaxmlstring
