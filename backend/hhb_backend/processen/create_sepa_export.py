@@ -1,4 +1,3 @@
-import logging
 from sepaxml import SepaTransfer
 import uuid
 
