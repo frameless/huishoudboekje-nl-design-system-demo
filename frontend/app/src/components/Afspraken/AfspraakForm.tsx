@@ -378,7 +378,7 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, or
 										<FormLabel>{t("afspraken.bedrag")}</FormLabel>
 										<InputGroup>
 											<InputLeftElement zIndex={0}>&euro;</InputLeftElement>
-											<Input flex={3} type={"number"} step={.01} value={form.bedrag || ""} onChange={e => updateForm("bedrag", parseFloat(e.target.value))} />
+											<Input flex={3} type={"number"} step={.01} min={0} value={form.bedrag || undefined} onChange={e => updateForm("bedrag", parseFloat(e.target.value))} />
 										</InputGroup>
 										<FormErrorMessage>{t("afspraakDetailView.invalidBedragError")}</FormErrorMessage>
 									</FormControl>
