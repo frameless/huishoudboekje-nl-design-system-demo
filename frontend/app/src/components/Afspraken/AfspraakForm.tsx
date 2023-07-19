@@ -14,6 +14,7 @@ import SectionContainer from "../shared/SectionContainer";
 import AfspraakFormContext from "./EditAfspraak/context";
 import d from "../../utils/dayjs";
 import DatePicker from "react-datepicker";
+import { fromPromise } from "@apollo/client";
 
 /**
  * This validator2 is required because Zod doesn't execute the superRefine directly, but only after the initial set of rules all pass.
@@ -378,7 +379,15 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, or
 										<FormLabel>{t("afspraken.bedrag")}</FormLabel>
 										<InputGroup>
 											<InputLeftElement zIndex={0}>&euro;</InputLeftElement>
-											<Input flex={3} type={"number"} step={.01} min={0} value={form.bedrag || undefined} onChange={e => updateForm("bedrag", parseFloat(e.target.value))} />
+											<Input 
+												flex={3} 
+												type={"number"} 
+												pattern={"^\\d*(,{0,1}\\d{0,2})$"} 
+												step={.01} 
+												min={0.00} 
+												value={(form.bedrag || form.bedrag == 0) ? parseFloat(String(form.bedrag)) : ""} 
+												onChange={e => updateForm("bedrag", parseFloat(e.target.value.toString().replace(',','.')))} 
+											/>
 										</InputGroup>
 										<FormErrorMessage>{t("afspraakDetailView.invalidBedragError")}</FormErrorMessage>
 									</FormControl>
