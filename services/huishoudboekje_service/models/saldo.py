@@ -11,7 +11,7 @@ from core_service.database import db
 class Saldo(db.Model):
     __tablename__ = "saldos"
 
-    id = Column(Integer, Sequence("burgers_id_seq"), primary_key=True)
+    id = Column(Integer, Sequence("saldos_id_seq"), primary_key=True)
 
     # Foreign Keys
     burger_id = Column(Integer, ForeignKey(
