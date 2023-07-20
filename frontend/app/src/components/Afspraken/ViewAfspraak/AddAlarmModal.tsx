@@ -33,7 +33,7 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 	const [showOptions, setShowOptions] = useState(false);
 	const reactSelectStyles = useReactSelectStyles();
 
-	const [form, {setForm, updateForm, toggleSubmitted, isSubmitted, isFieldValid, reset}] = useForm<zod.infer<typeof validator>>({
+	const [form, {setForm, updateForm, toggleSubmitted, isSubmitted, isFieldValid, capInput, reset}] = useForm<zod.infer<typeof validator>>({
 		validator,
 		initialValue: {
 			startDate: d(afspraak.validFrom).isSameOrAfter(d(), 'date') ? d(afspraak.validFrom).toDate() : d().toDate(),
@@ -269,7 +269,7 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 
 
 							{form.isPeriodiek !== undefined && (<>
-								<FormControl flex={1} isInvalid={!isFieldValid("bedrag")} isRequired>
+								<FormControl flex={1} isInvalid={!(isFieldValid("bedrag") && capInput("bedrag", 20000000))} isRequired>
 									<FormLabel>{t("alarmForm.bedrag")}</FormLabel>
 									<InputGroup>
 										<InputLeftElement zIndex={0}>&euro;</InputLeftElement>
@@ -285,7 +285,7 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 									<FormErrorMessage>{t("alarmForm.errors.invalidBedragError")}</FormErrorMessage>
 								</FormControl>
 
-								<FormControl flex={1} isInvalid={!isFieldValid("bedragMargin")} isRequired>
+								<FormControl flex={1} isInvalid={!(isFieldValid("bedragMargin") && capInput("bedragMargin", 20000000))} isRequired>
 									<FormLabel>{t("alarmForm.bedragMargin")}</FormLabel>
 									<InputGroup>
 										<InputLeftElement zIndex={0}>&euro;</InputLeftElement>
