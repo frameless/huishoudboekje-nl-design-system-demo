@@ -85,7 +85,7 @@ const createInitialValues = (data, organisatiesId): Partial<zod.infer<typeof val
 const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, organisatie, onSubmit, isLoading = false}) => {
 	const toast = useToaster();
 	const {t} = useTranslation();
-	const [form, {updateForm, setForm, toggleSubmitted, isSubmitted, isValid, isFieldValid, isFloatValid}] = useForm<zod.infer<typeof validator>>({
+	const [form, {updateForm, setForm, toggleSubmitted, isSubmitted, isValid, isFieldValid, capInput}] = useForm<zod.infer<typeof validator>>({
 		validator,
 		initialValue: values,
 	});
@@ -376,7 +376,7 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, or
 								</Stack>
 
 								<Stack direction={["column", "row"]}>
-									<FormControl flex={1} isInvalid={!isFieldValid("bedrag")|| !isFloatValid("bedrag", 20000000)} isRequired>
+									<FormControl flex={1} isInvalid={!isFieldValid("bedrag")|| !capInput("bedrag", 20000000)} isRequired>
 										<FormLabel>{t("afspraken.bedrag")}</FormLabel>
 										<InputGroup>
 											<InputLeftElement zIndex={0}>&euro;</InputLeftElement>

@@ -12,7 +12,7 @@ export type UseFormResult<T extends FormData> = [T | Partial<T>, {
 	isFieldDirty: (field: string) => boolean,
 	isFieldValid: (field: string) => boolean,
 	isValid: () => boolean,
-	isFloatValid: (field: string, max: number) => boolean,
+	capInput: (field: string, max: number) => boolean,
 }];
 
 interface UseFormParams<T extends FormData> {
@@ -42,10 +42,16 @@ const useForm = <T extends FormData>({initialValue = {}, validator}: UseFormPara
 		const parsed = validator.safeParse(form);
 		return parsed.success || !parsed.error.issues.find(issue => issue.path?.[0] === field);
 	};
-	const isFloatValid = (field: string, max: number) => {
-		let formValue = form[field];
+	const isValid = () => {
+		if (!validator) {
+			return true;
+		}
 
-		if (typeof formValue == 'undefined') return true;
+		return validator.safeParse(form).success;
+	};
+	
+	const capInput = (field: string, max: number) => {
+		let formValue = form[field];
 
 		switch (typeof formValue) {
 			case 'undefined':
@@ -59,18 +65,9 @@ const useForm = <T extends FormData>({initialValue = {}, validator}: UseFormPara
 				return false
 		}
 
-		if (typeof formValue !== 'number') return false;
+		if (typeof formValue == 'number' && formValue > max) updateForm(field, max);
 
-		if (formValue > max) updateForm(field, max);
-		
 		return true;
-	};
-	const isValid = () => {
-		if (!validator) {
-			return true;
-		}
-
-		return validator.safeParse(form).success;
 	};
 
 	const updateForm = (field: keyof T, value: unknown, callback?: (data) => T) => {
@@ -106,7 +103,7 @@ const useForm = <T extends FormData>({initialValue = {}, validator}: UseFormPara
 			isFieldDirty,
 			isFieldValid,
 			isValid,
-			isFloatValid,
+			capInput,
 		},
 	];
 };
