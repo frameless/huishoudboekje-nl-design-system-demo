@@ -85,7 +85,7 @@ const createInitialValues = (data, organisatiesId): Partial<zod.infer<typeof val
 const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, organisatie, onSubmit, isLoading = false}) => {
 	const toast = useToaster();
 	const {t} = useTranslation();
-	const [form, {updateForm, setForm, toggleSubmitted, isSubmitted, isValid, isFieldValid}] = useForm<zod.infer<typeof validator>>({
+	const [form, {updateForm, setForm, toggleSubmitted, isSubmitted, isValid, isFieldValid, isFloatValid}] = useForm<zod.infer<typeof validator>>({
 		validator,
 		initialValue: values,
 	});
@@ -97,15 +97,6 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, or
 		const {organisatieId, afdelingId, postadresId} = form;
 		const parsed = validator2.safeParse({organisatieId, afdelingId, postadresId});
 		return parsed.success || !parsed.error.issues.find(issue => issue.path?.[0] === field);
-	};
-	const isFloatValid = (value: string, max: number) => {
-		if (typeof form[value] == 'undefined') return true;
-
-		const formValue = typeof form[value] == 'string' ? parseFloat(form[value]) : form[value];
-		
-		if (formValue > max) form[value] = max;
-		
-		return formValue <= max;
 	};
 	const reactSelectStyles = useReactSelectStyles();
 	const {

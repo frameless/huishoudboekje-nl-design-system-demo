@@ -12,6 +12,7 @@ export type UseFormResult<T extends FormData> = [T | Partial<T>, {
 	isFieldDirty: (field: string) => boolean,
 	isFieldValid: (field: string) => boolean,
 	isValid: () => boolean,
+	isFloatValid: (field: string, max: number) => boolean,
 }];
 
 interface UseFormParams<T extends FormData> {
@@ -40,6 +41,29 @@ const useForm = <T extends FormData>({initialValue = {}, validator}: UseFormPara
 
 		const parsed = validator.safeParse(form);
 		return parsed.success || !parsed.error.issues.find(issue => issue.path?.[0] === field);
+	};
+	const isFloatValid = (field: string, max: number) => {
+		let formValue = form[field];
+
+		if (typeof formValue == 'undefined') return true;
+
+		switch (typeof formValue) {
+			case 'undefined':
+				return true;
+			case 'string':
+				formValue = parseFloat(formValue);
+				break;
+			case 'number':
+				break;
+			default:
+				return false
+		}
+
+		if (typeof formValue !== 'number') return false;
+
+		if (formValue > max) updateForm(field, max);
+		
+		return true;
 	};
 	const isValid = () => {
 		if (!validator) {
@@ -82,6 +106,7 @@ const useForm = <T extends FormData>({initialValue = {}, validator}: UseFormPara
 			isFieldDirty,
 			isFieldValid,
 			isValid,
+			isFloatValid,
 		},
 	];
 };
