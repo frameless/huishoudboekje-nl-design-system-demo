@@ -1,5 +1,13 @@
 # Huishoudboekje Changelog
 
+## 1.9.5
+
+### Patch Changes
+
+- Fixed saldo's not updating properly due to incorrect table auto increment
+- Afspraken now allows for payment amounts between (and including) 0 and 1
+- 6e21c235: Changed batch to true so that transactions are batched, set BtchBookg = false so that transactions are individual in MT940"
+
 ## 1.9.4
 
 Deze versie omvat verbeteringen aan functionaliteit bij het navigeren in de context van een burger, het exporteren van gegegvens, het beheren van afspraken, betaalinstructies en alarmen.
