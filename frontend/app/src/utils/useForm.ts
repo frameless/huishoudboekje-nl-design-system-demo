@@ -49,7 +49,6 @@ const useForm = <T extends FormData>({initialValue = {}, validator}: UseFormPara
 
 		return validator.safeParse(form).success;
 	};
-	
 	const capInput = (field: string, max: number) => {
 		let formValue = form[field];
 

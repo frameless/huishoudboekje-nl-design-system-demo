@@ -376,7 +376,7 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, or
 								</Stack>
 
 								<Stack direction={["column", "row"]}>
-									<FormControl flex={1} isInvalid={!isFieldValid("bedrag")|| !capInput("bedrag", 20000000)} isRequired>
+									<FormControl flex={1} isInvalid={!(isFieldValid("bedrag") && capInput("bedrag", 20000000))} isRequired>
 										<FormLabel>{t("afspraken.bedrag")}</FormLabel>
 										<InputGroup>
 											<InputLeftElement zIndex={0}>&euro;</InputLeftElement>
