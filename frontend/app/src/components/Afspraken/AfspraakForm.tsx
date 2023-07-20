@@ -15,6 +15,7 @@ import AfspraakFormContext from "./EditAfspraak/context";
 import d from "../../utils/dayjs";
 import DatePicker from "react-datepicker";
 import { fromPromise } from "@apollo/client";
+import { boolean } from "zod";
 
 /**
  * This validator2 is required because Zod doesn't execute the superRefine directly, but only after the initial set of rules all pass.
@@ -96,6 +97,15 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, or
 		const {organisatieId, afdelingId, postadresId} = form;
 		const parsed = validator2.safeParse({organisatieId, afdelingId, postadresId});
 		return parsed.success || !parsed.error.issues.find(issue => issue.path?.[0] === field);
+	};
+	const isFloatValid = (value: string, max: number) => {
+		if (typeof form[value] == 'undefined') return true;
+
+		const formValue = typeof form[value] == 'string' ? parseFloat(form[value]) : form[value];
+		
+		if (formValue > max) form[value] = max;
+		
+		return formValue <= max;
 	};
 	const reactSelectStyles = useReactSelectStyles();
 	const {
@@ -375,7 +385,7 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, or
 								</Stack>
 
 								<Stack direction={["column", "row"]}>
-									<FormControl flex={1} isInvalid={!isFieldValid("bedrag")} isRequired>
+									<FormControl flex={1} isInvalid={!isFieldValid("bedrag")|| !isFloatValid("bedrag", 20000000)} isRequired>
 										<FormLabel>{t("afspraken.bedrag")}</FormLabel>
 										<InputGroup>
 											<InputLeftElement zIndex={0}>&euro;</InputLeftElement>
@@ -384,8 +394,9 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, or
 												type={"number"} 
 												pattern={"^\\d*(,{0,1}\\d{0,2})$"} 
 												step={.01} 
-												min={0.00} 
-												value={(form.bedrag || form.bedrag == 0) ? parseFloat(String(form.bedrag)) : ""} 
+												min={0.00}
+												value={(form.bedrag || form.bedrag == 0) ? parseFloat(String(form.bedrag)) : ""}
+												onKeyUp = {e => updateForm("bedrag", parseFloat((e.target as HTMLInputElement).value.toString().replace(',','.')))}
 												onChange={e => updateForm("bedrag", parseFloat(e.target.value.toString().replace(',','.')))} 
 											/>
 										</InputGroup>
