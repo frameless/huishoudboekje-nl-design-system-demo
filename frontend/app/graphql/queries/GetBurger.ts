@@ -22,6 +22,12 @@ export const GetBurgerDetailsQuery = gql`
 					iban
 					rekeninghouder
 				}
+				afdeling {
+					naam
+					organisatie {
+						naam
+					}
+				}
 			}
 		}
 	}
