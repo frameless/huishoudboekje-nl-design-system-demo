@@ -12,6 +12,7 @@ export type UseFormResult<T extends FormData> = [T | Partial<T>, {
 	isFieldDirty: (field: string) => boolean,
 	isFieldValid: (field: string) => boolean,
 	isValid: () => boolean,
+	capInput: (field: string, max: number) => boolean,
 }];
 
 interface UseFormParams<T extends FormData> {
@@ -48,6 +49,25 @@ const useForm = <T extends FormData>({initialValue = {}, validator}: UseFormPara
 
 		return validator.safeParse(form).success;
 	};
+	const capInput = (field: string, max: number) => {
+		let formValue = form[field];
+
+		switch (typeof formValue) {
+			case 'undefined':
+				return true;
+			case 'string':
+				formValue = parseFloat(formValue);
+				break;
+			case 'number':
+				break;
+			default:
+				return false
+		}
+
+		if (typeof formValue == 'number' && formValue > max) updateForm(field, max);
+
+		return true;
+	};
 
 	const updateForm = (field: keyof T, value: unknown, callback?: (data) => T) => {
 		setForm(prevData => {
@@ -82,6 +102,7 @@ const useForm = <T extends FormData>({initialValue = {}, validator}: UseFormPara
 			isFieldDirty,
 			isFieldValid,
 			isValid,
+			capInput,
 		},
 	];
 };

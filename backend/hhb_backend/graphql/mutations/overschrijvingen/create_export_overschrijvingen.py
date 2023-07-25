@@ -115,7 +115,7 @@ class CreateExportOverschrijvingen(graphene.Mutation):
             afspraken,
             tegen_rekeningen,
             config_values
-        ).decode()
+        )
         export_response = requests.post(
             f"{settings.HHB_SERVICES_URL}/export/",
             data=json.dumps(

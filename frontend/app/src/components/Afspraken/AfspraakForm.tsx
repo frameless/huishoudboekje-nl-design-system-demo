@@ -14,6 +14,8 @@ import SectionContainer from "../shared/SectionContainer";
 import AfspraakFormContext from "./EditAfspraak/context";
 import d from "../../utils/dayjs";
 import DatePicker from "react-datepicker";
+import { fromPromise } from "@apollo/client";
+import { boolean } from "zod";
 
 /**
  * This validator2 is required because Zod doesn't execute the superRefine directly, but only after the initial set of rules all pass.
@@ -83,7 +85,7 @@ const createInitialValues = (data, organisatiesId): Partial<zod.infer<typeof val
 const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, organisatie, onSubmit, isLoading = false}) => {
 	const toast = useToaster();
 	const {t} = useTranslation();
-	const [form, {updateForm, setForm, toggleSubmitted, isSubmitted, isValid, isFieldValid}] = useForm<zod.infer<typeof validator>>({
+	const [form, {updateForm, setForm, toggleSubmitted, isSubmitted, isValid, isFieldValid, capInput}] = useForm<zod.infer<typeof validator>>({
 		validator,
 		initialValue: values,
 	});
@@ -374,11 +376,20 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, or
 								</Stack>
 
 								<Stack direction={["column", "row"]}>
-									<FormControl flex={1} isInvalid={!isFieldValid("bedrag")} isRequired>
+									<FormControl flex={1} isInvalid={!(isFieldValid("bedrag") && capInput("bedrag", 20000000))} isRequired>
 										<FormLabel>{t("afspraken.bedrag")}</FormLabel>
 										<InputGroup>
 											<InputLeftElement zIndex={0}>&euro;</InputLeftElement>
-											<Input flex={3} type={"number"} step={.01} value={form.bedrag || ""} onChange={e => updateForm("bedrag", parseFloat(e.target.value))} />
+											<Input 
+												flex={3} 
+												type={"number"} 
+												pattern={"^\\d*(,{0,1}\\d{0,2})$"} 
+												step={.01} 
+												min={0.00}
+												value={(form.bedrag || form.bedrag == 0) ? parseFloat(String(form.bedrag)) : ""}
+												onKeyUp = {e => updateForm("bedrag", parseFloat((e.target as HTMLInputElement).value.toString().replace(',','.')))}
+												onChange={e => updateForm("bedrag", parseFloat(e.target.value.toString().replace(',','.')))} 
+											/>
 										</InputGroup>
 										<FormErrorMessage>{t("afspraakDetailView.invalidBedragError")}</FormErrorMessage>
 									</FormControl>

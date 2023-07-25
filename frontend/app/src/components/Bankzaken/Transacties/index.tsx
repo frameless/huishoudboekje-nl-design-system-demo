@@ -301,8 +301,16 @@ const Transactions = () => {
 																	endDate: value ? d(value).format("YYYY-MM-DD") : undefined
 																});
 															}}
-															showYearDropdown
-															dropdownMode={"select"}
+															onChangeRaw={(val) => {
+																if (!isNaN(Date.parse(val.toString()))) {
+																	const value = d(val.toString()).format("YYYY-MM-DD")
+																	setBanktransactieFilters({
+																		...banktransactieFilters,
+																		endDate: value ? d(value).format("YYYY-MM-DD") : undefined
+																	});
+																}
+															}}
+															showYearDropdown={true}
 															customInput={<Input type={"text"} />}
 															isClearable={true}
 														/>
