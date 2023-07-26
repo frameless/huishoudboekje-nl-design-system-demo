@@ -14,6 +14,7 @@ def test_exports_post_new_export(client, session):
         "timestamp": datetime(2020, 10, 1, tzinfo=tz.tzlocal()).isoformat(),
         "start_datum": '2021-01-01',
         "eind_datum": '2021-02-01',
+        'verwerking_datum': None,
         "xmldata": '''<?xml version="1.0" encoding="UTF-8"?>
 <Document xmlns="urn:iso:std:iso:20022:tech:xsd:pain.001.001.03" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<CstmrCdtTrfInitn>
@@ -80,12 +81,12 @@ def test_exports_post_new_export(client, session):
 	</CstmrCdtTrfInitn>
 </Document>
 ''',
-    "sha256":"88d84d6df3eba23d5e494e8b84c364d194bd6232ead459a1711124e60d983aba"
+        "sha256": "88d84d6df3eba23d5e494e8b84c364d194bd6232ead459a1711124e60d983aba"
     }
     response = client.post('/export/', json=export_dict)
     assert response.status_code == 201
 
-    export_dict["id"] = 1 
+    export_dict["id"] = 1
     export_dict["start_datum"] = '2021-01-01T00:00:00'
     export_dict["eind_datum"] = '2021-02-01T00:00:00'
 
