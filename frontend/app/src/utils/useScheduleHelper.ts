@@ -7,13 +7,13 @@ import {humanJoin, Months} from "./things";
 const useScheduleHelper = (schedule?: Schedule | Betaalinstructie) => {
 	const {t} = useTranslation();
 	enum DayNumberOfWeek {
+		Sunday = 0,
 		Monday = 1,
 		Tuesday = 2,
 		Wednesday = 3,
 		Thursday = 4,
 		Friday = 5,
-		Saturday = 6,
-		Sunday = 7
+		Saturday = 6
 	}
 
 	return {
@@ -94,32 +94,34 @@ const useScheduleHelper = (schedule?: Schedule | Betaalinstructie) => {
 			let upcoming = new Date();
 
 			if (byDay && byDay.length > 0) {
-				const futureDays = byDay.filter(d => (upcoming.getDay() + 1) < parseInt(DayNumberOfWeek[String(d)]));
-				const upcomingDay = futureDays.length ? futureDays[0] : byDay[0];
-				upcoming.setDate(upcoming.getDate() + (((parseInt(DayNumberOfWeek[String(upcomingDay)]) + 7 - upcoming.getDay()) % 7) || 7));
+				const bySortedDays = byDay.map(d => parseInt(DayNumberOfWeek[String(d)])).sort();
+				const futureDays = bySortedDays.filter(d => upcoming.getDay() < d);
+				const upcomingDay = futureDays.length ? futureDays[0] : bySortedDays[0];
 
-				result = d(upcoming.toLocaleDateString(), "DD/MM/YYYY").format("DD-MM-YYYY");
+				upcoming.setDate(upcoming.getDate() + (upcomingDay - upcoming.getDay()));
+
+				result = upcoming.toLocaleDateString('nl-NL', {year: 'numeric', month: '2-digit', day: '2-digit'});
 			}
 
 			if (byMonth !== null && byMonth.length > 0 && byMonthDay.length > 0 && startDate !== endDate) {
-				const futureDays = byMonthDay.filter(d => upcoming.getDay() < d);
+				const futureDays = byMonthDay.sort().filter(d => upcoming.getDate() < d);
 				const futureDay = futureDays.length ? futureDays[0] : byMonthDay[0];
 
 				if (futureDays.length == 0) upcoming.setMonth(upcoming.getMonth() + 1 > 11 ? 0 : upcoming.getMonth() + 1);
 
-				const futureMonths = byMonth.filter(d => upcoming.getMonth() < d);
-				const futureMonth = futureMonths.length ? futureMonths[0] : byMonth[0];
+				const futureMonths = byMonth.map(d => d - 1).filter(d => upcoming.getMonth() <= d);
+				const futureMonth = futureMonths.length ? futureMonths[0] : byMonth[0] - 1;
 
 				if (futureMonths.length == 0) upcoming.setFullYear(upcoming.getFullYear() + 1);
 
 				const futureYear = upcoming.getFullYear();
-				upcoming = new Date(futureYear, futureMonth - 1, futureDay);
+				upcoming = new Date(futureYear, futureMonth, futureDay);
 
 				if (upcoming.getTime() >= d(startDate, 'YYYY-MM-DD').toDate().getTime()
 					&& upcoming.getTime() >= new Date().getTime()
-					&& (endDate == undefined || endDate == null || upcoming.getTime() <= d(endDate, 'YYYY-MM-DD').toDate().getTime())
+					&& (endDate !== undefined || endDate == null || upcoming.getTime() <= d(endDate, 'YYYY-MM-DD').toDate().getTime())
 				) {
-					result = d(upcoming.toLocaleDateString(), "DD/MM/YYYY").format("DD-MM-YYYY");
+					result = upcoming.toLocaleDateString('nl-NL', {year: 'numeric', month: '2-digit', day: '2-digit'});
 				}
 			}
 
