@@ -115,9 +115,9 @@ const useScheduleHelper = (schedule?: Schedule | Betaalinstructie) => {
 				const futureYear = upcoming.getFullYear();
 				upcoming = new Date(futureYear, futureMonth - 1, futureDay);
 
-				if (upcoming.getTime() >= new Date().getTime()
-					&& upcoming.getTime() >= d(startDate, 'YYYY-MM-DD').toDate().getTime() 
-					&& upcoming.getTime() <= d(endDate, 'YYYY-MM-DD').toDate().getTime()
+				if (upcoming.getTime() >= d(startDate, 'YYYY-MM-DD').toDate().getTime()
+					&& upcoming.getTime() >= new Date().getTime()
+					&& (endDate == undefined || endDate == null || upcoming.getTime() <= d(endDate, 'YYYY-MM-DD').toDate().getTime())
 				) {
 					result = d(upcoming.toLocaleDateString(), "DD/MM/YYYY").format("DD-MM-YYYY");
 				}
