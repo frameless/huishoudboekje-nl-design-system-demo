@@ -123,7 +123,9 @@ const useScheduleHelper = (schedule?: Schedule | Betaalinstructie) => {
 				}
 			}
 
-			if (startDate === endDate) {
+			if (startDate === endDate 
+				&& d(startDate, 'YYYY-MM-DD').toDate().getTime() >= new Date().getTime()
+			) {
 				result = d(startDate, "YYYY-MM-DD").format("DD-MM-YYYY")
 			}
 
