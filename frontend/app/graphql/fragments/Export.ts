@@ -7,6 +7,7 @@ export const ExportFragment = gql`
         timestamp
         startDatum
         eindDatum
+        verwerkingDatum
         sha256
         overschrijvingen {
             id

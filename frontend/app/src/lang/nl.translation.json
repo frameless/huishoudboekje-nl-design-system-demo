@@ -518,7 +518,10 @@
   "zoektermSuggesties": "Suggesties",
   "exports": {
     "period": "Periode",
-    "dateCreated": "Aanmaakdatum"
+    "dateCreated": "Aanmaakdatum",
+    "paymentDate": "Verwerkingsdatum",
+    "invalidPaymentDate": "Selecteer een geldige verwerkingsdatum (van {{startDate}} t/m {{endDate}})",
+    "individualPaymentDate": "Op datum betaalinstructie"
   },
   "periodiekSelector": {
     "periodiek": "Periodiek",
