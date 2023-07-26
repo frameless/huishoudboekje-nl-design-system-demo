@@ -6,6 +6,8 @@ import {NavLink} from "react-router-dom";
 import {AppRoutes} from "../../config/routes";
 import {Afspraak} from "../../generated/graphql";
 import {currencyFormat2, isAfspraakActive} from "../../utils/things";
+import d from "../../utils/dayjs";
+import useScheduleHelper from "../../utils/useScheduleHelper";
 
 const AfspraakTableRow: React.FC<TableRowProps & {afspraak: Afspraak}> = ({afspraak, ...props}) => {
 	const {t} = useTranslation();
@@ -13,6 +15,7 @@ const AfspraakTableRow: React.FC<TableRowProps & {afspraak: Afspraak}> = ({afspr
 
 	const bedrag = afspraak.credit ? parseFloat(afspraak.bedrag) : parseFloat(afspraak.bedrag) * -1;
 	const isActive = isAfspraakActive(afspraak);
+	const betaalinstructieSchedule = useScheduleHelper(afspraak.betaalinstructie).nextScheduled();
 
 	return (
 		<Tr color={!isActive ? "gray.400" : undefined} {...props}>
@@ -24,6 +27,9 @@ const AfspraakTableRow: React.FC<TableRowProps & {afspraak: Afspraak}> = ({afspr
 			</Td>
 			{!isMobile && (<Td verticalAlign="top">
 				<Text>{afspraak.omschrijving}</Text>
+			</Td>)}
+			{!isMobile &&  (<Td>
+				<Text>{betaalinstructieSchedule}</Text>
 			</Td>)}
 			<Td verticalAlign="top">
 				<Stack spacing={1} flex={1} align={"flex-end"} justify={"center"}>
