@@ -17,6 +17,15 @@ export const GetBurgerDetailsQuery = gql`
 				credit
 				omschrijving
 				validThrough
+				betaalinstructie {
+					byDay
+					byMonth
+					byMonthDay
+					exceptDates
+					repeatFrequency
+					startDate
+					endDate
+				}
 				tegenRekening {
 					id
 					iban

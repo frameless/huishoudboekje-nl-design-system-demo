@@ -375,7 +375,8 @@
     "showActive": "Actieve afspraken",
     "showInActive": "Beëindigde afspraken",
     "tegenpartij": "Tegenpartij",
-    "noResults": "Er zijn geen afspraken gevonden."
+    "noResults": "Er zijn geen afspraken gevonden.",
+    "nextBooking": "Verwachte betaling"
   },
   "organisatie": "Organisatie",
   "burger": "Burger",
@@ -455,6 +456,7 @@
     "saturday": "zaterdag",
     "sunday": "zondag",
     "unknown": "Onbekend",
+    "n/a": "Niet van toepassing",
     "everyDay": "Elke dag",
     "everyWeek": "Elke week",
     "onDays": "op {{days}}",
@@ -463,7 +465,8 @@
     "everyYear": "Elk jaar",
     "inMonths": "in {{months}}",
     "onDates": "op de {{dates}}",
-    "nextExpected": "Eerstvolgende datum"
+    "nextExpected": "Eerstvolgende datum",
+    "upcoming": "Aanstaande"
   },
   "afspraakBetaalinstructie": {
     "title": "Betaalinstructie instellen",

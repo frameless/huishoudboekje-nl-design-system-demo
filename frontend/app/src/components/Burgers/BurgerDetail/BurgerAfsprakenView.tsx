@@ -53,6 +53,7 @@ const BurgerAfsprakenView: React.FC<{burger: Burger}> = ({burger}) => {
 							<Tr>
 								<Th>{t("afspraken.tegenpartij")}</Th>
 								{!isMobile && <Th>{t("afspraken.omschrijving")}</Th>}
+								{!isMobile && <Th>{t("afspraken.nextBooking")}</Th>}
 								<Th textAlign={"right"}>{t("afspraken.bedrag")}</Th>
 								<Th />
 							</Tr>
