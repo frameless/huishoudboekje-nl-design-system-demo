@@ -35,6 +35,18 @@ def get_config_value(config_id) -> str:
     return hhb_dataloader().configuraties.load_one(config_id)["waarde"]
 
 
+def filter_future_overschrijvingen_on_afspraak_startdate_before_payment_date(future_overschrijvingen, afspraken):
+    count = 0
+    for overschrijving in future_overschrijvingen:
+        afspraak = next(
+            filter(lambda x: x['id'] == overschrijving['afspraak_id'], afspraken), None)
+        if afspraak is not None:
+            if to_date(afspraak['valid_from']) > to_date(overschrijving['datum']):
+                future_overschrijvingen.pop(count)
+        count += 1
+    return future_overschrijvingen
+
+
 class CreateExportOverschrijvingen(graphene.Mutation):
     """Mutatie om een betaalinstructie te genereren."""
 
@@ -74,7 +86,7 @@ class CreateExportOverschrijvingen(graphene.Mutation):
             planner_input = PlannedOverschrijvingenInput(
                 afspraak.betaalinstructie,
                 afspraak.bedrag,
-                afspraak.id,
+                afspraak.id
             )
             future_overschrijvingen += list(
                 get_planned_overschrijvingen(
@@ -94,6 +106,10 @@ class CreateExportOverschrijvingen(graphene.Mutation):
                     future_overschrijvingen,
                 )
             )
+
+        if future_overschrijvingen:
+            filter_future_overschrijvingen_on_afspraak_startdate_before_payment_date(
+                future_overschrijvingen, afspraken)
 
         if not future_overschrijvingen:
             raise GraphQLError(
