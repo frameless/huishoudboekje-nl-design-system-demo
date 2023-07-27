@@ -100,7 +100,7 @@ const Betaalinstructies = () => {
 						</Stack>
 						<Checkbox onChange={e => {
 							onChangeUseCustomPaymentDate(e.target.checked ?? false)
-						}} flex={1}>aangepaste verwerkingsdatum</Checkbox>
+						}} flex={1}>{t("exports.useCustomPaymentDate")}</Checkbox>
 						{useCustomPaymentDate && (
 							<Stack>
 								<FormControl flex={1} isInvalid={!paymentDateValid}>
@@ -118,8 +118,9 @@ const Betaalinstructies = () => {
 											onChangePaymentDate(date)
 										}}
 										customInput={<Input />} />
-									<FormErrorMessage>{t("exports.invalidPaymentDate", {"startDate": d(dateRange.from).format("L"), "endDate": d(dateRange.through).format("L")})}</FormErrorMessage>
+									<FormErrorMessage>{t("exports.invalidPaymentDate", {"startDate": d().subtract(7, "days").format("L"), "endDate": d(dateRange.through).add(7, "days").format("L")})}</FormErrorMessage>
 								</FormControl>
+								<FormLabel>{t("exports.customPaymentInformation")}</FormLabel>
 							</Stack>
 						)}
 					</Stack>
