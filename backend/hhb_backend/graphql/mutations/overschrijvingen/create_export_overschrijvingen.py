@@ -52,8 +52,8 @@ class CreateExportOverschrijvingen(graphene.Mutation):
         logging.info(f"Creating export file")
         start_datum_str = kwargs.pop("startDatum")
         eind_datum_str = kwargs.pop("eindDatum")
-        verwerking_datum_str = kwargs.pop(
-            "verwerkingDatum") if "verwerkingsdatum" in kwargs else None
+        verwerking_datum_str = kwargs.get(
+            "verwerkingDatum", None)
         start_datum = to_date(start_datum_str)
         eind_datum = to_date(eind_datum_str)
         verwerking_datum = to_date(
