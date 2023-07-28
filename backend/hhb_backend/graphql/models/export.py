@@ -16,6 +16,7 @@ class Export(graphene.ObjectType):
     eind_datum = graphene.Date()
     sha256 = graphene.String()
     xmldata = graphene.String()
+    verwerking_datum = graphene.Date()
     overschrijvingen = graphene.List(lambda: overschrijving.Overschrijving)
 
     def resolve_timestamp(self, _info):
@@ -31,7 +32,11 @@ class Export(graphene.ObjectType):
     def resolve_start_datum(self, _info):
         if value := self.get('start_datum'):
             return to_date(value)
-            
+
     def resolve_eind_datum(self, _info):
         if value := self.get('eind_datum'):
+            return to_date(value)
+
+    def resolve_verwerking_datum(self, _info):
+        if value := self.get('verwerking_datum'):
             return to_date(value)
