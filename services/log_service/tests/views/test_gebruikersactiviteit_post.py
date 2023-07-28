@@ -33,4 +33,6 @@ def test_configuraties_post_success(app):
     response = app.test_client().post('/gebruikersactiviteiten/', json=ga_data)
     assert response.status_code == 201
     ga_data["id"] = 1
-    assert response.json["data"] == ga_data
+    responseJson = response.json["data"]
+    responseJson.pop('uuid')
+    assert responseJson == ga_data

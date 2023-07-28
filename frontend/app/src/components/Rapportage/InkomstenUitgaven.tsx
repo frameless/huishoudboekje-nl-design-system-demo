@@ -1,17 +1,18 @@
-import {BoxProps, Heading, Spinner, Stack, Text, useToken} from "@chakra-ui/react";
+import {BoxProps, FormControl, HStack, Spinner, Stack, Text, useToken} from "@chakra-ui/react";
 import React, {useContext} from "react";
 import {useTranslation} from "react-i18next";
 import ChakraChart from "../../config/theme/custom/Chart";
 import {BurgerRapportage} from "../../generated/graphql";
 import {prepareChartData} from "../../utils/things";
-import {createChartAggregation} from "./Aggregator";
+import {Granularity, createChartAggregation} from "./Aggregator";
 import {RapportageContext} from "./context";
+import RadioButtonGroup from "../shared/RadioButtonGroup";
 
 // Todo: specify types explicitly
-const InkomstenUitgaven: React.FC<BoxProps & {transactions: BurgerRapportage[]}> = ({transactions = []}) => {
+const InkomstenUitgaven: React.FC<BoxProps & {transactions: BurgerRapportage[], granularity: Granularity, setGranularity: (value) => void, granularityOptions}> = ({transactions = [], granularity, setGranularity, granularityOptions}) => {
 	const {t} = useTranslation();
 	const [colorInkomsten, colorUitgaven] = useToken("colors", ["green.300", "red.300"]);
-	const {startDate, endDate, granularity} = useContext(RapportageContext);
+	const {startDate, endDate} = useContext(RapportageContext);
 
 	const aggregation = createChartAggregation(startDate,transactions, granularity);
 
@@ -34,10 +35,17 @@ const InkomstenUitgaven: React.FC<BoxProps & {transactions: BurgerRapportage[]}>
 	];
 
 	return (
-		<Stack>
-			<Heading size={"md"}>{t("charts.inkomstenUitgaven.title")}</Heading>
-			<Text fontSize={"md"} color={"gray.500"}>{t("charts.inkomstenUitgaven.helperText")}</Text>
-
+		<Stack  height={"600px"}>
+			<HStack justifyContent={"space-between"}>
+				<Stack>
+					<Text fontSize={"md"} color={"gray.500"}>{t("charts.inkomstenUitgaven.helperText")}</Text>
+				</Stack>
+				<Stack>
+					<FormControl paddingRight={50}>
+						<RadioButtonGroup name={"granularity"} onChange={setGranularity}  defaultValue={Granularity.Weekly} value={granularity} options={granularityOptions} />
+					</FormControl>
+				</Stack>
+			</HStack>
 			<ChakraChart
 				chartType={"AreaChart"}
 				loader={<Spinner />}

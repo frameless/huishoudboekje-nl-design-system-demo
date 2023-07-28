@@ -6,7 +6,7 @@ metadata:
     name: hhb-unleashservice-ingress
 spec:
   rules:
-    - host: ${APP_HOST}
+    - host: huishoudboekje.example.com
       http:
         paths:
           - path: /api/unleash

@@ -75,10 +75,14 @@ const Betaalinstructies = () => {
 
 	const onChangeStartDate = (value: [Date, Date]) => {
 		const [from, through] = value;
-		setDateRange(() => ({
-			from, through,
-		}));
-		validateCustomPaymentDate(paymentDate, {from, through})
+
+		if (value) {
+			setDateRange(() => ({
+				from, through,
+			}));
+			validateCustomPaymentDate(paymentDate, {from, through})
+		}
+
 	};
 
 	return (

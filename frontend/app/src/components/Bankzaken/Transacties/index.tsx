@@ -10,19 +10,19 @@ import Section from "../../shared/Section";
 import SectionContainer from "../../shared/SectionContainer";
 import TransactiesList from "./TransactiesList";
 import useStore from "../../../store";
-import { defaultBanktransactieFilters } from "./defaultBanktransactieFilters";
-import { formatBurgerName, getBurgerHhbId, useReactSelectStyles } from "../../../utils/things";
+import {defaultBanktransactieFilters} from "./defaultBanktransactieFilters";
+import {formatBurgerName, getBurgerHhbId, useReactSelectStyles} from "../../../utils/things";
 import Select from "react-select";
 import DatePicker from "react-datepicker";
 import d from "../../../utils/dayjs";
 import ZoektermenList from "../../shared/ZoektermenList";
-import { TriangleUpIcon, TriangleDownIcon, WarningTwoIcon, RepeatIcon } from "@chakra-ui/icons";
+import {TriangleUpIcon, TriangleDownIcon, WarningTwoIcon, RepeatIcon} from "@chakra-ui/icons";
 
 
 const Transactions = () => {
 	const {t} = useTranslation();
 	const reactSelectStyles = useReactSelectStyles();
-	const {offset, total, pageSize, setTotal, setPageSize ,goFirst, PaginationButtons} = usePagination({pageSize: 50});
+	const {offset, total, pageSize, setTotal, setPageSize, goFirst, PaginationButtons} = usePagination({pageSize: 50});
 	const handleMutation = useHandleMutation();
 
 	const [timeLastUpdate, setTimeLAstUpdate] = useState<Date | undefined>(undefined);
@@ -38,24 +38,24 @@ const Transactions = () => {
 
 
 	const defaultValueRadio = (value) => {
-		if(value === undefined ){
+		if (value === undefined) {
 			return "3"
 		}
-		if(value){
+		if (value) {
 			return "2"
 		}
 		else {
 			return "1"
-        }
+		}
 	}
 
 	const onChangeCreditRadio = (value) => {
-        let onlyCredit : boolean | undefined = undefined
-		if(value === "1"){
-            onlyCredit = false
+		let onlyCredit: boolean | undefined = undefined
+		if (value === "1") {
+			onlyCredit = false
 		}
-		if(value === "2"){
-            onlyCredit = true
+		if (value === "2") {
+			onlyCredit = true
 		}
 		setBanktransactieFilters({
 			...banktransactieFilters,
@@ -97,24 +97,24 @@ const Transactions = () => {
 		})
 	};
 
-    const onChangeBookedRadio = (value) => {
-        let onlyBooked : boolean | undefined = undefined
-		if(value === "1"){
-            onlyBooked = false
+	const onChangeBookedRadio = (value) => {
+		let onlyBooked: boolean | undefined = undefined
+		if (value === "1") {
+			onlyBooked = false
 		}
-		if(value === "2"){
-            onlyBooked = true
+		if (value === "2") {
+			onlyBooked = true
 		}
 		setBanktransactieFilters({
 			...banktransactieFilters,
 			onlyBooked: onlyBooked,
 			burgerIds: !onlyBooked ? undefined : banktransactieFilters.burgerIds
 		})
-		if(onlyBooked !== undefined && !onlyBooked){
-			if(filterBurgerIds.length > 0){
+		if (onlyBooked !== undefined && !onlyBooked) {
+			if (filterBurgerIds.length > 0) {
 				setFilterBurgerIds([])
 			}
-			if(filterBurgerIds.length > 0){
+			if (filterBurgerIds.length > 0) {
 				setFilterRekeingIbans([])
 			}
 		}
@@ -124,8 +124,8 @@ const Transactions = () => {
 	const [zoektermen, setZoektermen] = useState<string[]>(banktransactieFilters.zoektermen || []);
 	const onAddzoekterm = (e) => {
 		e.preventDefault();
-		if(zoekterm !== ""){
-			const list : string[] = []
+		if (zoekterm !== "") {
+			const list: string[] = []
 			list.push(zoekterm)
 			const newZoektermen = zoektermen.concat(list)
 			setBanktransactieFilters({
@@ -139,9 +139,9 @@ const Transactions = () => {
 	};
 
 	const onDeleteZoekterm = (value) => {
-		const list : string[] = zoektermen.slice()
+		const list: string[] = zoektermen.slice()
 		const index = zoektermen.indexOf(value)
-		list.splice(index,1)
+		list.splice(index, 1)
 		setBanktransactieFilters({
 			...banktransactieFilters,
 			zoektermen: list.length > 0 ? list : undefined
@@ -158,14 +158,14 @@ const Transactions = () => {
 	const [minBedrag, setMinBedrag] = useState(defaultvalueBedrag(banktransactieFilters.minBedrag))
 	const [maxBedrag, setMaxBedrag] = useState(defaultvalueBedrag(banktransactieFilters.maxBedrag))
 
-	const onChangeMaxbedrag = (valueAsString) =>{
+	const onChangeMaxbedrag = (valueAsString) => {
 		setMaxBedrag(valueAsString)
 		setBanktransactieFilters({
 			...banktransactieFilters,
 			maxBedrag: valueAsString !== "" ? Math.round(+valueAsString * 100) : undefined
 		})
 	}
-	const onChangeMinbedrag = (valueAsString) =>{
+	const onChangeMinbedrag = (valueAsString) => {
 		setMinBedrag(valueAsString)
 		setBanktransactieFilters({
 			...banktransactieFilters,
@@ -173,23 +173,23 @@ const Transactions = () => {
 		})
 	}
 
-	const invalidBedrag = () =>{
+	const invalidBedrag = () => {
 		let result = false;
-		if(banktransactieFilters.maxBedrag !== undefined && banktransactieFilters.minBedrag !== undefined){
-			if(banktransactieFilters.maxBedrag < banktransactieFilters.minBedrag){
+		if (banktransactieFilters.maxBedrag !== undefined && banktransactieFilters.minBedrag !== undefined) {
+			if (banktransactieFilters.maxBedrag < banktransactieFilters.minBedrag) {
 				result = true
 			}
 		}
 		return result
 	}
 
-	const queryVariables : SearchTransactiesQueryVariables = {
-		offset: offset -1,
+	const queryVariables: SearchTransactiesQueryVariables = {
+		offset: offset - 1,
 		limit: pageSize,
 		filters: banktransactieFilters,
 	};
 
-	
+
 
 	const $transactions = useSearchTransactiesQuery({
 		fetchPolicy: "no-cache", // This "no-cache" is to make sure the list is refreshed after uploading a Bankafschrift in CsmUploadModal.tsx (24-02-2022)
@@ -212,7 +212,7 @@ const Transactions = () => {
 		],
 	});
 
-	const blockBookedFilters = () =>{
+	const blockBookedFilters = () => {
 		return !banktransactieFilters.onlyBooked
 	}
 
@@ -224,7 +224,7 @@ const Transactions = () => {
 			banktransactieFilters.burgerIds !== undefined
 	}
 
-	const { isOpen, onToggle } = useDisclosure()
+	const {isOpen, onToggle} = useDisclosure()
 
 	return (
 		<Page title={t("forms.bankzaken.sections.transactions.title")} right={(
@@ -232,7 +232,7 @@ const Transactions = () => {
 		)}>
 			<SectionContainer>
 				<Queryable query={$transactions} children={(data) => {
-					const transacties : BankTransaction[] = data.searchTransacties?.banktransactions || []
+					const transacties: BankTransaction[] = data.searchTransacties?.banktransactions || []
 					return (
 						<Section title={t("transactionsPage.title")} helperText={t("transactionsPage.helperText")}>
 							<Stack>
@@ -282,10 +282,11 @@ const Transactions = () => {
 															onChange={(value: Date) => {
 																setBanktransactieFilters({
 																	...banktransactieFilters,
-																	startDate: value ? d(value).format("YYYY-MM-DD"): undefined
+																	startDate: value ? d(value).format("YYYY-MM-DD") : undefined
 																});
 															}}
-															showYearDropdown={true}
+															showYearDropdown
+															dropdownMode={"select"}
 															customInput={<Input type={"text"} />}
 															isClearable={true}
 														/>
@@ -297,8 +298,17 @@ const Transactions = () => {
 															onChange={(value: Date) => {
 																setBanktransactieFilters({
 																	...banktransactieFilters,
-																	endDate: value ? d(value).format("YYYY-MM-DD"): undefined
+																	endDate: value ? d(value).format("YYYY-MM-DD") : undefined
 																});
+															}}
+															onChangeRaw={(val) => {
+																if (!isNaN(Date.parse(val.toString()))) {
+																	const value = d(val.toString()).format("YYYY-MM-DD")
+																	setBanktransactieFilters({
+																		...banktransactieFilters,
+																		endDate: value ? d(value).format("YYYY-MM-DD") : undefined
+																	});
+																}
 															}}
 															showYearDropdown={true}
 															customInput={<Input type={"text"} />}
@@ -335,13 +345,13 @@ const Transactions = () => {
 																<HStack >
 																	<FormControl as={Stack} flex={1}>
 																		<FormLabel>{t("transactionsPage.filters.accounts")}</FormLabel>
-																		<Select  onChange={onSelectRekening} options={rekeningen.map(rekening => ({
+																		<Select onChange={onSelectRekening} options={rekeningen.map(rekening => ({
 																			key: rekening.iban,
 																			value: rekening.iban,
 																			label: rekening.rekeninghouder + " (" + rekening.iban + ")",
 																		}))}
-																		styles={reactSelectStyles.default} isMulti isClearable={true} noOptionsMessage={() => t("select.noOptions")} maxMenuHeight={200}
-																		placeholder={t("transactionsPage.filters.none")} value={rekeningen_filter} />
+																			styles={reactSelectStyles.default} isMulti isClearable={true} noOptionsMessage={() => t("select.noOptions")} maxMenuHeight={200}
+																			placeholder={t("transactionsPage.filters.none")} value={rekeningen_filter} />
 																	</FormControl>
 																</HStack>
 															</Stack>
@@ -355,17 +365,17 @@ const Transactions = () => {
 															label: organisatie.naam,
 														}));
 														return (
-															<Stack direction={"column"} spacing={5} flex={1}  paddingLeft={15}>
+															<Stack direction={"column"} spacing={5} flex={1} paddingLeft={15}>
 																<HStack>
 																	<FormControl as={Stack} flex={1}>
 																		<FormLabel>{t("transactionsPage.filters.organisatie")}</FormLabel>
-																		<Select  onChange={onSelectOrganisatie} options={organisaties.map(organisatie => ({
+																		<Select onChange={onSelectOrganisatie} options={organisaties.map(organisatie => ({
 																			key: organisatie.id,
 																			value: organisatie.id,
 																			label: organisatie.naam,
 																		}))}
-																		styles={reactSelectStyles.default} isMulti isClearable={true} noOptionsMessage={() => t("select.noOptions")} maxMenuHeight={200}
-																		placeholder={t("transactionsPage.filters.none")} value={organisatie_filter} />
+																			styles={reactSelectStyles.default} isMulti isClearable={true} noOptionsMessage={() => t("select.noOptions")} maxMenuHeight={200}
+																			placeholder={t("transactionsPage.filters.none")} value={organisatie_filter} />
 																	</FormControl>
 																</HStack>
 															</Stack>
@@ -373,30 +383,30 @@ const Transactions = () => {
 													}} />
 												</HStack>
 												<Queryable query={$burgers} children={data => {
-														const burgers: Burger[] = data.burgers || [];
-														const burgers_filter = burgers.filter(b => filterBurgerIds.includes(b.id!)).map(b => ({
-															key: b.id,
-															value: b.id,
-															label: formatBurgerName(b)   + " " + getBurgerHhbId(b),
-														}));
-														return (
-															<Stack direction={"column"} spacing={5} flex={1}>
-																<HStack>
-																	<FormControl as={Stack} flex={1} paddingBottom={15}>
-																		<FormLabel>{t("transactionsPage.filters.burgers")}</FormLabel>
-																		<Select  onChange={onSelectBurger} options={burgers.map(b => ({
-																			key: b.id,
-																			value: b.id,
-																			label: formatBurgerName(b) + " " + getBurgerHhbId(b),
-																		}))}
+													const burgers: Burger[] = data.burgers || [];
+													const burgers_filter = burgers.filter(b => filterBurgerIds.includes(b.id!)).map(b => ({
+														key: b.id,
+														value: b.id,
+														label: formatBurgerName(b) + " " + getBurgerHhbId(b),
+													}));
+													return (
+														<Stack direction={"column"} spacing={5} flex={1}>
+															<HStack>
+																<FormControl as={Stack} flex={1} paddingBottom={15}>
+																	<FormLabel>{t("transactionsPage.filters.burgers")}</FormLabel>
+																	<Select onChange={onSelectBurger} options={burgers.map(b => ({
+																		key: b.id,
+																		value: b.id,
+																		label: formatBurgerName(b) + " " + getBurgerHhbId(b),
+																	}))}
 																		isDisabled={blockBookedFilters()}
 																		styles={reactSelectStyles.default} isMulti isClearable={true} noOptionsMessage={() => t("select.noOptions")} maxMenuHeight={200}
 																		placeholder={blockBookedFilters() ? t("transactionsPage.filters.none") : t("charts.optionAllBurgers")} value={burgers_filter} />
-																	</FormControl>
-																</HStack>
-															</Stack>
-														);
-													}} />
+																</FormControl>
+															</HStack>
+														</Stack>
+													);
+												}} />
 												<HStack paddingBottom={15}>
 													<FormControl>
 														<FormLabel>{t("transactionsPage.filters.amountFrom")}</FormLabel>
@@ -413,7 +423,7 @@ const Transactions = () => {
 															</NumberInput>
 														</InputGroup>
 													</FormControl>
-													<FormControl  paddingLeft={15}>
+													<FormControl paddingLeft={15}>
 														<FormLabel>{t("transactionsPage.filters.amountTo")}</FormLabel>
 														<InputGroup>
 															<InputLeftAddon>€</InputLeftAddon>
@@ -429,34 +439,34 @@ const Transactions = () => {
 														</InputGroup>
 													</FormControl>
 												</HStack>
-												{ invalidBedrag() ?
+												{invalidBedrag() ?
 													<Tag colorScheme={"red"} size={"md"} variant={"subtle"}>
 														<Icon as={WarningTwoIcon} />
 														{t("transactionsPage.filters.amountwarning")}
-													</Tag>: ""
+													</Tag> : ""
 												}
 												<FormLabel paddingBottom={"10px"}>
 													<FormLabel>
 														{t("transactionsPage.filters.description")}
 													</FormLabel>
 													<form onSubmit={onAddzoekterm}>
-															<InputGroup size={"md"}>
-																<Input id={"zoektermen"} onChange={e => setZoekterm(e.target.value)} value={zoekterm || ""} />
-																<InputRightElement width={"auto"} pr={1}>
-																	<Button type={"submit"} size={"sm"} colorScheme={"primary"}>Zoeken</Button>
-																</InputRightElement>
-															</InputGroup>
-															<ZoektermenList zoektermen={zoektermen} onClickDelete={(zoekterm: string) => onDeleteZoekterm(zoekterm)} />
+														<InputGroup size={"md"}>
+															<Input id={"zoektermen"} onChange={e => setZoekterm(e.target.value)} value={zoekterm || ""} />
+															<InputRightElement width={"auto"} pr={1}>
+																<Button type={"submit"} size={"sm"} colorScheme={"primary"}>Zoeken</Button>
+															</InputRightElement>
+														</InputGroup>
+														<ZoektermenList zoektermen={zoektermen} onClickDelete={(zoekterm: string) => onDeleteZoekterm(zoekterm)} />
 													</form>
 												</FormLabel>
 											</Stack>
 										</Collapse>
 										<Button leftIcon={isOpen ? <TriangleUpIcon /> : <TriangleDownIcon />} colorScheme={"blue"} variant={"outline"} onClick={onToggle}>{t("transactionsPage.filters.extensive")}</Button>
-										{extraFiltersUsed() && !isOpen?
+										{extraFiltersUsed() && !isOpen ?
 											<Tag colorScheme={"red"} size={"md"} variant={"subtle"}>
 												<Icon as={WarningTwoIcon} />
 												{t("transactionsPage.filters.active")}
-											</Tag>: ""}
+											</Tag> : ""}
 									</Stack>
 								</Stack>
 							</Stack>
@@ -466,10 +476,10 @@ const Transactions = () => {
 										{transacties.length > 0 ? (
 											<HStack>
 												<Text>{t("transactionsPage.filters.count")}: </Text>
-												<Box width={30}> {$transactions.loading ? <Spinner size={"xs"}/> : total}</Box>
+												<Box width={30}> {$transactions.loading ? <Spinner size={"xs"} /> : total}</Box>
 											</HStack>
 										) : (
-											<Text/>
+											<Text />
 										)}
 										<HStack>
 											<Text>{t("transactionsPage.timeUpdated")}: {d(timeLastUpdate).format("HH:mm:ss")}</Text>
@@ -478,8 +488,8 @@ const Transactions = () => {
 												size={"xs"}
 												onClick={() => {
 													$transactions.refetch();
-												} } aria-label={"reload"}
-												>
+												}} aria-label={"reload"}
+											>
 												reload
 											</IconButton>
 										</HStack>

@@ -57,7 +57,7 @@ const CreateBurger = () => {
 
 			const {id} = result?.data?.createBurger?.burger || {};
 			if (id) {
-				navigate(AppRoutes.ViewBurger(String(id)));
+				navigate(AppRoutes.ViewBurger(String(id)), {replace: true});
 			}
 		}).catch(handleSaveBurgerErrors(t));
 	};

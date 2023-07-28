@@ -20,7 +20,10 @@ def test_rekeningen_post_new_rekening(client, session):
     )
     assert response.status_code == 201
     rekening_dict["id"] = 1
-    assert response.json["data"] == rekening_dict
+    responseJson = response.json["data"]
+    responseJson.pop('uuid')
+
+    assert responseJson == rekening_dict
     assert session.query(Rekening).count() == 1
 
 

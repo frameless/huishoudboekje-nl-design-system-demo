@@ -1,4 +1,4 @@
-import {Text, Tabs, Stack, Tab, TabPanels, TabPanel} from "@chakra-ui/react";
+import {Text, Tabs, Stack, Tab, TabPanels, TabPanel, Box} from "@chakra-ui/react";
 import {useTranslation} from "react-i18next";
 import {BurgerRapportage, Saldo as startSaldo, useGetBurgerRapportagesQuery, useGetSaldoClosestToQuery} from "../../generated/graphql";
 import Queryable from "../../utils/Queryable";
@@ -7,8 +7,9 @@ import SectionContainer from "../shared/SectionContainer";
 import InkomstenUitgaven from "./InkomstenUitgaven";
 import d from "../../utils/dayjs";
 import BalanceTable from "./BalanceTable";
-import { calculateOffset, getStartingSaldo } from "./Aggregator";
+import { Granularity, calculateOffset, getStartingSaldo } from "./Aggregator";
 import { MathOperation, floatMathOperation } from "../../utils/things";
+import { useState } from "react";
 
 
 type RapportageComponentParams = {burgerIds: number[], startDate: Date, endDate: Date, rubrieken: number[]};
@@ -49,40 +50,50 @@ const RapportageComponent: React.FC<RapportageComponentParams> = ({burgerIds, st
 		)
 	}
 
+
+	const [granularity, setGranularity] = useState<Granularity>(Granularity.Weekly);
+	const granularityOptions = {
+		[Granularity.Daily]: t("granularity.daily"),
+		[Granularity.Weekly]: t("granularity.weekly"),
+		[Granularity.Monthly]: t("granularity.monthly"),
+	};
+
 	return (
 		<Queryable query={$rapportage} children={data => {
-			if (data.burgerRapportages === null) {
-				return (
-					<Text color={"red"}>{t("reports.noData")}</Text>
-				);
-			}
-			const reports: [BurgerRapportage] = data.burgerRapportages
-
+			const reports: [BurgerRapportage] = data.burgerRapportages || []
 			return (
 				<Queryable query={$saldoStart} children={data => {
 					const startSaldos: [startSaldo] = data.saldoClosest
 					const offsets = calculateOffset(d(startDate), reports);
 					const startSaldo = floatMathOperation(getStartingSaldo(startSaldos), offsets.TotalOffset, 2 , MathOperation.Plus);
 					return (
-						<Stack className="do-not-print">
-							<SectionContainer>
-								<Tabs isLazy variant={"solid"} align={"start"} colorScheme={"primary"}>
-									<Stack direction={"row"} spacing={2}>
-										<Tab>{t("charts.saldo.title")}</Tab>
-										<Tab>{t("charts.inkomstenUitgaven.title")}</Tab>
-									</Stack>
-									<TabPanels>
-										<TabPanel>
-											<Saldo transactions={reports} startSaldo={startSaldo} />
-										</TabPanel>
-										<TabPanel>
-											<InkomstenUitgaven transactions={reports} />
-										</TabPanel>
-									</TabPanels>
-								</Tabs>
-							</SectionContainer>
-							<BalanceTable transactions={reports} startDate={d(startDate)} endDate={d(endDate)} startSaldo={startSaldo} offsets={offsets} />
-						</Stack>
+						<Box>
+							<Stack className="do-not-print">
+								<SectionContainer>
+									<Tabs isLazy variant={"solid"} align={"start"} colorScheme={"primary"}>
+										<Stack direction={"row"} spacing={2}>
+											<Tab>{t("balance")}</Tab>
+											<Tab>{t("charts.saldo.title")}</Tab>
+											<Tab>{t("charts.inkomstenUitgaven.title")}</Tab>
+										</Stack>
+										<TabPanels>
+											<TabPanel className="do-not-print">
+												<BalanceTable transactions={reports} startDate={d(startDate)} endDate={d(endDate)} startSaldo={startSaldo} offsets={offsets} />
+											</TabPanel>
+											<TabPanel>
+												<Saldo transactions={reports} startSaldo={startSaldo} granularity={granularity} setGranularity={setGranularity} granularityOptions={granularityOptions}/>
+											</TabPanel>
+											<TabPanel>
+												<InkomstenUitgaven transactions={reports} granularity={granularity} setGranularity={setGranularity} granularityOptions={granularityOptions}/>
+											</TabPanel>
+										</TabPanels>
+									</Tabs>
+								</SectionContainer>
+							</Stack>
+							<Box className="only-show-on-print print">
+								<BalanceTable transactions={reports} startDate={d(startDate)} endDate={d(endDate)} startSaldo={startSaldo} offsets={offsets} />
+							</Box>
+						</Box>
 					)
 				}} />
 			)

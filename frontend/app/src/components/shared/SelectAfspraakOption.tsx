@@ -4,6 +4,7 @@ import React from "react";
 import {useTranslation} from "react-i18next";
 import {Afspraak} from "../../generated/graphql";
 import {currencyFormat2, formatBurgerName, truncateText} from "../../utils/things";
+import d from "../../utils/dayjs";
 
 type SelectAfspraakOptionProps = TableRowProps & {
 	afspraak: Afspraak,
@@ -14,11 +15,20 @@ const SelectAfspraakOption: React.FC<SelectAfspraakOptionProps> = ({afspraak, is
 	const {t} = useTranslation();
 	const zoektermen: string[] = afspraak.zoektermen || [];
 
+	function isAfspraakActive(afspraak: Afspraak) {
+		if (afspraak.validThrough != undefined) {
+			if (d(afspraak.validThrough) < d()) {
+				return false
+			}
+		}
+		return true
+	}
+
 	return (
 		<Tr _hover={{
 			cursor: "pointer",
 			bg: "gray.100",
-		}} {...props}>
+		}} color={!isAfspraakActive(afspraak) ? "gray.400" : undefined} {...props}>
 			<Td>
 				<Text>{afspraak.burger ? formatBurgerName(afspraak.burger) : t("unknownBurger")}</Text>
 			</Td>
@@ -43,7 +53,7 @@ const SelectAfspraakOption: React.FC<SelectAfspraakOptionProps> = ({afspraak, is
 			<Td isNumeric>
 				<Stack direction={"row"} justifyContent={"space-between"}>
 					<Text>&euro;</Text>
-					<Text>{currencyFormat2(false).format(afspraak.bedrag * (afspraak.credit ? 1 : -1))}</Text>
+					<Text color={afspraak.credit ? undefined : isAfspraakActive(afspraak) ? "red.500" : "red.200"}>{currencyFormat2(false).format(afspraak.bedrag * (afspraak.credit ? 1 : -1))}</Text>
 				</Stack>
 			</Td>
 		</Tr>

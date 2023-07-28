@@ -118,20 +118,20 @@ const AfspraakBetaalinstructieForm: React.FC<AfspraakBetaalinstructieProps> = ({
 	];
 
 	const getDayOfWeekFromStartDate = () => {
-		switch(form.startDate?.getDay()){
-			case 1: 
+		switch (form.startDate?.getDay()) {
+			case 1:
 				return [DayOfWeek.Monday]
-			case 2: 
+			case 2:
 				return [DayOfWeek.Tuesday]
-			case 3: 
+			case 3:
 				return [DayOfWeek.Wednesday]
-			case 4: 
+			case 4:
 				return [DayOfWeek.Thursday]
-			case 5: 
+			case 5:
 				return [DayOfWeek.Friday]
-			case 6: 
+			case 6:
 				return [DayOfWeek.Saturday]
-			case 0: 
+			case 0:
 				return [DayOfWeek.Sunday]
 			default:
 				return undefined
@@ -200,7 +200,11 @@ const AfspraakBetaalinstructieForm: React.FC<AfspraakBetaalinstructieProps> = ({
 									<DatePicker
 										dateFormat={"dd-MM-yyyy"}
 										selected={form.startDate}
-										onChange={(value: Date) => updateForm("startDate", value)}
+										onChange={(value: Date) => {
+											if (value) {
+												updateForm("startDate", value)
+											}
+										}}
 										customInput={<Input type={"text"} />}
 										isClearable={true}
 									/>
@@ -212,7 +216,11 @@ const AfspraakBetaalinstructieForm: React.FC<AfspraakBetaalinstructieProps> = ({
 									<DatePicker
 										dateFormat={"dd-MM-yyyy"}
 										selected={form.endDate ? d(form.endDate).endOf("day").toDate() : null}
-										onChange={(value: Date) => updateForm("endDate", value)}
+										onChange={(value: Date) => {
+											if (value) {
+												updateForm("endDate", value)
+											}
+										}}
 										customInput={<Input type={"text"} />}
 										isClearable={true}
 									/>
@@ -239,7 +247,7 @@ const AfspraakBetaalinstructieForm: React.FC<AfspraakBetaalinstructieProps> = ({
 												const allMonths = Array.from({length: 12}).map((x, i) => i + 1);
 												setForm(data => ({
 													...data,
-													byDay: val?.value === RepeatType.Week ? getDayOfWeekFromStartDate() : undefined, 
+													byDay: val?.value === RepeatType.Week ? getDayOfWeekFromStartDate() : undefined,
 													byMonth: val?.value === RepeatType.Month ? allMonths : undefined,
 													byMonthDay: val?.value === RepeatType.Month ? getDayOfMonth() : undefined,
 												}));

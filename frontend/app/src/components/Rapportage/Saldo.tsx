@@ -1,16 +1,18 @@
-import {BoxProps, Heading, Spinner, Stack, Text, useToken} from "@chakra-ui/react";
+import {BoxProps, FormControl, HStack, Spinner, Stack, Text, useToken} from "@chakra-ui/react";
 import React, {useContext} from "react";
 import {useTranslation} from "react-i18next";
 import ChakraChart, {chartProps} from "../../config/theme/custom/Chart";
 import {BurgerRapportage, Saldo as StartSaldo} from "../../generated/graphql";
 import {prepareChartData} from "../../utils/things";
-import {createChartAggregation, getStartingSaldo} from "./Aggregator";
+import {Granularity, createChartAggregation} from "./Aggregator";
 import {RapportageContext} from "./context";
+import RadioButtonGroup from "../shared/RadioButtonGroup";
 
-const Saldo: React.FC<BoxProps & {transactions: BurgerRapportage[], startSaldo: number}> = ({transactions, startSaldo}) => {
+const Saldo: React.FC<BoxProps & {transactions: BurgerRapportage[], startSaldo: number, granularity: Granularity, setGranularity: (value) => void, granularityOptions}> = ({transactions, startSaldo, granularity, setGranularity, granularityOptions}) => {
 	const {t} = useTranslation();
 	const [colorSaldo] = useToken("colors", ["blue.300"]);
-	const {startDate, endDate, granularity} = useContext(RapportageContext);
+	const {startDate, endDate} = useContext(RapportageContext);
+
 
 	const aggregation = createChartAggregation(startDate, transactions, granularity);
 
@@ -36,10 +38,19 @@ const Saldo: React.FC<BoxProps & {transactions: BurgerRapportage[], startSaldo: 
 		...chartData.length > 0 ? chartData : [[0, 0]],
 	];
 
+
 	return (
-		<Stack>
-			<Heading size={"md"}>{t("charts.saldo.title")}</Heading>
-			<Text fontSize={"md"} color={"gray.500"}>{t("charts.saldo.helperText")}</Text>
+		<Stack height={"600px"}>
+			<HStack justifyContent={"space-between"}>
+				<Stack>
+					<Text fontSize={"md"} color={"gray.500"}>{t("charts.saldo.helperText")}</Text>
+				</Stack>
+				<Stack>
+					<FormControl paddingRight={50}>
+						<RadioButtonGroup name={"granularity"} onChange={setGranularity}  defaultValue={Granularity.Weekly} value={granularity} options={granularityOptions} />
+					</FormControl>
+				</Stack>
+			</HStack>
 
 			<ChakraChart
 				height={"500px"}

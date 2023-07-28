@@ -41,7 +41,7 @@ const EditOrganisatie = () => {
 			toast({
 				success: t("messages.organisaties.updateSuccessMessage"),
 			});
-			navigate(AppRoutes.Organisatie(id));
+			navigate(AppRoutes.Organisatie(id), {replace: true});
 		}).catch(handleSaveOrganisatieErrors);
 	};
 

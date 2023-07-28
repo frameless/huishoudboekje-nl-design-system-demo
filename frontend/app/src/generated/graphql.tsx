@@ -2192,7 +2192,7 @@ export type GetBurgerDetailsQueryVariables = Exact<{
 }>;
 
 
-export type GetBurgerDetailsQuery = { burger?: { id?: number, voorletters?: string, voornamen?: string, achternaam?: string, huishouden?: { id?: number }, afspraken?: Array<{ id?: number, bedrag?: any, credit?: boolean, omschrijving?: string, validThrough?: any, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string } }> } };
+export type GetBurgerDetailsQuery = { burger?: { id?: number, voorletters?: string, voornamen?: string, achternaam?: string, huishouden?: { id?: number }, afspraken?: Array<{ id?: number, bedrag?: any, credit?: boolean, omschrijving?: string, validThrough?: any, betaalinstructie?: { byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string }, afdeling?: { naam?: string, organisatie?: { naam?: string } } }> } };
 
 export type GetBurgerPersonalDetailsQueryVariables = Exact<{
   id: Scalars['Int'];
@@ -2368,7 +2368,7 @@ export type GetSearchAfsprakenQueryVariables = Exact<{
 }>;
 
 
-export type GetSearchAfsprakenQuery = { searchAfspraken?: { afspraken?: Array<{ id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, burger?: { id?: number, voornamen?: string, voorletters?: string, achternaam?: string } }>, pageInfo?: { count?: number, limit?: number, start?: number } } };
+export type GetSearchAfsprakenQuery = { searchAfspraken?: { afspraken?: Array<{ id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, validFrom?: any, validThrough?: any, burger?: { id?: number, voornamen?: string, voorletters?: string, achternaam?: string } }>, pageInfo?: { count?: number, limit?: number, start?: number } } };
 
 export type GetSignalenAndBurgersQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -2385,7 +2385,7 @@ export type GetSimilarAfsprakenQueryVariables = Exact<{
 }>;
 
 
-export type GetSimilarAfsprakenQuery = { afspraken?: Array<{ id?: number, similarAfspraken?: Array<{ id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, burger?: { voorletters?: string, voornamen?: string, achternaam?: string } }> }> };
+export type GetSimilarAfsprakenQuery = { afspraken?: Array<{ id?: number, similarAfspraken?: Array<{ id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, validThrough?: any, validFrom?: any, burger?: { voorletters?: string, voornamen?: string, achternaam?: string } }> }> };
 
 export type GetSimpleBurgersQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -2397,7 +2397,7 @@ export type GetTransactieQueryVariables = Exact<{
 }>;
 
 
-export type GetTransactieQuery = { bankTransaction?: { id?: number, informationToAccountOwner?: string, statementLine?: string, bedrag?: any, isCredit?: boolean, tegenRekeningIban?: string, transactieDatum?: any, tegenRekening?: { iban?: string, rekeninghouder?: string }, journaalpost?: { id?: number, isAutomatischGeboekt?: boolean, afspraak?: { id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, burger?: { voornamen?: string, voorletters?: string, achternaam?: string, id?: number }, rubriek?: { id?: number, naam?: string } }, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } }, suggesties?: Array<{ id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, burger?: { voornamen?: string, voorletters?: string, achternaam?: string, id?: number } }> }, rubrieken?: Array<{ id?: number, naam?: string, grootboekrekening?: { id: string } }> };
+export type GetTransactieQuery = { bankTransaction?: { id?: number, informationToAccountOwner?: string, statementLine?: string, bedrag?: any, isCredit?: boolean, tegenRekeningIban?: string, transactieDatum?: any, tegenRekening?: { iban?: string, rekeninghouder?: string }, journaalpost?: { id?: number, isAutomatischGeboekt?: boolean, afspraak?: { id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, burger?: { voornamen?: string, voorletters?: string, achternaam?: string, id?: number }, rubriek?: { id?: number, naam?: string } }, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } }, suggesties?: Array<{ id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, validFrom?: any, validThrough?: any, burger?: { voornamen?: string, voorletters?: string, achternaam?: string, id?: number } }> }, rubrieken?: Array<{ id?: number, naam?: string, grootboekrekening?: { id: string } }> };
 
 export type GetTransactionItemFormDataQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -5032,10 +5032,25 @@ export const GetBurgerDetailsDocument = gql`
       credit
       omschrijving
       validThrough
+      betaalinstructie {
+        byDay
+        byMonth
+        byMonthDay
+        exceptDates
+        repeatFrequency
+        startDate
+        endDate
+      }
       tegenRekening {
         id
         iban
         rekeninghouder
+      }
+      afdeling {
+        naam
+        organisatie {
+          naam
+        }
       }
     }
   }
@@ -6175,6 +6190,8 @@ export const GetSearchAfsprakenDocument = gql`
       bedrag
       credit
       zoektermen
+      validFrom
+      validThrough
       burger {
         id
         voornamen
@@ -6331,6 +6348,8 @@ export const GetSimilarAfsprakenDocument = gql`
       bedrag
       credit
       zoektermen
+      validThrough
+      validFrom
       burger {
         voorletters
         voornamen
@@ -6457,6 +6476,8 @@ export const GetTransactieDocument = gql`
       bedrag
       credit
       zoektermen
+      validFrom
+      validThrough
       burger {
         voornamen
         voorletters
