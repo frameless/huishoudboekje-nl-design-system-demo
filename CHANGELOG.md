@@ -1,5 +1,13 @@
 # Huishoudboekje Changelog
 
+## 1.9.6
+
+### Patch Changes
+
+- 48a9c16a: Betaalisnctructies now shows totaalbedrag
+- 76740df6: Exports now allow for custom payment dates to allow for payments before the weekend/bankholidays. This due to customary practices of paying before the weekend if a payment day would be in the weekend and banks not processing payments during bankholidays
+- 8bca2057: SEPA Exports now correctly removes transactions where the afspraak has a startdate older then the transaction day being calculated
+
 ## 1.9.5
 
 ### Patch Changes
