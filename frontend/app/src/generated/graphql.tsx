@@ -618,6 +618,7 @@ export type Export = {
   sha256?: Maybe<Scalars['String']>;
   startDatum?: Maybe<Scalars['Date']>;
   timestamp?: Maybe<Scalars['DateTime']>;
+  verwerkingDatum?: Maybe<Scalars['Date']>;
   xmldata?: Maybe<Scalars['String']>;
 };
 
@@ -932,6 +933,7 @@ export type RootMutationCreateCustomerStatementMessageArgs = {
 export type RootMutationCreateExportOverschrijvingenArgs = {
   eindDatum?: InputMaybe<Scalars['String']>;
   startDatum?: InputMaybe<Scalars['String']>;
+  verwerkingDatum?: InputMaybe<Scalars['String']>;
 };
 
 
@@ -1723,7 +1725,7 @@ export type BurgerFragment = { id?: number, bsn?: number, email?: string, telefo
 
 export type CustomerStatementMessageFragment = { id?: number, filename?: string, uploadDate?: any, accountIdentification?: string, closingAvailableFunds?: number, closingBalance?: number, forwardAvailableBalance?: number, openingBalance?: number, relatedReference?: string, sequenceNumber?: string, transactionReferenceNumber?: string };
 
-export type ExportFragment = { id?: number, naam?: string, timestamp?: any, startDatum?: any, eindDatum?: any, sha256?: string, overschrijvingen?: Array<{ id?: number, bedrag?: any }> };
+export type ExportFragment = { id?: number, naam?: string, timestamp?: any, startDatum?: any, eindDatum?: any, verwerkingDatum?: any, sha256?: string, overschrijvingen?: Array<{ id?: number, bedrag?: any }> };
 
 export type GebruikersactiviteitFragment = { id?: number, timestamp?: any, gebruikerId?: string, action?: string, entities?: Array<{ entityType?: string, entityId?: string, huishouden?: { id?: number, burgers?: Array<{ id?: number, voorletters?: string, voornamen?: string, achternaam?: string }> }, burger?: { id?: number, voorletters?: string, voornamen?: string, achternaam?: string }, organisatie?: { id?: number, naam?: string, kvknummer?: string, vestigingsnummer?: string }, afspraak?: { id?: number, burger?: { id?: number, voornamen?: string, voorletters?: string, achternaam?: string }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string } } }, rekening?: { id?: number, iban?: string, rekeninghouder?: string }, customerStatementMessage?: { id?: number, filename?: string, bankTransactions?: Array<{ id?: number }> }, configuratie?: { id?: string, waarde?: string }, rubriek?: { id?: number, naam?: string }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, naam?: string } }, postadres?: { id?: string }, export?: { id?: number, naam?: string } }>, meta?: { userAgent?: string, ip?: Array<string>, applicationVersion?: string } };
 
@@ -1818,6 +1820,7 @@ export type CreateCustomerStatementMessageMutation = { createCustomerStatementMe
 export type CreateExportOverschrijvingenMutationVariables = Exact<{
   startDatum: Scalars['String'];
   eindDatum: Scalars['String'];
+  verwerkingDatum?: InputMaybe<Scalars['String']>;
 }>;
 
 
@@ -2261,7 +2264,7 @@ export type GetCsmsQuery = { customerStatementMessages?: Array<{ id?: number, fi
 export type GetExportsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetExportsQuery = { exports?: Array<{ id?: number, naam?: string, timestamp?: any, startDatum?: any, eindDatum?: any, sha256?: string, overschrijvingen?: Array<{ id?: number, bedrag?: any }> }> };
+export type GetExportsQuery = { exports?: Array<{ id?: number, naam?: string, timestamp?: any, startDatum?: any, eindDatum?: any, verwerkingDatum?: any, sha256?: string, overschrijvingen?: Array<{ id?: number, bedrag?: any }> }> };
 
 export type GetGebeurtenissenQueryVariables = Exact<{
   limit: Scalars['Int'];
@@ -2441,6 +2444,7 @@ export const ExportFragmentDoc = gql`
   timestamp
   startDatum
   eindDatum
+  verwerkingDatum
   sha256
   overschrijvingen {
     id
@@ -3120,8 +3124,12 @@ export type CreateCustomerStatementMessageMutationHookResult = ReturnType<typeof
 export type CreateCustomerStatementMessageMutationResult = Apollo.MutationResult<CreateCustomerStatementMessageMutation>;
 export type CreateCustomerStatementMessageMutationOptions = Apollo.BaseMutationOptions<CreateCustomerStatementMessageMutation, CreateCustomerStatementMessageMutationVariables>;
 export const CreateExportOverschrijvingenDocument = gql`
-    mutation createExportOverschrijvingen($startDatum: String!, $eindDatum: String!) {
-  createExportOverschrijvingen(startDatum: $startDatum, eindDatum: $eindDatum) {
+    mutation createExportOverschrijvingen($startDatum: String!, $eindDatum: String!, $verwerkingDatum: String) {
+  createExportOverschrijvingen(
+    startDatum: $startDatum
+    eindDatum: $eindDatum
+    verwerkingDatum: $verwerkingDatum
+  ) {
     ok
     export {
       id
@@ -3146,6 +3154,7 @@ export type CreateExportOverschrijvingenMutationFn = Apollo.MutationFunction<Cre
  *   variables: {
  *      startDatum: // value for 'startDatum'
  *      eindDatum: // value for 'eindDatum'
+ *      verwerkingDatum: // value for 'verwerkingDatum'
  *   },
  * });
  */

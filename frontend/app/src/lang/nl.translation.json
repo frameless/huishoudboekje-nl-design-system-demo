@@ -522,7 +522,12 @@
   "zoektermSuggesties": "Suggesties",
   "exports": {
     "period": "Periode",
-    "dateCreated": "Aanmaakdatum"
+    "dateCreated": "Aanmaakdatum",
+    "paymentDate": "Verwerkingsdatum",
+    "invalidPaymentDate": "Selecteer een geldige verwerkingsdatum (van {{startDate}} t/m {{endDate}})",
+    "individualPaymentDate": "Op datum betaalinstructie",
+    "useCustomPaymentDate": "Aangepaste verwerkingsdatum",
+    "customPaymentInformation": "Een aangepaste verwerkingsdatum mag maximaal een week in het verleden (vanaf vandaag), en een week na de einddatum van de periode"
   },
   "periodiekSelector": {
     "periodiek": "Periodiek",

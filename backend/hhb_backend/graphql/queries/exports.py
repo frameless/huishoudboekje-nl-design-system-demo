@@ -31,7 +31,7 @@ class ExportsQuery:
         Export,
         ids=graphene.List(graphene.Int, default_value=None),
         start_datum=graphene.Date(),
-        eind_datum=graphene.Date(),
+        eind_datum=graphene.Date()
     )
 
     @classmethod
@@ -47,7 +47,8 @@ class ExportsQuery:
         AuditLogging.create(
             action=info.field_name,
             entities=[
-                GebruikersActiviteitEntity(entityType="export", entityId=export.id)
+                GebruikersActiviteitEntity(
+                    entityType="export", entityId=export.id)
                 for export in result
             ] if ids or (start_datum and eind_datum) else []
         )

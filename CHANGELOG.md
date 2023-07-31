@@ -1,5 +1,21 @@
 # Huishoudboekje Changelog
 
+## 1.9.6
+
+### Patch Changes
+
+- 48a9c16a: Betaalisnctructies now shows totaalbedrag
+- 76740df6: Exports now allow for custom payment dates to allow for payments before the weekend/bankholidays. This due to customary practices of paying before the weekend if a payment day would be in the weekend and banks not processing payments during bankholidays
+- 8bca2057: SEPA Exports now correctly removes transactions where the afspraak has a startdate older then the transaction day being calculated
+
+## 1.9.5
+
+### Patch Changes
+
+- Fixed saldo's not updating properly due to incorrect table auto increment
+- Afspraken now allows for payment amounts between (and including) 0 and 1
+- 6e21c235: Changed batch to true so that transactions are batched, set BtchBookg = false so that transactions are individual in MT940"
+
 ## 1.9.4
 
 Deze versie omvat verbeteringen aan functionaliteit bij het navigeren in de context van een burger, het exporteren van gegegvens, het beheren van afspraken, betaalinstructies en alarmen.

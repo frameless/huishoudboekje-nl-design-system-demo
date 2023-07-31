@@ -35,12 +35,25 @@ def get_config_value(config_id) -> str:
     return hhb_dataloader().configuraties.load_one(config_id)["waarde"]
 
 
+def filter_future_overschrijvingen_on_afspraak_startdate_before_payment_date(future_overschrijvingen, afspraken):
+    count = 0
+    for overschrijving in future_overschrijvingen:
+        afspraak = next(
+            filter(lambda x: x['id'] == overschrijving['afspraak_id'], afspraken), None)
+        if afspraak is not None:
+            if to_date(afspraak['valid_from']) > to_date(overschrijving['datum']):
+                future_overschrijvingen.pop(count)
+        count += 1
+    return future_overschrijvingen
+
+
 class CreateExportOverschrijvingen(graphene.Mutation):
     """Mutatie om een betaalinstructie te genereren."""
 
     class Arguments:
         startDatum = graphene.String()
         eindDatum = graphene.String()
+        verwerkingDatum = graphene.String()
 
     ok = graphene.Boolean()
     export = graphene.Field(lambda: graphene_export.Export)
@@ -51,11 +64,16 @@ class CreateExportOverschrijvingen(graphene.Mutation):
         logging.info(f"Creating export file")
         start_datum_str = kwargs.pop("startDatum")
         eind_datum_str = kwargs.pop("eindDatum")
+        verwerking_datum_str = kwargs.get(
+            "verwerkingDatum", None)
         start_datum = to_date(start_datum_str)
         eind_datum = to_date(eind_datum_str)
+        verwerking_datum = to_date(
+            verwerking_datum_str) if verwerking_datum_str is not None else None
 
         # Get all afspraken with the start and end date.
-        afspraken = hhb_dataloader().afspraken.in_date_range(start_datum_str, eind_datum_str)
+        afspraken = hhb_dataloader().afspraken.in_date_range(
+            start_datum_str, eind_datum_str)
         afspraken = list(filter(lambda o: o.betaalinstructie, afspraken))
         afspraken_ids = [afspraak_result.id for afspraak_result in afspraken]
 
@@ -68,7 +86,7 @@ class CreateExportOverschrijvingen(graphene.Mutation):
             planner_input = PlannedOverschrijvingenInput(
                 afspraak.betaalinstructie,
                 afspraak.bedrag,
-                afspraak.id,
+                afspraak.id
             )
             future_overschrijvingen += list(
                 get_planned_overschrijvingen(
@@ -88,6 +106,10 @@ class CreateExportOverschrijvingen(graphene.Mutation):
                     future_overschrijvingen,
                 )
             )
+
+        if future_overschrijvingen:
+            filter_future_overschrijvingen_on_afspraak_startdate_before_payment_date(
+                future_overschrijvingen, afspraken)
 
         if not future_overschrijvingen:
             raise GraphQLError(
@@ -111,6 +133,7 @@ class CreateExportOverschrijvingen(graphene.Mutation):
 
         today = datetime.now(tz=tz.tzlocal()).replace(microsecond=0)
         xml_string = create_export_string(
+            verwerking_datum,
             future_overschrijvingen,
             afspraken,
             tegen_rekeningen,
@@ -124,6 +147,7 @@ class CreateExportOverschrijvingen(graphene.Mutation):
                     "timestamp": today.isoformat(),
                     "start_datum": start_datum_str,
                     "eind_datum": eind_datum_str,
+                    "verwerking_datum": verwerking_datum_str,
                     "xmldata": xml_string,
                     "sha256": hashlib.sha256(xml_string.encode()).hexdigest()
                 }
@@ -131,7 +155,8 @@ class CreateExportOverschrijvingen(graphene.Mutation):
             headers={"Content-type": "application/json"},
         )
         if export_response.status_code != 201:
-            raise GraphQLError(f"Upstream API responded: {export_response.json()}")
+            raise GraphQLError(
+                f"Upstream API responded: {export_response.json()}")
         export_object = export_response.json()["data"]
 
         # Overschrijvingen wegschrijven in db + export object
@@ -152,7 +177,8 @@ class CreateExportOverschrijvingen(graphene.Mutation):
         AuditLogging.create(
             action=info.field_name,
             entities=[
-                GebruikersActiviteitEntity(entityType="export", entityId=export_object["id"]),
+                GebruikersActiviteitEntity(
+                    entityType="export", entityId=export_object["id"]),
             ],
             after=dict(export=export_object)
         )
