@@ -57,7 +57,9 @@ describe("Signal CRUD (operations)", () => {
 		it("should update the Signal", async () => {
 			const newSignal: Omit<Signal, "id"> = {
 				alarmId: "d9c00acb-8d04-4cf0-9be4-061f33b3357d",
+				alarmUuid: "d9c00acb-8d04-4cf0-9be4-061f33b3357d",
 				banktransactieIds: [],
+				banktransactieUuids: [],
 				isActive: true,
 				type: "default",
 				actions: [],
