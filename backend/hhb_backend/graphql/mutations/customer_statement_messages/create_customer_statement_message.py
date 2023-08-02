@@ -173,7 +173,7 @@ def process_transactions(csm_id, transactions):
             transactie_datum=str(t.data["date"].strftime("%Y-%m-%d")),
             tegen_rekening=retrieve_iban(t.data),
             is_credit=t.data["status"] == "C",
-            bedrag=int(Decimal(str(t.data["amount"].amount)) * 100)
+            bedrag=int(t.data["amount"].amount * 100)
         )
         bank_transactions.append(transaction_model)
 

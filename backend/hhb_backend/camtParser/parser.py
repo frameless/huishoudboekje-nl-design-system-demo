@@ -7,6 +7,7 @@
 ### https://github.com/OCA/bank-statement-import/blob/14.0/account_statement_import_camt/models/parser.py
 
 
+from decimal import Decimal
 import re
 from lxml import etree
 from datetime import datetime
@@ -33,7 +34,7 @@ class CamtParser():
                 "./ns:AmtDtls/ns:TxAmt/ns:Amt", namespaces={"ns": ns}
             )
         if amount_node:
-            amount = sign * float(amount_node[0].text)
+            amount = sign * Decimal(amount_node[0].text)
         return amount
 
     def add_value_from_node(self, ns, node, xpath_str, obj, attr_name, join_str=None):
