@@ -1,5 +1,11 @@
 # Huishoudboekje Changelog
 
+## 1.9.7
+
+### Patch Changes
+
+- Fixed manual booking ignoring previous saldo when creating a new saldo
+
 ## 1.9.6
 
 ### Patch Changes

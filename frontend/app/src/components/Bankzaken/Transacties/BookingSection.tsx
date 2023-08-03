@@ -2,7 +2,7 @@ import {Box, Button, Divider, FormControl, FormLabel, HStack, Icon, Input, Input
 import React, {useState} from "react";
 import {useTranslation} from "react-i18next";
 import Select from "react-select";
-import {Afspraak, Burger, BankTransaction, GetTransactieDocument, GetSaldoDocument, Rubriek, useCreateJournaalpostAfspraakMutation, useCreateJournaalpostGrootboekrekeningMutation, useGetSimilarAfsprakenLazyQuery, useGetBurgersAndOrganisatiesQuery, Organisatie, useGetSearchAfsprakenQuery, useCreateSaldoMutation, useUpdateSaldoMutation} from "../../../generated/graphql";
+import {Afspraak, Burger, BankTransaction, GetTransactieDocument, GetSaldoDocument, Rubriek, useCreateJournaalpostAfspraakMutation, useCreateJournaalpostGrootboekrekeningMutation, useGetSimilarAfsprakenLazyQuery, useGetBurgersAndOrganisatiesQuery, Organisatie, useGetSearchAfsprakenQuery, useCreateSaldoMutation, useUpdateSaldoMutation, GetSaldoClosestToDocument} from "../../../generated/graphql";
 import useToaster from "../../../utils/useToaster";
 import SelectAfspraakOption from "../../shared/SelectAfspraakOption";
 import {TriangleDownIcon, TriangleUpIcon, WarningTwoIcon} from "@chakra-ui/icons";
@@ -103,6 +103,10 @@ const BookingSection = ({transaction, rubrieken}) => {
 		fetchPolicy: "no-cache"
 	})
 
+	const [getClosestSaldo] = useLazyQuery(GetSaldoClosestToDocument, {
+		fetchPolicy: "no-cache"
+	})
+
 	const onSelectRubriek = (val) => {
 		const foundRubriek = rubrieken.find(r => r.grootboekrekening?.id === val.value);
 
@@ -156,19 +160,29 @@ const BookingSection = ({transaction, rubrieken}) => {
 						})
 					}
 					else if (result.data.saldo.length === 0) {
-						const startingDate = d(transactionDate).startOf("month").format("YYYY-MM-DD");
-						const endDate = d(transactionDate).endOf("month").format("YYYY-MM-DD");
-
-						createSaldo({
+						getClosestSaldo({
 							variables: {
-								input: {
-									begindatum: startingDate,
-									einddatum: endDate,
-									saldo: transaction.bedrag,
-									burgerId: burgerId
-								}
+								burger_ids: [burgerId],
+								date: d(transactionDate).format("YYYY-MM-DD")
 							}
+						}).then((result) => {
+							const prev_saldo = result.data.saldoClosest.length > 0 ? result.data.saldoClosest[0]?.saldo : 0;
+							const saldo = floatMathOperation(prev_saldo, transaction.bedrag, 2, MathOperation.Plus);
+							const startingDate = d(transactionDate).startOf("month").format("YYYY-MM-DD");
+							const endDate = d(transactionDate).endOf("month").format("YYYY-MM-DD");
+
+							createSaldo({
+								variables: {
+									input: {
+										begindatum: startingDate,
+										einddatum: endDate,
+										saldo: saldo,
+										burgerId: burgerId
+									}
+								}
+							})
 						})
+
 					}
 				}
 			)
