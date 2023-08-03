@@ -336,7 +336,10 @@ class Transaction:
         self.searchAndReplace(transaction, "narration", "extra_details")
 
         if transaction["transaction_details"] == "/":
-            transaction['transaction_details'] = transaction['customer_reference']
+            transaction["transaction_details"] = transaction["customer_reference"]
+
+        if transaction["transaction_details"] == "":
+            transaction["transaction_details"] = transaction["extra_details"]
 
         if transaction["amount"] < 0:
             transaction["status"] = 'D'
