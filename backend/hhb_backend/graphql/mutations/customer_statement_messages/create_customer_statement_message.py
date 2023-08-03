@@ -1,4 +1,5 @@
 """ GraphQL mutation for creating a new CustomerStatementMessage """
+from decimal import Decimal
 import json
 import logging
 import re
