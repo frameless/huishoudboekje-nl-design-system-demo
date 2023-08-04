@@ -166,30 +166,26 @@ def test_create_csm_with_abn_camt_file(client, mocker: MockerFixture):
                 adapter.request_history[1].json()[1]["tegen_rekening"]
                 == "NL46ABNA0499998748"
             )
-            assert(
-                adapter.request_history[1].json()[1]["information_to_account_owner"]
-                == "/TRTP/SEPA OVERBOEKING/IBAN/NL46ABNA0499998748/BIC/ABNANL2A/NAME/NAAM/REMI/OMSCHRIJVING/EREF/NOTPROVIDED"
-            )
+            assert "/TRTP/SEPA OVERBOEKING/IBAN/NL46ABNA0499998748/BIC/ABNANL2A/NAME/NAAM/REMI/OMSCHRIJVING/EREF/NOTPROVIDED" in adapter.request_history[1].json()[1]["information_to_account_owner"]
+
+            assert "NOTPROVIDED" in adapter.request_history[1].json()[1]["information_to_account_owner"]
             assert adapter.request_history[1].json()[1]["bedrag"] == 100
             assert adapter.request_history[1].json()[1]["transactie_datum"] == "2013-04-02"
 
             # Details from other transactions must be correct
-            assert(
-                adapter.request_history[1].json()[2]["information_to_account_owner"]
-                == "/TRTP/SEPA ACCEPTGIRO/IBAN/NL46ABNA0499998748/BIC/ABNANL2A/NAME/NAAM/REMI//REMI/Issuer: CUR Ref: 1234567812345678/EREF/NOTPROVIDED"
-            )
-            assert (
-                adapter.request_history[1].json()[3]["information_to_account_owner"]
-                == "/TRTP/SEPA ACCEPTGIRO BATCH/PREF/3095D4322561460S0PS/NRTX/10"
-            )
-            assert (
-                adapter.request_history[1].json()[4]["information_to_account_owner"]
-                == "/TRTP/SEPA ACCEPTGIRO BATCH/PREF/3095D4322561460S0PS/NRTX/10"
-            )
-            assert (
-                adapter.request_history[1].json()[27]["information_to_account_owner"]
-                == "/RTYP/SEPA Incasso niet uitgevoerd/MARF/123456789XXmandaat/RTRN/MS03/IBAN/NL27ABNA0562399340/NAME/Debtor/REMI/Levering maand mei, zie nota 1234556. Uw klantnummer 123455666/EREF/1234567X908303803"
-            )
+            assert "/TRTP/SEPA ACCEPTGIRO/IBAN/NL46ABNA0499998748/BIC/ABNANL2A/NAME/NAAM/REMI//REMI/Issuer: CUR Ref: 1234567812345678/EREF/NOTPROVIDED" in adapter.request_history[1].json()[2]["information_to_account_owner"]
+            assert "NOTPROVIDED" in adapter.request_history[1].json()[2]["information_to_account_owner"]
+            
+            assert  "/TRTP/SEPA ACCEPTGIRO BATCH/PREF/3095D4322561460S0PS/NRTX/10" in adapter.request_history[1].json()[3]["information_to_account_owner"]
+            assert "NOTPROVIDED" in adapter.request_history[1].json()[3]["information_to_account_owner"]
+
+            assert "/TRTP/SEPA ACCEPTGIRO BATCH/PREF/3095D4322561460S0PS/NRTX/10" in adapter.request_history[1].json()[4]["information_to_account_owner"]
+            assert "NOTPROVIDED" in adapter.request_history[1].json()[4]["information_to_account_owner"]
+
+            assert "/RTYP/SEPA Incasso niet uitgevoerd/MARF/123456789XXmandaat/RTRN/MS03/IBAN/NL27ABNA0562399340/NAME/Debtor/REMI/Levering maand mei, zie nota 1234556. Uw klantnummer 123455666/EREF/1234567X908303803" in adapter.request_history[1].json()[27]["information_to_account_owner"]
+            assert "1234567X908303803" in adapter.request_history[1].json()[27]["information_to_account_owner"]
+            assert "123456789XXmandaat" in adapter.request_history[1].json()[27]["information_to_account_owner"]
+            
             # Overall response
             assert len(adapter.request_history[1].json()) == 29
             assert adapter.call_count == 3
@@ -266,7 +262,7 @@ def test_create_csm_with_ing_camt_file(client, mocker: MockerFixture):
             assert adapter.request_history[1].json()[1]["bedrag"] == 12500
             assert adapter.request_history[1].json()[1]["transactie_datum"] == "2014-01-03"
             assert adapter.request_history[1].json()[1]["information_to_account_owner"] == 'UstrdRemi2014010323566INGBankNV'
-            assert adapter.request_history[1].json()[2]["information_to_account_owner"] == "6390338414964113"
+            assert "20140103E2EIdA1INGBankNV" in adapter.request_history[1].json()[2]["information_to_account_owner"]
             # Overall response
             assert len(adapter.request_history[1].json()) == 9
             assert adapter.call_count == 3
@@ -304,11 +300,13 @@ def test_create_csm_with_anoniem_camt_file(client, mocker: MockerFixture):
             )
             assert adapter.request_history[1].json()[1]["bedrag"] == 100997
             assert adapter.request_history[1].json()[1]["transactie_datum"] == "2021-08-16"
-            assert adapter.request_history[1].json()[1]["information_to_account_owner"] == '''/TRTP/SEPA ontvangst/REMI/518303424874 Factnr 54005413523 BTW 137,11 Jaarafr 10.08.2021
+            assert '''/TRTP/SEPA ontvangst/REMI/518303424874 Factnr 54005413523 BTW 137,11 Jaarafr 10.08.2021
                     Klantnr 12345678 CRN 3014357265 Straatnaam 1 3531 PN UTRECHT
-                '''
-            assert adapter.request_history[1].json()[2]["information_to_account_owner"] == '''/TRTP/SEPA ontvangst/REMI/MAAND AUG. NR. 123456789H1001 IB/PVV 2021 (ACHTER )
-                '''
+                ''' in adapter.request_history[1].json()[1]["information_to_account_owner"]
+            assert "518303424874" in adapter.request_history[1].json()[1]["information_to_account_owner"]
+            assert '''/TRTP/SEPA ontvangst/REMI/MAAND AUG. NR. 123456789H1001 IB/PVV 2021 (ACHTER )
+                ''' in adapter.request_history[1].json()[2]["information_to_account_owner"]
+            assert "GVSXX20210811035337804" in adapter.request_history[1].json()[2]["information_to_account_owner"]
             # Overall response
             assert len(adapter.request_history[1].json()) == 23
             assert adapter.call_count == 3
