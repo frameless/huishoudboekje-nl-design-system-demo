@@ -23,7 +23,14 @@ def dict_keys_subset_builder(match_keys: list):
          dict(omschrijving="eromheen", valid_from="2020-01-01T00:00:00", valid_through='2021-12-31T00:00:00'),
      ]),
 
-    ("2021-01-01", "2021-02-01", [
+     
+    ("2021-01-01", "2021-01-01", [
+        dict(omschrijving="precies een dag", valid_from="2021-01-01T00:00:00", valid_through="2021-01-01T00:00:00"),
+    ], [
+         dict(omschrijving="precies een dag", valid_from="2021-01-01T00:00:00", valid_through="2021-01-01T00:00:00"),
+     ]),
+
+    ("2021-01-02", "2021-02-01", [
         dict(omschrijving="te vroeg", valid_from="2020-01-01T00:00:00", valid_through="2020-12-31T00:00:00"),
         dict(omschrijving="te vroeg", valid_from="2020-01-01T00:00:00", valid_through="2021-01-01T00:00:00"),
     ], []),
