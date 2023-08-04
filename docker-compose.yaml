@@ -112,7 +112,7 @@ x-py-tests: &x-py-tests
   command:
     - /bin/sh
     - -c
-    - pytest tests --disable-pytest-warnings -vv
+    - pytest tests --disable-pytest-warnings
   environment:
     JWT_AUDIENCE: pytest
     JWT_SECRET: pytestsecret
