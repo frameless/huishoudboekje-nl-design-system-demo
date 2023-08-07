@@ -37,7 +37,7 @@ class CamtParser():
             amount = sign * Decimal(amount_node[0].text)
         return amount
 
-    def add_value_from_node(self, ns, node, xpath_str, obj, attr_name, join_str=None):
+    def add_value_from_node(self, ns, node, xpath_str, obj, attr_name, join_str=None, add_to_original=False):
         """Add value to object from first or all nodes found with xpath.
 
         If xpath_str is a list (or iterable), it will be seen as a series
@@ -54,7 +54,11 @@ class CamtParser():
                     attr_value = found_node[0].text
                 else:
                     attr_value = join_str.join([x.text for x in found_node])
-                obj[attr_name] = attr_value
+
+                if add_to_original and attr_name in obj:
+                    obj[attr_name] = " ".join([obj[attr_name],attr_value])
+                else:
+                    obj[attr_name] = attr_value
                 break
 
     def parse_transaction_details(self, ns, node, transaction):
@@ -73,6 +77,9 @@ class CamtParser():
             join_str="\n",
         )
 
+        self.add_value_from_node(ns,node,["./ns:Refs/ns:EndToEndId",],transaction,"payment_ref",join_str="\n", add_to_original=True)
+        self.add_value_from_node(ns,node,["./ns:Refs/ns:MndtId",],transaction,"payment_ref",join_str="\n", add_to_original=True)
+
         # name
         self.add_value_from_node(
             ns, node, ["./ns:AddtlTxInf"], transaction, "payment_ref", join_str="\n"
@@ -83,12 +90,15 @@ class CamtParser():
             node,
             [
                 "./ns:RmtInf/ns:Strd/ns:CdtrRefInf/ns:Ref",
-                "./ns:Refs/ns:EndToEndId",
                 "./ns:Ntry/ns:AcctSvcrRef",
             ],
             transaction,
             "ref",
         )
+        
+        self.add_value_from_node(ns,node,["./ns:Refs/ns:EndToEndId",],transaction,"ref",join_str="\n", add_to_original=True)
+        self.add_value_from_node(ns,node,["./ns:Refs/ns:MndtId",],transaction,"ref",join_str="\n", add_to_original=True)
+
         amount = self.parse_amount(ns, node)
         if amount != 0.0:
             transaction["amount"] = amount
