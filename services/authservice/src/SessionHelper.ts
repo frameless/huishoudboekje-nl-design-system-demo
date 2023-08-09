@@ -34,7 +34,7 @@ class SessionHelper {
 
 	createSession(res, user) {
 		const token = this.generateToken(user);
-		res.cookie("app-token", token);
+		res.cookie("app-token", token, {httpOnly: true, secure: true, sameSite: "lax"});
 	}
 
 	destroySession(res) {
