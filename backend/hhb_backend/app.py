@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 import asyncio
 import io
-import json
 import logging
 import nest_asyncio
 from flask import Flask, make_response, render_template, send_file, request, abort
@@ -12,9 +11,10 @@ import hhb_backend.graphql.blueprint as graphql_blueprint
 from graphql import GraphQLError
 from hhb_backend.auth import Auth
 from hhb_backend.commands.alarms import alarms_cli
-from hhb_backend.graphql.dataloaders import hhb_dataloader, HHBDataLoader
+from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.processen import brieven_export
 from hhb_backend.reverse_proxy import ReverseProxied
+from hhb_backend.content_type_validation import ContentTypeValidator
 
 
 def create_app(
@@ -58,7 +58,7 @@ def create_app(
 
     @graphql.before_request
     def validate_content_type():
-        if request.content_type != 'application/json' and not exempt_content_type_based_on_grahpql_operations(request):
+        if not ContentTypeValidator().is_valid(request):
             abort(415, "Content-type not supported by this endpoint")
 
     @graphql.before_request
@@ -126,30 +126,6 @@ def create_app(
     app.register_blueprint(alarms_cli)
 
     return app
-
-def exempt_multipart_form_data(request):
-    excempt = False
-    exempt_operations = ["createCustomerStatementMessage"]
-    operation = json.loads(request.form.get("operations"))
-    # (just in case) multipart/form-data only allowed when it is only one operation
-    if type(operation) is not list and operation["operationName"] in exempt_operations:
-        excempt = True
-    return excempt
-
-
-def exempt_content_types():
-    return {"multipart/form-data": exempt_multipart_form_data}
-
-def exempt_content_type_based_on_grahpql_operations(request):
-    if request.content_type is None:
-        return False
-
-    exemptions = exempt_content_types()
-    #This works for multipart/form-data not sure if it will work for other types but so far we only use multipart/form-data besides json
-    content_type = request.content_type.split(';')[0]
-    if content_type not in exemptions:
-        return False
-    return exemptions[content_type](request)
 
 
 if __name__ == "__main__":

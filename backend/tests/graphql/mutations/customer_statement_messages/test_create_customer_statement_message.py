@@ -40,7 +40,7 @@ def test_create_csm_with_ing_file(client, mocker: MockerFixture):
         with requests_mock.Mocker() as m:
             m._adapter = adapter
             m.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", json={"data": {"id": 1}})
-            response = do_csm_post(client, testfile)
+            response = do_csm_post(client, testfile, mocker)
             # Customer Statement Message
             assert (
                 adapter.request_history[0].json()["account_identification"]
@@ -77,7 +77,7 @@ def test_create_csm_with_abn_file(client, mocker: MockerFixture):
         with requests_mock.Mocker() as m:
             m._adapter = adapter
             m.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", json={"data": {"id": 1}})
-            response = do_csm_post(client, testfile)
+            response = do_csm_post(client, testfile, mocker)
             # Customer Statement Message
             assert (
                 adapter.request_history[0].json()["account_identification"]
@@ -111,7 +111,7 @@ def test_create_csm_with_bng_file(client, mocker: MockerFixture):
         with requests_mock.Mocker() as m:
             m._adapter = adapter
             m.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", json={"data": {"id": 1}})
-            response = do_csm_post(client, testfile)
+            response = do_csm_post(client, testfile, mocker)
             # Customer Statement Message
             assert (
                 adapter.request_history[0].json()["account_identification"]
@@ -144,7 +144,7 @@ def test_create_csm_with_abn_camt_file(client, mocker: MockerFixture):
         with requests_mock.Mocker() as m:
             m._adapter = adapter
             m.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", json={"data": {"id": 1}})
-            response = do_csm_post(client, testfile)
+            response = do_csm_post(client, testfile, mocker)
 
             # Customer Statement Message
             assert (
@@ -199,7 +199,7 @@ def test_create_csm_with_rabo_camt_file(client, mocker: MockerFixture):
         with requests_mock.Mocker() as m:
             m._adapter = adapter
             m.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", json={"data": {"id": 1}})
-            response = do_csm_post(client, testfile)
+            response = do_csm_post(client, testfile, mocker)
 
             # Customer Statement Message
             assert (
@@ -237,7 +237,7 @@ def test_create_csm_with_ing_camt_file(client, mocker: MockerFixture):
         with requests_mock.Mocker() as m:
             m._adapter = adapter
             m.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", json={"data": {"id": 1}})
-            response = do_csm_post(client, testfile)
+            response = do_csm_post(client, testfile, mocker)
 
             # Customer Statement Message
             assert (
@@ -276,7 +276,7 @@ def test_create_csm_with_anoniem_camt_file(client, mocker: MockerFixture):
         with requests_mock.Mocker() as m:
             m._adapter = adapter
             m.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", json={"data": {"id": 1}})
-            response = do_csm_post(client, testfile)
+            response = do_csm_post(client, testfile, mocker)
 
             # Customer Statement Message
             assert (
@@ -313,21 +313,21 @@ def test_create_csm_with_anoniem_camt_file(client, mocker: MockerFixture):
             assert response.json.get("errors") is None
             assert response.status_code == 200
 
-def test_create_csm_with_incorrect_file(client):
+def test_create_csm_with_incorrect_file(client, mocker: MockerFixture):
     with open(INCORRECT_CSM_FILE, "rb") as testfile:
-        response = do_csm_post(client, testfile)
+        response = do_csm_post(client, testfile, mocker)
         assert response.json["errors"] is not None
         assert response.status_code == 200
 
-def test_create_camt_with_incorrect_file(client):
+def test_create_camt_with_incorrect_file(client, mocker: MockerFixture):
     with open(INCORRECT_CAMT_FILE, "rb") as testfile:
-        response = do_csm_post(client, testfile)
+        response = do_csm_post(client, testfile, mocker)
         assert response.json["errors"] is not None
         assert response.status_code == 200
 
-def test_create_with_incorrect_file_format(client):
+def test_create_with_incorrect_file_format(client, mocker: MockerFixture):
     with open(INCORRECT_FILE_FORMAT, "rb") as testfile:
-        response = do_csm_post(client, testfile)
+        response = do_csm_post(client, testfile, mocker)
         assert response.json["errors"][0]['message'] == "File format not allowed."
         assert response.status_code == 200
 
@@ -373,7 +373,7 @@ def test_create_csm_with_dangerous_camt_file(client, mocker: MockerFixture):
         with requests_mock.Mocker() as m:
             m._adapter = adapter
             m.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", json={"data": {"id": 1}})
-            response = do_csm_post(client, testfile)
+            response = do_csm_post(client, testfile, mocker)
 
             assert(adapter.request_history == [])
             assert(response.json['errors'][0]['message'] == 'sequence item 0: expected str instance, NoneType found')
@@ -394,7 +394,8 @@ def create_mock_adapter(mocker: MockerFixture) -> Adapter:
     return adapter
 
 
-def do_csm_post(client, testfile):
+def do_csm_post(client, testfile, mocker):
+    mocker.patch('hhb_backend.content_type_validation.ContentTypeValidator.is_valid', return_value=True)
     query = """
         mutation testCSMCreate($file: Upload!) {
             createCustomerStatementMessage(file: $file) {
