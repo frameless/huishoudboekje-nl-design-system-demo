@@ -17,7 +17,7 @@ class ContentTypeValidator():
             return False
         return exemptions[content_type](request)
     
-    def __exempt_multipart_form_data(request):
+    def __exempt_multipart_form_data(self,request):
         excempt = False
         exempt_operations = ["createCustomerStatementMessage"]
         operation = json.loads(request.form.get("operations"))
