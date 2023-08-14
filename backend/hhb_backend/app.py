@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import asyncio
 import io
+import json
 import logging
 import nest_asyncio
 from flask import Flask, make_response, render_template, send_file, request, abort
@@ -55,11 +56,10 @@ def create_app(
 
     graphql = graphql_blueprint.create_blueprint(app.config["USE_GRAPHIQL"])
 
-    @app.before_request
-    @require_json_content_type_except_criteria(exempt_criteria_func=exempt_based_on_grahpql_operations)
+    @graphql.before_request
     def validate_content_type():
-        if request.endpoint == "graphql.graphql":
-            pass
+        if request.content_type != 'application/json' and not exempt_content_type_based_on_grahpql_operations(request):
+            abort(415, "Content-type not supported by this endpoint")
 
     @graphql.before_request
     @auth.require_login
@@ -127,41 +127,29 @@ def create_app(
 
     return app
 
-
-# TODO: Does not exempt the exempted criteria function, not sure why. Could be here, could be in the function itself
-def require_json_content_type_except_criteria(exempt_criteria_func=None):
-    def decorator(func):
-        @wraps(func)
-        def decorated_function(*args, **kwargs):
-            if exempt_criteria_func is not None and exempt_criteria_func(request):
-                # Skip content type check based on the provided exemption criteria
-                return func(*args, **kwargs)
-            elif request.content_type != 'application/json':
-                abort(415, "Content-type not supported by this endpoint")
-            return func(*args, **kwargs)
-        return decorated_function
-    return decorator
+def exempt_multipart_form_data(request):
+    excempt = False
+    exempt_operations = ["createCustomerStatementMessage"]
+    operation = json.loads(request.form.get("operations"))
+    # (just in case) multipart/form-data only allowed when it is only one operation
+    if type(operation) is not list and operation["operationName"] in exempt_operations:
+        excempt = True
+    return excempt
 
 
-# TODO: Operation names that should be exempt, getCsms is the internal name for createCustomerStatementMessage it looks like, but I can't get it to work even with that
-def exempt_operations():
-    return ["getCsms", "createCustomerStatementMessage"]
+def exempt_content_types():
+    return {"multipart/form-data": exempt_multipart_form_data}
 
-
-# TODO: This doesnt exempt the given names despite the logging going to "true".. could also be in the wrapper function
-def exempt_based_on_grahpql_operations(request):
-    logging.warning(request.get_json()[0]['operationName'])
-    try:
-        data = request.get_json()  # Get the JSON data from the request
-        exemptions = exempt_operations()
-        for operation in data:
-            logging.warning(operation)
-            if operation['operationName'] in exemptions:
-                logging.error("true")
-                return True
+def exempt_content_type_based_on_grahpql_operations(request):
+    if request.content_type is None:
         return False
-    except:
+
+    exemptions = exempt_content_types()
+    #This works for multipart/form-data not sure if it will work for other types but so far we only use multipart/form-data besides json
+    content_type = request.content_type.split(';')[0]
+    if content_type not in exemptions:
         return False
+    return exemptions[content_type](request)
 
 
 if __name__ == "__main__":
