@@ -3,16 +3,18 @@ import asyncio
 import io
 import logging
 import nest_asyncio
-from flask import Flask, make_response, render_template, send_file, request
+from flask import Flask, make_response, render_template, send_file, request, abort
+from functools import wraps
 from http.client import HTTPException
 
 import hhb_backend.graphql.blueprint as graphql_blueprint
 from graphql import GraphQLError
 from hhb_backend.auth import Auth
 from hhb_backend.commands.alarms import alarms_cli
-from hhb_backend.graphql.dataloaders import hhb_dataloader, HHBDataLoader
+from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.processen import brieven_export
 from hhb_backend.reverse_proxy import ReverseProxied
+from hhb_backend.content_type_validation import ContentTypeValidator
 
 
 def create_app(
@@ -53,6 +55,11 @@ def create_app(
         return make_response(("ok", {"Content-Type": "text/plain"}))
 
     graphql = graphql_blueprint.create_blueprint(app.config["USE_GRAPHIQL"])
+
+    @graphql.before_request
+    def validate_content_type():
+        if not ContentTypeValidator().is_valid(request):
+            abort(415, "Content-type not supported by this endpoint")
 
     @graphql.before_request
     @auth.require_login

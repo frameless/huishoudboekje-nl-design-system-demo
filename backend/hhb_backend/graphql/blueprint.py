@@ -1,7 +1,6 @@
 import logging
 
 from flask import Blueprint
-
 from hhb_backend.graphql import schema
 from lib.graphene_file_upload import FileUploadGraphQLView
 
@@ -19,10 +18,12 @@ def create_blueprint(USE_GRAPHIQL):
         ]
     )
 
-    bp.add_url_rule('/', view_func=view, strict_slashes=False)
+    bp.add_url_rule('/', view_func=view,
+                    strict_slashes=False, methods=["POST"])
 
     # Optional, for adding batch query support (used in Apollo-Client)
-    bp.add_url_rule('/batch', view_func=view, strict_slashes=False)
+    bp.add_url_rule(
+        '/batch', view_func=view, strict_slashes=False)
 
     return bp
 
