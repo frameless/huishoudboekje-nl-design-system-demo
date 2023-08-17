@@ -2,6 +2,8 @@
 
 ## 1.9.8
 
+Deze versie omvat verbeteringen voor de verwerking van bestanden met het formaat CAMT.053.
+
 ### Patch Changes
 
 - d6a12cb7: Fixed bug rounding error CAMT files
