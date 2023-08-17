@@ -1,5 +1,31 @@
 # Huishoudboekje Changelog
 
+## 1.9.8
+
+### Patch Changes
+
+- d6a12cb7: Fixed bug rounding error CAMT files
+- 1cc7a0e8: fixed missing transaction details when NtryDtls is not in CAMT file
+- f4ea6266: Security update
+- 22e09eab: Betaalisnctructies now shows totaalbedrag
+- b737094d: 1382
+- c460efa5: After submitting an afspraak, burger or organisatie form, when the back button is pressed you dont go back to the form.
+- 41107189: signalen service fix
+- 8003d38a: Updated security flags cookie
+- e9f11d7a: uuid
+- b10ea252: If present EndToEndId and MndtId tags in CAMT file added to transactie omschrijving
+- de319add: Add name of afdeling to afspraken overview
+- 35d8d48c: moved balance table to show first on the rapportage page
+- 85ae0cd5: Improved rapportage when no transactions
+- 0a6d530e: Rapportage page filters are now displayed on the page inestead of in a modal
+- 435c9eaa: Added buttons for default values date range rapportage
+- 341a37ff: Improved afspraken readability in search section of a transactie
+
+## Migration guide
+
+> ⚠️ To rectify the rounding problem of the CAMT files, an SQL statement must be executed. In the folder SQL there is a file named CAMT rounding error fix in database.txt. Use the provided update statement in the banktransaction service database. This will find the rounding errors and correct them.
+
+
 ## 1.9.7
 
 ### Patch Changes
