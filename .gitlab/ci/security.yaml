@@ -20,6 +20,3 @@ secret_detection:
   stage: security
   needs: [ ]
 
-license_scanning:
-  stage: security
-  needs: [ ]
