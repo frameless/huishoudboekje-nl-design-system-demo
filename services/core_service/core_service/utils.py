@@ -24,7 +24,8 @@ def row2dict(result):
 
 
 def handle_operational_error(error: OperationalError):
-    logging.exception(error)
+    logging.exception("Could not connect to the database")
+    logging.debug(error)
     abort(make_response({"errors": ["Could not connect to the database"]}, 500))
 
 

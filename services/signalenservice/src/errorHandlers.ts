@@ -47,7 +47,8 @@ export class UnknownError extends HttpError {
 
 	constructor(err) {
 		super();
-		log.error("Unknown Error", {err});
+		log.error("Unknown Error");
+		log.debug("Unknown Error", {err});
 	}
 
 }
@@ -58,7 +59,8 @@ export const errorHandler = (err, req, res, next) => {
 	}
 
 	if (process.env.NODE_ENV !== "test") {
-		log.error("[ERROR]", err);
+		log.error("[ERROR]: An error occurred");
+		log.debug("[ERROR]", err);
 	}
 
 	if (err instanceof PrismaClientInitializationError) {
