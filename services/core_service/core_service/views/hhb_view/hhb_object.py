@@ -64,7 +64,8 @@ class HHBObject:
         except OperationalError as error:
             handle_operational_error(error)
         except IntegrityError as error:
-            logging.warning(repr(error))
+            logging.error("An IntegrityError occurred")
+            logging.debug(repr(error))
             abort(make_response({"errors": [str(error.orig).strip().split("DETAIL:  ")[1]]}, 409))
 
     def delete(self):

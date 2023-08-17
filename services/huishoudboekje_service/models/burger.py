@@ -72,7 +72,8 @@ def delete_orphaned_huishoudens(session):
         session.query(Huishouden).filter(
             Huishouden.id.not_in(huishouden_ids)).delete()
     except OperationalError as error:
-        logging.exception(error)
+        logging.exception("An error occurred while deleting orphaned huishoudens")
+        logging.debug(error)
 
 
 @event.listens_for(Burger, "after_update")

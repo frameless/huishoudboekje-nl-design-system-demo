@@ -103,7 +103,8 @@ class Auth():
                     self.logger.debug(f"_user_loader: token user: {user}")
                     return user
             except InvalidTokenError as err:
-                self.logger.warning(f"""_user_loader: {err}; claims: {unverifiedToken}""")
+                self.logger.warning("Invalid token")
+                self.logger.debug(f"""_user_loader: {err}; claims: {unverifiedToken}""")
 
         self.logger.debug(f"_user_loader: no user")
         return None

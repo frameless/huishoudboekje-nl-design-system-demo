@@ -15,8 +15,6 @@ def update_or_create_saldo(journaalpost, undo_saldo=False):
     transaction = hhb_dataloader().bank_transactions.load_one(
         journaalpost['transaction_id'])
 
-    # logging.warning(journaalpost)
-
     if transaction:
         if "afspraak" in transaction.keys():
             burger_id = journaalpost["afspraak"]["burger_id"]

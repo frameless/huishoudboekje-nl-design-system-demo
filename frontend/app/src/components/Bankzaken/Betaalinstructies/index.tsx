@@ -46,7 +46,6 @@ const Betaalinstructies = () => {
 		const {from, through} = range != undefined ? range : dateRange
 		if (value != undefined) {
 			const maxPastDate = d().subtract(7, "days").startOf("day");
-			console.log(maxPastDate)
 			if (d(value).isSameOrAfter(maxPastDate) && d(value).isSameOrBefore(d(through).add(7, "days").endOf("day"))) {
 				setPaymentDateValid(true)
 				return true

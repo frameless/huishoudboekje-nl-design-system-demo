@@ -17,7 +17,7 @@ def evaluate():
     """Evaluates all current active alarms"""
     if Unleash().is_enabled("signalen"):
         logging.info("Evaluating all alarms")
-        logging.info(evaluate_alarms())
+        evaluate_alarms()
         logging.debug("Evaluated all alarms!")
     else:
         logging.info("Skipping alarm evaluation. Signalen is disabled")

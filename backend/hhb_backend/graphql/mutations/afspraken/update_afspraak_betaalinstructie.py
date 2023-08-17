@@ -55,7 +55,8 @@ class UpdateAfspraakBetaalinstructie(graphene.Mutation):
         try:
             validate_afspraak_betaalinstructie(previous.credit, betaalinstructie)
         except Exception as e:
-            logging.exception(f"Invalid betaalinstructie {e}")
+            logging.exception(f"Invalid betaalinstructie")
+            logging.debug(f"Invalid betaalinstructie {e}")
             raise e
 
         response = requests.post(

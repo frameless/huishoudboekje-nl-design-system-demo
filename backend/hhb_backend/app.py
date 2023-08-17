@@ -48,7 +48,8 @@ def create_app(
     try:
         auth = Auth(app)
     except HTTPException as err:
-        logger.error(err)
+        logger.error("A HTTP Exception occurred")
+        logger.debug(err)
 
     @app.route("/health")
     def health():

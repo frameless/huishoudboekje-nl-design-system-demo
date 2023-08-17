@@ -37,5 +37,5 @@ class ErrorReportingMiddleware(object):
                 "An error occurred while resolving field {}.{}".format(
                     info.parent_type.name, info.field_name)
             )
-            logging.error(e)
+            logging.debug(e)
             raise e
