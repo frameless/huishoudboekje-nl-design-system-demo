@@ -2,7 +2,6 @@ include:
   - template: Security/SAST.gitlab-ci.yml
   - template: Security/Dependency-Scanning.gitlab-ci.yml
   - template: Security/Secret-Detection.gitlab-ci.yml
-  - template: Security/License-Scanning.gitlab-ci.yml
 
 sast:
   stage: security
@@ -21,6 +20,3 @@ secret_detection:
   stage: security
   needs: [ ]
 
-license_scanning:
-  stage: security
-  needs: [ ]
