@@ -1,4 +1,5 @@
 import itsdangerous
+import traceback
 import jwt
 import logging
 import re
@@ -6,6 +7,7 @@ from flask import Flask, abort, g, make_response, request
 from hhb_backend.auth.models import User
 from jwt import InvalidTokenError
 from time import time
+from graphql import GraphQLError
 
 
 class Auth():
@@ -15,7 +17,8 @@ class Auth():
         self.secret = app.config.get("JWT_SECRET", None)
         self.require_auth = app.config.get("REQUIRE_AUTH", True)
 
-        self.logger.debug(f"JWT_SECRET {self.secret}, JWT_AUDIENCE {self.audience}")
+        self.logger.debug(
+            f"JWT_SECRET {self.secret}, JWT_AUDIENCE {self.audience}")
 
         if self.require_auth != "0":
             if self.audience is None:
@@ -42,15 +45,22 @@ class Auth():
         self.logger.debug(f"current user: {self.current_user}")
 
     def require_login(self, func):
-        def wrapper(*args, **kwargs):
-            if self.require_auth != "0":
-                self._init_auth()
-                if self.current_user == None:
-                    return self._not_logged_in()
-            return func(*args, **kwargs)
+        try:
+            logging.info(f"auth-checking function: {func.__name__}")
 
-        wrapper.__name__ = func.__name__
-        return wrapper
+            def wrapper(*args, **kwargs):
+                if self.require_auth != "0":
+                    self._init_auth()
+                    if self.current_user == None:
+                        return self._not_logged_in()
+                return func(*args, **kwargs)
+
+            wrapper.__name__ = func.__name__
+            return wrapper
+        except Exception as e:
+            logging.error(e)
+            logging.error(traceback.print_tb(e.__traceback__))
+            raise GraphQLError("Something went wrong during the request")
 
     @property
     def current_user(self):
@@ -71,7 +81,8 @@ class Auth():
 
     def _get_token_from_header(self):
         if 'authorization' in request.headers:
-            token_search = re.search('bearer (.*)', request.headers['authorization'], re.IGNORECASE)
+            token_search = re.search(
+                'bearer (.*)', request.headers['authorization'], re.IGNORECASE)
             if token_search:
                 token = token_search.group(1)
                 self.logger.debug(f"_token_loader: Bearer found: {token}")
@@ -91,11 +102,18 @@ class Auth():
         token = self._token_loader()
 
         if token is not None:
-            unverifiedToken = jwt.decode(token, options={"verify_signature": False})
-            self.logger.debug(f"""_user_loader: Token: {token}, claims: {unverifiedToken}""")
+            try:
+                unverifiedToken = jwt.decode(
+                    token, options={"verify_signature": False})
+            except Exception as e:
+                logging.error(e)
+                logging.error(traceback.print_tb(e.__traceback__))
+            self.logger.debug(
+                f"""_user_loader: Token: {token}, claims: {unverifiedToken}""")
             try:
                 # Try to decode and verify the token
-                claims = jwt.decode(token, self.secret, algorithms=['HS256'], audience=self.audience)
+                claims = jwt.decode(token, self.secret, algorithms=[
+                                    'HS256'], audience=self.audience)
                 email = claims.get('email', None)
                 name = claims.get('name', None)
                 if email and name:
@@ -104,7 +122,8 @@ class Auth():
                     return user
             except InvalidTokenError as err:
                 self.logger.warning("Invalid token")
-                self.logger.debug(f"""_user_loader: {err}; claims: {unverifiedToken}""")
+                self.logger.debug(
+                    f"""_user_loader: {err}; claims: {unverifiedToken}""")
 
         self.logger.debug(f"_user_loader: no user")
         return None

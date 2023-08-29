@@ -71,7 +71,7 @@ const server = (prefix: string = "/auth") => {
 				}
 
 				const user = await req.oidc.fetchUserInfo();
-				log.info("User found:");
+				log.info("User found:", user.given_name);
 				log.debug("User found:", user);
 
 				sessionHelper.createSession(res, user);
@@ -80,9 +80,11 @@ const server = (prefix: string = "/auth") => {
 					user,
 				});
 			}
+			log.info("user not authenticated")
 		}
 		catch (err) {
 			log.error("OIDC provider didn't recognize user.");
+			log.error(err)
 		}
 
 		// If no user was found, deny access.
