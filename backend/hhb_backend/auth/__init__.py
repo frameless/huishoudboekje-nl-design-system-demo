@@ -102,15 +102,14 @@ class Auth():
         token = self._token_loader()
 
         if token is not None:
-            # try:
-            token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiV2VyZGxlciwgQ2xhdWRpYSIsImVtYWlsIjoiY2xhdWRpYS53ZXJkbGVyQHV0cmVjaHQubmwiLCJmYW1pbHlfbmFtZSI6IldlcmRsZXIiLCJnaXZlbl9uYW1lIjoiQ2xhdWRpYSIsImlhdCI6MTY5MzMwMzIxNywiZXhwIjoxNjk1ODk1MjE3LCJhdWQiOiJodHRwczovL2h1aXNob3VkYm9la2plLnV0cmVjaHQubmwiLCJpc3MiOiJodHRwczovL2xvZ2luLm1pY3Jvc29mdG9ubGluZS5jb20vYjllYTg3ZjctYTI2My00ZTY4LTk4ZTEtNWZhZDM1NDdhODA1L3YyLjAifQ.PuknCl-RsVRbCKtkun7LdM4eWP0e8ilv2RrNOizviCA"
-            unverifiedToken = jwt.decode(
-                token, options={"verify_signature": False})
-            # except Exception as e:
-            #     logging.error(e)
-            #     logging.error(traceback.print_tb(e.__traceback__))
-            self.logger.debug(
-                f"""_user_loader: Token: {token}, claims: {unverifiedToken}""")
+            try:
+                unverifiedToken = jwt.decode(
+                    token, options={"verify_signature": False})
+            except Exception as e:
+                logging.error(e)
+                logging.error(traceback.print_tb(e.__traceback__))
+                self.logger.debug(
+                    f"""_user_loader: Token: {token}, claims: {unverifiedToken}""")
             try:
                 # Try to decode and verify the token
                 claims = jwt.decode(token, self.secret, algorithms=[
