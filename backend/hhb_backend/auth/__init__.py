@@ -102,13 +102,13 @@ class Auth():
         token = self._token_loader()
 
         if token is not None:
-            try:
-                token = ""
-                unverifiedToken = jwt.decode(
-                    token, options={"verify_signature": False})
-            except Exception as e:
-                logging.error(e)
-                logging.error(traceback.print_tb(e.__traceback__))
+            # try:
+            token = ""
+            unverifiedToken = jwt.decode(
+                token, options={"verify_signature": False})
+            # except Exception as e:
+            #     logging.error(e)
+            #     logging.error(traceback.print_tb(e.__traceback__))
             self.logger.debug(
                 f"""_user_loader: Token: {token}, claims: {unverifiedToken}""")
             try:
