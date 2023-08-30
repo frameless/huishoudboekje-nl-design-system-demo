@@ -94,6 +94,12 @@ class Auth():
         token_cookie = self._get_token_from_cookie()
         token_header = self._get_token_from_header()
 
+        if token_cookie:
+            logging.info("token from cookie")
+
+        if token_header:
+            logging.info("token from header")
+
         token = token_cookie or token_header or None
         self.logger.debug(f"_token_loader: Token: {token}")
         return token
