@@ -64,7 +64,7 @@ const server = (prefix: string = "/auth") => {
 				const tokenContent = req.oidc.user;
 				log.debug("OIDC provider found an authenticated user:", tokenContent);
 
-				// Check if the token is expired, if so, try to refresh.
+				// Check if the token is expired, if so, try to refresh. 
 				const isExpired = req.oidc.accessToken?.isExpired();
 				if (isExpired) {
 					await req.oidc.accessToken?.refresh();
