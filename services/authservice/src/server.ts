@@ -64,14 +64,14 @@ const server = (prefix: string = "/auth") => {
 				const tokenContent = req.oidc.user;
 				log.debug("OIDC provider found an authenticated user:", tokenContent);
 
-				// Check if the token is expired, if so, try to refresh.
+				// Check if the token is expired, if so, try to refresh. 
 				const isExpired = req.oidc.accessToken?.isExpired();
 				if (isExpired) {
 					await req.oidc.accessToken?.refresh();
 				}
 
 				const user = await req.oidc.fetchUserInfo();
-				log.info("User found:");
+				log.info("User found:", user.given_name);
 				log.debug("User found:", user);
 
 				sessionHelper.createSession(res, user);
@@ -80,9 +80,11 @@ const server = (prefix: string = "/auth") => {
 					user,
 				});
 			}
+			log.info("user not authenticated")
 		}
 		catch (err) {
 			log.error("OIDC provider didn't recognize user.");
+			log.error(err)
 		}
 
 		// If no user was found, deny access.
