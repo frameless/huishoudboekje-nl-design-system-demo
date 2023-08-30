@@ -103,6 +103,7 @@ class Auth():
 
         if token is not None:
             try:
+                token = ""
                 unverifiedToken = jwt.decode(
                     token, options={"verify_signature": False})
             except Exception as e:
