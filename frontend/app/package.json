@@ -79,7 +79,7 @@
     "zustand": "^4.1.5"
   },
   "devDependencies": {
-    "@apollo/rover": "^0.10.0",
+    "@apollo/rover": "^0.18.0",
     "@chakra-ui/storybook-addon": "^4.0.14",
     "@clarketm/jwt-cli": "^1.2.0",
     "@graphql-codegen/cli": "^2.16.1",
