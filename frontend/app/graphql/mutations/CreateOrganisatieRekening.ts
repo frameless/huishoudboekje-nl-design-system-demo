@@ -1,5 +1,4 @@
 import {gql} from "@apollo/client";
-import {RekeningFragment} from "../fragments/Rekening";
 
 export const CreateAfdelingRekeningMutation = gql`
     mutation createAfdelingRekening(
@@ -9,9 +8,10 @@ export const CreateAfdelingRekeningMutation = gql`
         createAfdelingRekening(afdelingId: $afdelingId, rekening: $rekening){
             ok
             rekening{
-                ...Rekening
+                id
+                iban
+                rekeninghouder
             }
         }
     }
-    ${RekeningFragment}
 `;

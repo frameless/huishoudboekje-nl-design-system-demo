@@ -1,6 +1,4 @@
 import {gql} from "@apollo/client";
-import {AfdelingFragment} from "../fragments/Afdeling";
-import {AfspraakFragment} from "../fragments/Afspraak";
 
 export const UpdateAfdelingMutation = gql`
     mutation updateAfdeling(
@@ -15,9 +13,27 @@ export const UpdateAfdelingMutation = gql`
         ){
             ok
             afdeling {
-                ...Afdeling
+                id
+                naam
+                organisatie {
+                    id
+                    kvknummer
+                    vestigingsnummer
+                    naam
+                }
+                postadressen {
+                    id
+                    straatnaam
+                    huisnummer
+                    postcode
+                    plaatsnaam
+                }
+                rekeningen {
+                    id
+                    iban
+                    rekeninghouder
+                }
             }
         }
     }
-    ${AfdelingFragment}
 `;
