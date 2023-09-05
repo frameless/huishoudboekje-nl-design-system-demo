@@ -44,6 +44,8 @@ spec:
                 secretKeyRef:
                   name: hhb-database-secrets
                   key: POSTGRESQL_PASSWORD
+            - name: LOG_LEVEL
+              value: INFO
           volumeMounts:
             - mountPath: /bitnami/postgresql
               name: hhb-database-volume

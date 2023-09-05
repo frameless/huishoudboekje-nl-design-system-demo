@@ -80,3 +80,5 @@ spec:
               value: "http://hhb-rapportageservice"
             - name: USE_GRAPHIQL
               value: "0"
+            - name: LOG_LEVEL
+              value: INFO
