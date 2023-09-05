@@ -29,6 +29,10 @@
   },
   "homepage": "https://gitlab.com/commonground/huishoudboekje/app-new#readme",
   "dependencies": {
-    "@changesets/cli": "^2.26.1"
+    "@changesets/cli": "^2.26.1",
+    "express-session": "^1.17.3"
+  },
+  "devDependencies": {
+    "@types/express-session": "^1.17.7"
   }
 }
