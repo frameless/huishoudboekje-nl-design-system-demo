@@ -2,18 +2,19 @@ import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import express from "express";
+
 import {auth} from "express-openid-connect";
 import {getConfig} from "./config";
 import SessionHelper from "./SessionHelper";
 import log from "loglevel";
 
+const session = require('express-session')
 const config = getConfig();
 
 const sessionHelper = new SessionHelper({
 	secret: config.secret,
 	issuer: config.issuer,
-	audience: config.audience,
-	expiresIn: config.expiresIn,
+	audience: config.audience
 });
 
 const server = (prefix: string = "/auth") => {
@@ -27,6 +28,14 @@ const server = (prefix: string = "/auth") => {
 		res.send(`<a href="${prefix}">Go to auth</a>`);
 	});
 
+	app.use(
+		session({
+			secret: process.env.OIDC_CLIENT_SECRET,
+			resave: false,
+			saveUninitialized: true,
+		})
+	)
+
 	app.use(auth({
 		baseURL: process.env.OIDC_BASE_URL,
 		clientID: process.env.OIDC_CLIENT_ID,
@@ -34,6 +43,7 @@ const server = (prefix: string = "/auth") => {
 		issuerBaseURL: process.env.OIDC_ISSUER_URL,
 		authorizationParams: {
 			response_type: "code",
+			scope: "openid profile email offline_access"
 		},
 		secret: config.secret,
 		idpLogout: true,
@@ -57,28 +67,32 @@ const server = (prefix: string = "/auth") => {
 		`);
 	});
 
+	// express-openid-connect automatically refreshes tokens when needed
+	// so there is no need to do it here
 	authRouter.get("/me", async (req, res) => {
 		try {
 			// Check with the OIDC provider if the user is authenticated.
 			if (req.oidc.isAuthenticated()) {
 				const tokenContent = req.oidc.user;
-				log.debug("OIDC provider found an authenticated user:", tokenContent);
+				const token = req.oidc.accessToken
+				log.debug("token ", token)
+				log.info("OIDC provider found an authenticated user:", tokenContent);
 
-				// Check if the token is expired, if so, try to refresh. 
-				const isExpired = req.oidc.accessToken?.isExpired();
-				if (isExpired) {
-					await req.oidc.accessToken?.refresh();
+				// verify the token here before creating a new session because otherwise an app-token will be created that's not valid
+				if (sessionHelper.verifyToken(token)) {
+					const user = await req.oidc.fetchUserInfo();
+					log.info("User found");
+
+					sessionHelper.createSession(res, token);
+					return res.json({
+						ok: true,
+						user,
+					});
 				}
 
-				const user = await req.oidc.fetchUserInfo();
-				log.info("User found:", user.given_name);
-				log.debug("User found:", user);
-
-				sessionHelper.createSession(res, user);
-				return res.json({
-					ok: true,
-					user,
-				});
+				// verifyToken will log the error during verifying, but we will still log a warning that an invalid token was provided
+				// This to ensure no invalid tokens are overlooked since they can be indication of security breaches/attempts
+				log.warn("an invalid token was given to the auth service.")
 			}
 			log.info("user not authenticated")
 		}
@@ -89,9 +103,22 @@ const server = (prefix: string = "/auth") => {
 
 		// If no user was found, deny access.
 		log.info("No user found.");
-		sessionHelper.destroySession(res);
+		sessionHelper.destroySession(req, res);
 		return res.status(401).json({ok: false, message: "Unauthorized"});
 	});
+
+	authRouter.get('/logout', (req, res) => {
+		res.clearCookie('app-token')
+		req.session.destroy((err) => {
+			if (err) {
+				log.error(err)
+				return res.status(500).send('Failed to logout user')
+			}
+			res.redirect('/login')
+		});
+
+	})
+
 
 	// Use the auth router on /auth
 	app.use(prefix, authRouter);

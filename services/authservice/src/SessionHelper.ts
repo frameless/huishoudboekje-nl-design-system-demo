@@ -1,4 +1,5 @@
 import jwt from "jsonwebtoken";
+import log from "loglevel";
 
 const defaultConfig: SessionHelperConfig = {
 	secret: "testtest",
@@ -16,7 +17,6 @@ type SessionHelperConfig = {
 
 class SessionHelper {
 	private readonly secret: string;
-	private readonly expiresIn: string;
 	private readonly audience: string;
 	private readonly issuer: string;
 
@@ -27,56 +27,34 @@ class SessionHelper {
 		};
 
 		this.secret = _config.secret;
-		this.expiresIn = _config.expiresIn;
 		this.audience = _config.audience;
 		this.issuer = _config.issuer;
 	}
 
-	createSession(res, user) {
-		const token = this.generateToken(user);
+	createSession(res, token) {
 		res.cookie("app-token", token, {httpOnly: true, secure: true, sameSite: "lax"});
 	}
 
-	destroySession(res) {
-		res.cookie("app-token", "", {expires: new Date(0)});
+	destroySession(req, res) {
+		req.session.destroy()
+		res.clearCookie('app-token')
+		res.redirect('/login')
 	}
 
-	generateToken(user: any): string {
-		const {
-			preferred_username,
-			name,
-			email,
-			family_name,
-			given_name,
-		} = user;
 
-		const jwtContent = {
-			name,
-			email,
-			family_name,
-			given_name,
-			preferred_username,
-		};
-
-		return jwt.sign(jwtContent, this.secret, {
-			expiresIn: this.expiresIn,
-			audience: this.audience,
-			issuer: this.issuer,
-		});
+	verifyToken(token): boolean {
+		try {
+			jwt.verify(token, this.secret, {
+				audience: this.audience,
+				issuer: this.issuer,
+			});
+			return true;
+		}
+		catch (err) {
+			log.error('failed to verify token', err)
+			return false;
+		}
 	}
-
-	// verifyToken(token: string): boolean {
-	// 	try {
-	// 		jwt.verify(token, this.secret, {
-	// 			audience: this.audience,
-	// 			issuer: this.issuer,
-	// 		});
-	// 		return true;
-	// 	}
-	// 	catch (err) {
-	// 		return false;
-	// 	}
-	// }
 }
 
 export default SessionHelper;
