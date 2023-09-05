@@ -15,3 +15,4 @@ class Config(object):
     PREFIX = os.environ.get('PREFIX', '/api')
     REQUIRE_AUTH = os.getenv("REQUIRE_AUTH", True)
     USE_GRAPHIQL = os.getenv("USE_GRAPHIQL", False)
+    ALLOW_INTROSPECTION = os.getenv("ALLOW_INTROSPECTION", False)

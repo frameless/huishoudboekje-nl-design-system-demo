@@ -16,13 +16,15 @@ def test_graphql_unauthenticated(no_auth_client, mocker: MockerFixture):
 
 def test_graphql_authenticated_cookie(cookie_client, mocker: MockerFixture):
     mocker.patch('hhb_backend.content_type_validation.ContentTypeValidator.is_valid', return_value=True)
-    response = cookie_client.post('/api/graphql?query=%7B%20__typename%20%7D')
+    body = { "query" : "{grootboekrekening(id:\"adawdad\") {id}}"}
+    response = cookie_client.post('/api/graphql', json=body)
 
     assert response.status_code == 200
 
 def test_graphql_authenticated_token(client, mocker: MockerFixture):
     mocker.patch('hhb_backend.content_type_validation.ContentTypeValidator.is_valid', return_value=True)
-    response = client.post('/api/graphql?query=%7B%20__typename%20%7D')
+    body = { "query" : "{grootboekrekening(id:\"adawdad\") {id}}"}
+    response = client.post('/api/graphql', json=body)
 
     assert response.status_code == 200
 
