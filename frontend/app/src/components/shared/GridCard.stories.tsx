@@ -1,15 +1,14 @@
 import {Avatar, Grid, Stack, Text} from "@chakra-ui/react";
-import {ComponentMeta, ComponentStory} from "@storybook/react";
-import React from "react";
+import {Meta, StoryFn} from "@storybook/react";
 import GridCard from "./GridCard";
 
 export default {
 	title: "Huishoudboekje/GridCard",
 	component: Grid,
 	argTypes: {},
-} as ComponentMeta<typeof Grid>;
+} as Meta<typeof Grid>;
 
-const Template: ComponentStory<typeof Grid> = ({gridTemplateColumns, gap, children}) => <Grid gridTemplateColumns={gridTemplateColumns}
+const Template: StoryFn<typeof Grid> = ({gridTemplateColumns, gap, children}) => <Grid gridTemplateColumns={gridTemplateColumns}
 	gap={gap}>{children}</Grid>;
 
 const burgers = [

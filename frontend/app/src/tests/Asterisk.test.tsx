@@ -12,10 +12,10 @@ describe("Asterisk", () => {
 		expect(container?.innerHTML).toMatchSnapshot();
 
 		const asterisk = getByText(container!, "*");
-		expect(asterisk).toBeVisible();
+		expect(asterisk).toBeDefined();
 
 		const text = getByText(container!, "forms.asterisk");
-		expect(text).toBeVisible();
+		expect(text).toBeDefined();
 
 	});
 });

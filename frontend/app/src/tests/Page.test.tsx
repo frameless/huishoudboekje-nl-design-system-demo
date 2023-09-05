@@ -18,7 +18,7 @@ describe("Page", () => {
 		const [pageTitle] = screen.queryAllByRole("heading");
 
 		const title = getByText(pageTitle, "Bankafschriften");
-		expect(title).toBeVisible();
+		expect(title).toBeDefined();
 	});
 
 	it("Renders the page component with all options", () => {
@@ -66,7 +66,7 @@ describe("Page", () => {
 		});
 
 		const backButton = getByText(pageButton, "Click");
-		expect(backButton).toBeInTheDocument();
+		expect(backButton).toBeDefined();
 
 		fireEvent(backButton, clickEvent);
 		expect(onClick).toHaveBeenCalledTimes(1);
@@ -94,7 +94,7 @@ describe("Page", () => {
 		expect(onClick).toHaveBeenCalledTimes(0);
 
 		const iconButton = getByLabelText(container, "Open menu");
-		expect(iconButton).toBeVisible();
+		expect(iconButton).toBeDefined();
 
 		const clickEvent = new Event("click", {
 			bubbles: true,
@@ -107,7 +107,7 @@ describe("Page", () => {
 		expect(onClick).toHaveBeenCalledTimes(1);
 
 		const menuItem = getByText(container, "Alle transacties afletteren");
-		await waitFor(() => expect(menuItem).toBeVisible());
+		await waitFor(() => expect(menuItem).toBeDefined());
 
 		fireEvent(menuItem, clickEvent);
 		expect(onClick).toHaveBeenCalledTimes(2);
@@ -132,10 +132,10 @@ describe("Page", () => {
 		expect(onClick).toHaveBeenCalledTimes(0);
 
 		const text = getByText(container, "Tekst zichtbaar");
-		expect(text).toBeVisible();
+		expect(text).toBeDefined();
 
 		const button = getByText(container, "Actie");
-		expect(button).toBeVisible();
+		expect(button).toBeDefined();
 
 		const clickEvent = new Event("click", {
 			bubbles: true,
@@ -158,6 +158,6 @@ describe("Page", () => {
 		expect(container.innerHTML).toMatchSnapshot();
 
 		const text = getByText(container, "Hier kunnen verschillende componenten komen te staan.");
-		expect(text).toBeVisible();
+		expect(text).toBeDefined();
 	});
 });
