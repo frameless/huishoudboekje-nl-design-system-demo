@@ -16,6 +16,7 @@ from hhb_backend.graphql.mutations.afspraken.update_afspraak_betaalinstructie im
 from hhb_backend.graphql.mutations.afspraken.update_afspraak_betaalinstructie import validate_afspraak_betaalinstructie
 from hhb_backend.graphql.scalars.bedrag import Bedrag
 from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
+from hhb_backend.graphql.mutations.json_input_validator import JsonInputValidator
 
 
 class CreateAfspraakInput(graphene.InputObjectType):
@@ -45,6 +46,18 @@ class CreateAfspraak(graphene.Mutation):
     def mutate(self, info, input: CreateAfspraakInput):
         """ Create the new Afspraak """
         logging.info("Creating afspraak")
+
+        validation_schema = {
+            "type": "object",
+            "properties": {
+                "bedrag": {
+                    "type": "int", 
+                    "min": 0,
+                }
+            },
+            "required": []
+        }
+        JsonInputValidator(validation_schema).validate(input)
 
         if "valid_from" not in input:
             input["valid_from"] = str(date.today())

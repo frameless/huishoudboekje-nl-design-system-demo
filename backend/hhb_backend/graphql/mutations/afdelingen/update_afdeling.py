@@ -9,6 +9,7 @@ from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
+from hhb_backend.graphql.mutations.json_input_validator import JsonInputValidator
 
 
 class UpdateAfdeling(graphene.Mutation):
@@ -28,6 +29,19 @@ class UpdateAfdeling(graphene.Mutation):
     def mutate(root, info, id, **kwargs):
         """ Update the current Afdeling """
         logging.info(f"Updating afdeling: {id}")
+        
+        validation_schema = {
+            "type": "object",
+            "properties": {
+                "naam": {
+                    "type": "string", 
+                    "minLength": 1,
+                }
+            },
+            "required": []
+        }
+        JsonInputValidator(validation_schema).validate(kwargs)
+
         previous = hhb_dataloader().afdelingen.load_one(id)
         if not previous:
             raise GraphQLError("Afdeling not found")
