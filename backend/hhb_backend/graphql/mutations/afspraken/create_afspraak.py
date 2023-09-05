@@ -50,9 +50,29 @@ class CreateAfspraak(graphene.Mutation):
         validation_schema = {
             "type": "object",
             "properties": {
-                "bedrag": {
-                    "type": "int", 
-                    "min": 0,
+                "burger_id": {"type": "integer", "minimum": 1},
+                "tegen_rekening_id": {"type": "integer", "minimum": 1},
+                "rubriek_id": {"type": "integer", "minimum": 1},
+                "omschrijving": {"type": "string","minLength": 1},
+                "bedrag": {"type": "integer", "minimum": 0},
+                "credit": {"type": "boolean"},
+                "afdeling_id": {"type": "integer", "minimum": 1},
+                "postadres_id": {"type": "string","pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"}, #uuid
+                "alarm_id": { "type": "integer", "minimum": 1},
+                "valid_from": {"type": "string", "pattern": "^\d{4}\-(0?[1-9]|1[012])\-(0?[1-9]|[12][0-9]|3[01])$"}, #date
+                "valid_through": {"type": "string", "pattern": "^\d{4}\-(0?[1-9]|1[012])\-(0?[1-9]|[12][0-9]|3[01])$"}, #date
+                "zoektermen": {  "type": "array", "items": {"type": "string", "minLength": 1 } },
+                "betaalinstructie":{
+                    "type": "object", 
+                    "properties": {
+                        "by_day" :{ "type": "array","prefixItems": [ { "type": "string" }, { "enum": ["Monday", "Tuesday", "Wednesday","Thursday","Friday","Saturday","Sunday"] },]},
+                        "by_month": { "type": "array",  "items": { "type": "integer", "minimum": 1, "maximum": 12 }},
+                        "by_month_day": { "type": "array", "items": {"type": "integer","minimum": 1, "maximum": 31}},
+                        "repeat_frequency": {"type": "string","minLength": 1},
+                        "except_dates": {"type": "array",  "items": {"type": "string","minLength": 1}},
+                        "start_date": {"type": "string", "pattern": "^\d{4}\-(0?[1-9]|1[012])\-(0?[1-9]|[12][0-9]|3[01])$"}, #date
+                        "end_date": {"type": "string", "pattern": "^\d{4}\-(0?[1-9]|1[012])\-(0?[1-9]|[12][0-9]|3[01])$"} #date
+                    }
                 }
             },
             "required": []

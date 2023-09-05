@@ -11,6 +11,7 @@ from hhb_backend.graphql.models import afspraak
 from hhb_backend.graphql.scalars.day_of_week import DayOfWeekEnum
 from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
 from hhb_backend.graphql.utils.upstream_error_handler import UpstreamError
+from hhb_backend.graphql.mutations.json_input_validator import JsonInputValidator
 
 
 class BetaalinstructieInput(graphene.InputObjectType):
@@ -44,6 +45,22 @@ class UpdateAfspraakBetaalinstructie(graphene.Mutation):
     def mutate(self, info, afspraak_id: int, betaalinstructie: BetaalinstructieInput):
         """ Update the Afspraak """
         logging.info(f"Updating afspraak: {afspraak_id}")
+
+        validation_schema = {
+            "type": "object", 
+            "properties": {
+                "by_day" :{ "type": "array","prefixItems": [ { "type": "string" }, { "enum": ["Monday", "Tuesday", "Wednesday","Thursday","Friday","Saturday","Sunday"] },]},
+                "by_month": { "type": "array",  "items": { "type": "integer", "minimum": 1, "maximum": 12 }},
+                "by_month_day": { "type": "array", "items": {"type": "integer","minimum": 1, "maximum": 31}},
+                "repeat_frequency": {"type": "string","minLength": 1},
+                "except_dates": {"type": "array",  "items": {"type": "string","minLength": 1}},
+                "start_date": {"type": "string", "pattern": "^\d{4}\-(0?[1-9]|1[012])\-(0?[1-9]|[12][0-9]|3[01])$"}, #date
+                "end_date": {"type": "string", "pattern": "^\d{4}\-(0?[1-9]|1[012])\-(0?[1-9]|[12][0-9]|3[01])$"} #date
+            }
+        }
+        JsonInputValidator(validation_schema).validate(betaalinstructie)
+
+
         previous = hhb_dataloader().afspraken.load_one(afspraak_id)
 
         if previous is None:
