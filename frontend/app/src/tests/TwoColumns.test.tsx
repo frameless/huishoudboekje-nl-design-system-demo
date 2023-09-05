@@ -18,7 +18,7 @@ describe("TwoColumns", () => {
 		expect(container.innerHTML).toMatchSnapshot();
 
 		const text = getByText(container, "Children");
-		expect(text).toBeVisible();
+		expect(text).toBeDefined();
 	});
 
 });

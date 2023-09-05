@@ -1,7 +1,6 @@
 import {ViewIcon} from "@chakra-ui/icons";
 import {HStack, IconButton, Text} from "@chakra-ui/react";
-import {ComponentMeta, ComponentStory} from "@storybook/react";
-import React from "react";
+import {Meta, StoryFn} from "@storybook/react";
 import DataItem from "./DataItem";
 
 export default {
@@ -24,9 +23,9 @@ export default {
 		},
 	},
 	args: {},
-} as ComponentMeta<typeof DataItem>;
+} as Meta<typeof DataItem>;
 
-const Template: ComponentStory<typeof DataItem> = ({label, children}) => (
+const Template: StoryFn<typeof DataItem> = ({label, children}) => (
 	<DataItem label={label}>
 		{children}
 	</DataItem>

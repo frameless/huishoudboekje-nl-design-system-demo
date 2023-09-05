@@ -1,5 +1,4 @@
-import {ComponentMeta, ComponentStory} from "@storybook/react";
-import React from "react";
+import {Meta, StoryFn} from "@storybook/react";
 import BackButton from "./BackButton";
 
 export default {
@@ -22,9 +21,9 @@ export default {
 			description: "The label on the button.",
 		},
 	},
-} as ComponentMeta<typeof BackButton>;
+} as Meta<typeof BackButton>;
 
-const Template: ComponentStory<typeof BackButton> = (args) => <BackButton {...args} />;
+const Template: StoryFn<typeof BackButton> = (args) => <BackButton {...args} />;
 
 export const Default = Template.bind({});
 Default.args = {};

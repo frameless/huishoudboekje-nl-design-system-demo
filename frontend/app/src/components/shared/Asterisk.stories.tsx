@@ -1,13 +1,12 @@
-import {ComponentMeta, ComponentStory} from "@storybook/react";
-import React from "react";
+import {Meta, StoryFn} from "@storybook/react";
 import Asterisk from "./Asterisk";
 
 export default {
 	title: "Huishoudboekje/Asterisk",
 	component: Asterisk,
-} as ComponentMeta<typeof Asterisk>;
+} as Meta<typeof Asterisk>;
 
-const Template: ComponentStory<typeof Asterisk> = () => <Asterisk />;
+const Template: StoryFn<typeof Asterisk> = () => <Asterisk />;
 
 export const Default = Template.bind({});
 Default.args = {};

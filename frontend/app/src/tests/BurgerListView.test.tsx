@@ -62,7 +62,7 @@ it("renders a list of two burgers", () => {
 
 	const button = screen.queryByRole("button");
 	expect(button).not.toBeNull();
-	expect(button).toContainHTML("actions.add");
+	expect(button).toContain("actions.add");
 
 	const burger1Card = screen.queryByText(formatBurgerName(burgers[0], true));
 	expect(burger1Card).not.toBeNull();

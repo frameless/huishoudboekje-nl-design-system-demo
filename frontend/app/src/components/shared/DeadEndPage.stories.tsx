@@ -1,5 +1,4 @@
-import {ComponentMeta, ComponentStory} from "@storybook/react";
-import React from "react";
+import {Meta, StoryFn} from "@storybook/react";
 import AddButton from "./AddButton";
 import DeadEndPage from "./DeadEndPage";
 
@@ -21,9 +20,9 @@ export default {
 			},
 		},
 	},
-} as ComponentMeta<typeof DeadEndPage>;
+} as Meta<typeof DeadEndPage>;
 
-const Template: ComponentStory<typeof DeadEndPage> = ({message, children}) => (
+const Template: StoryFn<typeof DeadEndPage> = ({message, children}) => (
 	<DeadEndPage message={message}>
 		{children}
 	</DeadEndPage>

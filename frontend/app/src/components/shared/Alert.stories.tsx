@@ -1,6 +1,5 @@
 import {Button, useDisclosure} from "@chakra-ui/react";
-import {ComponentMeta} from "@storybook/react";
-import React from "react";
+import {Meta} from "@storybook/react";
 import Alert from "./Alert";
 
 export default {
@@ -43,7 +42,7 @@ export default {
 			description: "A function that will close the alert.",
 		},
 	},
-} as ComponentMeta<typeof Alert>;
+} as Meta<typeof Alert>;
 
 export const Default = () => {
 	const {isOpen, onOpen, onClose} = useDisclosure();

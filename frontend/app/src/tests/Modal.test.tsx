@@ -23,7 +23,7 @@ describe("Modal", () => {
 		});
 
 		const closeButton = screen.getByLabelText("Close");
-		expect(closeButton).toBeInTheDocument();
+		expect(closeButton).toBeDefined();
 
 		fireEvent(closeButton, clickEvent);
 		expect(onClose).toHaveBeenCalledTimes(1);

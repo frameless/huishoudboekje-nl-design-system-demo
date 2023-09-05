@@ -1,6 +1,6 @@
-import {ComponentMeta, ComponentStory} from "@storybook/react";
-import React from "react";
+import {Meta, StoryFn} from "@storybook/react";
 import AddButton from "./AddButton";
+import React from 'react';
 
 export default {
 	title: "Huishoudboekje/AddButton",
@@ -21,9 +21,9 @@ export default {
 			description: "This will override the button label.",
 		},
 	},
-} as ComponentMeta<typeof AddButton>;
+} as Meta<typeof AddButton>;
 
-const Template: ComponentStory<typeof AddButton> = ({onClick, children}) => (
+const Template: StoryFn<typeof AddButton> = ({onClick, children}) => (
 	<AddButton onClick={onClick}>
 		{children}
 	</AddButton>

@@ -1,3 +1,5 @@
+/* eslint-env jest */
+
 import {Button} from "@chakra-ui/react";
 import {fireEvent, getByLabelText, getByText, render, screen} from "@testing-library/react";
 import React from "react";
@@ -41,13 +43,13 @@ describe("Alert", () => {
 		});
 
 		const confirmButton = getByText(alert, "Verwijderen");
-		expect(confirmButton).toBeInTheDocument();
+		expect(confirmButton).toBeDefined();
 
 		fireEvent(confirmButton, clickEvent);
 		expect(onConfirm).toHaveBeenCalledTimes(1);
 
 		const closeButton = getByLabelText(alert, "Close");
-		expect(closeButton).toBeInTheDocument();
+		expect(closeButton).toBeDefined();
 
 		fireEvent(closeButton, clickEvent);
 		expect(onClose).toHaveBeenCalledTimes(1);

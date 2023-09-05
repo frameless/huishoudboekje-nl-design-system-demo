@@ -1,5 +1,4 @@
-import {ComponentMeta, ComponentStory} from "@storybook/react";
-import React from "react";
+import {Meta, StoryFn} from "@storybook/react";
 import DeleteConfirmButton from "./DeleteConfirmButton";
 
 export default {
@@ -14,9 +13,9 @@ export default {
 			description: "A function that does whatever it needs to do after confirming that the item can be deleted.",
 		},
 	},
-} as ComponentMeta<typeof DeleteConfirmButton>;
+} as Meta<typeof DeleteConfirmButton>;
 
-const Template: ComponentStory<typeof DeleteConfirmButton> = ({onConfirm}) => <DeleteConfirmButton onConfirm={onConfirm} />;
+const Template: StoryFn<typeof DeleteConfirmButton> = ({onConfirm}) => <DeleteConfirmButton onConfirm={onConfirm} />;
 
 export const Default = Template.bind({});
 Default.args = {};
