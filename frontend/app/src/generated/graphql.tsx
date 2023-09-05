@@ -2257,7 +2257,7 @@ export type GetOrganisatieQueryVariables = Exact<{
 }>;
 
 
-export type GetOrganisatieQuery = { organisatie?: { id?: number, naam?: string, kvknummer?: string, vestigingsnummer?: string, afdelingen?: Array<{ id?: number, naam?: string }> } };
+export type GetOrganisatieQuery = { organisatie?: { id?: number, naam?: string, kvknummer?: string, vestigingsnummer?: string, afdelingen?: Array<{ id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }> } };
 
 export type GetOrganisatiesQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -6784,6 +6784,24 @@ export const GetOrganisatieDocument = gql`
     afdelingen {
       id
       naam
+      organisatie {
+        id
+        kvknummer
+        vestigingsnummer
+        naam
+      }
+      postadressen {
+        id
+        straatnaam
+        huisnummer
+        postcode
+        plaatsnaam
+      }
+      rekeningen {
+        id
+        iban
+        rekeninghouder
+      }
     }
   }
 }

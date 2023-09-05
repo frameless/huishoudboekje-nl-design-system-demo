@@ -10,6 +10,24 @@ export const GetOrganisatieQuery = gql`
             afdelingen {
                 id
                 naam
+                organisatie {
+                    id
+                    kvknummer
+                    vestigingsnummer
+                    naam
+                }
+                postadressen {
+                    id
+                    straatnaam
+                    huisnummer
+                    postcode
+                    plaatsnaam
+                }
+                rekeningen {
+                    id
+                    iban
+                    rekeninghouder
+                }
             }
         }
     }
