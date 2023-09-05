@@ -116,7 +116,6 @@ const server = (prefix: string = "/auth") => {
 			}
 			res.redirect('/login')
 		});
-
 	})
 
 

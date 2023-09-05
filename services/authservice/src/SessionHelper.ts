@@ -36,8 +36,8 @@ class SessionHelper {
 	}
 
 	destroySession(req, res) {
-		req.session.destroy()
 		res.clearCookie('app-token')
+		req.session.destroy()
 		res.redirect('/login')
 	}
 
