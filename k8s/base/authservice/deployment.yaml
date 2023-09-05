@@ -48,6 +48,9 @@ spec:
           envFrom:
             - configMapRef:
                 name: authservice-config
+          env:
+            - name: LOG_LEVEL
+              value: INFO
 #          env:
 #            - name: OIDC_ISSUER_URL
 #              value: "comes from authservice-config configMap"

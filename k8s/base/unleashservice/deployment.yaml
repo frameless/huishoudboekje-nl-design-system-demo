@@ -60,3 +60,5 @@ spec:
                 configMapKeyRef:
                   name: unleash-config
                   key: UNLEASH_OTAP
+            - name: LOG_LEVEL
+              value: INFO
