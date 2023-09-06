@@ -70,7 +70,7 @@ const server = (prefix: string = "/auth") => {
 			// Check with the OIDC provider if the user is authenticated.
 			if (req.oidc.isAuthenticated()) {
 				const tokenContent = req.oidc.user;
-				const stringJWT = JSON.stringify(req.oidc.accessToken)
+				const stringJWT = req.oidc.accessToken?.access_token
 				log.info(timeStamp, "token ", stringJWT)
 				log.info("OIDC provider found an authenticated user:", tokenContent);
 
