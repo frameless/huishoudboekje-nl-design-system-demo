@@ -28,18 +28,6 @@ const server = (prefix: string = "/auth") => {
 		res.send(`<a href="${prefix}">Go to auth</a>`);
 	});
 
-	try {
-		app.use(
-			session({
-				secret: process.env.OIDC_CLIENT_SECRET,
-				resave: false,
-				saveUninitialized: true,
-			})
-		)
-	}
-	catch (err) {
-		log.error(err)
-	}
 
 	app.use(auth({
 		baseURL: process.env.OIDC_BASE_URL,
@@ -62,15 +50,18 @@ const server = (prefix: string = "/auth") => {
 		enableTelemetry: false,
 	}));
 
+	// app.use(
+	// 	session({
+	// 		secret: process.env.OIDC_CLIENT_SECRET,
+	// 		resave: false,
+	// 		saveUninitialized: true,
+	// 	})
+	// )
+
 	const authRouter = express.Router();
 
-	authRouter.get("/", (req, res) => {
-		res.send(`
-			<a href="${prefix}/me">Me</a><br>
-			<a href="${prefix}/login">Login</a><br>
-			<a href="${prefix}/logout">Logout</a><br>
-		`);
-	});
+	// Use the auth router on /auth
+	app.use(prefix, authRouter);
 
 	// express-openid-connect automatically refreshes tokens when needed
 	// so there is no need to do it here
@@ -112,20 +103,24 @@ const server = (prefix: string = "/auth") => {
 		return res.status(401).json({ok: false, message: "Unauthorized"});
 	});
 
-	// authRouter.get('/logout', (req, res) => {
-	// 	res.clearCookie('app-token')
-	// 	req.session.destroy((err) => {
-	// 		if (err) {
-	// 			log.error(err)
-	// 			return res.status(500).send('Failed to logout user')
-	// 		}
-	// 		res.redirect('/login')
-	// 	});
-	// })
+	authRouter.get('/logout', (req, res) => {
+		res.clearCookie('app-token')
+		req.session.destroy((err) => {
+			if (err) {
+				log.error(err)
+				return res.status(500).send('Failed to logout user')
+			}
+			res.redirect('/login')
+		});
+	})
 
-
-	// Use the auth router on /auth
-	app.use(prefix, authRouter);
+	authRouter.get("/", (req, res) => {
+		res.send(`
+			<a href="${prefix}/me">Me</a><br>
+			<a href="${prefix}/login">Login</a><br>
+			<a href="${prefix}/logout">Logout</a><br>
+		`);
+	});
 
 	// Endpoint for testing the health of this service
 	app.get("/health", (req, res) => {
