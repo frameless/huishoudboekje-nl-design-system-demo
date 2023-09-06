@@ -1,7 +1,7 @@
 import {Table, TableProps, Tbody, Th, Thead, Tr} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
-import {Afdeling, GetOrganisatieDocument, GetOrganisatiesDocument, Postadres, useDeleteAfdelingPostadresMutation} from "../../generated/graphql";
+import {Afdeling, GetAfdelingDocument, GetOrganisatieDocument, GetOrganisatiesDocument, Postadres, useDeleteAfdelingPostadresMutation} from "../../generated/graphql";
 import useToaster from "../../utils/useToaster";
 import PostadresListItem from "./PostadresListItem";
 
@@ -11,6 +11,7 @@ const PostadresList: React.FC<TableProps & PostadressenListProps> = ({postadress
 	const toast = useToaster();
 	const [deleteAfdelingRekening] = useDeleteAfdelingPostadresMutation({
 		refetchQueries: [
+			{query: GetAfdelingDocument, variables: {id: afdeling.id}},
 			{query: GetOrganisatiesDocument},
 			{query: GetOrganisatieDocument, variables: {id: afdeling?.organisatie?.id}},
 		],
