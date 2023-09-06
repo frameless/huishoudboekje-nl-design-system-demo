@@ -13,6 +13,7 @@ from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.mutations.huishoudens import huishouden_input as huishouden_input
 from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
 from hhb_backend.service.model import burger
+from hhb_backend.graphql.mutations.json_input_validator import JsonInputValidator
 
 
 class UpdateBurger(graphene.Mutation):
@@ -40,6 +41,32 @@ class UpdateBurger(graphene.Mutation):
     def mutate(self, info, id, **kwargs):
         """ Update the current Gebruiker/Burger """
         logging.info(f"Updating burger {id}")
+
+        validation_schema = {
+            "type": "object",
+            "properties": {
+                "bsn": {"type": "integer"},
+                "voorletters": {"type": "string", "pattern": "^([A-Z]\.)+$"},
+                "voornamen": {"type": "string", "minLength": 1},
+                "achternaam": {"type": "string","minLength": 1},
+                "geboortedatum": {"type": "string", "pattern": "^\d{4}\-(0?[1-9]|1[012])\-(0?[1-9]|[12][0-9]|3[01])$"}, #date
+                "telefoonnummer": {"anyOf": [
+                    {"type": "string", "pattern": "^(((\+31|0|0031)6){1}[1-9]{1}[0-9]{7})$"}, #MobilePhoneNL
+                    {"type": "string", "pattern": "^(((0)[1-9]{2}[0-9][-]?[1-9][0-9]{5})|((\\+31|0|0031)[1-9][0-9][-]?[1-9][0-9]{6}))$"} #PhoneNumberNL
+                ]},
+                "email": {"type": "string", "pattern": "^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$"},
+                "straatnaam": {"type": "string","minlength": 1}, 
+                "huisnummer": {"type": "string", "minlength": 1},
+                "postcode": {"type": "string", "pattern": "^[1-9][0-9]{3}[A-Za-z]{2}$"}, #ZipcodeNL
+                "plaatsnaam": {"type": "string","minlength": 1},
+                "saldo": {  "type": "integer", "minimum": 1 }
+            },
+            "required": []
+        }
+        JsonInputValidator(validation_schema).validate(input)
+
+
+
         previous = hhb_dataloader().burgers.load_one(id)
 
         bsn = kwargs.get("bsn")

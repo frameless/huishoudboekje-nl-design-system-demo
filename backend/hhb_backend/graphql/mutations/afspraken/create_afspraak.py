@@ -50,15 +50,10 @@ class CreateAfspraak(graphene.Mutation):
         validation_schema = {
             "type": "object",
             "properties": {
-                "burger_id": {"type": "integer", "minimum": 1},
-                "tegen_rekening_id": {"type": "integer", "minimum": 1},
-                "rubriek_id": {"type": "integer", "minimum": 1},
                 "omschrijving": {"type": "string","minLength": 1},
                 "bedrag": {"type": "integer", "minimum": 0},
-                "credit": {"type": "boolean"},
-                "afdeling_id": {"type": "integer", "minimum": 1},
                 "postadres_id": {"type": "string","pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"}, #uuid
-                "alarm_id": { "type": "integer", "minimum": 1},
+                "alarm_id": {"type": "string","pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"}, #uuid
                 "valid_from": {"type": "string", "pattern": "^\d{4}\-(0?[1-9]|1[012])\-(0?[1-9]|[12][0-9]|3[01])$"}, #date
                 "valid_through": {"type": "string", "pattern": "^\d{4}\-(0?[1-9]|1[012])\-(0?[1-9]|[12][0-9]|3[01])$"}, #date
                 "zoektermen": {  "type": "array", "items": {"type": "string", "minLength": 1 } },

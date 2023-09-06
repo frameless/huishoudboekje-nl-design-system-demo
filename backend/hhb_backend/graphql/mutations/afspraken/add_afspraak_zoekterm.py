@@ -35,10 +35,7 @@ class AddAfspraakZoekterm(graphene.Mutation):
         validation_schema = {
             "type": "object",
             "properties": {
-                "zoekterm": {
-                    "type": "string", 
-                    "minLength": 1,
-                }
+                "zoekterm": {"type": "string", "minLength": 1}
             },
             "required": []
         }

@@ -12,6 +12,7 @@ from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.models.rubriek import Rubriek
 from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
+from hhb_backend.graphql.mutations.json_input_validator import JsonInputValidator
 
 
 class CreateRubriek(graphene.Mutation):
@@ -26,6 +27,17 @@ class CreateRubriek(graphene.Mutation):
     def mutate(self, info, **kwargs):
         """ Create the new Rubriek """
         logging.info(f"Creating rubriek")
+
+        validation_schema = {
+            "type": "object",
+            "properties": {
+                "naam": {"type": "string","minlength": 1},
+                "grootboekrekening_id": {"type": "string","minlength": 1}
+            },
+            "required": []
+        }
+        JsonInputValidator(validation_schema).validate(kwargs)
+
         if (
             kwargs["grootboekrekening_id"]
             and hhb_dataloader().grootboekrekeningen.load_one(kwargs['grootboekrekening_id']) is None

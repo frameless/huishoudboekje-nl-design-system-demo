@@ -33,10 +33,7 @@ class UpdateAfdeling(graphene.Mutation):
         validation_schema = {
             "type": "object",
             "properties": {
-                "naam": {
-                    "type": "string", 
-                    "minLength": 1,
-                }
+                "naam": {"type": "string", "minLength": 1}
             },
             "required": []
         }

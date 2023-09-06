@@ -13,6 +13,7 @@ from hhb_backend.graphql.scalars.bedrag import Bedrag
 from hhb_backend.graphql.scalars.day_of_week import DayOfWeekEnum
 from hhb_backend.graphql.utils.dates import valid_afspraak, to_date
 from hhb_backend.graphql.utils.upstream_error_handler import UpstreamError
+from hhb_backend.graphql.mutations.json_input_validator import JsonInputValidator
 
 
 class CreateAlarmInput(graphene.InputObjectType):
@@ -52,7 +53,7 @@ class AlarmHelper:
     @staticmethod
     def create(input):
         logging.debug(f"AlarmHelper.create: creating alarm... Input: {input}")
-
+        validate_input(input)
         # TODO eventually turn this back on, for testing purposes it is off
         # alarm_date = parser.parse(input.startDate).date()
         # utc_now = date.today()
@@ -120,6 +121,7 @@ class AlarmHelper:
     @staticmethod
     def update(id: str, input: UpdateAlarmInput):
         logging.debug(f"AlarmHelper.update: updating alarm... Id: {id}, input: {input}")
+        validate_input(input)
 
         # TODO eventually turn this back on, for testing purposes it is off
         # if input.get("startDate"):
@@ -150,6 +152,23 @@ class AlarmHelper:
         logging.debug(f"AlarmHelper.update: updated alarm {id}. Response: {response_alarm}.")
         return AlarmHelper(alarm=response_alarm, previous=previous_response, ok=True,
                            burger_id=afspraak_response.burger_id)
+
+def validate_input(input):
+    validation_schema = {
+            "type": "object", 
+            "properties": {
+                "is_active" :{ "type": "boolean"},
+                "start_date": {"type": "string", "pattern": "^\d{4}\-(0?[1-9]|1[012])\-(0?[1-9]|[12][0-9]|3[01])$"}, #date
+                "end_date": {"type": "string", "pattern": "^\d{4}\-(0?[1-9]|1[012])\-(0?[1-9]|[12][0-9]|3[01])$"}, #date
+                "datum_margin": {"type": "integer", "minimum": 0},
+                "bedrag": {"type": "integer", "minimum": 0},
+                "bedrag_margin": {"type": "integer", "minimum": 0},
+                "by_day" :{ "type": "array","prefixItems": [ { "type": "string" }, { "enum": ["Monday", "Tuesday", "Wednesday","Thursday","Friday","Saturday","Sunday"] },]},
+                "by_month": { "type": "array",  "items": { "type": "integer", "minimum": 1, "maximum": 12 }},
+                "by_month_day": { "type": "array", "items": {"type": "integer","minimum": 1, "maximum": 31}}
+            }
+        }
+    JsonInputValidator(validation_schema).validate(input)
 
 
 def date_in_past(date_input):

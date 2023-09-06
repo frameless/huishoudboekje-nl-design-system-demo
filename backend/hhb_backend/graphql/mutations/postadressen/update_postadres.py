@@ -9,7 +9,7 @@ from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
-
+from hhb_backend.graphql.mutations.json_input_validator import JsonInputValidator
 
 class UpdatePostadres(graphene.Mutation):
     class Arguments:
@@ -27,6 +27,20 @@ class UpdatePostadres(graphene.Mutation):
     def mutate(self, info, id, **kwargs):
         """ Update the current Postadres """
         logging.info(f"Updating postadres {id}")
+
+        validation_schema = {
+            "type": "object",
+            "properties": {
+                "straatnaam": {"type": "string", "minlength": 1},
+                "huisnummer": {"type": "string", "minlength": 1},
+                "postcode": {"type": "string","pattern": "^[1-9][0-9]{3}[A-Za-z]{2}$"}, #ZipcodeNL
+                "plaatsnaam": {"type": "string", "minlength": 1},
+            },
+            "required": []
+        }
+        JsonInputValidator(validation_schema).validate(kwargs)
+
+
         previous = hhb_dataloader().postadressen.load_one(id)
         if not previous:
             raise GraphQLError("Postadres not found")

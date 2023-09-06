@@ -10,7 +10,7 @@ from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActivitei
 from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
-
+from hhb_backend.graphql.mutations.json_input_validator import JsonInputValidator
 
 class CreatePostadresInput(graphene.InputObjectType):
     # hhb_service elements (required)
@@ -34,6 +34,18 @@ class CreatePostadres(graphene.Mutation):
         """ Create the new Postadres """
         logging.info(f"Creating postadres")
         input = kwargs.pop("input")
+
+        validation_schema = {
+            "type": "object",
+            "properties": {
+                "straatnaam": {"type": "string", "minlength": 1},
+                "huisnummer": {"type": "string", "minlength": 1},
+                "postcode": {"type": "string","pattern": "^[1-9][0-9]{3}[A-Za-z]{2}$"}, #ZipcodeNL
+                "plaatsnaam": {"type": "string", "minlength": 1},
+            },
+            "required": []
+        }
+        JsonInputValidator(validation_schema).validate(input)
 
         ## check if afdeling exists
         previous_afdeling = hhb_dataloader().afdelingen.load_one(input.get('afdeling_id'))

@@ -52,7 +52,7 @@ class UpdateAfspraakBetaalinstructie(graphene.Mutation):
                 "by_day" :{ "type": "array","prefixItems": [ { "type": "string" }, { "enum": ["Monday", "Tuesday", "Wednesday","Thursday","Friday","Saturday","Sunday"] },]},
                 "by_month": { "type": "array",  "items": { "type": "integer", "minimum": 1, "maximum": 12 }},
                 "by_month_day": { "type": "array", "items": {"type": "integer","minimum": 1, "maximum": 31}},
-                "repeat_frequency": {"type": "string","minLength": 1},
+                "repeat_frequency": {"type": "string","minLength": 0},
                 "except_dates": {"type": "array",  "items": {"type": "string","minLength": 1}},
                 "start_date": {"type": "string", "pattern": "^\d{4}\-(0?[1-9]|1[012])\-(0?[1-9]|[12][0-9]|3[01])$"}, #date
                 "end_date": {"type": "string", "pattern": "^\d{4}\-(0?[1-9]|1[012])\-(0?[1-9]|[12][0-9]|3[01])$"} #date

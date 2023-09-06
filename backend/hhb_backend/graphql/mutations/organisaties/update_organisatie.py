@@ -9,6 +9,7 @@ from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.models.organisatie import Organisatie
 from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
+from hhb_backend.graphql.mutations.json_input_validator import JsonInputValidator
 
 
 class UpdateOrganisatie(graphene.Mutation):
@@ -27,6 +28,18 @@ class UpdateOrganisatie(graphene.Mutation):
     def mutate(self, info, id, **kwargs):
         """ Update the current Organisatie """
         logging.info(f"Updating organisatie {id}")
+
+        validation_schema = {
+            "type": "object",
+            "properties": {
+                "naam": {"type": "string", "minlength": 1, "maxlength": 100},
+                "kvknummer": {"type": "string","pattern": "^([0-9]{8})$"}, #KvkNummer
+                "vestigingsnummer": {  "type": "string", "pattern": "^([0-9]{12})$" } #Vestigingsnummer
+            },
+            "required": []
+        }
+        JsonInputValidator(validation_schema).validate(kwargs)
+
         previous = hhb_dataloader().organisaties.load_one(id)
         if not previous:
             raise GraphQLError("Organisatie not found")

@@ -6,6 +6,7 @@ import hhb_backend.graphql.models.signaal as graphene_signaal
 from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql.mutations.signalen.signalen import SignaalHelper, UpdateSignaalInput
 from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
+from hhb_backend.graphql.mutations.json_input_validator import JsonInputValidator
 
 
 class UpdateSignaal(graphene.Mutation):
@@ -21,6 +22,19 @@ class UpdateSignaal(graphene.Mutation):
     def mutate(self, info, id: str, input: UpdateSignaalInput):
         """ Mutatie voor het wijzigen van een bestaand Signaal """
         logging.info(f"Updating signaal {id}")
+
+        validation_schema = {
+            "type": "object",
+            "properties": {
+                "alarm_id": {"type": "string","pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"}, #uuid
+                "type": {"type": "string","minlength": 1},
+                "actions": { "type": "array",  "items": { "type": "string", "minlength": 1}},
+                "context": {"type": "string","minlength": 1}
+            },
+            "required": []
+        }
+        JsonInputValidator(validation_schema).validate(input)
+
         response = SignaalHelper.update(id, input)
         signaal = response.signaal
         previous = response.previous

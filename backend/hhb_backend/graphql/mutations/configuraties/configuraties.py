@@ -8,6 +8,7 @@ from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.models.configuratie import Configuratie
 from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
+from hhb_backend.graphql.mutations.json_input_validator import JsonInputValidator
 
 
 class ConfiguratieInput(graphene.InputObjectType):
@@ -25,6 +26,17 @@ class CreateConfiguratie(graphene.Mutation):
     @staticmethod
     def mutate(self, info, input):
         logging.info(f"Creating configuatie")
+
+        validation_schema = {
+            "type": "object",
+            "properties": {
+                "id": {"type": "string", "minLength": 1},
+                "waarde": {"type": "string", "minLength": 1},
+            },
+            "required": []
+        }
+        JsonInputValidator(validation_schema).validate(input)
+
         post_response = requests.post(
             f"{settings.HHB_SERVICES_URL}/configuratie",
             json=input,
@@ -55,6 +67,16 @@ class UpdateConfiguratie(graphene.Mutation):
 
     @staticmethod
     def mutate(self, info, input, **_kwargs):
+        validation_schema = {
+            "type": "object",
+            "properties": {
+                "id": {"type": "string", "minLength": 1},
+                "waarde": {"type": "string", "minLength": 1},
+            },
+            "required": []
+        }
+        JsonInputValidator(validation_schema).validate(input)
+
         previous = hhb_dataloader().configuraties.load_one(input.id)
 
         response = requests.post(
@@ -87,6 +109,8 @@ class DeleteConfiguratie(graphene.Mutation):
 
     @staticmethod
     def mutate(self, info, id):
+        validation_schema = {"type": "string", "minLength": 1}
+        JsonInputValidator(validation_schema).validate(id)
         previous = hhb_dataloader().configuraties.load_one(id)
 
         response = requests.delete(f"{settings.HHB_SERVICES_URL}/configuratie/{id}")
