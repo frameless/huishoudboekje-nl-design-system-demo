@@ -28,6 +28,13 @@ const server = (prefix: string = "/auth") => {
 		res.send(`<a href="${prefix}">Go to auth</a>`);
 	});
 
+	app.use(
+		session({
+			secret: process.env.OIDC_CLIENT_SECRET,
+			resave: false,
+			saveUninitialized: true,
+		})
+	)
 
 	app.use(auth({
 		baseURL: process.env.OIDC_BASE_URL,
@@ -50,14 +57,6 @@ const server = (prefix: string = "/auth") => {
 		enableTelemetry: false,
 	}));
 
-	// app.use(
-	// 	session({
-	// 		secret: process.env.OIDC_CLIENT_SECRET,
-	// 		resave: false,
-	// 		saveUninitialized: true,
-	// 	})
-	// )
-
 	const authRouter = express.Router();
 
 	// Use the auth router on /auth
@@ -70,16 +69,16 @@ const server = (prefix: string = "/auth") => {
 			// Check with the OIDC provider if the user is authenticated.
 			if (req.oidc.isAuthenticated()) {
 				const tokenContent = req.oidc.user;
-				const token = req.oidc.accessToken
-				log.debug("token ", token)
+				const stringJWT = JSON.stringify(req.oidc.accessToken)
+				log.debug("token ", stringJWT)
 				log.info("OIDC provider found an authenticated user:", tokenContent);
 
 				// verify the token here before creating a new session because otherwise an app-token will be created that's not valid
-				if (sessionHelper.verifyToken(token)) {
+				if (sessionHelper.verifyToken(stringJWT)) {
 					const user = await req.oidc.fetchUserInfo();
 					log.info("User found");
 
-					sessionHelper.createSession(res, token);
+					sessionHelper.createSession(res, stringJWT);
 					return res.json({
 						ok: true,
 						user,
