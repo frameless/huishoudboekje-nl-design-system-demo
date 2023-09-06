@@ -45,7 +45,7 @@ class CreateAfdeling(graphene.Mutation):
                     "type": "object",
                     "properties": {
                         "iban": {"type": "string","pattern": "^[a-zA-Z]{2}[0-9]{2}[a-zA-Z0-9]{4}[0-9]{7}([a-zA-Z0-9]{0,16})$"}, #IbanNL
-                        "rekeninghouder": {"type": "string","minlength": 1}
+                        "rekeninghouder": {"type": "string","minlength": 1,"maxlength": 100}
                     },
                 }},
                 "postadressen": {"type": "array", "items": {

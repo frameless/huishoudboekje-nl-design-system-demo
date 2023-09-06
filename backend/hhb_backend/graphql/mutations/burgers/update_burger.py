@@ -14,6 +14,7 @@ from hhb_backend.graphql.mutations.huishoudens import huishouden_input as huisho
 from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
 from hhb_backend.service.model import burger
 from hhb_backend.graphql.mutations.json_input_validator import JsonInputValidator
+from hhb_backend.graphql.mutations.validators import before_today
 
 
 class UpdateBurger(graphene.Mutation):
@@ -64,8 +65,7 @@ class UpdateBurger(graphene.Mutation):
             "required": []
         }
         JsonInputValidator(validation_schema).validate(input)
-
-
+        before_today(input.geboortedatum)
 
         previous = hhb_dataloader().burgers.load_one(id)
 

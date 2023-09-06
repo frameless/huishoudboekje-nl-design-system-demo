@@ -1,4 +1,5 @@
 """ GraphQL mutation for creating a new Burger """
+from datetime import datetime
 import json
 import logging
 
@@ -16,6 +17,7 @@ from hhb_backend.graphql.mutations.rekeningen.utils import create_burger_rekenin
 from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
 from hhb_backend.service.model import burger
 from hhb_backend.graphql.mutations.json_input_validator import JsonInputValidator
+from hhb_backend.graphql.mutations.validators import before_today
 
 
 class CreateBurgerInput(graphene.InputObjectType):
@@ -66,14 +68,14 @@ class CreateBurger(graphene.Mutation):
                 "plaatsnaam": {"type": "string","minlength": 1}, 
                 "rekeningen": {  "type": "object", "propeties": {
                     "iban": {"type": "string","pattern": "^[a-zA-Z]{2}[0-9]{2}[a-zA-Z0-9]{4}[0-9]{7}([a-zA-Z0-9]{0,16})$"}, #IbanNL
-                    "rekeninghouder": {"type": "string","minlength": 1}
+                    "rekeninghouder": {"type": "string","minlength": 1,"maxlength": 100}
                 }},
                 "saldo": {  "type": "integer", "minimum": 1 }
             },
             "required": []
         }
         JsonInputValidator(validation_schema).validate(input)
-
+        before_today(input.geboortedatum)
 
         bsn = input.get('bsn')
         graphene_burger.Burger.bsn_length(bsn)

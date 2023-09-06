@@ -1,6 +1,6 @@
 import calendar
 import logging
-from datetime import date
+from datetime import date, datetime
 
 import graphene
 import requests
@@ -14,6 +14,7 @@ from hhb_backend.graphql.scalars.day_of_week import DayOfWeekEnum
 from hhb_backend.graphql.utils.dates import valid_afspraak, to_date
 from hhb_backend.graphql.utils.upstream_error_handler import UpstreamError
 from hhb_backend.graphql.mutations.json_input_validator import JsonInputValidator
+from hhb_backend.graphql.mutations.validators import after_today
 
 
 class CreateAlarmInput(graphene.InputObjectType):
@@ -169,6 +170,7 @@ def validate_input(input):
             }
         }
     JsonInputValidator(validation_schema).validate(input)
+    after_today(input.start_date)
 
 
 def date_in_past(date_input):
