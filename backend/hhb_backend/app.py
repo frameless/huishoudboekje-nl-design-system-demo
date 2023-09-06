@@ -55,7 +55,7 @@ def create_app(
     def health():
         return make_response(("ok", {"Content-Type": "text/plain"}))
 
-    graphql = graphql_blueprint.create_blueprint(app.config["USE_GRAPHIQL"])
+    graphql = graphql_blueprint.create_blueprint(app.config["USE_GRAPHIQL"], app.config["ALLOW_INTROSPECTION"])
 
     @graphql.before_request
     def validate_content_type():

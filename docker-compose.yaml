@@ -217,6 +217,7 @@ services:
       SIGNALENSERVICE_URL: "http://signalenservice:8080"
       UNLEASHSERVICE_URL: "http://unleashservice:8080"
       USE_GRAPHIQL: 1
+      ALLOW_INTROSPECTION: 1
     ports:
       - 5000:8000
 

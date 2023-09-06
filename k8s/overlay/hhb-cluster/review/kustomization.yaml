@@ -21,4 +21,9 @@ patches:
     version: v1
     kind: Deployment
   path: resources-remove-patch.yaml
+- target:
+    version: v1
+    kind: Deployment
+    name: hhb-backend
+  path: allow-introspection-patch.yaml
 
