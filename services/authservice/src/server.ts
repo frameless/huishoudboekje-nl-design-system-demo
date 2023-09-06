@@ -7,6 +7,7 @@ import {auth} from "express-openid-connect";
 import {getConfig} from "./config";
 import SessionHelper from "./SessionHelper";
 import log from "loglevel";
+import {timeStamp} from "console";
 
 const session = require('express-session')
 const config = getConfig();
@@ -70,7 +71,7 @@ const server = (prefix: string = "/auth") => {
 			if (req.oidc.isAuthenticated()) {
 				const tokenContent = req.oidc.user;
 				const stringJWT = JSON.stringify(req.oidc.accessToken)
-				log.debug("token ", stringJWT)
+				log.info(timeStamp, "token ", stringJWT)
 				log.info("OIDC provider found an authenticated user:", tokenContent);
 
 				// verify the token here before creating a new session because otherwise an app-token will be created that's not valid
