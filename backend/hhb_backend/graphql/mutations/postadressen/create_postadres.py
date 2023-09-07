@@ -38,10 +38,10 @@ class CreatePostadres(graphene.Mutation):
         validation_schema = {
             "type": "object",
             "properties": {
-                "straatnaam": {"type": "string", "minlength": 1},
-                "huisnummer": {"type": "string", "minlength": 1},
+                "straatnaam": {"type": "string", "minLength": 1},
+                "huisnummer": {"type": "string", "minLength": 1},
                 "postcode": {"type": "string","pattern": "^[1-9][0-9]{3}[A-Za-z]{2}$"}, #ZipcodeNL
-                "plaatsnaam": {"type": "string", "minlength": 1},
+                "plaatsnaam": {"type": "string", "minLength": 1},
             },
             "required": []
         }

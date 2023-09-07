@@ -31,15 +31,8 @@ class AddAfspraakZoekterm(graphene.Mutation):
     def mutate(root, info, afspraak_id: int, zoekterm, **kwargs):
         """ Add zoekterm to afspraak """
         logging.info(f"Adding zoekterm for afspraak: {id}")
-
-        validation_schema = {
-            "type": "object",
-            "properties": {
-                "zoekterm": {"type": "string", "minLength": 1}
-            },
-            "required": []
-        }
-        JsonInputValidator(validation_schema).validate(kwargs)
+        validation_schema = {"type": "string", "minLength": 1}
+        JsonInputValidator(validation_schema).validate(zoekterm)
 
         previous: Afspraak = hhb_dataloader().afspraken.load_one(afspraak_id)
         if previous is None:

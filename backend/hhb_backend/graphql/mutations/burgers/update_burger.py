@@ -46,21 +46,22 @@ class UpdateBurger(graphene.Mutation):
         validation_schema = {
             "type": "object",
             "properties": {
-                "bsn": {"type": "integer"},
                 "voorletters": {"type": "string", "pattern": "^([A-Z]\.)+$"},
                 "voornamen": {"type": "string", "minLength": 1},
                 "achternaam": {"type": "string","minLength": 1},
-                "geboortedatum": {"type": "string", "format": "date"},
                 "telefoonnummer": {"anyOf": [
                     {"type": "string", "pattern": "^(((\+31|0|0031)6){1}[1-9]{1}[0-9]{7})$"}, #MobilePhoneNL
                     {"type": "string", "pattern": "^(((0)[1-9]{2}[0-9][-]?[1-9][0-9]{5})|((\\+31|0|0031)[1-9][0-9][-]?[1-9][0-9]{6}))$"} #PhoneNumberNL
                 ]},
-                "email": {"type": "string", "pattern": "^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$"},
-                "straatnaam": {"type": "string","minlength": 1}, 
-                "huisnummer": {"type": "string", "minlength": 1},
+                "email": {"type": "string", "pattern": "^\S+@\S+$"},
+                "straatnaam": {"type": "string","minLength": 1}, 
+                "huisnummer": {"type": "string", "minLength": 1},
                 "postcode": {"type": "string", "pattern": "^[1-9][0-9]{3}[A-Za-z]{2}$"}, #ZipcodeNL
-                "plaatsnaam": {"type": "string","minlength": 1},
-                "saldo": {  "type": "integer", "minimum": 1 }
+                "plaatsnaam": {"type": "string","minLength": 1}, 
+                "rekeningen": {  "type": "object", "propeties": {
+                    "iban": {"type": "string","pattern": "^[a-zA-Z]{2}[0-9]{2}[a-zA-Z0-9]{4}[0-9]{7}([a-zA-Z0-9]{0,16})$"}, #IbanNL
+                    "rekeninghouder": {"type": "string","minLength": 1,"maxLength": 100}
+                }}
             },
             "required": []
         }

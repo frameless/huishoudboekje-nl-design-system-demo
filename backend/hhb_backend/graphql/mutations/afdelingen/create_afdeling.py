@@ -45,16 +45,16 @@ class CreateAfdeling(graphene.Mutation):
                     "type": "object",
                     "properties": {
                         "iban": {"type": "string","pattern": "^[a-zA-Z]{2}[0-9]{2}[a-zA-Z0-9]{4}[0-9]{7}([a-zA-Z0-9]{0,16})$"}, #IbanNL
-                        "rekeninghouder": {"type": "string","minlength": 1,"maxlength": 100}
+                        "rekeninghouder": {"type": "string","minLength": 1,"maxLength": 100}
                     },
                 }},
                 "postadressen": {"type": "array", "items": {
                     "type": "object",
                     "properties": {
-                        "straatnaam": {"type": "string", "minlength": 1},
-                        "huisnummer": {"type": "string", "minlength": 1},
+                        "straatnaam": {"type": "string", "minLength": 1},
+                        "huisnummer": {"type": "string", "minLength": 1},
                         "postcode": {"type": "string","pattern": "^[1-9][0-9]{3}[A-Za-z]{2}$"}, #ZipcodeNL
-                        "plaatsnaam": {"type": "string", "minlength": 1},
+                        "plaatsnaam": {"type": "string", "minLength": 1},
                     },
                 }},
             },

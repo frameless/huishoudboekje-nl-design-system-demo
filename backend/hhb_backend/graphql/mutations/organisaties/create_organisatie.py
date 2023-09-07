@@ -31,7 +31,7 @@ class CreateOrganisatie(graphene.Mutation):
         validation_schema = {
             "type": "object",
             "properties": {
-                "naam": {"type": "string", "minlength": 1, "maxlength": 100},
+                "naam": {"type": "string", "minLength": 1, "maxLength": 100},
                 "kvknummer": {"type": "string","pattern": "^([0-9]{8})$"}, #KvkNummer
                 "vestigingsnummer": {  "type": "string", "pattern": "^([0-9]{12})$" } #Vestigingsnummer
             },

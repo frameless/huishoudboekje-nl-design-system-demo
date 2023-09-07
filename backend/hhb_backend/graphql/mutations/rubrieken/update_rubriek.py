@@ -33,8 +33,8 @@ class UpdateRubriek(graphene.Mutation):
         validation_schema = {
             "type": "object",
             "properties": {
-                "naam": {"type": "string","minlength": 1},
-                "grootboekrekening_id": {"type": "string","minlength": 1}
+                "naam": {"type": "string","minLength": 1},
+                "grootboekrekening_id": {"type": "string","minLength": 1}
             },
             "required": []
         }
