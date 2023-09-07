@@ -56,12 +56,12 @@ class CreateBurger(graphene.Mutation):
                 "voorletters": {"type": "string", "pattern": "^([A-Z]\.)+$"},
                 "voornamen": {"type": "string", "minLength": 1},
                 "achternaam": {"type": "string","minLength": 1},
-                "geboortedatum": {"type": "string", "pattern": "^\d{4}\-(0?[1-9]|1[012])\-(0?[1-9]|[12][0-9]|3[01])$"}, #date
+                "geboortedatum": {"type": "string", "format": "date"},
                 "telefoonnummer": {"anyOf": [
                     {"type": "string", "pattern": "^(((\+31|0|0031)6){1}[1-9]{1}[0-9]{7})$"}, #MobilePhoneNL
                     {"type": "string", "pattern": "^(((0)[1-9]{2}[0-9][-]?[1-9][0-9]{5})|((\\+31|0|0031)[1-9][0-9][-]?[1-9][0-9]{6}))$"} #PhoneNumberNL
                 ]},
-                "email": {"type": "string", "pattern": "^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$"},
+                "email": {"type": "string", "format": "email"},
                 "straatnaam": {"type": "string","minlength": 1}, 
                 "huisnummer": {"type": "string", "minlength": 1},
                 "postcode": {"type": "string", "pattern": "^[1-9][0-9]{3}[A-Za-z]{2}$"}, #ZipcodeNL

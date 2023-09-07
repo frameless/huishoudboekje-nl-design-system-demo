@@ -158,20 +158,23 @@ def validate_input(input):
     validation_schema = {
             "type": "object", 
             "properties": {
-                "is_active" :{ "type": "boolean"},
-                "start_date": {"type": "string", "pattern": "^\d{4}\-(0?[1-9]|1[012])\-(0?[1-9]|[12][0-9]|3[01])$"}, #date
-                "end_date": {"type": "string", "pattern": "^\d{4}\-(0?[1-9]|1[012])\-(0?[1-9]|[12][0-9]|3[01])$"}, #date
+                "isActive" :{ "type": "boolean"},
+                "startDate": {"type": "string", "format": "date"},
+                "endDate": {"type": "string", "format": "date"},
                 "datum_margin": {"type": "integer", "minimum": 0},
                 "bedrag": {"type": "integer", "minimum": 0},
-                "bedrag_margin": {"type": "integer", "minimum": 0},
-                "by_day" :{ "type": "array","prefixItems": [ { "type": "string" }, { "enum": ["Monday", "Tuesday", "Wednesday","Thursday","Friday","Saturday","Sunday"] },]},
-                "by_month": { "type": "array",  "items": { "type": "integer", "minimum": 1, "maximum": 12 }},
-                "by_month_day": { "type": "array", "items": {"type": "integer","minimum": 1, "maximum": 31}}
+                "bedragMargin": {"type": "integer", "minimum": 0},
+                "byDay" :{ "type": "array","prefixItems": [ { "type": "string" }, { "enum": ["Monday", "Tuesday", "Wednesday","Thursday","Friday","Saturday","Sunday"] }]},
+                "byMonth": { "type": "array",  "items": { "type": "integer", "minimum": 1, "maximum": 12 }},
+                "byMonthDay": { "type": "array", "items": {"type": "integer","minimum": 1, "maximum": 31}}
             }
         }
+    
     JsonInputValidator(validation_schema).validate(input)
-    after_today(input.start_date)
-
+    after_today(input.startDate)
+    if not input.endDate:
+        if any(day > 28 for day in input.byMonthDay):
+            raise GraphQLError("Invalid input")
 
 def date_in_past(date_input):
     d = to_date(date_input)

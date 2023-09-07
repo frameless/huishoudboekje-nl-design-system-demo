@@ -54,8 +54,8 @@ class UpdateAfspraakBetaalinstructie(graphene.Mutation):
                 "by_month_day": { "type": "array", "items": {"type": "integer","minimum": 1, "maximum": 31}},
                 "repeat_frequency": {"type": "string","minLength": 0},
                 "except_dates": {"type": "array",  "items": {"type": "string","minLength": 1}},
-                "start_date": {"type": "string", "pattern": "^\d{4}\-(0?[1-9]|1[012])\-(0?[1-9]|[12][0-9]|3[01])$"}, #date
-                "end_date": {"type": "string", "pattern": "^\d{4}\-(0?[1-9]|1[012])\-(0?[1-9]|[12][0-9]|3[01])$"} #date
+                "start_date": {"type": "string", "format": "date"},
+                "end_date": {"type": "string", "format": "date"}
             }
         }
         JsonInputValidator(validation_schema).validate(betaalinstructie)

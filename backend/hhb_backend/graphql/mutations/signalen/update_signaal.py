@@ -26,7 +26,7 @@ class UpdateSignaal(graphene.Mutation):
         validation_schema = {
             "type": "object",
             "properties": {
-                "alarm_id": {"type": "string","pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"}, #uuid
+                "alarm_id": {"type": "string","format": "uuid"},
                 "type": {"type": "string","minlength": 1},
                 "actions": { "type": "array",  "items": { "type": "string", "minlength": 1}},
                 "context": {"type": "string","minlength": 1}

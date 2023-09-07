@@ -38,8 +38,8 @@ class CreateSaldo(graphene.Mutation):
         validation_schema = {
             "type": "object",
             "properties": {
-                "einddatum":{"type": "string", "pattern": "^\d{4}\-(0?[1-9]|1[012])\-(0?[1-9]|[12][0-9]|3[01])$"}, #date
-                "begindatum":{"type": "string", "pattern": "^\d{4}\-(0?[1-9]|1[012])\-(0?[1-9]|[12][0-9]|3[01])$"}, #date
+                "einddatum":{"type": "string", "format": "date"},
+                "begindatum":{"type": "string", "format": "date"},
             },
             "required": []
         }

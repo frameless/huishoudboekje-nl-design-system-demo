@@ -50,10 +50,10 @@ class UpdateAfspraak(graphene.Mutation):
             "properties": {
                 "omschrijving": {"type": "string","minLength": 1},
                 "bedrag": {"type": "integer", "minimum": 0},
-                "postadres_id": {"type": "string","pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"}, #uuid
-                "alarm_id": {"type": "string","pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"}, #uuid
-                "valid_from": {"type": "string", "pattern": "^\d{4}\-(0?[1-9]|1[012])\-(0?[1-9]|[12][0-9]|3[01])$"}, #date
-                "valid_through": {"type": "string", "pattern": "^\d{4}\-(0?[1-9]|1[012])\-(0?[1-9]|[12][0-9]|3[01])$"}, #date
+                "postadres_id": {"type": "string","format": "uuid"},
+                "alarm_id": {"type": "string","format": "uuid"},
+                "valid_from": {"type": "string", "format": "date"},
+                "valid_through": {"type": "string", "format": "date"},
                 "zoektermen": {  "type": "array", "items": {"type": "string", "minLength": 1 } }
             },
             "required": []
