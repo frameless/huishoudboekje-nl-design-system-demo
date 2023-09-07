@@ -1,5 +1,5 @@
 import {Button, useDisclosure} from "@chakra-ui/react";
-import {ComponentMeta, ComponentStory} from "@storybook/react";
+import {Meta, StoryFn} from "@storybook/react";
 import React from "react";
 import Modal from "./Modal";
 
@@ -29,9 +29,9 @@ export default {
 			description: "This will be visible in the body of the modal.",
 		},
 	},
-} as ComponentMeta<typeof Modal>;
+} as Meta<typeof Modal>;
 
-const Template: ComponentStory<typeof Modal> = ({title, children}) => {
+const Template: StoryFn<typeof Modal> = ({title, children}) => {
 	const {isOpen, onOpen, onClose} = useDisclosure();
 
 	return (<>

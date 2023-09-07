@@ -1,5 +1,5 @@
 import {Text} from "@chakra-ui/react";
-import {ComponentMeta, ComponentStory} from "@storybook/react";
+import {Meta, StoryFn} from "@storybook/react";
 import React from "react";
 import TwoColumns from "./TwoColumns";
 
@@ -7,9 +7,9 @@ export default {
 	title: "Huishoudboekje/TwoColumns",
 	component: TwoColumns,
 	argTypes: {},
-} as ComponentMeta<typeof TwoColumns>;
+} as Meta<typeof TwoColumns>;
 
-const Template: ComponentStory<typeof TwoColumns> = ({children}) => <TwoColumns>{children}</TwoColumns>;
+const Template: StoryFn<typeof TwoColumns> = ({children}) => <TwoColumns>{children}</TwoColumns>;
 
 export const Default = Template.bind({});
 Default.args = {
