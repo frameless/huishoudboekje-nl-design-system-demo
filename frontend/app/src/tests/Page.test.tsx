@@ -1,8 +1,9 @@
-import {Button, HStack, IconButton, Menu, MenuButton, MenuItem, MenuList, Text} from "@chakra-ui/react";
+import {Button, ButtonGroup, HStack, IconButton, Menu, MenuButton, MenuItem, MenuList, Text} from "@chakra-ui/react";
 import {fireEvent, getByLabelText, getByText, render, screen, waitFor} from "@testing-library/react";
 import React from "react";
 import MenuIcon from "../components/shared/MenuIcon";
 import Page from "../components/shared/Page";
+import SectionContainer from "../components/shared/SectionContainer";
 
 jest.mock("react-i18next", () => require("./utils/mock-hooks").reactI18NextMock());
 jest.mock('react', () => ({
