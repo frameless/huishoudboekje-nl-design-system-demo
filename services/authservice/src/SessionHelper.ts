@@ -35,8 +35,9 @@ class SessionHelper {
 		this.audience = _config.audience;
 		this.issuer = _config.issuer;
 		this.allowedAlgs = this.parseAllowedAlgorithms(_config.allowedAlgs)
+		log.info(`${process.env.OIDC_BASE_URL}`)
 		this.jwksClientInstance = jwksClient({
-			jwksUri: `${process.env.OIDC_BASE_URL}/.well-known/jwks.json`
+			jwksUri: `${process.env.OIDC_BASE_URL}/jwks.json`
 		});
 
 	}
