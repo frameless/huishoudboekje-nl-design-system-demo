@@ -1,0 +1,7 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Dashed button Check the onClick 1`] = `"<button colorscheme=\\"primary\\" borderstyle=\\"dashed\\" variant=\\"outline\\" lefticon=\\"[object Object]\\" w=\\"100%\\" h=\\"100%\\" borderradius=\\"5\\" p=\\"5\\">Opslaan</button>"`;
+
+exports[`Dashed button Show dashed button with default label 1`] = `"<button colorscheme=\\"primary\\" borderstyle=\\"dashed\\" variant=\\"outline\\" lefticon=\\"[object Object]\\" w=\\"100%\\" h=\\"100%\\" borderradius=\\"5\\" p=\\"5\\">global.actions.add</button>"`;
+
+exports[`Dashed button Show dashed button with label 1`] = `"<button colorscheme=\\"primary\\" borderstyle=\\"dashed\\" variant=\\"outline\\" lefticon=\\"[object Object]\\" w=\\"100%\\" h=\\"100%\\" borderradius=\\"5\\" p=\\"5\\">Toevoegen</button>"`;
