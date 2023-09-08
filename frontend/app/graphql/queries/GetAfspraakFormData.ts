@@ -1,5 +1,4 @@
 import {gql} from "@apollo/client";
-import {AfspraakFragment} from "../fragments/Afspraak";
 
 export const GetAfspraakFormDataQuery = gql`
     query getAfspraakFormData($afspraakId: Int!) {
@@ -32,12 +31,35 @@ export const GetAfspraakFormDataQuery = gql`
                     kvknummer
                     vestigingsnummer
                     afdelingen {
-                        ...Afdeling
+                        id
+                        naam
+                        organisatie {
+                            id
+                            kvknummer
+                            vestigingsnummer
+                            naam
+                        }
+                        postadressen {
+                            id
+                            straatnaam
+                            huisnummer
+                            postcode
+                            plaatsnaam
+                        }
+                        rekeningen {
+                            id
+                            iban
+                            rekeninghouder
+                        }
                     }
                 }
             }
             postadres {
-                ...Postadres
+                id
+                straatnaam
+                huisnummer
+                postcode
+                plaatsnaam
             }
             tegenRekening {
                 id
@@ -70,5 +92,4 @@ export const GetAfspraakFormDataQuery = gql`
             vestigingsnummer
         }
     }
-    ${AfspraakFragment}
 `;

@@ -22,6 +22,7 @@ const PostadresListItem: React.FC<PostadresListItemProps> = ({postadres, afdelin
 	const onConfirmDelete = () => {
 		if (onDelete) {
 			onDelete();
+			deleteAlert.onClose()
 		}
 	};
 

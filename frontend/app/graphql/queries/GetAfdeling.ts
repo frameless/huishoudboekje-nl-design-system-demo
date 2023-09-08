@@ -1,11 +1,28 @@
 import {gql} from "@apollo/client";
-import {AfdelingFragment} from "../fragments/Afdeling";
 
 export const GetAfdelingQuery = gql`
     query getAfdeling($id: Int!) {
         afdeling(id: $id){
-            ...Afdeling
+            id
+            naam
+            organisatie {
+                id
+                kvknummer
+                vestigingsnummer
+                naam
+            }
+            postadressen {
+                id
+                straatnaam
+                huisnummer
+                postcode
+                plaatsnaam
+            }
+            rekeningen {
+                id
+                iban
+                rekeninghouder
+            }
         }
     }
-    ${AfdelingFragment}
 `;
