@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
 import {Algorithm} from "jsonwebtoken";
+import jwksRsa from 'jwks-rsa'
 import log from "loglevel";
 
 const defaultConfig: SessionHelperConfig = {
@@ -45,15 +46,18 @@ class SessionHelper {
 		req.session.destroy()
 	}
 
-
 	verifyToken(token): boolean {
 		try {
-			jwt.verify(token, this.secret, {
-				audience: this.audience,
-				issuer: this.issuer,
-				algorithms: this.allowedAlgs
-			});
-			return true;
+			const alg = this.getAlgorithmFromHeader(token)
+			if (alg) {
+				jwt.verify(token, this.getJWTKeyOrSecret(alg), {
+					audience: this.audience,
+					issuer: this.issuer,
+					algorithms: [alg]
+				});
+				return true;
+			}
+			return false
 		}
 		catch (err) {
 			log.error('failed to verify token', err)
@@ -61,7 +65,7 @@ class SessionHelper {
 		}
 	}
 
-	verifyAllowedAlgorithms(token): boolean {
+	getAlgorithmFromHeader(token) {
 		try {
 			const decodedToken = jwt.decode(token, {complete: true})
 			if (decodedToken) {
@@ -70,11 +74,9 @@ class SessionHelper {
 
 				const jwtAlgorithm = jwtHeader.alg
 				log.info(new Date().toISOString(), "JWT Alg: ", jwtAlgorithm)
-
-				if (this.allowedAlgs.includes(jwtAlgorithm as Algorithm)) {
-					return true
-				}
+				return jwtAlgorithm as Algorithm
 			}
+			log.info("token did not contain a decode-able token")
 			return false
 		}
 		catch (err) {
@@ -82,6 +84,17 @@ class SessionHelper {
 			return false
 		}
 	}
+
+	verifyAllowedAlgorithms(token) {
+		const jwtAlg = this.getAlgorithmFromHeader(token)
+		if (jwtAlg) {
+			if (this.allowedAlgs.includes(jwtAlg)) {
+				return true
+			}
+		}
+		return false
+	}
+
 	parseAllowedAlgorithms(algorithmsEnv: string): Algorithm[] {
 		const algorithmStrings = algorithmsEnv.split(',');
 
@@ -94,6 +107,19 @@ class SessionHelper {
 		});
 
 		return algorithms;
+	}
+
+	getJWTKeyOrSecret(alg: Algorithm) {
+		if (['HS256', 'HS384', 'HS512'].includes(alg)) {
+			return this.secret
+		}
+		else {
+			const publicKey = jwksRsa.expressJwtSecret({
+				jwksUri: `${process.env.OIDC_BASE_URL}/.well-known/jwks.json`,
+				cache: true // cache the key for performance since it's a PUBLIC key
+			})
+			return publicKey.toString()
+		}
 	}
 }
 
