@@ -14,7 +14,6 @@ from hhb_backend.graphql.scalars.day_of_week import DayOfWeekEnum
 from hhb_backend.graphql.utils.dates import valid_afspraak, to_date
 from hhb_backend.graphql.utils.upstream_error_handler import UpstreamError
 from hhb_backend.graphql.mutations.json_input_validator import JsonInputValidator
-from hhb_backend.graphql.mutations.validators import after_today
 
 
 class CreateAlarmInput(graphene.InputObjectType):
@@ -160,7 +159,10 @@ def validate_input(input):
             "properties": {
                 "isActive" :{ "type": "boolean"},
                 "startDate": {"type": "string", "format": "date"},
-                "endDate": {"type": "string", "format": "date"},
+                "endDate": {"oneOf": [
+                    {"type": "string", "format": "date"},
+                    {"type": "null"}
+                ]},
                 "datum_margin": {"type": "integer", "minimum": 0},
                 "bedrag": {"type": "integer", "minimum": 0},
                 "bedragMargin": {"type": "integer", "minimum": 0},
@@ -171,8 +173,7 @@ def validate_input(input):
         }
     
     JsonInputValidator(validation_schema).validate(input)
-    after_today(input.startDate)
-    if not input.endDate:
+    if not input.get("endDate", None) and input.get("byMonthDay", None):
         if any(day > 28 for day in input.byMonthDay):
             raise GraphQLError("Invalid input")
 

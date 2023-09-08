@@ -27,7 +27,7 @@ class CreateSignaal(graphene.Mutation):
                 "alarm_id": {"type": "string","format": "uuid"},
                 "type": {"type": "string","minLength": 1},
                 "actions": { "type": "array",  "items": { "type": "string", "minLength": 1}},
-                "context": {"type": "string","minLength": 1}
+                "context": {"type": "string"}
             },
             "required": []
         }

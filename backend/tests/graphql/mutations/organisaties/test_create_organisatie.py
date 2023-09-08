@@ -4,7 +4,7 @@ from hhb_backend.graphql import settings
 def test_create_organisatie_succes(client):
     with requests_mock.Mocker() as mock:
         # arrange
-        input = {'kvknummer': '123456789', 'vestigingsnummer': '1', 'naam': 'testOrganisatie'}
+        input = {'kvknummer': '12345678', 'vestigingsnummer': '123456789112', 'naam': 'testOrganisatie'}
         request = {
                 "query": '''
                     mutation test($input:CreateOrganisatieInput!) {
@@ -17,9 +17,9 @@ def test_create_organisatie_succes(client):
                     }''',
                 "variables": {"input": input}}
         fallback = mock.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
-        organisatie_1 = {'id': 1, 'kvknummer': 123, 'vestigingsnummer': 123}
+        organisatie_1 = {'id': 1, 'kvknummer': 12345678, 'vestigingsnummer': 123456789112}
         organisaties = mock.get(f"{settings.ORGANISATIE_SERVICES_URL}/organisaties/", json={'data': [organisatie_1]}, status_code=200)
-        organisatie_new = {'id':2, 'kvknummer': '123456789', 'vestigingsnummer': '1', 'naam': 'testOrganisatie'}
+        organisatie_new = {'id':2, 'kvknummer': '12345678', 'vestigingsnummer': '123456789112', 'naam': 'testOrganisatie'}
         org = mock.post(f"{settings.ORGANISATIE_SERVICES_URL}/organisaties/", json={'data': organisatie_new}, status_code=201)
         log = mock.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/")
 
@@ -48,12 +48,12 @@ def test_create_organisatie_unique_fail(client):
                         }
                     }''',
                 "variables": {"input": {
-                    'kvknummer': '123',
-                    'vestigingsnummer': '123',
+                    'kvknummer': '12345678',
+                    'vestigingsnummer': '123456789112',
                     'naam': 'testOrganisatie'}}}
         fallback = mock.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
-        organisatie_1 = {'id': 1, 'kvknummer': 123, 'vestigingsnummer': 123}
-        organisatie_2 = {'id': 2, 'kvknummer': 123, 'vestigingsnummer': 123}
+        organisatie_1 = {'id': 1, 'kvknummer': 12345678, 'vestigingsnummer': 123456789112}
+        organisatie_2 = {'id': 2, 'kvknummer': 12345678, 'vestigingsnummer': 123456789112}
         organisaties = mock.get(f"{settings.ORGANISATIE_SERVICES_URL}/organisaties/", json={'data': [organisatie_1, organisatie_2]}, status_code=200)
 
 

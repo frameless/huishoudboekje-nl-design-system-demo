@@ -58,15 +58,16 @@ class UpdateBurger(graphene.Mutation):
                 "huisnummer": {"type": "string", "minLength": 1},
                 "postcode": {"type": "string", "pattern": "^[1-9][0-9]{3}[A-Za-z]{2}$"}, #ZipcodeNL
                 "plaatsnaam": {"type": "string","minLength": 1}, 
-                "rekeningen": {  "type": "object", "propeties": {
-                    "iban": {"type": "string","pattern": "^[a-zA-Z]{2}[0-9]{2}[a-zA-Z0-9]{4}[0-9]{7}([a-zA-Z0-9]{0,16})$"}, #IbanNL
-                    "rekeninghouder": {"type": "string","minLength": 1,"maxLength": 100}
-                }}
+                "rekeningen": { "type": "array",  "items": { 
+                    "type": "object", "propeties": {
+                        "iban": {"type": "string","pattern": "^[a-zA-Z]{2}[0-9]{2}[a-zA-Z0-9]{4}[0-9]{7}([a-zA-Z0-9]{0,16})$"}, #IbanNL
+                        "rekeninghouder": {"type": "string","minLength": 1,"maxLength": 100}
+                }}},
             },
             "required": []
         }
-        JsonInputValidator(validation_schema).validate(input)
-        before_today(input.geboortedatum)
+        JsonInputValidator(validation_schema).validate(kwargs)
+        before_today(kwargs["geboortedatum"])
 
         previous = hhb_dataloader().burgers.load_one(id)
 
