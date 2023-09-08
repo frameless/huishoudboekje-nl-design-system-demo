@@ -123,6 +123,7 @@ class SessionHelper {
 			return this.secret
 		}
 		else {
+			log.info(`${process.env.OIDC_BASE_URL}`)
 			const decodedToken = jwt.decode(token, {complete: true})
 			if (decodedToken) {
 				const jwtHeader = decodedToken.header
