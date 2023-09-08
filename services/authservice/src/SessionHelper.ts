@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import {Algorithm} from "jsonwebtoken";
-import jwksRsa from 'jwks-rsa'
+import jwksClient from 'jwks-rsa'
 import log from "loglevel";
 
 const defaultConfig: SessionHelperConfig = {
@@ -15,7 +15,6 @@ type SessionHelperConfig = {
 	audience: string,
 	issuer: string,
 	allowedAlgs: string
-
 }
 
 class SessionHelper {
@@ -24,6 +23,8 @@ class SessionHelper {
 	private readonly issuer: string;
 	private readonly allowedAlgs: Algorithm[];
 	private readonly supportedAlgs: Algorithm[] = ['ES256', 'ES384', 'ES512', 'HS256', 'HS384', 'HS512', 'PS256', 'PS512', 'RS256', 'RS384', 'RS512']
+	private readonly jwksClientInstance: jwksClient.JwksClient
+
 
 	constructor(config: Partial<SessionHelperConfig>) {
 		const _config = {
@@ -34,6 +35,9 @@ class SessionHelper {
 		this.audience = _config.audience;
 		this.issuer = _config.issuer;
 		this.allowedAlgs = this.parseAllowedAlgorithms(_config.allowedAlgs)
+		this.jwksClientInstance = jwksClient({
+			jwksUri: `${process.env.OIDC_BASE_URL}/.well-known/jwks.json`
+		});
 
 	}
 
@@ -49,13 +53,17 @@ class SessionHelper {
 	verifyToken(token): boolean {
 		try {
 			const alg = this.getAlgorithmFromHeader(token)
+
 			if (alg) {
-				jwt.verify(token, this.getJWTKeyOrSecret(alg), {
-					audience: this.audience,
-					issuer: this.issuer,
-					algorithms: [alg]
-				});
-				return true;
+				const keyOrSecret = this.getJWTKeyOrSecret(alg, token)
+				if (keyOrSecret) {
+					jwt.verify(token, keyOrSecret, {
+						audience: this.audience,
+						issuer: this.issuer,
+						algorithms: [alg]
+					});
+					return true;
+				}
 			}
 			return false
 		}
@@ -109,16 +117,29 @@ class SessionHelper {
 		return algorithms;
 	}
 
-	getJWTKeyOrSecret(alg: Algorithm) {
+	getJWTKeyOrSecret(alg: Algorithm, token) {
 		if (['HS256', 'HS384', 'HS512'].includes(alg)) {
 			return this.secret
 		}
 		else {
-			const publicKey = jwksRsa.expressJwtSecret({
-				jwksUri: `${process.env.OIDC_BASE_URL}/.well-known/jwks.json`,
-				cache: true // cache the key for performance since it's a PUBLIC key
-			})
-			return publicKey.toString()
+			const decodedToken = jwt.decode(token, {complete: true})
+			if (decodedToken) {
+				const jwtHeader = decodedToken.header
+				const jwtKid = jwtHeader.kid
+				if (jwtKid) {
+					this.jwksClientInstance.getSigningKey(jwtKid, (err, key) => {
+						if (err) {
+							log.error(err)
+						}
+						else {
+							const publicKey = key?.getPublicKey()
+							return publicKey
+						}
+					})
+
+				}
+
+			}
 		}
 	}
 }
