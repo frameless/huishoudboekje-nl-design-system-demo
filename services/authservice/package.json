@@ -28,6 +28,7 @@
     "express-openid-connect": "^2.15.0",
     "express-session": "^1.17.3",
     "jsonwebtoken": "^9.0.0",
+    "jwks-rsa": "^3.0.1",
     "loglevel": "^1.8.1",
     "nodemon": "^2.0.22",
     "typescript": "^4.9.5"

@@ -7,7 +7,6 @@ import {auth} from "express-openid-connect";
 import {getConfig} from "./config";
 import SessionHelper from "./SessionHelper";
 import log from "loglevel";
-import {timeStamp} from "console";
 
 const session = require('express-session')
 const config = getConfig();
