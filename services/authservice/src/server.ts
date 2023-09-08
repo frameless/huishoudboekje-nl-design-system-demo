@@ -70,10 +70,10 @@ const server = (prefix: string = "/auth") => {
 			// Check with the OIDC provider if the user is authenticated.
 			if (req.oidc.isAuthenticated()) {
 				const tokenContent = req.oidc.user;
-				const header = req.oidc.accessToken.
 				const stringJWT = req.oidc.accessToken?.access_token
 				log.info(new Date().toISOString(), "token ", stringJWT)
 				log.info("OIDC provider found an authenticated user:", tokenContent);
+
 
 				// verify the token here before creating a new session because otherwise an app-token will be created that's not valid
 				if (sessionHelper.verifyToken(stringJWT)) {
