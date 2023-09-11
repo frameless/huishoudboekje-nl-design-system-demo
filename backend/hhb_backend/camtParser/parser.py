@@ -9,8 +9,8 @@
 
 from decimal import Decimal
 import re
-from lxml import etree
 from datetime import datetime
+from defusedxml import ElementTree as etree
 
 class CamtParser():
     _name = "account.statement.import.camt.parser"
