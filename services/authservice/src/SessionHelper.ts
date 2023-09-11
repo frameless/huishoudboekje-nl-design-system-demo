@@ -2,6 +2,7 @@ import jwt from "jsonwebtoken";
 import {Algorithm} from "jsonwebtoken";
 import jwksClient from 'jwks-rsa'
 import log from "loglevel";
+const axios = require('axios')
 
 const defaultConfig: SessionHelperConfig = {
 	secret: "testtest",
@@ -23,7 +24,8 @@ class SessionHelper {
 	private readonly issuer: string;
 	private readonly allowedAlgs: Algorithm[];
 	private readonly supportedAlgs: Algorithm[] = ['ES256', 'ES384', 'ES512', 'HS256', 'HS384', 'HS512', 'PS256', 'PS512', 'RS256', 'RS384', 'RS512']
-	private readonly jwksClientInstance: jwksClient.JwksClient
+	// we only need one jwksClient, but we can only configure it when we know the jwks uri. We will set the jwksclient when the first request is made to the auth service.
+	private jwksClientInstance: jwksClient.JwksClient | null = null
 
 
 	constructor(config: Partial<SessionHelperConfig>) {
@@ -35,11 +37,6 @@ class SessionHelper {
 		this.audience = _config.audience;
 		this.issuer = _config.issuer;
 		this.allowedAlgs = this.parseAllowedAlgorithms(_config.allowedAlgs)
-		log.info(`${process.env.OIDC_BASE_URL}`)
-		this.jwksClientInstance = jwksClient({
-			jwksUri: `${process.env.OIDC_BASE_URL}/jwks.json`
-		});
-
 	}
 
 	createSession(res, token) {
@@ -94,6 +91,8 @@ class SessionHelper {
 		}
 	}
 
+
+
 	verifyAllowedAlgorithms(token) {
 		const jwtAlg = this.getAlgorithmFromHeader(token)
 		if (jwtAlg) {
@@ -119,30 +118,55 @@ class SessionHelper {
 	}
 
 	getJWTKeyOrSecret(alg: Algorithm, token) {
+		// These are symmetric (private key only) algorithms and only require the secret from env
 		if (['HS256', 'HS384', 'HS512'].includes(alg)) {
 			return this.secret
 		}
+		// any other algorithm uses a public key system based on the KID (gotten from jwt header)
 		else {
-			log.info(`${process.env.OIDC_BASE_URL}`)
 			const decodedToken = jwt.decode(token, {complete: true})
 			if (decodedToken) {
 				const jwtHeader = decodedToken.header
 				const jwtKid = jwtHeader.kid
 				if (jwtKid) {
-					this.jwksClientInstance.getSigningKey(jwtKid, (err, key) => {
-						if (err) {
-							log.error(err)
-						}
-						else {
-							const publicKey = key?.getPublicKey()
-							return publicKey
-						}
-					})
-
+					return this.getJWKSPublicKey(jwtKid)
 				}
 
 			}
 		}
+	}
+
+	// The JWKS endpoint is not the same for every openid provider, but the configuration is.
+	// For this reason we first get the openid-configuration, which returns a json object inlcuding the jwks_uri
+	getJWKSPublicKey(kid) {
+		// the issuer should always be the same, and as such the open-id configuration aswell. We only need to do this once here, when the client instance does not exist
+		if (this.jwksClientInstance == null) {
+			log.info("no jwks client configured, getting configuration and setting up..")
+			try {
+				const response = axios.get(`${this.issuer}/.well-known/openid-configuration`) // this will get the configuration where we can find the JWKS url
+				const configuration = JSON.parse(response.data)
+				const jwksUri = configuration["jwks_uri"]
+				// set the jwks uri and create the jwksClient
+				this.jwksClientInstance = jwksClient({
+					jwksUri: jwksUri,
+				});
+			}
+			catch (err) {
+				log.error(err)
+				return false
+			}
+		}
+		// get the public key from openid provider using jwksClient
+		this.jwksClientInstance.getSigningKey(kid, (err, key) => {
+			if (err) {
+				log.error(err)
+				return false
+			}
+			else {
+				const publicKey = key?.getPublicKey()
+				return publicKey
+			}
+		})
 	}
 }
 
