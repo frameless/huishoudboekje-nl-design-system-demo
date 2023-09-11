@@ -166,7 +166,8 @@ class SessionHelper {
 
 	// this will get the configuration where we can find the JWKS uri
 	async getJWKSUri() {
-		const response = await axios.get(`${this.issuer}/.well-known/openid-configuration`)
+		const url = this.issuer + this.issuer.endsWith('/') ? '/' : '' + '.well-known/openid-configuration'
+		const response = await axios.get(url)
 		return response.data['jwks_uri']
 	}
 }
