@@ -21,8 +21,7 @@ class MockWeakMap<KeyType extends object, ValueType> {
 
     has(key: KeyType): boolean {
         return this.map.has(key);
-    }
-      
+    }      
 }
 
 (global as any).WeakMap = MockWeakMap; // Mock WeakMap globally
