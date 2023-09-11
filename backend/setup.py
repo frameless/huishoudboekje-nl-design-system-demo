@@ -23,7 +23,7 @@ setup(
         'pydash==5.1.0',
         'pyjwt==2.4.0',
         'python-dateutil>=2.8.2,<3',
-        'requests==2.29.0',
+        'requests==2.31.0',
         'schwifty>=2022.7.1',
         'sepaxml>=2.5.0,<3',
         'Jinja2==3.1.2',
