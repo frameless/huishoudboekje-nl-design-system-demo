@@ -140,29 +140,31 @@ class SessionHelper {
 		if (this.jwksClientInstance == null) {
 			log.info("no jwks client configured, getting configuration and setting up..")
 			try {
-				const jwksUri = Promise.resolve(this.getJWKSUri()).toString()
-				log.info(jwksUri)
-				// set the jwks uri and create the jwksClient
-				this.jwksClientInstance = jwksClient({
-					jwksUri: jwksUri,
-				});
+				this.getJWKSUri().then((uri) => {
+					// set the jwks uri and create the jwksClient
+					this.jwksClientInstance = jwksClient({
+						jwksUri: uri,
+					});
+				})
 			}
 			catch (err) {
 				log.error(err)
 				return false
 			}
 		}
-		// get the public key from openid provider using jwksClient
-		this.jwksClientInstance.getSigningKey(kid, (err, key) => {
-			if (err) {
-				log.error(err)
-				return false
-			}
-			else {
-				const publicKey = key?.getPublicKey()
-				return publicKey
-			}
-		})
+		if (this.jwksClientInstance != null) {
+			// get the public key from openid provider using jwksClient
+			this.jwksClientInstance.getSigningKey(kid, (err, key) => {
+				if (err) {
+					log.error(err)
+					return false
+				}
+				else {
+					const publicKey = key?.getPublicKey()
+					return publicKey
+				}
+			})
+		}
 	}
 
 	// this will get the configuration where we can find the JWKS uri
@@ -174,9 +176,8 @@ class SessionHelper {
 		else {
 			url = `${this.issuer}/.well-known/openid-configuration`
 		}
-		log.info(url)
 		const response = await axios.get(url)
-		return response.data['jwks_uri']
+		return response.data.jwks_uri
 	}
 }
 
