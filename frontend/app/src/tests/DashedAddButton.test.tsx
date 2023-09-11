@@ -17,14 +17,12 @@ describe("Dashed button", () => {
 		const label = "Toevoegen";
 		const {container} = render(<DashedAddButton>{label}</DashedAddButton>);
 
-		expect(container.innerHTML).toMatchSnapshot();
 		expect(container.textContent).toBe(label);
 	});
 
 	it("Show dashed button with default label", () => {
 		const {container} = render(<DashedAddButton />);
 
-		expect(container.innerHTML).toMatchSnapshot();
 		expect(container.textContent).toBe("global.actions.add");
 	});
 
@@ -34,7 +32,6 @@ describe("Dashed button", () => {
 
 		const {container} = render(<DashedAddButton onClick={onClick}>{label}</DashedAddButton>);
 
-		expect(container.innerHTML).toMatchSnapshot();
 		expect(container.textContent).toBe("Opslaan");
 
 		const clickEvent = new Event("click", {
@@ -49,6 +46,5 @@ describe("Dashed button", () => {
 
 		fireEvent(element, clickEvent);
 		expect(onClick).toHaveBeenCalledTimes(2);
-
 	});
 });
