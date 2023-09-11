@@ -52,19 +52,24 @@ class SessionHelper {
 		try {
 			const alg = this.getAlgorithmFromHeader(token)
 			if (alg) {
-				const keyOrSecret = this.getJWTKeyOrSecret(alg, token)
-				log.info(`audience: ${this.audience}`)
-				log.info(`issuer: ${this.issuer}`)
-				log.info(`alg: ${alg}`)
-				log.info(`keyorsecret: ${keyOrSecret}`)
-				if (keyOrSecret) {
-					jwt.verify(token, keyOrSecret, {
-						audience: this.audience,
-						issuer: this.issuer,
-						algorithms: [alg]
-					});
-					return true;
+				if (this.jwksClientInstance == null) {
+					this.setJWKSClientInstance()
 				}
+				this.getJWTKeyOrSecret(alg, token).then((keyOrSecret) => {
+					log.info(`audience: ${this.audience}`)
+					log.info(`issuer: ${this.issuer}`)
+					log.info(`alg: ${alg}`)
+					log.info(`keyorsecret: ${keyOrSecret}`)
+					if (keyOrSecret) {
+						jwt.verify(token, keyOrSecret, {
+							audience: this.audience,
+							issuer: this.issuer,
+							algorithms: [alg]
+						});
+						return true;
+					}
+				})
+
 			}
 			return false
 		}
@@ -118,7 +123,7 @@ class SessionHelper {
 		return algorithms;
 	}
 
-	getJWTKeyOrSecret(alg: Algorithm, token) {
+	async getJWTKeyOrSecret(alg: Algorithm, token) {
 		// These are symmetric (private key only) algorithms and only require the secret from env
 		if (['HS256', 'HS384', 'HS512'].includes(alg)) {
 			return this.secret
@@ -130,45 +135,41 @@ class SessionHelper {
 				const jwtHeader = decodedToken.header
 				const jwtKid = jwtHeader.kid
 				if (jwtKid) {
-					return this.getJWKSPublicKey(jwtKid)
+					return await this.getJWKSPublicKey(jwtKid)
 				}
 
 			}
 		}
 	}
 
+	setJWKSClientInstance() {
+		// the issuer should always be the same, and as such the open-id configuration aswell. We only need to do this once here, when the client instance does not exist
+		log.info("no jwks client configured, getting configuration and setting up..")
+		try {
+			this.getJWKSUri().then((uri) => {
+				// set the jwks uri and create the jwksClient
+				this.jwksClientInstance = jwksClient({
+					jwksUri: uri,
+				});
+			})
+			return true
+		}
+		catch (err) {
+			log.error(err)
+		}
+	}
+
 	// The JWKS endpoint is not the same for every openid provider, but the configuration is.
 	// For this reason we first get the openid-configuration, which returns a json object inlcuding the jwks_uri
 	getJWKSPublicKey(kid) {
-		// the issuer should always be the same, and as such the open-id configuration aswell. We only need to do this once here, when the client instance does not exist
-		if (this.jwksClientInstance == null) {
-			log.info("no jwks client configured, getting configuration and setting up..")
-			try {
-				this.getJWKSUri().then((uri) => {
-					// set the jwks uri and create the jwksClient
-					this.jwksClientInstance = jwksClient({
-						jwksUri: uri,
-					});
-				})
-			}
-			catch (err) {
-				log.error(err)
-				return false
-			}
-		}
-		if (this.jwksClientInstance != null) {
-			// get the public key from openid provider using jwksClient
-			this.jwksClientInstance.getSigningKey(kid, (err, key) => {
-				if (err) {
-					log.error(err)
-					return false
-				}
-				else {
-					const publicKey = key?.getPublicKey()
-					return publicKey
-				}
+		// get the public key from openid provider using jwksClient
+		return this.jwksClientInstance?.getSigningKey(kid)
+			.then((key) => {
+				return key.getPublicKey()
 			})
-		}
+			.catch((error) => {
+				log.error(error)
+			})
 	}
 
 	// this will get the configuration where we can find the JWKS uri
