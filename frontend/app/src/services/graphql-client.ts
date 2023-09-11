@@ -1,6 +1,5 @@
 import {ApolloClient, ApolloLink, InMemoryCache} from "@apollo/client";
 import {BatchHttpLink} from "@apollo/client/link/batch-http";
-import { addTypenameToDocument } from "@apollo/client/utilities";
 import DebounceLink from "apollo-link-debounce";
 import {createUploadLink} from "apollo-upload-client";
 
