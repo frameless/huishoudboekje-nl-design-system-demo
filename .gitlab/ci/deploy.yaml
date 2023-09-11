@@ -117,9 +117,9 @@ deploy-deployment-review:
     OIDC_BASE_URL: "https://hhb-$CI_COMMIT_REF_SLUG.nlx.reviews"
     OIDC_ISSUER_URL: https://keycloak.huishoudboekje.demoground.nl/realms/huishoudboekje/
     OIDC_CLIENT_ID: huishoudboekje-medewerkers
-    JWT_ISSUER: hhb-$CI_COMMIT_REF_SLUG.nlx.reviews
+    JWT_ISSUER: https://keycloak.huishoudboekje.demoground.nl/realms/huishoudboekje/
     JWT_AUDIENCE: hhb-$CI_COMMIT_REF_SLUG.nlx.reviews
-    JWT_SECRET: koen-hhb-$CI_COMMIT_REF_SLUG
+    JWT_SECRET: $OIDC_CLIENT_SECRET
   script:
     - sh ./k8s/overlay/hhb-cluster/apply-env-vars.sh
     - kubectl config use-context commonground/huishoudboekje/app-new:hhb-review
