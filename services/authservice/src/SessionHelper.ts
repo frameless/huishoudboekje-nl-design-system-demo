@@ -91,8 +91,6 @@ class SessionHelper {
 		}
 	}
 
-
-
 	verifyAllowedAlgorithms(token) {
 		const jwtAlg = this.getAlgorithmFromHeader(token)
 		if (jwtAlg) {
@@ -143,9 +141,7 @@ class SessionHelper {
 		if (this.jwksClientInstance == null) {
 			log.info("no jwks client configured, getting configuration and setting up..")
 			try {
-				const response = axios.get(`${this.issuer}/.well-known/openid-configuration`) // this will get the configuration where we can find the JWKS url
-				const configuration = JSON.parse(response.data)
-				const jwksUri = configuration["jwks_uri"]
+				const jwksUri = Promise.resolve(this.getJWKSUri()).toString()
 				// set the jwks uri and create the jwksClient
 				this.jwksClientInstance = jwksClient({
 					jwksUri: jwksUri,
@@ -167,6 +163,12 @@ class SessionHelper {
 				return publicKey
 			}
 		})
+	}
+
+	// this will get the configuration where we can find the JWKS uri
+	async getJWKSUri() {
+		const response = await axios.get(`${this.issuer}/.well-known/openid-configuration`)
+		return response.data['jwks_uri']
 	}
 }
 
