@@ -53,6 +53,10 @@ class SessionHelper {
 			const alg = this.getAlgorithmFromHeader(token)
 			if (alg) {
 				const keyOrSecret = this.getJWTKeyOrSecret(alg, token)
+				log.info(`audience: ${this.audience}`)
+				log.info(`issuer: ${this.issuer}`)
+				log.info(`alg: ${alg}`)
+				log.info(`keyorsecret: ${keyOrSecret}`)
 				if (keyOrSecret) {
 					jwt.verify(token, keyOrSecret, {
 						audience: this.audience,
