@@ -65,6 +65,7 @@ module.exports = {
 
 		// Default rules
 		"@typescript-eslint/ban-ts-comment": ["off"],
+		"@typescript-eslint/ban-types": ["off"],
 		"@typescript-eslint/no-non-null-assertion": ["off"],
 		"@typescript-eslint/no-use-before-define": ["off"],
 		"import/no-anonymous-default-export": ["off"],
