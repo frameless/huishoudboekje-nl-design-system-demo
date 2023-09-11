@@ -51,7 +51,6 @@ class SessionHelper {
 	verifyToken(token): boolean {
 		try {
 			const alg = this.getAlgorithmFromHeader(token)
-
 			if (alg) {
 				const keyOrSecret = this.getJWTKeyOrSecret(alg, token)
 				if (keyOrSecret) {
