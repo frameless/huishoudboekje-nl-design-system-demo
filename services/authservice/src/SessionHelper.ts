@@ -141,6 +141,7 @@ class SessionHelper {
 			log.info("no jwks client configured, getting configuration and setting up..")
 			try {
 				const jwksUri = Promise.resolve(this.getJWKSUri()).toString()
+				log.info(jwksUri)
 				// set the jwks uri and create the jwksClient
 				this.jwksClientInstance = jwksClient({
 					jwksUri: jwksUri,
@@ -173,6 +174,7 @@ class SessionHelper {
 		else {
 			url = `${this.issuer}/.well-known/openid-configuration`
 		}
+		log.info(url)
 		const response = await axios.get(url)
 		return response.data['jwks_uri']
 	}
