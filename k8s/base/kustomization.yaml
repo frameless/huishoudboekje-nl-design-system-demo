@@ -16,3 +16,4 @@ resources:
   - ./signalenservice
   - ./authservice
   - ./rapportageservice
+  - ./statsdexporter

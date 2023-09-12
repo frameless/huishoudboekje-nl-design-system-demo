@@ -1,0 +1,23 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hhb-statsd-exporter
+  labels:
+    name: hhb-statsd-exporter
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: hhb-statsd-exporter
+  template:
+    metadata:
+      labels:
+        name: hhb-statsd-exporter
+    spec:
+      containers:
+        - name: statsd-exporter
+          image: prom/statsd-exporter:v0.24.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 9102
