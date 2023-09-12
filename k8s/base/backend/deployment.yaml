@@ -83,4 +83,4 @@ spec:
             - name: LOG_LEVEL
               value: INFO
             - name: GUNICORN_STATSD_HOST
-              value: "statsd-exporter:9102"
+              value: "hhb-statsd-exporter:9125"

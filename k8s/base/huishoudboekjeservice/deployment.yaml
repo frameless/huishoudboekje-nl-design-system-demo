@@ -110,3 +110,5 @@ spec:
                   key: HUISHOUDBOEKJESERVICE_DATABASE_URL
             - name: LOG_LEVEL
               value: INFO
+            - name: GUNICORN_STATSD_HOST
+              value: "hhb-statsd-exporter:9125"

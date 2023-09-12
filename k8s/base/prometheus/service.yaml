@@ -1,0 +1,13 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hhb-prometheus
+  labels:
+    name: hhb-prometheus
+spec:
+  type: ClusterIP
+  selector:
+    name: hhb-prometheus
+  ports:
+    - port: 9090

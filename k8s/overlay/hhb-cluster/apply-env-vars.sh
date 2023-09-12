@@ -81,5 +81,6 @@ envsubst < components/configmaps/sample.kustomization.yaml > components/configma
 envsubst < components/set-images/sample.kustomization.yaml > components/set-images/kustomization.yaml
 envsubst < review/sample.ingress-host-patch.yaml > review/ingress-host-patch.yaml
 envsubst < review/sample.ingress-sb-host-patch.yaml > review/ingress-sb-host-patch.yaml
+envsubst < review/sample.ingress-prom-host-patch.yaml > review/ingress-prom-host-patch.yaml
 
 

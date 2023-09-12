@@ -2,26 +2,25 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: hhb-statsd-exporter
+  name: hhb-prometheus
   labels:
-    name: hhb-statsd-exporter
+    name: hhb-prometheus
 spec:
   replicas: 1
   selector:
     matchLabels:
-      name: hhb-statsd-exporter
+      name: hhb-prometheus
   template:
     metadata:
       labels:
-        name: hhb-statsd-exporter
+        name: hhb-prometheus
     spec:
       containers:
-        - name: hhb-statsd-exporter
-          image: prom/statsd-exporter:v0.24.0
+        - name: prometheus
+          image: prom/prometheus:latest
           imagePullPolicy: IfNotPresent
           ports:
-            - containerPort: 9102
-            - containerPort: 9125
+            - containerPort: 9090
           resources:
             limits:
               cpu: "100m"
