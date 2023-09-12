@@ -76,6 +76,7 @@ const server = (prefix: string = "/auth") => {
 
 				// verify the token here before creating a new session because otherwise an app-token will be created that's not valid
 				return sessionHelper.verifyToken(stringJWT).then(async (result) => {
+					log.info(result)
 					if (result) {
 						const user = await req.oidc.fetchUserInfo();
 						log.info("User found");
