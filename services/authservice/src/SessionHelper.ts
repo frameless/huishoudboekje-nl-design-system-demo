@@ -55,13 +55,13 @@ class SessionHelper {
 				if (this.jwksClientInstance == null) {
 					this.setJWKSClientInstance()
 				}
-				await this.getJWTKeyOrSecret(alg, token).then((keyOrSecret) => {
+				return await this.getJWTKeyOrSecret(alg, token).then((keyOrSecret) => {
 					log.info(`audience: ${this.audience}`)
 					log.info(`issuer: ${this.issuer}`)
 					log.info(`alg: ${alg}`)
 					log.info(`keyorsecret: ${keyOrSecret}`)
 					if (keyOrSecret) {
-						jwt.verify(token, keyOrSecret, {
+						const res = jwt.verify(token, keyOrSecret, {
 							audience: this.audience,
 							issuer: this.issuer,
 							algorithms: [alg]
