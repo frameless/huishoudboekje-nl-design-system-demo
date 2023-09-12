@@ -118,7 +118,7 @@ deploy-deployment-review:
     OIDC_ISSUER_URL: https://keycloak.huishoudboekje.demoground.nl/realms/huishoudboekje/
     OIDC_CLIENT_ID: huishoudboekje-medewerkers
     JWT_ISSUER: https://keycloak.huishoudboekje.demoground.nl/realms/huishoudboekje/
-    JWT_AUDIENCE: hhb-$CI_COMMIT_REF_SLUG.nlx.reviews
+    JWT_AUDIENCE: account
     JWT_SECRET: $OIDC_CLIENT_SECRET
   script:
     - sh ./k8s/overlay/hhb-cluster/apply-env-vars.sh
