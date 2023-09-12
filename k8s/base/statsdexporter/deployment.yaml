@@ -20,8 +20,12 @@ spec:
           image: prom/statsd-exporter:v0.24.0
           imagePullPolicy: IfNotPresent
           ports:
-            - containerPort: 9102
-            - containerPort: 9125
+            - name: metrics
+              containerPort: 9102
+              protocol: TCP
+            - name: statsd
+              containerPort: 9125
+              protocol: UDP
           resources:
             limits:
               cpu: "100m"
