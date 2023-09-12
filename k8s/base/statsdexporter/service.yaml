@@ -12,7 +12,9 @@ spec:
   ports:
     - name: metrics
       protocol: TCP
+      port: 9102
       targetPort: metrics
     - name: statsd
       protocol: UDP
+      port: 9125
       targetPort: statsd
