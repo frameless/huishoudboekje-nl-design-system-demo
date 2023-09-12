@@ -8,8 +8,7 @@ ENV TZ=Europe/Amsterdam
 
 WORKDIR /app
 RUN mkdir -p hhb_backend/
-#dont commit like this
-COPY backend/setup.py /app  
+COPY setup.py /app  
 RUN pip install .
 COPY . /app
 
