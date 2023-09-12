@@ -48,14 +48,14 @@ class SessionHelper {
 		req.session.destroy()
 	}
 
-	verifyToken(token): boolean {
+	async verifyToken(token) {
 		try {
 			const alg = this.getAlgorithmFromHeader(token)
 			if (alg) {
 				if (this.jwksClientInstance == null) {
 					this.setJWKSClientInstance()
 				}
-				this.getJWTKeyOrSecret(alg, token).then((keyOrSecret) => {
+				await this.getJWTKeyOrSecret(alg, token).then((keyOrSecret) => {
 					log.info(`audience: ${this.audience}`)
 					log.info(`issuer: ${this.issuer}`)
 					log.info(`alg: ${alg}`)
@@ -68,6 +68,9 @@ class SessionHelper {
 						});
 						return true;
 					}
+				}).catch((error) => {
+					log.error(error)
+					return false
 				})
 
 			}

@@ -7,6 +7,7 @@ import {auth} from "express-openid-connect";
 import {getConfig} from "./config";
 import SessionHelper from "./SessionHelper";
 import log from "loglevel";
+import {JsonWebTokenError} from "jsonwebtoken";
 
 const session = require('express-session')
 const config = getConfig();
@@ -73,27 +74,36 @@ const server = (prefix: string = "/auth") => {
 				log.info(new Date().toISOString(), "token ", stringJWT)
 				log.info("OIDC provider found an authenticated user:", tokenContent);
 
-
 				// verify the token here before creating a new session because otherwise an app-token will be created that's not valid
-				if (sessionHelper.verifyToken(stringJWT)) {
-					const user = await req.oidc.fetchUserInfo();
-					log.info("User found");
+				return sessionHelper.verifyToken(stringJWT).then(async (result) => {
+					if (result) {
+						const user = await req.oidc.fetchUserInfo();
+						log.info("User found");
 
-					sessionHelper.createSession(res, stringJWT);
-					return res.json({
-						ok: true,
-						user,
-					});
-				}
-
-				// verifyToken will log the error during verifying, but we will still log a warning that an invalid token was provided
-				// This to ensure no invalid tokens are overlooked since they can be indication of security breaches/attempts
-				log.warn("an invalid token was given to the auth service.")
+						sessionHelper.createSession(res, stringJWT);
+						return res.json({
+							ok: true,
+							user,
+						});
+					}
+					else {
+						log.info("No user found.");
+						sessionHelper.destroySession(req, res);
+						return res.status(401).json({ok: false, message: "Unauthorized"});
+					}
+				}).catch((error) => {
+					if (error == typeof (JsonWebTokenError)) {
+						log.error("token invalid: ", error)
+						return res.status(401).json({ok: false, message: "Unauthorized"});
+					}
+					log.error('failed to authenticate user', error)
+					return res.status(500).json({ok: false, message: "Something went wrong"});
+				})
 			}
 			log.info("user not authenticated")
+			return res.status(401).json({ok: false, message: "Unauthorized"});
 		}
 		catch (err) {
-			log.error("OIDC provider didn't recognize user.");
 			log.error(err)
 		}
 
