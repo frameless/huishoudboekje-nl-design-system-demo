@@ -8,7 +8,8 @@ ENV TZ=Europe/Amsterdam
 
 WORKDIR /app
 RUN mkdir -p hhb_backend/
-COPY setup.py /app
+#dont commit like this
+COPY backend/setup.py /app  
 RUN pip install .
 COPY . /app
 
@@ -16,7 +17,7 @@ COPY . /app
 ENV GUNICORN_PORT="8000" \
     GUNICORN_WORKERS="2" \
     GUNICORN_THREADS="4" \
-    GUNICORN_LOGLEVEL="info" \
+    GUNICORN_LOGLEVEL="debug" \
     PYTHONDONTWRITEBYTECODE="1" \
     PYTHONUNBUFFERED="1" \
     PATH="/app/.local/bin:${PATH}" \
@@ -24,6 +25,7 @@ ENV GUNICORN_PORT="8000" \
 
 # Runtime envrionment
 CMD ["bash", "-c", "exec gunicorn \
+  -c gunicorn.conf.py \
   --bind=0.0.0.0:${GUNICORN_PORT} \
   --workers=${GUNICORN_WORKERS} \
   --threads=${GUNICORN_THREADS} \

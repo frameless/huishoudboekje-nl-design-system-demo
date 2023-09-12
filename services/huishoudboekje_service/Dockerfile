@@ -25,6 +25,7 @@ ENV GUNICORN_PORT="8000" \
     APP_NAME="wsgi:app"
 
 CMD ["bash", "-c", "exec gunicorn \
+  -c gunicorn.conf.py \
   --bind=0.0.0.0:${GUNICORN_PORT} \
   --workers=${GUNICORN_WORKERS} \
   --threads=${GUNICORN_THREADS} \
