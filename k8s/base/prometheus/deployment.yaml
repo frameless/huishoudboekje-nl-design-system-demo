@@ -19,10 +19,19 @@ spec:
         - name: prometheus
           image: prom/prometheus:latest
           imagePullPolicy: IfNotPresent
+          args:
+            - "--config.file=/etc/prometheus/prometheus.yml"
           ports:
             - name: prometheus
               containerPort: 9090
               protocol: TCP
+          volumeMounts:
+            - name: config-volume
+              mountPath: /etc/prometheus
+          volumes:
+            - name: config-volume
+              configMap:
+                name: prometheus-config
           resources:
             limits:
               cpu: "100m"
