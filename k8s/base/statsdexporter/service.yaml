@@ -11,10 +11,8 @@ spec:
     name: hhb-statsd-exporter
   ports:
     - name: metrics
-      containerPort: 9102
       protocol: TCP
       targetPort: metrics
     - name: statsd
-      containerPort: 9125
       protocol: UDP
       targetPort: statsd
