@@ -20,7 +20,9 @@ spec:
           image: prom/prometheus:latest
           imagePullPolicy: IfNotPresent
           ports:
-            - containerPort: 9090
+            - name: prometheus
+              containerPort: 9090
+              protocol: TCP
           resources:
             limits:
               cpu: "100m"

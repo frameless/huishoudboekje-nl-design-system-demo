@@ -10,4 +10,7 @@ spec:
   selector:
     name: hhb-prometheus
   ports:
-    - port: 9090
+    - name: prometheus
+      protocol: TCP
+      port: 80
+      targetPort: prometheus
