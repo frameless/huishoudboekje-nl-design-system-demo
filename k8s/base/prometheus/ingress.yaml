@@ -6,10 +6,10 @@ metadata:
     name: hhb-prometheus-ingress
 spec:
   rules:
-    - host: prom-huishoudboekje.example.com
+    - host: huishoudboekje.example.com
       http:
         paths:
-          - path: /
+          - path: /prometheus
             pathType: Prefix
             backend:
               service:
