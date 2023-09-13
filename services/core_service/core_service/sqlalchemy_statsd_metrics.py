@@ -27,7 +27,7 @@ def add_sqlalchemy_statsd_metrics(app):
             @event.listens_for(Engine, "after_cursor_execute")
             def after_cursor_execute(conn, cursor, statement, parameters, context, executemany):
                 total = int((time.time() - conn.info["query_start_time"].pop(-1)) * 1000) #time in miliseconds
-                statsd.timing("query.execution.duration", total)
+                statsd.timing("sqlalchemy.query.execution.duration", total)
                 logging.info(f"Exexcuted query in {total} miliseconds:\n{statement} ")
 
             @event.listens_for(Pool, "connect")
