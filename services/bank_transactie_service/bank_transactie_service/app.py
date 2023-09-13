@@ -53,6 +53,10 @@ def create_app(config_name='bank_transactie_service.config.Config'):
             logging.warning("could not connect to statsd host")
 
         if statsd:
+            statsd.set('sqlalchemy.pool.connections', 0)
+            statsd.set('sqlalchemy.used.connections', 0)
+            statsd.set('sqlalchemy.detached.connections', 0)
+
             @event.listens_for(Engine, "before_cursor_execute")
             def before_cursor_execute(conn, cursor, statement, parameters, context, executemany):
                 conn.info.setdefault("query_start_time", []).append(time.time())
@@ -67,7 +71,6 @@ def create_app(config_name='bank_transactie_service.config.Config'):
             def receive_connect(dbapi_connection, connection_record):
                 # Called at the moment a particular DBAPI connection is first created for a given Pool.
                 statsd.gauge('sqlalchemy.pool.connections', 1, delta=True)
-                # statsd.incr('sqlalchemy.pool.connections')
                 logging.info(f"Connect")
 
             @event.listens_for(Pool, "checkin")
@@ -75,8 +78,6 @@ def create_app(config_name='bank_transactie_service.config.Config'):
                 # Called when a connection returns to the pool.
                 statsd.gauge('sqlalchemy.pool.connections', 1, delta=True)
                 statsd.gauge('sqlalchemy.used.connections', -1, delta=True)
-                # statsd.incr('sqlalchemy.pool.connections')
-                # statsd.decr('sqlalchemy.used.connections')
                 logging.info(f"checkin")
 
             @event.listens_for(Pool, "checkout")
@@ -84,14 +85,11 @@ def create_app(config_name='bank_transactie_service.config.Config'):
                 # Called when a connection is retrieved from the Pool.
                 statsd.gauge('sqlalchemy.pool.connections', -1, delta=True)
                 statsd.gauge('sqlalchemy.used.connections', 1, delta=True)
-                # statsd.decr('sqlalchemy.pool.connections')
-                # statsd.incr('sqlalchemy.used.connections')
                 logging.info(f"checkout")
 
             @event.listens_for(Pool, "close")
             def receive_close(dbapi_connection, connection_record, connection_proxy):
                 # Called when a DBAPI connection is closed.
-                # statsd.decr('sqlalchemy.pool.connections')
                 statsd.gauge('sqlalchemy.pool.connections', -1, delta=True)
                 logging.info(f"close")
 
@@ -100,14 +98,11 @@ def create_app(config_name='bank_transactie_service.config.Config'):
                 # Called when a DBAPI connection is “detached” from a pool.
                 statsd.gauge('sqlalchemy.pool.connections', -1, delta=True)
                 statsd.gauge('sqlalchemy.detached.connections', 1, delta=True)
-                # statsd.decr('sqlalchemy.pool.connections')
-                # statsd.incr('sqlalchemy.detached.connections')
                 logging.info(f"chedetachckin")
 
             @event.listens_for(Pool, "close_detached")
             def receive_close_detached(dbapi_connection, connection_record, connection_proxy):
                 # Called when a detached DBAPI connection is closed.
-                # statsd.decr('sqlalchemy.detached.connections')
                 statsd.gauge('sqlalchemy.detached.connections', -1, delta=True)
                 logging.info(f"close_detached")
 
