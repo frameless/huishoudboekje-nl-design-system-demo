@@ -43,15 +43,14 @@ def create_app(config_name='bank_transactie_service.config.Config'):
     # This can also cause parameters that are normally hidden to be logged
     logging.getLogger('werkzeug').setLevel(app.config["LOG_LEVEL"])
 
-    logging.info("TEST:")
-    logging.info(app.config["STATSD_HOSTPORT"])
     if app.config["STATSD_HOSTPORT"] is not None and type(app.config["STATSD_HOSTPORT"]) is str:
         statsd = None
-        # try:
-        statsd_host = app.config["STATSD_HOSTPORT"].split(':')
-        statsd = StatsClient(host=statsd_host[0], port=int(statsd_host[1]), prefix=app.config["STATSD_PREFIX"])
-        # except:
-        #     logging.warning("could not connect to statsd host")
+        try:
+            statsd_host = app.config["STATSD_HOSTPORT"].split(':')
+            statsd = StatsClient(host=statsd_host[0], port=int(statsd_host[1]), prefix=app.config["STATSD_PREFIX"])
+            logging.info(f"Connected to statsd host {app.config['STATSD_HOSTPORT']}")
+        except:
+            logging.warning("could not connect to statsd host")
 
         if statsd:
             @event.listens_for(Engine, "before_cursor_execute")
