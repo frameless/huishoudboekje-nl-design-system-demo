@@ -178,7 +178,6 @@ class Auth():
             try:
                 jwks_keys = requests.get(jwks_uri).json().get('keys', [])
                 kid = self._get_KID_from_token(token)
-
                 public_key = None
                 for key in jwks_keys:
                     if key.get('kid') == kid:
