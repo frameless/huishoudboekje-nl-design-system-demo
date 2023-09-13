@@ -52,27 +52,25 @@ class SessionHelper {
 		try {
 			const alg = this.getAlgorithmFromHeader(token)
 			if (alg) {
-				if (this.jwksClientInstance == null) {
-					this.setJWKSClientInstance()
-				}
-				return await this.getJWTKeyOrSecret(alg, token).then((keyOrSecret) => {
-					log.info(`audience: ${this.audience}`)
-					log.info(`issuer: ${this.issuer}`)
-					log.info(`alg: ${alg}`)
-					log.info(`keyorsecret: ${keyOrSecret}`)
-					if (keyOrSecret) {
-						const res = jwt.verify(token, keyOrSecret, {
-							audience: this.audience,
-							issuer: this.issuer,
-							algorithms: [alg]
-						});
-						return true;
+				if (this.verifyAllowedAlgorithms(alg)) {
+					if (this.jwksClientInstance == null) {
+						this.setJWKSClientInstance()
 					}
-				}).catch((error) => {
-					log.error(error)
-					return false
-				})
+					return await this.getJWTKeyOrSecret(alg, token).then((keyOrSecret) => {
+						if (keyOrSecret) {
+							const res = jwt.verify(token, keyOrSecret, {
+								audience: this.audience,
+								issuer: this.issuer,
+								algorithms: [alg]
+							});
+							return true;
+						}
+					}).catch((error) => {
+						log.error(error)
+						return false
+					})
 
+				}
 			}
 			return false
 		}
@@ -87,10 +85,8 @@ class SessionHelper {
 			const decodedToken = jwt.decode(token, {complete: true})
 			if (decodedToken) {
 				const jwtHeader = decodedToken.header
-				log.info(new Date().toISOString(), "JWT Header: ", jwtHeader)
 
 				const jwtAlgorithm = jwtHeader.alg
-				log.info(new Date().toISOString(), "JWT Alg: ", jwtAlgorithm)
 				return jwtAlgorithm as Algorithm
 			}
 			log.info("token did not contain a decode-able token")
