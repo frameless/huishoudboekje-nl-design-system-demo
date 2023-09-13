@@ -59,41 +59,48 @@ def create_app(config_name='bank_transactie_service.config.Config'):
 
             @event.listens_for(Engine, "after_cursor_execute")
             def after_cursor_execute(conn, cursor, statement, parameters, context, executemany):
-                total = (time.time() - conn.info["query_start_time"].pop(-1)) * 1000 #time in miliseconds
+                total = int((time.time() - conn.info["query_start_time"].pop(-1)) * 1000) #time in miliseconds
+                logging.info(f"Exexcuted query in {total} miliseconds")
                 statsd.timing("query.execution.duration", total)
 
             @event.listens_for(Pool, "connect")
             def receive_connect(dbapi_connection, connection_record):
                 # Called at the moment a particular DBAPI connection is first created for a given Pool.
                 statsd.incr('sqlalchemy.pool.connections')
+                logging.info(f"Connect")
 
             @event.listens_for(Pool, "checkin")
             def receive_checkin(dbapi_connection, connection_record):
                 # Called when a connection returns to the pool.
                 statsd.incr('sqlalchemy.pool.connections')
                 statsd.decr('sqlalchemy.used.connections')
+                logging.info(f"checkin")
 
             @event.listens_for(Pool, "checkout")
             def receive_checkout(dbapi_connection, connection_record, connection_proxy):
                 # Called when a connection is retrieved from the Pool.
                 statsd.decr('sqlalchemy.pool.connections')
                 statsd.incr('sqlalchemy.used.connections')
+                logging.info(f"checkout")
 
             @event.listens_for(Pool, "close")
             def receive_close(dbapi_connection, connection_record, connection_proxy):
                 # Called when a DBAPI connection is closed.
                 statsd.decr('sqlalchemy.pool.connections')
+                logging.info(f"close")
 
             @event.listens_for(Pool, "detach")
             def receive_detach(dbapi_connection, connection_record, connection_proxy):
                 # Called when a DBAPI connection is “detached” from a pool.
                 statsd.decr('sqlalchemy.pool.connections')
                 statsd.incr('sqlalchemy.detached.connections')
+                logging.info(f"chedetachckin")
 
             @event.listens_for(Pool, "close_detached")
             def receive_close_detached(dbapi_connection, connection_record, connection_proxy):
                 # Called when a detached DBAPI connection is closed.
                 statsd.decr('sqlalchemy.detached.connections')
+                logging.info(f"close_detached")
 
 
     @app.route('/health')
