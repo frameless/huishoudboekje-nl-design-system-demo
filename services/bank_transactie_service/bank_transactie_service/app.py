@@ -30,13 +30,13 @@ def create_app(config_name='bank_transactie_service.config.Config'):
         format='%(asctime)s %(levelname)-8s %(message)s',
         level=app.config["LOG_LEVEL"],
         datefmt='%Y-%m-%d %H:%M:%S')
-    logging.config.dictConfig(
-        {
-            "version": 1,
-            "incremental": True,
-            "loggers": {"sqlalchemy.engine": {"level": app.config["LOG_LEVEL"]}},
-        }
-    )
+    # logging.config.dictConfig(
+    #     {
+    #         "version": 1,
+    #         "incremental": True,
+    #         "loggers": {"sqlalchemy.engine": {"level": app.config["LOG_LEVEL"]}},
+    #     }
+    # )
     logging.info(f"Starting {__name__} with {config_name}")
 
     # Werkzeug has their own logger which outputs info level URL calls.
@@ -66,40 +66,49 @@ def create_app(config_name='bank_transactie_service.config.Config'):
             @event.listens_for(Pool, "connect")
             def receive_connect(dbapi_connection, connection_record):
                 # Called at the moment a particular DBAPI connection is first created for a given Pool.
-                statsd.incr('sqlalchemy.pool.connections')
+                statsd.gauge('sqlalchemy.pool.connections', 1, delta=True)
+                # statsd.incr('sqlalchemy.pool.connections')
                 logging.info(f"Connect")
 
             @event.listens_for(Pool, "checkin")
             def receive_checkin(dbapi_connection, connection_record):
                 # Called when a connection returns to the pool.
-                statsd.incr('sqlalchemy.pool.connections')
-                statsd.decr('sqlalchemy.used.connections')
+                statsd.gauge('sqlalchemy.pool.connections', 1, delta=True)
+                statsd.gauge('sqlalchemy.used.connections', -1, delta=True)
+                # statsd.incr('sqlalchemy.pool.connections')
+                # statsd.decr('sqlalchemy.used.connections')
                 logging.info(f"checkin")
 
             @event.listens_for(Pool, "checkout")
             def receive_checkout(dbapi_connection, connection_record, connection_proxy):
                 # Called when a connection is retrieved from the Pool.
-                statsd.decr('sqlalchemy.pool.connections')
-                statsd.incr('sqlalchemy.used.connections')
+                statsd.gauge('sqlalchemy.pool.connections', -1, delta=True)
+                statsd.gauge('sqlalchemy.used.connections', 1, delta=True)
+                # statsd.decr('sqlalchemy.pool.connections')
+                # statsd.incr('sqlalchemy.used.connections')
                 logging.info(f"checkout")
 
             @event.listens_for(Pool, "close")
             def receive_close(dbapi_connection, connection_record, connection_proxy):
                 # Called when a DBAPI connection is closed.
-                statsd.decr('sqlalchemy.pool.connections')
+                # statsd.decr('sqlalchemy.pool.connections')
+                statsd.gauge('sqlalchemy.pool.connections', -1, delta=True)
                 logging.info(f"close")
 
             @event.listens_for(Pool, "detach")
             def receive_detach(dbapi_connection, connection_record, connection_proxy):
                 # Called when a DBAPI connection is “detached” from a pool.
-                statsd.decr('sqlalchemy.pool.connections')
-                statsd.incr('sqlalchemy.detached.connections')
+                statsd.gauge('sqlalchemy.pool.connections', -1, delta=True)
+                statsd.gauge('sqlalchemy.detached.connections', 1, delta=True)
+                # statsd.decr('sqlalchemy.pool.connections')
+                # statsd.incr('sqlalchemy.detached.connections')
                 logging.info(f"chedetachckin")
 
             @event.listens_for(Pool, "close_detached")
             def receive_close_detached(dbapi_connection, connection_record, connection_proxy):
                 # Called when a detached DBAPI connection is closed.
-                statsd.decr('sqlalchemy.detached.connections')
+                # statsd.decr('sqlalchemy.detached.connections')
+                statsd.gauge('sqlalchemy.detached.connections', -1, delta=True)
                 logging.info(f"close_detached")
 
 
