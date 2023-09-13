@@ -48,8 +48,8 @@ def create_app(config_name='bank_transactie_service.config.Config'):
     if app.config["STATSD_HOSTPORT"] is not None and type(app.config["STATSD_HOSTPORT"]) is str:
         statsd = None
         # try:
-            statsd_host = app.config["STATSD_HOSTPORT"].split(':')
-            statsd = StatsClient(host=statsd_host[0], port=int(statsd_host[1]), prefix=app.config["STATSD_PREFIX"])
+        statsd_host = app.config["STATSD_HOSTPORT"].split(':')
+        statsd = StatsClient(host=statsd_host[0], port=int(statsd_host[1]), prefix=app.config["STATSD_PREFIX"])
         # except:
         #     logging.warning("could not connect to statsd host")
 
