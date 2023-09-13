@@ -4,11 +4,6 @@ import logging.config
 
 from flask import Flask, Response
 from flask_migrate import Migrate
-from sqlalchemy import event
-from sqlalchemy.engine import Engine
-from sqlalchemy.pool import Pool
-import time
-from statsd import StatsClient
 
 from bank_transactie_service.views.bank_transaction import BankTransactionView
 from bank_transactie_service.views.customer_statement_message import CustomerStatementMessageView

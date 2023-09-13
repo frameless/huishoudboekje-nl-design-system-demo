@@ -2,6 +2,7 @@
 import logging
 from flask import Flask, Response
 from flask_migrate import Migrate
+from core_service.sqlalchemy_statsd_metrics import add_sqlalchemy_statsd_metrics
 
 
 from huishoudboekje_service.views import (
@@ -47,6 +48,8 @@ def create_app(config_name='huishoudboekje_service.config.Config'):
 
     db.init_app(app)
     Migrate(app, db)
+
+    add_sqlalchemy_statsd_metrics(app)
 
     @app.route('/health')
     def health():

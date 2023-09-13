@@ -6,6 +6,7 @@ from flask import Flask, Response
 from flask_injector import FlaskInjector
 from rapportage_service.dependencies import configure
 from rapportage_service.views.RapportageView import BurgerRapportageView
+from core_service.sqlalchemy_statsd_metrics import add_sqlalchemy_statsd_metrics
 
 
 def create_app(config_name='rapportage_service.config.Config', dependency_injection_configuration=configure):
@@ -28,6 +29,8 @@ def create_app(config_name='rapportage_service.config.Config', dependency_inject
     # Werkzeug has their own logger which outputs info level URL calls.
     # This can also cause parameters that are normally hidden to be logged
     logging.getLogger('werkzeug').setLevel(app.config["LOG_LEVEL"])
+
+    add_sqlalchemy_statsd_metrics(app)
 
     @app.route('/health')
     def health():

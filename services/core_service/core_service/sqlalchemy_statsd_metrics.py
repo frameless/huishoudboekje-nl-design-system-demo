@@ -9,8 +9,8 @@ def add_sqlalchemy_statsd_metrics(app):
     if app.config["STATSD_HOSTPORT"] is not None and type(app.config["STATSD_HOSTPORT"]) is str:
         statsd = None
         try:
-            statsd_host = app.config["STATSD_HOSTPORT"].split(':')
-            statsd = StatsClient(host=statsd_host[0], port=int(statsd_host[1]), prefix=app.config["STATSD_PREFIX"])
+            statsd_host_port = app.config["STATSD_HOSTPORT"].split(':')
+            statsd = StatsClient(host=statsd_host_port[0], port=int(statsd_host_port[1]), prefix=app.config["STATSD_PREFIX"])
             logging.info(f"Connected to statsd host {app.config['STATSD_HOSTPORT']}")
         except:
             logging.warning("could not connect to statsd host")
@@ -28,7 +28,7 @@ def add_sqlalchemy_statsd_metrics(app):
             def after_cursor_execute(conn, cursor, statement, parameters, context, executemany):
                 total = int((time.time() - conn.info["query_start_time"].pop(-1)) * 1000) #time in miliseconds
                 statsd.timing("query.execution.duration", total)
-                logging.info(f"Exexcuted query in {total} miliseconds: \n {statement} ")
+                logging.info(f"Exexcuted query in {total} miliseconds:\n{statement} ")
 
             @event.listens_for(Pool, "connect")
             def receive_connect(dbapi_connection, connection_record):
