@@ -89,7 +89,7 @@ class SessionHelper {
 				const jwtAlgorithm = jwtHeader.alg
 				return jwtAlgorithm as Algorithm
 			}
-			log.info("token did not contain a decode-able token")
+			log.info("token did not contain a decode-able header")
 			return false
 		}
 		catch (err) {
@@ -98,10 +98,9 @@ class SessionHelper {
 		}
 	}
 
-	verifyAllowedAlgorithms(token) {
-		const jwtAlg = this.getAlgorithmFromHeader(token)
-		if (jwtAlg) {
-			if (this.allowedAlgs.includes(jwtAlg)) {
+	verifyAllowedAlgorithms(alg) {
+		if (alg) {
+			if (this.allowedAlgs.includes(alg)) {
 				return true
 			}
 		}
