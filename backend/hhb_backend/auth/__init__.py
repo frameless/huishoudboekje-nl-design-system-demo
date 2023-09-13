@@ -1,5 +1,6 @@
 import itsdangerous
 import traceback
+import requests
 import jwt
 import logging
 import re
@@ -15,6 +16,9 @@ class Auth():
         self.logger = logger = logging.getLogger(__name__)
         self.audience = app.config.get("JWT_AUDIENCE", None)
         self.secret = app.config.get("JWT_SECRET", None)
+        self.issuer = app.config.get("JWT_ISSUER", None)
+        self.supported_algorithms = app.config.get(
+            "JWT_ALGORITHMS", None).strip().upper().split(',')
         self.require_auth = app.config.get("REQUIRE_AUTH", True)
 
         self.logger.debug(
@@ -27,6 +31,10 @@ class Auth():
 
             if self.secret is None:
                 self.logger.error("Missing environment variable JWT_SECRET.")
+                abort(500)
+            if self.supported_algorithms is None:
+                self.logger.error(
+                    "Missing environment variable JWT_ALGORITHMS")
                 abort(500)
 
         @app.errorhandler(itsdangerous.exc.BadSignature)
@@ -92,9 +100,8 @@ class Auth():
 
     def _token_loader(self):
         token_cookie = self._get_token_from_cookie()
-        token_header = self._get_token_from_header()
 
-        token = token_cookie or token_header or None
+        token = token_cookie or None
         self.logger.debug(f"_token_loader: Token: {token}")
         return token
 
@@ -112,18 +119,80 @@ class Auth():
                     f"""_user_loader: Token: {token}, claims: {unverifiedToken}""")
             try:
                 # Try to decode and verify the token
-                claims = jwt.decode(token, self.secret, algorithms=[
-                                    'HS256'], audience=self.audience)
-                email = claims.get('email', None)
-                name = claims.get('name', None)
-                if email and name:
-                    user = User(email=email, name=name)
-                    self.logger.debug(f"_user_loader: token user: {user}")
-                    return user
+                secret = self._public_key_or_secret
+                if secret != None:
+                    claims = jwt.decode(
+                        token, secret, algorithms=self.supported_algorithms, audience=self.audience, issuer=self.issuer)
+                    email = claims.get('email', None)
+                    name = claims.get('name', None)
+                    if email and name:
+                        user = User(email=email, name=name)
+                        self.logger.debug(f"_user_loader: token user: {user}")
+                        return user
             except InvalidTokenError as err:
                 self.logger.warning("Invalid token")
                 self.logger.debug(
                     f"""_user_loader: {err}; claims: {unverifiedToken}""")
 
         self.logger.debug(f"_user_loader: no user")
+        return None
+
+    def _determine_alg_used(self, token):
+        header = jwt.get_unverified_header(token)
+        alg = header.get(alg)
+        return alg
+
+    def _get_KID_from_token(self, token):
+        return jwt.get_unverified_header(token).get("kid")
+
+    def _public_key_or_secret(self, token):
+        alg = self._determine_alg_used(token)
+        if (alg in ['HS256', 'HS384', 'HS512']):
+            return self.secret
+        else:
+            return self._get_public_key_from_oidc(token)
+
+    def _get_oidc_config_uri(self):
+        uri = f'{self.issuer}.well-known/openid-configuration' if self.issuer.endswith(
+            '/') else f'{self.issuer}/.well-known/openid-configuration'
+        return uri
+
+    def _get_jwks_uri_from_config(self, config_uri):
+        try:
+            config_data = requests.get(config_uri).json()
+            jwks_uri = config_data.get('jwks_uri', None)
+            if jwks_uri == None:
+                self.logger.info("JWKS endpoint not found for issuer")
+            return jwks_uri
+        except requests.exceptions.RequestException as e:
+            self.logger.error(f'Error trying to fetch oidc configuration: {e}')
+            return None
+        except jwt.DecodeError as e:
+            self.logger.error(
+                f"Error trying to decode openid-configuration: {e}")
+            return None
+
+    def _get_public_key_from_oidc(self, token):
+        jwks_uri = self._get_jwks_uri_from_config()
+        if jwks_uri != None:
+            try:
+                jwks_keys = requests.get(jwks_uri).json().get('keys', [])
+                kid = self._get_KID_from_token(token)
+
+                public_key = None
+                for key in jwks_keys:
+                    if key.get('kid') == kid:
+                        public_key = key
+                        break
+                if public_key == None:
+                    self.logger.info(f"public key not found for KID: {kid}")
+                return public_key
+            except requests.exceptions.RequestException as e:
+                self.logger.error(
+                    f"Error trying to get keys from JWKS endpoint: {e}")
+                return None
+            except jwt.DecodeError as e:
+                self.logger.error(
+                    f"Error trying to decode JWKS keys: {e}")
+                return None
         return None

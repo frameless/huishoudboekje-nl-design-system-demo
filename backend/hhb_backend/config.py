@@ -11,6 +11,7 @@ def strip_quotes(s):
 class Config(object):
     JWT_AUDIENCE = os.getenv("JWT_AUDIENCE", None)
     JWT_SECRET = os.getenv("JWT_SECRET", None)
+    JWT_ALGORITHMS = os.getenv("JWT_ALGORITHMS", None)
     LOG_LEVEL = os.getenv("LOG_LEVEL", "WARNING")
     PREFIX = os.environ.get('PREFIX', '/api')
     REQUIRE_AUTH = os.getenv("REQUIRE_AUTH", True)
