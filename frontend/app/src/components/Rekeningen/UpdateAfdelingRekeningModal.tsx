@@ -1,6 +1,6 @@
 import React from "react";
 import {useTranslation} from "react-i18next";
-import {GetRekeningDocument, Rekening, useUpdateRekeningMutation} from "../../generated/graphql";
+import {Afdeling, Burger, GetAfdelingDocument, GetBurgerDetailsDocument, GetRekeningDocument, Rekening, useUpdateRekeningMutation} from "../../generated/graphql";
 import useToaster from "../../utils/useToaster";
 import Modal from "../shared/Modal";
 import RekeningForm from "./RekeningForm";
@@ -8,15 +8,26 @@ import RekeningForm from "./RekeningForm";
 type UpdateAfdelingRekeningModalProps = {
 	rekening: Rekening,
 	onClose: VoidFunction,
+	afdeling?: Afdeling,
+	burger?: Burger
 };
 
-const UpdateAfdelingRekeningModal: React.FC<UpdateAfdelingRekeningModalProps> = ({rekening, onClose}) => {
+const UpdateAfdelingRekeningModal: React.FC<UpdateAfdelingRekeningModalProps> = ({rekening, onClose, afdeling, burger}) => {
 	const {t} = useTranslation();
 	const toast = useToaster();
+	const refetchQueries = [
+		{query: GetRekeningDocument, variables: {id: rekening.id}}
+	]
+
+	if(afdeling && afdeling.id){
+		refetchQueries.push({query: GetAfdelingDocument, variables: {id: afdeling.id}})
+	}
+	if(burger && burger.id){
+		refetchQueries.push({query: GetBurgerDetailsDocument, variables: {id: burger?.id}})
+	}
+
 	const [updateAfdelingRekening] = useUpdateRekeningMutation({
-		refetchQueries: [
-			{query: GetRekeningDocument, variables: {id: rekening.id}},
-		],
+		refetchQueries: refetchQueries,
 	});
 
 	const onSubmit = (data) => {

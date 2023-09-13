@@ -2,7 +2,7 @@ import {DeleteIcon, EditIcon} from "@chakra-ui/icons";
 import {Button, HStack, IconButton, Td, Text, Tr, useDisclosure} from "@chakra-ui/react";
 import React, {useEffect, useRef} from "react";
 import {Trans, useTranslation} from "react-i18next";
-import {Rekening} from "../../generated/graphql";
+import {Afdeling, Burger, Rekening} from "../../generated/graphql";
 import {formatIBAN, truncateText} from "../../utils/things";
 import Alert from "../shared/Alert";
 import PrettyIban from "../shared/PrettyIban";
@@ -10,10 +10,12 @@ import UpdateAfdelingRekeningModal from "./UpdateAfdelingRekeningModal";
 
 type RekeningListItemProps = {
 	rekening: Rekening,
-	onDelete?: VoidFunction
+	onDelete?: VoidFunction,
+	afdeling?: Afdeling,
+	burger?: Burger
 };
 
-const RekeningListItem: React.FC<RekeningListItemProps> = ({rekening, onDelete}) => {
+const RekeningListItem: React.FC<RekeningListItemProps> = ({rekening, onDelete, afdeling, burger}) => {
 	const {t} = useTranslation();
 	const deleteAlert = useDisclosure();
 	const updateAfdelingRekeningModal = useDisclosure();
@@ -40,7 +42,7 @@ const RekeningListItem: React.FC<RekeningListItemProps> = ({rekening, onDelete})
 	}
 
 	return (<>
-		{updateAfdelingRekeningModal.isOpen && <UpdateAfdelingRekeningModal rekening={rekening} onClose={updateAfdelingRekeningModal.onClose} />}
+		{updateAfdelingRekeningModal.isOpen && <UpdateAfdelingRekeningModal rekening={rekening} onClose={updateAfdelingRekeningModal.onClose} afdeling={afdeling} burger={burger}/>}
 		{deleteAlert.isOpen && (
 			<Alert
 				title={t("messages.rekeningen.deleteTitle")}
