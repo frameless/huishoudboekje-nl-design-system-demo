@@ -2,7 +2,7 @@ version: "3.8"
 
 x-backend: &x-backend
   build:
-    dockerfile: ./backend/Dockerfile
+    dockerfile: ./backend/dev.Dockerfile
     context: .
   volumes:
     - ./backend:/app
@@ -218,7 +218,6 @@ services:
       UNLEASHSERVICE_URL: "http://unleashservice:8080"
       USE_GRAPHIQL: 1
       ALLOW_INTROSPECTION: 1
-      GUNICORN_STATSD_HOST: statsd:9125
     ports:
       - 5000:8000
 
