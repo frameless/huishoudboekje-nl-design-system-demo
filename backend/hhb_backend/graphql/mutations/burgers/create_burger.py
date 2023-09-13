@@ -56,10 +56,14 @@ class CreateBurger(graphene.Mutation):
                 "voornamen": {"type": "string", "minLength": 1},
                 "achternaam": {"type": "string","minLength": 1},
                 "telefoonnummer": {"anyOf": [
+                    {"type": "null"},
                     {"type": "string", "pattern": "^(((\+31|0|0031)6){1}[1-9]{1}[0-9]{7})$"}, #MobilePhoneNL
                     {"type": "string", "pattern": "^(((0)[1-9]{2}[0-9][-]?[1-9][0-9]{5})|((\\+31|0|0031)[1-9][0-9][-]?[1-9][0-9]{6}))$"} #PhoneNumberNL
                 ]},
-                "email": {"type": "string", "pattern": "^\S+@\S+$"},
+                "email": {"anyOf": [
+                    {"type": "null"},
+                    {"type": "string", "pattern": "^\S+@\S+$"}
+                ]},
                 "straatnaam": {"type": "string","minLength": 1}, 
                 "huisnummer": {"type": "string", "minLength": 1},
                 "postcode": {"type": "string", "pattern": "^[1-9][0-9]{3}[A-Za-z]{2}$"}, #ZipcodeNL
@@ -73,7 +77,8 @@ class CreateBurger(graphene.Mutation):
             "required": []
         }
         JsonInputValidator(validation_schema).validate(input)
-        before_today(str(input.geboortedatum))
+        if input.geboortedatum:
+            before_today(str(input.geboortedatum))
 
         bsn = input.get('bsn')
         graphene_burger.Burger.bsn_length(bsn)
