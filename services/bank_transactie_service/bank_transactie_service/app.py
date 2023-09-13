@@ -43,6 +43,8 @@ def create_app(config_name='bank_transactie_service.config.Config'):
     # This can also cause parameters that are normally hidden to be logged
     logging.getLogger('werkzeug').setLevel(app.config["LOG_LEVEL"])
 
+    logging.debug("TEST:")
+    logging.debug(app.config["STATSD_HOSTPORT"])
     if app.config["STATSD_HOSTPORT"] is not None and type(app.config["STATSD_HOSTPORT"]) is str:
         try:
             statsd_host = app.config["STATSD_HOSTPORT"].split(':')
