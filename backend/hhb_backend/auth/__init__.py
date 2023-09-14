@@ -121,6 +121,7 @@ class Auth():
                 # Try to decode and verify the token
                 secret = self._public_key_or_secret
                 if secret != None:
+                    logging.info(self.supported_algorithms)
                     claims = jwt.decode(
                         token, secret, algorithms=self.supported_algorithms, audience=self.audience, issuer=self.issuer)
                     email = claims.get('email', None)
