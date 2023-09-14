@@ -2,7 +2,7 @@
 
 ## 1.9.9
 
-Deze versie omvat oplossingen voor kwetsbaarheden in beveiliging en extra logging van Gunicorn en SQLAlchemy.
+Deze versie omvat oplossingen voor kwetsbaarheden in beveiliging en logging van Gunicorn en SQLAlchemy.
 
 ### Patch Changes
 
