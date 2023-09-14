@@ -10,6 +10,7 @@ from bank_transactie_service.views.customer_statement_message import CustomerSta
 from core_service import database
 from bank_transactie_service.views.bank_transaction_range import BanktransactionRangeView
 from bank_transactie_service.views.transactions_filter_view import BanktransactionFilterView
+from core_service.sqlalchemy_statsd_metrics import add_sqlalchemy_statsd_metrics
 
 db = database.db
 
@@ -25,18 +26,21 @@ def create_app(config_name='bank_transactie_service.config.Config'):
         format='%(asctime)s %(levelname)-8s %(message)s',
         level=app.config["LOG_LEVEL"],
         datefmt='%Y-%m-%d %H:%M:%S')
-    logging.config.dictConfig(
-        {
-            "version": 1,
-            "incremental": True,
-            "loggers": {"sqlalchemy.engine": {"level": app.config["LOG_LEVEL"]}},
-        }
-    )
+    # logging.config.dictConfig(
+    #     {
+    #         "version": 1,
+    #         "incremental": True,
+    #         "loggers": {"sqlalchemy.engine": {"level": app.config["LOG_LEVEL"]}},
+    #     }
+    # )
     logging.info(f"Starting {__name__} with {config_name}")
 
     # Werkzeug has their own logger which outputs info level URL calls.
     # This can also cause parameters that are normally hidden to be logged
     logging.getLogger('werkzeug').setLevel(app.config["LOG_LEVEL"])
+
+    add_sqlalchemy_statsd_metrics(app)
+
 
     @app.route('/health')
     def health():

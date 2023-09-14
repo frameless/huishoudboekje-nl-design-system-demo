@@ -115,3 +115,5 @@ spec:
                   key: TRANSACTIESERVICE_DATABASE_URL
             - name: LOG_LEVEL
               value: INFO
+            - name: STATSD_HOST
+              value: "hhb-statsd-exporter:9125"

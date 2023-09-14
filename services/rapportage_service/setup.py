@@ -19,6 +19,7 @@ setup(
         'flask-injector>=0.14.0,<1',
         'MarkupSafe==2.1.1',
 		'future==0.18.3',
-		'WTForms==3.0.1'
+		'WTForms==3.0.1',
+        'statsd==4.0.1'
     ],
 )
