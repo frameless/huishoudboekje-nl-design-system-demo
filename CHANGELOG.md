@@ -2,6 +2,8 @@
 
 ## 1.9.9
 
+Deze versie omvat oplossingen voor kwetsbaarheden in beveiliging en extra logging van Gunicorn en SQLAlchemy.
+
 ### Patch Changes
 
 - ad6df36c: Removed source maps from builds
