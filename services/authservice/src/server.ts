@@ -115,7 +115,8 @@ const server = (prefix: string = "/auth") => {
 	});
 
 	authRouter.get('/logout', (req, res) => {
-		res.clearCookie('app-token', {path:'/'})
+		res.clearCookie('app-token', {httpOnly: true, secure: true, sameSite: "lax"})
+
 		req.session.destroy((err) => {
 			if (err) {
 				log.error(err)
