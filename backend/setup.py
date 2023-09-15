@@ -22,6 +22,7 @@ setup(
         'nest-asyncio>=1.5.5,<2',
         'pydash==5.1.0',
         'pyjwt==2.4.0',
+        'pyjwt[crypto]'
         'python-dateutil>=2.8.2,<3',
         'requests==2.29.0',
         'schwifty>=2022.7.1',
