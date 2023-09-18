@@ -37,12 +37,6 @@ const server = (prefix: string = "/auth") => {
 		})
 	)
 
-	function onLogout(req, res) {
-		res.clearCookie("app-token")
-		log.info("test123 /logout")
-		res.redirect('/');
-	}
-
 	app.use(auth({
 		baseURL: process.env.OIDC_BASE_URL,
 		clientID: process.env.OIDC_CLIENT_ID,
@@ -54,7 +48,6 @@ const server = (prefix: string = "/auth") => {
 		},
 		secret: config.secret,
 		idpLogout: true,
-		onLogout: onLogout,
 		authRequired: false,
 		routes: {
 			login: prefix + "/login",
