@@ -154,15 +154,15 @@ class Auth():
 
     def _public_key_or_secret(self, token):
         alg = self._determine_alg_used(token)
+        self.logger.info(alg)
         if (alg in ['HS256', 'HS384', 'HS512']):
+            self.logger('wrong location sir')
             return self.secret
         else:
             return self._format_key_to_PEM(self._get_public_key_from_oidc(token))
 
     def _get_oidc_config_uri(self):
-        uri = f'{self.issuer}.well-known/openid-configuration' if self.issuer.endswith(
-            '/') else f'{self.issuer}/.well-known/openid-configuration'
-        return uri
+        return f'{self.issuer}{"" if self.issuer.endswith("/") else "/"}.well-known/openid-configuration'
 
     def _get_jwks_uri_from_config(self, config_uri):
         try:
