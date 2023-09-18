@@ -180,7 +180,7 @@ class Auth():
             return None
 
     def _get_public_key_from_oidc(self, token):
-        jwks_uri = self._get_jwks_uri_from_config()
+        jwks_uri = self._get_jwks_uri_from_config(self._get_oidc_config_uri())
         if jwks_uri != None:
             try:
                 jwks_keys = requests.get(jwks_uri).json().get('keys', [])
