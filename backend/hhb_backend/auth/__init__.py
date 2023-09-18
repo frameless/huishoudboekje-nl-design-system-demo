@@ -146,7 +146,7 @@ class Auth():
 
     def _determine_alg_used(self, token):
         header = jwt.get_unverified_header(token)
-        alg = header.get(alg)
+        alg = header.get("alg")
         return alg
 
     def _get_KID_from_token(self, token):
@@ -159,7 +159,7 @@ class Auth():
             self.logger.info('wrong location sir')
             return self.secret
         else:
-            return self._format_key_to_PEM(self._get_public_key_from_oidc(token))
+            return self._get_public_key_from_oidc(token)
 
     def _get_oidc_config_uri(self):
         return f'{self.issuer}{"" if self.issuer.endswith("/") else "/"}.well-known/openid-configuration'
