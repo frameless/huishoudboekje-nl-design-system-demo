@@ -189,6 +189,7 @@ class Auth():
                 for key in jwks_keys:
                     if key.get('kid') == kid:
                         public_key = key
+                        self.logger.info(f"key: {key}")
                         break
                 if public_key == None:
                     self.logger.info(f"public key not found for KID: {kid}")
