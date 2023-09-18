@@ -156,7 +156,6 @@ class Auth():
         alg = self._determine_alg_used(token)
         self.logger.info(alg)
         if (alg in ['HS256', 'HS384', 'HS512']):
-            self.logger.info('wrong location sir')
             return self.secret
         else:
             return self._get_public_key_from_oidc(token)
