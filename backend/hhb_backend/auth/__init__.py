@@ -205,8 +205,8 @@ class Auth():
         return None
 
     def _format_key_to_PEM(self, key):
-        n = int.from_bytes(base64.urlsafe_decode(key['n']), byteorder='big')
-        e = int.from_bytes(base64.urlsafe_decode(key['e']), byteorder='big')
+        n = int.from_bytes(base64.urlsafe_b64decode(key['n']), byteorder='big')
+        e = int.from_bytes(base64.urlsafe_b64decode(key['e']), byteorder='big')
 
         public_numbers = rsa.RSAPublicNumbers(n, e)
         public_key_pem = public_numbers.public_key(backend=default_backend())
