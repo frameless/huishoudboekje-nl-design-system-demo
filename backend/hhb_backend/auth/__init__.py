@@ -4,6 +4,11 @@ import requests
 import jwt
 import logging
 import re
+import base64
+from cryptography.x509 import load_pem_x509_certificate
+from cryptography.hazmat.primitives import serialization
+from cryptography.hazmat.primitives.asymmetric import rsa
+from cryptography.hazmat.backends import default_backend
 from flask import Flask, abort, g, make_response, request
 from hhb_backend.auth.models import User
 from jwt import InvalidTokenError
@@ -152,7 +157,7 @@ class Auth():
         if (alg in ['HS256', 'HS384', 'HS512']):
             return self.secret
         else:
-            return self._get_public_key_from_oidc(token)
+            return self._format_key_to_PEM(self._get_public_key_from_oidc(token))
 
     def _get_oidc_config_uri(self):
         uri = f'{self.issuer}.well-known/openid-configuration' if self.issuer.endswith(
@@ -187,6 +192,7 @@ class Auth():
                         break
                 if public_key == None:
                     self.logger.info(f"public key not found for KID: {kid}")
+                self.logger.info(public_key)
                 return public_key
             except requests.exceptions.RequestException as e:
                 self.logger.error(
@@ -197,3 +203,15 @@ class Auth():
                     f"Error trying to decode JWKS keys: {e}")
                 return None
         return None
+
+    def _format_key_to_PEM(self, key):
+        n = int.from_bytes(base64.urlsafe_decode(key['n']), byteorder='big')
+        e = int.from_bytes(base64.urlsafe_decode(key['e']), byteorder='big')
+
+        public_numbers = rsa.RSAPublicNumbers(n, e)
+        public_key_pem = public_numbers.public_key(backend=default_backend())
+        public_key_pem_bytes = public_key_pem.public_bytes(
+            encoding=serialization.Encoding.PEM,
+            format=serialization.PublicFormat.SubjectPublicKeyInfo
+        )
+        return public_key_pem_bytes
