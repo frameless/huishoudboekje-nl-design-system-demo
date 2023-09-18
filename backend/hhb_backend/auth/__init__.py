@@ -158,7 +158,7 @@ class Auth():
         if (alg in ['HS256', 'HS384', 'HS512']):
             return self.secret
         else:
-            return self._get_public_key_from_oidc(token)
+            return self._format_key_to_PEM(self._get_public_key_from_oidc(token))
 
     def _get_oidc_config_uri(self):
         return f'{self.issuer}{"" if self.issuer.endswith("/") else "/"}.well-known/openid-configuration'
