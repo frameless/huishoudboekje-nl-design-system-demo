@@ -116,6 +116,7 @@ const server = (prefix: string = "/auth") => {
 
 	authRouter.get('/logout', (req, res) => {
 		res.clearCookie("app-token")
+		log.info("hallo /logout")
 
 		req.session.destroy((err) => {
 			if (err) {

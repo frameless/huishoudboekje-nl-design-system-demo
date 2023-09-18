@@ -124,7 +124,7 @@ class Auth():
                     f"""_user_loader: Token: {token}, claims: {unverifiedToken}""")
             try:
                 # Try to decode and verify the token
-                secret = self._public_key_or_secret
+                secret = self._public_key_or_secret(token)
                 if secret != None:
                     logging.info(self.supported_algorithms)
                     claims = jwt.decode(
@@ -156,7 +156,7 @@ class Auth():
         alg = self._determine_alg_used(token)
         self.logger.info(alg)
         if (alg in ['HS256', 'HS384', 'HS512']):
-            self.logger('wrong location sir')
+            self.logger.info('wrong location sir')
             return self.secret
         else:
             return self._format_key_to_PEM(self._get_public_key_from_oidc(token))
