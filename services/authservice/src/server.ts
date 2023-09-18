@@ -52,7 +52,7 @@ const server = (prefix: string = "/auth") => {
 		routes: {
 			login: prefix + "/login",
 			logout: prefix + "/logout",
-			postLogoutRedirect: prefix + "/custom-logout",
+			postLogoutRedirect: prefix + "/callback",
 			callback: prefix + "/callback",
 		},
 		enableTelemetry: false,
@@ -114,10 +114,8 @@ const server = (prefix: string = "/auth") => {
 		return res.status(401).json({ok: false, message: "Unauthorized"});
 	});
 
-
-	authRouter.get('/custom-logout', (req, res) => {
+	authRouter.get('/logout', (req, res) => {
 		res.clearCookie("app-token")
-		log.info("hallo /logout")
 
 		req.session.destroy((err) => {
 			if (err) {
