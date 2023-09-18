@@ -52,7 +52,7 @@ const server = (prefix: string = "/auth") => {
 		routes: {
 			login: prefix + "/login",
 			logout: prefix + "/logout",
-			postLogoutRedirect: prefix + "/callback",
+			postLogoutRedirect: prefix + "/custom-logout",
 			callback: prefix + "/callback",
 		},
 		enableTelemetry: false,
@@ -115,7 +115,7 @@ const server = (prefix: string = "/auth") => {
 	});
 
 
-	authRouter.get('/logout', (req, res) => {
+	authRouter.get('/custom-logout', (req, res) => {
 		res.clearCookie("app-token")
 		log.info("hallo /logout")
 
