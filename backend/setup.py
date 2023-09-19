@@ -23,6 +23,7 @@ setup(
         'pydash==5.1.0',
         'pyjwt==2.4.0',
         'pyjwt[crypto]',
+        'python-jose>=3.3.0',
         'python-dateutil>=2.8.2,<3',
         'requests==2.31.0',
         'schwifty>=2022.7.1',
