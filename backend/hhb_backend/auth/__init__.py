@@ -4,7 +4,7 @@ import logging
 import re
 from jose.jwt import decode, get_unverified_header
 from flask import Flask, abort, g, make_response, request
-from public_key_calculator import PublicKeyCalculator
+from hhb_backend.auth.public_key_calculator import PublicKeyCalculator
 from hhb_backend.auth.models import User
 from jwt import InvalidTokenError
 from time import time
