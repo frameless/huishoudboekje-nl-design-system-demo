@@ -107,7 +107,6 @@ class Auth():
 
     def _user_loader(self):
         token = self._token_loader()
-
         if token is not None:
             try:
                 # Try to decode and verify the token
@@ -142,4 +141,4 @@ class Auth():
         if (alg in ['HS256', 'HS384', 'HS512']):
             return self.secret
         else:
-            return PublicKeyCalculator.get_public_key(token, alg)
+            return PublicKeyCalculator().get_public_key(token, alg)
