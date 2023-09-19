@@ -58,9 +58,9 @@ class PublicKeyCalculator:
     def _determine_key_to_use(self, key, algorithm):
         alg = key.get("kty", None)
         if (alg == "RSA" and algorithm in ALGORITHMS.RSA):
-            return RSAKey.from_jwk(key)
+            return RSAKey(key)
         elif (alg == "EC" and algorithm in ALGORITHMS.EC):
-            return ECKey.from_jwk(key)
+            return ECKey(key)
 
         raise ValueError(
             f"No key could be found or the algorithm: {algorithm} is not supported. Found kty: {alg if alg != None else 'None'}")
