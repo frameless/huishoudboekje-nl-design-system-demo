@@ -1,15 +1,10 @@
 import itsdangerous
 import traceback
-import requests
-import jwt
 import logging
 import re
-import base64
-from cryptography.x509 import load_pem_x509_certificate
-from cryptography.hazmat.primitives import serialization
-from cryptography.hazmat.primitives.asymmetric import rsa
-from cryptography.hazmat.backends import default_backend
+from jose.jwt import decode, get_unverified_header
 from flask import Flask, abort, g, make_response, request
+from public_key_calculator import PublicKeyCalculator
 from hhb_backend.auth.models import User
 from jwt import InvalidTokenError
 from time import time
@@ -115,7 +110,7 @@ class Auth():
 
         if token is not None:
             try:
-                unverifiedToken = jwt.decode(
+                unverifiedToken = decode(
                     token, options={"verify_signature": False})
             except Exception as e:
                 logging.error(e)
@@ -127,7 +122,7 @@ class Auth():
                 secret = self._public_key_or_secret(token)
                 if secret != None:
                     logging.info(self.supported_algorithms)
-                    claims = jwt.decode(
+                    claims = decode(
                         token, secret, algorithms=self.supported_algorithms, audience=self.audience, issuer=self.issuer)
                     email = claims.get('email', None)
                     name = claims.get('name', None)
@@ -145,12 +140,9 @@ class Auth():
         return None
 
     def _determine_alg_used(self, token):
-        header = jwt.get_unverified_header(token)
+        header = get_unverified_header(token)
         alg = header.get("alg")
         return alg
-
-    def _get_KID_from_token(self, token):
-        return jwt.get_unverified_header(token).get("kid")
 
     def _public_key_or_secret(self, token):
         alg = self._determine_alg_used(token)
@@ -158,60 +150,4 @@ class Auth():
         if (alg in ['HS256', 'HS384', 'HS512']):
             return self.secret
         else:
-            return self._format_key_to_PEM(self._get_public_key_from_oidc(token))
-
-    def _get_oidc_config_uri(self):
-        return f'{self.issuer}{"" if self.issuer.endswith("/") else "/"}.well-known/openid-configuration'
-
-    def _get_jwks_uri_from_config(self, config_uri):
-        try:
-            config_data = requests.get(config_uri).json()
-            jwks_uri = config_data.get('jwks_uri', None)
-            if jwks_uri == None:
-                self.logger.info("JWKS endpoint not found for issuer")
-            return jwks_uri
-        except requests.exceptions.RequestException as e:
-            self.logger.error(f'Error trying to fetch oidc configuration: {e}')
-            return None
-        except jwt.DecodeError as e:
-            self.logger.error(
-                f"Error trying to decode openid-configuration: {e}")
-            return None
-
-    def _get_public_key_from_oidc(self, token):
-        jwks_uri = self._get_jwks_uri_from_config(self._get_oidc_config_uri())
-        if jwks_uri != None:
-            try:
-                jwks_keys = requests.get(jwks_uri).json().get('keys', [])
-                kid = self._get_KID_from_token(token)
-                public_key = None
-                for key in jwks_keys:
-                    if key.get('kid') == kid:
-                        public_key = key
-                        self.logger.info(f"key: {key}")
-                        break
-                if public_key == None:
-                    self.logger.info(f"public key not found for KID: {kid}")
-                self.logger.info(public_key)
-                return public_key
-            except requests.exceptions.RequestException as e:
-                self.logger.error(
-                    f"Error trying to get keys from JWKS endpoint: {e}")
-                return None
-            except jwt.DecodeError as e:
-                self.logger.error(
-                    f"Error trying to decode JWKS keys: {e}")
-                return None
-        return None
-
-    def _format_key_to_PEM(self, key):
-        n = int.from_bytes(base64.urlsafe_b64decode(key['n']), byteorder='big')
-        e = int.from_bytes(base64.urlsafe_b64decode(key['e']), byteorder='big')
-
-        public_numbers = rsa.RSAPublicNumbers(n, e)
-        public_key_pem = public_numbers.public_key(backend=default_backend())
-        public_key_pem_bytes = public_key_pem.public_bytes(
-            encoding=serialization.Encoding.PEM,
-            format=serialization.PublicFormat.SubjectPublicKeyInfo
-        )
-        return public_key_pem_bytes
+            return PublicKeyCalculator.get_public_key(token, alg)
