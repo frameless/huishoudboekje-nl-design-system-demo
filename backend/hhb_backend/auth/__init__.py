@@ -141,4 +141,4 @@ class Auth():
         if (alg in ['HS256', 'HS384', 'HS512']):
             return self.secret
         else:
-            return PublicKeyCalculator().get_public_key(token, alg)
+            return PublicKeyCalculator().get_public_key(token, alg, self.issuer)

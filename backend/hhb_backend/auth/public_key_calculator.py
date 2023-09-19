@@ -5,11 +5,11 @@ from jose.jwt import get_unverified_header
 
 
 class PublicKeyCalculator:
-    def get_public_key(self, token, alg):
-        return self._determine_key_to_use(self._get_public_key_from_oidc(token), alg)
+    def get_public_key(self, token, alg, issuer):
+        return self._determine_key_to_use(self._get_public_key_from_oidc(token, issuer), alg)
 
-    def _get_oidc_config_uri(self):
-        return f'{self.issuer}{"" if self.issuer.endswith("/") else "/"}.well-known/openid-configuration'
+    def _get_oidc_config_uri(self, issuer):
+        return f'{issuer}{"" if issuer.endswith("/") else "/"}.well-known/openid-configuration'
 
     def _get_jwks_uri_from_config(self, config_uri):
         try:
@@ -26,8 +26,9 @@ class PublicKeyCalculator:
                 f"Error trying to decode openid-configuration: {e}")
             return None
 
-    def _get_public_key_from_oidc(self, token):
-        jwks_uri = self._get_jwks_uri_from_config(self._get_oidc_config_uri())
+    def _get_public_key_from_oidc(self, token, issuer):
+        jwks_uri = self._get_jwks_uri_from_config(
+            self._get_oidc_config_uri(issuer))
         if jwks_uri != None:
             try:
                 jwks_keys = requests.get(jwks_uri).json().get('keys', [])
