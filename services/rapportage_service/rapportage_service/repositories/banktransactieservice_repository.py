@@ -9,3 +9,8 @@ class BanktransactieServiceRepository:
         transactionsJson = {"transaction_ids": transactions}
         response = requests.get(f"{self.BANKTRANSACTIES_SERVICE_URL}/banktransactions/range?startDate={startDate}&endDate={endDate}", json=transactionsJson)
         return response.json()["data"]
+    
+    def get_saldo(self,date, transactions=None ):
+        transactionsJson = {"transaction_ids": transactions}
+        response = requests.get(f"{self.BANKTRANSACTIES_SERVICE_URL}/banktransactions/sum?date={date}", json=transactionsJson)
+        return response.json()["data"][0]["sum"]

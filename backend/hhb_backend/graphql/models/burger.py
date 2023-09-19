@@ -1,4 +1,5 @@
 """ Burger model as used in GraphQL queries """
+from datetime import date
 import graphene
 from graphql import GraphQLError
 
@@ -8,6 +9,7 @@ import hhb_backend.graphql.models.huishouden as huishouden
 import hhb_backend.graphql.models.rekening as rekening
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.models.pageinfo import PageInfo
+from hhb_backend.graphql.scalars.bedrag import Bedrag
 from hhb_backend.graphql.utils.dates import to_date
 
 
@@ -28,7 +30,7 @@ class Burger(graphene.ObjectType):
     afspraken = graphene.List(lambda: afspraak.Afspraak)
     huishouden_id = graphene.Int()
     huishouden = graphene.Field(lambda: huishouden.Huishouden)
-    saldo = graphene.Int()
+    saldo = graphene.Field(Bedrag)
     gebruikersactiviteiten = graphene.List(
         lambda: gebruikersactiviteit.GebruikersActiviteit)
 
@@ -54,6 +56,9 @@ class Burger(graphene.ObjectType):
     def resolve_geboortedatum(self, _info):
         if value := self.get('geboortedatum'):
             return to_date(value)
+        
+    def resolve_saldo(self, _info):
+        return hhb_dataloader().saldo.get_saldo([self.get('id')], date.today())["saldo"]
 
     @staticmethod
     def bsn_length(bsn):

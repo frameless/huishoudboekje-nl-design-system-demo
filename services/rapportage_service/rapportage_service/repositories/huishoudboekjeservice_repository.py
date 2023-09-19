@@ -12,3 +12,10 @@ class HuishoudboekjeserviceRepository:
         }
         response = requests.get(f"{self.HHB_SERVICES_URL}/burgers/transacties", json=json)
         return response.json()["data"]
+    
+    def get_transaction_ids_burgers(self,burger_ids) -> list[int]:
+        json = {
+            "burger_ids": burger_ids
+        }
+        response = requests.get(f"{self.HHB_SERVICES_URL}/burgers/transacties/ids", json=json)
+        return response.json()["data"]
