@@ -1,4 +1,5 @@
 import requests
+import logging
 from jose.backends import RSAKey, ECKey
 from jose.constants import ALGORITHMS
 from jose.jwt import get_unverified_header
@@ -16,13 +17,13 @@ class PublicKeyCalculator:
             config_data = requests.get(config_uri).json()
             jwks_uri = config_data.get('jwks_uri', None)
             if jwks_uri == None:
-                self.logger.info("JWKS endpoint not found for issuer")
+                logging.info("JWKS endpoint not found for issuer")
             return jwks_uri
         except requests.exceptions.RequestException as e:
-            self.logger.error(f'Error trying to fetch oidc configuration: {e}')
+            logging.error(f'Error trying to fetch oidc configuration: {e}')
             return None
         except Exception as e:
-            self.logger.error(
+            logging.error(
                 f"Error trying to decode openid-configuration: {e}")
             return None
 
@@ -37,18 +38,16 @@ class PublicKeyCalculator:
                 for key in jwks_keys:
                     if key.get('kid') == kid:
                         public_key = key
-                        self.logger.info(f"key: {key}")
                         break
                 if public_key == None:
-                    self.logger.info(f"public key not found for KID: {kid}")
-                self.logger.info(public_key)
+                    logging.info(f"public key not found for KID: {kid}")
                 return public_key
             except requests.exceptions.RequestException as e:
-                self.logger.error(
+                logging.error(
                     f"Error trying to get keys from JWKS endpoint: {e}")
                 return None
             except Exception as e:
-                self.logger.error(
+                logging.error(
                     f"Error trying to decode JWKS keys: {e}")
                 return None
         return None
