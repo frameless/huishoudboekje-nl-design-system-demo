@@ -59,9 +59,9 @@ class PublicKeyCalculator:
         alg = key.get("alg", None)
         if (alg == algorithm):
             if (algorithm in ALGORITHMS.RSA):
-                return RSAKey(key.get('n', None), key.get('e', None), algorithm=algorithm)
+                return RSAKey(key, algorithm)
             elif (algorithm in ALGORITHMS.EC):
-                return ECKey(key.get('x', None), key.get('y', None), curve=key.get('crv', None), algorithm=algorithm)
+                return ECKey(key, algorithm)
 
         raise ValueError(
             f"No key could be found or the algorithm: {algorithm} is not supported. Found alg: {alg if alg != None else 'None'}")
