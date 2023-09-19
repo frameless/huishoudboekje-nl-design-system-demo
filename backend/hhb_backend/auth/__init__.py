@@ -110,14 +110,6 @@ class Auth():
 
         if token is not None:
             try:
-                unverifiedToken = decode(
-                    token, options={"verify_signature": False})
-            except Exception as e:
-                logging.error(e)
-                logging.error(traceback.print_tb(e.__traceback__))
-                self.logger.debug(
-                    f"""_user_loader: Token: {token}, claims: {unverifiedToken}""")
-            try:
                 # Try to decode and verify the token
                 secret = self._public_key_or_secret(token)
                 if secret != None:
@@ -134,7 +126,7 @@ class Auth():
                 self.logger.error(err)
                 self.logger.warning("Invalid token")
                 self.logger.debug(
-                    f"""_user_loader: {err}; claims: {unverifiedToken}""")
+                    f"""_user_loader: {err}; claims: {claims}""")
 
         self.logger.debug(f"_user_loader: no user")
         return None
