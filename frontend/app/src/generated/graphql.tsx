@@ -451,18 +451,6 @@ export type CreateRubriek = {
   rubriek?: Maybe<Rubriek>;
 };
 
-export type CreateSaldo = {
-  ok?: Maybe<Scalars['Boolean']>;
-  saldo?: Maybe<Saldo>;
-};
-
-export type CreateSaldoInput = {
-  begindatum?: InputMaybe<Scalars['String']>;
-  burgerId?: InputMaybe<Scalars['Int']>;
-  einddatum?: InputMaybe<Scalars['String']>;
-  saldo?: InputMaybe<Scalars['Bedrag']>;
-};
-
 export type CreateSignaal = {
   ok?: Maybe<Scalars['Boolean']>;
   signaal?: Maybe<Signaal>;
@@ -820,7 +808,6 @@ export type RootMutation = {
   createOrganisatie?: Maybe<CreateOrganisatie>;
   createPostadres?: Maybe<CreatePostadres>;
   createRubriek?: Maybe<CreateRubriek>;
-  createSaldo?: Maybe<CreateSaldo>;
   createSignaal?: Maybe<CreateSignaal>;
   /** Mutatie om een afdeling van een organisatie te verwijderen. */
   deleteAfdeling?: Maybe<DeleteAfdeling>;
@@ -860,7 +847,6 @@ export type RootMutation = {
   updatePostadres?: Maybe<UpdatePostadres>;
   updateRekening?: Maybe<UpdateRekening>;
   updateRubriek?: Maybe<UpdateRubriek>;
-  updateSaldo?: Maybe<UpdateSaldo>;
   updateSignaal?: Maybe<UpdateSignaal>;
 };
 
@@ -971,12 +957,6 @@ export type RootMutationCreatePostadresArgs = {
 export type RootMutationCreateRubriekArgs = {
   grootboekrekeningId?: InputMaybe<Scalars['String']>;
   naam?: InputMaybe<Scalars['String']>;
-};
-
-
-/** The root of all mutations  */
-export type RootMutationCreateSaldoArgs = {
-  input?: InputMaybe<CreateSaldoInput>;
 };
 
 
@@ -1189,12 +1169,6 @@ export type RootMutationUpdateRubriekArgs = {
   grootboekrekeningId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
   naam?: InputMaybe<Scalars['String']>;
-};
-
-
-/** The root of all mutations  */
-export type RootMutationUpdateSaldoArgs = {
-  input?: InputMaybe<UpdateSaldoInput>;
 };
 
 
@@ -1509,7 +1483,7 @@ export type RootQueryRubriekenArgs = {
 /** The root of all queries  */
 export type RootQuerySaldoArgs = {
   burgerIds?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
-  date?: InputMaybe<Scalars['String']>;
+  date: Scalars['Date'];
 };
 
 
@@ -1662,19 +1636,6 @@ export type UpdateRubriek = {
   ok?: Maybe<Scalars['Boolean']>;
   previous?: Maybe<Rubriek>;
   rubriek?: Maybe<Rubriek>;
-};
-
-export type UpdateSaldo = {
-  ok?: Maybe<Scalars['Boolean']>;
-  saldo?: Maybe<Saldo>;
-};
-
-export type UpdateSaldoInput = {
-  begindatum?: InputMaybe<Scalars['String']>;
-  burgerId?: InputMaybe<Scalars['Int']>;
-  einddatum?: InputMaybe<Scalars['String']>;
-  id?: InputMaybe<Scalars['Int']>;
-  saldo?: InputMaybe<Scalars['Bedrag']>;
 };
 
 export type UpdateSignaal = {
@@ -2153,7 +2114,7 @@ export type GetBurgerRapportagesQueryVariables = Exact<{
   start: Scalars['String'];
   end: Scalars['String'];
   rubrieken: Array<Scalars['Int']> | Scalars['Int'];
-  saldoDate: Scalars['String'];
+  saldoDate: Scalars['Date'];
 }>;
 
 
@@ -6062,7 +6023,7 @@ export type GetBurgerGebeurtenissenQueryHookResult = ReturnType<typeof useGetBur
 export type GetBurgerGebeurtenissenLazyQueryHookResult = ReturnType<typeof useGetBurgerGebeurtenissenLazyQuery>;
 export type GetBurgerGebeurtenissenQueryResult = Apollo.QueryResult<GetBurgerGebeurtenissenQuery, GetBurgerGebeurtenissenQueryVariables>;
 export const GetBurgerRapportagesDocument = gql`
-    query getBurgerRapportages($burgers: [Int!]!, $start: String!, $end: String!, $rubrieken: [Int!]!, $saldoDate: String!) {
+    query getBurgerRapportages($burgers: [Int!]!, $start: String!, $end: String!, $rubrieken: [Int!]!, $saldoDate: Date!) {
   burgerRapportages(
     burgerIds: $burgers
     startDate: $start
