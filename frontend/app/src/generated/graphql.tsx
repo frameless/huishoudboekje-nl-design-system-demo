@@ -206,7 +206,6 @@ export type Burger = {
   plaatsnaam?: Maybe<Scalars['String']>;
   postcode?: Maybe<Scalars['String']>;
   rekeningen?: Maybe<Array<Maybe<Rekening>>>;
-  saldo?: Maybe<Scalars['Bedrag']>;
   straatnaam?: Maybe<Scalars['String']>;
   telefoonnummer?: Maybe<Scalars['String']>;
   voorletters?: Maybe<Scalars['String']>;
@@ -2084,7 +2083,7 @@ export type GetBurgerDetailsQueryVariables = Exact<{
 }>;
 
 
-export type GetBurgerDetailsQuery = { burger?: { id?: number, voorletters?: string, voornamen?: string, achternaam?: string, saldo?: any, huishouden?: { id?: number }, afspraken?: Array<{ id?: number, bedrag?: any, credit?: boolean, omschrijving?: string, validThrough?: any, betaalinstructie?: { byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string }, afdeling?: { naam?: string, organisatie?: { naam?: string } } }> } };
+export type GetBurgerDetailsQuery = { burger?: { id?: number, voorletters?: string, voornamen?: string, achternaam?: string, huishouden?: { id?: number }, afspraken?: Array<{ id?: number, bedrag?: any, credit?: boolean, omschrijving?: string, validThrough?: any, betaalinstructie?: { byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string }, afdeling?: { naam?: string, organisatie?: { naam?: string } } }> } };
 
 export type GetBurgerPersonalDetailsQueryVariables = Exact<{
   id: Scalars['Int'];
@@ -2222,6 +2221,14 @@ export type GetRubriekenConfiguratieQueryVariables = Exact<{ [key: string]: neve
 
 
 export type GetRubriekenConfiguratieQuery = { rubrieken?: Array<{ id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, omschrijving?: string } }>, grootboekrekeningen?: Array<{ id: string, naam?: string, omschrijving?: string }> };
+
+export type GetSaldoQueryVariables = Exact<{
+  burgers: Array<Scalars['Int']> | Scalars['Int'];
+  date: Scalars['Date'];
+}>;
+
+
+export type GetSaldoQuery = { saldo?: { saldo?: any } };
 
 export type GetSearchAfsprakenQueryVariables = Exact<{
   offset?: InputMaybe<Scalars['Int']>;
@@ -5625,7 +5632,6 @@ export const GetBurgerDetailsDocument = gql`
     voorletters
     voornamen
     achternaam
-    saldo
     huishouden {
       id
     }
@@ -7003,6 +7009,42 @@ export function useGetRubriekenConfiguratieLazyQuery(baseOptions?: Apollo.LazyQu
 export type GetRubriekenConfiguratieQueryHookResult = ReturnType<typeof useGetRubriekenConfiguratieQuery>;
 export type GetRubriekenConfiguratieLazyQueryHookResult = ReturnType<typeof useGetRubriekenConfiguratieLazyQuery>;
 export type GetRubriekenConfiguratieQueryResult = Apollo.QueryResult<GetRubriekenConfiguratieQuery, GetRubriekenConfiguratieQueryVariables>;
+export const GetSaldoDocument = gql`
+    query getSaldo($burgers: [Int!]!, $date: Date!) {
+  saldo(burgerIds: $burgers, date: $date) {
+    saldo
+  }
+}
+    `;
+
+/**
+ * __useGetSaldoQuery__
+ *
+ * To run a query within a React component, call `useGetSaldoQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetSaldoQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetSaldoQuery({
+ *   variables: {
+ *      burgers: // value for 'burgers'
+ *      date: // value for 'date'
+ *   },
+ * });
+ */
+export function useGetSaldoQuery(baseOptions: Apollo.QueryHookOptions<GetSaldoQuery, GetSaldoQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetSaldoQuery, GetSaldoQueryVariables>(GetSaldoDocument, options);
+      }
+export function useGetSaldoLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetSaldoQuery, GetSaldoQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetSaldoQuery, GetSaldoQueryVariables>(GetSaldoDocument, options);
+        }
+export type GetSaldoQueryHookResult = ReturnType<typeof useGetSaldoQuery>;
+export type GetSaldoLazyQueryHookResult = ReturnType<typeof useGetSaldoLazyQuery>;
+export type GetSaldoQueryResult = Apollo.QueryResult<GetSaldoQuery, GetSaldoQueryVariables>;
 export const GetSearchAfsprakenDocument = gql`
     query getSearchAfspraken($offset: Int, $limit: Int, $afspraken: [Int], $afdelingen: [Int], $burgers: [Int], $only_valid: Boolean, $min_bedrag: Int, $max_bedrag: Int, $zoektermen: [String]) {
   searchAfspraken(

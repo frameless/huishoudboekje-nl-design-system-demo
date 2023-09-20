@@ -8,7 +8,6 @@ export const GetBurgerDetailsQuery = gql`
 			voorletters
 			voornamen
 			achternaam
-			saldo
 			huishouden {
 				id
 			}
