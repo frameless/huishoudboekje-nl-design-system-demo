@@ -51,7 +51,7 @@ const server = (prefix: string = "/auth") => {
 		authRequired: false,
 		routes: {
 			login: prefix + "/login",
-			logout: prefix + "/logout",
+			logout: false,
 			postLogoutRedirect: prefix + "/callback",
 			callback: prefix + "/callback",
 		},
@@ -114,15 +114,16 @@ const server = (prefix: string = "/auth") => {
 	});
 
 	authRouter.get('/logout', (req, res) => {
-		res.clearCookie("app-token")
+		log.error("TESTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT")
+		// res.clearCookie("app-token")
 
-		req.session.destroy((err) => {
-			if (err) {
-				log.error(err)
-				return res.status(500).send('Failed to logout user')
-			}
-			res.redirect('/login')
-		});
+		// req.session.destroy((err) => {
+		// 	if (err) {
+		// 		log.error(err)
+		// 		return res.status(500).send('Failed to logout user')
+		// 	}
+		// 	res.redirect('/login')
+		// });
 	})
 
 	authRouter.get("/", (req, res) => {
