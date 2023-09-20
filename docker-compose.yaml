@@ -115,6 +115,8 @@ x-py-tests: &x-py-tests
     - pytest tests --disable-pytest-warnings
   environment:
     JWT_AUDIENCE: pytest
+    JWT_ISSUER: pytest
+    JWT_ALGORITHMS: HS256
     JWT_SECRET: pytestsecret
 
 x-js-tests: &x-js-tests
@@ -207,6 +209,8 @@ services:
       REQUIRE_AUTH: 0
       JWT_AUDIENCE: Account
       JWT_SECRET: testtest
+      JWT_ISSUER: localhost
+      JWT_ALGORITHMS: HS256
       HHB_SERVICE_URL: "http://huishoudboekjeservice:8000"
       ORGANISATIE_SERVICE_URL: "http://organisatieservice:8000"
       TRANSACTIE_SERVICE_URL: "http://banktransactieservice:8000"
