@@ -1,7 +1,7 @@
 import {gql} from "@apollo/client";
 
 export const GetBurgerRapportageQuery = gql`
-    query getBurgerRapportages($burgers:[Int!]!,$start:String!,$end:String!,$rubrieken:[Int!]!) {
+    query getBurgerRapportages($burgers:[Int!]!,$start:String!,$end:String!,$rubrieken:[Int!]!, $saldoDate:Date!) {
         burgerRapportages(burgerIds:$burgers startDate:$start, endDate:$end, rubriekenIds:$rubrieken){
             burger{
                 voornamen
@@ -27,6 +27,9 @@ export const GetBurgerRapportageQuery = gql`
                     rekeninghouder
                 }
             }
+        }
+        saldo(burgerIds: $burgers, date: $saldoDate) {
+            saldo
         }
     }
 `;

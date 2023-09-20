@@ -10,8 +10,6 @@ from hhb_backend.service.model.afspraak import Afspraak
 from hhb_backend.service.model.rekening import Rekening
 from hhb_backend.service.model.bank_transaction import BankTransaction
 from hhb_backend.graphql.mutations.journaalposten.create_journaalpost import create_journaalposten
-from hhb_backend.processen.saldo_berekenen import update_or_create_saldo
-
 
 def automatisch_boeken(customer_statement_message_id: int = None):
     logging.info(f"Start automatisch boeken")
@@ -59,11 +57,6 @@ def automatisch_boeken(customer_statement_message_id: int = None):
         json, _afspraken, _matching_transactions)
 
     logging.info(f"automatisch boeken completed with {len(journaalposten_)}")
-
-    logging.info(f"Updating saldos accordingly...")
-    for journaalpost in journaalposten_:
-        update_or_create_saldo(journaalpost)
-
     return journaalposten_
 
 

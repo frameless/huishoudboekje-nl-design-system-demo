@@ -1,21 +1,20 @@
 import {Box, Divider, HStack, Stack, Text, VStack} from "@chakra-ui/react";
 import React from "react";
 import {Trans, useTranslation} from "react-i18next";
-import {BurgerRapportage, Saldo} from "../../generated/graphql";
+import {BurgerRapportage} from "../../generated/graphql";
 import d from "../../utils/dayjs";
-import {currencyFormat2} from "../../utils/things";
+import {MathOperation, currencyFormat2, floatMathOperation} from "../../utils/things";
 import Section from "../shared/Section";
 import SectionContainer from "../shared/SectionContainer";
-import {createBalanceTableAggregation, createSaldos, Offsets, Transaction, Type} from "./Aggregator";
+import {createBalanceTableAggregation, createSaldos, Transaction, Type} from "./Aggregator";
 import { Dayjs } from "dayjs";
-import { type } from "os";
 
-type BalanceTableProps = {transactions: BurgerRapportage[], startDate: Dayjs, endDate: Dayjs, startSaldo: number, offsets: Offsets};
+type BalanceTableProps = {transactions: BurgerRapportage[], startDate: Dayjs, endDate: Dayjs, startSaldo: number};
 
-const BalanceTable: React.FC<BalanceTableProps> = ({transactions, startDate, endDate, startSaldo, offsets}) => {
+const BalanceTable: React.FC<BalanceTableProps> = ({transactions, startDate, endDate, startSaldo}) => {
 	const {t} = useTranslation();
 	const aggregationByOrganisatie: Transaction[] = createBalanceTableAggregation(startDate, transactions);
-	const saldos = createSaldos(transactions, offsets)
+	const saldos = createSaldos(transactions)
 	const saldoDate = d(endDate, "L")
 	const translatedCategory = {
 		[Type.Inkomsten]: t("charts.inkomstenUitgaven.income"),
@@ -93,8 +92,8 @@ const BalanceTable: React.FC<BalanceTableProps> = ({transactions, startDate, end
 						{ !dataFound && (<Text paddingTop={"30px"} >{t("reports.noData")}</Text>)}
 						<HStack direction={"row"}>
 							<Box flex={1} paddingTop={"30px"}>
-								<Text>{t("end saldo at") + " " + saldoDate.format("L")}:
-									{` € ${currencyFormat2(false).format(startSaldo + saldos['Total'])}`}</Text>
+							<Text>{t("end saldo at") + " " + saldoDate.format("L")}:
+									{` € ${currencyFormat2(false).format(floatMathOperation(startSaldo, saldos['Total'], 2, MathOperation.Plus))}`}</Text>
 							</Box>
 						</HStack>
 					</Stack>

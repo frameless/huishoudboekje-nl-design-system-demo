@@ -206,7 +206,6 @@ export type Burger = {
   plaatsnaam?: Maybe<Scalars['String']>;
   postcode?: Maybe<Scalars['String']>;
   rekeningen?: Maybe<Array<Maybe<Rekening>>>;
-  saldo?: Maybe<Scalars['Int']>;
   straatnaam?: Maybe<Scalars['String']>;
   telefoonnummer?: Maybe<Scalars['String']>;
   voorletters?: Maybe<Scalars['String']>;
@@ -449,18 +448,6 @@ export type CreatePostadresInput = {
 export type CreateRubriek = {
   ok?: Maybe<Scalars['Boolean']>;
   rubriek?: Maybe<Rubriek>;
-};
-
-export type CreateSaldo = {
-  ok?: Maybe<Scalars['Boolean']>;
-  saldo?: Maybe<Saldo>;
-};
-
-export type CreateSaldoInput = {
-  begindatum?: InputMaybe<Scalars['String']>;
-  burgerId?: InputMaybe<Scalars['Int']>;
-  einddatum?: InputMaybe<Scalars['String']>;
-  saldo?: InputMaybe<Scalars['Bedrag']>;
 };
 
 export type CreateSignaal = {
@@ -820,7 +807,6 @@ export type RootMutation = {
   createOrganisatie?: Maybe<CreateOrganisatie>;
   createPostadres?: Maybe<CreatePostadres>;
   createRubriek?: Maybe<CreateRubriek>;
-  createSaldo?: Maybe<CreateSaldo>;
   createSignaal?: Maybe<CreateSignaal>;
   /** Mutatie om een afdeling van een organisatie te verwijderen. */
   deleteAfdeling?: Maybe<DeleteAfdeling>;
@@ -860,7 +846,6 @@ export type RootMutation = {
   updatePostadres?: Maybe<UpdatePostadres>;
   updateRekening?: Maybe<UpdateRekening>;
   updateRubriek?: Maybe<UpdateRubriek>;
-  updateSaldo?: Maybe<UpdateSaldo>;
   updateSignaal?: Maybe<UpdateSignaal>;
 };
 
@@ -971,12 +956,6 @@ export type RootMutationCreatePostadresArgs = {
 export type RootMutationCreateRubriekArgs = {
   grootboekrekeningId?: InputMaybe<Scalars['String']>;
   naam?: InputMaybe<Scalars['String']>;
-};
-
-
-/** The root of all mutations  */
-export type RootMutationCreateSaldoArgs = {
-  input?: InputMaybe<CreateSaldoInput>;
 };
 
 
@@ -1193,12 +1172,6 @@ export type RootMutationUpdateRubriekArgs = {
 
 
 /** The root of all mutations  */
-export type RootMutationUpdateSaldoArgs = {
-  input?: InputMaybe<UpdateSaldoInput>;
-};
-
-
-/** The root of all mutations  */
 export type RootMutationUpdateSignaalArgs = {
   id: Scalars['String'];
   input: UpdateSignaalInput;
@@ -1245,9 +1218,7 @@ export type RootQuery = {
   rekeningenByIbans?: Maybe<Array<Maybe<Rekening>>>;
   rubriek?: Maybe<Rubriek>;
   rubrieken?: Maybe<Array<Maybe<Rubriek>>>;
-  saldo?: Maybe<Array<Maybe<Saldo>>>;
-  saldoClosest?: Maybe<Array<Maybe<Saldo>>>;
-  saldoRange?: Maybe<Array<Maybe<Saldo>>>;
+  saldo?: Maybe<Saldo>;
   searchAfspraken?: Maybe<AfsprakenPaged>;
   searchTransacties?: Maybe<BankTransactionsPaged>;
   signaal?: Maybe<Signaal>;
@@ -1511,22 +1482,7 @@ export type RootQueryRubriekenArgs = {
 /** The root of all queries  */
 export type RootQuerySaldoArgs = {
   burgerIds?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
-  date?: InputMaybe<Scalars['String']>;
-};
-
-
-/** The root of all queries  */
-export type RootQuerySaldoClosestArgs = {
-  burgerIds?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
-  date?: InputMaybe<Scalars['String']>;
-};
-
-
-/** The root of all queries  */
-export type RootQuerySaldoRangeArgs = {
-  burgerIds?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
-  enddate?: InputMaybe<Scalars['String']>;
-  startdate?: InputMaybe<Scalars['String']>;
+  date: Scalars['Date'];
 };
 
 
@@ -1570,10 +1526,6 @@ export type Rubriek = {
 };
 
 export type Saldo = {
-  begindatum?: Maybe<Scalars['String']>;
-  burgerId?: Maybe<Scalars['Int']>;
-  einddatum?: Maybe<Scalars['String']>;
-  id?: Maybe<Scalars['Int']>;
   saldo?: Maybe<Scalars['Bedrag']>;
 };
 
@@ -1683,19 +1635,6 @@ export type UpdateRubriek = {
   ok?: Maybe<Scalars['Boolean']>;
   previous?: Maybe<Rubriek>;
   rubriek?: Maybe<Rubriek>;
-};
-
-export type UpdateSaldo = {
-  ok?: Maybe<Scalars['Boolean']>;
-  saldo?: Maybe<Saldo>;
-};
-
-export type UpdateSaldoInput = {
-  begindatum?: InputMaybe<Scalars['String']>;
-  burgerId?: InputMaybe<Scalars['Int']>;
-  einddatum?: InputMaybe<Scalars['String']>;
-  id?: InputMaybe<Scalars['Int']>;
-  saldo?: InputMaybe<Scalars['Bedrag']>;
 };
 
 export type UpdateSignaal = {
@@ -1851,13 +1790,6 @@ export type CreateRubriekMutationVariables = Exact<{
 
 
 export type CreateRubriekMutation = { createRubriek?: { ok?: boolean, rubriek?: { id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } } } };
-
-export type CreateSaldoMutationVariables = Exact<{
-  input?: InputMaybe<CreateSaldoInput>;
-}>;
-
-
-export type CreateSaldoMutation = { createSaldo?: { ok?: boolean, saldo?: { id?: number, burgerId?: number, einddatum?: string, begindatum?: string, saldo?: any } } };
 
 export type DeleteOrganisatieMutationVariables = Exact<{
   id: Scalars['Int'];
@@ -2092,13 +2024,6 @@ export type UpdateRubriekMutationVariables = Exact<{
 
 export type UpdateRubriekMutation = { updateRubriek?: { ok?: boolean } };
 
-export type UpdateSaldoMutationVariables = Exact<{
-  input: UpdateSaldoInput;
-}>;
-
-
-export type UpdateSaldoMutation = { updateSaldo?: { ok?: boolean, saldo?: { id?: number, burgerId?: number, einddatum?: string, begindatum?: string, saldo?: any } } };
-
 export type UpdateSignaalMutationVariables = Exact<{
   id: Scalars['String'];
   input: UpdateSignaalInput;
@@ -2188,10 +2113,11 @@ export type GetBurgerRapportagesQueryVariables = Exact<{
   start: Scalars['String'];
   end: Scalars['String'];
   rubrieken: Array<Scalars['Int']> | Scalars['Int'];
+  saldoDate: Scalars['Date'];
 }>;
 
 
-export type GetBurgerRapportagesQuery = { burgerRapportages?: Array<{ startDatum?: string, eindDatum?: string, totaal?: any, totaalUitgaven?: any, totaalInkomsten?: any, burger?: { voornamen?: string }, inkomsten?: Array<{ rubriek?: string, transacties?: Array<{ bedrag?: any, transactieDatum?: string, rekeninghouder?: string }> }>, uitgaven?: Array<{ rubriek?: string, transacties?: Array<{ bedrag?: any, transactieDatum?: string, rekeninghouder?: string }> }> }> };
+export type GetBurgerRapportagesQuery = { burgerRapportages?: Array<{ startDatum?: string, eindDatum?: string, totaal?: any, totaalUitgaven?: any, totaalInkomsten?: any, burger?: { voornamen?: string }, inkomsten?: Array<{ rubriek?: string, transacties?: Array<{ bedrag?: any, transactieDatum?: string, rekeninghouder?: string }> }>, uitgaven?: Array<{ rubriek?: string, transacties?: Array<{ bedrag?: any, transactieDatum?: string, rekeninghouder?: string }> }> }>, saldo?: { saldo?: any } };
 
 export type GetBurgersQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -2297,29 +2223,12 @@ export type GetRubriekenConfiguratieQueryVariables = Exact<{ [key: string]: neve
 export type GetRubriekenConfiguratieQuery = { rubrieken?: Array<{ id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, omschrijving?: string } }>, grootboekrekeningen?: Array<{ id: string, naam?: string, omschrijving?: string }> };
 
 export type GetSaldoQueryVariables = Exact<{
-  burger_ids?: InputMaybe<Array<Scalars['Int']> | Scalars['Int']>;
-  date: Scalars['String'];
+  burgers: Array<Scalars['Int']> | Scalars['Int'];
+  date: Scalars['Date'];
 }>;
 
 
-export type GetSaldoQuery = { saldo?: Array<{ id?: number, burgerId?: number, begindatum?: string, einddatum?: string, saldo?: any }> };
-
-export type GetSaldoClosestToQueryVariables = Exact<{
-  burger_ids?: InputMaybe<Array<Scalars['Int']> | Scalars['Int']>;
-  date: Scalars['String'];
-}>;
-
-
-export type GetSaldoClosestToQuery = { saldoClosest?: Array<{ burgerId?: number, begindatum?: string, einddatum?: string, saldo?: any, id?: number }> };
-
-export type GetSaldoByDateRangeQueryVariables = Exact<{
-  burger_ids?: InputMaybe<Array<Scalars['Int']> | Scalars['Int']>;
-  startdate: Scalars['String'];
-  enddate: Scalars['String'];
-}>;
-
-
-export type GetSaldoByDateRangeQuery = { saldoRange?: Array<{ burgerId?: number, begindatum?: string, einddatum?: string, saldo?: any }> };
+export type GetSaldoQuery = { saldo?: { saldo?: any } };
 
 export type GetSearchAfsprakenQueryVariables = Exact<{
   offset?: InputMaybe<Scalars['Int']>;
@@ -3512,46 +3421,6 @@ export function useCreateRubriekMutation(baseOptions?: Apollo.MutationHookOption
 export type CreateRubriekMutationHookResult = ReturnType<typeof useCreateRubriekMutation>;
 export type CreateRubriekMutationResult = Apollo.MutationResult<CreateRubriekMutation>;
 export type CreateRubriekMutationOptions = Apollo.BaseMutationOptions<CreateRubriekMutation, CreateRubriekMutationVariables>;
-export const CreateSaldoDocument = gql`
-    mutation createSaldo($input: CreateSaldoInput) {
-  createSaldo(input: $input) {
-    ok
-    saldo {
-      id
-      burgerId
-      einddatum
-      begindatum
-      saldo
-    }
-  }
-}
-    `;
-export type CreateSaldoMutationFn = Apollo.MutationFunction<CreateSaldoMutation, CreateSaldoMutationVariables>;
-
-/**
- * __useCreateSaldoMutation__
- *
- * To run a mutation, you first call `useCreateSaldoMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateSaldoMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [createSaldoMutation, { data, loading, error }] = useCreateSaldoMutation({
- *   variables: {
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useCreateSaldoMutation(baseOptions?: Apollo.MutationHookOptions<CreateSaldoMutation, CreateSaldoMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<CreateSaldoMutation, CreateSaldoMutationVariables>(CreateSaldoDocument, options);
-      }
-export type CreateSaldoMutationHookResult = ReturnType<typeof useCreateSaldoMutation>;
-export type CreateSaldoMutationResult = Apollo.MutationResult<CreateSaldoMutation>;
-export type CreateSaldoMutationOptions = Apollo.BaseMutationOptions<CreateSaldoMutation, CreateSaldoMutationVariables>;
 export const DeleteOrganisatieDocument = gql`
     mutation deleteOrganisatie($id: Int!) {
   deleteOrganisatie(id: $id) {
@@ -5039,46 +4908,6 @@ export function useUpdateRubriekMutation(baseOptions?: Apollo.MutationHookOption
 export type UpdateRubriekMutationHookResult = ReturnType<typeof useUpdateRubriekMutation>;
 export type UpdateRubriekMutationResult = Apollo.MutationResult<UpdateRubriekMutation>;
 export type UpdateRubriekMutationOptions = Apollo.BaseMutationOptions<UpdateRubriekMutation, UpdateRubriekMutationVariables>;
-export const UpdateSaldoDocument = gql`
-    mutation updateSaldo($input: UpdateSaldoInput!) {
-  updateSaldo(input: $input) {
-    ok
-    saldo {
-      id
-      burgerId
-      einddatum
-      begindatum
-      saldo
-    }
-  }
-}
-    `;
-export type UpdateSaldoMutationFn = Apollo.MutationFunction<UpdateSaldoMutation, UpdateSaldoMutationVariables>;
-
-/**
- * __useUpdateSaldoMutation__
- *
- * To run a mutation, you first call `useUpdateSaldoMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateSaldoMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [updateSaldoMutation, { data, loading, error }] = useUpdateSaldoMutation({
- *   variables: {
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useUpdateSaldoMutation(baseOptions?: Apollo.MutationHookOptions<UpdateSaldoMutation, UpdateSaldoMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<UpdateSaldoMutation, UpdateSaldoMutationVariables>(UpdateSaldoDocument, options);
-      }
-export type UpdateSaldoMutationHookResult = ReturnType<typeof useUpdateSaldoMutation>;
-export type UpdateSaldoMutationResult = Apollo.MutationResult<UpdateSaldoMutation>;
-export type UpdateSaldoMutationOptions = Apollo.BaseMutationOptions<UpdateSaldoMutation, UpdateSaldoMutationVariables>;
 export const UpdateSignaalDocument = gql`
     mutation updateSignaal($id: String!, $input: UpdateSignaalInput!) {
   updateSignaal(id: $id, input: $input) {
@@ -6200,7 +6029,7 @@ export type GetBurgerGebeurtenissenQueryHookResult = ReturnType<typeof useGetBur
 export type GetBurgerGebeurtenissenLazyQueryHookResult = ReturnType<typeof useGetBurgerGebeurtenissenLazyQuery>;
 export type GetBurgerGebeurtenissenQueryResult = Apollo.QueryResult<GetBurgerGebeurtenissenQuery, GetBurgerGebeurtenissenQueryVariables>;
 export const GetBurgerRapportagesDocument = gql`
-    query getBurgerRapportages($burgers: [Int!]!, $start: String!, $end: String!, $rubrieken: [Int!]!) {
+    query getBurgerRapportages($burgers: [Int!]!, $start: String!, $end: String!, $rubrieken: [Int!]!, $saldoDate: Date!) {
   burgerRapportages(
     burgerIds: $burgers
     startDate: $start
@@ -6232,6 +6061,9 @@ export const GetBurgerRapportagesDocument = gql`
       }
     }
   }
+  saldo(burgerIds: $burgers, date: $saldoDate) {
+    saldo
+  }
 }
     `;
 
@@ -6251,6 +6083,7 @@ export const GetBurgerRapportagesDocument = gql`
  *      start: // value for 'start'
  *      end: // value for 'end'
  *      rubrieken: // value for 'rubrieken'
+ *      saldoDate: // value for 'saldoDate'
  *   },
  * });
  */
@@ -7177,12 +7010,8 @@ export type GetRubriekenConfiguratieQueryHookResult = ReturnType<typeof useGetRu
 export type GetRubriekenConfiguratieLazyQueryHookResult = ReturnType<typeof useGetRubriekenConfiguratieLazyQuery>;
 export type GetRubriekenConfiguratieQueryResult = Apollo.QueryResult<GetRubriekenConfiguratieQuery, GetRubriekenConfiguratieQueryVariables>;
 export const GetSaldoDocument = gql`
-    query getSaldo($burger_ids: [Int!], $date: String!) {
-  saldo(burgerIds: $burger_ids, date: $date) {
-    id
-    burgerId
-    begindatum
-    einddatum
+    query getSaldo($burgers: [Int!]!, $date: Date!) {
+  saldo(burgerIds: $burgers, date: $date) {
     saldo
   }
 }
@@ -7200,7 +7029,7 @@ export const GetSaldoDocument = gql`
  * @example
  * const { data, loading, error } = useGetSaldoQuery({
  *   variables: {
- *      burger_ids: // value for 'burger_ids'
+ *      burgers: // value for 'burgers'
  *      date: // value for 'date'
  *   },
  * });
@@ -7216,86 +7045,6 @@ export function useGetSaldoLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<G
 export type GetSaldoQueryHookResult = ReturnType<typeof useGetSaldoQuery>;
 export type GetSaldoLazyQueryHookResult = ReturnType<typeof useGetSaldoLazyQuery>;
 export type GetSaldoQueryResult = Apollo.QueryResult<GetSaldoQuery, GetSaldoQueryVariables>;
-export const GetSaldoClosestToDocument = gql`
-    query getSaldoClosestTo($burger_ids: [Int!], $date: String!) {
-  saldoClosest(burgerIds: $burger_ids, date: $date) {
-    burgerId
-    begindatum
-    einddatum
-    saldo
-    id
-  }
-}
-    `;
-
-/**
- * __useGetSaldoClosestToQuery__
- *
- * To run a query within a React component, call `useGetSaldoClosestToQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetSaldoClosestToQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetSaldoClosestToQuery({
- *   variables: {
- *      burger_ids: // value for 'burger_ids'
- *      date: // value for 'date'
- *   },
- * });
- */
-export function useGetSaldoClosestToQuery(baseOptions: Apollo.QueryHookOptions<GetSaldoClosestToQuery, GetSaldoClosestToQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetSaldoClosestToQuery, GetSaldoClosestToQueryVariables>(GetSaldoClosestToDocument, options);
-      }
-export function useGetSaldoClosestToLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetSaldoClosestToQuery, GetSaldoClosestToQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetSaldoClosestToQuery, GetSaldoClosestToQueryVariables>(GetSaldoClosestToDocument, options);
-        }
-export type GetSaldoClosestToQueryHookResult = ReturnType<typeof useGetSaldoClosestToQuery>;
-export type GetSaldoClosestToLazyQueryHookResult = ReturnType<typeof useGetSaldoClosestToLazyQuery>;
-export type GetSaldoClosestToQueryResult = Apollo.QueryResult<GetSaldoClosestToQuery, GetSaldoClosestToQueryVariables>;
-export const GetSaldoByDateRangeDocument = gql`
-    query getSaldoByDateRange($burger_ids: [Int!], $startdate: String!, $enddate: String!) {
-  saldoRange(burgerIds: $burger_ids, startdate: $startdate, enddate: $enddate) {
-    burgerId
-    begindatum
-    einddatum
-    saldo
-  }
-}
-    `;
-
-/**
- * __useGetSaldoByDateRangeQuery__
- *
- * To run a query within a React component, call `useGetSaldoByDateRangeQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetSaldoByDateRangeQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetSaldoByDateRangeQuery({
- *   variables: {
- *      burger_ids: // value for 'burger_ids'
- *      startdate: // value for 'startdate'
- *      enddate: // value for 'enddate'
- *   },
- * });
- */
-export function useGetSaldoByDateRangeQuery(baseOptions: Apollo.QueryHookOptions<GetSaldoByDateRangeQuery, GetSaldoByDateRangeQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetSaldoByDateRangeQuery, GetSaldoByDateRangeQueryVariables>(GetSaldoByDateRangeDocument, options);
-      }
-export function useGetSaldoByDateRangeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetSaldoByDateRangeQuery, GetSaldoByDateRangeQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetSaldoByDateRangeQuery, GetSaldoByDateRangeQueryVariables>(GetSaldoByDateRangeDocument, options);
-        }
-export type GetSaldoByDateRangeQueryHookResult = ReturnType<typeof useGetSaldoByDateRangeQuery>;
-export type GetSaldoByDateRangeLazyQueryHookResult = ReturnType<typeof useGetSaldoByDateRangeLazyQuery>;
-export type GetSaldoByDateRangeQueryResult = Apollo.QueryResult<GetSaldoByDateRangeQuery, GetSaldoByDateRangeQueryVariables>;
 export const GetSearchAfsprakenDocument = gql`
     query getSearchAfspraken($offset: Int, $limit: Int, $afspraken: [Int], $afdelingen: [Int], $burgers: [Int], $only_valid: Boolean, $min_bedrag: Int, $max_bedrag: Int, $zoektermen: [String]) {
   searchAfspraken(
