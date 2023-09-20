@@ -116,13 +116,6 @@ const server = (prefix: string = "/auth") => {
 	authRouter.get('/logout', (req, res) => {
 		res.clearCookie("app-token")
 		res.oidc.logout()
-		// req.session.destroy((err) => {
-		// 	if (err) {
-		// 		log.error(err)
-		// 		return res.status(500).send('Failed to logout user')
-		// 	}
-		// 	res.redirect('/login')
-		// });
 	})
 
 	authRouter.get("/", (req, res) => {
