@@ -54,7 +54,7 @@ class SessionHelper {
 			if (alg) {
 				if (this.verifyAllowedAlgorithms(alg)) {
 					if (this.jwksClientInstance == null) {
-						this.setJWKSClientInstance()
+						await this.setJWKSClientInstance()
 					}
 					return await this.getJWTKeyOrSecret(alg, token).then((keyOrSecret) => {
 						if (keyOrSecret) {
@@ -140,11 +140,11 @@ class SessionHelper {
 		}
 	}
 
-	setJWKSClientInstance() {
+	async setJWKSClientInstance() {
 		// the issuer should always be the same, and as such the open-id configuration aswell. We only need to do this once here, when the client instance does not exist
 		log.info("no jwks client configured, getting configuration and setting up..")
 		try {
-			this.getJWKSUri().then((uri) => {
+			await this.getJWKSUri().then((uri) => {
 				// set the jwks uri and create the jwksClient
 				this.jwksClientInstance = jwksClient({
 					jwksUri: uri,
