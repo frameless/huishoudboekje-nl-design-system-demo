@@ -1,5 +1,14 @@
 # Huishoudboekje Changelog
 
+## 1.9.10
+
+Deze versie omvat gewijzigde functionaliteit voor het berekenen en weergeven van saldo op een pagina met een burger.
+
+### Patch Changes
+
+- 52a63a0e: Implemented saldos differently, saldos are now calculated on each request
+- 5d6f040f: Added statsd metrics to python services and gunicorn
+
 ## 1.9.9
 
 Deze versie omvat oplossingen voor kwetsbaarheden in beveiliging en logging van Gunicorn en SQLAlchemy.
@@ -13,6 +22,7 @@ Deze versie omvat oplossingen voor kwetsbaarheden in beveiliging en logging van 
 ## Migration guide
 
 > ⚠️ Added statsd metrics support to use it add statsd support in the hosting and configure the new env variables:
+
 - STATS_DPREFIX, default values are hhb.naam (hhb.backend etc.)
 - STATSD_HOST, default value is None, expects values like "hostname:port" ("localhost:9125")
 
