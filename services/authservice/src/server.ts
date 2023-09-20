@@ -76,7 +76,6 @@ const server = (prefix: string = "/auth") => {
 
 				// verify the token here before creating a new session because otherwise an app-token will be created that's not valid
 				return sessionHelper.verifyToken(stringJWT).then(async (result) => {
-					log.info(result)
 					if (result) {
 						const user = await req.oidc.fetchUserInfo();
 						log.info("User found");
@@ -106,11 +105,11 @@ const server = (prefix: string = "/auth") => {
 		}
 		catch (err) {
 			log.error(err)
+			sessionHelper.destroySession(req, res);
 		}
 
 		// If no user was found, deny access.
 		log.info("No user found.");
-		sessionHelper.destroySession(req, res);
 		return res.status(401).json({ok: false, message: "Unauthorized"});
 	});
 

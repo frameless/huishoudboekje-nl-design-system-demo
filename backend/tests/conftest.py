@@ -22,6 +22,7 @@ def test_request_context(event_loop):
         app.preprocess_request()
         yield ctx
 
+
 class TokenTestClient(testing.FlaskClient):
     aud: str
     exp: int
@@ -33,14 +34,13 @@ class TokenTestClient(testing.FlaskClient):
         self.exp_offset = exp_offset or 3600
         self.secret = secret or self.application.config["JWT_SECRET"]
 
-
     def token(self):
         payload = {
             "iat": int(time()),
             "exp": int(time()) + self.exp_offset,
             "aud": self.aud,
             "jti": str(uuid.uuid4()),
-            "email": "test@mail.com", 
+            "email": "test@mail.com",
             "name": "tester"
         }
         token = jwt.encode(
@@ -48,7 +48,6 @@ class TokenTestClient(testing.FlaskClient):
             key=self.secret,
             algorithm="HS256")
         return token
-
 
     def open(self, *args, **kwargs):
         headers = kwargs.pop('headers', Headers())
@@ -60,8 +59,9 @@ class TokenTestClient(testing.FlaskClient):
         kwargs['headers'] = headers
         return super().open(*args, **kwargs)
 
+
 @pytest.fixture(scope="session")
-def client(request):
+def _client(request):
     """
     Returns session-wide application.
     """
@@ -71,8 +71,9 @@ def client(request):
 
     yield app.test_client()
 
+
 @pytest.fixture(scope="session")
-def cookie_client(request):
+def client(request):
     """
     Returns session-wide application.
     """
@@ -83,10 +84,13 @@ def cookie_client(request):
     with app.test_client() as client:
         secret = app.config["JWT_SECRET"]
         audience = app.config["JWT_AUDIENCE"]
-        token = jwt.encode({"email": "test@mail.com", "name": "tester", "aud": audience}, secret, algorithm="HS256")
+        issuer = app.config["JWT_ISSUER"]
+        token = jwt.encode({"email": "test@mail.com", "name": "tester",
+                           "aud": audience, "iss": issuer}, secret, algorithm="HS256")
         client.set_cookie('localhost', 'app-token', token)
 
         yield client
+
 
 @pytest.fixture(scope="session")
 def no_auth_client(request):
