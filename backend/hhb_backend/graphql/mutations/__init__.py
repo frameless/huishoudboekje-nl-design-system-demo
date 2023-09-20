@@ -48,8 +48,6 @@ from .rubrieken.update_rubriek import UpdateRubriek
 from .signalen.create_signaal import CreateSignaal
 from .signalen.delete_signaal import DeleteSignaal
 from .signalen.update_signaal import UpdateSignaal
-from .saldo.create_saldo import CreateSaldo
-from .saldo.update_saldo import UpdateSaldo
 
 
 class RootMutation(graphene.ObjectType):
@@ -116,6 +114,3 @@ class RootMutation(graphene.ObjectType):
     createSignaal = CreateSignaal.Field()
     updateSignaal = UpdateSignaal.Field()
     deleteSignaal = DeleteSignaal.Field()
-
-    createSaldo = CreateSaldo.Field()
-    updateSaldo = UpdateSaldo.Field()
