@@ -26,6 +26,7 @@ const useAuth = () => {
 	}, []);
 
 	const logout = useCallback(() => {
+		document.cookie = "app-token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
 		window.location.href = AuthRoutes.logout;
 	}, []);
 
