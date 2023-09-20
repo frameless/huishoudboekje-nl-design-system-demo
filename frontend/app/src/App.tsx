@@ -58,12 +58,8 @@ const App = () => {
 		);
 	}
 
-	const logout = () => {
-		reset()
-		document.cookie = "app-token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-	}
-
 	if (!user) {
+		document.cookie = "app-token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
 		return (
 			<TwoColumns>
 				{loading ? (
@@ -102,7 +98,7 @@ const App = () => {
 							<Menu>
 								<IconButton as={MenuButton} icon={<MenuIcon />} variant={"solid"} size={"sm"} aria-label={"Open menu"} />
 								<MenuList>
-									<MenuItem onClick={logout}>{t("global.actions.logout")}</MenuItem>
+									<MenuItem onClick={() => reset()}>{t("global.actions.logout")}</MenuItem>
 								</MenuList>
 							</Menu>
 						</HStack>
