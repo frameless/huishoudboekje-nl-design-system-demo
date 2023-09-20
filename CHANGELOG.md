@@ -2,6 +2,8 @@
 
 ## 1.9.10
 
+Deze versie omvat gewijzigde functionaliteit voor het berekenen en weergeven van saldo op een pagina met een burger.
+
 ### Patch Changes
 
 - 52a63a0e: Implemented saldos differently, saldos are now calculated on each request
