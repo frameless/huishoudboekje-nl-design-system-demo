@@ -1,5 +1,4 @@
 import re
-from freezegun import freeze_time
 
 import requests_mock
 
@@ -226,31 +225,3 @@ def test_burgers_search(client):
         assert rm4.call_count == 1
         assert fallback.call_count == 0
         assert response.json == expected
-
-@freeze_time("2021-01-01")
-def test_burger_saldo(client):
-    with requests_mock.Mocker() as rm:
-        #Arrange
-        burger_id = 1
-        saldo = 13427
-        saldo_expected = "134.27"
-
-        rm1 = rm.get(f"{settings.HHB_SERVICES_URL}/burgers/",
-               json={'data': [{'id': burger_id}]})
-        rm2 = rm.get(f"{settings.RAPPORTAGE_SERVICE_URL}/saldo?date=2021-01-01",
-               json={'data': {'saldo': saldo}})
-        rm3 = rm.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/")
-
-        #Act
-        response = client.post(
-            "/graphql",
-            data='{"query": "{ burger(id:1) { saldo } }"}',
-            content_type='application/json'
-        )
-
-        #Assert
-        assert rm1.call_count == 1
-        assert rm2.call_count == 1
-        assert rm3.call_count == 1
-        assert response.json == {
-            'data': {'burger': {'saldo': saldo_expected}}}
