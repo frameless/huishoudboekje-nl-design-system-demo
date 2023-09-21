@@ -10,8 +10,9 @@
   when: manual
   script:
     - kubectl config use-context commonground/huishoudboekje/app-new:$CONFIG
-    - kubectl cp ./sampleData/db.out $(kubectl get pods -l name=hhb-database --namespace=$NAMESPACE | head -n 1):/db.out --namespace=$NAMESPACE
-    - kubectl exec $(kubectl get pods -l name=hhb-database --namespace=$NAMESPACE | head -n 1) psql -f ./db.out postgres --namespace=$NAMESPACE
+    - POD_NAME=$(kubectl get pods -l name=hhb-database --namespace=$NAMESPACE -o jsonpath='{.items[0].metadata.name}')
+    - kubectl cp ./sampleData/db.out $NAMESPACE/$POD_NAME:/db.out
+    - kubectl exec $POD_NAME psql -f ./db.out postgres --namespace=$NAMESPACE
 
 load-data-review:
   <<: *load-sample-data
