@@ -9,14 +9,15 @@
     - docker
   when: manual
   script:
-    - kubectl cp ./sampleData/db.out hhb-database:/sampleData/db.out
-    - kubectl exec hhb-database psql -f /sampleData/db.out postgres
+    - kubectl cp ./sampleData/db.out hhb-database:/sampleData/db.out --namespace=$NAMESPACE
+    - kubectl exec hhb-database psql -f /sampleData/db.out postgres --namespace=$NAMESPACE
 
 load-data-review:
   <<: *load-sample-data
   environment:
     name: review/$CI_COMMIT_REF_SLUG
   variables:
+    NAMESPACE: "hhb-$CI_COMMIT_REF_SLUG"
     APP_HOST: "hhb-$CI_COMMIT_REF_SLUG.nlx.reviews"
     JWT_SECRET: koen-hhb-$CI_COMMIT_REF_SLUG
   needs:
@@ -33,6 +34,7 @@ load-data-develop:
   environment:
     name: test
   variables:
+    NAMESPACE: "hhb-test"
     APP_HOST: "test.huishoudboekje.demoground.nl"
     JWT_SECRET: testtest
   needs:
