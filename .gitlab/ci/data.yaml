@@ -13,7 +13,7 @@
     - POD_NAME=$(kubectl get pods -l name=hhb-database -o jsonpath='{.items[0].metadata.name}' --namespace=$NAMESPACE)
     - tar -czvf dbout.tar.gz ./sampleData/db.out
     - echo $POD_NAME
-    - kubectl cp -v dbout.tar.gz $POD_NAME:~/sampleData/dbout.tar.gz --namespace=$NAMESPACE
+    - kubectl cp dbout.tar.gz $POD_NAME:~/sampleData/dbout.tar.gz --namespace=$NAMESPACE
     - kubectl exec $pod_name -- tar -xzvf ~/sampleData/dbout.tar.gz -C ~/sampleData/db.out --namespace=$NAMESPACE
     - kubectl exec $POD_NAME psql -f ~sampleData/db.out postgres --namespace=$NAMESPACE
 
