@@ -12,8 +12,8 @@
     - kubectl config use-context commonground/huishoudboekje/app-new:$CONFIG
     - POD_NAME=$(kubectl get pods -l name=hhb-database -o jsonpath='{.items[0].metadata.name}' --namespace=$NAMESPACE)
     - echo $POD_NAME
-    - kubectl cp ./sampleData/db.out $POD_NAME:/sampleData/db.out
-    - kubectl exec $POD_NAME psql -f ./db.out postgres
+    - kubectl cp ./sampleData/db.out $POD_NAME:/sampleData/db.out --namespace=$NAMESPACE
+    - kubectl exec $POD_NAME psql -f ./db.out postgres --namespace=$NAMESPACE
 
 load-data-review:
   <<: *load-sample-data
