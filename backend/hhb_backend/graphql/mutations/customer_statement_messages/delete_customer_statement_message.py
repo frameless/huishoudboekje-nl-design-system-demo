@@ -11,7 +11,6 @@ from hhb_backend.graphql.models.customer_statement_message import (
     CustomerStatementMessage,
 )
 from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
-from hhb_backend.processen.saldo_berekenen import update_or_create_saldo
 
 
 class DeleteCustomerStatementMessage(graphene.Mutation):
@@ -39,8 +38,6 @@ class DeleteCustomerStatementMessage(graphene.Mutation):
                 if not response.ok:
                     raise GraphQLError(
                         f"Upstream API responded: {response.text}")
-                if journaalpost.afspraak_id != None:
-                    update_or_create_saldo(journaalpost, True)
 
         for transaction in transaction_ids:
             response = requests.delete(

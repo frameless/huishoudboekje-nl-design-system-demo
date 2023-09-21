@@ -2,6 +2,7 @@
 import logging
 from flask import Flask, Response
 from flask_migrate import Migrate
+from core_service.sqlalchemy_statsd_metrics import add_sqlalchemy_statsd_metrics
 
 
 from huishoudboekje_service.views import (
@@ -21,7 +22,8 @@ from huishoudboekje_service.views import (
     BurgerTransactiesView,
     SaldoView,
     AfsprakenFilterView,
-    JournaalpostenFilterView
+    JournaalpostenFilterView,
+    BurgerTransactieIdsView
 )
 from core_service import database
 
@@ -48,6 +50,8 @@ def create_app(config_name='huishoudboekje_service.config.Config'):
     db.init_app(app)
     Migrate(app, db)
 
+    add_sqlalchemy_statsd_metrics(app)
+
     @app.route('/health')
     def health():
         return Response()
@@ -58,9 +62,11 @@ def create_app(config_name='huishoudboekje_service.config.Config'):
         {"path": "/burgers/<object_id>", "view": BurgerView,
             "name": "burger_detail_view"},
         {"path": "/burgers/<object_id>/rekeningen", "view": RekeningBurgerView,
-         "name": "burger_rekeningen_view"},
+            "name": "burger_rekeningen_view"},
         {"path": "/burgers/transacties",
             "view": BurgerTransactiesView, "name": "burger_transacties"},
+        {"path": "/burgers/transacties/ids",
+            "view": BurgerTransactieIdsView, "name": "burger_transactie_ids"},
         {"path": "/afspraken", "view": AfspraakView, "name": "afspraak_view"},
         {"path": "/afspraken/filter", "view": AfsprakenFilterView, "name": "afspraak_filter_view"},
         {"path": "/afspraken/<object_id>", "view": AfspraakView,
@@ -97,7 +103,7 @@ def create_app(config_name='huishoudboekje_service.config.Config'):
         {"path": "/afdelingen/<object_id>", "view": AfdelingView,
             "name": "afdeling_detail_view"},
         {"path": "/afdelingen/<object_id>/rekeningen", "view": RekeningAfdelingView,
-         "name": "afdeling_rekeningen_view"},
+            "name": "afdeling_rekeningen_view"},
         {"path": "/saldo", "view": SaldoView, "name": "saldo_view"}
     ]
     for route in routes:

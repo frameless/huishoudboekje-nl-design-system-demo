@@ -8,7 +8,7 @@ ENV TZ=Europe/Amsterdam
 
 WORKDIR /app
 RUN mkdir -p hhb_backend/
-COPY setup.py /app
+COPY setup.py /app  
 RUN pip install .
 COPY . /app
 
@@ -24,6 +24,7 @@ ENV GUNICORN_PORT="8000" \
 
 # Runtime envrionment
 CMD ["bash", "-c", "exec gunicorn \
+  -c gunicorn.conf.py \
   --bind=0.0.0.0:${GUNICORN_PORT} \
   --workers=${GUNICORN_WORKERS} \
   --threads=${GUNICORN_THREADS} \

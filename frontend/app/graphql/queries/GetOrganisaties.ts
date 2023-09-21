@@ -1,14 +1,36 @@
 import {gql} from "@apollo/client";
-import {OrganisatieFragment} from "../fragments/Organisatie";
 
 export const GetOrganisatiesQuery = gql`
     query getOrganisaties {
         organisaties {
             id
-            ...Organisatie
+            naam
+            kvknummer
+            vestigingsnummer
+            afdelingen {
+                id
+                naam
+                organisatie {
+                    id
+                    kvknummer
+                    vestigingsnummer
+                    naam
+                }
+                postadressen {
+                    id
+                    straatnaam
+                    huisnummer
+                    postcode
+                    plaatsnaam
+                }
+                rekeningen {
+                    id
+                    iban
+                    rekeninghouder
+                }
+            }
         }
     }
-    ${OrganisatieFragment}
 `;
 
 export const GetSimpleOrganisatiesQuery = gql`

@@ -5,7 +5,22 @@ export const UpdateAlarmMutation = gql`
         updateAlarm(id: $id, input: $input){
             ok
             alarm {
-                ...Alarm
+                id
+                isActive
+                bedrag
+                bedragMargin
+                startDate
+                endDate
+                datumMargin
+                byDay
+                byMonth
+                byMonthDay
+                afspraak {
+                    id
+                }
+                signaal {
+                    id
+                }
             }
         }
     }

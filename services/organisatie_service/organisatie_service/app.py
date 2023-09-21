@@ -9,7 +9,7 @@ from organisatie_service.views.organisaties import OrganisatieView
 from organisatie_service.views.organisatie_rekeningen import OrganisatieRekeningenView
 from organisatie_service.views.afdelingen import AfdelingView
 from core_service import database
-from organisatie_service import config
+from core_service.sqlalchemy_statsd_metrics import add_sqlalchemy_statsd_metrics
 
 db = database.db
 
@@ -30,6 +30,8 @@ def create_app(config_name='organisatie_service.config.Config'):
 
     db.init_app(app)
     Migrate(app, db)
+
+    add_sqlalchemy_statsd_metrics(app)
 
     @app.route('/health')
     def health():

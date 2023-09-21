@@ -22,6 +22,7 @@ const RekeningListItem: React.FC<RekeningListItemProps> = ({rekening, onDelete})
 	const onConfirmDeleteDialog = () => {
 		if (onDelete) {
 			onDelete();
+			updateAfdelingRekeningModal.onClose();
 		}
 	};
 	const onCloseDeleteDialog = () => deleteAlert.onClose();

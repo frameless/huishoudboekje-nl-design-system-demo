@@ -1,0 +1,41 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hhb-prometheus
+  labels:
+    name: hhb-prometheus
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: hhb-prometheus
+  template:
+    metadata:
+      labels:
+        name: hhb-prometheus
+    spec:
+      containers:
+        - name: prometheus
+          image: prom/prometheus:latest
+          imagePullPolicy: IfNotPresent
+          args:
+            - "--config.file=/etc/prometheus/prometheus.yml"
+          ports:
+            - name: prometheus
+              containerPort: 9090
+              protocol: TCP
+          volumeMounts:
+            - name: config-volume
+              mountPath: /etc/prometheus
+          resources:
+            limits:
+              cpu: "100m"
+              memory: 128Mi
+            requests:
+              cpu: 50m
+              memory: 128Mi
+      volumes:
+        - name: config-volume
+          configMap:
+            name: prometheus-config

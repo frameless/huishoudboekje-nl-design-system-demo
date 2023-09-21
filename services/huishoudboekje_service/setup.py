@@ -23,7 +23,8 @@ setup(
         'itsdangerous>=2.1.2,<3',
         'python-dateutil==2.8.2,<3',
         'MarkupSafe==2.1.1',
-        'future==0.18.2',
-        'WTForms==3.0.1'
+        'future==0.18.3',
+        'WTForms==3.0.1',
+        'statsd==4.0.1'
     ]
 )

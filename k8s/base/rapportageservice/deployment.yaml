@@ -54,3 +54,5 @@ spec:
               value: "http://hhb-banktransactieservice"
             - name: LOG_LEVEL
               value: INFO
+            - name: STATSD_HOST
+              value: "hhb-statsd-exporter:9125"

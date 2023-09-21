@@ -16,3 +16,5 @@ resources:
   - ./signalenservice
   - ./authservice
   - ./rapportageservice
+  - ./statsdexporter
+  - ./prometheus

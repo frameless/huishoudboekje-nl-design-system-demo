@@ -206,7 +206,6 @@ export type Burger = {
   plaatsnaam?: Maybe<Scalars['String']>;
   postcode?: Maybe<Scalars['String']>;
   rekeningen?: Maybe<Array<Maybe<Rekening>>>;
-  saldo?: Maybe<Scalars['Int']>;
   straatnaam?: Maybe<Scalars['String']>;
   telefoonnummer?: Maybe<Scalars['String']>;
   voorletters?: Maybe<Scalars['String']>;
@@ -449,18 +448,6 @@ export type CreatePostadresInput = {
 export type CreateRubriek = {
   ok?: Maybe<Scalars['Boolean']>;
   rubriek?: Maybe<Rubriek>;
-};
-
-export type CreateSaldo = {
-  ok?: Maybe<Scalars['Boolean']>;
-  saldo?: Maybe<Saldo>;
-};
-
-export type CreateSaldoInput = {
-  begindatum?: InputMaybe<Scalars['String']>;
-  burgerId?: InputMaybe<Scalars['Int']>;
-  einddatum?: InputMaybe<Scalars['String']>;
-  saldo?: InputMaybe<Scalars['Bedrag']>;
 };
 
 export type CreateSignaal = {
@@ -820,7 +807,6 @@ export type RootMutation = {
   createOrganisatie?: Maybe<CreateOrganisatie>;
   createPostadres?: Maybe<CreatePostadres>;
   createRubriek?: Maybe<CreateRubriek>;
-  createSaldo?: Maybe<CreateSaldo>;
   createSignaal?: Maybe<CreateSignaal>;
   /** Mutatie om een afdeling van een organisatie te verwijderen. */
   deleteAfdeling?: Maybe<DeleteAfdeling>;
@@ -860,7 +846,6 @@ export type RootMutation = {
   updatePostadres?: Maybe<UpdatePostadres>;
   updateRekening?: Maybe<UpdateRekening>;
   updateRubriek?: Maybe<UpdateRubriek>;
-  updateSaldo?: Maybe<UpdateSaldo>;
   updateSignaal?: Maybe<UpdateSignaal>;
 };
 
@@ -971,12 +956,6 @@ export type RootMutationCreatePostadresArgs = {
 export type RootMutationCreateRubriekArgs = {
   grootboekrekeningId?: InputMaybe<Scalars['String']>;
   naam?: InputMaybe<Scalars['String']>;
-};
-
-
-/** The root of all mutations  */
-export type RootMutationCreateSaldoArgs = {
-  input?: InputMaybe<CreateSaldoInput>;
 };
 
 
@@ -1193,12 +1172,6 @@ export type RootMutationUpdateRubriekArgs = {
 
 
 /** The root of all mutations  */
-export type RootMutationUpdateSaldoArgs = {
-  input?: InputMaybe<UpdateSaldoInput>;
-};
-
-
-/** The root of all mutations  */
 export type RootMutationUpdateSignaalArgs = {
   id: Scalars['String'];
   input: UpdateSignaalInput;
@@ -1245,9 +1218,7 @@ export type RootQuery = {
   rekeningenByIbans?: Maybe<Array<Maybe<Rekening>>>;
   rubriek?: Maybe<Rubriek>;
   rubrieken?: Maybe<Array<Maybe<Rubriek>>>;
-  saldo?: Maybe<Array<Maybe<Saldo>>>;
-  saldoClosest?: Maybe<Array<Maybe<Saldo>>>;
-  saldoRange?: Maybe<Array<Maybe<Saldo>>>;
+  saldo?: Maybe<Saldo>;
   searchAfspraken?: Maybe<AfsprakenPaged>;
   searchTransacties?: Maybe<BankTransactionsPaged>;
   signaal?: Maybe<Signaal>;
@@ -1511,22 +1482,7 @@ export type RootQueryRubriekenArgs = {
 /** The root of all queries  */
 export type RootQuerySaldoArgs = {
   burgerIds?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
-  date?: InputMaybe<Scalars['String']>;
-};
-
-
-/** The root of all queries  */
-export type RootQuerySaldoClosestArgs = {
-  burgerIds?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
-  date?: InputMaybe<Scalars['String']>;
-};
-
-
-/** The root of all queries  */
-export type RootQuerySaldoRangeArgs = {
-  burgerIds?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
-  enddate?: InputMaybe<Scalars['String']>;
-  startdate?: InputMaybe<Scalars['String']>;
+  date: Scalars['Date'];
 };
 
 
@@ -1570,10 +1526,6 @@ export type Rubriek = {
 };
 
 export type Saldo = {
-  begindatum?: Maybe<Scalars['String']>;
-  burgerId?: Maybe<Scalars['Int']>;
-  einddatum?: Maybe<Scalars['String']>;
-  id?: Maybe<Scalars['Int']>;
   saldo?: Maybe<Scalars['Bedrag']>;
 };
 
@@ -1685,19 +1637,6 @@ export type UpdateRubriek = {
   rubriek?: Maybe<Rubriek>;
 };
 
-export type UpdateSaldo = {
-  ok?: Maybe<Scalars['Boolean']>;
-  saldo?: Maybe<Saldo>;
-};
-
-export type UpdateSaldoInput = {
-  begindatum?: InputMaybe<Scalars['String']>;
-  burgerId?: InputMaybe<Scalars['Int']>;
-  einddatum?: InputMaybe<Scalars['String']>;
-  id?: InputMaybe<Scalars['Int']>;
-  saldo?: InputMaybe<Scalars['Bedrag']>;
-};
-
 export type UpdateSignaal = {
   ok?: Maybe<Scalars['Boolean']>;
   previous?: Maybe<Signaal>;
@@ -1712,40 +1651,6 @@ export type UpdateSignaalInput = {
   isActive?: InputMaybe<Scalars['Boolean']>;
   type?: InputMaybe<Scalars['String']>;
 };
-
-export type AfdelingFragment = { id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> };
-
-export type AfspraakFragment = { id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, validFrom?: any, validThrough?: any, betaalinstructie?: { byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string }, burger?: { id?: number, bsn?: number, voornamen?: string, voorletters?: string, achternaam?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, alarm?: { id?: string, isActive?: boolean, bedrag?: any, bedragMargin?: any, startDate?: string, endDate?: string, datumMargin?: number, byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, afspraak?: { id?: number }, signaal?: { id?: string } }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, postadres?: { id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string }, rubriek?: { id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } }, matchingAfspraken?: Array<{ id?: number, credit?: boolean, zoektermen?: Array<string>, bedrag?: any, omschrijving?: string, burger?: { voorletters?: string, voornamen?: string, achternaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string } }> };
-
-export type AlarmFragment = { id?: string, isActive?: boolean, bedrag?: any, bedragMargin?: any, startDate?: string, endDate?: string, datumMargin?: number, byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, afspraak?: { id?: number }, signaal?: { id?: string } };
-
-export type BetaalinstructieFragment = { byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string };
-
-export type BurgerFragment = { id?: number, bsn?: number, email?: string, telefoonnummer?: string, voorletters?: string, voornamen?: string, achternaam?: string, geboortedatum?: any, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }>, afspraken?: Array<{ id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, validFrom?: any, validThrough?: any, betaalinstructie?: { byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string }, burger?: { id?: number, bsn?: number, voornamen?: string, voorletters?: string, achternaam?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, alarm?: { id?: string, isActive?: boolean, bedrag?: any, bedragMargin?: any, startDate?: string, endDate?: string, datumMargin?: number, byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, afspraak?: { id?: number }, signaal?: { id?: string } }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, postadres?: { id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string }, rubriek?: { id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } }, matchingAfspraken?: Array<{ id?: number, credit?: boolean, zoektermen?: Array<string>, bedrag?: any, omschrijving?: string, burger?: { voorletters?: string, voornamen?: string, achternaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string } }> }>, huishouden?: { id?: number, burgers?: Array<{ id?: number }> } };
-
-export type CustomerStatementMessageFragment = { id?: number, filename?: string, uploadDate?: any, accountIdentification?: string, closingAvailableFunds?: number, closingBalance?: number, forwardAvailableBalance?: number, openingBalance?: number, relatedReference?: string, sequenceNumber?: string, transactionReferenceNumber?: string };
-
-export type ExportFragment = { id?: number, naam?: string, timestamp?: any, startDatum?: any, eindDatum?: any, verwerkingDatum?: any, sha256?: string, overschrijvingen?: Array<{ id?: number, bedrag?: any }> };
-
-export type GebruikersactiviteitFragment = { id?: number, timestamp?: any, gebruikerId?: string, action?: string, entities?: Array<{ entityType?: string, entityId?: string, huishouden?: { id?: number, burgers?: Array<{ id?: number, voorletters?: string, voornamen?: string, achternaam?: string }> }, burger?: { id?: number, voorletters?: string, voornamen?: string, achternaam?: string }, organisatie?: { id?: number, naam?: string, kvknummer?: string, vestigingsnummer?: string }, afspraak?: { id?: number, burger?: { id?: number, voornamen?: string, voorletters?: string, achternaam?: string }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string } } }, rekening?: { id?: number, iban?: string, rekeninghouder?: string }, customerStatementMessage?: { id?: number, filename?: string, bankTransactions?: Array<{ id?: number }> }, configuratie?: { id?: string, waarde?: string }, rubriek?: { id?: number, naam?: string }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, naam?: string } }, postadres?: { id?: string }, export?: { id?: number, naam?: string } }>, meta?: { userAgent?: string, ip?: Array<string>, applicationVersion?: string } };
-
-export type GrootboekrekeningFragment = { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } };
-
-export type HuishoudenFragment = { id?: number, burgers?: Array<{ id?: number, bsn?: number, email?: string, telefoonnummer?: string, voorletters?: string, voornamen?: string, achternaam?: string, geboortedatum?: any, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }>, afspraken?: Array<{ id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, validFrom?: any, validThrough?: any, betaalinstructie?: { byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string }, burger?: { id?: number, bsn?: number, voornamen?: string, voorletters?: string, achternaam?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, alarm?: { id?: string, isActive?: boolean, bedrag?: any, bedragMargin?: any, startDate?: string, endDate?: string, datumMargin?: number, byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, afspraak?: { id?: number }, signaal?: { id?: string } }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, postadres?: { id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string }, rubriek?: { id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } }, matchingAfspraken?: Array<{ id?: number, credit?: boolean, zoektermen?: Array<string>, bedrag?: any, omschrijving?: string, burger?: { voorletters?: string, voornamen?: string, achternaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string } }> }>, huishouden?: { id?: number, burgers?: Array<{ id?: number }> } }> };
-
-export type JournaalpostFragment = { id?: number };
-
-export type OrganisatieFragment = { id?: number, naam?: string, kvknummer?: string, vestigingsnummer?: string, afdelingen?: Array<{ id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }> };
-
-export type PostadresFragment = { id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string };
-
-export type RekeningFragment = { id?: number, iban?: string, rekeninghouder?: string };
-
-export type RubriekFragment = { id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } };
-
-export type SignaalFragment = { id?: string, isActive?: boolean, type?: string, actions?: Array<string>, bedragDifference?: string, timeUpdated?: string, alarm?: { id?: string, afspraak?: { id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, validFrom?: any, validThrough?: any, betaalinstructie?: { byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string }, burger?: { id?: number, bsn?: number, voornamen?: string, voorletters?: string, achternaam?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, alarm?: { id?: string, isActive?: boolean, bedrag?: any, bedragMargin?: any, startDate?: string, endDate?: string, datumMargin?: number, byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, afspraak?: { id?: number }, signaal?: { id?: string } }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, postadres?: { id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string }, rubriek?: { id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } }, matchingAfspraken?: Array<{ id?: number, credit?: boolean, zoektermen?: Array<string>, bedrag?: any, omschrijving?: string, burger?: { voorletters?: string, voornamen?: string, achternaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string } }> } }, bankTransactions?: Array<{ id?: number, bedrag?: any, isCredit?: boolean }> };
-
-export type BankTransactionFragment = { id?: number, informationToAccountOwner?: string, statementLine?: string, bedrag?: any, isCredit?: boolean, tegenRekeningIban?: string, transactieDatum?: any, tegenRekening?: { iban?: string, rekeninghouder?: string } };
 
 export type AddAfspraakZoektermMutationVariables = Exact<{
   afspraakId: Scalars['Int'];
@@ -1885,13 +1790,6 @@ export type CreateRubriekMutationVariables = Exact<{
 
 
 export type CreateRubriekMutation = { createRubriek?: { ok?: boolean, rubriek?: { id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } } } };
-
-export type CreateSaldoMutationVariables = Exact<{
-  input?: InputMaybe<CreateSaldoInput>;
-}>;
-
-
-export type CreateSaldoMutation = { createSaldo?: { ok?: boolean, saldo?: { id?: number, burgerId?: number, einddatum?: string, begindatum?: string, saldo?: any } } };
 
 export type DeleteOrganisatieMutationVariables = Exact<{
   id: Scalars['Int'];
@@ -2126,20 +2024,13 @@ export type UpdateRubriekMutationVariables = Exact<{
 
 export type UpdateRubriekMutation = { updateRubriek?: { ok?: boolean } };
 
-export type UpdateSaldoMutationVariables = Exact<{
-  input: UpdateSaldoInput;
-}>;
-
-
-export type UpdateSaldoMutation = { updateSaldo?: { ok?: boolean, saldo?: { id?: number, burgerId?: number, einddatum?: string, begindatum?: string, saldo?: any } } };
-
 export type UpdateSignaalMutationVariables = Exact<{
   id: Scalars['String'];
   input: UpdateSignaalInput;
 }>;
 
 
-export type UpdateSignaalMutation = { updateSignaal?: { ok?: boolean, signaal?: { id?: string, isActive?: boolean, type?: string, actions?: Array<string>, bedragDifference?: string, timeUpdated?: string, alarm?: { id?: string, afspraak?: { id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, validFrom?: any, validThrough?: any, betaalinstructie?: { byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string }, burger?: { id?: number, bsn?: number, voornamen?: string, voorletters?: string, achternaam?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, alarm?: { id?: string, isActive?: boolean, bedrag?: any, bedragMargin?: any, startDate?: string, endDate?: string, datumMargin?: number, byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, afspraak?: { id?: number }, signaal?: { id?: string } }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, postadres?: { id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string }, rubriek?: { id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } }, matchingAfspraken?: Array<{ id?: number, credit?: boolean, zoektermen?: Array<string>, bedrag?: any, omschrijving?: string, burger?: { voorletters?: string, voornamen?: string, achternaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string } }> } }, bankTransactions?: Array<{ id?: number, bedrag?: any, isCredit?: boolean }> } } };
+export type UpdateSignaalMutation = { updateSignaal?: { ok?: boolean, signaal?: { id?: string, isActive?: boolean, type?: string, actions?: Array<string>, bedragDifference?: string, timeUpdated?: string, alarm?: { id?: string, afspraak?: { id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, validFrom?: any, validThrough?: any, betaalinstructie?: { byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string }, burger?: { id?: number, bsn?: number, voornamen?: string, voorletters?: string, achternaam?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, alarm?: { id?: string, isActive?: boolean, bedrag?: any, bedragMargin?: any, startDate?: string, endDate?: string, datumMargin?: number, byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, afspraak?: { id?: number }, signaal?: { id?: string } }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, postadres?: { id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string }, rubriek?: { id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } } } }, bankTransactions?: Array<{ id?: number, bedrag?: any, isCredit?: boolean }> } } };
 
 export type GetAdditionalTransactionDataQueryVariables = Exact<{
   ibans?: InputMaybe<Array<Scalars['String']> | Scalars['String']>;
@@ -2222,10 +2113,11 @@ export type GetBurgerRapportagesQueryVariables = Exact<{
   start: Scalars['String'];
   end: Scalars['String'];
   rubrieken: Array<Scalars['Int']> | Scalars['Int'];
+  saldoDate: Scalars['Date'];
 }>;
 
 
-export type GetBurgerRapportagesQuery = { burgerRapportages?: Array<{ startDatum?: string, eindDatum?: string, totaal?: any, totaalUitgaven?: any, totaalInkomsten?: any, burger?: { voornamen?: string }, inkomsten?: Array<{ rubriek?: string, transacties?: Array<{ bedrag?: any, transactieDatum?: string, rekeninghouder?: string }> }>, uitgaven?: Array<{ rubriek?: string, transacties?: Array<{ bedrag?: any, transactieDatum?: string, rekeninghouder?: string }> }> }> };
+export type GetBurgerRapportagesQuery = { burgerRapportages?: Array<{ startDatum?: string, eindDatum?: string, totaal?: any, totaalUitgaven?: any, totaalInkomsten?: any, burger?: { voornamen?: string }, inkomsten?: Array<{ rubriek?: string, transacties?: Array<{ bedrag?: any, transactieDatum?: string, rekeninghouder?: string }> }>, uitgaven?: Array<{ rubriek?: string, transacties?: Array<{ bedrag?: any, transactieDatum?: string, rekeninghouder?: string }> }> }>, saldo?: { saldo?: any } };
 
 export type GetBurgersQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -2331,29 +2223,12 @@ export type GetRubriekenConfiguratieQueryVariables = Exact<{ [key: string]: neve
 export type GetRubriekenConfiguratieQuery = { rubrieken?: Array<{ id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, omschrijving?: string } }>, grootboekrekeningen?: Array<{ id: string, naam?: string, omschrijving?: string }> };
 
 export type GetSaldoQueryVariables = Exact<{
-  burger_ids?: InputMaybe<Array<Scalars['Int']> | Scalars['Int']>;
-  date: Scalars['String'];
+  burgers: Array<Scalars['Int']> | Scalars['Int'];
+  date: Scalars['Date'];
 }>;
 
 
-export type GetSaldoQuery = { saldo?: Array<{ id?: number, burgerId?: number, begindatum?: string, einddatum?: string, saldo?: any }> };
-
-export type GetSaldoClosestToQueryVariables = Exact<{
-  burger_ids?: InputMaybe<Array<Scalars['Int']> | Scalars['Int']>;
-  date: Scalars['String'];
-}>;
-
-
-export type GetSaldoClosestToQuery = { saldoClosest?: Array<{ burgerId?: number, begindatum?: string, einddatum?: string, saldo?: any, id?: number }> };
-
-export type GetSaldoByDateRangeQueryVariables = Exact<{
-  burger_ids?: InputMaybe<Array<Scalars['Int']> | Scalars['Int']>;
-  startdate: Scalars['String'];
-  enddate: Scalars['String'];
-}>;
-
-
-export type GetSaldoByDateRangeQuery = { saldoRange?: Array<{ burgerId?: number, begindatum?: string, einddatum?: string, saldo?: any }> };
+export type GetSaldoQuery = { saldo?: { saldo?: any } };
 
 export type GetSearchAfsprakenQueryVariables = Exact<{
   offset?: InputMaybe<Scalars['Int']>;
@@ -2402,7 +2277,7 @@ export type GetTransactieQuery = { bankTransaction?: { id?: number, informationT
 export type GetTransactionItemFormDataQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetTransactionItemFormDataQuery = { rubrieken?: Array<{ id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } }>, afspraken?: Array<{ id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, validFrom?: any, validThrough?: any, betaalinstructie?: { byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string }, burger?: { id?: number, bsn?: number, voornamen?: string, voorletters?: string, achternaam?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, alarm?: { id?: string, isActive?: boolean, bedrag?: any, bedragMargin?: any, startDate?: string, endDate?: string, datumMargin?: number, byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, afspraak?: { id?: number }, signaal?: { id?: string } }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, postadres?: { id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string }, rubriek?: { id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } }, matchingAfspraken?: Array<{ id?: number, credit?: boolean, zoektermen?: Array<string>, bedrag?: any, omschrijving?: string, burger?: { voorletters?: string, voornamen?: string, achternaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string } }> }> };
+export type GetTransactionItemFormDataQuery = { rubrieken?: Array<{ id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string } }>, afspraken?: Array<{ id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, validFrom?: any, validThrough?: any, betaalinstructie?: { byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string }, burger?: { id?: number, bsn?: number, voornamen?: string, voorletters?: string, achternaam?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, alarm?: { id?: string, isActive?: boolean, bedrag?: any, bedragMargin?: any, startDate?: string, endDate?: string, datumMargin?: number, byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, afspraak?: { id?: number }, signaal?: { id?: string } }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, postadres?: { id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string }, rubriek?: { id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } }, matchingAfspraken?: Array<{ id?: number, credit?: boolean, zoektermen?: Array<string>, bedrag?: any, omschrijving?: string, burger?: { voorletters?: string, voornamen?: string, achternaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string } }> }> };
 
 export type GetTransactiesQueryVariables = Exact<{
   offset: Scalars['Int'];
@@ -2422,367 +2297,7 @@ export type SearchTransactiesQueryVariables = Exact<{
 
 export type SearchTransactiesQuery = { searchTransacties?: { banktransactions?: Array<{ id?: number, informationToAccountOwner?: string, statementLine?: string, bedrag?: any, isCredit?: boolean, isGeboekt?: boolean, transactieDatum?: any, journaalpost?: { id?: number, rubriek?: { naam?: string } }, tegenRekening?: { iban?: string, rekeninghouder?: string } }>, pageInfo?: { count?: number, limit?: number, start?: number } } };
 
-export const CustomerStatementMessageFragmentDoc = gql`
-    fragment CustomerStatementMessage on CustomerStatementMessage {
-  id
-  filename
-  uploadDate
-  accountIdentification
-  closingAvailableFunds
-  closingBalance
-  forwardAvailableBalance
-  openingBalance
-  relatedReference
-  sequenceNumber
-  transactionReferenceNumber
-}
-    `;
-export const ExportFragmentDoc = gql`
-    fragment Export on Export {
-  id
-  naam
-  timestamp
-  startDatum
-  eindDatum
-  verwerkingDatum
-  sha256
-  overschrijvingen {
-    id
-    bedrag
-  }
-}
-    `;
-export const GebruikersactiviteitFragmentDoc = gql`
-    fragment Gebruikersactiviteit on GebruikersActiviteit {
-  id
-  timestamp
-  gebruikerId
-  action
-  entities {
-    entityType
-    entityId
-    huishouden {
-      id
-      burgers {
-        id
-        voorletters
-        voornamen
-        achternaam
-      }
-    }
-    burger {
-      id
-      voorletters
-      voornamen
-      achternaam
-    }
-    organisatie {
-      id
-      naam
-      kvknummer
-      vestigingsnummer
-    }
-    afspraak {
-      id
-      burger {
-        id
-        voornamen
-        voorletters
-        achternaam
-      }
-      afdeling {
-        id
-        naam
-        organisatie {
-          id
-          kvknummer
-          vestigingsnummer
-          naam
-        }
-      }
-    }
-    rekening {
-      id
-      iban
-      rekeninghouder
-    }
-    customerStatementMessage {
-      id
-      filename
-      bankTransactions {
-        id
-      }
-    }
-    configuratie {
-      id
-      waarde
-    }
-    rubriek {
-      id
-      naam
-    }
-    afdeling {
-      id
-      naam
-      organisatie {
-        id
-        naam
-      }
-    }
-    postadres {
-      id
-    }
-    export {
-      id
-      naam
-    }
-  }
-  meta {
-    userAgent
-    ip
-    applicationVersion
-  }
-}
-    `;
-export const RekeningFragmentDoc = gql`
-    fragment Rekening on Rekening {
-  id
-  iban
-  rekeninghouder
-}
-    `;
-export const BetaalinstructieFragmentDoc = gql`
-    fragment Betaalinstructie on Betaalinstructie {
-  byDay
-  byMonth
-  byMonthDay
-  exceptDates
-  repeatFrequency
-  startDate
-  endDate
-}
-    `;
-export const AlarmFragmentDoc = gql`
-    fragment Alarm on Alarm {
-  id
-  isActive
-  bedrag
-  bedragMargin
-  startDate
-  endDate
-  datumMargin
-  byDay
-  byMonth
-  byMonthDay
-  afspraak {
-    id
-  }
-  signaal {
-    id
-  }
-}
-    `;
-export const PostadresFragmentDoc = gql`
-    fragment Postadres on Postadres {
-  id
-  straatnaam
-  huisnummer
-  postcode
-  plaatsnaam
-}
-    `;
-export const AfdelingFragmentDoc = gql`
-    fragment Afdeling on Afdeling {
-  id
-  naam
-  organisatie {
-    id
-    kvknummer
-    vestigingsnummer
-    naam
-  }
-  postadressen {
-    ...Postadres
-  }
-  rekeningen {
-    ...Rekening
-  }
-}
-    ${PostadresFragmentDoc}
-${RekeningFragmentDoc}`;
-export const GrootboekrekeningFragmentDoc = gql`
-    fragment Grootboekrekening on Grootboekrekening {
-  id
-  naam
-  credit
-  omschrijving
-  referentie
-  rubriek {
-    id
-    naam
-  }
-}
-    `;
-export const RubriekFragmentDoc = gql`
-    fragment Rubriek on Rubriek {
-  id
-  naam
-  grootboekrekening {
-    ...Grootboekrekening
-  }
-}
-    ${GrootboekrekeningFragmentDoc}`;
-export const AfspraakFragmentDoc = gql`
-    fragment Afspraak on Afspraak {
-  id
-  omschrijving
-  bedrag
-  credit
-  betaalinstructie {
-    ...Betaalinstructie
-  }
-  zoektermen
-  validFrom
-  validThrough
-  burger {
-    id
-    bsn
-    voornamen
-    voorletters
-    achternaam
-    plaatsnaam
-    rekeningen {
-      ...Rekening
-    }
-  }
-  alarm {
-    ...Alarm
-  }
-  afdeling {
-    ...Afdeling
-  }
-  postadres {
-    ...Postadres
-  }
-  tegenRekening {
-    ...Rekening
-  }
-  rubriek {
-    ...Rubriek
-  }
-  matchingAfspraken {
-    id
-    credit
-    burger {
-      voorletters
-      voornamen
-      achternaam
-    }
-    zoektermen
-    bedrag
-    omschrijving
-    tegenRekening {
-      id
-      iban
-      rekeninghouder
-    }
-  }
-}
-    ${BetaalinstructieFragmentDoc}
-${RekeningFragmentDoc}
-${AlarmFragmentDoc}
-${AfdelingFragmentDoc}
-${PostadresFragmentDoc}
-${RubriekFragmentDoc}`;
-export const BurgerFragmentDoc = gql`
-    fragment Burger on Burger {
-  id
-  bsn
-  email
-  telefoonnummer
-  voorletters
-  voornamen
-  achternaam
-  geboortedatum
-  straatnaam
-  huisnummer
-  postcode
-  plaatsnaam
-  rekeningen {
-    ...Rekening
-  }
-  afspraken {
-    ...Afspraak
-  }
-  huishouden {
-    id
-    burgers {
-      id
-    }
-  }
-}
-    ${RekeningFragmentDoc}
-${AfspraakFragmentDoc}`;
-export const HuishoudenFragmentDoc = gql`
-    fragment Huishouden on Huishouden {
-  id
-  burgers {
-    ...Burger
-  }
-}
-    ${BurgerFragmentDoc}`;
-export const JournaalpostFragmentDoc = gql`
-    fragment Journaalpost on Journaalpost {
-  id
-}
-    `;
-export const OrganisatieFragmentDoc = gql`
-    fragment Organisatie on Organisatie {
-  id
-  naam
-  kvknummer
-  vestigingsnummer
-  afdelingen {
-    ...Afdeling
-  }
-}
-    ${AfdelingFragmentDoc}`;
-export const SignaalFragmentDoc = gql`
-    fragment Signaal on Signaal {
-  id
-  isActive
-  type
-  actions
-  bedragDifference
-  timeUpdated
-  alarm {
-    id
-    afspraak {
-      ...Afspraak
-    }
-  }
-  bankTransactions {
-    id
-    bedrag
-    isCredit
-  }
-}
-    ${AfspraakFragmentDoc}`;
-export const BankTransactionFragmentDoc = gql`
-    fragment BankTransaction on BankTransaction {
-  id
-  informationToAccountOwner
-  statementLine
-  bedrag
-  isCredit
-  tegenRekeningIban
-  tegenRekening {
-    iban
-    rekeninghouder
-  }
-  transactieDatum
-}
-    `;
+
 export const AddAfspraakZoektermDocument = gql`
     mutation addAfspraakZoekterm($afspraakId: Int!, $zoekterm: String!) {
   addAfspraakZoekterm(afspraakId: $afspraakId, zoekterm: $zoekterm) {
@@ -2873,11 +2388,30 @@ export const CreateAfdelingDocument = gql`
   ) {
     ok
     afdeling {
-      ...Afdeling
+      id
+      naam
+      organisatie {
+        id
+        kvknummer
+        vestigingsnummer
+        naam
+      }
+      postadressen {
+        id
+        straatnaam
+        huisnummer
+        postcode
+        plaatsnaam
+      }
+      rekeningen {
+        id
+        iban
+        rekeninghouder
+      }
     }
   }
 }
-    ${AfdelingFragmentDoc}`;
+    `;
 export type CreateAfdelingMutationFn = Apollo.MutationFunction<CreateAfdelingMutation, CreateAfdelingMutationVariables>;
 
 /**
@@ -2912,11 +2446,123 @@ export const CreateAfspraakDocument = gql`
   createAfspraak(input: $input) {
     ok
     afspraak {
-      ...Afspraak
+      id
+      omschrijving
+      bedrag
+      credit
+      betaalinstructie {
+        byDay
+        byMonth
+        byMonthDay
+        exceptDates
+        repeatFrequency
+        startDate
+        endDate
+      }
+      zoektermen
+      validFrom
+      validThrough
+      burger {
+        id
+        bsn
+        voornamen
+        voorletters
+        achternaam
+        plaatsnaam
+        rekeningen {
+          id
+          iban
+          rekeninghouder
+        }
+      }
+      alarm {
+        id
+        isActive
+        bedrag
+        bedragMargin
+        startDate
+        endDate
+        datumMargin
+        byDay
+        byMonth
+        byMonthDay
+        afspraak {
+          id
+        }
+        signaal {
+          id
+        }
+      }
+      afdeling {
+        id
+        naam
+        organisatie {
+          id
+          kvknummer
+          vestigingsnummer
+          naam
+        }
+        postadressen {
+          id
+          straatnaam
+          huisnummer
+          postcode
+          plaatsnaam
+        }
+        rekeningen {
+          id
+          iban
+          rekeninghouder
+        }
+      }
+      postadres {
+        id
+        straatnaam
+        huisnummer
+        postcode
+        plaatsnaam
+      }
+      tegenRekening {
+        id
+        iban
+        rekeninghouder
+      }
+      rubriek {
+        id
+        naam
+        grootboekrekening {
+          id
+          naam
+          credit
+          omschrijving
+          referentie
+          rubriek {
+            id
+            naam
+          }
+        }
+      }
+      matchingAfspraken {
+        id
+        credit
+        burger {
+          voorletters
+          voornamen
+          achternaam
+        }
+        zoektermen
+        bedrag
+        omschrijving
+        tegenRekening {
+          id
+          iban
+          rekeninghouder
+        }
+      }
     }
   }
 }
-    ${AfspraakFragmentDoc}`;
+    `;
 export type CreateAfspraakMutationFn = Apollo.MutationFunction<CreateAfspraakMutation, CreateAfspraakMutationVariables>;
 
 /**
@@ -2948,11 +2594,26 @@ export const CreateAlarmDocument = gql`
   createAlarm(input: $input) {
     ok
     alarm {
-      ...Alarm
+      id
+      isActive
+      bedrag
+      bedragMargin
+      startDate
+      endDate
+      datumMargin
+      byDay
+      byMonth
+      byMonthDay
+      afspraak {
+        id
+      }
+      signaal {
+        id
+      }
     }
   }
 }
-    ${AlarmFragmentDoc}`;
+    `;
 export type CreateAlarmMutationFn = Apollo.MutationFunction<CreateAlarmMutation, CreateAlarmMutationVariables>;
 
 /**
@@ -2984,11 +2645,148 @@ export const CreateBurgerDocument = gql`
   createBurger(input: $input) {
     ok
     burger {
-      ...Burger
+      id
+      bsn
+      email
+      telefoonnummer
+      voorletters
+      voornamen
+      achternaam
+      geboortedatum
+      straatnaam
+      huisnummer
+      postcode
+      plaatsnaam
+      rekeningen {
+        id
+        iban
+        rekeninghouder
+      }
+      afspraken {
+        id
+        omschrijving
+        bedrag
+        credit
+        betaalinstructie {
+          byDay
+          byMonth
+          byMonthDay
+          exceptDates
+          repeatFrequency
+          startDate
+          endDate
+        }
+        zoektermen
+        validFrom
+        validThrough
+        burger {
+          id
+          bsn
+          voornamen
+          voorletters
+          achternaam
+          plaatsnaam
+          rekeningen {
+            id
+            iban
+            rekeninghouder
+          }
+        }
+        alarm {
+          id
+          isActive
+          bedrag
+          bedragMargin
+          startDate
+          endDate
+          datumMargin
+          byDay
+          byMonth
+          byMonthDay
+          afspraak {
+            id
+          }
+          signaal {
+            id
+          }
+        }
+        afdeling {
+          id
+          naam
+          organisatie {
+            id
+            kvknummer
+            vestigingsnummer
+            naam
+          }
+          postadressen {
+            id
+            straatnaam
+            huisnummer
+            postcode
+            plaatsnaam
+          }
+          rekeningen {
+            id
+            iban
+            rekeninghouder
+          }
+        }
+        postadres {
+          id
+          straatnaam
+          huisnummer
+          postcode
+          plaatsnaam
+        }
+        tegenRekening {
+          id
+          iban
+          rekeninghouder
+        }
+        rubriek {
+          id
+          naam
+          grootboekrekening {
+            id
+            naam
+            credit
+            omschrijving
+            referentie
+            rubriek {
+              id
+              naam
+            }
+          }
+        }
+        matchingAfspraken {
+          id
+          credit
+          burger {
+            voorletters
+            voornamen
+            achternaam
+          }
+          zoektermen
+          bedrag
+          omschrijving
+          tegenRekening {
+            id
+            iban
+            rekeninghouder
+          }
+        }
+      }
+      huishouden {
+        id
+        burgers {
+          id
+        }
+      }
     }
   }
 }
-    ${BurgerFragmentDoc}`;
+    `;
 export type CreateBurgerMutationFn = Apollo.MutationFunction<CreateBurgerMutation, CreateBurgerMutationVariables>;
 
 /**
@@ -3020,11 +2818,13 @@ export const CreateBurgerRekeningDocument = gql`
   createBurgerRekening(burgerId: $burgerId, rekening: $rekening) {
     ok
     rekening {
-      ...Rekening
+      id
+      iban
+      rekeninghouder
     }
   }
 }
-    ${RekeningFragmentDoc}`;
+    `;
 export type CreateBurgerRekeningMutationFn = Apollo.MutationFunction<CreateBurgerRekeningMutation, CreateBurgerRekeningMutationVariables>;
 
 /**
@@ -3170,11 +2970,151 @@ export const CreateHuishoudenDocument = gql`
   createHuishouden(input: {burgerIds: $burgerIds}) {
     ok
     huishouden {
-      ...Huishouden
+      id
+      burgers {
+        id
+        bsn
+        email
+        telefoonnummer
+        voorletters
+        voornamen
+        achternaam
+        geboortedatum
+        straatnaam
+        huisnummer
+        postcode
+        plaatsnaam
+        rekeningen {
+          id
+          iban
+          rekeninghouder
+        }
+        afspraken {
+          id
+          omschrijving
+          bedrag
+          credit
+          betaalinstructie {
+            byDay
+            byMonth
+            byMonthDay
+            exceptDates
+            repeatFrequency
+            startDate
+            endDate
+          }
+          zoektermen
+          validFrom
+          validThrough
+          burger {
+            id
+            bsn
+            voornamen
+            voorletters
+            achternaam
+            plaatsnaam
+            rekeningen {
+              id
+              iban
+              rekeninghouder
+            }
+          }
+          alarm {
+            id
+            isActive
+            bedrag
+            bedragMargin
+            startDate
+            endDate
+            datumMargin
+            byDay
+            byMonth
+            byMonthDay
+            afspraak {
+              id
+            }
+            signaal {
+              id
+            }
+          }
+          afdeling {
+            id
+            naam
+            organisatie {
+              id
+              kvknummer
+              vestigingsnummer
+              naam
+            }
+            postadressen {
+              id
+              straatnaam
+              huisnummer
+              postcode
+              plaatsnaam
+            }
+            rekeningen {
+              id
+              iban
+              rekeninghouder
+            }
+          }
+          postadres {
+            id
+            straatnaam
+            huisnummer
+            postcode
+            plaatsnaam
+          }
+          tegenRekening {
+            id
+            iban
+            rekeninghouder
+          }
+          rubriek {
+            id
+            naam
+            grootboekrekening {
+              id
+              naam
+              credit
+              omschrijving
+              referentie
+              rubriek {
+                id
+                naam
+              }
+            }
+          }
+          matchingAfspraken {
+            id
+            credit
+            burger {
+              voorletters
+              voornamen
+              achternaam
+            }
+            zoektermen
+            bedrag
+            omschrijving
+            tegenRekening {
+              id
+              iban
+              rekeninghouder
+            }
+          }
+        }
+        huishouden {
+          id
+          burgers {
+            id
+          }
+        }
+      }
     }
   }
 }
-    ${HuishoudenFragmentDoc}`;
+    `;
 export type CreateHuishoudenMutationFn = Apollo.MutationFunction<CreateHuishoudenMutation, CreateHuishoudenMutationVariables>;
 
 /**
@@ -3293,11 +3233,36 @@ export const CreateOrganisatieDocument = gql`
   ) {
     ok
     organisatie {
-      ...Organisatie
+      id
+      naam
+      kvknummer
+      vestigingsnummer
+      afdelingen {
+        id
+        naam
+        organisatie {
+          id
+          kvknummer
+          vestigingsnummer
+          naam
+        }
+        postadressen {
+          id
+          straatnaam
+          huisnummer
+          postcode
+          plaatsnaam
+        }
+        rekeningen {
+          id
+          iban
+          rekeninghouder
+        }
+      }
     }
   }
 }
-    ${OrganisatieFragmentDoc}`;
+    `;
 export type CreateOrganisatieMutationFn = Apollo.MutationFunction<CreateOrganisatieMutation, CreateOrganisatieMutationVariables>;
 
 /**
@@ -3331,11 +3296,13 @@ export const CreateAfdelingRekeningDocument = gql`
   createAfdelingRekening(afdelingId: $afdelingId, rekening: $rekening) {
     ok
     rekening {
-      ...Rekening
+      id
+      iban
+      rekeninghouder
     }
   }
 }
-    ${RekeningFragmentDoc}`;
+    `;
 export type CreateAfdelingRekeningMutationFn = Apollo.MutationFunction<CreateAfdelingRekeningMutation, CreateAfdelingRekeningMutationVariables>;
 
 /**
@@ -3413,12 +3380,20 @@ export const CreateRubriekDocument = gql`
       id
       naam
       grootboekrekening {
-        ...Grootboekrekening
+        id
+        naam
+        credit
+        omschrijving
+        referentie
+        rubriek {
+          id
+          naam
+        }
       }
     }
   }
 }
-    ${GrootboekrekeningFragmentDoc}`;
+    `;
 export type CreateRubriekMutationFn = Apollo.MutationFunction<CreateRubriekMutation, CreateRubriekMutationVariables>;
 
 /**
@@ -3446,46 +3421,6 @@ export function useCreateRubriekMutation(baseOptions?: Apollo.MutationHookOption
 export type CreateRubriekMutationHookResult = ReturnType<typeof useCreateRubriekMutation>;
 export type CreateRubriekMutationResult = Apollo.MutationResult<CreateRubriekMutation>;
 export type CreateRubriekMutationOptions = Apollo.BaseMutationOptions<CreateRubriekMutation, CreateRubriekMutationVariables>;
-export const CreateSaldoDocument = gql`
-    mutation createSaldo($input: CreateSaldoInput) {
-  createSaldo(input: $input) {
-    ok
-    saldo {
-      id
-      burgerId
-      einddatum
-      begindatum
-      saldo
-    }
-  }
-}
-    `;
-export type CreateSaldoMutationFn = Apollo.MutationFunction<CreateSaldoMutation, CreateSaldoMutationVariables>;
-
-/**
- * __useCreateSaldoMutation__
- *
- * To run a mutation, you first call `useCreateSaldoMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateSaldoMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [createSaldoMutation, { data, loading, error }] = useCreateSaldoMutation({
- *   variables: {
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useCreateSaldoMutation(baseOptions?: Apollo.MutationHookOptions<CreateSaldoMutation, CreateSaldoMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<CreateSaldoMutation, CreateSaldoMutationVariables>(CreateSaldoDocument, options);
-      }
-export type CreateSaldoMutationHookResult = ReturnType<typeof useCreateSaldoMutation>;
-export type CreateSaldoMutationResult = Apollo.MutationResult<CreateSaldoMutation>;
-export type CreateSaldoMutationOptions = Apollo.BaseMutationOptions<CreateSaldoMutation, CreateSaldoMutationVariables>;
 export const DeleteOrganisatieDocument = gql`
     mutation deleteOrganisatie($id: Int!) {
   deleteOrganisatie(id: $id) {
@@ -4006,11 +3941,123 @@ export const EndAfspraakDocument = gql`
   updateAfspraak(id: $id, input: {validThrough: $validThrough}) {
     ok
     afspraak {
-      ...Afspraak
+      id
+      omschrijving
+      bedrag
+      credit
+      betaalinstructie {
+        byDay
+        byMonth
+        byMonthDay
+        exceptDates
+        repeatFrequency
+        startDate
+        endDate
+      }
+      zoektermen
+      validFrom
+      validThrough
+      burger {
+        id
+        bsn
+        voornamen
+        voorletters
+        achternaam
+        plaatsnaam
+        rekeningen {
+          id
+          iban
+          rekeninghouder
+        }
+      }
+      alarm {
+        id
+        isActive
+        bedrag
+        bedragMargin
+        startDate
+        endDate
+        datumMargin
+        byDay
+        byMonth
+        byMonthDay
+        afspraak {
+          id
+        }
+        signaal {
+          id
+        }
+      }
+      afdeling {
+        id
+        naam
+        organisatie {
+          id
+          kvknummer
+          vestigingsnummer
+          naam
+        }
+        postadressen {
+          id
+          straatnaam
+          huisnummer
+          postcode
+          plaatsnaam
+        }
+        rekeningen {
+          id
+          iban
+          rekeninghouder
+        }
+      }
+      postadres {
+        id
+        straatnaam
+        huisnummer
+        postcode
+        plaatsnaam
+      }
+      tegenRekening {
+        id
+        iban
+        rekeninghouder
+      }
+      rubriek {
+        id
+        naam
+        grootboekrekening {
+          id
+          naam
+          credit
+          omschrijving
+          referentie
+          rubriek {
+            id
+            naam
+          }
+        }
+      }
+      matchingAfspraken {
+        id
+        credit
+        burger {
+          voorletters
+          voornamen
+          achternaam
+        }
+        zoektermen
+        bedrag
+        omschrijving
+        tegenRekening {
+          id
+          iban
+          rekeninghouder
+        }
+      }
     }
   }
 }
-    ${AfspraakFragmentDoc}`;
+    `;
 export type EndAfspraakMutationFn = Apollo.MutationFunction<EndAfspraakMutation, EndAfspraakMutationVariables>;
 
 /**
@@ -4151,11 +4198,30 @@ export const UpdateAfdelingDocument = gql`
   updateAfdeling(id: $id, naam: $naam, organisatieId: $organisatieId) {
     ok
     afdeling {
-      ...Afdeling
+      id
+      naam
+      organisatie {
+        id
+        kvknummer
+        vestigingsnummer
+        naam
+      }
+      postadressen {
+        id
+        straatnaam
+        huisnummer
+        postcode
+        plaatsnaam
+      }
+      rekeningen {
+        id
+        iban
+        rekeninghouder
+      }
     }
   }
 }
-    ${AfdelingFragmentDoc}`;
+    `;
 export type UpdateAfdelingMutationFn = Apollo.MutationFunction<UpdateAfdelingMutation, UpdateAfdelingMutationVariables>;
 
 /**
@@ -4189,11 +4255,123 @@ export const UpdateAfspraakDocument = gql`
   updateAfspraak(id: $id, input: $input) {
     ok
     afspraak {
-      ...Afspraak
+      id
+      omschrijving
+      bedrag
+      credit
+      betaalinstructie {
+        byDay
+        byMonth
+        byMonthDay
+        exceptDates
+        repeatFrequency
+        startDate
+        endDate
+      }
+      zoektermen
+      validFrom
+      validThrough
+      burger {
+        id
+        bsn
+        voornamen
+        voorletters
+        achternaam
+        plaatsnaam
+        rekeningen {
+          id
+          iban
+          rekeninghouder
+        }
+      }
+      alarm {
+        id
+        isActive
+        bedrag
+        bedragMargin
+        startDate
+        endDate
+        datumMargin
+        byDay
+        byMonth
+        byMonthDay
+        afspraak {
+          id
+        }
+        signaal {
+          id
+        }
+      }
+      afdeling {
+        id
+        naam
+        organisatie {
+          id
+          kvknummer
+          vestigingsnummer
+          naam
+        }
+        postadressen {
+          id
+          straatnaam
+          huisnummer
+          postcode
+          plaatsnaam
+        }
+        rekeningen {
+          id
+          iban
+          rekeninghouder
+        }
+      }
+      postadres {
+        id
+        straatnaam
+        huisnummer
+        postcode
+        plaatsnaam
+      }
+      tegenRekening {
+        id
+        iban
+        rekeninghouder
+      }
+      rubriek {
+        id
+        naam
+        grootboekrekening {
+          id
+          naam
+          credit
+          omschrijving
+          referentie
+          rubriek {
+            id
+            naam
+          }
+        }
+      }
+      matchingAfspraken {
+        id
+        credit
+        burger {
+          voorletters
+          voornamen
+          achternaam
+        }
+        zoektermen
+        bedrag
+        omschrijving
+        tegenRekening {
+          id
+          iban
+          rekeninghouder
+        }
+      }
     }
   }
 }
-    ${AfspraakFragmentDoc}`;
+    `;
 export type UpdateAfspraakMutationFn = Apollo.MutationFunction<UpdateAfspraakMutation, UpdateAfspraakMutationVariables>;
 
 /**
@@ -4263,11 +4441,26 @@ export const UpdateAlarmDocument = gql`
   updateAlarm(id: $id, input: $input) {
     ok
     alarm {
-      ...Alarm
+      id
+      isActive
+      bedrag
+      bedragMargin
+      startDate
+      endDate
+      datumMargin
+      byDay
+      byMonth
+      byMonthDay
+      afspraak {
+        id
+      }
+      signaal {
+        id
+      }
     }
   }
 }
-    ${AlarmFragmentDoc}`;
+    `;
 export type UpdateAlarmMutationFn = Apollo.MutationFunction<UpdateAlarmMutation, UpdateAlarmMutationVariables>;
 
 /**
@@ -4313,11 +4506,148 @@ export const UpdateBurgerDocument = gql`
   ) {
     ok
     burger {
-      ...Burger
+      id
+      bsn
+      email
+      telefoonnummer
+      voorletters
+      voornamen
+      achternaam
+      geboortedatum
+      straatnaam
+      huisnummer
+      postcode
+      plaatsnaam
+      rekeningen {
+        id
+        iban
+        rekeninghouder
+      }
+      afspraken {
+        id
+        omschrijving
+        bedrag
+        credit
+        betaalinstructie {
+          byDay
+          byMonth
+          byMonthDay
+          exceptDates
+          repeatFrequency
+          startDate
+          endDate
+        }
+        zoektermen
+        validFrom
+        validThrough
+        burger {
+          id
+          bsn
+          voornamen
+          voorletters
+          achternaam
+          plaatsnaam
+          rekeningen {
+            id
+            iban
+            rekeninghouder
+          }
+        }
+        alarm {
+          id
+          isActive
+          bedrag
+          bedragMargin
+          startDate
+          endDate
+          datumMargin
+          byDay
+          byMonth
+          byMonthDay
+          afspraak {
+            id
+          }
+          signaal {
+            id
+          }
+        }
+        afdeling {
+          id
+          naam
+          organisatie {
+            id
+            kvknummer
+            vestigingsnummer
+            naam
+          }
+          postadressen {
+            id
+            straatnaam
+            huisnummer
+            postcode
+            plaatsnaam
+          }
+          rekeningen {
+            id
+            iban
+            rekeninghouder
+          }
+        }
+        postadres {
+          id
+          straatnaam
+          huisnummer
+          postcode
+          plaatsnaam
+        }
+        tegenRekening {
+          id
+          iban
+          rekeninghouder
+        }
+        rubriek {
+          id
+          naam
+          grootboekrekening {
+            id
+            naam
+            credit
+            omschrijving
+            referentie
+            rubriek {
+              id
+              naam
+            }
+          }
+        }
+        matchingAfspraken {
+          id
+          credit
+          burger {
+            voorletters
+            voornamen
+            achternaam
+          }
+          zoektermen
+          bedrag
+          omschrijving
+          tegenRekening {
+            id
+            iban
+            rekeninghouder
+          }
+        }
+      }
+      huishouden {
+        id
+        burgers {
+          id
+        }
+      }
     }
   }
 }
-    ${BurgerFragmentDoc}`;
+    `;
 export type UpdateBurgerMutationFn = Apollo.MutationFunction<UpdateBurgerMutation, UpdateBurgerMutationVariables>;
 
 /**
@@ -4403,11 +4733,36 @@ export const UpdateOrganisatieDocument = gql`
   ) {
     ok
     organisatie {
-      ...Organisatie
+      id
+      naam
+      kvknummer
+      vestigingsnummer
+      afdelingen {
+        id
+        naam
+        organisatie {
+          id
+          kvknummer
+          vestigingsnummer
+          naam
+        }
+        postadressen {
+          id
+          straatnaam
+          huisnummer
+          postcode
+          plaatsnaam
+        }
+        rekeningen {
+          id
+          iban
+          rekeninghouder
+        }
+      }
     }
   }
 }
-    ${OrganisatieFragmentDoc}`;
+    `;
 export type UpdateOrganisatieMutationFn = Apollo.MutationFunction<UpdateOrganisatieMutation, UpdateOrganisatieMutationVariables>;
 
 /**
@@ -4553,56 +4908,127 @@ export function useUpdateRubriekMutation(baseOptions?: Apollo.MutationHookOption
 export type UpdateRubriekMutationHookResult = ReturnType<typeof useUpdateRubriekMutation>;
 export type UpdateRubriekMutationResult = Apollo.MutationResult<UpdateRubriekMutation>;
 export type UpdateRubriekMutationOptions = Apollo.BaseMutationOptions<UpdateRubriekMutation, UpdateRubriekMutationVariables>;
-export const UpdateSaldoDocument = gql`
-    mutation updateSaldo($input: UpdateSaldoInput!) {
-  updateSaldo(input: $input) {
-    ok
-    saldo {
-      id
-      burgerId
-      einddatum
-      begindatum
-      saldo
-    }
-  }
-}
-    `;
-export type UpdateSaldoMutationFn = Apollo.MutationFunction<UpdateSaldoMutation, UpdateSaldoMutationVariables>;
-
-/**
- * __useUpdateSaldoMutation__
- *
- * To run a mutation, you first call `useUpdateSaldoMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateSaldoMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [updateSaldoMutation, { data, loading, error }] = useUpdateSaldoMutation({
- *   variables: {
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useUpdateSaldoMutation(baseOptions?: Apollo.MutationHookOptions<UpdateSaldoMutation, UpdateSaldoMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<UpdateSaldoMutation, UpdateSaldoMutationVariables>(UpdateSaldoDocument, options);
-      }
-export type UpdateSaldoMutationHookResult = ReturnType<typeof useUpdateSaldoMutation>;
-export type UpdateSaldoMutationResult = Apollo.MutationResult<UpdateSaldoMutation>;
-export type UpdateSaldoMutationOptions = Apollo.BaseMutationOptions<UpdateSaldoMutation, UpdateSaldoMutationVariables>;
 export const UpdateSignaalDocument = gql`
     mutation updateSignaal($id: String!, $input: UpdateSignaalInput!) {
   updateSignaal(id: $id, input: $input) {
     ok
     signaal {
-      ...Signaal
+      id
+      isActive
+      type
+      actions
+      bedragDifference
+      timeUpdated
+      alarm {
+        id
+        afspraak {
+          id
+          omschrijving
+          bedrag
+          credit
+          betaalinstructie {
+            byDay
+            byMonth
+            byMonthDay
+            exceptDates
+            repeatFrequency
+            startDate
+            endDate
+          }
+          zoektermen
+          validFrom
+          validThrough
+          burger {
+            id
+            bsn
+            voornamen
+            voorletters
+            achternaam
+            plaatsnaam
+            rekeningen {
+              id
+              iban
+              rekeninghouder
+            }
+          }
+          alarm {
+            id
+            isActive
+            bedrag
+            bedragMargin
+            startDate
+            endDate
+            datumMargin
+            byDay
+            byMonth
+            byMonthDay
+            afspraak {
+              id
+            }
+            signaal {
+              id
+            }
+          }
+          afdeling {
+            id
+            naam
+            organisatie {
+              id
+              kvknummer
+              vestigingsnummer
+              naam
+            }
+            postadressen {
+              id
+              straatnaam
+              huisnummer
+              postcode
+              plaatsnaam
+            }
+            rekeningen {
+              id
+              iban
+              rekeninghouder
+            }
+          }
+          postadres {
+            id
+            straatnaam
+            huisnummer
+            postcode
+            plaatsnaam
+          }
+          tegenRekening {
+            id
+            iban
+            rekeninghouder
+          }
+          rubriek {
+            id
+            naam
+            grootboekrekening {
+              id
+              naam
+              credit
+              omschrijving
+              referentie
+              rubriek {
+                id
+                naam
+              }
+            }
+          }
+        }
+      }
+      bankTransactions {
+        id
+        bedrag
+        isCredit
+      }
     }
   }
 }
-    ${SignaalFragmentDoc}`;
+    `;
 export type UpdateSignaalMutationFn = Apollo.MutationFunction<UpdateSignaalMutation, UpdateSignaalMutationVariables>;
 
 /**
@@ -4677,10 +5103,29 @@ export type GetAdditionalTransactionDataQueryResult = Apollo.QueryResult<GetAddi
 export const GetAfdelingDocument = gql`
     query getAfdeling($id: Int!) {
   afdeling(id: $id) {
-    ...Afdeling
+    id
+    naam
+    organisatie {
+      id
+      kvknummer
+      vestigingsnummer
+      naam
+    }
+    postadressen {
+      id
+      straatnaam
+      huisnummer
+      postcode
+      plaatsnaam
+    }
+    rekeningen {
+      id
+      iban
+      rekeninghouder
+    }
   }
 }
-    ${AfdelingFragmentDoc}`;
+    `;
 
 /**
  * __useGetAfdelingQuery__
@@ -4845,12 +5290,35 @@ export const GetAfspraakFormDataDocument = gql`
         kvknummer
         vestigingsnummer
         afdelingen {
-          ...Afdeling
+          id
+          naam
+          organisatie {
+            id
+            kvknummer
+            vestigingsnummer
+            naam
+          }
+          postadressen {
+            id
+            straatnaam
+            huisnummer
+            postcode
+            plaatsnaam
+          }
+          rekeningen {
+            id
+            iban
+            rekeninghouder
+          }
         }
       }
     }
     postadres {
-      ...Postadres
+      id
+      straatnaam
+      huisnummer
+      postcode
+      plaatsnaam
     }
     tegenRekening {
       id
@@ -4883,8 +5351,7 @@ export const GetAfspraakFormDataDocument = gql`
     vestigingsnummer
   }
 }
-    ${AfdelingFragmentDoc}
-${PostadresFragmentDoc}`;
+    `;
 
 /**
  * __useGetAfspraakFormDataQuery__
@@ -4916,10 +5383,122 @@ export type GetAfspraakFormDataQueryResult = Apollo.QueryResult<GetAfspraakFormD
 export const GetAfsprakenDocument = gql`
     query getAfspraken {
   afspraken {
-    ...Afspraak
+    id
+    omschrijving
+    bedrag
+    credit
+    betaalinstructie {
+      byDay
+      byMonth
+      byMonthDay
+      exceptDates
+      repeatFrequency
+      startDate
+      endDate
+    }
+    zoektermen
+    validFrom
+    validThrough
+    burger {
+      id
+      bsn
+      voornamen
+      voorletters
+      achternaam
+      plaatsnaam
+      rekeningen {
+        id
+        iban
+        rekeninghouder
+      }
+    }
+    alarm {
+      id
+      isActive
+      bedrag
+      bedragMargin
+      startDate
+      endDate
+      datumMargin
+      byDay
+      byMonth
+      byMonthDay
+      afspraak {
+        id
+      }
+      signaal {
+        id
+      }
+    }
+    afdeling {
+      id
+      naam
+      organisatie {
+        id
+        kvknummer
+        vestigingsnummer
+        naam
+      }
+      postadressen {
+        id
+        straatnaam
+        huisnummer
+        postcode
+        plaatsnaam
+      }
+      rekeningen {
+        id
+        iban
+        rekeninghouder
+      }
+    }
+    postadres {
+      id
+      straatnaam
+      huisnummer
+      postcode
+      plaatsnaam
+    }
+    tegenRekening {
+      id
+      iban
+      rekeninghouder
+    }
+    rubriek {
+      id
+      naam
+      grootboekrekening {
+        id
+        naam
+        credit
+        omschrijving
+        referentie
+        rubriek {
+          id
+          naam
+        }
+      }
+    }
+    matchingAfspraken {
+      id
+      credit
+      burger {
+        voorletters
+        voornamen
+        achternaam
+      }
+      zoektermen
+      bedrag
+      omschrijving
+      tegenRekening {
+        id
+        iban
+        rekeninghouder
+      }
+    }
   }
 }
-    ${AfspraakFragmentDoc}`;
+    `;
 
 /**
  * __useGetAfsprakenQuery__
@@ -4950,10 +5529,25 @@ export type GetAfsprakenQueryResult = Apollo.QueryResult<GetAfsprakenQuery, GetA
 export const GetAlarmDocument = gql`
     query getAlarm($id: String!) {
   alarm(id: $id) {
-    ...Alarm
+    id
+    isActive
+    bedrag
+    bedragMargin
+    startDate
+    endDate
+    datumMargin
+    byDay
+    byMonth
+    byMonthDay
+    afspraak {
+      id
+    }
+    signaal {
+      id
+    }
   }
 }
-    ${AlarmFragmentDoc}`;
+    `;
 
 /**
  * __useGetAlarmQuery__
@@ -4985,10 +5579,25 @@ export type GetAlarmQueryResult = Apollo.QueryResult<GetAlarmQuery, GetAlarmQuer
 export const GetAlarmenDocument = gql`
     query getAlarmen {
   alarmen {
-    ...Alarm
+    id
+    isActive
+    bedrag
+    bedragMargin
+    startDate
+    endDate
+    datumMargin
+    byDay
+    byMonth
+    byMonthDay
+    afspraak {
+      id
+    }
+    signaal {
+      id
+    }
   }
 }
-    ${AlarmFragmentDoc}`;
+    `;
 
 /**
  * __useGetAlarmenQuery__
@@ -5139,11 +5748,123 @@ export const GetBurgerAfsprakenDocument = gql`
     query getBurgerAfspraken($id: Int!) {
   burger(id: $id) {
     afspraken {
-      ...Afspraak
+      id
+      omschrijving
+      bedrag
+      credit
+      betaalinstructie {
+        byDay
+        byMonth
+        byMonthDay
+        exceptDates
+        repeatFrequency
+        startDate
+        endDate
+      }
+      zoektermen
+      validFrom
+      validThrough
+      burger {
+        id
+        bsn
+        voornamen
+        voorletters
+        achternaam
+        plaatsnaam
+        rekeningen {
+          id
+          iban
+          rekeninghouder
+        }
+      }
+      alarm {
+        id
+        isActive
+        bedrag
+        bedragMargin
+        startDate
+        endDate
+        datumMargin
+        byDay
+        byMonth
+        byMonthDay
+        afspraak {
+          id
+        }
+        signaal {
+          id
+        }
+      }
+      afdeling {
+        id
+        naam
+        organisatie {
+          id
+          kvknummer
+          vestigingsnummer
+          naam
+        }
+        postadressen {
+          id
+          straatnaam
+          huisnummer
+          postcode
+          plaatsnaam
+        }
+        rekeningen {
+          id
+          iban
+          rekeninghouder
+        }
+      }
+      postadres {
+        id
+        straatnaam
+        huisnummer
+        postcode
+        plaatsnaam
+      }
+      tegenRekening {
+        id
+        iban
+        rekeninghouder
+      }
+      rubriek {
+        id
+        naam
+        grootboekrekening {
+          id
+          naam
+          credit
+          omschrijving
+          referentie
+          rubriek {
+            id
+            naam
+          }
+        }
+      }
+      matchingAfspraken {
+        id
+        credit
+        burger {
+          voorletters
+          voornamen
+          achternaam
+        }
+        zoektermen
+        bedrag
+        omschrijving
+        tegenRekening {
+          id
+          iban
+          rekeninghouder
+        }
+      }
     }
   }
 }
-    ${AfspraakFragmentDoc}`;
+    `;
 
 /**
  * __useGetBurgerAfsprakenQuery__
@@ -5182,14 +5903,101 @@ export const GetBurgerGebeurtenissenDocument = gql`
   }
   gebruikersactiviteitenPaged(burgerIds: $ids, start: $offset, limit: $limit) {
     gebruikersactiviteiten {
-      ...Gebruikersactiviteit
+      id
+      timestamp
+      gebruikerId
+      action
+      entities {
+        entityType
+        entityId
+        huishouden {
+          id
+          burgers {
+            id
+            voorletters
+            voornamen
+            achternaam
+          }
+        }
+        burger {
+          id
+          voorletters
+          voornamen
+          achternaam
+        }
+        organisatie {
+          id
+          naam
+          kvknummer
+          vestigingsnummer
+        }
+        afspraak {
+          id
+          burger {
+            id
+            voornamen
+            voorletters
+            achternaam
+          }
+          afdeling {
+            id
+            naam
+            organisatie {
+              id
+              kvknummer
+              vestigingsnummer
+              naam
+            }
+          }
+        }
+        rekening {
+          id
+          iban
+          rekeninghouder
+        }
+        customerStatementMessage {
+          id
+          filename
+          bankTransactions {
+            id
+          }
+        }
+        configuratie {
+          id
+          waarde
+        }
+        rubriek {
+          id
+          naam
+        }
+        afdeling {
+          id
+          naam
+          organisatie {
+            id
+            naam
+          }
+        }
+        postadres {
+          id
+        }
+        export {
+          id
+          naam
+        }
+      }
+      meta {
+        userAgent
+        ip
+        applicationVersion
+      }
     }
     pageInfo {
       count
     }
   }
 }
-    ${GebruikersactiviteitFragmentDoc}`;
+    `;
 
 /**
  * __useGetBurgerGebeurtenissenQuery__
@@ -5221,7 +6029,7 @@ export type GetBurgerGebeurtenissenQueryHookResult = ReturnType<typeof useGetBur
 export type GetBurgerGebeurtenissenLazyQueryHookResult = ReturnType<typeof useGetBurgerGebeurtenissenLazyQuery>;
 export type GetBurgerGebeurtenissenQueryResult = Apollo.QueryResult<GetBurgerGebeurtenissenQuery, GetBurgerGebeurtenissenQueryVariables>;
 export const GetBurgerRapportagesDocument = gql`
-    query getBurgerRapportages($burgers: [Int!]!, $start: String!, $end: String!, $rubrieken: [Int!]!) {
+    query getBurgerRapportages($burgers: [Int!]!, $start: String!, $end: String!, $rubrieken: [Int!]!, $saldoDate: Date!) {
   burgerRapportages(
     burgerIds: $burgers
     startDate: $start
@@ -5253,6 +6061,9 @@ export const GetBurgerRapportagesDocument = gql`
       }
     }
   }
+  saldo(burgerIds: $burgers, date: $saldoDate) {
+    saldo
+  }
 }
     `;
 
@@ -5272,6 +6083,7 @@ export const GetBurgerRapportagesDocument = gql`
  *      start: // value for 'start'
  *      end: // value for 'end'
  *      rubrieken: // value for 'rubrieken'
+ *      saldoDate: // value for 'saldoDate'
  *   },
  * });
  */
@@ -5547,10 +6359,20 @@ export type GetCsmsQueryResult = Apollo.QueryResult<GetCsmsQuery, GetCsmsQueryVa
 export const GetExportsDocument = gql`
     query getExports {
   exports {
-    ...Export
+    id
+    naam
+    timestamp
+    startDatum
+    eindDatum
+    verwerkingDatum
+    sha256
+    overschrijvingen {
+      id
+      bedrag
+    }
   }
 }
-    ${ExportFragmentDoc}`;
+    `;
 
 /**
  * __useGetExportsQuery__
@@ -5582,14 +6404,101 @@ export const GetGebeurtenissenDocument = gql`
     query GetGebeurtenissen($limit: Int!, $offset: Int!) {
   gebruikersactiviteitenPaged(start: $offset, limit: $limit) {
     gebruikersactiviteiten {
-      ...Gebruikersactiviteit
+      id
+      timestamp
+      gebruikerId
+      action
+      entities {
+        entityType
+        entityId
+        huishouden {
+          id
+          burgers {
+            id
+            voorletters
+            voornamen
+            achternaam
+          }
+        }
+        burger {
+          id
+          voorletters
+          voornamen
+          achternaam
+        }
+        organisatie {
+          id
+          naam
+          kvknummer
+          vestigingsnummer
+        }
+        afspraak {
+          id
+          burger {
+            id
+            voornamen
+            voorletters
+            achternaam
+          }
+          afdeling {
+            id
+            naam
+            organisatie {
+              id
+              kvknummer
+              vestigingsnummer
+              naam
+            }
+          }
+        }
+        rekening {
+          id
+          iban
+          rekeninghouder
+        }
+        customerStatementMessage {
+          id
+          filename
+          bankTransactions {
+            id
+          }
+        }
+        configuratie {
+          id
+          waarde
+        }
+        rubriek {
+          id
+          naam
+        }
+        afdeling {
+          id
+          naam
+          organisatie {
+            id
+            naam
+          }
+        }
+        postadres {
+          id
+        }
+        export {
+          id
+          naam
+        }
+      }
+      meta {
+        userAgent
+        ip
+        applicationVersion
+      }
     }
     pageInfo {
       count
     }
   }
 }
-    ${GebruikersactiviteitFragmentDoc}`;
+    `;
 
 /**
  * __useGetGebeurtenissenQuery__
@@ -5701,10 +6610,35 @@ export type GetHuishoudensQueryResult = Apollo.QueryResult<GetHuishoudensQuery, 
 export const GetOrganisatieDocument = gql`
     query getOrganisatie($id: Int!) {
   organisatie(id: $id) {
-    ...Organisatie
+    id
+    naam
+    kvknummer
+    vestigingsnummer
+    afdelingen {
+      id
+      naam
+      organisatie {
+        id
+        kvknummer
+        vestigingsnummer
+        naam
+      }
+      postadressen {
+        id
+        straatnaam
+        huisnummer
+        postcode
+        plaatsnaam
+      }
+      rekeningen {
+        id
+        iban
+        rekeninghouder
+      }
+    }
   }
 }
-    ${OrganisatieFragmentDoc}`;
+    `;
 
 /**
  * __useGetOrganisatieQuery__
@@ -5737,10 +6671,34 @@ export const GetOrganisatiesDocument = gql`
     query getOrganisaties {
   organisaties {
     id
-    ...Organisatie
+    naam
+    kvknummer
+    vestigingsnummer
+    afdelingen {
+      id
+      naam
+      organisatie {
+        id
+        kvknummer
+        vestigingsnummer
+        naam
+      }
+      postadressen {
+        id
+        straatnaam
+        huisnummer
+        postcode
+        plaatsnaam
+      }
+      rekeningen {
+        id
+        iban
+        rekeninghouder
+      }
+    }
   }
 }
-    ${OrganisatieFragmentDoc}`;
+    `;
 
 /**
  * __useGetOrganisatiesQuery__
@@ -6052,12 +7010,8 @@ export type GetRubriekenConfiguratieQueryHookResult = ReturnType<typeof useGetRu
 export type GetRubriekenConfiguratieLazyQueryHookResult = ReturnType<typeof useGetRubriekenConfiguratieLazyQuery>;
 export type GetRubriekenConfiguratieQueryResult = Apollo.QueryResult<GetRubriekenConfiguratieQuery, GetRubriekenConfiguratieQueryVariables>;
 export const GetSaldoDocument = gql`
-    query getSaldo($burger_ids: [Int!], $date: String!) {
-  saldo(burgerIds: $burger_ids, date: $date) {
-    id
-    burgerId
-    begindatum
-    einddatum
+    query getSaldo($burgers: [Int!]!, $date: Date!) {
+  saldo(burgerIds: $burgers, date: $date) {
     saldo
   }
 }
@@ -6075,7 +7029,7 @@ export const GetSaldoDocument = gql`
  * @example
  * const { data, loading, error } = useGetSaldoQuery({
  *   variables: {
- *      burger_ids: // value for 'burger_ids'
+ *      burgers: // value for 'burgers'
  *      date: // value for 'date'
  *   },
  * });
@@ -6091,86 +7045,6 @@ export function useGetSaldoLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<G
 export type GetSaldoQueryHookResult = ReturnType<typeof useGetSaldoQuery>;
 export type GetSaldoLazyQueryHookResult = ReturnType<typeof useGetSaldoLazyQuery>;
 export type GetSaldoQueryResult = Apollo.QueryResult<GetSaldoQuery, GetSaldoQueryVariables>;
-export const GetSaldoClosestToDocument = gql`
-    query getSaldoClosestTo($burger_ids: [Int!], $date: String!) {
-  saldoClosest(burgerIds: $burger_ids, date: $date) {
-    burgerId
-    begindatum
-    einddatum
-    saldo
-    id
-  }
-}
-    `;
-
-/**
- * __useGetSaldoClosestToQuery__
- *
- * To run a query within a React component, call `useGetSaldoClosestToQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetSaldoClosestToQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetSaldoClosestToQuery({
- *   variables: {
- *      burger_ids: // value for 'burger_ids'
- *      date: // value for 'date'
- *   },
- * });
- */
-export function useGetSaldoClosestToQuery(baseOptions: Apollo.QueryHookOptions<GetSaldoClosestToQuery, GetSaldoClosestToQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetSaldoClosestToQuery, GetSaldoClosestToQueryVariables>(GetSaldoClosestToDocument, options);
-      }
-export function useGetSaldoClosestToLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetSaldoClosestToQuery, GetSaldoClosestToQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetSaldoClosestToQuery, GetSaldoClosestToQueryVariables>(GetSaldoClosestToDocument, options);
-        }
-export type GetSaldoClosestToQueryHookResult = ReturnType<typeof useGetSaldoClosestToQuery>;
-export type GetSaldoClosestToLazyQueryHookResult = ReturnType<typeof useGetSaldoClosestToLazyQuery>;
-export type GetSaldoClosestToQueryResult = Apollo.QueryResult<GetSaldoClosestToQuery, GetSaldoClosestToQueryVariables>;
-export const GetSaldoByDateRangeDocument = gql`
-    query getSaldoByDateRange($burger_ids: [Int!], $startdate: String!, $enddate: String!) {
-  saldoRange(burgerIds: $burger_ids, startdate: $startdate, enddate: $enddate) {
-    burgerId
-    begindatum
-    einddatum
-    saldo
-  }
-}
-    `;
-
-/**
- * __useGetSaldoByDateRangeQuery__
- *
- * To run a query within a React component, call `useGetSaldoByDateRangeQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetSaldoByDateRangeQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetSaldoByDateRangeQuery({
- *   variables: {
- *      burger_ids: // value for 'burger_ids'
- *      startdate: // value for 'startdate'
- *      enddate: // value for 'enddate'
- *   },
- * });
- */
-export function useGetSaldoByDateRangeQuery(baseOptions: Apollo.QueryHookOptions<GetSaldoByDateRangeQuery, GetSaldoByDateRangeQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetSaldoByDateRangeQuery, GetSaldoByDateRangeQueryVariables>(GetSaldoByDateRangeDocument, options);
-      }
-export function useGetSaldoByDateRangeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetSaldoByDateRangeQuery, GetSaldoByDateRangeQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetSaldoByDateRangeQuery, GetSaldoByDateRangeQueryVariables>(GetSaldoByDateRangeDocument, options);
-        }
-export type GetSaldoByDateRangeQueryHookResult = ReturnType<typeof useGetSaldoByDateRangeQuery>;
-export type GetSaldoByDateRangeLazyQueryHookResult = ReturnType<typeof useGetSaldoByDateRangeLazyQuery>;
-export type GetSaldoByDateRangeQueryResult = Apollo.QueryResult<GetSaldoByDateRangeQuery, GetSaldoByDateRangeQueryVariables>;
 export const GetSearchAfsprakenDocument = gql`
     query getSearchAfspraken($offset: Int, $limit: Int, $afspraken: [Int], $afdelingen: [Int], $burgers: [Int], $only_valid: Boolean, $min_bedrag: Int, $max_bedrag: Int, $zoektermen: [String]) {
   searchAfspraken(
@@ -6526,18 +7400,130 @@ export type GetTransactieQueryResult = Apollo.QueryResult<GetTransactieQuery, Ge
 export const GetTransactionItemFormDataDocument = gql`
     query getTransactionItemFormData {
   rubrieken {
-    ...Rubriek
+    id
+    naam
     grootboekrekening {
       id
       naam
     }
   }
   afspraken {
-    ...Afspraak
+    id
+    omschrijving
+    bedrag
+    credit
+    betaalinstructie {
+      byDay
+      byMonth
+      byMonthDay
+      exceptDates
+      repeatFrequency
+      startDate
+      endDate
+    }
+    zoektermen
+    validFrom
+    validThrough
+    burger {
+      id
+      bsn
+      voornamen
+      voorletters
+      achternaam
+      plaatsnaam
+      rekeningen {
+        id
+        iban
+        rekeninghouder
+      }
+    }
+    alarm {
+      id
+      isActive
+      bedrag
+      bedragMargin
+      startDate
+      endDate
+      datumMargin
+      byDay
+      byMonth
+      byMonthDay
+      afspraak {
+        id
+      }
+      signaal {
+        id
+      }
+    }
+    afdeling {
+      id
+      naam
+      organisatie {
+        id
+        kvknummer
+        vestigingsnummer
+        naam
+      }
+      postadressen {
+        id
+        straatnaam
+        huisnummer
+        postcode
+        plaatsnaam
+      }
+      rekeningen {
+        id
+        iban
+        rekeninghouder
+      }
+    }
+    postadres {
+      id
+      straatnaam
+      huisnummer
+      postcode
+      plaatsnaam
+    }
+    tegenRekening {
+      id
+      iban
+      rekeninghouder
+    }
+    rubriek {
+      id
+      naam
+      grootboekrekening {
+        id
+        naam
+        credit
+        omschrijving
+        referentie
+        rubriek {
+          id
+          naam
+        }
+      }
+    }
+    matchingAfspraken {
+      id
+      credit
+      burger {
+        voorletters
+        voornamen
+        achternaam
+      }
+      zoektermen
+      bedrag
+      omschrijving
+      tegenRekening {
+        id
+        iban
+        rekeninghouder
+      }
+    }
   }
 }
-    ${RubriekFragmentDoc}
-${AfspraakFragmentDoc}`;
+    `;
 
 /**
  * __useGetTransactionItemFormDataQuery__

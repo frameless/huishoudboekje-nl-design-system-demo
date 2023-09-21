@@ -1,0 +1,35 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hhb-statsd-exporter
+  labels:
+    name: hhb-statsd-exporter
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: hhb-statsd-exporter
+  template:
+    metadata:
+      labels:
+        name: hhb-statsd-exporter
+    spec:
+      containers:
+        - name: hhb-statsd-exporter
+          image: prom/statsd-exporter:v0.24.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: metrics
+              containerPort: 9102
+              protocol: TCP
+            - name: statsd
+              containerPort: 9125
+              protocol: UDP
+          resources:
+            limits:
+              cpu: "100m"
+              memory: 128Mi
+            requests:
+              cpu: 50m
+              memory: 128Mi

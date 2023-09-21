@@ -1,5 +1,4 @@
 import {gql} from "@apollo/client";
-import {OrganisatieFragment} from "../fragments/Organisatie";
 
 export const CreateOrganisatieMutation = gql`
     mutation createOrganisatie(
@@ -16,9 +15,33 @@ export const CreateOrganisatieMutation = gql`
         ){
             ok
             organisatie {
-                ...Organisatie
+                id
+                naam
+                kvknummer
+                vestigingsnummer
+                afdelingen {
+                    id
+                    naam
+                    organisatie {
+                        id
+                        kvknummer
+                        vestigingsnummer
+                        naam
+                    }
+                    postadressen {
+                        id
+                        straatnaam
+                        huisnummer
+                        postcode
+                        plaatsnaam
+                    }
+                    rekeningen {
+                        id
+                        iban
+                        rekeninghouder
+                    }
+                }
             }
         }
     }
-    ${OrganisatieFragment}
 `;

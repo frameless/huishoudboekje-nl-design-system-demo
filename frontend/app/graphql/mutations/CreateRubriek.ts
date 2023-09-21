@@ -1,5 +1,4 @@
 import {gql} from "@apollo/client";
-import {GrootboekrekeningFragment} from "../fragments/Grootboekrekening";
 
 export const CreateRubriekMutation = gql`
     mutation createRubriek(
@@ -13,10 +12,17 @@ export const CreateRubriekMutation = gql`
                 id
                 naam
                 grootboekrekening{
-                    ...Grootboekrekening
+                    id
+                    naam
+                    credit
+                    omschrijving
+                    referentie
+                    rubriek{
+                        id
+                        naam
+                    }
                 }
             }
         }
     }
-    ${GrootboekrekeningFragment}
 `;

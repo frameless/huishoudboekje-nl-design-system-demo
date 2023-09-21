@@ -1,5 +1,4 @@
 import {gql} from "@apollo/client";
-import {RubriekFragment} from "../fragments/Rubriek";
 
 export const GetRubriekenConfiguratieQuery = gql`
     query getRubriekenConfiguratie {
@@ -18,5 +17,4 @@ export const GetRubriekenConfiguratieQuery = gql`
             omschrijving
         }
     }
-    ${RubriekFragment}
 `;

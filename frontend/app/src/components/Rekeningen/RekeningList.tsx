@@ -4,6 +4,7 @@ import {useTranslation} from "react-i18next";
 import {
 	Afdeling,
 	Burger,
+	GetAfdelingDocument,
 	GetBurgerDetailsDocument,
 	GetBurgersDocument,
 	GetBurgersSearchDocument,
@@ -33,6 +34,7 @@ const RekeningList: React.FC<TableProps & RekeningListProps> = ({rekeningen, bur
 		refetchQueries: [
 			{query: GetOrganisatiesDocument},
 			{query: GetOrganisatieDocument, variables: {id: afdeling?.id}},
+			{query: GetAfdelingDocument, variables: {id: afdeling?.id}}
 		],
 	});
 
