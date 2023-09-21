@@ -9,7 +9,7 @@
     - docker
   when: manual
   script:
-    - kubectl copy ./sampleData/db.out hhb-database:/sampleData/db.out
+    - kubectl cp ./sampleData/db.out hhb-database:/sampleData/db.out
     - kubectl exec hhb-database psql -f /sampleData/db.out postgres
 
 load-data-review:
