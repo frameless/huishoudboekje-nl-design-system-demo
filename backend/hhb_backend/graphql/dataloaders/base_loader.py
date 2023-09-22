@@ -2,6 +2,7 @@ import copy
 import json
 import logging
 from typing import Dict, Union, TypedDict, List, Optional, TypeVar, Generic
+from hhb_backend.graphql.settings import INTERNAL_CONNECTION_TIMEOUT, INTERNAL_READ_TIMEOUT
 
 import requests
 from graphql import GraphQLError
@@ -185,7 +186,7 @@ def _base_load_with_options(service: str, options: Unpack[DataLoaderOptions], ke
 
 def _send_get_request(url, service, params=None, headers=None):
     try:
-        response = requests.get(url, params=params, headers=headers)
+        response = requests.get(url, params=params, headers=headers, timeout=(INTERNAL_CONNECTION_TIMEOUT,INTERNAL_READ_TIMEOUT))
 
         if response.status_code == 400 and "too large" in response.text.lower():
             if not headers: headers = {}
@@ -193,8 +194,12 @@ def _send_get_request(url, service, params=None, headers=None):
             json = {}
             for key, value in params.items():
                 json[key] = value.split(",")
-            response = requests.get(url, json=json, headers=headers)
+            response = requests.get(url, json=json, headers=headers, timeout=(INTERNAL_CONNECTION_TIMEOUT,INTERNAL_READ_TIMEOUT))
 
+    except requests.exceptions.ReadTimeout:
+        raise GraphQLError(f"Failed to read data from {service} in time ")
+    except requests.exceptions.ConnectTimeout:
+        raise GraphQLError(f"Failed to connect to {service} in time")
     except requests.exceptions.ConnectionError:
         raise GraphQLError(f"Failed to connect to service {service}")
 
