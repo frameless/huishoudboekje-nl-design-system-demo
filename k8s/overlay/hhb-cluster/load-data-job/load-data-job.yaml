@@ -3,8 +3,10 @@ kind: Job
 metadata:
   name: load-data-job
 spec:
+  backoffLimit: 2
   template:
     spec:
+      restartPolicy: OnFailure
       containers:
       - name: load-data
         image: bitnami/postgresql:13
