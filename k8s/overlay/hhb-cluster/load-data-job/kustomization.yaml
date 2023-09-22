@@ -5,4 +5,4 @@ resources:
 configMapGenerator:
   - name: data-file-configmap
     files:
-    - db.out
+    - dbout.tar.gz

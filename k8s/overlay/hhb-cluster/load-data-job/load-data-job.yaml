@@ -11,6 +11,7 @@ spec:
         imagePullPolicy: IfNotPresent
         command: ["/bin/sh", "-c"]
         args:
+          - tar -xzvf ~/configmap/dbout.tar.gz -C ~/configmap/db.out
           - psql -h $POSTGRESQL_HOSTNAME -U $POSTGRESQL_USERNAME < /configmap/db.out
         envFrom:
           - configMapRef:
