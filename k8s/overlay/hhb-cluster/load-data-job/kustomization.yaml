@@ -6,19 +6,15 @@ configMapGenerator:
   - name: grootboek-data
     files:
     - grootboek_data.tar.gz
-configMapGenerator:
   - name: huishoudboekje-data
     files:
     - huishoudboekje_data.tar.gz
-configMapGenerator:
   - name: log-data
     files:
     - log_data.tar.gz
-configMapGenerator:
   - name: organisatie-data
     files:
     - organisatie_data.tar.gz
-configMapGenerator:
   - name: postadressen-data
     files:
     - postadressen_data.tar.gz
