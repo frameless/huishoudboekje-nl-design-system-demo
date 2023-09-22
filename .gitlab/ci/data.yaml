@@ -10,7 +10,6 @@
   when: manual
   script:
     - kubectl config use-context commonground/huishoudboekje/app-new:$CONFIG
-    - tar -czvf ./k8s/overlay/hhb-cluster/load-data-job/grootboek_data.tar.gz ./k8s/overlay/hhb-cluster/load-data-job/grootboek_data.out
     - tar -czvf ./k8s/overlay/hhb-cluster/load-data-job/huishoudboekje_data.tar.gz ./k8s/overlay/hhb-cluster/load-data-job/huishoudboekje_data.out
     - tar -czvf ./k8s/overlay/hhb-cluster/load-data-job/log_data.tar.gz ./k8s/overlay/hhb-cluster/load-data-job/log_data.out
     - tar -czvf ./k8s/overlay/hhb-cluster/load-data-job/organisatie_data.tar.gz ./k8s/overlay/hhb-cluster/load-data-job/organisatie_data.out
