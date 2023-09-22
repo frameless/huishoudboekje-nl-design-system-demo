@@ -10,10 +10,10 @@
   when: manual
   script:
     - kubectl config use-context commonground/huishoudboekje/app-new:$CONFIG
-    - tar -czvf ./k8s/overlay/hhb-cluster/load-data-job/dbout.tar.gz ./sampleData/db.out
+    - tar -czvf ./k8s/overlay/hhb-cluster/load-data-job/dbout.tar.gz ./k8s/overlay/hhb-cluster/load-data-job/db.out
     - kubectl kustomize ./k8s/overlay/hhb-cluster/load-data-job
     - kubectl apply -k ./k8s/overlay/hhb-cluster/load-data-job --namespace=$NAMESPACE
-    
+
 load-data-review:
   <<: *load-sample-data
   environment:
