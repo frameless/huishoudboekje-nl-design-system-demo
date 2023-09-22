@@ -1,0 +1,30 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: load-data-job
+spec:
+  template:
+    spec:
+      containers:
+      - name: load-data
+        image: bitnami/postgresql:13
+        imagePullPolicy: IfNotPresent
+        command: ["/bin/sh", "-c"]
+        args:
+          - psql -h $POSTGRESQL_HOSTNAME -U $POSTGRESQL_USERNAME < /configmap/db.out
+        envFrom:
+          - configMapRef:
+              name: postgres-config
+        env:
+          - name: POSTGRESQL_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: hhb-database-secrets
+                key: POSTGRESQL_PASSWORD
+        volumeMounts:
+            - name: data-file-configmap
+              mountPath: /configmap
+      volumes:
+        - name: data-file-configmap
+          configMap:
+            name: data-file-configmap
