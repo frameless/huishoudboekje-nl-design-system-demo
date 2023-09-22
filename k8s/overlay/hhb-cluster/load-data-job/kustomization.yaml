@@ -3,9 +3,6 @@ kind: Kustomization
 resources:
 - load-data-job.yaml
 configMapGenerator:
-  - name: grootboek-data
-    files:
-    - grootboek_data.tar.gz
   - name: huishoudboekje-data
     files:
     - huishoudboekje_data.tar.gz

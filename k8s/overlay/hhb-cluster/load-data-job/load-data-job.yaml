@@ -13,12 +13,10 @@ spec:
         imagePullPolicy: IfNotPresent
         command: ["/bin/sh", "-c"]
         args:
-          - tar -xzvf ~/configmap/grootboek_data.tar.gz -C ~/configmap/grootboek_data.out
           - tar -xzvf ~/configmap/huishoudboekje_data.tar.gz -C ~/configmap/huishoudboekje_data.out
           - tar -xzvf ~/configmap/log_data.tar.gz -C ~/configmap/log_data.out
           - tar -xzvf ~/configmap/organisatie_data.tar.gz -C ~/configmap/organisatie_data.out
           - tar -xzvf ~/configmap/postadressen_data.tar.gz -C ~/configmap/postadressen_data.out
-          - pg_restore  -h $POSTGRESQL_HOSTNAME -U $POSTGRESQL_USERNAME -d $POSTGRESQL_DATABASE_NAME_GRBSVC --data-only -F c ~/configmap/grootboek_data.out
           - pg_restore  -h $POSTGRESQL_HOSTNAME -U $POSTGRESQL_USERNAME -d $POSTGRESQL_DATABASE_NAME_HHBSVC --data-only -F c ~/configmap/huishoudboekje_data.out
           - pg_restore  -h $POSTGRESQL_HOSTNAME -U $POSTGRESQL_USERNAME -d $POSTGRESQL_DATABASE_NAME_LOGSVC --data-only -F c ~/configmap/log_data.out
           - pg_restore  -h $POSTGRESQL_HOSTNAME -U $POSTGRESQL_USERNAME -d $POSTGRESQL_DATABASE_NAME_ORGSVC --data-only -F c ~/configmap/organisatie_data.out
@@ -33,8 +31,6 @@ spec:
       - name: data-files
         projected:
           sources:
-            - configMap:
-                name: grootboek-data
             - configMap:
                 name: huishoudboekje-data
             - configMap:
