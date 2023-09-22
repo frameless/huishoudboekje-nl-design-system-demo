@@ -27,10 +27,10 @@ spec:
           - configMapRef:
               name: postgres-config
         volumeMounts:
-            - name: data-configmap
+            - name: data-files
               mountPath: /configmap
       volumes:
-      - name: configmap
+      - name: data-files
         projected:
           sources:
             - configMap:
