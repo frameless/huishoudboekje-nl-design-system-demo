@@ -3,6 +3,10 @@ kind: Kustomization
 resources:
 - load-data-job.yaml
 configMapGenerator:
-  - name: data-file-configmap
+  - name: data-files
     files:
-    - dbout.tar.gz
+    - grootboek_data.tar.gz
+    - huishoudboekje_data.tar.gz
+    - log_data.tar.gz
+    - organisatie_data.tar.gz
+    - postadressen_data.tar.gz
