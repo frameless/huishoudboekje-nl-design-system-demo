@@ -27,9 +27,19 @@ spec:
           - configMapRef:
               name: postgres-config
         volumeMounts:
-            - name: data-files
+            - name: data-configmap
               mountPath: /configmap
       volumes:
-        - name: data-files
-          configMap:
-            name: data-files
+      - name: configmap
+        projected:
+          sources:
+            - configMap:
+                name: grootboek-data
+            - configMap:
+                name: huishoudboekje-data
+            - configMap:
+                name: log-data
+            - configMap:
+                name: organisatie-data
+            - configMap:
+                name: postadressen-data
