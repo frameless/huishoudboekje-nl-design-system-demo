@@ -28,7 +28,7 @@ spec:
         args:
           - |
             cd
-            tar -xzvf ./configmap/huishoudboekje-data.tar.gz -C ./configmap/huishoudboekje-data.out
+            tar -xzvf .\configmap\huishoudboekje-data.tar.gz -C .\configmap\huishoudboekje-data.out
             tar -xzvf ./configmap/log-data.tar.gz -C ./configmap/log-data.out
             tar -xzvf ./configmap/organisatie-data.tar.gz -C ./configmap/organisatie-data.out
             tar -xzvf ./configmap/postadressen-data.tar.gz -C ./configmap/postadressen-data.out
