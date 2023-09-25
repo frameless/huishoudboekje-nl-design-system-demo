@@ -7,6 +7,8 @@ import {formatBurgerName} from "../../utils/things";
 import useToaster from "../../utils/useToaster";
 import Modal from "../shared/Modal";
 import RekeningForm from "./RekeningForm";
+import {Navigate, useNavigate, useParams} from "react-router-dom";
+import {AppRoutes} from "../../config/routes";
 
 type AddBurgerRekeningModalProps = {
 	burger: Burger,
@@ -22,6 +24,8 @@ const AddBurgerRekeningModal: React.FC<AddBurgerRekeningModalProps> = ({burger, 
 			{query: GetBurgerDetailsDocument, variables: {id: burger.id}},
 		],
 	});
+	const navigate = useNavigate();
+	const burger_id = burger.id ? burger.id : 0;
 
 	const onSaveRekening = (rekening) => {
 		createBurgerRekening({
@@ -34,6 +38,7 @@ const AddBurgerRekeningModal: React.FC<AddBurgerRekeningModalProps> = ({burger, 
 				success: t("messages.rekeningen.createSuccess", {iban: rekening.iban, rekeninghouder: rekening.rekeninghouder}),
 			});
 			onClose();
+			navigate(AppRoutes.ViewBurgerPersonalDetails(burger_id.toString()), {replace: true});
 		}).catch(handleSaveBurgerRekening);
 	};
 
