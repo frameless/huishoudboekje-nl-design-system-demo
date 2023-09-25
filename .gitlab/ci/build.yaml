@@ -56,38 +56,6 @@
       - NAME: rapportageservice
         DOCKERATTRIBUTES: "--file=./services/rapportage_service/Dockerfile services"
 
-.build-storybook: &build-storybook
-  <<: *retry
-  stage: build
-  image: docker:24.0.2-git
-  needs: [ ]
-  services:
-    - docker:24.0.2-dind
-  tags:
-    - cg
-    - docker
-  variables:
-    DOCKER_BUILDKIT: 1
-    BUILDKIT_INLINE_CACHE: 1
-    DOCKER_TLS_CERTDIR: "/certs"
-  script:
-    - export DOCKER_CONFIG=/tmp/docker-config-$CI_JOB_ID
-    - mkdir -p $DOCKER_CONFIG && echo $DOCKER_AUTH_CONFIG > $DOCKER_CONFIG/config.json
-    - echo "$CI_REGISTRY_PASSWORD" | docker login $CI_REGISTRY --username $CI_REGISTRY_USER --password-stdin
-    - docker build --build-arg BUILDKIT_INLINE_CACHE=$BUILDKIT_INLINE_CACHE --cache-from $CI_REGISTRY_IMAGE/storybook:$CI_COMMIT_REF_SLUG -t $CI_REGISTRY_IMAGE/storybook:$CI_COMMIT_REF_SLUG -t $CI_REGISTRY_IMAGE/storybook:$IMAGE_TAG --build-arg "DOCKER_PROXY=$DOCKER_PROXY" --file=./frontend/storybook.Dockerfile frontend
-    - docker push $CI_REGISTRY_IMAGE/storybook:$CI_COMMIT_REF_SLUG
-    - docker push $CI_REGISTRY_IMAGE/storybook:$IMAGE_TAG
-
-# Build the Storybook docker image
-build-storybook:
-  <<: *build-storybook
-  only:
-    - branches@commonground/huishoudboekje/app-new
-  except:
-    - develop
-    - master
-    - acceptance
-
 # Build docker images with default tag ("branchName-commitSha").
 build-images-dev:
   <<: *build-docker-images

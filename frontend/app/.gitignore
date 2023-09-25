@@ -9,4 +9,3 @@ node_modules
 public/theme
 src/version.ts
 schema.graphql
-storybook-static/

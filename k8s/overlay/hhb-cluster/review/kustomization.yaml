@@ -15,7 +15,6 @@ patches:
     group: networking.k8s.io
     version: v1
     kind: Ingress
-    name: hhb-storybook-ingress
   path: ingress-sb-host-patch.yaml
 - target:
     version: v1

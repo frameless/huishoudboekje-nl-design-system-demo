@@ -103,7 +103,6 @@ deploy-deployment-review:
   <<: *retry
   needs:
     - build-images-dev
-    - build-storybook
   stage: deploy
   environment:
     name: review/$CI_COMMIT_REF_SLUG
