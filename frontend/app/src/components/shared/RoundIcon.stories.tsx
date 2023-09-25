@@ -8,7 +8,7 @@ export default {
 	component: RoundIcon,
 };
 
-const Template: ComponentStory<typeof RoundIcon> = ({children}) => <RoundIcon>{children}</RoundIcon>;
+const Template: ComponentStory<typeof RoundIcon> = ({children}: any) => <RoundIcon>{children}</RoundIcon>;
 
 export const Activity = Template.bind({});
 Activity.args = {

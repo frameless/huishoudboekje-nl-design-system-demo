@@ -25,7 +25,12 @@ export default {
 	args: {},
 } as Meta<typeof DataItem>;
 
-const Template: StoryFn<typeof DataItem> = ({label, children}) => (
+type DataItemProps = {
+	label: string;
+	children: React.ReactNode;
+};
+
+const Template: StoryFn<DataItemProps> = ({label, children}: any) => (
 	<DataItem label={label}>
 		{children}
 	</DataItem>

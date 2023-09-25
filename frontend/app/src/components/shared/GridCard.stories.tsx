@@ -8,7 +8,13 @@ export default {
 	argTypes: {},
 } as Meta<typeof Grid>;
 
-const Template: StoryFn<typeof Grid> = ({gridTemplateColumns, gap, children}) => <Grid gridTemplateColumns={gridTemplateColumns}
+type BurgerGridProps = {
+	gridTemplateColumns: string[];
+	gap: number;
+	children: React.ReactNode;
+};
+
+const Template: StoryFn<BurgerGridProps> = ({gridTemplateColumns, gap, children}: any) => <Grid gridTemplateColumns={gridTemplateColumns}
 	gap={gap}>{children}</Grid>;
 
 const burgers = [
@@ -19,6 +25,7 @@ const burgers = [
 	"Mirjam de Rijke-Huijgens",
 	"Bart Boot",
 ];
+
 export const BurgerGrid = Template.bind({});
 BurgerGrid.args = {
 	gridTemplateColumns: ["repeat(1, 1fr)", "repeat(2, 1fr)", "repeat(3, 1fr)", "repeat(4, 1fr)", "repeat(6, 1fr)"],

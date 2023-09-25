@@ -1,5 +1,5 @@
 import {Button, useDisclosure} from "@chakra-ui/react";
-import {Meta, StoryFn} from "@storybook/react";
+import {Meta, Story} from "@storybook/react";
 import React from "react";
 import Modal from "./Modal";
 
@@ -31,7 +31,12 @@ export default {
 	},
 } as Meta<typeof Modal>;
 
-const Template: StoryFn<typeof Modal> = ({title, children}) => {
+type ModalProps = {
+	title: string;
+	children: React.ReactNode;
+};
+
+const Template: Story<ModalProps> = ({title, children}: any) => {
 	const {isOpen, onOpen, onClose} = useDisclosure();
 
 	return (<>
@@ -43,7 +48,6 @@ const Template: StoryFn<typeof Modal> = ({title, children}) => {
 		)}
 	</>);
 };
-
 
 export const Default = Template.bind({});
 Default.args = {

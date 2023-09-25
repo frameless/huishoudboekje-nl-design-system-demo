@@ -15,7 +15,7 @@ export default {
 	},
 } as Meta<typeof DeleteConfirmButton>;
 
-const Template: StoryFn<typeof DeleteConfirmButton> = ({onConfirm}) => <DeleteConfirmButton onConfirm={onConfirm} />;
+const Template: StoryFn<typeof DeleteConfirmButton> = ({onConfirm}: any) => <DeleteConfirmButton onConfirm={onConfirm} />;
 
 export const Default = Template.bind({});
 Default.args = {};

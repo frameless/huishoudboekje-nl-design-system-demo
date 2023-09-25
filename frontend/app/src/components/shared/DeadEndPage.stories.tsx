@@ -22,7 +22,12 @@ export default {
 	},
 } as Meta<typeof DeadEndPage>;
 
-const Template: StoryFn<typeof DeadEndPage> = ({message, children}) => (
+type DeadEndPageProps = {
+	message: string;
+	children: React.ReactNode;
+};
+
+const Template: StoryFn<DeadEndPageProps> = ({message, children}: any) => (
 	<DeadEndPage message={message}>
 		{children}
 	</DeadEndPage>

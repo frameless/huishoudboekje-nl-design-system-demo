@@ -5,67 +5,65 @@ export type InputMaybe<T> = T;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
-export type MakeEmpty<T extends { [key: string]: unknown }, K extends keyof T> = { [_ in K]?: never };
-export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
 const defaultOptions = {} as const;
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
-  ID: { input: string; output: string; }
-  String: { input: string; output: string; }
-  Boolean: { input: boolean; output: boolean; }
-  Int: { input: number; output: number; }
-  Float: { input: number; output: number; }
+  ID: string;
+  String: string;
+  Boolean: boolean;
+  Int: number;
+  Float: number;
   /** Bedrag (bijvoorbeeld: 99.99) n */
-  Bedrag: { input: any; output: any; }
+  Bedrag: any;
   /**
    * The `Date` scalar type represents a Date
    * value as specified by
    * [iso8601](https://en.wikipedia.org/wiki/ISO_8601).
    */
-  Date: { input: any; output: any; }
+  Date: any;
   /**
    * The `DateTime` scalar type represents a DateTime
    * value as specified by
    * [iso8601](https://en.wikipedia.org/wiki/ISO_8601).
    */
-  DateTime: { input: any; output: any; }
+  DateTime: any;
   /** The `Decimal` scalar type represents a python Decimal. */
-  Decimal: { input: any; output: any; }
+  Decimal: any;
   /** Accepteert datum, datum en tijd, ints en strings en wordt gebruikt bij ComplexFilterType. */
-  DynamicType: { input: any; output: any; }
+  DynamicType: any;
   /**
    * Allows use of a JSON String for input / output from the GraphQL schema.
    *
    * Use of this type is *not recommended* as you lose the benefits of having a defined, static
    * schema (one of the key benefits of GraphQL).
    */
-  JSONString: { input: any; output: any; }
+  JSONString: any;
   /**
    * Create scalar that ignores normal serialization/deserialization, since
    * that will be handled by the multipart request spec
    */
-  Upload: { input: any; output: any; }
+  Upload: any;
 };
 
 /** Mutatie om een zoekterm aan een afspraak toe te voegen. */
 export type AddAfspraakZoekterm = {
   afspraak?: Maybe<Afspraak>;
   matchingAfspraken?: Maybe<Array<Maybe<Afspraak>>>;
-  ok?: Maybe<Scalars['Boolean']['output']>;
+  ok?: Maybe<Scalars['Boolean']>;
   previous?: Maybe<Afspraak>;
 };
 
 /** Mutatie om een burger aan een huishouden toe te voegen. */
 export type AddHuishoudenBurger = {
   huishouden?: Maybe<Huishouden>;
-  ok?: Maybe<Scalars['Boolean']['output']>;
+  ok?: Maybe<Scalars['Boolean']>;
   previous?: Maybe<Huishouden>;
 };
 
 export type Afdeling = {
   afspraken?: Maybe<Array<Maybe<Afspraak>>>;
-  id?: Maybe<Scalars['Int']['output']>;
-  naam?: Maybe<Scalars['String']['output']>;
+  id?: Maybe<Scalars['Int']>;
+  naam?: Maybe<Scalars['String']>;
   organisatie?: Maybe<Organisatie>;
   postadressen?: Maybe<Array<Maybe<Postadres>>>;
   rekeningen?: Maybe<Array<Maybe<Rekening>>>;
@@ -74,29 +72,29 @@ export type Afdeling = {
 export type Afspraak = {
   afdeling?: Maybe<Afdeling>;
   alarm?: Maybe<Alarm>;
-  bedrag?: Maybe<Scalars['Bedrag']['output']>;
+  bedrag?: Maybe<Scalars['Bedrag']>;
   betaalinstructie?: Maybe<Betaalinstructie>;
   burger?: Maybe<Burger>;
-  burgerId?: Maybe<Scalars['Int']['output']>;
-  credit?: Maybe<Scalars['Boolean']['output']>;
-  id?: Maybe<Scalars['Int']['output']>;
+  burgerId?: Maybe<Scalars['Int']>;
+  credit?: Maybe<Scalars['Boolean']>;
+  id?: Maybe<Scalars['Int']>;
   journaalposten?: Maybe<Array<Maybe<Journaalpost>>>;
   matchingAfspraken?: Maybe<Array<Maybe<Afspraak>>>;
-  omschrijving?: Maybe<Scalars['String']['output']>;
+  omschrijving?: Maybe<Scalars['String']>;
   overschrijvingen?: Maybe<Array<Maybe<Overschrijving>>>;
   postadres?: Maybe<Postadres>;
   rubriek?: Maybe<Rubriek>;
   similarAfspraken?: Maybe<Array<Maybe<Afspraak>>>;
   tegenRekening?: Maybe<Rekening>;
-  validFrom?: Maybe<Scalars['Date']['output']>;
-  validThrough?: Maybe<Scalars['Date']['output']>;
-  zoektermen?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
+  validFrom?: Maybe<Scalars['Date']>;
+  validThrough?: Maybe<Scalars['Date']>;
+  zoektermen?: Maybe<Array<Maybe<Scalars['String']>>>;
 };
 
 
 export type AfspraakOverschrijvingenArgs = {
-  eindDatum?: InputMaybe<Scalars['Date']['input']>;
-  startDatum?: InputMaybe<Scalars['Date']['input']>;
+  eindDatum?: InputMaybe<Scalars['Date']>;
+  startDatum?: InputMaybe<Scalars['Date']>;
 };
 
 export type AfsprakenPaged = {
@@ -107,17 +105,17 @@ export type AfsprakenPaged = {
 /** Model om vast te stellen op basis van welke regels een signaal aangemaakt moet worden  */
 export type Alarm = {
   afspraak?: Maybe<Afspraak>;
-  bedrag?: Maybe<Scalars['Bedrag']['output']>;
-  bedragMargin?: Maybe<Scalars['Bedrag']['output']>;
+  bedrag?: Maybe<Scalars['Bedrag']>;
+  bedragMargin?: Maybe<Scalars['Bedrag']>;
   byDay?: Maybe<Array<Maybe<DayOfWeek>>>;
-  byMonth?: Maybe<Array<Maybe<Scalars['Int']['output']>>>;
-  byMonthDay?: Maybe<Array<Maybe<Scalars['Int']['output']>>>;
-  datumMargin?: Maybe<Scalars['Int']['output']>;
-  endDate?: Maybe<Scalars['String']['output']>;
-  id?: Maybe<Scalars['String']['output']>;
-  isActive?: Maybe<Scalars['Boolean']['output']>;
+  byMonth?: Maybe<Array<Maybe<Scalars['Int']>>>;
+  byMonthDay?: Maybe<Array<Maybe<Scalars['Int']>>>;
+  datumMargin?: Maybe<Scalars['Int']>;
+  endDate?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['String']>;
+  isActive?: Maybe<Scalars['Boolean']>;
   signaal?: Maybe<Signaal>;
-  startDate?: Maybe<Scalars['String']['output']>;
+  startDate?: Maybe<Scalars['String']>;
 };
 
 export type AlarmTriggerResult = {
@@ -127,18 +125,18 @@ export type AlarmTriggerResult = {
 };
 
 export type BankTransaction = {
-  bedrag?: Maybe<Scalars['Bedrag']['output']>;
+  bedrag?: Maybe<Scalars['Bedrag']>;
   customerStatementMessage?: Maybe<CustomerStatementMessage>;
-  id?: Maybe<Scalars['Int']['output']>;
-  informationToAccountOwner?: Maybe<Scalars['String']['output']>;
-  isCredit?: Maybe<Scalars['Boolean']['output']>;
-  isGeboekt?: Maybe<Scalars['Boolean']['output']>;
+  id?: Maybe<Scalars['Int']>;
+  informationToAccountOwner?: Maybe<Scalars['String']>;
+  isCredit?: Maybe<Scalars['Boolean']>;
+  isGeboekt?: Maybe<Scalars['Boolean']>;
   journaalpost?: Maybe<Journaalpost>;
-  statementLine?: Maybe<Scalars['String']['output']>;
+  statementLine?: Maybe<Scalars['String']>;
   suggesties?: Maybe<Array<Maybe<Afspraak>>>;
   tegenRekening?: Maybe<Rekening>;
-  tegenRekeningIban?: Maybe<Scalars['String']['output']>;
-  transactieDatum?: Maybe<Scalars['Date']['output']>;
+  tegenRekeningIban?: Maybe<Scalars['String']>;
+  transactieDatum?: Maybe<Scalars['Date']>;
 };
 
 export type BankTransactionFilter = {
@@ -146,25 +144,25 @@ export type BankTransactionFilter = {
   OR?: InputMaybe<BankTransactionFilter>;
   bedrag?: InputMaybe<ComplexBedragFilterType>;
   id?: InputMaybe<ComplexFilterType>;
-  isCredit?: InputMaybe<Scalars['Boolean']['input']>;
-  isGeboekt?: InputMaybe<Scalars['Boolean']['input']>;
+  isCredit?: InputMaybe<Scalars['Boolean']>;
+  isGeboekt?: InputMaybe<Scalars['Boolean']>;
   statementLine?: InputMaybe<ComplexFilterType>;
   tegenRekening?: InputMaybe<ComplexFilterType>;
   transactieDatum?: InputMaybe<ComplexFilterType>;
 };
 
 export type BankTransactionSearchFilter = {
-  automatischGeboekt?: InputMaybe<Scalars['Boolean']['input']>;
-  burgerIds?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
-  endDate?: InputMaybe<Scalars['String']['input']>;
-  ibans?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-  maxBedrag?: InputMaybe<Scalars['Int']['input']>;
-  minBedrag?: InputMaybe<Scalars['Int']['input']>;
-  onlyBooked?: InputMaybe<Scalars['Boolean']['input']>;
-  onlyCredit?: InputMaybe<Scalars['Boolean']['input']>;
-  organisatieIds?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
-  startDate?: InputMaybe<Scalars['String']['input']>;
-  zoektermen?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  automatischGeboekt?: InputMaybe<Scalars['Boolean']>;
+  burgerIds?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
+  endDate?: InputMaybe<Scalars['String']>;
+  ibans?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  maxBedrag?: InputMaybe<Scalars['Int']>;
+  minBedrag?: InputMaybe<Scalars['Int']>;
+  onlyBooked?: InputMaybe<Scalars['Boolean']>;
+  onlyCredit?: InputMaybe<Scalars['Boolean']>;
+  organisatieIds?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
+  startDate?: InputMaybe<Scalars['String']>;
+  zoektermen?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
 export type BankTransactionsPaged = {
@@ -175,38 +173,38 @@ export type BankTransactionsPaged = {
 /** Implementatie op basis van http://schema.org/Schedule */
 export type Betaalinstructie = {
   byDay?: Maybe<Array<Maybe<DayOfWeek>>>;
-  byMonth?: Maybe<Array<Maybe<Scalars['Int']['output']>>>;
-  byMonthDay?: Maybe<Array<Maybe<Scalars['Int']['output']>>>;
-  endDate?: Maybe<Scalars['String']['output']>;
-  exceptDates?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
-  repeatFrequency?: Maybe<Scalars['String']['output']>;
-  startDate?: Maybe<Scalars['String']['output']>;
+  byMonth?: Maybe<Array<Maybe<Scalars['Int']>>>;
+  byMonthDay?: Maybe<Array<Maybe<Scalars['Int']>>>;
+  endDate?: Maybe<Scalars['String']>;
+  exceptDates?: Maybe<Array<Maybe<Scalars['String']>>>;
+  repeatFrequency?: Maybe<Scalars['String']>;
+  startDate?: Maybe<Scalars['String']>;
 };
 
 /** Implementatie op basis van http://schema.org/Schedule */
 export type BetaalinstructieInput = {
   byDay?: InputMaybe<Array<InputMaybe<DayOfWeek>>>;
-  byMonth?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
-  byMonthDay?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
-  endDate?: InputMaybe<Scalars['String']['input']>;
-  exceptDates?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-  repeatFrequency?: InputMaybe<Scalars['String']['input']>;
-  startDate: Scalars['String']['input'];
+  byMonth?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
+  byMonthDay?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
+  endDate?: InputMaybe<Scalars['String']>;
+  exceptDates?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  repeatFrequency?: InputMaybe<Scalars['String']>;
+  startDate: Scalars['String'];
 };
 
 export type Burger = {
-  achternaam?: Maybe<Scalars['String']['output']>;
+  achternaam?: Maybe<Scalars['String']>;
   afspraken?: Maybe<Array<Maybe<Afspraak>>>;
-  bsn?: Maybe<Scalars['Int']['output']>;
-  email?: Maybe<Scalars['String']['output']>;
-  geboortedatum?: Maybe<Scalars['Date']['output']>;
+  bsn?: Maybe<Scalars['Int']>;
+  email?: Maybe<Scalars['String']>;
+  geboortedatum?: Maybe<Scalars['Date']>;
   gebruikersactiviteiten?: Maybe<Array<Maybe<GebruikersActiviteit>>>;
   huishouden?: Maybe<Huishouden>;
-  huishoudenId?: Maybe<Scalars['Int']['output']>;
-  huisnummer?: Maybe<Scalars['String']['output']>;
-  id?: Maybe<Scalars['Int']['output']>;
-  plaatsnaam?: Maybe<Scalars['String']['output']>;
-  postcode?: Maybe<Scalars['String']['output']>;
+  huishoudenId?: Maybe<Scalars['Int']>;
+  huisnummer?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['Int']>;
+  plaatsnaam?: Maybe<Scalars['String']>;
+  postcode?: Maybe<Scalars['String']>;
   rekeningen?: Maybe<Array<Maybe<Rekening>>>;
   straatnaam?: Maybe<Scalars['String']>;
   telefoonnummer?: Maybe<Scalars['String']>;
@@ -238,12 +236,12 @@ export type BurgerFilter = {
 
 export type BurgerRapportage = {
   burger?: Maybe<Burger>;
-  eindDatum?: Maybe<Scalars['String']['output']>;
+  eindDatum?: Maybe<Scalars['String']>;
   inkomsten?: Maybe<Array<Maybe<RapportageRubriek>>>;
-  startDatum?: Maybe<Scalars['String']['output']>;
-  totaal?: Maybe<Scalars['Decimal']['output']>;
-  totaalInkomsten?: Maybe<Scalars['Decimal']['output']>;
-  totaalUitgaven?: Maybe<Scalars['Decimal']['output']>;
+  startDatum?: Maybe<Scalars['String']>;
+  totaal?: Maybe<Scalars['Decimal']>;
+  totaalInkomsten?: Maybe<Scalars['Decimal']>;
+  totaalUitgaven?: Maybe<Scalars['Decimal']>;
   uitgaven?: Maybe<Array<Maybe<RapportageRubriek>>>;
 };
 
@@ -253,233 +251,233 @@ export type BurgersPaged = {
 };
 
 export type ComplexBedragFilterType = {
-  BETWEEN?: InputMaybe<Array<InputMaybe<Scalars['Bedrag']['input']>>>;
-  EQ?: InputMaybe<Scalars['Bedrag']['input']>;
-  GT?: InputMaybe<Scalars['Bedrag']['input']>;
-  GTE?: InputMaybe<Scalars['Bedrag']['input']>;
-  IN?: InputMaybe<Array<InputMaybe<Scalars['Bedrag']['input']>>>;
-  LT?: InputMaybe<Scalars['Bedrag']['input']>;
-  LTE?: InputMaybe<Scalars['Bedrag']['input']>;
-  NEQ?: InputMaybe<Scalars['Bedrag']['input']>;
-  NOTIN?: InputMaybe<Array<InputMaybe<Scalars['Bedrag']['input']>>>;
+  BETWEEN?: InputMaybe<Array<InputMaybe<Scalars['Bedrag']>>>;
+  EQ?: InputMaybe<Scalars['Bedrag']>;
+  GT?: InputMaybe<Scalars['Bedrag']>;
+  GTE?: InputMaybe<Scalars['Bedrag']>;
+  IN?: InputMaybe<Array<InputMaybe<Scalars['Bedrag']>>>;
+  LT?: InputMaybe<Scalars['Bedrag']>;
+  LTE?: InputMaybe<Scalars['Bedrag']>;
+  NEQ?: InputMaybe<Scalars['Bedrag']>;
+  NOTIN?: InputMaybe<Array<InputMaybe<Scalars['Bedrag']>>>;
 };
 
 export type ComplexFilterType = {
-  BETWEEN?: InputMaybe<Array<InputMaybe<Scalars['DynamicType']['input']>>>;
-  EQ?: InputMaybe<Scalars['DynamicType']['input']>;
-  GT?: InputMaybe<Scalars['DynamicType']['input']>;
-  GTE?: InputMaybe<Scalars['DynamicType']['input']>;
-  IN?: InputMaybe<Array<InputMaybe<Scalars['DynamicType']['input']>>>;
-  LT?: InputMaybe<Scalars['DynamicType']['input']>;
-  LTE?: InputMaybe<Scalars['DynamicType']['input']>;
-  NEQ?: InputMaybe<Scalars['DynamicType']['input']>;
-  NOTIN?: InputMaybe<Array<InputMaybe<Scalars['DynamicType']['input']>>>;
+  BETWEEN?: InputMaybe<Array<InputMaybe<Scalars['DynamicType']>>>;
+  EQ?: InputMaybe<Scalars['DynamicType']>;
+  GT?: InputMaybe<Scalars['DynamicType']>;
+  GTE?: InputMaybe<Scalars['DynamicType']>;
+  IN?: InputMaybe<Array<InputMaybe<Scalars['DynamicType']>>>;
+  LT?: InputMaybe<Scalars['DynamicType']>;
+  LTE?: InputMaybe<Scalars['DynamicType']>;
+  NEQ?: InputMaybe<Scalars['DynamicType']>;
+  NOTIN?: InputMaybe<Array<InputMaybe<Scalars['DynamicType']>>>;
 };
 
 export type Configuratie = {
-  id?: Maybe<Scalars['String']['output']>;
-  waarde?: Maybe<Scalars['String']['output']>;
+  id?: Maybe<Scalars['String']>;
+  waarde?: Maybe<Scalars['String']>;
 };
 
 export type ConfiguratieInput = {
-  id: Scalars['String']['input'];
-  waarde?: InputMaybe<Scalars['String']['input']>;
+  id: Scalars['String'];
+  waarde?: InputMaybe<Scalars['String']>;
 };
 
 /** Mutatie om een afdeling aan een organisatie toe te voegen. */
 export type CreateAfdeling = {
   afdeling?: Maybe<Afdeling>;
-  ok?: Maybe<Scalars['Boolean']['output']>;
+  ok?: Maybe<Scalars['Boolean']>;
 };
 
 export type CreateAfdelingInput = {
-  naam: Scalars['String']['input'];
-  organisatieId: Scalars['Int']['input'];
+  naam: Scalars['String'];
+  organisatieId: Scalars['Int'];
   postadressen?: InputMaybe<Array<InputMaybe<CreatePostadresInput>>>;
   rekeningen?: InputMaybe<Array<InputMaybe<RekeningInput>>>;
 };
 
 /** Mutatie om een rekening aan een afdeling toe te voegen. */
 export type CreateAfdelingRekening = {
-  ok?: Maybe<Scalars['Boolean']['output']>;
+  ok?: Maybe<Scalars['Boolean']>;
   rekening?: Maybe<Rekening>;
 };
 
 export type CreateAfspraak = {
   afspraak?: Maybe<Afspraak>;
-  ok?: Maybe<Scalars['Boolean']['output']>;
+  ok?: Maybe<Scalars['Boolean']>;
 };
 
 export type CreateAfspraakInput = {
-  afdelingId?: InputMaybe<Scalars['Int']['input']>;
-  alarmId?: InputMaybe<Scalars['String']['input']>;
-  bedrag: Scalars['Bedrag']['input'];
+  afdelingId?: InputMaybe<Scalars['Int']>;
+  alarmId?: InputMaybe<Scalars['String']>;
+  bedrag: Scalars['Bedrag'];
   betaalinstructie?: InputMaybe<BetaalinstructieInput>;
-  burgerId: Scalars['Int']['input'];
-  credit: Scalars['Boolean']['input'];
-  omschrijving: Scalars['String']['input'];
-  postadresId?: InputMaybe<Scalars['String']['input']>;
-  rubriekId: Scalars['Int']['input'];
-  tegenRekeningId: Scalars['Int']['input'];
-  validFrom?: InputMaybe<Scalars['String']['input']>;
-  validThrough?: InputMaybe<Scalars['String']['input']>;
-  zoektermen?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  burgerId: Scalars['Int'];
+  credit: Scalars['Boolean'];
+  omschrijving: Scalars['String'];
+  postadresId?: InputMaybe<Scalars['String']>;
+  rubriekId: Scalars['Int'];
+  tegenRekeningId: Scalars['Int'];
+  validFrom?: InputMaybe<Scalars['String']>;
+  validThrough?: InputMaybe<Scalars['String']>;
+  zoektermen?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
 export type CreateAlarm = {
   alarm?: Maybe<Alarm>;
-  burgerId?: Maybe<Scalars['String']['output']>;
-  ok?: Maybe<Scalars['Boolean']['output']>;
+  burgerId?: Maybe<Scalars['String']>;
+  ok?: Maybe<Scalars['Boolean']>;
 };
 
 export type CreateAlarmInput = {
-  afspraakId?: InputMaybe<Scalars['Int']['input']>;
-  bedrag?: InputMaybe<Scalars['Bedrag']['input']>;
-  bedragMargin?: InputMaybe<Scalars['Bedrag']['input']>;
+  afspraakId?: InputMaybe<Scalars['Int']>;
+  bedrag?: InputMaybe<Scalars['Bedrag']>;
+  bedragMargin?: InputMaybe<Scalars['Bedrag']>;
   byDay?: InputMaybe<Array<InputMaybe<DayOfWeek>>>;
-  byMonth?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
-  byMonthDay?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
-  datumMargin?: InputMaybe<Scalars['Int']['input']>;
-  endDate?: InputMaybe<Scalars['String']['input']>;
-  isActive?: InputMaybe<Scalars['Boolean']['input']>;
-  startDate?: InputMaybe<Scalars['String']['input']>;
+  byMonth?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
+  byMonthDay?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
+  datumMargin?: InputMaybe<Scalars['Int']>;
+  endDate?: InputMaybe<Scalars['String']>;
+  isActive?: InputMaybe<Scalars['Boolean']>;
+  startDate?: InputMaybe<Scalars['String']>;
 };
 
 export type CreateBurger = {
   burger?: Maybe<Burger>;
-  ok?: Maybe<Scalars['Boolean']['output']>;
+  ok?: Maybe<Scalars['Boolean']>;
 };
 
 export type CreateBurgerInput = {
-  achternaam?: InputMaybe<Scalars['String']['input']>;
-  bsn?: InputMaybe<Scalars['Int']['input']>;
-  email?: InputMaybe<Scalars['String']['input']>;
-  geboortedatum?: InputMaybe<Scalars['Date']['input']>;
+  achternaam?: InputMaybe<Scalars['String']>;
+  bsn?: InputMaybe<Scalars['Int']>;
+  email?: InputMaybe<Scalars['String']>;
+  geboortedatum?: InputMaybe<Scalars['Date']>;
   huishouden?: InputMaybe<HuishoudenInput>;
-  huisnummer?: InputMaybe<Scalars['String']['input']>;
-  plaatsnaam?: InputMaybe<Scalars['String']['input']>;
-  postcode?: InputMaybe<Scalars['String']['input']>;
+  huisnummer?: InputMaybe<Scalars['String']>;
+  plaatsnaam?: InputMaybe<Scalars['String']>;
+  postcode?: InputMaybe<Scalars['String']>;
   rekeningen?: InputMaybe<Array<InputMaybe<RekeningInput>>>;
-  saldo?: InputMaybe<Scalars['Int']['input']>;
-  straatnaam?: InputMaybe<Scalars['String']['input']>;
-  telefoonnummer?: InputMaybe<Scalars['String']['input']>;
-  voorletters?: InputMaybe<Scalars['String']['input']>;
-  voornamen?: InputMaybe<Scalars['String']['input']>;
+  saldo?: InputMaybe<Scalars['Int']>;
+  straatnaam?: InputMaybe<Scalars['String']>;
+  telefoonnummer?: InputMaybe<Scalars['String']>;
+  voorletters?: InputMaybe<Scalars['String']>;
+  voornamen?: InputMaybe<Scalars['String']>;
 };
 
 /** Mutatie om een rekening aan een burger toe te voegen. */
 export type CreateBurgerRekening = {
-  ok?: Maybe<Scalars['Boolean']['output']>;
+  ok?: Maybe<Scalars['Boolean']>;
   rekening?: Maybe<Rekening>;
 };
 
 export type CreateConfiguratie = {
   configuratie?: Maybe<Configuratie>;
-  ok?: Maybe<Scalars['Boolean']['output']>;
+  ok?: Maybe<Scalars['Boolean']>;
 };
 
 export type CreateCustomerStatementMessage = {
   customerStatementMessage?: Maybe<Array<Maybe<CustomerStatementMessage>>>;
   journaalposten?: Maybe<Array<Maybe<Journaalpost>>>;
-  ok?: Maybe<Scalars['Boolean']['output']>;
+  ok?: Maybe<Scalars['Boolean']>;
 };
 
 /** Mutatie om een betaalinstructie te genereren. */
 export type CreateExportOverschrijvingen = {
   export?: Maybe<Export>;
-  ok?: Maybe<Scalars['Boolean']['output']>;
+  ok?: Maybe<Scalars['Boolean']>;
 };
 
 export type CreateHuishouden = {
   huishouden?: Maybe<Huishouden>;
-  ok?: Maybe<Scalars['Boolean']['output']>;
+  ok?: Maybe<Scalars['Boolean']>;
 };
 
 export type CreateHuishoudenInput = {
-  burgerIds?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  burgerIds?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
 };
 
 export type CreateJournaalpostAfspraak = {
   journaalposten?: Maybe<Array<Maybe<Journaalpost>>>;
-  ok?: Maybe<Scalars['Boolean']['output']>;
+  ok?: Maybe<Scalars['Boolean']>;
 };
 
 export type CreateJournaalpostAfspraakInput = {
-  afspraakId: Scalars['Int']['input'];
-  isAutomatischGeboekt: Scalars['Boolean']['input'];
-  transactionId: Scalars['Int']['input'];
+  afspraakId: Scalars['Int'];
+  isAutomatischGeboekt: Scalars['Boolean'];
+  transactionId: Scalars['Int'];
 };
 
 /** Mutatie om een banktransactie af te letteren op een grootboekrekening. */
 export type CreateJournaalpostGrootboekrekening = {
   journaalpost?: Maybe<Journaalpost>;
-  ok?: Maybe<Scalars['Boolean']['output']>;
+  ok?: Maybe<Scalars['Boolean']>;
 };
 
 export type CreateJournaalpostGrootboekrekeningInput = {
-  grootboekrekeningId: Scalars['String']['input'];
-  isAutomatischGeboekt: Scalars['Boolean']['input'];
-  transactionId: Scalars['Int']['input'];
+  grootboekrekeningId: Scalars['String'];
+  isAutomatischGeboekt: Scalars['Boolean'];
+  transactionId: Scalars['Int'];
 };
 
 export type CreateOrganisatie = {
-  ok?: Maybe<Scalars['Boolean']['output']>;
+  ok?: Maybe<Scalars['Boolean']>;
   organisatie?: Maybe<Organisatie>;
 };
 
 export type CreateOrganisatieInput = {
-  kvknummer: Scalars['String']['input'];
-  naam?: InputMaybe<Scalars['String']['input']>;
-  vestigingsnummer?: InputMaybe<Scalars['String']['input']>;
+  kvknummer: Scalars['String'];
+  naam?: InputMaybe<Scalars['String']>;
+  vestigingsnummer?: InputMaybe<Scalars['String']>;
 };
 
 export type CreatePostadres = {
   afdeling?: Maybe<Afdeling>;
-  ok?: Maybe<Scalars['Boolean']['output']>;
+  ok?: Maybe<Scalars['Boolean']>;
   postadres?: Maybe<Postadres>;
 };
 
 export type CreatePostadresInput = {
-  afdelingId?: InputMaybe<Scalars['Int']['input']>;
-  huisnummer: Scalars['String']['input'];
-  plaatsnaam: Scalars['String']['input'];
-  postcode: Scalars['String']['input'];
-  straatnaam: Scalars['String']['input'];
+  afdelingId?: InputMaybe<Scalars['Int']>;
+  huisnummer: Scalars['String'];
+  plaatsnaam: Scalars['String'];
+  postcode: Scalars['String'];
+  straatnaam: Scalars['String'];
 };
 
 export type CreateRubriek = {
-  ok?: Maybe<Scalars['Boolean']['output']>;
+  ok?: Maybe<Scalars['Boolean']>;
   rubriek?: Maybe<Rubriek>;
 };
 
 export type CreateSignaal = {
-  ok?: Maybe<Scalars['Boolean']['output']>;
+  ok?: Maybe<Scalars['Boolean']>;
   signaal?: Maybe<Signaal>;
 };
 
 export type CreateSignaalInput = {
-  actions?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-  alarmId?: InputMaybe<Scalars['String']['input']>;
-  banktransactieIds?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
-  context?: InputMaybe<Scalars['String']['input']>;
-  isActive?: InputMaybe<Scalars['Boolean']['input']>;
-  type?: InputMaybe<Scalars['String']['input']>;
+  actions?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  alarmId?: InputMaybe<Scalars['String']>;
+  banktransactieIds?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
+  context?: InputMaybe<Scalars['String']>;
+  isActive?: InputMaybe<Scalars['Boolean']>;
+  type?: InputMaybe<Scalars['String']>;
 };
 
 /** Model van een bankafschrift. */
 export type CustomerStatementMessage = {
-  accountIdentification?: Maybe<Scalars['String']['output']>;
+  accountIdentification?: Maybe<Scalars['String']>;
   bankTransactions?: Maybe<Array<Maybe<BankTransaction>>>;
-  closingAvailableFunds?: Maybe<Scalars['Int']['output']>;
-  closingBalance?: Maybe<Scalars['Int']['output']>;
-  filename?: Maybe<Scalars['String']['output']>;
-  forwardAvailableBalance?: Maybe<Scalars['Int']['output']>;
-  id?: Maybe<Scalars['Int']['output']>;
-  openingBalance?: Maybe<Scalars['Int']['output']>;
-  relatedReference?: Maybe<Scalars['String']['output']>;
-  sequenceNumber?: Maybe<Scalars['String']['output']>;
-  transactionReferenceNumber?: Maybe<Scalars['String']['output']>;
-  uploadDate?: Maybe<Scalars['DateTime']['output']>;
+  closingAvailableFunds?: Maybe<Scalars['Int']>;
+  closingBalance?: Maybe<Scalars['Int']>;
+  filename?: Maybe<Scalars['String']>;
+  forwardAvailableBalance?: Maybe<Scalars['Int']>;
+  id?: Maybe<Scalars['Int']>;
+  openingBalance?: Maybe<Scalars['Int']>;
+  relatedReference?: Maybe<Scalars['String']>;
+  sequenceNumber?: Maybe<Scalars['String']>;
+  transactionReferenceNumber?: Maybe<Scalars['String']>;
+  uploadDate?: Maybe<Scalars['DateTime']>;
 };
 
 /** http://schema.org/DayOfWeek implementation */
@@ -495,25 +493,25 @@ export enum DayOfWeek {
 
 /** Mutatie om een afdeling van een organisatie te verwijderen. */
 export type DeleteAfdeling = {
-  ok?: Maybe<Scalars['Boolean']['output']>;
+  ok?: Maybe<Scalars['Boolean']>;
   previous?: Maybe<Afdeling>;
 };
 
 /** Mutatie om een rekening van een afdeling te verwijderen. */
 export type DeleteAfdelingRekening = {
-  ok?: Maybe<Scalars['Boolean']['output']>;
+  ok?: Maybe<Scalars['Boolean']>;
   previous?: Maybe<Rekening>;
 };
 
 export type DeleteAfspraak = {
-  ok?: Maybe<Scalars['Boolean']['output']>;
+  ok?: Maybe<Scalars['Boolean']>;
   previous?: Maybe<Afspraak>;
 };
 
 /** Mutatie om een betaalinstructie bij een afspraak te verwijderen. */
 export type DeleteAfspraakBetaalinstructie = {
   afspraak?: Maybe<Afspraak>;
-  ok?: Maybe<Scalars['Boolean']['output']>;
+  ok?: Maybe<Scalars['Boolean']>;
   previous?: Maybe<Afspraak>;
 };
 
@@ -521,39 +519,39 @@ export type DeleteAfspraakBetaalinstructie = {
 export type DeleteAfspraakZoekterm = {
   afspraak?: Maybe<Afspraak>;
   matchingAfspraken?: Maybe<Array<Maybe<Afspraak>>>;
-  ok?: Maybe<Scalars['Boolean']['output']>;
+  ok?: Maybe<Scalars['Boolean']>;
   previous?: Maybe<Afspraak>;
 };
 
 export type DeleteAlarm = {
-  burgerId?: Maybe<Scalars['String']['output']>;
-  ok?: Maybe<Scalars['Boolean']['output']>;
+  burgerId?: Maybe<Scalars['String']>;
+  ok?: Maybe<Scalars['Boolean']>;
   previous?: Maybe<Alarm>;
 };
 
 export type DeleteBurger = {
-  ok?: Maybe<Scalars['Boolean']['output']>;
+  ok?: Maybe<Scalars['Boolean']>;
   previous?: Maybe<Burger>;
 };
 
 /** Mutatie om een rekening bij een burger te verwijderen. */
 export type DeleteBurgerRekening = {
-  ok?: Maybe<Scalars['Boolean']['output']>;
+  ok?: Maybe<Scalars['Boolean']>;
   previous?: Maybe<Rekening>;
 };
 
 export type DeleteConfiguratie = {
-  ok?: Maybe<Scalars['Boolean']['output']>;
+  ok?: Maybe<Scalars['Boolean']>;
   previous?: Maybe<Configuratie>;
 };
 
 export type DeleteCustomerStatementMessage = {
-  ok?: Maybe<Scalars['Boolean']['output']>;
+  ok?: Maybe<Scalars['Boolean']>;
   previous?: Maybe<CustomerStatementMessage>;
 };
 
 export type DeleteHuishouden = {
-  ok?: Maybe<Scalars['Boolean']['output']>;
+  ok?: Maybe<Scalars['Boolean']>;
   previous?: Maybe<Huishouden>;
 };
 
@@ -561,33 +559,33 @@ export type DeleteHuishouden = {
 export type DeleteHuishoudenBurger = {
   burgerIds?: Maybe<Array<Maybe<Burger>>>;
   huishouden?: Maybe<Array<Maybe<Huishouden>>>;
-  ok?: Maybe<Scalars['Boolean']['output']>;
+  ok?: Maybe<Scalars['Boolean']>;
   previous?: Maybe<Huishouden>;
 };
 
 export type DeleteJournaalpost = {
-  ok?: Maybe<Scalars['Boolean']['output']>;
+  ok?: Maybe<Scalars['Boolean']>;
   previous?: Maybe<Journaalpost>;
 };
 
 export type DeleteOrganisatie = {
-  ok?: Maybe<Scalars['Boolean']['output']>;
+  ok?: Maybe<Scalars['Boolean']>;
   previous?: Maybe<Organisatie>;
 };
 
 export type DeletePostadres = {
   afdeling?: Maybe<Afdeling>;
-  ok?: Maybe<Scalars['Boolean']['output']>;
+  ok?: Maybe<Scalars['Boolean']>;
   previous?: Maybe<Postadres>;
 };
 
 export type DeleteRubriek = {
-  ok?: Maybe<Scalars['Boolean']['output']>;
+  ok?: Maybe<Scalars['Boolean']>;
   previous?: Maybe<Rubriek>;
 };
 
 export type DeleteSignaal = {
-  ok?: Maybe<Scalars['Boolean']['output']>;
+  ok?: Maybe<Scalars['Boolean']>;
   previous?: Maybe<Signaal>;
 };
 
@@ -600,27 +598,27 @@ export type EvaluateAlarms = {
 };
 
 export type Export = {
-  eindDatum?: Maybe<Scalars['Date']['output']>;
-  id?: Maybe<Scalars['Int']['output']>;
-  naam?: Maybe<Scalars['String']['output']>;
+  eindDatum?: Maybe<Scalars['Date']>;
+  id?: Maybe<Scalars['Int']>;
+  naam?: Maybe<Scalars['String']>;
   overschrijvingen?: Maybe<Array<Maybe<Overschrijving>>>;
-  sha256?: Maybe<Scalars['String']['output']>;
-  startDatum?: Maybe<Scalars['Date']['output']>;
-  timestamp?: Maybe<Scalars['DateTime']['output']>;
-  verwerkingDatum?: Maybe<Scalars['Date']['output']>;
-  xmldata?: Maybe<Scalars['String']['output']>;
+  sha256?: Maybe<Scalars['String']>;
+  startDatum?: Maybe<Scalars['Date']>;
+  timestamp?: Maybe<Scalars['DateTime']>;
+  verwerkingDatum?: Maybe<Scalars['Date']>;
+  xmldata?: Maybe<Scalars['String']>;
 };
 
 /** Model dat een actie van een gebruiker beschrijft. */
 export type GebruikersActiviteit = {
-  action?: Maybe<Scalars['String']['output']>;
+  action?: Maybe<Scalars['String']>;
   entities?: Maybe<Array<Maybe<GebruikersActiviteitEntity>>>;
-  gebruikerId?: Maybe<Scalars['String']['output']>;
-  id?: Maybe<Scalars['Int']['output']>;
+  gebruikerId?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['Int']>;
   meta?: Maybe<GebruikersActiviteitMeta>;
   snapshotAfter?: Maybe<GebruikersActiviteitSnapshot>;
   snapshotBefore?: Maybe<GebruikersActiviteitSnapshot>;
-  timestamp?: Maybe<Scalars['DateTime']['output']>;
+  timestamp?: Maybe<Scalars['DateTime']>;
 };
 
 /** Dit model beschrijft de wijzingen die een gebruiker heeft gedaan. */
@@ -631,8 +629,8 @@ export type GebruikersActiviteitEntity = {
   burger?: Maybe<Burger>;
   configuratie?: Maybe<Configuratie>;
   customerStatementMessage?: Maybe<CustomerStatementMessage>;
-  entityId?: Maybe<Scalars['String']['output']>;
-  entityType?: Maybe<Scalars['String']['output']>;
+  entityId?: Maybe<Scalars['String']>;
+  entityType?: Maybe<Scalars['String']>;
   export?: Maybe<Export>;
   grootboekrekening?: Maybe<Grootboekrekening>;
   huishouden?: Maybe<Huishouden>;
@@ -646,9 +644,9 @@ export type GebruikersActiviteitEntity = {
 };
 
 export type GebruikersActiviteitMeta = {
-  applicationVersion?: Maybe<Scalars['String']['output']>;
-  ip?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
-  userAgent?: Maybe<Scalars['String']['output']>;
+  applicationVersion?: Maybe<Scalars['String']>;
+  ip?: Maybe<Array<Maybe<Scalars['String']>>>;
+  userAgent?: Maybe<Scalars['String']>;
 };
 
 export type GebruikersActiviteitSnapshot = {
@@ -662,7 +660,7 @@ export type GebruikersActiviteitSnapshot = {
   grootboekrekening?: Maybe<Grootboekrekening>;
   huishouden?: Maybe<Huishouden>;
   journaalpost?: Maybe<Journaalpost>;
-  json?: Maybe<Scalars['JSONString']['output']>;
+  json?: Maybe<Scalars['JSONString']>;
   organisatie?: Maybe<Organisatie>;
   postadres?: Maybe<Postadres>;
   rubriek?: Maybe<Rubriek>;
@@ -677,22 +675,22 @@ export type GebruikersActiviteitenPaged = {
 
 export type Grootboekrekening = {
   children?: Maybe<Array<Maybe<Grootboekrekening>>>;
-  credit?: Maybe<Scalars['Boolean']['output']>;
-  id: Scalars['String']['output'];
-  naam?: Maybe<Scalars['String']['output']>;
-  omschrijving?: Maybe<Scalars['String']['output']>;
+  credit?: Maybe<Scalars['Boolean']>;
+  id: Scalars['String'];
+  naam?: Maybe<Scalars['String']>;
+  omschrijving?: Maybe<Scalars['String']>;
   parent?: Maybe<Grootboekrekening>;
-  referentie?: Maybe<Scalars['String']['output']>;
+  referentie?: Maybe<Scalars['String']>;
   rubriek?: Maybe<Rubriek>;
 };
 
 export type Huishouden = {
   burgers?: Maybe<Array<Maybe<Burger>>>;
-  id?: Maybe<Scalars['Int']['output']>;
+  id?: Maybe<Scalars['Int']>;
 };
 
 export type HuishoudenInput = {
-  id?: InputMaybe<Scalars['Int']['input']>;
+  id?: InputMaybe<Scalars['Int']>;
 };
 
 export type HuishoudensPaged = {
@@ -704,37 +702,37 @@ export type HuishoudensPaged = {
 export type Journaalpost = {
   afspraak?: Maybe<Afspraak>;
   grootboekrekening?: Maybe<Grootboekrekening>;
-  id?: Maybe<Scalars['Int']['output']>;
-  isAutomatischGeboekt?: Maybe<Scalars['Boolean']['output']>;
+  id?: Maybe<Scalars['Int']>;
+  isAutomatischGeboekt?: Maybe<Scalars['Boolean']>;
   rubriek?: Maybe<Rubriek>;
   transaction?: Maybe<BankTransaction>;
 };
 
 /** Model van een afgeletterde banktransactie. (minimale data om eenvoudig de rubriek van een banktransactie te kunnen vinden)  */
 export type JournaalpostTransactieRubriek = {
-  afspraakRubriekNaam?: Maybe<Scalars['String']['output']>;
-  grootboekrekeningRubriekNaam?: Maybe<Scalars['String']['output']>;
-  id?: Maybe<Scalars['Int']['output']>;
-  isAutomatischGeboekt?: Maybe<Scalars['Boolean']['output']>;
-  transactionId?: Maybe<Scalars['Int']['output']>;
+  afspraakRubriekNaam?: Maybe<Scalars['String']>;
+  grootboekrekeningRubriekNaam?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['Int']>;
+  isAutomatischGeboekt?: Maybe<Scalars['Boolean']>;
+  transactionId?: Maybe<Scalars['Int']>;
 };
 
 export type Organisatie = {
   afdelingen?: Maybe<Array<Maybe<Afdeling>>>;
-  id?: Maybe<Scalars['Int']['output']>;
-  kvknummer?: Maybe<Scalars['String']['output']>;
-  naam?: Maybe<Scalars['String']['output']>;
-  vestigingsnummer?: Maybe<Scalars['String']['output']>;
+  id?: Maybe<Scalars['Int']>;
+  kvknummer?: Maybe<Scalars['String']>;
+  naam?: Maybe<Scalars['String']>;
+  vestigingsnummer?: Maybe<Scalars['String']>;
 };
 
 export type Overschrijving = {
   afspraak?: Maybe<Afspraak>;
   afspraken?: Maybe<Array<Maybe<Afspraak>>>;
   bankTransaction?: Maybe<BankTransaction>;
-  bedrag?: Maybe<Scalars['Bedrag']['output']>;
-  datum?: Maybe<Scalars['Date']['output']>;
+  bedrag?: Maybe<Scalars['Bedrag']>;
+  datum?: Maybe<Scalars['Date']>;
   export?: Maybe<Export>;
-  id?: Maybe<Scalars['Int']['output']>;
+  id?: Maybe<Scalars['Int']>;
   status?: Maybe<OverschrijvingStatus>;
 };
 
@@ -745,42 +743,42 @@ export enum OverschrijvingStatus {
 }
 
 export type PageInfo = {
-  count?: Maybe<Scalars['Int']['output']>;
-  limit?: Maybe<Scalars['Int']['output']>;
-  start?: Maybe<Scalars['Int']['output']>;
+  count?: Maybe<Scalars['Int']>;
+  limit?: Maybe<Scalars['Int']>;
+  start?: Maybe<Scalars['Int']>;
 };
 
 export type Postadres = {
-  huisnummer?: Maybe<Scalars['String']['output']>;
-  id?: Maybe<Scalars['String']['output']>;
-  plaatsnaam?: Maybe<Scalars['String']['output']>;
-  postcode?: Maybe<Scalars['String']['output']>;
-  straatnaam?: Maybe<Scalars['String']['output']>;
+  huisnummer?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['String']>;
+  plaatsnaam?: Maybe<Scalars['String']>;
+  postcode?: Maybe<Scalars['String']>;
+  straatnaam?: Maybe<Scalars['String']>;
 };
 
 export type RapportageRubriek = {
-  rubriek?: Maybe<Scalars['String']['output']>;
+  rubriek?: Maybe<Scalars['String']>;
   transacties?: Maybe<Array<Maybe<RapportageTransactie>>>;
 };
 
 export type RapportageTransactie = {
-  bedrag?: Maybe<Scalars['Decimal']['output']>;
-  rekeninghouder?: Maybe<Scalars['String']['output']>;
-  transactieDatum?: Maybe<Scalars['String']['output']>;
+  bedrag?: Maybe<Scalars['Decimal']>;
+  rekeninghouder?: Maybe<Scalars['String']>;
+  transactieDatum?: Maybe<Scalars['String']>;
 };
 
 export type Rekening = {
   afdelingen?: Maybe<Array<Maybe<Afdeling>>>;
   afspraken?: Maybe<Array<Maybe<Afspraak>>>;
   burgers?: Maybe<Array<Maybe<Burger>>>;
-  iban?: Maybe<Scalars['String']['output']>;
-  id?: Maybe<Scalars['Int']['output']>;
-  rekeninghouder?: Maybe<Scalars['String']['output']>;
+  iban?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['Int']>;
+  rekeninghouder?: Maybe<Scalars['String']>;
 };
 
 export type RekeningInput = {
-  iban?: InputMaybe<Scalars['String']['input']>;
-  rekeninghouder?: InputMaybe<Scalars['String']['input']>;
+  iban?: InputMaybe<Scalars['String']>;
+  rekeninghouder?: InputMaybe<Scalars['String']>;
 };
 
 /** The root of all mutations  */
@@ -854,15 +852,15 @@ export type RootMutation = {
 
 /** The root of all mutations  */
 export type RootMutationAddAfspraakZoektermArgs = {
-  afspraakId: Scalars['Int']['input'];
-  zoekterm: Scalars['String']['input'];
+  afspraakId: Scalars['Int'];
+  zoekterm: Scalars['String'];
 };
 
 
 /** The root of all mutations  */
 export type RootMutationAddHuishoudenBurgerArgs = {
-  burgerIds: Array<InputMaybe<Scalars['Int']['input']>>;
-  huishoudenId: Scalars['Int']['input'];
+  burgerIds: Array<InputMaybe<Scalars['Int']>>;
+  huishoudenId: Scalars['Int'];
 };
 
 
@@ -874,7 +872,7 @@ export type RootMutationCreateAfdelingArgs = {
 
 /** The root of all mutations  */
 export type RootMutationCreateAfdelingRekeningArgs = {
-  afdelingId: Scalars['Int']['input'];
+  afdelingId: Scalars['Int'];
   rekening: RekeningInput;
 };
 
@@ -899,7 +897,7 @@ export type RootMutationCreateBurgerArgs = {
 
 /** The root of all mutations  */
 export type RootMutationCreateBurgerRekeningArgs = {
-  burgerId: Scalars['Int']['input'];
+  burgerId: Scalars['Int'];
   rekening: RekeningInput;
 };
 
@@ -912,15 +910,15 @@ export type RootMutationCreateConfiguratieArgs = {
 
 /** The root of all mutations  */
 export type RootMutationCreateCustomerStatementMessageArgs = {
-  file: Scalars['Upload']['input'];
+  file: Scalars['Upload'];
 };
 
 
 /** The root of all mutations  */
 export type RootMutationCreateExportOverschrijvingenArgs = {
-  eindDatum?: InputMaybe<Scalars['String']['input']>;
-  startDatum?: InputMaybe<Scalars['String']['input']>;
-  verwerkingDatum?: InputMaybe<Scalars['String']['input']>;
+  eindDatum?: InputMaybe<Scalars['String']>;
+  startDatum?: InputMaybe<Scalars['String']>;
+  verwerkingDatum?: InputMaybe<Scalars['String']>;
 };
 
 
@@ -956,8 +954,8 @@ export type RootMutationCreatePostadresArgs = {
 
 /** The root of all mutations  */
 export type RootMutationCreateRubriekArgs = {
-  grootboekrekeningId?: InputMaybe<Scalars['String']['input']>;
-  naam?: InputMaybe<Scalars['String']['input']>;
+  grootboekrekeningId?: InputMaybe<Scalars['String']>;
+  naam?: InputMaybe<Scalars['String']>;
 };
 
 
@@ -969,167 +967,167 @@ export type RootMutationCreateSignaalArgs = {
 
 /** The root of all mutations  */
 export type RootMutationDeleteAfdelingArgs = {
-  id: Scalars['Int']['input'];
+  id: Scalars['Int'];
 };
 
 
 /** The root of all mutations  */
 export type RootMutationDeleteAfdelingRekeningArgs = {
-  afdelingId: Scalars['Int']['input'];
-  rekeningId: Scalars['Int']['input'];
+  afdelingId: Scalars['Int'];
+  rekeningId: Scalars['Int'];
 };
 
 
 /** The root of all mutations  */
 export type RootMutationDeleteAfspraakArgs = {
-  id: Scalars['Int']['input'];
+  id: Scalars['Int'];
 };
 
 
 /** The root of all mutations  */
 export type RootMutationDeleteAfspraakBetaalinstructieArgs = {
-  afspraakId: Scalars['Int']['input'];
+  afspraakId: Scalars['Int'];
 };
 
 
 /** The root of all mutations  */
 export type RootMutationDeleteAfspraakZoektermArgs = {
-  afspraakId: Scalars['Int']['input'];
-  zoekterm: Scalars['String']['input'];
+  afspraakId: Scalars['Int'];
+  zoekterm: Scalars['String'];
 };
 
 
 /** The root of all mutations  */
 export type RootMutationDeleteAlarmArgs = {
-  id: Scalars['String']['input'];
+  id: Scalars['String'];
 };
 
 
 /** The root of all mutations  */
 export type RootMutationDeleteBurgerArgs = {
-  id: Scalars['Int']['input'];
+  id: Scalars['Int'];
 };
 
 
 /** The root of all mutations  */
 export type RootMutationDeleteBurgerRekeningArgs = {
-  burgerId: Scalars['Int']['input'];
-  rekeningId: Scalars['Int']['input'];
+  burgerId: Scalars['Int'];
+  rekeningId: Scalars['Int'];
 };
 
 
 /** The root of all mutations  */
 export type RootMutationDeleteConfiguratieArgs = {
-  id: Scalars['String']['input'];
+  id: Scalars['String'];
 };
 
 
 /** The root of all mutations  */
 export type RootMutationDeleteCustomerStatementMessageArgs = {
-  id: Scalars['Int']['input'];
+  id: Scalars['Int'];
 };
 
 
 /** The root of all mutations  */
 export type RootMutationDeleteHuishoudenArgs = {
-  id: Scalars['Int']['input'];
+  id: Scalars['Int'];
 };
 
 
 /** The root of all mutations  */
 export type RootMutationDeleteHuishoudenBurgerArgs = {
-  burgerIds: Array<InputMaybe<Scalars['Int']['input']>>;
-  huishoudenId: Scalars['Int']['input'];
+  burgerIds: Array<InputMaybe<Scalars['Int']>>;
+  huishoudenId: Scalars['Int'];
 };
 
 
 /** The root of all mutations  */
 export type RootMutationDeleteJournaalpostArgs = {
-  id: Scalars['Int']['input'];
+  id: Scalars['Int'];
 };
 
 
 /** The root of all mutations  */
 export type RootMutationDeleteOrganisatieArgs = {
-  id: Scalars['Int']['input'];
+  id: Scalars['Int'];
 };
 
 
 /** The root of all mutations  */
 export type RootMutationDeletePostadresArgs = {
-  afdelingId: Scalars['Int']['input'];
-  id: Scalars['String']['input'];
+  afdelingId: Scalars['Int'];
+  id: Scalars['String'];
 };
 
 
 /** The root of all mutations  */
 export type RootMutationDeleteRubriekArgs = {
-  id: Scalars['Int']['input'];
+  id: Scalars['Int'];
 };
 
 
 /** The root of all mutations  */
 export type RootMutationDeleteSignaalArgs = {
-  id: Scalars['String']['input'];
+  id: Scalars['String'];
 };
 
 
 /** The root of all mutations  */
 export type RootMutationEvaluateAlarmArgs = {
-  id: Scalars['String']['input'];
+  id: Scalars['String'];
 };
 
 
 /** The root of all mutations  */
 export type RootMutationEvaluateAlarmsArgs = {
-  ids?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  ids?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
 
 /** The root of all mutations  */
 export type RootMutationUpdateAfdelingArgs = {
-  id: Scalars['Int']['input'];
-  naam?: InputMaybe<Scalars['String']['input']>;
-  organisatieId?: InputMaybe<Scalars['Int']['input']>;
+  id: Scalars['Int'];
+  naam?: InputMaybe<Scalars['String']>;
+  organisatieId?: InputMaybe<Scalars['Int']>;
 };
 
 
 /** The root of all mutations  */
 export type RootMutationUpdateAfspraakArgs = {
-  id: Scalars['Int']['input'];
+  id: Scalars['Int'];
   input: UpdateAfspraakInput;
 };
 
 
 /** The root of all mutations  */
 export type RootMutationUpdateAfspraakBetaalinstructieArgs = {
-  afspraakId: Scalars['Int']['input'];
+  afspraakId: Scalars['Int'];
   betaalinstructie: BetaalinstructieInput;
 };
 
 
 /** The root of all mutations  */
 export type RootMutationUpdateAlarmArgs = {
-  id: Scalars['String']['input'];
+  id: Scalars['String'];
   input: UpdateAlarmInput;
 };
 
 
 /** The root of all mutations  */
 export type RootMutationUpdateBurgerArgs = {
-  achternaam?: InputMaybe<Scalars['String']['input']>;
-  bsn?: InputMaybe<Scalars['Int']['input']>;
-  email?: InputMaybe<Scalars['String']['input']>;
-  geboortedatum?: InputMaybe<Scalars['String']['input']>;
+  achternaam?: InputMaybe<Scalars['String']>;
+  bsn?: InputMaybe<Scalars['Int']>;
+  email?: InputMaybe<Scalars['String']>;
+  geboortedatum?: InputMaybe<Scalars['String']>;
   huishouden?: InputMaybe<HuishoudenInput>;
-  huisnummer?: InputMaybe<Scalars['String']['input']>;
-  id: Scalars['Int']['input'];
-  plaatsnaam?: InputMaybe<Scalars['String']['input']>;
-  postcode?: InputMaybe<Scalars['String']['input']>;
-  straatnaam?: InputMaybe<Scalars['String']['input']>;
-  telefoonnummer?: InputMaybe<Scalars['String']['input']>;
-  voorletters?: InputMaybe<Scalars['String']['input']>;
-  voornamen?: InputMaybe<Scalars['String']['input']>;
+  huisnummer?: InputMaybe<Scalars['String']>;
+  id: Scalars['Int'];
+  plaatsnaam?: InputMaybe<Scalars['String']>;
+  postcode?: InputMaybe<Scalars['String']>;
+  straatnaam?: InputMaybe<Scalars['String']>;
+  telefoonnummer?: InputMaybe<Scalars['String']>;
+  voorletters?: InputMaybe<Scalars['String']>;
+  voornamen?: InputMaybe<Scalars['String']>;
 };
 
 
@@ -1141,41 +1139,41 @@ export type RootMutationUpdateConfiguratieArgs = {
 
 /** The root of all mutations  */
 export type RootMutationUpdateOrganisatieArgs = {
-  id: Scalars['Int']['input'];
-  kvknummer?: InputMaybe<Scalars['String']['input']>;
-  naam?: InputMaybe<Scalars['String']['input']>;
-  vestigingsnummer?: InputMaybe<Scalars['String']['input']>;
+  id: Scalars['Int'];
+  kvknummer?: InputMaybe<Scalars['String']>;
+  naam?: InputMaybe<Scalars['String']>;
+  vestigingsnummer?: InputMaybe<Scalars['String']>;
 };
 
 
 /** The root of all mutations  */
 export type RootMutationUpdatePostadresArgs = {
-  huisnummer?: InputMaybe<Scalars['String']['input']>;
-  id: Scalars['String']['input'];
-  plaatsnaam?: InputMaybe<Scalars['String']['input']>;
-  postcode?: InputMaybe<Scalars['String']['input']>;
-  straatnaam?: InputMaybe<Scalars['String']['input']>;
+  huisnummer?: InputMaybe<Scalars['String']>;
+  id: Scalars['String'];
+  plaatsnaam?: InputMaybe<Scalars['String']>;
+  postcode?: InputMaybe<Scalars['String']>;
+  straatnaam?: InputMaybe<Scalars['String']>;
 };
 
 
 /** The root of all mutations  */
 export type RootMutationUpdateRekeningArgs = {
-  id: Scalars['Int']['input'];
+  id: Scalars['Int'];
   rekening: RekeningInput;
 };
 
 
 /** The root of all mutations  */
 export type RootMutationUpdateRubriekArgs = {
-  grootboekrekeningId?: InputMaybe<Scalars['String']['input']>;
-  id: Scalars['Int']['input'];
-  naam?: InputMaybe<Scalars['String']['input']>;
+  grootboekrekeningId?: InputMaybe<Scalars['String']>;
+  id: Scalars['Int'];
+  naam?: InputMaybe<Scalars['String']>;
 };
 
 
 /** The root of all mutations  */
 export type RootMutationUpdateSignaalArgs = {
-  id: Scalars['String']['input'];
+  id: Scalars['String'];
   input: UpdateSignaalInput;
 };
 
@@ -1230,43 +1228,43 @@ export type RootQuery = {
 
 /** The root of all queries  */
 export type RootQueryAfdelingArgs = {
-  id: Scalars['Int']['input'];
+  id: Scalars['Int'];
 };
 
 
 /** The root of all queries  */
 export type RootQueryAfdelingenArgs = {
-  ids?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  ids?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
 };
 
 
 /** The root of all queries  */
 export type RootQueryAfspraakArgs = {
-  id: Scalars['Int']['input'];
+  id: Scalars['Int'];
 };
 
 
 /** The root of all queries  */
 export type RootQueryAfsprakenArgs = {
-  ids?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  ids?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
 };
 
 
 /** The root of all queries  */
 export type RootQueryAlarmArgs = {
-  id: Scalars['String']['input'];
+  id: Scalars['String'];
 };
 
 
 /** The root of all queries  */
 export type RootQueryAlarmenArgs = {
-  ids?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  ids?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
 
 /** The root of all queries  */
 export type RootQueryBankTransactionArgs = {
-  id: Scalars['Int']['input'];
+  id: Scalars['Int'];
 };
 
 
@@ -1279,205 +1277,205 @@ export type RootQueryBankTransactionsArgs = {
 /** The root of all queries  */
 export type RootQueryBankTransactionsPagedArgs = {
   filters?: InputMaybe<BankTransactionFilter>;
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  start?: InputMaybe<Scalars['Int']['input']>;
+  limit?: InputMaybe<Scalars['Int']>;
+  start?: InputMaybe<Scalars['Int']>;
 };
 
 
 /** The root of all queries  */
 export type RootQueryBurgerArgs = {
-  id: Scalars['Int']['input'];
+  id: Scalars['Int'];
 };
 
 
 /** The root of all queries  */
 export type RootQueryBurgerRapportagesArgs = {
-  burgerIds: Array<InputMaybe<Scalars['Int']['input']>>;
-  endDate: Scalars['String']['input'];
-  rubriekenIds?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
-  startDate: Scalars['String']['input'];
+  burgerIds: Array<InputMaybe<Scalars['Int']>>;
+  endDate: Scalars['String'];
+  rubriekenIds?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
+  startDate: Scalars['String'];
 };
 
 
 /** The root of all queries  */
 export type RootQueryBurgersArgs = {
-  ids?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
-  search?: InputMaybe<Scalars['String']['input']>;
+  ids?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
+  search?: InputMaybe<Scalars['String']>;
 };
 
 
 /** The root of all queries  */
 export type RootQueryBurgersPagedArgs = {
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  start?: InputMaybe<Scalars['Int']['input']>;
+  limit?: InputMaybe<Scalars['Int']>;
+  start?: InputMaybe<Scalars['Int']>;
 };
 
 
 /** The root of all queries  */
 export type RootQueryConfiguratieArgs = {
-  id: Scalars['String']['input'];
+  id: Scalars['String'];
 };
 
 
 /** The root of all queries  */
 export type RootQueryConfiguratiesArgs = {
-  ids?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  ids?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
 
 /** The root of all queries  */
 export type RootQueryCustomerStatementMessageArgs = {
-  id: Scalars['Int']['input'];
+  id: Scalars['Int'];
 };
 
 
 /** The root of all queries  */
 export type RootQueryCustomerStatementMessagesArgs = {
-  ids?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  ids?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
 };
 
 
 /** The root of all queries  */
 export type RootQueryExportArgs = {
-  id: Scalars['Int']['input'];
+  id: Scalars['Int'];
 };
 
 
 /** The root of all queries  */
 export type RootQueryExportsArgs = {
-  eindDatum?: InputMaybe<Scalars['Date']['input']>;
-  ids?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
-  startDatum?: InputMaybe<Scalars['Date']['input']>;
+  eindDatum?: InputMaybe<Scalars['Date']>;
+  ids?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
+  startDatum?: InputMaybe<Scalars['Date']>;
 };
 
 
 /** The root of all queries  */
 export type RootQueryGebruikersactiviteitArgs = {
-  id: Scalars['Int']['input'];
+  id: Scalars['Int'];
 };
 
 
 /** The root of all queries  */
 export type RootQueryGebruikersactiviteitenArgs = {
-  afsprakenIds?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
-  burgerIds?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
-  huishoudenIds?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
-  ids?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  afsprakenIds?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
+  burgerIds?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
+  huishoudenIds?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
+  ids?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
 };
 
 
 /** The root of all queries  */
 export type RootQueryGebruikersactiviteitenPagedArgs = {
-  afsprakenIds?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
-  burgerIds?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
-  huishoudenIds?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  start?: InputMaybe<Scalars['Int']['input']>;
+  afsprakenIds?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
+  burgerIds?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
+  huishoudenIds?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  start?: InputMaybe<Scalars['Int']>;
 };
 
 
 /** The root of all queries  */
 export type RootQueryGrootboekrekeningArgs = {
-  id: Scalars['String']['input'];
+  id: Scalars['String'];
 };
 
 
 /** The root of all queries  */
 export type RootQueryGrootboekrekeningenArgs = {
-  ids?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  ids?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
 
 /** The root of all queries  */
 export type RootQueryHuishoudenArgs = {
-  id: Scalars['Int']['input'];
+  id: Scalars['Int'];
 };
 
 
 /** The root of all queries  */
 export type RootQueryHuishoudensArgs = {
   filters?: InputMaybe<BurgerFilter>;
-  ids?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  ids?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
 };
 
 
 /** The root of all queries  */
 export type RootQueryHuishoudensPagedArgs = {
   filters?: InputMaybe<BurgerFilter>;
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  start?: InputMaybe<Scalars['Int']['input']>;
+  limit?: InputMaybe<Scalars['Int']>;
+  start?: InputMaybe<Scalars['Int']>;
 };
 
 
 /** The root of all queries  */
 export type RootQueryJournaalpostArgs = {
-  id: Scalars['Int']['input'];
+  id: Scalars['Int'];
 };
 
 
 /** The root of all queries  */
 export type RootQueryJournaalpostenArgs = {
-  ids?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  ids?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
 };
 
 
 /** The root of all queries  */
 export type RootQueryJournaalpostenTransactieRubriekArgs = {
-  transactionIds?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  transactionIds?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
 };
 
 
 /** The root of all queries  */
 export type RootQueryOrganisatieArgs = {
-  id: Scalars['Int']['input'];
+  id: Scalars['Int'];
 };
 
 
 /** The root of all queries  */
 export type RootQueryOrganisatiesArgs = {
-  ids?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  ids?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
 };
 
 
 /** The root of all queries  */
 export type RootQueryPostadresArgs = {
-  id: Scalars['String']['input'];
+  id: Scalars['String'];
 };
 
 
 /** The root of all queries  */
 export type RootQueryPostadressenArgs = {
-  ids?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  ids?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
 
 /** The root of all queries  */
 export type RootQueryRekeningArgs = {
-  id: Scalars['Int']['input'];
+  id: Scalars['Int'];
 };
 
 
 /** The root of all queries  */
 export type RootQueryRekeningenArgs = {
-  ids?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  ids?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
 };
 
 
 /** The root of all queries  */
 export type RootQueryRekeningenByIbansArgs = {
-  ibans?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  ibans?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
 
 /** The root of all queries  */
 export type RootQueryRubriekArgs = {
-  id: Scalars['Int']['input'];
+  id: Scalars['Int'];
 };
 
 
 /** The root of all queries  */
 export type RootQueryRubriekenArgs = {
-  ids?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  ids?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
 
@@ -1490,41 +1488,41 @@ export type RootQuerySaldoArgs = {
 
 /** The root of all queries  */
 export type RootQuerySearchAfsprakenArgs = {
-  afdelingIds?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
-  afspraakIds?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
-  burgerIds?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  maxBedrag?: InputMaybe<Scalars['Int']['input']>;
-  minBedrag?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  onlyValid?: InputMaybe<Scalars['Boolean']['input']>;
-  zoektermen?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  afdelingIds?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
+  afspraakIds?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
+  burgerIds?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  maxBedrag?: InputMaybe<Scalars['Int']>;
+  minBedrag?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  onlyValid?: InputMaybe<Scalars['Boolean']>;
+  zoektermen?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
 
 /** The root of all queries  */
 export type RootQuerySearchTransactiesArgs = {
   filters?: InputMaybe<BankTransactionSearchFilter>;
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
 };
 
 
 /** The root of all queries  */
 export type RootQuerySignaalArgs = {
-  id: Scalars['String']['input'];
+  id: Scalars['String'];
 };
 
 
 /** The root of all queries  */
 export type RootQuerySignalenArgs = {
-  ids?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  ids?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
 export type Rubriek = {
   grootboekrekening?: Maybe<Grootboekrekening>;
-  id?: Maybe<Scalars['Int']['output']>;
-  naam?: Maybe<Scalars['String']['output']>;
+  id?: Maybe<Scalars['Int']>;
+  naam?: Maybe<Scalars['String']>;
 };
 
 export type Saldo = {
@@ -1532,147 +1530,147 @@ export type Saldo = {
 };
 
 export type Signaal = {
-  actions?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
+  actions?: Maybe<Array<Maybe<Scalars['String']>>>;
   alarm?: Maybe<Alarm>;
   bankTransactions?: Maybe<Array<Maybe<BankTransaction>>>;
-  bedragDifference?: Maybe<Scalars['String']['output']>;
-  context?: Maybe<Scalars['String']['output']>;
-  id?: Maybe<Scalars['String']['output']>;
-  isActive?: Maybe<Scalars['Boolean']['output']>;
-  timeUpdated?: Maybe<Scalars['String']['output']>;
-  type?: Maybe<Scalars['String']['output']>;
+  bedragDifference?: Maybe<Scalars['String']>;
+  context?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['String']>;
+  isActive?: Maybe<Scalars['Boolean']>;
+  timeUpdated?: Maybe<Scalars['String']>;
+  type?: Maybe<Scalars['String']>;
 };
 
 /** Mutatie om niet afgeletterde banktransacties af te letteren. */
 export type StartAutomatischBoeken = {
   journaalposten?: Maybe<Array<Maybe<Journaalpost>>>;
-  ok?: Maybe<Scalars['Boolean']['output']>;
+  ok?: Maybe<Scalars['Boolean']>;
 };
 
 export type UpdateAfdeling = {
   afdeling?: Maybe<Afdeling>;
-  ok?: Maybe<Scalars['Boolean']['output']>;
+  ok?: Maybe<Scalars['Boolean']>;
   previous?: Maybe<Afdeling>;
 };
 
 export type UpdateAfspraak = {
   afspraak?: Maybe<Afspraak>;
-  ok?: Maybe<Scalars['Boolean']['output']>;
+  ok?: Maybe<Scalars['Boolean']>;
   previous?: Maybe<Afspraak>;
 };
 
 /** Mutatie voor het instellen van een nieuwe betaalinstructie voor een afspraak. */
 export type UpdateAfspraakBetaalinstructie = {
   afspraak?: Maybe<Afspraak>;
-  ok?: Maybe<Scalars['Boolean']['output']>;
+  ok?: Maybe<Scalars['Boolean']>;
   previous?: Maybe<Afspraak>;
 };
 
 export type UpdateAfspraakInput = {
-  afdelingId?: InputMaybe<Scalars['Int']['input']>;
-  alarmId?: InputMaybe<Scalars['String']['input']>;
-  bedrag?: InputMaybe<Scalars['Bedrag']['input']>;
-  burgerId?: InputMaybe<Scalars['Int']['input']>;
-  credit?: InputMaybe<Scalars['Boolean']['input']>;
-  omschrijving?: InputMaybe<Scalars['String']['input']>;
-  postadresId?: InputMaybe<Scalars['String']['input']>;
-  rubriekId?: InputMaybe<Scalars['Int']['input']>;
-  tegenRekeningId?: InputMaybe<Scalars['Int']['input']>;
-  validFrom?: InputMaybe<Scalars['String']['input']>;
-  validThrough?: InputMaybe<Scalars['String']['input']>;
-  zoektermen?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  afdelingId?: InputMaybe<Scalars['Int']>;
+  alarmId?: InputMaybe<Scalars['String']>;
+  bedrag?: InputMaybe<Scalars['Bedrag']>;
+  burgerId?: InputMaybe<Scalars['Int']>;
+  credit?: InputMaybe<Scalars['Boolean']>;
+  omschrijving?: InputMaybe<Scalars['String']>;
+  postadresId?: InputMaybe<Scalars['String']>;
+  rubriekId?: InputMaybe<Scalars['Int']>;
+  tegenRekeningId?: InputMaybe<Scalars['Int']>;
+  validFrom?: InputMaybe<Scalars['String']>;
+  validThrough?: InputMaybe<Scalars['String']>;
+  zoektermen?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
 export type UpdateAlarm = {
   alarm?: Maybe<Alarm>;
-  burgerId?: Maybe<Scalars['String']['output']>;
-  ok?: Maybe<Scalars['Boolean']['output']>;
+  burgerId?: Maybe<Scalars['String']>;
+  ok?: Maybe<Scalars['Boolean']>;
   previous?: Maybe<Alarm>;
 };
 
 export type UpdateAlarmInput = {
-  afspraakId?: InputMaybe<Scalars['Int']['input']>;
-  bedrag?: InputMaybe<Scalars['Bedrag']['input']>;
-  bedragMargin?: InputMaybe<Scalars['Bedrag']['input']>;
+  afspraakId?: InputMaybe<Scalars['Int']>;
+  bedrag?: InputMaybe<Scalars['Bedrag']>;
+  bedragMargin?: InputMaybe<Scalars['Bedrag']>;
   byDay?: InputMaybe<Array<InputMaybe<DayOfWeek>>>;
-  byMonth?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
-  byMonthDay?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
-  datumMargin?: InputMaybe<Scalars['Int']['input']>;
-  endDate?: InputMaybe<Scalars['String']['input']>;
-  isActive?: InputMaybe<Scalars['Boolean']['input']>;
-  startDate?: InputMaybe<Scalars['String']['input']>;
+  byMonth?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
+  byMonthDay?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
+  datumMargin?: InputMaybe<Scalars['Int']>;
+  endDate?: InputMaybe<Scalars['String']>;
+  isActive?: InputMaybe<Scalars['Boolean']>;
+  startDate?: InputMaybe<Scalars['String']>;
 };
 
 export type UpdateBurger = {
   burger?: Maybe<Burger>;
-  ok?: Maybe<Scalars['Boolean']['output']>;
+  ok?: Maybe<Scalars['Boolean']>;
   previous?: Maybe<Burger>;
 };
 
 export type UpdateConfiguratie = {
   configuratie?: Maybe<Configuratie>;
-  ok?: Maybe<Scalars['Boolean']['output']>;
+  ok?: Maybe<Scalars['Boolean']>;
   previous?: Maybe<Configuratie>;
 };
 
 export type UpdateOrganisatie = {
-  ok?: Maybe<Scalars['Boolean']['output']>;
+  ok?: Maybe<Scalars['Boolean']>;
   organisatie?: Maybe<Organisatie>;
   previous?: Maybe<Organisatie>;
 };
 
 export type UpdatePostadres = {
-  ok?: Maybe<Scalars['Boolean']['output']>;
+  ok?: Maybe<Scalars['Boolean']>;
   postadres?: Maybe<Postadres>;
   previous?: Maybe<Postadres>;
 };
 
 export type UpdateRekening = {
-  ok?: Maybe<Scalars['Boolean']['output']>;
+  ok?: Maybe<Scalars['Boolean']>;
   previous?: Maybe<Rekening>;
   rekening?: Maybe<Rekening>;
 };
 
 export type UpdateRubriek = {
-  ok?: Maybe<Scalars['Boolean']['output']>;
+  ok?: Maybe<Scalars['Boolean']>;
   previous?: Maybe<Rubriek>;
   rubriek?: Maybe<Rubriek>;
 };
 
 export type UpdateSignaal = {
-  ok?: Maybe<Scalars['Boolean']['output']>;
+  ok?: Maybe<Scalars['Boolean']>;
   previous?: Maybe<Signaal>;
   signaal?: Maybe<Signaal>;
 };
 
 export type UpdateSignaalInput = {
-  actions?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-  alarmId?: InputMaybe<Scalars['String']['input']>;
-  banktransactieIds?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
-  context?: InputMaybe<Scalars['String']['input']>;
-  isActive?: InputMaybe<Scalars['Boolean']['input']>;
-  type?: InputMaybe<Scalars['String']['input']>;
+  actions?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  alarmId?: InputMaybe<Scalars['String']>;
+  banktransactieIds?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
+  context?: InputMaybe<Scalars['String']>;
+  isActive?: InputMaybe<Scalars['Boolean']>;
+  type?: InputMaybe<Scalars['String']>;
 };
 
 export type AddAfspraakZoektermMutationVariables = Exact<{
-  afspraakId: Scalars['Int']['input'];
-  zoekterm: Scalars['String']['input'];
+  afspraakId: Scalars['Int'];
+  zoekterm: Scalars['String'];
 }>;
 
 
 export type AddAfspraakZoektermMutation = { addAfspraakZoekterm?: { ok?: boolean, matchingAfspraken?: Array<{ id?: number, zoektermen?: Array<string>, bedrag?: any, burger?: { id?: number, voorletters?: string, voornamen?: string, achternaam?: string }, tegenRekening?: { rekeninghouder?: string, iban?: string } }> } };
 
 export type AddHuishoudenBurgerMutationVariables = Exact<{
-  huishoudenId: Scalars['Int']['input'];
-  burgerIds: Array<InputMaybe<Scalars['Int']['input']>> | InputMaybe<Scalars['Int']['input']>;
+  huishoudenId: Scalars['Int'];
+  burgerIds: Array<InputMaybe<Scalars['Int']>> | InputMaybe<Scalars['Int']>;
 }>;
 
 
 export type AddHuishoudenBurgerMutation = { addHuishoudenBurger?: { ok?: boolean } };
 
 export type CreateAfdelingMutationVariables = Exact<{
-  naam: Scalars['String']['input'];
-  organisatieId: Scalars['Int']['input'];
+  naam: Scalars['String'];
+  organisatieId: Scalars['Int'];
   postadressen?: InputMaybe<Array<InputMaybe<CreatePostadresInput>> | InputMaybe<CreatePostadresInput>>;
   rekeningen?: InputMaybe<Array<InputMaybe<RekeningInput>> | InputMaybe<RekeningInput>>;
 }>;
@@ -1702,7 +1700,7 @@ export type CreateBurgerMutationVariables = Exact<{
 export type CreateBurgerMutation = { createBurger?: { ok?: boolean, burger?: { id?: number, bsn?: number, email?: string, telefoonnummer?: string, voorletters?: string, voornamen?: string, achternaam?: string, geboortedatum?: any, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }>, afspraken?: Array<{ id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, validFrom?: any, validThrough?: any, betaalinstructie?: { byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string }, burger?: { id?: number, bsn?: number, voornamen?: string, voorletters?: string, achternaam?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, alarm?: { id?: string, isActive?: boolean, bedrag?: any, bedragMargin?: any, startDate?: string, endDate?: string, datumMargin?: number, byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, afspraak?: { id?: number }, signaal?: { id?: string } }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, postadres?: { id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string }, rubriek?: { id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } }, matchingAfspraken?: Array<{ id?: number, credit?: boolean, zoektermen?: Array<string>, bedrag?: any, omschrijving?: string, burger?: { voorletters?: string, voornamen?: string, achternaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string } }> }>, huishouden?: { id?: number, burgers?: Array<{ id?: number }> } } } };
 
 export type CreateBurgerRekeningMutationVariables = Exact<{
-  burgerId: Scalars['Int']['input'];
+  burgerId: Scalars['Int'];
   rekening: RekeningInput;
 }>;
 
@@ -1710,64 +1708,64 @@ export type CreateBurgerRekeningMutationVariables = Exact<{
 export type CreateBurgerRekeningMutation = { createBurgerRekening?: { ok?: boolean, rekening?: { id?: number, iban?: string, rekeninghouder?: string } } };
 
 export type CreateConfiguratieMutationVariables = Exact<{
-  id: Scalars['String']['input'];
-  waarde: Scalars['String']['input'];
+  id: Scalars['String'];
+  waarde: Scalars['String'];
 }>;
 
 
 export type CreateConfiguratieMutation = { createConfiguratie?: { ok?: boolean, configuratie?: { id?: string, waarde?: string } } };
 
 export type CreateCustomerStatementMessageMutationVariables = Exact<{
-  file: Scalars['Upload']['input'];
+  file: Scalars['Upload'];
 }>;
 
 
 export type CreateCustomerStatementMessageMutation = { createCustomerStatementMessage?: { ok?: boolean } };
 
 export type CreateExportOverschrijvingenMutationVariables = Exact<{
-  startDatum: Scalars['String']['input'];
-  eindDatum: Scalars['String']['input'];
-  verwerkingDatum?: InputMaybe<Scalars['String']['input']>;
+  startDatum: Scalars['String'];
+  eindDatum: Scalars['String'];
+  verwerkingDatum?: InputMaybe<Scalars['String']>;
 }>;
 
 
 export type CreateExportOverschrijvingenMutation = { createExportOverschrijvingen?: { ok?: boolean, export?: { id?: number } } };
 
 export type CreateHuishoudenMutationVariables = Exact<{
-  burgerIds?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>> | InputMaybe<Scalars['Int']['input']>>;
+  burgerIds?: InputMaybe<Array<InputMaybe<Scalars['Int']>> | InputMaybe<Scalars['Int']>>;
 }>;
 
 
 export type CreateHuishoudenMutation = { createHuishouden?: { ok?: boolean, huishouden?: { id?: number, burgers?: Array<{ id?: number, bsn?: number, email?: string, telefoonnummer?: string, voorletters?: string, voornamen?: string, achternaam?: string, geboortedatum?: any, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }>, afspraken?: Array<{ id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, validFrom?: any, validThrough?: any, betaalinstructie?: { byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string }, burger?: { id?: number, bsn?: number, voornamen?: string, voorletters?: string, achternaam?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, alarm?: { id?: string, isActive?: boolean, bedrag?: any, bedragMargin?: any, startDate?: string, endDate?: string, datumMargin?: number, byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, afspraak?: { id?: number }, signaal?: { id?: string } }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, postadres?: { id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string }, rubriek?: { id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } }, matchingAfspraken?: Array<{ id?: number, credit?: boolean, zoektermen?: Array<string>, bedrag?: any, omschrijving?: string, burger?: { voorletters?: string, voornamen?: string, achternaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string } }> }>, huishouden?: { id?: number, burgers?: Array<{ id?: number }> } }> } } };
 
 export type CreateJournaalpostAfspraakMutationVariables = Exact<{
-  transactionId: Scalars['Int']['input'];
-  afspraakId: Scalars['Int']['input'];
-  isAutomatischGeboekt?: InputMaybe<Scalars['Boolean']['input']>;
+  transactionId: Scalars['Int'];
+  afspraakId: Scalars['Int'];
+  isAutomatischGeboekt?: InputMaybe<Scalars['Boolean']>;
 }>;
 
 
 export type CreateJournaalpostAfspraakMutation = { createJournaalpostAfspraak?: { ok?: boolean, journaalposten?: Array<{ id?: number, afspraak?: { id?: number, alarm?: { id?: string } } }> } };
 
 export type CreateJournaalpostGrootboekrekeningMutationVariables = Exact<{
-  transactionId: Scalars['Int']['input'];
-  grootboekrekeningId: Scalars['String']['input'];
+  transactionId: Scalars['Int'];
+  grootboekrekeningId: Scalars['String'];
 }>;
 
 
 export type CreateJournaalpostGrootboekrekeningMutation = { createJournaalpostGrootboekrekening?: { ok?: boolean, journaalpost?: { id?: number } } };
 
 export type CreateOrganisatieMutationVariables = Exact<{
-  kvknummer: Scalars['String']['input'];
-  vestigingsnummer: Scalars['String']['input'];
-  naam?: InputMaybe<Scalars['String']['input']>;
+  kvknummer: Scalars['String'];
+  vestigingsnummer: Scalars['String'];
+  naam?: InputMaybe<Scalars['String']>;
 }>;
 
 
 export type CreateOrganisatieMutation = { createOrganisatie?: { ok?: boolean, organisatie?: { id?: number, naam?: string, kvknummer?: string, vestigingsnummer?: string, afdelingen?: Array<{ id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }> } } };
 
 export type CreateAfdelingRekeningMutationVariables = Exact<{
-  afdelingId: Scalars['Int']['input'];
+  afdelingId: Scalars['Int'];
   rekening: RekeningInput;
 }>;
 
@@ -1775,144 +1773,144 @@ export type CreateAfdelingRekeningMutationVariables = Exact<{
 export type CreateAfdelingRekeningMutation = { createAfdelingRekening?: { ok?: boolean, rekening?: { id?: number, iban?: string, rekeninghouder?: string } } };
 
 export type CreateAfdelingPostadresMutationVariables = Exact<{
-  afdelingId: Scalars['Int']['input'];
-  huisnummer: Scalars['String']['input'];
-  plaatsnaam: Scalars['String']['input'];
-  postcode: Scalars['String']['input'];
-  straatnaam: Scalars['String']['input'];
+  afdelingId: Scalars['Int'];
+  huisnummer: Scalars['String'];
+  plaatsnaam: Scalars['String'];
+  postcode: Scalars['String'];
+  straatnaam: Scalars['String'];
 }>;
 
 
 export type CreateAfdelingPostadresMutation = { createPostadres?: { ok?: boolean, postadres?: { id?: string } } };
 
 export type CreateRubriekMutationVariables = Exact<{
-  naam?: InputMaybe<Scalars['String']['input']>;
-  grootboekrekening?: InputMaybe<Scalars['String']['input']>;
+  naam?: InputMaybe<Scalars['String']>;
+  grootboekrekening?: InputMaybe<Scalars['String']>;
 }>;
 
 
 export type CreateRubriekMutation = { createRubriek?: { ok?: boolean, rubriek?: { id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } } } };
 
 export type DeleteOrganisatieMutationVariables = Exact<{
-  id: Scalars['Int']['input'];
+  id: Scalars['Int'];
 }>;
 
 
 export type DeleteOrganisatieMutation = { deleteOrganisatie?: { ok?: boolean } };
 
 export type DeleteAfdelingMutationVariables = Exact<{
-  afdelingId: Scalars['Int']['input'];
+  afdelingId: Scalars['Int'];
 }>;
 
 
 export type DeleteAfdelingMutation = { deleteAfdeling?: { ok?: boolean } };
 
 export type DeleteAfdelingPostadresMutationVariables = Exact<{
-  id: Scalars['String']['input'];
-  afdelingId: Scalars['Int']['input'];
+  id: Scalars['String'];
+  afdelingId: Scalars['Int'];
 }>;
 
 
 export type DeleteAfdelingPostadresMutation = { deletePostadres?: { ok?: boolean } };
 
 export type DeleteAfspraakMutationVariables = Exact<{
-  id: Scalars['Int']['input'];
+  id: Scalars['Int'];
 }>;
 
 
 export type DeleteAfspraakMutation = { deleteAfspraak?: { ok?: boolean } };
 
 export type DeleteAfspraakBetaalinstructieMutationVariables = Exact<{
-  id: Scalars['Int']['input'];
+  id: Scalars['Int'];
 }>;
 
 
 export type DeleteAfspraakBetaalinstructieMutation = { deleteAfspraakBetaalinstructie?: { ok?: boolean } };
 
 export type DeleteAfspraakZoektermMutationVariables = Exact<{
-  afspraakId: Scalars['Int']['input'];
-  zoekterm: Scalars['String']['input'];
+  afspraakId: Scalars['Int'];
+  zoekterm: Scalars['String'];
 }>;
 
 
 export type DeleteAfspraakZoektermMutation = { deleteAfspraakZoekterm?: { ok?: boolean, matchingAfspraken?: Array<{ id?: number, zoektermen?: Array<string>, bedrag?: any, burger?: { id?: number, voorletters?: string, voornamen?: string, achternaam?: string }, tegenRekening?: { rekeninghouder?: string, iban?: string } }> } };
 
 export type DeleteAlarmMutationVariables = Exact<{
-  id: Scalars['String']['input'];
+  id: Scalars['String'];
 }>;
 
 
 export type DeleteAlarmMutation = { deleteAlarm?: { ok?: boolean } };
 
 export type DeleteBurgerMutationVariables = Exact<{
-  id: Scalars['Int']['input'];
+  id: Scalars['Int'];
 }>;
 
 
 export type DeleteBurgerMutation = { deleteBurger?: { ok?: boolean } };
 
 export type DeleteBurgerRekeningMutationVariables = Exact<{
-  rekeningId: Scalars['Int']['input'];
-  burgerId: Scalars['Int']['input'];
+  rekeningId: Scalars['Int'];
+  burgerId: Scalars['Int'];
 }>;
 
 
 export type DeleteBurgerRekeningMutation = { deleteBurgerRekening?: { ok?: boolean } };
 
 export type DeleteConfiguratieMutationVariables = Exact<{
-  key: Scalars['String']['input'];
+  key: Scalars['String'];
 }>;
 
 
 export type DeleteConfiguratieMutation = { deleteConfiguratie?: { ok?: boolean } };
 
 export type DeleteCustomerStatementMessageMutationVariables = Exact<{
-  id: Scalars['Int']['input'];
+  id: Scalars['Int'];
 }>;
 
 
 export type DeleteCustomerStatementMessageMutation = { deleteCustomerStatementMessage?: { ok?: boolean } };
 
 export type DeleteHuishoudenBurgerMutationVariables = Exact<{
-  huishoudenId: Scalars['Int']['input'];
-  burgerIds: Array<InputMaybe<Scalars['Int']['input']>> | InputMaybe<Scalars['Int']['input']>;
+  huishoudenId: Scalars['Int'];
+  burgerIds: Array<InputMaybe<Scalars['Int']>> | InputMaybe<Scalars['Int']>;
 }>;
 
 
 export type DeleteHuishoudenBurgerMutation = { deleteHuishoudenBurger?: { ok?: boolean } };
 
 export type DeleteJournaalpostMutationVariables = Exact<{
-  id: Scalars['Int']['input'];
+  id: Scalars['Int'];
 }>;
 
 
 export type DeleteJournaalpostMutation = { deleteJournaalpost?: { ok?: boolean } };
 
 export type DeleteAfdelingRekeningMutationVariables = Exact<{
-  id: Scalars['Int']['input'];
-  afdelingId: Scalars['Int']['input'];
+  id: Scalars['Int'];
+  afdelingId: Scalars['Int'];
 }>;
 
 
 export type DeleteAfdelingRekeningMutation = { deleteAfdelingRekening?: { ok?: boolean } };
 
 export type DeleteRubriekMutationVariables = Exact<{
-  id: Scalars['Int']['input'];
+  id: Scalars['Int'];
 }>;
 
 
 export type DeleteRubriekMutation = { deleteRubriek?: { ok?: boolean } };
 
 export type EndAfspraakMutationVariables = Exact<{
-  id: Scalars['Int']['input'];
-  validThrough: Scalars['String']['input'];
+  id: Scalars['Int'];
+  validThrough: Scalars['String'];
 }>;
 
 
 export type EndAfspraakMutation = { updateAfspraak?: { ok?: boolean, afspraak?: { id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, validFrom?: any, validThrough?: any, betaalinstructie?: { byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string }, burger?: { id?: number, bsn?: number, voornamen?: string, voorletters?: string, achternaam?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, alarm?: { id?: string, isActive?: boolean, bedrag?: any, bedragMargin?: any, startDate?: string, endDate?: string, datumMargin?: number, byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, afspraak?: { id?: number }, signaal?: { id?: string } }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, postadres?: { id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string }, rubriek?: { id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } }, matchingAfspraken?: Array<{ id?: number, credit?: boolean, zoektermen?: Array<string>, bedrag?: any, omschrijving?: string, burger?: { voorletters?: string, voornamen?: string, achternaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string } }> } } };
 
 export type EvaluateAlarmMutationVariables = Exact<{
-  id: Scalars['String']['input'];
+  id: Scalars['String'];
 }>;
 
 
@@ -1929,16 +1927,16 @@ export type StartAutomatischBoekenMutationVariables = Exact<{ [key: string]: nev
 export type StartAutomatischBoekenMutation = { startAutomatischBoeken?: { ok?: boolean, journaalposten?: Array<{ id?: number }> } };
 
 export type UpdateAfdelingMutationVariables = Exact<{
-  id: Scalars['Int']['input'];
-  naam?: InputMaybe<Scalars['String']['input']>;
-  organisatieId?: InputMaybe<Scalars['Int']['input']>;
+  id: Scalars['Int'];
+  naam?: InputMaybe<Scalars['String']>;
+  organisatieId?: InputMaybe<Scalars['Int']>;
 }>;
 
 
 export type UpdateAfdelingMutation = { updateAfdeling?: { ok?: boolean, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> } } };
 
 export type UpdateAfspraakMutationVariables = Exact<{
-  id: Scalars['Int']['input'];
+  id: Scalars['Int'];
   input: UpdateAfspraakInput;
 }>;
 
@@ -1946,7 +1944,7 @@ export type UpdateAfspraakMutationVariables = Exact<{
 export type UpdateAfspraakMutation = { updateAfspraak?: { ok?: boolean, afspraak?: { id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, validFrom?: any, validThrough?: any, betaalinstructie?: { byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string }, burger?: { id?: number, bsn?: number, voornamen?: string, voorletters?: string, achternaam?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, alarm?: { id?: string, isActive?: boolean, bedrag?: any, bedragMargin?: any, startDate?: string, endDate?: string, datumMargin?: number, byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, afspraak?: { id?: number }, signaal?: { id?: string } }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, postadres?: { id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string }, rubriek?: { id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } }, matchingAfspraken?: Array<{ id?: number, credit?: boolean, zoektermen?: Array<string>, bedrag?: any, omschrijving?: string, burger?: { voorletters?: string, voornamen?: string, achternaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string } }> } } };
 
 export type UpdateAfspraakBetaalinstructieMutationVariables = Exact<{
-  id: Scalars['Int']['input'];
+  id: Scalars['Int'];
   betaalinstructie: BetaalinstructieInput;
 }>;
 
@@ -1954,7 +1952,7 @@ export type UpdateAfspraakBetaalinstructieMutationVariables = Exact<{
 export type UpdateAfspraakBetaalinstructieMutation = { updateAfspraakBetaalinstructie?: { ok?: boolean } };
 
 export type UpdateAlarmMutationVariables = Exact<{
-  id: Scalars['String']['input'];
+  id: Scalars['String'];
   input: UpdateAlarmInput;
 }>;
 
@@ -1962,72 +1960,72 @@ export type UpdateAlarmMutationVariables = Exact<{
 export type UpdateAlarmMutation = { updateAlarm?: { ok?: boolean, alarm?: { id?: string, isActive?: boolean, bedrag?: any, bedragMargin?: any, startDate?: string, endDate?: string, datumMargin?: number, byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, afspraak?: { id?: number }, signaal?: { id?: string } } } };
 
 export type UpdateBurgerMutationVariables = Exact<{
-  id: Scalars['Int']['input'];
-  bsn?: InputMaybe<Scalars['Int']['input']>;
-  voorletters?: InputMaybe<Scalars['String']['input']>;
-  voornamen?: InputMaybe<Scalars['String']['input']>;
-  achternaam?: InputMaybe<Scalars['String']['input']>;
-  geboortedatum?: InputMaybe<Scalars['String']['input']>;
-  straatnaam?: InputMaybe<Scalars['String']['input']>;
-  huisnummer?: InputMaybe<Scalars['String']['input']>;
-  postcode?: InputMaybe<Scalars['String']['input']>;
-  plaatsnaam?: InputMaybe<Scalars['String']['input']>;
-  telefoonnummer?: InputMaybe<Scalars['String']['input']>;
-  email?: InputMaybe<Scalars['String']['input']>;
+  id: Scalars['Int'];
+  bsn?: InputMaybe<Scalars['Int']>;
+  voorletters?: InputMaybe<Scalars['String']>;
+  voornamen?: InputMaybe<Scalars['String']>;
+  achternaam?: InputMaybe<Scalars['String']>;
+  geboortedatum?: InputMaybe<Scalars['String']>;
+  straatnaam?: InputMaybe<Scalars['String']>;
+  huisnummer?: InputMaybe<Scalars['String']>;
+  postcode?: InputMaybe<Scalars['String']>;
+  plaatsnaam?: InputMaybe<Scalars['String']>;
+  telefoonnummer?: InputMaybe<Scalars['String']>;
+  email?: InputMaybe<Scalars['String']>;
 }>;
 
 
 export type UpdateBurgerMutation = { updateBurger?: { ok?: boolean, burger?: { id?: number, bsn?: number, email?: string, telefoonnummer?: string, voorletters?: string, voornamen?: string, achternaam?: string, geboortedatum?: any, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }>, afspraken?: Array<{ id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, validFrom?: any, validThrough?: any, betaalinstructie?: { byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string }, burger?: { id?: number, bsn?: number, voornamen?: string, voorletters?: string, achternaam?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, alarm?: { id?: string, isActive?: boolean, bedrag?: any, bedragMargin?: any, startDate?: string, endDate?: string, datumMargin?: number, byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, afspraak?: { id?: number }, signaal?: { id?: string } }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, postadres?: { id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string }, rubriek?: { id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } }, matchingAfspraken?: Array<{ id?: number, credit?: boolean, zoektermen?: Array<string>, bedrag?: any, omschrijving?: string, burger?: { voorletters?: string, voornamen?: string, achternaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string } }> }>, huishouden?: { id?: number, burgers?: Array<{ id?: number }> } } } };
 
 export type UpdateConfiguratieMutationVariables = Exact<{
-  id: Scalars['String']['input'];
-  waarde: Scalars['String']['input'];
+  id: Scalars['String'];
+  waarde: Scalars['String'];
 }>;
 
 
 export type UpdateConfiguratieMutation = { updateConfiguratie?: { ok?: boolean, configuratie?: { id?: string, waarde?: string } } };
 
 export type UpdateOrganisatieMutationVariables = Exact<{
-  id: Scalars['Int']['input'];
-  kvknummer?: InputMaybe<Scalars['String']['input']>;
-  vestigingsnummer?: InputMaybe<Scalars['String']['input']>;
-  naam?: InputMaybe<Scalars['String']['input']>;
+  id: Scalars['Int'];
+  kvknummer?: InputMaybe<Scalars['String']>;
+  vestigingsnummer?: InputMaybe<Scalars['String']>;
+  naam?: InputMaybe<Scalars['String']>;
 }>;
 
 
 export type UpdateOrganisatieMutation = { updateOrganisatie?: { ok?: boolean, organisatie?: { id?: number, naam?: string, kvknummer?: string, vestigingsnummer?: string, afdelingen?: Array<{ id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }> } } };
 
 export type UpdatePostadresMutationVariables = Exact<{
-  id: Scalars['String']['input'];
-  straatnaam?: InputMaybe<Scalars['String']['input']>;
-  huisnummer?: InputMaybe<Scalars['String']['input']>;
-  postcode?: InputMaybe<Scalars['String']['input']>;
-  plaatsnaam?: InputMaybe<Scalars['String']['input']>;
+  id: Scalars['String'];
+  straatnaam?: InputMaybe<Scalars['String']>;
+  huisnummer?: InputMaybe<Scalars['String']>;
+  postcode?: InputMaybe<Scalars['String']>;
+  plaatsnaam?: InputMaybe<Scalars['String']>;
 }>;
 
 
 export type UpdatePostadresMutation = { updatePostadres?: { ok?: boolean } };
 
 export type UpdateRekeningMutationVariables = Exact<{
-  id: Scalars['Int']['input'];
-  iban?: InputMaybe<Scalars['String']['input']>;
-  rekeninghouder?: InputMaybe<Scalars['String']['input']>;
+  id: Scalars['Int'];
+  iban?: InputMaybe<Scalars['String']>;
+  rekeninghouder?: InputMaybe<Scalars['String']>;
 }>;
 
 
 export type UpdateRekeningMutation = { updateRekening?: { ok?: boolean } };
 
 export type UpdateRubriekMutationVariables = Exact<{
-  id: Scalars['Int']['input'];
-  naam: Scalars['String']['input'];
-  grootboekrekeningId: Scalars['String']['input'];
+  id: Scalars['Int'];
+  naam: Scalars['String'];
+  grootboekrekeningId: Scalars['String'];
 }>;
 
 
 export type UpdateRubriekMutation = { updateRubriek?: { ok?: boolean } };
 
 export type UpdateSignaalMutationVariables = Exact<{
-  id: Scalars['String']['input'];
+  id: Scalars['String'];
   input: UpdateSignaalInput;
 }>;
 
@@ -2035,29 +2033,29 @@ export type UpdateSignaalMutationVariables = Exact<{
 export type UpdateSignaalMutation = { updateSignaal?: { ok?: boolean, signaal?: { id?: string, isActive?: boolean, type?: string, actions?: Array<string>, bedragDifference?: string, timeUpdated?: string, alarm?: { id?: string, afspraak?: { id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, validFrom?: any, validThrough?: any, betaalinstructie?: { byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string }, burger?: { id?: number, bsn?: number, voornamen?: string, voorletters?: string, achternaam?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, alarm?: { id?: string, isActive?: boolean, bedrag?: any, bedragMargin?: any, startDate?: string, endDate?: string, datumMargin?: number, byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, afspraak?: { id?: number }, signaal?: { id?: string } }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, postadres?: { id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string }, rubriek?: { id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } } } }, bankTransactions?: Array<{ id?: number, bedrag?: any, isCredit?: boolean }> } } };
 
 export type GetAdditionalTransactionDataQueryVariables = Exact<{
-  ibans?: InputMaybe<Array<Scalars['String']['input']> | Scalars['String']['input']>;
-  transaction_ids?: InputMaybe<Array<Scalars['Int']['input']> | Scalars['Int']['input']>;
+  ibans?: InputMaybe<Array<Scalars['String']> | Scalars['String']>;
+  transaction_ids?: InputMaybe<Array<Scalars['Int']> | Scalars['Int']>;
 }>;
 
 
 export type GetAdditionalTransactionDataQuery = { rekeningenByIbans?: Array<{ iban?: string, rekeninghouder?: string }>, journaalpostenTransactieRubriek?: Array<{ id?: number, transactionId?: number, isAutomatischGeboekt?: boolean, afspraakRubriekNaam?: string, grootboekrekeningRubriekNaam?: string }> };
 
 export type GetAfdelingQueryVariables = Exact<{
-  id: Scalars['Int']['input'];
+  id: Scalars['Int'];
 }>;
 
 
 export type GetAfdelingQuery = { afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> } };
 
 export type GetAfspraakQueryVariables = Exact<{
-  id: Scalars['Int']['input'];
+  id: Scalars['Int'];
 }>;
 
 
 export type GetAfspraakQuery = { afspraak?: { id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, validFrom?: any, validThrough?: any, betaalinstructie?: { byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string }, burger?: { id?: number, bsn?: number, voornamen?: string, voorletters?: string, achternaam?: string, plaatsnaam?: string }, alarm?: { id?: string, isActive?: boolean, bedrag?: any, bedragMargin?: any, startDate?: string, endDate?: string, datumMargin?: number, byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number> }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number } }, postadres?: { id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string }, rubriek?: { id?: number, naam?: string }, matchingAfspraken?: Array<{ id?: number, credit?: boolean, zoektermen?: Array<string>, bedrag?: any, omschrijving?: string, burger?: { voorletters?: string, voornamen?: string, achternaam?: string } }> } };
 
 export type GetAfspraakFormDataQueryVariables = Exact<{
-  afspraakId: Scalars['Int']['input'];
+  afspraakId: Scalars['Int'];
 }>;
 
 
@@ -2069,7 +2067,7 @@ export type GetAfsprakenQueryVariables = Exact<{ [key: string]: never; }>;
 export type GetAfsprakenQuery = { afspraken?: Array<{ id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, validFrom?: any, validThrough?: any, betaalinstructie?: { byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string }, burger?: { id?: number, bsn?: number, voornamen?: string, voorletters?: string, achternaam?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, alarm?: { id?: string, isActive?: boolean, bedrag?: any, bedragMargin?: any, startDate?: string, endDate?: string, datumMargin?: number, byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, afspraak?: { id?: number }, signaal?: { id?: string } }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, postadres?: { id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string }, rubriek?: { id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } }, matchingAfspraken?: Array<{ id?: number, credit?: boolean, zoektermen?: Array<string>, bedrag?: any, omschrijving?: string, burger?: { voorletters?: string, voornamen?: string, achternaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string } }> }> };
 
 export type GetAlarmQueryVariables = Exact<{
-  id: Scalars['String']['input'];
+  id: Scalars['String'];
 }>;
 
 
@@ -2081,30 +2079,30 @@ export type GetAlarmenQueryVariables = Exact<{ [key: string]: never; }>;
 export type GetAlarmenQuery = { alarmen?: Array<{ id?: string, isActive?: boolean, bedrag?: any, bedragMargin?: any, startDate?: string, endDate?: string, datumMargin?: number, byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, afspraak?: { id?: number }, signaal?: { id?: string } }> };
 
 export type GetBurgerDetailsQueryVariables = Exact<{
-  id: Scalars['Int']['input'];
+  id: Scalars['Int'];
 }>;
 
 
 export type GetBurgerDetailsQuery = { burger?: { id?: number, voorletters?: string, voornamen?: string, achternaam?: string, huishouden?: { id?: number }, afspraken?: Array<{ id?: number, bedrag?: any, credit?: boolean, omschrijving?: string, validThrough?: any, betaalinstructie?: { byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string }, afdeling?: { naam?: string, organisatie?: { naam?: string } } }> } };
 
 export type GetBurgerPersonalDetailsQueryVariables = Exact<{
-  id: Scalars['Int']['input'];
+  id: Scalars['Int'];
 }>;
 
 
 export type GetBurgerPersonalDetailsQuery = { burger?: { id?: number, bsn?: number, voorletters?: string, voornamen?: string, achternaam?: string, geboortedatum?: any, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string, telefoonnummer?: string, email?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> } };
 
 export type GetBurgerAfsprakenQueryVariables = Exact<{
-  id: Scalars['Int']['input'];
+  id: Scalars['Int'];
 }>;
 
 
 export type GetBurgerAfsprakenQuery = { burger?: { afspraken?: Array<{ id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, validFrom?: any, validThrough?: any, betaalinstructie?: { byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string }, burger?: { id?: number, bsn?: number, voornamen?: string, voorletters?: string, achternaam?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, alarm?: { id?: string, isActive?: boolean, bedrag?: any, bedragMargin?: any, startDate?: string, endDate?: string, datumMargin?: number, byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, afspraak?: { id?: number }, signaal?: { id?: string } }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, postadres?: { id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string }, rubriek?: { id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } }, matchingAfspraken?: Array<{ id?: number, credit?: boolean, zoektermen?: Array<string>, bedrag?: any, omschrijving?: string, burger?: { voorletters?: string, voornamen?: string, achternaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string } }> }> } };
 
 export type GetBurgerGebeurtenissenQueryVariables = Exact<{
-  ids: Array<Scalars['Int']['input']> | Scalars['Int']['input'];
-  limit: Scalars['Int']['input'];
-  offset: Scalars['Int']['input'];
+  ids: Array<Scalars['Int']> | Scalars['Int'];
+  limit: Scalars['Int'];
+  offset: Scalars['Int'];
 }>;
 
 
@@ -2132,7 +2130,7 @@ export type GetBurgersAndOrganisatiesQueryVariables = Exact<{ [key: string]: nev
 export type GetBurgersAndOrganisatiesQuery = { organisaties?: Array<{ id?: number, naam?: string, afdelingen?: Array<{ id?: number }> }>, burgers?: Array<{ id?: number, voornamen?: string, voorletters?: string, achternaam?: string }> };
 
 export type GetBurgersSearchQueryVariables = Exact<{
-  search?: InputMaybe<Scalars['String']['input']>;
+  search?: InputMaybe<Scalars['String']>;
 }>;
 
 
@@ -2144,7 +2142,7 @@ export type GetConfiguratieQueryVariables = Exact<{ [key: string]: never; }>;
 export type GetConfiguratieQuery = { configuraties?: Array<{ id?: string, waarde?: string }> };
 
 export type GetCreateAfspraakFormDataQueryVariables = Exact<{
-  burgerId: Scalars['Int']['input'];
+  burgerId: Scalars['Int'];
 }>;
 
 
@@ -2161,15 +2159,15 @@ export type GetExportsQueryVariables = Exact<{ [key: string]: never; }>;
 export type GetExportsQuery = { exports?: Array<{ id?: number, naam?: string, timestamp?: any, startDatum?: any, eindDatum?: any, verwerkingDatum?: any, sha256?: string, overschrijvingen?: Array<{ id?: number, bedrag?: any }> }> };
 
 export type GetGebeurtenissenQueryVariables = Exact<{
-  limit: Scalars['Int']['input'];
-  offset: Scalars['Int']['input'];
+  limit: Scalars['Int'];
+  offset: Scalars['Int'];
 }>;
 
 
 export type GetGebeurtenissenQuery = { gebruikersactiviteitenPaged?: { gebruikersactiviteiten?: Array<{ id?: number, timestamp?: any, gebruikerId?: string, action?: string, entities?: Array<{ entityType?: string, entityId?: string, huishouden?: { id?: number, burgers?: Array<{ id?: number, voorletters?: string, voornamen?: string, achternaam?: string }> }, burger?: { id?: number, voorletters?: string, voornamen?: string, achternaam?: string }, organisatie?: { id?: number, naam?: string, kvknummer?: string, vestigingsnummer?: string }, afspraak?: { id?: number, burger?: { id?: number, voornamen?: string, voorletters?: string, achternaam?: string }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string } } }, rekening?: { id?: number, iban?: string, rekeninghouder?: string }, customerStatementMessage?: { id?: number, filename?: string, bankTransactions?: Array<{ id?: number }> }, configuratie?: { id?: string, waarde?: string }, rubriek?: { id?: number, naam?: string }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, naam?: string } }, postadres?: { id?: string }, export?: { id?: number, naam?: string } }>, meta?: { userAgent?: string, ip?: Array<string>, applicationVersion?: string } }>, pageInfo?: { count?: number } } };
 
 export type GetHuishoudenQueryVariables = Exact<{
-  id: Scalars['Int']['input'];
+  id: Scalars['Int'];
 }>;
 
 
@@ -2181,7 +2179,7 @@ export type GetHuishoudensQueryVariables = Exact<{ [key: string]: never; }>;
 export type GetHuishoudensQuery = { burgers?: Array<{ id?: number, voorletters?: string, voornamen?: string, achternaam?: string, huishoudenId?: number }> };
 
 export type GetOrganisatieQueryVariables = Exact<{
-  id: Scalars['Int']['input'];
+  id: Scalars['Int'];
 }>;
 
 
@@ -2198,7 +2196,7 @@ export type GetSimpleOrganisatiesQueryVariables = Exact<{ [key: string]: never; 
 export type GetSimpleOrganisatiesQuery = { organisaties?: Array<{ id?: number, naam?: string }> };
 
 export type GetRekeningQueryVariables = Exact<{
-  id: Scalars['Int']['input'];
+  id: Scalars['Int'];
 }>;
 
 
@@ -2233,15 +2231,15 @@ export type GetSaldoQueryVariables = Exact<{
 export type GetSaldoQuery = { saldo?: { saldo?: any } };
 
 export type GetSearchAfsprakenQueryVariables = Exact<{
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  afspraken?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>> | InputMaybe<Scalars['Int']['input']>>;
-  afdelingen?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>> | InputMaybe<Scalars['Int']['input']>>;
-  burgers?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>> | InputMaybe<Scalars['Int']['input']>>;
-  only_valid?: InputMaybe<Scalars['Boolean']['input']>;
-  min_bedrag?: InputMaybe<Scalars['Int']['input']>;
-  max_bedrag?: InputMaybe<Scalars['Int']['input']>;
-  zoektermen?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>> | InputMaybe<Scalars['String']['input']>>;
+  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']>;
+  afspraken?: InputMaybe<Array<InputMaybe<Scalars['Int']>> | InputMaybe<Scalars['Int']>>;
+  afdelingen?: InputMaybe<Array<InputMaybe<Scalars['Int']>> | InputMaybe<Scalars['Int']>>;
+  burgers?: InputMaybe<Array<InputMaybe<Scalars['Int']>> | InputMaybe<Scalars['Int']>>;
+  only_valid?: InputMaybe<Scalars['Boolean']>;
+  min_bedrag?: InputMaybe<Scalars['Int']>;
+  max_bedrag?: InputMaybe<Scalars['Int']>;
+  zoektermen?: InputMaybe<Array<InputMaybe<Scalars['String']>> | InputMaybe<Scalars['String']>>;
 }>;
 
 
@@ -2258,7 +2256,7 @@ export type GetSignalenQueryVariables = Exact<{ [key: string]: never; }>;
 export type GetSignalenQuery = { signalen?: Array<{ id?: string, isActive?: boolean }> };
 
 export type GetSimilarAfsprakenQueryVariables = Exact<{
-  ids?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>> | InputMaybe<Scalars['Int']['input']>>;
+  ids?: InputMaybe<Array<InputMaybe<Scalars['Int']>> | InputMaybe<Scalars['Int']>>;
 }>;
 
 
@@ -2270,7 +2268,7 @@ export type GetSimpleBurgersQueryVariables = Exact<{ [key: string]: never; }>;
 export type GetSimpleBurgersQuery = { burgers?: Array<{ id?: number, bsn?: number, voorletters?: string, achternaam?: string }> };
 
 export type GetTransactieQueryVariables = Exact<{
-  id: Scalars['Int']['input'];
+  id: Scalars['Int'];
 }>;
 
 
@@ -2282,8 +2280,8 @@ export type GetTransactionItemFormDataQueryVariables = Exact<{ [key: string]: ne
 export type GetTransactionItemFormDataQuery = { rubrieken?: Array<{ id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string } }>, afspraken?: Array<{ id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, validFrom?: any, validThrough?: any, betaalinstructie?: { byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string }, burger?: { id?: number, bsn?: number, voornamen?: string, voorletters?: string, achternaam?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, alarm?: { id?: string, isActive?: boolean, bedrag?: any, bedragMargin?: any, startDate?: string, endDate?: string, datumMargin?: number, byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, afspraak?: { id?: number }, signaal?: { id?: string } }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, postadres?: { id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string }, rubriek?: { id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } }, matchingAfspraken?: Array<{ id?: number, credit?: boolean, zoektermen?: Array<string>, bedrag?: any, omschrijving?: string, burger?: { voorletters?: string, voornamen?: string, achternaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string } }> }> };
 
 export type GetTransactiesQueryVariables = Exact<{
-  offset: Scalars['Int']['input'];
-  limit: Scalars['Int']['input'];
+  offset: Scalars['Int'];
+  limit: Scalars['Int'];
   filters?: InputMaybe<BankTransactionFilter>;
 }>;
 
@@ -2291,8 +2289,8 @@ export type GetTransactiesQueryVariables = Exact<{
 export type GetTransactiesQuery = { bankTransactionsPaged?: { banktransactions?: Array<{ id?: number, informationToAccountOwner?: string, statementLine?: string, bedrag?: any, isCredit?: boolean, tegenRekeningIban?: string, transactieDatum?: any }>, pageInfo?: { count?: number, limit?: number, start?: number } } };
 
 export type SearchTransactiesQueryVariables = Exact<{
-  offset: Scalars['Int']['input'];
-  limit: Scalars['Int']['input'];
+  offset: Scalars['Int'];
+  limit: Scalars['Int'];
   filters?: InputMaybe<BankTransactionSearchFilter>;
 }>;
 

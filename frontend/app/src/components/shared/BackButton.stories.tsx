@@ -23,7 +23,12 @@ export default {
 	},
 } as Meta<typeof BackButton>;
 
-const Template: StoryFn<typeof BackButton> = (args) => <BackButton {...args} />;
+type BackButtonProps = {
+	label: string;
+	to: string;
+};
+
+const Template: StoryFn<BackButtonProps> = (args) => <BackButton {...args} />;
 
 export const Default = Template.bind({});
 Default.args = {};

@@ -23,7 +23,11 @@ export default {
 	},
 } as Meta<typeof AddButton>;
 
-const Template: StoryFn<typeof AddButton> = ({onClick, children}) => (
+type AddButtonProps = {
+	children: React.ReactNode;
+};
+
+const Template: StoryFn<AddButtonProps> = ({onClick, children}: any) => (
 	<AddButton onClick={onClick}>
 		{children}
 	</AddButton>

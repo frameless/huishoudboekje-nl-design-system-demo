@@ -9,7 +9,7 @@ export default {
 	argTypes: {},
 } as Meta<typeof TwoColumns>;
 
-const Template: StoryFn<typeof TwoColumns> = ({children}) => <TwoColumns>{children}</TwoColumns>;
+const Template: StoryFn<typeof TwoColumns> = ({children}: any) => <TwoColumns>{children}</TwoColumns>;
 
 export const Default = Template.bind({});
 Default.args = {

@@ -21,7 +21,7 @@ export default {
 	},
 };
 
-const Template: ComponentStory<typeof PrettyIban> = ({iban, fallback}) => <PrettyIban iban={iban} fallback={fallback} />;
+const Template: ComponentStory<typeof PrettyIban> = ({iban, fallback}: any) => <PrettyIban iban={iban} fallback={fallback} />;
 
 export const Default = Template.bind({});
 Default.args = {
