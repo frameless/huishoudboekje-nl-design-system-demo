@@ -9,16 +9,16 @@ spec:
       restartPolicy: OnFailure
       initContainers:
       - name: wait-for-huishoudboekjeservice
-        image: busybox
+        image: alpine/curl
         command: ['sh', '-c', 'until curl -s http://hhb-huishoudboekjeservice/health; do echo waiting for huishoudboekjeservice; sleep 2; done;']
       - name: wait-for-logservice
-        image: busybox
+        image: alpine/curl
         command: ['sh', '-c', 'until curl -s http://hhb-logservice/health; do echo waiting for logservice; sleep 2; done;']
       - name: wait-for-organisatieservice
-        image: busybox
+        image: alpine/curl
         command: ['sh', '-c', 'until curl -s http://hhb-organisatieservice/health; do echo waiting for organisatieservice; sleep 2; done;']
       - name: wait-for-postadressenservice
-        image: busybox
+        image: alpine/curl
         command: ['sh', '-c', 'until curl -s http://hhb-postadressenservice/health; do echo waiting for postadressenservice; sleep 2; done;']
       containers:
       - name: load-data
