@@ -120,7 +120,8 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, or
 		let selected: Organisatie | undefined = undefined;
 		if (organisatie && organisatieId === organisatie.id) {
 			selected = organisatie
-		} else {
+		}
+		else {
 			selected = $organisatie.data?.organisatie
 		}
 		return selected
@@ -226,7 +227,7 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, or
 											{...defaultProps}
 											id={"organisatie"}
 											options={organisatieOptions}
-											value={form.organisatieId ? (selectedOrganisatie ? organisatieOptions.find(o => o.value === selectedOrganisatie.id) : null) : null}
+											value={form.organisatieId ? selectedOrganisatie ? organisatieOptions.find(o => o.value === selectedOrganisatie.id) : null : null}
 											styles={isFieldValid("organisatieId") && isFieldValid2("organisatieId") ? reactSelectStyles.default : reactSelectStyles.error}
 											onChange={result => {
 												const organisatieId = result?.value;
@@ -245,7 +246,8 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, or
 															}
 														}
 													})
-												} else {
+												}
+												else {
 													updateForm("organisatieId", undefined);
 													updateForm("afdelingId", undefined);
 													updateForm("postadresId", undefined);
@@ -380,15 +382,15 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, or
 										<FormLabel>{t("afspraken.bedrag")}</FormLabel>
 										<InputGroup>
 											<InputLeftElement zIndex={0}>&euro;</InputLeftElement>
-											<Input 
-												flex={3} 
-												type={"number"} 
-												pattern={"^\\d*(,{0,1}\\d{0,2})$"} 
-												step={.01} 
+											<Input
+												flex={3}
+												type={"number"}
+												pattern={"^\\d*(,{0,1}\\d{0,2})$"}
+												step={.01}
 												min={0.00}
-												value={(form.bedrag || form.bedrag == 0) ? parseFloat(String(form.bedrag)) : ""}
-												onKeyUp = {e => updateForm("bedrag", parseFloat((e.target as HTMLInputElement).value.toString().replace(',','.')))}
-												onChange={e => updateForm("bedrag", parseFloat(e.target.value.toString().replace(',','.')))} 
+												value={form.bedrag || form.bedrag == 0 ? parseFloat(String(form.bedrag)) : ""}
+												onKeyUp = {e => updateForm("bedrag", parseFloat((e.target as HTMLInputElement).value.toString().replace(",",".")))}
+												onChange={e => updateForm("bedrag", parseFloat(e.target.value.toString().replace(",",".")))}
 											/>
 										</InputGroup>
 										<FormErrorMessage>{t("afspraakDetailView.invalidBedragError")}</FormErrorMessage>
@@ -410,8 +412,9 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, or
 										showYearDropdown
 										dropdownMode={"select"}
 										onChange={(date) => {
-											if (date)
+											if (date) {
 												updateForm("validFrom", d(date).format("YYYY-MM-DD"))
+											}
 										}}
 										customInput={(<Input />)} />
 								</InputGroup>

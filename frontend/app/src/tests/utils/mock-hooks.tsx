@@ -1,3 +1,5 @@
+import { Box, Stack } from "@chakra-ui/react";
+
 export const reactI18NextMock = () => ({
 	// this mock makes sure any components using the translate hook can use it without a warning being shown
 	useTranslation: () => {
@@ -7,11 +9,11 @@ export const reactI18NextMock = () => ({
 	},
 });
 
-export const reactChakraMock = () => ({	
-	...jest.requireActual('@chakra-ui/react'),
-	Stack: ({ children, ...rest }) => <div {...rest}>{children}</div>,
-	Heading: ({ children, ...rest }) => <div {...rest}>{children}</div>,
-	HStack: ({ children, ...rest }) => <div {...rest}>{children}</div>,
+export const reactChakraMock = () => ({
+	...jest.requireActual("@chakra-ui/react"),
+	Stack: ({ children, ...rest }) => <Stack {...rest}>{children}</Stack>,
+	Heading: ({ children, ...rest }) => <Box {...rest}>{children}</Box>,
+	HStack: ({ children, ...rest }) => <Stack {...rest}>{children}</Stack>,
 });
 
 export const reactRouterDomMock = () => ({

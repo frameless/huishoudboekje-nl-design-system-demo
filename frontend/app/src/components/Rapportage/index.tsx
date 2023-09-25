@@ -17,7 +17,7 @@ const Rapportage = () => {
 	const {t} = useTranslation();
 	const reactSelectStyles = useReactSelectStyles();
 	const {search: queryParams} = useLocation();
-	
+
 	const [startDate, setStartDate] = useState<Date>(d().subtract(1, "month").startOf("month").toDate());
 	const [endDate, setEndDate] = useState<Date>(d().subtract(1, "month").endOf("month").toDate());
 
@@ -54,10 +54,10 @@ const Rapportage = () => {
 
 			return (
 				<RapportageContext.Provider value={{startDate: d(startDate), endDate: d(endDate)}}>
-				{/* filteropties */}
+					{/* filteropties */}
 					<Page title={t("reports.title")}>
 						<SectionContainer>
-							<Stack className="do-not-print" alignItems={"start"}>
+							<Stack className={"do-not-print"} alignItems={"start"}>
 								<HStack width={"100%"} alignItems={"start"}>
 									<HStack width={"50%"}>
 										<FormControl maxWidth={"40%"}>
@@ -78,7 +78,7 @@ const Rapportage = () => {
 												</Box>
 											</DatePicker>
 										</FormControl>
-										<Text maxWidth={"20%"}fontSize='sm'>{t("reports.till")}</Text>
+										<Text maxWidth={"20%"}fontSize={"sm"}>{t("reports.till")}</Text>
 										<FormControl maxWidth={"40%"}>
 											<DatePicker selected={endDate || null}
 												dateFormat={"dd-MM-yyyy"}
@@ -118,7 +118,7 @@ const Rapportage = () => {
 										</FormControl>
 									</HStack>
 								</HStack>
-								<FormControl className="do-not-print" minWidth={300}>
+								<FormControl className={"do-not-print"} minWidth={300}>
 									<Select onChange={onSelectBurger} options={burgers.map(b => ({
 										key: b.id,
 										value: b.id,
@@ -129,8 +129,8 @@ const Rapportage = () => {
 
 						</SectionContainer>
 						{/* pagina */}
-						<Heading className="only-show-on-print print"  size={"sm"} fontWeight={"normal"}>{selectedBurgers.length > 0 ? humanJoin(selectedBurgers.map(b => formatBurgerName(b) + " " + getBurgerHhbId(b))) : t("allBurgers")}</Heading>
-						<RapportageComponent burgerIds={filterBurgerIds} startDate={startDate} endDate={endDate} rubrieken={filterRubriekIds}></RapportageComponent>
+						<Heading className={"only-show-on-print print"}  size={"sm"} fontWeight={"normal"}>{selectedBurgers.length > 0 ? humanJoin(selectedBurgers.map(b => formatBurgerName(b) + " " + getBurgerHhbId(b))) : t("allBurgers")}</Heading>
+						<RapportageComponent burgerIds={filterBurgerIds} startDate={startDate} endDate={endDate} rubrieken={filterRubriekIds} />
 					</Page>
 				</RapportageContext.Provider>
 			)

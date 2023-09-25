@@ -1,6 +1,6 @@
 import {Meta, StoryFn} from "@storybook/react";
 import AddButton from "./AddButton";
-import React from 'react';
+import React from "react";
 
 export default {
 	title: "Huishoudboekje/AddButton",

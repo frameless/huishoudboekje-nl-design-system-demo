@@ -119,22 +119,22 @@ const AfspraakBetaalinstructieForm: React.FC<AfspraakBetaalinstructieProps> = ({
 
 	const getDayOfWeekFromStartDate = () => {
 		switch (form.startDate?.getDay()) {
-			case 1:
-				return [DayOfWeek.Monday]
-			case 2:
-				return [DayOfWeek.Tuesday]
-			case 3:
-				return [DayOfWeek.Wednesday]
-			case 4:
-				return [DayOfWeek.Thursday]
-			case 5:
-				return [DayOfWeek.Friday]
-			case 6:
-				return [DayOfWeek.Saturday]
-			case 0:
-				return [DayOfWeek.Sunday]
-			default:
-				return undefined
+				case 1:
+					return [DayOfWeek.Monday]
+				case 2:
+					return [DayOfWeek.Tuesday]
+				case 3:
+					return [DayOfWeek.Wednesday]
+				case 4:
+					return [DayOfWeek.Thursday]
+				case 5:
+					return [DayOfWeek.Friday]
+				case 6:
+					return [DayOfWeek.Saturday]
+				case 0:
+					return [DayOfWeek.Sunday]
+				default:
+					return undefined
 		}
 	}
 

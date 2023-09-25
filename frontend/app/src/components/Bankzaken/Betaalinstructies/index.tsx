@@ -97,7 +97,7 @@ const Betaalinstructies = () => {
 							</FormControl>
 							<FormControl flex={1}>
 								<Stack direction={["column", "row"]} alignItems={"flex-end"}>
-									<Button colorScheme={"primary"} isLoading={$createExportOverschrijvingen.loading} isDisabled={!(dateRange.from && dateRange.through) || (!paymentDateValid && useCustomPaymentDate)} onClick={onClickExportButton}>{t("global.actions.export")}</Button>
+									<Button colorScheme={"primary"} isLoading={$createExportOverschrijvingen.loading} isDisabled={!(dateRange.from && dateRange.through) || !paymentDateValid && useCustomPaymentDate} onClick={onClickExportButton}>{t("global.actions.export")}</Button>
 								</Stack>
 							</FormControl>
 						</Stack>
@@ -144,7 +144,7 @@ const Betaalinstructies = () => {
 								<Stack spacing={4}>
 									{exports.map((e) => {
 										const href = AppRoutes.Export(e.id);
-										const overschrijvingen = (e.overschrijvingen || [])
+										const overschrijvingen = e.overschrijvingen || []
 										let total = 0;
 										overschrijvingen.forEach(overschrijving => total = floatMathOperation(total, overschrijving.bedrag, 2, MathOperation.Plus))
 										return (

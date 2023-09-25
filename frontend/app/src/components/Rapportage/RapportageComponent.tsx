@@ -56,7 +56,7 @@ const RapportageComponent: React.FC<RapportageComponentParams> = ({burgerIds, st
 			const startSaldo: number = +data.saldo.saldo || 0
 			return (
 				<Box>
-					<Stack className="do-not-print">
+					<Stack className={"do-not-print"}>
 						<SectionContainer>
 							<Tabs isLazy variant={"solid"} align={"start"} colorScheme={"primary"}>
 								<Stack direction={"row"} spacing={2}>
@@ -65,7 +65,7 @@ const RapportageComponent: React.FC<RapportageComponentParams> = ({burgerIds, st
 									<Tab>{t("charts.inkomstenUitgaven.title")}</Tab>
 								</Stack>
 								<TabPanels>
-									<TabPanel className="do-not-print">
+									<TabPanel className={"do-not-print"}>
 										<BalanceTable transactions={reports} startDate={d(startDate)} endDate={d(endDate)} startSaldo={startSaldo} />
 									</TabPanel>
 									<TabPanel>
@@ -78,7 +78,7 @@ const RapportageComponent: React.FC<RapportageComponentParams> = ({burgerIds, st
 							</Tabs>
 						</SectionContainer>
 					</Stack>
-					<Box className="only-show-on-print print">
+					<Box className={"only-show-on-print print"}>
 						<BalanceTable transactions={reports} startDate={d(startDate)} endDate={d(endDate)} startSaldo={startSaldo} />
 					</Box>
 				</Box>

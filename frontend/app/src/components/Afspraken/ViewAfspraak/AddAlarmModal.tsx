@@ -36,7 +36,7 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 	const [form, {setForm, updateForm, toggleSubmitted, isSubmitted, isFieldValid, capInput, reset}] = useForm<zod.infer<typeof validator>>({
 		validator,
 		initialValue: {
-			startDate: d(afspraak.validFrom).isSameOrAfter(d(), 'date') ? d(afspraak.validFrom).toDate() : d().toDate(),
+			startDate: d(afspraak.validFrom).isSameOrAfter(d(), "date") ? d(afspraak.validFrom).toDate() : d().toDate(),
 			bedrag: parseFloat(afspraak.bedrag),
 			isPeriodiek: Periodiek.Periodiek,
 			repeatType: RepeatType.Month,
@@ -279,7 +279,7 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 											value={form.bedrag ? form.bedrag : 0}
 											min={0}
 											step={.01}
-											onChange={e => updateForm("bedrag", parseFloat(e.target.value.toString().replace(',', '.')))}
+											onChange={e => updateForm("bedrag", parseFloat(e.target.value.toString().replace(",", ".")))}
 										/>
 									</InputGroup>
 									<FormErrorMessage>{t("alarmForm.errors.invalidBedragError")}</FormErrorMessage>

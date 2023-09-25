@@ -1,10 +1,10 @@
-import { 
-	Checkbox, 
-	CheckboxGroup, 
-	FormControl, 
-	FormErrorMessage, 
+import {
+	Checkbox,
+	CheckboxGroup,
+	FormControl,
+	FormErrorMessage,
 	FormLabel,
-	Wrap, 
+	Wrap,
 	WrapItem
 } from "@chakra-ui/react";
 import React from "react";

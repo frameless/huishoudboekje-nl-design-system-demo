@@ -34,20 +34,20 @@ export const periodFormatForGranularity = {
 };
 
 export type Saldos = {
-	InkomstenTotal: Maybe<Scalars['Decimal']>,
-	UitgavenTotal: Maybe<Scalars['Decimal']>,
-	Total: Maybe<Scalars['Decimal']>,
+	InkomstenTotal: Maybe<Scalars["Decimal"]>,
+	UitgavenTotal: Maybe<Scalars["Decimal"]>,
+	Total: Maybe<Scalars["Decimal"]>,
 }
 
 export function createSaldos(burgerRapportages: BurgerRapportage[]) {
 	const result = [];
 	result[Type.Inkomsten] = 0;
-	result['Total'] = 0;
+	result.Total = 0;
 	result[Type.Uitgaven] = 0
 
 	for (const rapportage of burgerRapportages) {
 		result[Type.Inkomsten] += parseFloat(rapportage.totaalInkomsten);
-		result['Total'] += parseFloat(rapportage.totaal);
+		result.Total += parseFloat(rapportage.totaal);
 		result[Type.Uitgaven] += parseFloat(rapportage.totaalUitgaven);
 	}
 	return result;

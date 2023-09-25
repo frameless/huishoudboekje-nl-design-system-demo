@@ -160,7 +160,7 @@ const BurgerDetailPage = () => {
 					</Menu>
 				)}>
 					<BurgerContextContainer burger={burger} />
-					<BurgerSaldoView burger={burger}></BurgerSaldoView>
+					<BurgerSaldoView burger={burger} />
 					{/* TODO: uncomment when singalen views are implemented */}
 					{/* {isSignalenEnabled && <BurgerSignalenView burger={burger} />} */}
 					<BurgerAfsprakenView burger={burger} />

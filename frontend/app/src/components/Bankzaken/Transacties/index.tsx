@@ -350,8 +350,8 @@ const Transactions = () => {
 																			value: rekening.iban,
 																			label: rekening.rekeninghouder + " (" + rekening.iban + ")",
 																		}))}
-																			styles={reactSelectStyles.default} isMulti isClearable={true} noOptionsMessage={() => t("select.noOptions")} maxMenuHeight={200}
-																			placeholder={t("transactionsPage.filters.none")} value={rekeningen_filter} />
+																		styles={reactSelectStyles.default} isMulti isClearable={true} noOptionsMessage={() => t("select.noOptions")} maxMenuHeight={200}
+																		placeholder={t("transactionsPage.filters.none")} value={rekeningen_filter} />
 																	</FormControl>
 																</HStack>
 															</Stack>
@@ -374,8 +374,8 @@ const Transactions = () => {
 																			value: organisatie.id,
 																			label: organisatie.naam,
 																		}))}
-																			styles={reactSelectStyles.default} isMulti isClearable={true} noOptionsMessage={() => t("select.noOptions")} maxMenuHeight={200}
-																			placeholder={t("transactionsPage.filters.none")} value={organisatie_filter} />
+																		styles={reactSelectStyles.default} isMulti isClearable={true} noOptionsMessage={() => t("select.noOptions")} maxMenuHeight={200}
+																		placeholder={t("transactionsPage.filters.none")} value={organisatie_filter} />
 																	</FormControl>
 																</HStack>
 															</Stack>
@@ -399,9 +399,9 @@ const Transactions = () => {
 																		value: b.id,
 																		label: formatBurgerName(b) + " " + getBurgerHhbId(b),
 																	}))}
-																		isDisabled={blockBookedFilters()}
-																		styles={reactSelectStyles.default} isMulti isClearable={true} noOptionsMessage={() => t("select.noOptions")} maxMenuHeight={200}
-																		placeholder={blockBookedFilters() ? t("transactionsPage.filters.none") : t("charts.optionAllBurgers")} value={burgers_filter} />
+																	isDisabled={blockBookedFilters()}
+																	styles={reactSelectStyles.default} isMulti isClearable={true} noOptionsMessage={() => t("select.noOptions")} maxMenuHeight={200}
+																	placeholder={blockBookedFilters() ? t("transactionsPage.filters.none") : t("charts.optionAllBurgers")} value={burgers_filter} />
 																</FormControl>
 															</HStack>
 														</Stack>
