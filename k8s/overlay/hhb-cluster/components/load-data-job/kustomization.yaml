@@ -8,7 +8,7 @@ configMapGenerator:
     - huishoudboekje-data.tar.gz
   - name: log-data
     files:
-    - log_data.tar.gz
+    - log-data.tar.gz
   - name: organisatie-data
     files:
     - organisatie-data.tar.gz
