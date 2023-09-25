@@ -27,10 +27,10 @@ spec:
         command: ["/bin/sh", "-c"]
         args:
           - |
-            tar -xzvf ./configmap/huishoudboekje-data.tar.gz
-            tar -xzvf ./configmap/log-data.tar.gz
-            tar -xzvf ./configmap/organisatie-data.tar.gz
-            tar -xzvf ./configmap/postadressen-data.tar.gz
+            tar -xzvf huishoudboekje-data.tar.gz -C ./configmap/
+            tar -xzvf log-data.tar.gz -C ./configmap/
+            tar -xzvf organisatie-data.tar.gz -C ./configmap/
+            tar -xzvf postadressen-data.tar.gz -C ./configmap/
             sleep 600;
             echo "inserting data"
             pg_restore  -h $POSTGRESQL_HOSTNAME -U $POSTGRESQL_USERNAME -d $POSTGRESQL_DATABASE_NAME_HHBSVC --data-only -F c ~/configmap/huishoudboekje-data.out
