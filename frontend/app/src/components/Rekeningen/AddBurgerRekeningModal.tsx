@@ -31,7 +31,7 @@ const AddBurgerRekeningModal: React.FC<AddBurgerRekeningModalProps> = ({burger, 
 			},
 		}).then(() => {
 			toast({
-				success: t("messages.rekeningen.createSuccess", {rekening}),
+				success: t("messages.rekeningen.createSuccess", {iban: rekening.iban, rekeninghouder: rekening.rekeninghouder}),
 			});
 			onClose();
 		}).catch(handleSaveBurgerRekening);
