@@ -10,3 +10,8 @@ ALARMENSERVICE_URL = os.getenv('ALARMENSERVICE_URL', "http://localhost:8008") + 
 SIGNALENSERVICE_URL = os.getenv('SIGNALENSERVICE_URL', "http://localhost:8009") + '/v1'
 UNLEASHSERVICE_URL = os.getenv('UNLEASHSERVICE_URL', "http://localhost:8010") + '/api/unleash'
 RAPPORTAGE_SERVICE_URL = os.getenv('RAPPORTAGE_SERVICE_URL', "http://rapportageservice:8000")
+
+#timeout for the get requests in the request library connection and read timeout
+#To use no timeout set value to 0
+INTERNAL_CONNECTION_TIMEOUT = None if int(os.getenv('INTERNAL_CONNECTION_TIMEOUT', "10")) == 0 else int(os.getenv('INTERNAL_CONNECTION_TIMEOUT', "10"))
+INTERNAL_READ_TIMEOUT = None if int(os.getenv('INTERNAL_CONNECTION_TIMEOUT', "30")) == 0 else int(os.getenv('INTERNAL_CONNECTION_TIMEOUT', "30"))

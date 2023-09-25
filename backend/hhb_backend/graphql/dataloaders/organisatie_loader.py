@@ -5,6 +5,7 @@ from hhb_backend.service.model.organisatie import Organisatie
 import requests
 from graphql import GraphQLError
 from hhb_backend.graphql.utils.upstream_error_handler import UpstreamError
+from hhb_backend.graphql.settings import INTERNAL_CONNECTION_TIMEOUT, INTERNAL_READ_TIMEOUT
 
 
 class OrganisatieLoader(DataLoader[Organisatie]):
@@ -16,8 +17,12 @@ class OrganisatieLoader(DataLoader[Organisatie]):
         try:
             url = f"{self.service}/{self.model}/rekeningen"
             body = {"rekeningen_ids": rekeningen_ids}
-            response = requests.get(url, json=body)
+            response = requests.get(url, json=body, timeout=(INTERNAL_CONNECTION_TIMEOUT,INTERNAL_READ_TIMEOUT))
 
+        except requests.exceptions.ReadTimeout:
+            raise GraphQLError(f"Failed to read data from {self.service} in time ")
+        except requests.exceptions.ConnectTimeout:
+            raise GraphQLError(f"Failed to connect to {self.service} in time")
         except requests.exceptions.ConnectionError:
             raise GraphQLError(f"Failed to connect to service {self.service}")
 
