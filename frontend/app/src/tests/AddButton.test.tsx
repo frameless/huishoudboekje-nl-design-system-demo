@@ -16,14 +16,13 @@ describe('AddButton', () => {
 	it("Shows the button with Toevoegen as the label", () => {
 		const label = "Toevoegen";
 		const {container} = render(<AddButton >{label}</AddButton>);
-	
 		expect(container!.textContent).toBe(label);
 	});
 
 	it("Shows the button with the default label", () => {
-	const {container} = render(<AddButton />);
-	expect(container!.textContent).toBe("global.actions.add");
-});
+		const {container} = render(<AddButton />);
+		expect(container!.textContent).toBe("global.actions.add");
+	});
 
 	it("Shows the button with the default label", () => {
 		// Spy on the onClick function

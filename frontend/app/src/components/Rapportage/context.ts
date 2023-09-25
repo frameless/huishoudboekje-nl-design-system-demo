@@ -1,6 +1,5 @@
 import {createContext} from "react";
 import d from "../../utils/dayjs";
-import {Granularity} from "./Aggregator";
 
 type RapportageContextValue = {
 	startDate: d.Dayjs,

@@ -1,6 +1,6 @@
 import {DownloadIcon} from "@chakra-ui/icons";
 import {Box, Button, Checkbox, FormControl, FormErrorMessage, FormLabel, HStack, Input, Stack, Text, useBreakpointValue} from "@chakra-ui/react";
-import React, {useState} from "react";
+import {useState} from "react";
 import DatePicker from "react-datepicker";
 import {useTranslation} from "react-i18next";
 import {AppRoutes} from "../../../config/routes";
@@ -43,15 +43,15 @@ const Betaalinstructies = () => {
 	}
 
 	const validateCustomPaymentDate = (value: Date | undefined, range: DateRange | null = null) => {
-		const {from, through} = range != undefined ? range : dateRange
-		if (value != undefined) {
+		const {from, through} = range !== null && range !== undefined ? range : dateRange
+		if (value !== undefined) {
 			const maxPastDate = d().subtract(7, "days").startOf("day");
 			if (d(value).isSameOrAfter(maxPastDate) && d(value).isSameOrBefore(d(through).add(7, "days").endOf("day"))) {
 				setPaymentDateValid(true)
 				return true
 			}
 		}
-		if (value == undefined && !useCustomPaymentDate) {
+		if (value === undefined && !useCustomPaymentDate) {
 			setPaymentDateValid(true)
 			return true
 		}
@@ -116,7 +116,7 @@ const Betaalinstructies = () => {
 										showYearDropdown
 										dropdownMode={"select"}
 										onChange={value => {
-											const date = value == null ? undefined : value
+											const date = value === null ? undefined : value
 											validateCustomPaymentDate(date)
 											onChangePaymentDate(date)
 										}}

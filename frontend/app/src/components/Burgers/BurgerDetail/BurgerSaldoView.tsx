@@ -1,7 +1,7 @@
 import {Stack, Text} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
-import {Burger, Saldo, useGetSaldoQuery} from "../../../generated/graphql";
+import {Burger, useGetSaldoQuery} from "../../../generated/graphql";
 import Section from "../../shared/Section";
 import SectionContainer from "../../shared/SectionContainer";
 import {currencyFormat2} from "../../../utils/things";
@@ -11,7 +11,7 @@ import Queryable from "../../../utils/Queryable";
 
 const BurgerSaldoView: React.FC<{burger: Burger}> = ({burger}) => {
 	const {t} = useTranslation();
-	if (burger.id == null) {
+	if (typeof burger.id !== "number") {
 		return <SectionContainer>
 			<Text>Invalid burgerId</Text>
 		</SectionContainer>
@@ -24,7 +24,6 @@ const BurgerSaldoView: React.FC<{burger: Burger}> = ({burger}) => {
 		},
 		fetchPolicy: "no-cache"
 	})
-
 
 	return (
 		<Queryable query={$saldo} children={(data) => {

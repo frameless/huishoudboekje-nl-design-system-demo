@@ -2,7 +2,6 @@ import {getBurgerHhbId} from "../utils/things";
 import { render, screen } from '@testing-library/react';
 
 describe("getBurgerHhbId", () => {
-
 	it("Fills a bunch of ids correctly", () => {
 		// Length of Id fits in template "HHB000000"
 		expect(getBurgerHhbId({id: 1}) === "HHB000001").toBe;

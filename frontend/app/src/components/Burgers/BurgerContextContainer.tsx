@@ -22,11 +22,9 @@ const BurgerContextContainer = (data : {burger : Burger | undefined, showburgeri
         && data.burger.voorletters !== undefined
         && data.burger.voornamen !== undefined
         && data.burger.achternaam !== undefined
-        && data.burger.id !== undefined
-
-	const showBurgerViewIcon =  data.showburgericon == undefined ? false : data.showburgericon ;
-
-	const burger : Burger = (data.burger as Burger)
+        && data.burger.id !== undefined;
+	const showBurgerViewIcon = data.showburgericon === undefined || data.showburgericon === null ? false : data.showburgericon;
+	const burger : Burger = (data.burger as Burger);
 
 	return (
 		<SectionContainer>

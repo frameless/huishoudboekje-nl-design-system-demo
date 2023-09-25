@@ -28,7 +28,7 @@ const TransactieDetailsView: React.FC<StackProps & {transaction: BankTransaction
 				</Box>
 				<Box flex={1}>
 					<FormLabel>{t("form.common.fields.status")}</FormLabel>
-					{getIsBookedAndHow() == "automatisch" && (
+					{getIsBookedAndHow() === "automatisch" && (
 						<Box>
 							<Badge colorScheme={"green"}>{t("forms.afspraken.fields.automatischGeboekt")}</Badge>
 						</Box>

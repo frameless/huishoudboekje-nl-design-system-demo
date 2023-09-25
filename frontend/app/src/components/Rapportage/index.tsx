@@ -1,4 +1,4 @@
-import {FormControl, HStack, Heading, Text, Input, Stack, Button, VStack, Box} from "@chakra-ui/react";
+import {FormControl, HStack, Heading, Text, Input, Stack, Button, Box} from "@chakra-ui/react";
 import {useState} from "react";
 import DatePicker from "react-datepicker";
 import {useTranslation} from "react-i18next";

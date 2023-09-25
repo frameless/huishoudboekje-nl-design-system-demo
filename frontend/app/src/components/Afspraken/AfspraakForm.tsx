@@ -1,5 +1,5 @@
 import {Button, FormControl, FormErrorMessage, FormLabel, Input, InputGroup, InputLeftElement, Radio, RadioGroup, Spinner, Stack} from "@chakra-ui/react";
-import React, {useContext, useEffect, useState} from "react";
+import React, {useContext, useEffect} from "react";
 import {useTranslation} from "react-i18next";
 import Select from "react-select";
 import {Afdeling, Organisatie, Postadres, Rekening, UpdateAfspraakInput, useGetOrganisatieLazyQuery} from "../../generated/graphql";
@@ -14,8 +14,6 @@ import SectionContainer from "../shared/SectionContainer";
 import AfspraakFormContext from "./EditAfspraak/context";
 import d from "../../utils/dayjs";
 import DatePicker from "react-datepicker";
-import { fromPromise } from "@apollo/client";
-import { boolean } from "zod";
 
 /**
  * This validator2 is required because Zod doesn't execute the superRefine directly, but only after the initial set of rules all pass.
@@ -388,7 +386,7 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, or
 												pattern={"^\\d*(,{0,1}\\d{0,2})$"}
 												step={.01}
 												min={0.00}
-												value={form.bedrag || form.bedrag == 0 ? parseFloat(String(form.bedrag)) : ""}
+												value={form.bedrag || form.bedrag === 0 ? parseFloat(String(form.bedrag)) : ""}
 												onKeyUp = {e => updateForm("bedrag", parseFloat((e.target as HTMLInputElement).value.toString().replace(",",".")))}
 												onChange={e => updateForm("bedrag", parseFloat(e.target.value.toString().replace(",",".")))}
 											/>

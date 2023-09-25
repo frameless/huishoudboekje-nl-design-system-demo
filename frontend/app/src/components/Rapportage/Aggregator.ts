@@ -1,5 +1,5 @@
 import {Maybe} from "graphql/jsutils/Maybe";
-import {BankTransaction, BurgerRapportage, RapportageTransactie, RapportageRubriek, Organisatie, Rubriek, Scalars, Saldo} from "../../generated/graphql";
+import {BurgerRapportage, RapportageTransactie, RapportageRubriek, Scalars, Saldo} from "../../generated/graphql";
 import d from "../../utils/dayjs";
 import { Dayjs } from "dayjs";
 
@@ -9,12 +9,6 @@ export enum Type {
 	Uitgaven = "expenses",
 	Ongeboekt = "unbooked"
 }
-
-type RichTransaction = BankTransaction & {
-	dayjsDate: d.Dayjs,
-	rubriek?: Rubriek,
-	organisatie?: Organisatie,
-};
 
 export type Transaction = RapportageTransactie & {
 	type: Type,
@@ -40,9 +34,10 @@ export type Saldos = {
 }
 
 export function createSaldos(burgerRapportages: BurgerRapportage[]) {
-	const result = [];
+	const result = {
+		Total: 0,
+	};
 	result[Type.Inkomsten] = 0;
-	result.Total = 0;
 	result[Type.Uitgaven] = 0
 
 	for (const rapportage of burgerRapportages) {
@@ -58,7 +53,7 @@ export function createChartAggregation(startDate: Dayjs, burgerRapportages: Burg
 	const chartData = [];
 	for (const entry of _data) {
 		const period = d(entry.transactieDatum, "YYYY MM DD").format(periodFormatForGranularity[granularity]);
-		if (chartData[period] == undefined) {
+		if (chartData[period] === undefined) {
 			chartData[period] = [];
 		}
 		chartData[period][entry.type] = chartData[period][entry.type] || 0;
@@ -86,7 +81,6 @@ export function getStartingSaldo(saldos: Saldo[]) {
 	}
 	return startingSaldo;
 }
-
 
 function getTransactionsFromRapportageRubrieks(rapportageRubrieken: RapportageRubriek[], type: Type): Transaction[] {
 	const result: Transaction[] = [];

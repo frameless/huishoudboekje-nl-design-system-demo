@@ -29,7 +29,6 @@ describe("Dashed button", () => {
 	it("Check the onClick", () => {
 		const onClick = jest.fn();
 		const label = "Opslaan";
-
 		const {container} = render(<DashedAddButton onClick={onClick}>{label}</DashedAddButton>);
 
 		expect(container.textContent).toBe("Opslaan");
@@ -38,7 +37,6 @@ describe("Dashed button", () => {
 			bubbles: true,
 			cancelable: true,
 		});
-
 		const element = getByText(container, "Opslaan");
 
 		fireEvent(element, clickEvent);

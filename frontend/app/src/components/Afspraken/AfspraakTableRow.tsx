@@ -6,7 +6,6 @@ import {NavLink} from "react-router-dom";
 import {AppRoutes} from "../../config/routes";
 import {Afspraak} from "../../generated/graphql";
 import {currencyFormat2, isAfspraakActive} from "../../utils/things";
-import d from "../../utils/dayjs";
 import useScheduleHelper from "../../utils/useScheduleHelper";
 
 const AfspraakTableRow: React.FC<TableRowProps & {afspraak: Afspraak}> = ({afspraak, ...props}) => {

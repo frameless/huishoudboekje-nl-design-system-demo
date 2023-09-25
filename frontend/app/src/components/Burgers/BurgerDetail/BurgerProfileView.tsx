@@ -9,7 +9,7 @@ import d from "../../../utils/dayjs";
 import {getBurgerHhbId} from "../../../utils/things";
 import Section from "../../shared/Section";
 import SectionContainer from "../../shared/SectionContainer";
-import BurgerContextContainer from "../BurgerContextContainer";
+
 
 const BurgerProfileView: React.FC<{burger: Burger}> = ({burger}) => {
 	const {t} = useTranslation();

@@ -36,8 +36,8 @@ describe("TwoColumns", () => {
 				<Text>Children</Text>
 			</TwoColumns>
 		));
-
 		const text = getByText(container, "Children");
+
 		expect(text).toBeDefined();
 	});
 });

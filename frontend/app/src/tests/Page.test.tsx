@@ -40,8 +40,6 @@ jest.mock('@chakra-ui/react', () => ({
 describe("Page", () => {
 	it("Renders a title", () => {
 		const {container} = render(<Page title={"Bankafschriften"} />);
-
-		// Checks the title
 		const element = screen.findByRole("heading").then((result) => {
 			const title = getByText(result, "Bankafschriften");
 			expect(title).toBeDefined();

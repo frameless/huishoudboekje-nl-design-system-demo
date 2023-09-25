@@ -2,7 +2,7 @@
 // allows you to do things like:
 // expect(element).toHaveTextContent(/react/i)
 // learn more: https://github.com/testing-library/jest-dom
-import "@testing-library/jest-dom/node_modules/extend-expect"
+import "@testing-library/jest-dom/extend-expect"
 
 class MockWeakMap<KeyType extends object, ValueType> {
 	private map: Map<KeyType, ValueType>;
