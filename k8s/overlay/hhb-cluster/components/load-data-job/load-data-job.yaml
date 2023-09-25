@@ -27,17 +27,17 @@ spec:
         command: ["/bin/sh", "-c"]
         args:
           - |
-            cd ~/
-            tar -xzvf ./configmap/huishoudboekje_data.tar.gz -C ./configmap/huishoudboekje_data.out
-            tar -xzvf ./configmap/log_data.tar.gz -C ./configmap/log_data.out
-            tar -xzvf ./configmap/organisatie_data.tar.gz -C ./configmap/organisatie_data.out
-            tar -xzvf ./configmap/postadressen_data.tar.gz -C ./configmap/postadressen_data.out
-            sleep 180;
+            cd
+            tar -xzvf ./configmap/huishoudboekje-data.tar.gz -C ./configmap/huishoudboekje-data.out
+            tar -xzvf ./configmap/log-data.tar.gz -C ./configmap/log-data.out
+            tar -xzvf ./configmap/organisatie-data.tar.gz -C ./configmap/organisatie-data.out
+            tar -xzvf ./configmap/postadressen-data.tar.gz -C ./configmap/postadressen-data.out
+            sleep 600;
             echo "inserting data"
-            pg_restore  -h $POSTGRESQL_HOSTNAME -U $POSTGRESQL_USERNAME -d $POSTGRESQL_DATABASE_NAME_HHBSVC --data-only -F c ~/configmap/huishoudboekje_data.out
-            pg_restore  -h $POSTGRESQL_HOSTNAME -U $POSTGRESQL_USERNAME -d $POSTGRESQL_DATABASE_NAME_LOGSVC --data-only -F c ~/configmap/log_data.out
-            pg_restore  -h $POSTGRESQL_HOSTNAME -U $POSTGRESQL_USERNAME -d $POSTGRESQL_DATABASE_NAME_ORGSVC --data-only -F c ~/configmap/organisatie_data.out
-            pg_restore  -h $POSTGRESQL_HOSTNAME -U $POSTGRESQL_USERNAME -d $POSTGRESQL_DATABASE_NAME_PADSVC --data-only -F c ~/configmap/postadressen_data.out
+            pg_restore  -h $POSTGRESQL_HOSTNAME -U $POSTGRESQL_USERNAME -d $POSTGRESQL_DATABASE_NAME_HHBSVC --data-only -F c ~/configmap/huishoudboekje-data.out
+            pg_restore  -h $POSTGRESQL_HOSTNAME -U $POSTGRESQL_USERNAME -d $POSTGRESQL_DATABASE_NAME_LOGSVC --data-only -F c ~/configmap/log-data.out
+            pg_restore  -h $POSTGRESQL_HOSTNAME -U $POSTGRESQL_USERNAME -d $POSTGRESQL_DATABASE_NAME_ORGSVC --data-only -F c ~/configmap/organisatie-data.out
+            pg_restore  -h $POSTGRESQL_HOSTNAME -U $POSTGRESQL_USERNAME -d $POSTGRESQL_DATABASE_NAME_PADSVC --data-only -F c ~/configmap/postadressen-data.out
         envFrom:
           - configMapRef:
               name: postgres-config
