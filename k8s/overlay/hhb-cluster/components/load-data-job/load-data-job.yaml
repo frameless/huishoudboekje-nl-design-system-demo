@@ -28,10 +28,10 @@ spec:
         args:
           - |
             cd
-            tar -xzvf .\configmap\huishoudboekje-data.tar.gz -C .\configmap\huishoudboekje-data.out
-            tar -xzvf ./configmap/log-data.tar.gz -C ./configmap/log-data.out
-            tar -xzvf ./configmap/organisatie-data.tar.gz -C ./configmap/organisatie-data.out
-            tar -xzvf ./configmap/postadressen-data.tar.gz -C ./configmap/postadressen-data.out
+            tar -xzvf .\configmap\huishoudboekje-data.out -C .\configmap\huishoudboekje-data.tar.gz
+            tar -xzvf ./configmap/log-data.out -C ./configmap/log-data.tar.gz
+            tar -xzvf ./configmap/organisatie-data.out -C ./configmap/organisatie-data.tar.gz
+            tar -xzvf ./configmap/postadressen-data.out -C ./configmap/postadressen-data.tar.gz
             sleep 600;
             echo "inserting data"
             pg_restore  -h $POSTGRESQL_HOSTNAME -U $POSTGRESQL_USERNAME -d $POSTGRESQL_DATABASE_NAME_HHBSVC --data-only -F c ~/configmap/huishoudboekje-data.out
