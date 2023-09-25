@@ -123,7 +123,7 @@ deploy-deployment-review:
     JWT_ALGORITHMS: HS256,RS256
   script:
     - tar -czvf ./k8s/overlay/hhb-cluster/components/load-data-job/huishoudboekje_data.tar.gz ./k8s/overlay/hhb-cluster/components/load-data-job/huishoudboekje_data.out
-    - tar -czvf ./k8s/overlay/hhb-cluster/components/load-data-job/log_data.tar.gz ./k8s/overlay/hhb-cluster/load-data-job/components/log_data.out
+    - tar -czvf ./k8s/overlay/hhb-cluster/components/load-data-job/log_data.tar.gz ./k8s/overlay/hhb-cluster/components/load-data-job/log_data.out
     - tar -czvf ./k8s/overlay/hhb-cluster/components/load-data-job/organisatie_data.tar.gz ./k8s/overlay/hhb-cluster/components/load-data-job/organisatie_data.out
     - tar -czvf ./k8s/overlay/hhb-cluster/components/load-data-job/postadressen_data.tar.gz ./k8s/overlay/hhb-cluster/components/load-data-job/postadressen_data.out
     - sh ./k8s/overlay/hhb-cluster/apply-env-vars.sh
