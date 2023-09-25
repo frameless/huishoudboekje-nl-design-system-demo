@@ -128,6 +128,7 @@ deploy-deployment-review:
     - tar -czvf organisatie-data.tar.gz organisatie-data.out
     - tar -czvf postadressen-data.tar.gz postadressen-data.out
     - cd
+    - ls
     - sh ./k8s/overlay/hhb-cluster/apply-env-vars.sh
     - kubectl config use-context commonground/huishoudboekje/app-new:hhb-review
     - kubectl create ns $NAMESPACE || true
