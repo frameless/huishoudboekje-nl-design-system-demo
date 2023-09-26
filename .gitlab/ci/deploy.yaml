@@ -127,7 +127,7 @@ deploy-deployment-review:
     - tar -czvf log-data.tar.gz log-data.out
     - tar -czvf organisatie-data.tar.gz organisatie-data.out
     - tar -czvf postadressen-data.tar.gz postadressen-data.out
-    - cd ../../../../../..
+    - cd ~/app-new
     - ls
     - sh ./k8s/overlay/hhb-cluster/apply-env-vars.sh
     - kubectl config use-context commonground/huishoudboekje/app-new:hhb-review
