@@ -11,9 +11,6 @@ spec:
       - name: wait-for-huishoudboekjeservice
         image: alpine/curl
         command: ['sh', '-c', 'until curl -s http://hhb-huishoudboekjeservice/health; do echo waiting for huishoudboekjeservice; sleep 2; done;']
-      - name: wait-for-logservice
-        image: alpine/curl
-        command: ['sh', '-c', 'until curl -s http://hhb-logservice/health; do echo waiting for logservice; sleep 2; done;']
       - name: wait-for-organisatieservice
         image: alpine/curl
         command: ['sh', '-c', 'until curl -s http://hhb-organisatieservice/health; do echo waiting for organisatieservice; sleep 2; done;']
