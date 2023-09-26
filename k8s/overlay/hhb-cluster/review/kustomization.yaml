@@ -5,7 +5,6 @@ resources:
 components:
   - ../components/configmaps
   - ../components/set-images
-  - ../components/load-data-job
 patches:
 - target:
     group: networking.k8s.io

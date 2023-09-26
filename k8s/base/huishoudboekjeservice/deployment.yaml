@@ -66,8 +66,12 @@ spec:
                 secretKeyRef:
                   name: hhb-database-secrets
                   key: HUISHOUDBOEKJESERVICE_DATABASE_URL
-          command: ["flask"]
-          args: ["db", "upgrade"]
+          command: ["/bin/sh"]
+          args:
+            - -c
+            - >-
+              flask db upgrade
+              flask seed-db-with-test-data
       containers:
         - name: hhb-huishoudboekjeservice
           image: huishoudboekjeservice

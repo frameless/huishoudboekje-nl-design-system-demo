@@ -255,6 +255,7 @@ services:
     environment:
       DATABASE_URL: "postgresql://hhb:hhb@db/huishoudboekjeservice"
       LOG_LEVEL: DEBUG
+      SEED_TESTDATA: "true"
     ports:
       - 8001:8000
     depends_on:
@@ -269,6 +270,7 @@ services:
     environment:
       DATABASE_URL: "postgresql://hhb:hhb@db/organisatieservice"
       LOG_LEVEL: DEBUG
+      SEED_TESTDATA: "true"
     ports:
       - 8002:8000
     depends_on:
@@ -327,6 +329,7 @@ services:
     environment:
       DATABASE_URL: "postgresql://hhb:hhb@db/postadressenservice?connect_timeout=300"
       LOG_LEVEL: DEBUG
+      SEED_TESTDATA: "true"
     ports:
       - 8007:8080
     depends_on:
