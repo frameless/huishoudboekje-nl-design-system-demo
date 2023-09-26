@@ -27,16 +27,19 @@ spec:
         command: ["/bin/sh", "-c"]
         args:
           - |
-            tar -xzvf huishoudboekje-data.tar.gz -C ./configmap
-            tar -xzvf log-data.tar.gz -C ./configmap
-            tar -xzvf organisatie-data.tar.gz -C ./configmap
-            tar -xzvf postadressen-data.tar.gz -C ./configmap
+            echo "unzipping"
+            cd ./configmap
+            tar -xzvf huishoudboekje-data.tar.gz
+            tar -xzvf log-data.tar.gz
+            tar -xzvf organisatie-data.tar.gz
+            tar -xzvf postadressen-data.tar.gz
+            echo "restoring"
+            pg_restore  -h $POSTGRESQL_HOSTNAME -U $POSTGRESQL_USERNAME -d $POSTGRESQL_DATABASE_NAME_HHBSVC --data-only -F c ./configmap/huishoudboekje-data.out
+            pg_restore  -h $POSTGRESQL_HOSTNAME -U $POSTGRESQL_USERNAME -d $POSTGRESQL_DATABASE_NAME_LOGSVC --data-only -F c ./configmap/log-data.out
+            pg_restore  -h $POSTGRESQL_HOSTNAME -U $POSTGRESQL_USERNAME -d $POSTGRESQL_DATABASE_NAME_ORGSVC --data-only -F c ./configmap/organisatie-data.out
+            pg_restore  -h $POSTGRESQL_HOSTNAME -U $POSTGRESQL_USERNAME -d $POSTGRESQL_DATABASE_NAME_PADSVC --data-only -F c ./configmap/postadressen-data.out
+            echo "done"
             sleep 600;
-            echo "inserting data"
-            pg_restore  -h $POSTGRESQL_HOSTNAME -U $POSTGRESQL_USERNAME -d $POSTGRESQL_DATABASE_NAME_HHBSVC --data-only -F c ~/configmap/huishoudboekje-data.out
-            pg_restore  -h $POSTGRESQL_HOSTNAME -U $POSTGRESQL_USERNAME -d $POSTGRESQL_DATABASE_NAME_LOGSVC --data-only -F c ~/configmap/log-data.out
-            pg_restore  -h $POSTGRESQL_HOSTNAME -U $POSTGRESQL_USERNAME -d $POSTGRESQL_DATABASE_NAME_ORGSVC --data-only -F c ~/configmap/organisatie-data.out
-            pg_restore  -h $POSTGRESQL_HOSTNAME -U $POSTGRESQL_USERNAME -d $POSTGRESQL_DATABASE_NAME_PADSVC --data-only -F c ~/configmap/postadressen-data.out
         envFrom:
           - configMapRef:
               name: postgres-config
