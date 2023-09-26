@@ -29,10 +29,10 @@ spec:
           - |
             echo "unzipping"
             cd ./configmap
-            tar -xzvf huishoudboekje-data.tar.gz
-            tar -xzvf log-data.tar.gz
-            tar -xzvf organisatie-data.tar.gz
-            tar -xzvf postadressen-data.tar.gz
+            sudo tar -xzvf huishoudboekje-data.tar.gz
+            sudo tar xzvf log-data.tar.gz
+            sudo tar -xzvf organisatie-data.tar.gz
+            sudo tar -xzvf postadressen-data.tar.gz
             echo "restoring"
             pg_restore  -h $POSTGRESQL_HOSTNAME -U $POSTGRESQL_USERNAME -d $POSTGRESQL_DATABASE_NAME_HHBSVC --data-only -F c ./configmap/huishoudboekje-data.out
             pg_restore  -h $POSTGRESQL_HOSTNAME -U $POSTGRESQL_USERNAME -d $POSTGRESQL_DATABASE_NAME_LOGSVC --data-only -F c ./configmap/log-data.out
