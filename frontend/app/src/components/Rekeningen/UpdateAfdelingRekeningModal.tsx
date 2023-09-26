@@ -30,7 +30,6 @@ const UpdateAfdelingRekeningModal: React.FC<UpdateAfdelingRekeningModalProps> = 
 				success: t("messages.rekening.updateSucces"),
 			});
 			onClose();
-			location.reload();
 		}).catch(err => {
 			toast({
 				error: err.message,
