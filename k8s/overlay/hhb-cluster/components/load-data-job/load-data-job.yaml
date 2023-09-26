@@ -27,16 +27,16 @@ spec:
         command: ["/bin/sh", "-c"]
         args:
           - |
-            echo "unzipping"
-            cd ./configmap
-            chmod 600 huishoudboekje-data.tar.gz
-            chmod 600 log-data.tar.gz
-            chmod 600 organisatie-data.tar.gz
-            chmod 600 postadressen-data.tar.gz
-            tar -xzvf huishoudboekje-data.tar.gz
-            tar xzvf log-data.tar.gz
-            tar -xzvf organisatie-data.tar.gz
-            tar -xzvf postadressen-data.tar.gz
+            # echo "unzipping"
+            # cd ./configmap
+            # chmod 600 huishoudboekje-data.tar.gz
+            # chmod 600 log-data.tar.gz
+            # chmod 600 organisatie-data.tar.gz
+            # chmod 600 postadressen-data.tar.gz
+            # tar -xzvf huishoudboekje-data.tar.gz
+            # tar xzvf log-data.tar.gz
+            # tar -xzvf organisatie-data.tar.gz
+            # tar -xzvf postadressen-data.tar.gz
             echo "restoring"
             pg_restore  -h $POSTGRESQL_HOSTNAME -U $POSTGRESQL_USERNAME -d $POSTGRESQL_DATABASE_NAME_HHBSVC --data-only -F c ./configmap/huishoudboekje-data.out
             pg_restore  -h $POSTGRESQL_HOSTNAME -U $POSTGRESQL_USERNAME -d $POSTGRESQL_DATABASE_NAME_LOGSVC --data-only -F c ./configmap/log-data.out

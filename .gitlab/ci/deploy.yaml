@@ -122,13 +122,13 @@ deploy-deployment-review:
     JWT_SECRET: $OIDC_CLIENT_SECRET
     JWT_ALGORITHMS: HS256,RS256
   script:
-    - cd ./k8s/overlay/hhb-cluster/components/load-data-job
-    - tar -czvf huishoudboekje-data.tar.gz huishoudboekje-data.out
-    - tar -czvf log-data.tar.gz log-data.out
-    - tar -czvf organisatie-data.tar.gz organisatie-data.out
-    - tar -czvf postadressen-data.tar.gz postadressen-data.out
-    - cd ../../../../..
-    - ls
+    # - cd ./k8s/overlay/hhb-cluster/components/load-data-job
+    # - tar -czvf huishoudboekje-data.tar.gz huishoudboekje-data.out
+    # - tar -czvf log-data.tar.gz log-data.out
+    # - tar -czvf organisatie-data.tar.gz organisatie-data.out
+    # - tar -czvf postadressen-data.tar.gz postadressen-data.out
+    # - cd ../../../../..
+    # - ls
     - sh ./k8s/overlay/hhb-cluster/apply-env-vars.sh
     - kubectl config use-context commonground/huishoudboekje/app-new:hhb-review
     - kubectl create ns $NAMESPACE || true
