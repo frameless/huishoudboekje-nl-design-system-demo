@@ -39,7 +39,7 @@ spec:
             echo "restoring"
             # pg_restore  -h $POSTGRESQL_HOSTNAME -U $POSTGRESQL_USERNAME -d $POSTGRESQL_DATABASE_NAME_HHBSVC --data-only -F c ./data-files/huishoudboekje-data.out
             # pg_restore  -h $POSTGRESQL_HOSTNAME -U $POSTGRESQL_USERNAME -d $POSTGRESQL_DATABASE_NAME_LOGSVC --data-only -F c ./data-files/log-data.out
-            pg_restore  -h $POSTGRESQL_HOSTNAME -U $POSTGRESQL_USERNAME -d $POSTGRESQL_DATABASE_NAME_ORGSVC --data-only -F c ./configmap/organisatie-data.out
+            pg_restore  -h $POSTGRESQL_HOSTNAME -U $POSTGRESQL_USERNAME -d $POSTGRESQL_DATABASE_NAME_ORGSVC --data-only -Fc ./configmap/organisatie-data.out
             # pg_restore  -h $POSTGRESQL_HOSTNAME -U $POSTGRESQL_USERNAME -d $POSTGRESQL_DATABASE_NAME_PADSVC --data-only -F c ./data-files/postadressen-data.out
             echo "done"
             sleep 601;
