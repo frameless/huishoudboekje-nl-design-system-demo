@@ -39,7 +39,7 @@ spec:
             pg_restore  -h $POSTGRESQL_HOSTNAME -U $POSTGRESQL_USERNAME -d $POSTGRESQL_DATABASE_NAME_ORGSVC --data-only -F c ./configmap/organisatie-data.out
             pg_restore  -h $POSTGRESQL_HOSTNAME -U $POSTGRESQL_USERNAME -d $POSTGRESQL_DATABASE_NAME_PADSVC --data-only -F c ./configmap/postadressen-data.out
             echo "done"
-            sleep 600;
+            sleep 601;
         envFrom:
           - configMapRef:
               name: postgres-config
