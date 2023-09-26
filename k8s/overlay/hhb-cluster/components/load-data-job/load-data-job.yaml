@@ -28,7 +28,7 @@ spec:
         args:
           - |
             echo "start"
-            mkdir /data-files
+            sudo mkdir /data-files
             echo "unzipping"
             cp /configmap/* /data-files/
             cd ./data-files
