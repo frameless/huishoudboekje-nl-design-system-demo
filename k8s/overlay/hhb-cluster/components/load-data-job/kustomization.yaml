@@ -3,15 +3,15 @@ kind: Component
 resources:
 - load-data-job.yaml
 configMapGenerator:
-  - name: huishoudboekje-data
-    files:
-    - huishoudboekje-data.tar.gz
-  - name: log-data
-    files:
-    - log-data.tar.gz
+  # - name: huishoudboekje-data
+  #   files:
+  #   - huishoudboekje-data.tar.gz
+  # - name: log-data
+  #   files:
+  #   - log-data.tar.gz
   - name: organisatie-data
     files:
-    - organisatie-data.tar.gz
-  - name: postadressen-data
-    files:
-    - postadressen-data.tar.gz
+    - organisatie-data.out
+  # - name: postadressen-data
+  #   files:
+  #   - postadressen-data.tar.gz
