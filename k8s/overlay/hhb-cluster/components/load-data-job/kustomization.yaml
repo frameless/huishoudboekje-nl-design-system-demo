@@ -5,13 +5,13 @@ resources:
 configMapGenerator:
   - name: huishoudboekje-data
     files:
-    - huishoudboekje-data.out
+    - huishoudboekje-data.tar.gz
   - name: log-data
     files:
-    - log-data.out
+    - log-data.tar.gz
   - name: organisatie-data
     files:
-    - organisatie-data.out
+    - organisatie-data.tar.gz
   - name: postadressen-data
     files:
-    - postadressen-data.out
+    - postadressen-data.tar.gz
