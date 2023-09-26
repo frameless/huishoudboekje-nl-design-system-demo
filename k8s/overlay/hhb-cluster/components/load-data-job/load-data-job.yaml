@@ -52,12 +52,12 @@ spec:
       volumes:
       - name: data-files
         projected:
-          sources:
-            - configMap:
-                name: huishoudboekje-data
-            - configMap:
-                name: log-data
+          # sources:
+          #   - configMap:
+          #       name: huishoudboekje-data
+          #   - configMap:
+          #       name: log-data
             - configMap:
                 name: organisatie-data
-            - configMap:
-                name: postadressen-data
+            # - configMap:
+            #     name: postadressen-data
