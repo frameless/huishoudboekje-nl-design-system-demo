@@ -53,18 +53,20 @@ const useForm = <T extends FormData>({initialValue = {}, validator}: UseFormPara
 		let formValue = form[field];
 
 		switch (typeof formValue) {
-			case 'undefined':
-				return true;
-			case 'string':
-				formValue = parseFloat(formValue);
-				break;
-			case 'number':
-				break;
-			default:
-				return false
+				case "undefined":
+					return true;
+				case "string":
+					formValue = parseFloat(formValue);
+					break;
+				case "number":
+					break;
+				default:
+					return false
 		}
 
-		if (typeof formValue == 'number' && formValue > max) updateForm(field, max);
+		if (typeof formValue === "number" && formValue > max) {
+			updateForm(field, max);
+		}
 
 		return true;
 	};

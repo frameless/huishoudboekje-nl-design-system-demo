@@ -46,6 +46,3 @@ images:
 - name: rapportageservice
   newName: ${IMAGE_REGISTRY}/rapportageservice
   newTag: ${IMAGE_TAG}
-- name: storybook
-  newName: ${IMAGE_REGISTRY}/storybook
-  newTag: ${IMAGE_TAG}

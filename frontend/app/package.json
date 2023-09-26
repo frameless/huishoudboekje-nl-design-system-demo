@@ -23,6 +23,7 @@
     "winBuild": "set \"GENERATE_SOURCEMAP=false\" && react-scripts build",
     "pretest": "npm run i18n-migrate",
     "test": "react-scripts test",
+    "testleak": "react-scripts test --detectOpenHandles",
     "test:coverage": "npm run test -- --coverage --testResultsProcessor=jest-junit",
     "eject": "react-scripts eject",
     "theme": "./setTheme.sh",
@@ -30,9 +31,7 @@
     "get-schema": "rover graph introspect http://localhost:3000/api/graphql > schema.graphql",
     "pregen-types": "npm run get-schema",
     "gen-types": "graphql-codegen --config graphql-codegen.yaml",
-    "i18n-migrate": "i18next 'src/**/*.{ts,tsx}' [-oc]",
-    "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "i18n-migrate": "i18next 'src/**/*.{ts,tsx}' [-oc]"
   },
   "engines": {
     "node": ">=18",
@@ -56,7 +55,7 @@
     "dayjs-recur": "^1.0.1",
     "fill-range": "^7.0.1",
     "framer-motion": "^7.6.19",
-    "graphql": "^16.6.0",
+    "graphql": "^16.8.1",
     "graphql-tools": "^8.3.14",
     "http-proxy-middleware": "^2.0.6",
     "i18next": "^21.10.0",
@@ -79,7 +78,7 @@
     "zustand": "^4.1.5"
   },
   "devDependencies": {
-    "@apollo/rover": "^0.10.0",
+    "@apollo/rover": "^0.18.0",
     "@chakra-ui/storybook-addon": "^4.0.14",
     "@clarketm/jwt-cli": "^1.2.0",
     "@graphql-codegen/cli": "^2.16.1",
@@ -87,14 +86,6 @@
     "@graphql-codegen/typescript": "^2.8.5",
     "@graphql-codegen/typescript-operations": "^2.5.10",
     "@graphql-codegen/typescript-react-apollo": "^3.3.7",
-    "@storybook/addon-actions": "^6.5.14",
-    "@storybook/addon-essentials": "^6.5.14",
-    "@storybook/addon-links": "^6.5.14",
-    "@storybook/builder-webpack5": "^6.5.14",
-    "@storybook/manager-webpack5": "^6.5.14",
-    "@storybook/node-logger": "^6.5.14",
-    "@storybook/preset-create-react-app": "^4.1.2",
-    "@storybook/react": "^6.5.14",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^14.4.3",
@@ -106,11 +97,10 @@
     "@types/ua-parser-js": "^0.7.36",
     "babel-eslint": "^10.1.0",
     "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-storybook": "^0.6.14",
     "i18next-parser": "^7.0.3",
     "jest-junit": "^15.0.0",
     "nwsapi": "2.2.2",
-    "storybook-dark-mode": "^2.0.4",
-    "storybook-react-i18next": "^1.1.2",
     "webpack": "^5.82.0"
   },
   "overrides": {

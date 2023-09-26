@@ -1,6 +1,6 @@
 import {DownloadIcon} from "@chakra-ui/icons";
 import {Box, Button, Checkbox, FormControl, FormErrorMessage, FormLabel, HStack, Input, Stack, Text, useBreakpointValue} from "@chakra-ui/react";
-import React, {useState} from "react";
+import {useState} from "react";
 import DatePicker from "react-datepicker";
 import {useTranslation} from "react-i18next";
 import {AppRoutes} from "../../../config/routes";
@@ -43,15 +43,15 @@ const Betaalinstructies = () => {
 	}
 
 	const validateCustomPaymentDate = (value: Date | undefined, range: DateRange | null = null) => {
-		const {from, through} = range != undefined ? range : dateRange
-		if (value != undefined) {
+		const {from, through} = range !== null && range !== undefined ? range : dateRange
+		if (value !== undefined) {
 			const maxPastDate = d().subtract(7, "days").startOf("day");
 			if (d(value).isSameOrAfter(maxPastDate) && d(value).isSameOrBefore(d(through).add(7, "days").endOf("day"))) {
 				setPaymentDateValid(true)
 				return true
 			}
 		}
-		if (value == undefined && !useCustomPaymentDate) {
+		if (value === undefined && !useCustomPaymentDate) {
 			setPaymentDateValid(true)
 			return true
 		}
@@ -97,7 +97,7 @@ const Betaalinstructies = () => {
 							</FormControl>
 							<FormControl flex={1}>
 								<Stack direction={["column", "row"]} alignItems={"flex-end"}>
-									<Button colorScheme={"primary"} isLoading={$createExportOverschrijvingen.loading} isDisabled={!(dateRange.from && dateRange.through) || (!paymentDateValid && useCustomPaymentDate)} onClick={onClickExportButton}>{t("global.actions.export")}</Button>
+									<Button colorScheme={"primary"} isLoading={$createExportOverschrijvingen.loading} isDisabled={!(dateRange.from && dateRange.through) || !paymentDateValid && useCustomPaymentDate} onClick={onClickExportButton}>{t("global.actions.export")}</Button>
 								</Stack>
 							</FormControl>
 						</Stack>
@@ -116,7 +116,7 @@ const Betaalinstructies = () => {
 										showYearDropdown
 										dropdownMode={"select"}
 										onChange={value => {
-											const date = value == null ? undefined : value
+											const date = value === null ? undefined : value
 											validateCustomPaymentDate(date)
 											onChangePaymentDate(date)
 										}}
@@ -144,7 +144,7 @@ const Betaalinstructies = () => {
 								<Stack spacing={4}>
 									{exports.map((e) => {
 										const href = AppRoutes.Export(e.id);
-										const overschrijvingen = (e.overschrijvingen || [])
+										const overschrijvingen = e.overschrijvingen || []
 										let total = 0;
 										overschrijvingen.forEach(overschrijving => total = floatMathOperation(total, overschrijving.bedrag, 2, MathOperation.Plus))
 										return (

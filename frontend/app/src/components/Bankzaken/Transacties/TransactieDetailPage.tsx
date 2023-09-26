@@ -1,7 +1,6 @@
-import React from "react";
 import {useTranslation} from "react-i18next";
 import {useParams} from "react-router-dom";
-import {Afspraak, BankTransaction, Rubriek, useGetTransactieQuery} from "../../../generated/graphql";
+import {BankTransaction, Rubriek, useGetTransactieQuery} from "../../../generated/graphql";
 import Queryable from "../../../utils/Queryable";
 import Page from "../../shared/Page";
 import PageNotFound from "../../shared/PageNotFound";

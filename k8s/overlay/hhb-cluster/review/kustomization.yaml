@@ -12,12 +12,6 @@ patches:
     kind: Ingress
   path: ingress-host-patch.yaml
 - target:
-    group: networking.k8s.io
-    version: v1
-    kind: Ingress
-    name: hhb-storybook-ingress
-  path: ingress-sb-host-patch.yaml
-- target:
     version: v1
     kind: Deployment
   path: resources-remove-patch.yaml

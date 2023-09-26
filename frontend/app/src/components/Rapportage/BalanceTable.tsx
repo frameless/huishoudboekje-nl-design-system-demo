@@ -61,7 +61,7 @@ const BalanceTable: React.FC<BalanceTableProps> = ({transactions, startDate, end
 												</VStack>
 											);
 										})}
-										<HStack w="15%" textAlign={"right"} position={"relative"} left={"75%"}>
+										<HStack w={"15%"} textAlign={"right"} position={"relative"} left={"75%"}>
 											<Divider borderColor={"black"} flex={1} pt={1} />
 											<Text fontWeight={"bold"} flex={0}>+</Text>
 										</HStack>
@@ -76,7 +76,7 @@ const BalanceTable: React.FC<BalanceTableProps> = ({transactions, startDate, end
 									</Stack>
 								);
 							})}
-							<HStack w="15%" textAlign={"right"} position={"relative"} left={"85%"} alignItems={"center"}>
+							<HStack w={"15%"} textAlign={"right"} position={"relative"} left={"85%"} alignItems={"center"}>
 								<Divider borderColor={"black"} flex={1} pt={1} />
 								<Text fontWeight={"bold"} flex={0}>-</Text>
 							</HStack>
@@ -85,15 +85,15 @@ const BalanceTable: React.FC<BalanceTableProps> = ({transactions, startDate, end
 									<Text>{t("total income expenses in period")}</Text>
 								</Box>
 								<Box flex={2} textAlign={"right"} paddingRight={"6%"} >
-									<Text fontWeight={"bold"}>{`€ ${currencyFormat2(false).format(saldos['Total'])}`}</Text>
+									<Text fontWeight={"bold"}>{`€ ${currencyFormat2(false).format(saldos.Total)}`}</Text>
 								</Box>
 							</Stack>
 						</>)}
 						{ !dataFound && (<Text paddingTop={"30px"} >{t("reports.noData")}</Text>)}
 						<HStack direction={"row"}>
 							<Box flex={1} paddingTop={"30px"}>
-							<Text>{t("end saldo at") + " " + saldoDate.format("L")}:
-									{` € ${currencyFormat2(false).format(floatMathOperation(startSaldo, saldos['Total'], 2, MathOperation.Plus))}`}</Text>
+								<Text>{t("end saldo at") + " " + saldoDate.format("L")}:
+									{` € ${currencyFormat2(false).format(floatMathOperation(startSaldo, saldos.Total, 2, MathOperation.Plus))}`}</Text>
 							</Box>
 						</HStack>
 					</Stack>

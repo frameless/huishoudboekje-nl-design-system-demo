@@ -189,19 +189,19 @@ export function floatMathOperation(left, right, decimals: number, operation: Mat
 	const rightModified = +right * modifier;
 	let result = 0;
 	switch (operation) {
-		case MathOperation.Plus:
-			result = leftModified + rightModified
-			break;
-		case MathOperation.Minus:
-			result = leftModified - rightModified
-			break;
-		case MathOperation.Divide:
-			result = leftModified / rightModified
-			break;
-		case MathOperation.Times:
-			result = leftModified * rightModified
-			break;
-		default: throw new TypeError('operation not supported')
+			case MathOperation.Plus:
+				result = leftModified + rightModified
+				break;
+			case MathOperation.Minus:
+				result = leftModified - rightModified
+				break;
+			case MathOperation.Divide:
+				result = leftModified / rightModified
+				break;
+			case MathOperation.Times:
+				result = leftModified * rightModified
+				break;
+			default: throw new TypeError("operation not supported")
 	}
 	return result / modifier
 }

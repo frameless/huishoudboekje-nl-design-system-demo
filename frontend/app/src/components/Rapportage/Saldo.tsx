@@ -2,7 +2,7 @@ import {BoxProps, FormControl, HStack, Spinner, Stack, Text, useToken} from "@ch
 import React, {useContext} from "react";
 import {useTranslation} from "react-i18next";
 import ChakraChart, {chartProps} from "../../config/theme/custom/Chart";
-import {BurgerRapportage, Saldo as StartSaldo} from "../../generated/graphql";
+import {BurgerRapportage} from "../../generated/graphql";
 import {prepareChartData} from "../../utils/things";
 import {Granularity, createChartAggregation} from "./Aggregator";
 import {RapportageContext} from "./context";

@@ -11,9 +11,9 @@ module.exports = {
 		},
 	},
 	extends: [
-		"eslint:recommended",
-		"plugin:@typescript-eslint/recommended",
-	],
+        "eslint:recommended",
+        "plugin:@typescript-eslint/recommended",
+    ],
 	parser: "@typescript-eslint/parser",
 	plugins: [
 		"@typescript-eslint",
@@ -64,6 +64,8 @@ module.exports = {
 
 		// Default rules
 		"@typescript-eslint/ban-ts-comment": ["off"],
+		"@typescript-eslint/ban-types": ["off"],
+		"@typescript-eslint/no-explicit-any": ["off"],
 		"@typescript-eslint/no-non-null-assertion": ["off"],
 		"@typescript-eslint/no-use-before-define": ["off"],
 		"import/no-anonymous-default-export": ["off"],

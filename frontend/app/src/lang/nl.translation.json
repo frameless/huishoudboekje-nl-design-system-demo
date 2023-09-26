@@ -112,9 +112,9 @@
       "updateSucces": "Postadres gewijzigd."
     },
     "rekeningen": {
-      "createSuccess": "Bankrekening {{iban}} op naam van {{rekeninghouder}} is toegevoegd.",
       "alreadyExistsError": "Dit bankrekeningnummer wordt al gebruikt.",
       "invalidIbanError": "Er is een onjuiste IBAN ingevuld. Vul een geldige IBAN in.",
+      "createSuccess": "Bankrekening {{iban}} op naam van {{rekeninghouder}} is toegevoegd.",
       "deleteSuccess": "Bankrekening is verwijderd.",
       "inUseDeleteError": "Deze bankrekening is in gebruik en kan niet worden verwijderd.",
       "deleteTitle": "Bankrekening verwijderen.",
@@ -161,9 +161,7 @@
     "formError": "Er is een fout opgetreden. Controleer de invoer en probeer het nog eens.",
     "period": "Periode",
     "time": "Tijd",
-    "date": "Datum",
-    "startDate": "Startdatum",
-    "endDate": "Einddatum"
+    "date": "Datum"
   },
   "forms": {
     "afspraken": {
@@ -212,6 +210,30 @@
       }
     },
     "burgers": {
+      "fields": {
+        "hhbId": "Identificatienummer",
+        "initials": "Initialen",
+        "firstName": "Voornamen",
+        "lastName": "Achternaam",
+        "bsn": "Burgerservicenummer",
+        "dateOfBirth": "Geboortedatum",
+        "age": "Leeftijd",
+        "street": "Straatnaam",
+        "houseNumber": "Huisnummer",
+        "zipcode": "Postcode",
+        "city": "Plaatsnaam",
+        "phoneNumber": "Telefoonnummer",
+        "mail": "E-mailadres",
+        "voorletters": "Voorletters",
+        "voornamen": "Voornamen",
+        "achternaam": "Achternaam",
+        "geboortedatum": "Geboortedatum",
+        "straatnaam": "Straatnaam",
+        "huisnummer": "Huisnummer",
+        "postcode": "Postcode",
+        "plaatsnaam": "Plaatsnaam",
+        "telefoonnummer": "Telefoonnummer"
+      },
       "sections": {
         "agreements": {
           "title": "Afspraken",
@@ -231,38 +253,13 @@
           "title": "Rekeningen",
           "detailText": "Rekeningen van de burger."
         },
+        "saldo": {
+          "title": "Saldo"
+        },
         "signalen": {
           "title": "Signalen",
           "detailText": "Signalen van de burger."
-        },
-        "saldo": {
-          "title": "Saldo",
-          "noSaldo": "Geen saldo beschikbaar voor burger"
         }
-      },
-      "fields": {
-        "hhbId": "Identificatienummer",
-        "bsn": "Burgerservicenummer",
-        "initials": "Initialen",
-        "firstName": "Voornamen",
-        "lastName": "Achternaam",
-        "dateOfBirth": "Geboortedatum",
-        "age": "Leeftijd",
-        "street": "Straatnaam",
-        "houseNumber": "Huisnummer",
-        "zipcode": "Postcode",
-        "city": "Plaatsnaam",
-        "phoneNumber": "Telefoonnummer",
-        "mail": "E-mailadres",
-        "voorletters": "Voorletters",
-        "voornamen": "Voornamen",
-        "achternaam": "Achternaam",
-        "geboortedatum": "Geboortedatum",
-        "straatnaam": "Straatnaam",
-        "huisnummer": "Huisnummer",
-        "postcode": "Postcode",
-        "plaatsnaam": "Plaatsnaam",
-        "telefoonnummer": "Telefoonnummer"
       },
       "tooltips": {
         "postcode": "Invoer zonder spaties. Voorbeeld: 1234AB",
@@ -360,8 +357,8 @@
     "rubriek": "Rubriek",
     "omschrijving": "Omschrijving",
     "bedrag": "Bedrag",
-    "periodiek": "Periodiek",
     "startdatum": "Startdatum",
+    "periodiek": "Periodiek",
     "vervolgAfspraak": {
       "title": "Vervolgafspraak toevoegen",
       "zoektermenHelperText": "De volgende zoektermen worden overgenomen bij de vervolgafspraak:",
@@ -375,8 +372,8 @@
     "showActive": "Actieve afspraken",
     "showInActive": "Beëindigde afspraken",
     "tegenpartij": "Tegenpartij",
-    "noResults": "Er zijn geen afspraken gevonden.",
-    "nextBooking": "Verwachte betaling"
+    "nextBooking": "Verwachte betaling",
+    "noResults": "Er zijn geen afspraken gevonden."
   },
   "organisatie": "Organisatie",
   "burger": "Burger",
@@ -404,6 +401,9 @@
       "title": "Periode",
       "helperText": "De periode waarin deze afspraak actief is."
     },
+    "startDate": "Startdatum",
+    "endDate": "Einddatum",
+    "setEndDate": "Beëindig Afspraak",
     "section4": {
       "title": "Afletteren",
       "helperText": "Voeg zoektermen toe voor het automatisch afletteren van geïmporteerde banktransacties."
@@ -412,9 +412,6 @@
       "title": "Betaalinstructie",
       "helperText": "Instellingen voor een betaalinstructie."
     },
-    "startDate": "Startdatum",
-    "endDate": "Einddatum",
-    "setEndDate": "Beëindig Afspraak",
     "noBetaalinstructie": "Er is geen betaalinstructie ingesteld.",
     "alarm": {
       "title": "Alarm",
@@ -447,7 +444,9 @@
     "invalidByMonthError": "Kies minimaal één maand.",
     "byMonthDay": "Dag van de maand (1-28)",
     "invalidByMonthDayError": "Vul de dag van de maand in.",
+    "everyMonth": "Elke maand",
     "fromThrough": "Van {{from}} t/m {{through}}",
+    "nextExpected": "Eerstvolgende datum",
     "monday": "maandag",
     "tuesday": "dinsdag",
     "wednesday": "woensdag",
@@ -456,17 +455,14 @@
     "saturday": "zaterdag",
     "sunday": "zondag",
     "unknown": "Onbekend",
-    "n/a": "Niet van toepassing",
     "everyDay": "Elke dag",
     "everyWeek": "Elke week",
     "onDays": "op {{days}}",
-    "onceOnDate": "Eenmalig, op {{date}}",
-    "everyMonth": "Elke maand",
+    "onDates": "op de {{dates}}",
     "everyYear": "Elk jaar",
     "inMonths": "in {{months}}",
-    "onDates": "op de {{dates}}",
-    "nextExpected": "Eerstvolgende datum",
-    "upcoming": "Aanstaande"
+    "onceOnDate": "Eenmalig, op {{date}}",
+    "n/a": "Niet van toepassing"
   },
   "afspraakBetaalinstructie": {
     "title": "Betaalinstructie instellen",
@@ -503,8 +499,8 @@
       "invalidBedragError": "Vul een bedrag in.",
       "invalidBedragMarginError": "Vul een bedrag in."
     },
-    "startDate": "Startdatum (kan niet in het verleden zijn)",
     "datumMargin": "Toegestane afwijking (in dagen)",
+    "startDate": "Startdatum (kan niet in het verleden zijn)",
     "byMonthDay": "Dag in de maand",
     "bedrag": "Bedrag verwachte betaling",
     "bedragMargin": "Toegestane afwijking bedrag (in euro's)"
@@ -522,12 +518,12 @@
   "zoektermSuggesties": "Suggesties",
   "exports": {
     "period": "Periode",
-    "dateCreated": "Aanmaakdatum",
+    "useCustomPaymentDate": "Aangepaste verwerkingsdatum",
     "paymentDate": "Verwerkingsdatum",
     "invalidPaymentDate": "Selecteer een geldige verwerkingsdatum (van {{startDate}} t/m {{endDate}})",
-    "individualPaymentDate": "Op datum betaalinstructie",
-    "useCustomPaymentDate": "Aangepaste verwerkingsdatum",
-    "customPaymentInformation": "Een aangepaste verwerkingsdatum mag maximaal een week in het verleden (vanaf vandaag), en een week na de einddatum van de periode"
+    "customPaymentInformation": "Een aangepaste verwerkingsdatum mag maximaal een week in het verleden (vanaf vandaag), en een week na de einddatum van de periode",
+    "dateCreated": "Aanmaakdatum",
+    "individualPaymentDate": "Op datum betaalinstructie"
   },
   "periodiekSelector": {
     "periodiek": "Periodiek",
@@ -542,8 +538,8 @@
   },
   "bedrag": "Bedrag",
   "errors": {
-    "endDateBeforeStartDate": "De einddatum mag niet voor startdatum zijn.",
     "invalidDateError": "Vul een geldige datum in.",
+    "endDateBeforeStartDate": "De einddatum mag niet voor startdatum zijn.",
     "straatnaam": {
       "generalError": "Vul een straatnaam in."
     },
@@ -592,68 +588,66 @@
   "omschrijving": "Omschrijving",
   "rubriek": "Rubriek",
   "bookingSection": {
-    "noResults": "Er zijn geen afspraken gevonden. Voeg een afspraak toe, of kies een rubriek om deze transactie op af te letteren.",
-    "similarAfspraken": "Soortgelijke afspraken",
-    "noSimilarAfspraken": "Geen soortgelijke afspraken gevonden",
     "afspraak": "Afspraak",
     "rubriek": "Rubriek",
     "sugestions": "Suggesties",
     "search": "Zoeken",
-    "searchOmschrijvingAndTerms": "Zoek in omschrijving en zoektermen",
+    "noResults": "Er zijn geen afspraken gevonden. Voeg een afspraak toe, of kies een rubriek om deze transactie op af te letteren.",
+    "noSimilarAfspraken": "Geen soortgelijke afspraken gevonden",
+    "similarAfspraken": "Soortgelijke afspraken",
     "organisation": "Filter organisaties",
-    "amount": "Bedrag",
+    "allOrganisations": "Alle organisaties",
     "active": "Actief",
     "ended": "Beëindigd",
     "all": "Alle",
-    "allOrganisations": "Alle organisaties"
+    "searchOmschrijvingAndTerms": "Zoek in omschrijving en zoektermen"
   },
-  "filters": {
-    "transactions": {
-      "isCredit": {
-        "all": "Alle",
-        "income": "Inkomsten",
-        "expenses": "Uitgaven",
-        "title": "Betaalrichting",
-        "choose": "- Kies een betaalrichting -"
-      },
-      "type": {
-        "title": "Soort",
-        "onlyUnbooked": "Niet-afgeletterd"
-      },
-      "pageSize": "Aantal transacties per pagina"
-    }
-  },
-  "sections": {
-    "filterOptions": {
-      "title": "Filteropties",
-      "filtersActiveWarning": "Let op: er zijn filters actief!"
+  "charts": {
+    "filterBurgers": "Filter op burgers",
+    "optionAllBurgers": "Alle burgers",
+    "inkomstenUitgaven": {
+      "income": "Inkomsten",
+      "expenses": "Uitgaven",
+      "unbooked": "Niet afgeletterd",
+      "helperText": "Een overzicht van inkomsten en uitgaven over tijd.",
+      "title": "Inkomsten en uitgaven"
+    },
+    "optionAllRubrics": "Alle rubrieken",
+    "saldo": {
+      "title": "Saldo",
+      "helperText": "Een overzicht van saldo over tijd."
     }
   },
   "transactionsPage": {
-    "timeUpdated": "Laatste update",
-    "title": "Banktransacties",
-    "helperText": "Dit is een lijst van alle banktransacties in het Huishoudboekje.",
     "filters": {
+      "amountFrom": "Bedrag van",
+      "none": "Geen",
+      "amountTo": "Bedrag tot",
+      "amountwarning": "Bedrag tot kan niet lager zijn dan bedrag van",
       "status": "Status",
-      "direction": "Betaalrichting",
       "unbooked": "Niet afgeletterd",
       "booked": "Afgeletterd",
       "all": "Alle",
+      "direction": "Betaalrichting",
       "incomes": "Inkomsten",
       "expenses": "Uitgaven",
-      "description": "Zoeken in omschrijving",
-      "active": "Uitgebreide filters actief",
       "from": "Datum van",
       "to": "Datum tot",
       "accounts": "Rekeningen",
+      "organisatie": "Organisatie",
       "burgers": "Burgers",
+      "description": "Zoeken in omschrijving",
       "extensive": "Uitgebreid zoeken",
-      "count": "Aantal gevonden transacties",
-      "none": "Geen",
-      "amountFrom": "Bedrag van",
-      "amountTo": "Bedrag tot",
-      "amountwarning": "Bedrag tot kan niet lager zijn dan bedrag van",
-      "organisatie": "Organisatie"
+      "active": "Uitgebreide filters actief",
+      "count": "Aantal gevonden transacties"
+    },
+    "title": "Banktransacties",
+    "helperText": "Dit is een lijst van alle banktransacties in het Huishoudboekje.",
+    "timeUpdated": "Laatste update"
+  },
+  "filters": {
+    "transactions": {
+      "pageSize": "Aantal transacties per pagina"
     }
   },
   "transaction": "Transactie",
@@ -669,7 +663,6 @@
     "amount": "Bedrag",
     "description": "Omschrijving"
   },
-  "unbooked": "Niet afgeletterd",
   "pages": {
     "transactieDetails": {
       "transactie": {
@@ -715,6 +708,13 @@
     "rubriek": "Rubriek",
     "bedrag": "Bedrag"
   },
+  "burgers": {
+    "context": {
+      "title": "Burger",
+      "noBurger": "Burger niet bekend"
+    },
+    "burgers": "Burgers"
+  },
   "signalen": {
     "showActive": "Ingeschakelde signalen",
     "showInActive": "Uitgeschakelde signalen",
@@ -730,13 +730,6 @@
     "noResults": "Er zijn geen signalen gevonden."
   },
   "backToBurgersList": "Terug naar alle burgers",
-  "burgers": {
-    "burgers": "Burgers",
-    "context": {
-      "title": "Burger",
-      "noBurger": "Burger niet bekend"
-    }
-  },
   "configuratie": "Configuratie",
   "configuratieForm": {
     "emptyIdError": "Vul een waarde in voor de sleutel.",
@@ -874,53 +867,29 @@
     },
     "organizations": "Organisaties"
   },
-  "charts": {
-    "inkomstenUitgaven": {
-      "income": "Inkomsten",
-      "expenses": "Uitgaven",
-      "unbooked": "Niet afgeletterd",
-      "title": "Inkomsten en uitgaven",
-      "helperText": "Een overzicht van inkomsten en uitgaven over tijd."
-    },
-    "filterBurgers": "Filter op burgers",
-    "optionAllBurgers": "Alle burgers",
-    "filterRubrics": "Filter op rubriek",
-    "optionAllRubrics": "Alle rubrieken",
-    "granularity": "Weergave",
-    "saldo": {
-      "title": "Saldo",
-      "helperText": "Een overzicht van saldo over tijd."
-    }
-  },
-  "balance": "Balans",
   "reports": {
     "period": "Van <strong>{{from}}</strong> tot en met <strong>{{through}}</strong>",
-    "title": "Rapportage",
     "noData": "Geen transacties gevonden van de gegeven burger(s) in de gegeven periode",
-    "toManyBurgers": "Selecteer één burger (Ondersteuning voor meerdere burgers is nog niet geïmplementeerd)",
-    "incorrectDateRange": "De gegeven periode is niet correct",
-    "till": "tot en met ",
+    "title": "Rapportage",
     "currentMonth": "Huidige maand",
-    "lastMonth": "Vorige maand"
+    "lastMonth": "Vorige maand",
+    "till": "tot en met ",
+    "incorrectDateRange": "De gegeven periode is niet correct"
   },
-  "total": "Totaal",
-  "total income": "Totaal Inkomsten",
-  "total expenses": "Totaal Uitgaven",
   "total income expenses in period": "Totaal inkomsten en uitgaven in periode",
   "end saldo at": "Saldo in Huishoudboekje op",
-  "saldo": "Saldo",
-  "granularity": {
-    "daily": "Dag",
-    "weekly": "Week",
-    "monthly": "Maand"
-  },
-  "saldo balance": "Saldo in Huishoudboekje op",
   "allBurgers": "Alle burgers",
   "interval": {
     "period": "Periode",
     "month_one": "maand",
     "month_other": "maanden"
   },
+  "granularity": {
+    "daily": "Dag",
+    "weekly": "Week",
+    "monthly": "Maand"
+  },
+  "balance": "Balans",
   "suggestion": "Suggestie",
   "version": "Versie {{version}}",
   "sidebar": {
