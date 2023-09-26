@@ -5,10 +5,10 @@ resources:
 configMapGenerator:
   - name: huishoudboekje-data
     files:
-    - huishoudboekje.tar
+    - huishoudboekje.pgdump
   - name: organisatie-data
     files:
-    - organisatie.tar
+    - organisatie.pgdump
   - name: postadressen-data
     files:
-    - postadressen.tar
+    - postadressen.pgdump
