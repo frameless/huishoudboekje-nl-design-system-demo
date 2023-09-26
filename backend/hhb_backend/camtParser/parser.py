@@ -301,11 +301,11 @@ class CamtParser():
         """Parse a camt.052 or camt.053 or camt.054 file."""
         try:
             root = etree.fromstring(data, parser=etree.XMLParser(recover=True, resolve_entities=False)) # resolve_entities=False is to prevent XXE attacks (see https://gitlab.com/commonground/huishoudboekje/app-new/-/issues/915#note_1066352345)
-        except etree.XMLSyntaxError:
+        except etree.ParseError:
             try:
                 # ABNAmro is known to mix up encodings
                 root = etree.fromstring(data.decode("iso-8859-15").encode("utf-8"), parser=etree.XMLParser(recover=True, resolve_entities=False)) # resolve_entities=False is to prevent XXE attacks (see https://gitlab.com/commonground/huishoudboekje/app-new/-/issues/915#note_1066352345)
-            except etree.XMLSyntaxError:
+            except etree.ParseError:
                 root = None
         if root is None:
             raise ValueError("Not a valid xml file, or not an xml file at all.")
