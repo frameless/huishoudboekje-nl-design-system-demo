@@ -69,8 +69,8 @@ spec:
           command: ["/bin/sh"]
           args:
             - -c
-            - >-
-              npm run db:deply
+            - |
+              npm run db:deploy
               npm run seed-test-data
       containers:
         - name: hhb-postadressenservice

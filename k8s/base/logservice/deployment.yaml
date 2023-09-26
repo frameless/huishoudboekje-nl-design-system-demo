@@ -66,12 +66,8 @@ spec:
                 secretKeyRef:
                   name: hhb-database-secrets
                   key: LOGSERVICE_DATABASE_URL
-          command: ["/bin/sh"]
-          args:
-            - -c
-            - >-
-              flask db upgrade
-              flask seed-db-with-test-data
+          command: ["flask"]
+          args: ["db", "upgrade"]
       containers:
         - name: hhb-logservice
           image: logservice

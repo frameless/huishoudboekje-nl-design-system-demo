@@ -69,7 +69,7 @@ spec:
           command: ["/bin/sh"]
           args:
             - -c
-            - >-
+            - |
               flask db upgrade
               flask seed-db-with-test-data
       containers:
