@@ -52,5 +52,6 @@ spec:
       volumes:
       - name: data-files
         projected:
+          sources:
             - configMap:
                 name: organisatie-data
