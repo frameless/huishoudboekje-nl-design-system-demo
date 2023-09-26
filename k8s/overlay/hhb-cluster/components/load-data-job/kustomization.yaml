@@ -6,9 +6,6 @@ configMapGenerator:
   - name: huishoudboekje-data
     files:
     - huishoudboekje.tar
-  - name: log-data
-    files:
-    - log.tar
   - name: organisatie-data
     files:
     - organisatie.tar

@@ -29,7 +29,6 @@ spec:
           - |
             echo "start"
             pg_restore  -h $POSTGRESQL_HOSTNAME -U $POSTGRESQL_USERNAME -d $POSTGRESQL_DATABASE_NAME_HHBSVC --data-only -Ft ./data-files/huishoudboekje.tar
-            pg_restore  -h $POSTGRESQL_HOSTNAME -U $POSTGRESQL_USERNAME -d $POSTGRESQL_DATABASE_NAME_LOGSVC --data-only -Ft ./data-files/log.tar
             pg_restore  -h $POSTGRESQL_HOSTNAME -U $POSTGRESQL_USERNAME -d $POSTGRESQL_DATABASE_NAME_ORGSVC --data-only -Ft ./data-files/organisatie.tar
             pg_restore  -h $POSTGRESQL_HOSTNAME -U $POSTGRESQL_USERNAME -d $POSTGRESQL_DATABASE_NAME_PADSVC --data-only -Ft ./data-files/postadressen.tar
             echo "done"
@@ -46,8 +45,6 @@ spec:
           sources:
             - configMap:
                 name: huishoudboekje-data
-            - configMap:
-                name: log-data
             - configMap:
                 name: organisatie-data
             - configMap:
