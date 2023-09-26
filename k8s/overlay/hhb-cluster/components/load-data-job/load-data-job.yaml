@@ -46,6 +46,7 @@ spec:
         volumeMounts:
             - name: data-files
               mountPath: /configmap
+              readonly: false
       volumes:
       - name: data-files
         projected:
