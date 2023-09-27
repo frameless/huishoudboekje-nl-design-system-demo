@@ -6,7 +6,6 @@
 ### This parser is an altered version of the parser on
 ### https://github.com/OCA/bank-statement-import/blob/14.0/account_statement_import_camt/models/parser.py
 
-
 from decimal import Decimal
 import re
 from datetime import datetime
@@ -345,10 +344,10 @@ class Transaction:
         self.searchAndReplace(transaction, "ref", "customer_reference")
         self.searchAndReplace(transaction, "narration", "extra_details")
 
-        if transaction["transaction_details"] == "/":
+        if transaction["transaction_details"].strip() == "/":
             transaction["transaction_details"] = transaction["customer_reference"]
 
-        if transaction["transaction_details"] == "":
+        if transaction["transaction_details"].strip() == "" or "/ NOTPROVIDED" == transaction["transaction_details"]:
             transaction["transaction_details"] = transaction["extra_details"]
 
         if transaction["amount"] < 0:
