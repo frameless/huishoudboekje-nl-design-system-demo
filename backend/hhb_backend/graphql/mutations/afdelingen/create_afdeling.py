@@ -13,6 +13,7 @@ import hhb_backend.graphql.models.afdeling as graphene_afdeling
 from hhb_backend.graphql.mutations.postadressen.utils import create_afdeling_postadres
 from hhb_backend.graphql.mutations.rekeningen.utils import create_afdeling_rekening
 from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
+from hhb_backend.graphql.mutations.json_input_validator import JsonInputValidator
 
 
 class CreateAfdelingInput(graphene.InputObjectType):
@@ -35,7 +36,33 @@ class CreateAfdeling(graphene.Mutation):
     def mutate(root, info, **kwargs):
         """ Create the new Afdeling """
         logging.info("Creating afdeling")
+        
+        validation_schema = {
+            "type": "object",
+            "properties": {
+                "naam": {"type": "string", "minLength": 1},
+                "rekeningen": {"type": "array", "items": {
+                    "type": "object",
+                    "properties": {
+                        "rekeninghouder": {"type": "string","minLength": 1,"maxLength": 100}
+                    },
+                }},
+                "postadressen": {"type": "array", "items": {
+                    "type": "object",
+                    "properties": {
+                        "straatnaam": {"type": "string", "minLength": 1},
+                        "huisnummer": {"type": "string", "minLength": 1},
+                        "postcode": {"type": "string","pattern": "^[1-9][0-9]{3}[A-Za-z]{2}$"}, #ZipcodeNL
+                        "plaatsnaam": {"type": "string", "minLength": 1},
+                    },
+                }},
+            },
+            "required": []
+        }
+
         input = kwargs.pop("input")
+        JsonInputValidator(validation_schema).validate(input)
+
         rekeningen = input.pop("rekeningen", None)
         postadressen = input.pop("postadressen", None)
 

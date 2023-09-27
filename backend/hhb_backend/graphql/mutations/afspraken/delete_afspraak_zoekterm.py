@@ -12,6 +12,7 @@ import hhb_backend.graphql.models.afspraak as graphene_afspraak
 from hhb_backend.graphql.utils.find_matching_afspraken import find_matching_afspraken_by_afspraak
 from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
 from hhb_backend.service.model.afspraak import Afspraak
+from hhb_backend.graphql.mutations.json_input_validator import JsonInputValidator
 
 
 class DeleteAfspraakZoekterm(graphene.Mutation):
@@ -30,6 +31,10 @@ class DeleteAfspraakZoekterm(graphene.Mutation):
     def mutate(self, info, afspraak_id: int, zoekterm):
         """ Delete zoekterm to afspraak """
         logging.info(f"Updating afspraak: {afspraak_id}")
+
+        validation_schema = {"type": "string","minLength": 1}
+        JsonInputValidator(validation_schema).validate(zoekterm)
+
         previous = hhb_dataloader().afspraken.load_one(afspraak_id)
 
         if previous is None:

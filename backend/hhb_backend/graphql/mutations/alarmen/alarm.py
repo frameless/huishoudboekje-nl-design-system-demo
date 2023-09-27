@@ -1,6 +1,6 @@
 import calendar
 import logging
-from datetime import date
+from datetime import date, datetime
 
 import graphene
 import requests
@@ -13,6 +13,7 @@ from hhb_backend.graphql.scalars.bedrag import Bedrag
 from hhb_backend.graphql.scalars.day_of_week import DayOfWeekEnum
 from hhb_backend.graphql.utils.dates import valid_afspraak, to_date
 from hhb_backend.graphql.utils.upstream_error_handler import UpstreamError
+from hhb_backend.graphql.mutations.json_input_validator import JsonInputValidator
 
 
 class CreateAlarmInput(graphene.InputObjectType):
@@ -52,7 +53,7 @@ class AlarmHelper:
     @staticmethod
     def create(input):
         logging.debug(f"AlarmHelper.create: creating alarm... Input: {input}")
-
+        validate_input(input)
         # TODO eventually turn this back on, for testing purposes it is off
         # alarm_date = parser.parse(input.startDate).date()
         # utc_now = date.today()
@@ -120,6 +121,7 @@ class AlarmHelper:
     @staticmethod
     def update(id: str, input: UpdateAlarmInput):
         logging.debug(f"AlarmHelper.update: updating alarm... Id: {id}, input: {input}")
+        validate_input(input)
 
         # TODO eventually turn this back on, for testing purposes it is off
         # if input.get("startDate"):
@@ -151,6 +153,29 @@ class AlarmHelper:
         return AlarmHelper(alarm=response_alarm, previous=previous_response, ok=True,
                            burger_id=afspraak_response.burger_id)
 
+def validate_input(input):
+    validation_schema = {
+            "type": "object", 
+            "properties": {
+                "isActive" :{ "type": "boolean"},
+                "startDate": {"type": "string", "format": "date"},
+                "endDate": {"oneOf": [
+                    {"type": "string", "format": "date"},
+                    {"type": "null"}
+                ]},
+                "datum_margin": {"type": "integer", "minimum": 0},
+                "bedrag": {"type": "integer", "minimum": 0},
+                "bedragMargin": {"type": "integer", "minimum": 0},
+                "byDay" :{ "type": "array","prefixItems": [ { "type": "string" }, { "enum": ["Monday", "Tuesday", "Wednesday","Thursday","Friday","Saturday","Sunday"] }]},
+                "byMonth": { "type": "array",  "items": { "type": "integer", "minimum": 1, "maximum": 12 }},
+                "byMonthDay": { "type": "array", "items": {"type": "integer","minimum": 1, "maximum": 31}}
+            }
+        }
+    
+    JsonInputValidator(validation_schema).validate(input)
+    if not input.get("endDate", None) and input.get("byMonthDay", None):
+        if any(day > 28 for day in input.byMonthDay):
+            raise GraphQLError("Invalid input")
 
 def date_in_past(date_input):
     d = to_date(date_input)

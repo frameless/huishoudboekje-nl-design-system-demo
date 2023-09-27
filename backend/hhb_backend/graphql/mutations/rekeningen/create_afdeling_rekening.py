@@ -8,6 +8,7 @@ import hhb_backend.graphql.mutations.rekeningen.rekening_input as rekening_input
 from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql.mutations.rekeningen.utils import create_afdeling_rekening
 from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
+from hhb_backend.graphql.mutations.json_input_validator import JsonInputValidator
 
 
 class CreateAfdelingRekening(graphene.Mutation):
@@ -26,6 +27,16 @@ class CreateAfdelingRekening(graphene.Mutation):
     def mutate(self, info, afdeling_id, rekening):
         """ Create the new Rekening """
         logging.info(f"Creating rekening afdeling")
+
+        validation_schema = {
+            "type": "object",
+            "properties": {
+                "rekeninghouder": {"type": "string","minLength": 1,"maxLength": 100}
+            },
+            "required": []
+        }
+        JsonInputValidator(validation_schema).validate(rekening)
+
         result = create_afdeling_rekening(afdeling_id, rekening)
 
         AuditLogging.create(

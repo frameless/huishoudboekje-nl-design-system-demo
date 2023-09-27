@@ -13,6 +13,7 @@ from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.scalars.bedrag import Bedrag
 from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
 from hhb_backend.graphql.utils.upstream_error_handler import UpstreamError
+from hhb_backend.graphql.mutations.json_input_validator import JsonInputValidator
 
 
 class UpdateAfspraakInput(graphene.InputObjectType):
@@ -43,6 +44,21 @@ class UpdateAfspraak(graphene.Mutation):
     def mutate(self, info, id: int, input: UpdateAfspraakInput):
         """ Update the Afspraak """
         logging.info(f"Updating afspraak: {id}")
+        
+        validation_schema = {
+            "type": "object",
+            "properties": {
+                "omschrijving": {"type": "string","minLength": 1},
+                "bedrag": {"type": "integer", "minimum": 0},
+                "postadres_id": {"type": "string","format": "uuid"},
+                "alarm_id": {"type": "string","format": "uuid"},
+                "valid_from": {"type": "string", "format": "date"},
+                "valid_through": {"type": "string", "format": "date"},
+                "zoektermen": {  "type": "array", "items": {"type": "string", "minLength": 1 } }
+            },
+            "required": []
+        }
+        JsonInputValidator(validation_schema).validate(input)
 
         previous = hhb_dataloader().afspraken.load_one(id)
         if not previous:

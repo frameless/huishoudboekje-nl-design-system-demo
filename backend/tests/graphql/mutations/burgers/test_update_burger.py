@@ -57,7 +57,7 @@ def test_update_burger_success(client):
                               'huisnummer': "13a",
                               'postcode': "9999ZZ",
                               'straatnaam': "Hoofdstraat",
-                              'voorletters': "H",
+                              'voorletters': "H.",
                               'voornamen': "Hogan",
                               'plaatsnaam': "Dorp"}},
         )
