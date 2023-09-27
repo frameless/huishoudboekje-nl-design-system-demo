@@ -6,7 +6,6 @@
 ### This parser is an altered version of the parser on
 ### https://github.com/OCA/bank-statement-import/blob/14.0/account_statement_import_camt/models/parser.py
 
-
 from decimal import Decimal
 import re
 from datetime import datetime
@@ -48,8 +47,7 @@ class CamtParser():
 
         for search_str in xpath_str:
             found_node = node.findall(search_str, namespaces={"ns": ns})
-
-            if found_node: #type(found_node) in [list, dict] and len(found_node) == 0:
+            if found_node:
                 if isinstance(found_node[0], str):
                     attr_value = found_node[0]
                 elif join_str is None:
@@ -345,10 +343,10 @@ class Transaction:
         self.searchAndReplace(transaction, "ref", "customer_reference")
         self.searchAndReplace(transaction, "narration", "extra_details")
 
-        if transaction["transaction_details"] == "/":
+        if transaction["transaction_details"].strip() == "/":
             transaction["transaction_details"] = transaction["customer_reference"]
 
-        if transaction["transaction_details"] == "":
+        if transaction["transaction_details"].strip() == "" or "/ NOTPROVIDED" == transaction["transaction_details"]:
             transaction["transaction_details"] = transaction["extra_details"]
 
         if transaction["amount"] < 0:
