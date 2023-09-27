@@ -30,15 +30,15 @@ patches:
     version: v1
     kind: Deployment
     name: hhb-huishoudboekjeservice
-  path:  seed-test-data-patch.yaml
+  path: seed-test-data-patch.yaml
 - target:
     version: v1
     kind: Deployment
     name: hhb-organisatieservice
-  path:  seed-test-data-patch.yaml
+  path: seed-test-data-patch.yaml
 - target:
     version: v1
     kind: Deployment
     name: hhb-postadressenservice
-  path:  seed-test-data-patch.yaml
+  path: seed-test-data-patch.yaml
 
