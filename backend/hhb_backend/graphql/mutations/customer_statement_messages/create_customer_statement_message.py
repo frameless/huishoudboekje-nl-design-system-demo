@@ -175,8 +175,8 @@ def process_transactions(csm_id, transactions):
             is_credit=t.data["status"] == "C",
             bedrag=int(t.data["amount"].amount * 100)
         )
-        bank_transactions.append(transaction_model)
 
+        bank_transactions.append(transaction_model)
 
     bank_transactions_response = requests.post(
         f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/",

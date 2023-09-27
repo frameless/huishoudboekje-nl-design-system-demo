@@ -6,11 +6,11 @@
 ### This parser is an altered version of the parser on
 ### https://github.com/OCA/bank-statement-import/blob/14.0/account_statement_import_camt/models/parser.py
 
-
 from decimal import Decimal
 import re
 from datetime import datetime
-from defusedxml import ElementTree as etree
+from defusedxml import ElementTree
+
 
 class CamtParser():
     _name = "account.statement.import.camt.parser"
@@ -22,14 +22,14 @@ class CamtParser():
             return 0.0
         sign = 1
         amount = 0.0
-        sign_node = node.xpath("ns:CdtDbtInd", namespaces={"ns": ns})
+        sign_node = node.findall("ns:CdtDbtInd", namespaces={"ns": ns})
         if not sign_node:
-            sign_node = node.xpath("../../ns:CdtDbtInd", namespaces={"ns": ns})
+            sign_node = node.findall("../../ns:CdtDbtInd", namespaces={"ns": ns})
         if sign_node and sign_node[0].text == "DBIT":
             sign = -1
-        amount_node = node.xpath("ns:Amt", namespaces={"ns": ns})
+        amount_node = node.findall("ns:Amt", namespaces={"ns": ns})
         if not amount_node:
-            amount_node = node.xpath(
+            amount_node = node.findall(
                 "./ns:AmtDtls/ns:TxAmt/ns:Amt", namespaces={"ns": ns}
             )
         if amount_node:
@@ -45,7 +45,7 @@ class CamtParser():
         if not isinstance(xpath_str, (list, tuple)):
             xpath_str = [xpath_str]
         for search_str in xpath_str:
-            found_node = node.xpath(search_str, namespaces={"ns": ns})
+            found_node = node.findall(search_str, namespaces={"ns": ns})
             if found_node:
                 if isinstance(found_node[0], str):
                     attr_value = found_node[0]
@@ -74,14 +74,15 @@ class CamtParser():
             transaction,
             "payment_ref",
             join_str="\n",
+            add_to_original=True
         )
 
-        self.add_value_from_node(ns,node,["./ns:Refs/ns:EndToEndId",],transaction,"payment_ref",join_str="\n", add_to_original=True)
-        self.add_value_from_node(ns,node,["./ns:Refs/ns:MndtId",],transaction,"payment_ref",join_str="\n", add_to_original=True)
+        self.add_value_from_node(ns,node,["./ns:Refs/ns:EndToEndId"],transaction,"payment_ref",join_str="\n", add_to_original=True)
+        self.add_value_from_node(ns,node,["./ns:Refs/ns:MndtId"],transaction,"payment_ref",join_str="\n", add_to_original=True)
 
         # name
         self.add_value_from_node(
-            ns, node, ["./ns:AddtlTxInf"], transaction, "payment_ref", join_str="\n"
+            ns, node, ["./ns:AddtlTxInf"], transaction, "payment_ref", join_str="\n", add_to_original=True
         )
         # eref
         self.add_value_from_node(
@@ -103,14 +104,14 @@ class CamtParser():
             transaction["amount"] = amount
         # remote party values
         party_type = "Dbtr"
-        party_type_node = node.xpath("../../ns:CdtDbtInd", namespaces={"ns": ns})
+        party_type_node = node.findall("../../ns:CdtDbtInd", namespaces={"ns": ns})
         if party_type_node and party_type_node[0].text != "CRDT":
             party_type = "Cdtr"
-        party_node = node.xpath(
+        party_node = node.findall(
             f"./ns:RltdPties/ns:{party_type}", namespaces={"ns": ns}
         )
         if party_node:
-            name_node = node.xpath(
+            name_node = node.findall(
                 f"./ns:RltdPties/ns:{party_type}/ns:Nm", namespaces={"ns": ns}
             )
             if name_node:
@@ -126,11 +127,11 @@ class CamtParser():
                     "partner_name",
                 )
         # Get remote_account from iban or from domestic account:
-        account_node = node.xpath(
+        account_node = node.findall(
             f"./ns:RltdPties/ns:{party_type}Acct/ns:Id", namespaces={"ns": ns}
         )
         if account_node:
-            iban_node = account_node[0].xpath("./ns:IBAN", namespaces={"ns": ns})
+            iban_node = account_node[0].findall("./ns:IBAN", namespaces={"ns": ns})
             if iban_node:
                 transaction["account_number"] = iban_node[0].text
             else:
@@ -171,70 +172,61 @@ class CamtParser():
             "ref",
         )
 
-        details_nodes = node.xpath("./ns:NtryDtls/ns:TxDtls", namespaces={"ns": ns})
+        details_nodes = node.findall("./ns:NtryDtls/ns:TxDtls", namespaces={"ns": ns})
+        
         if len(details_nodes) == 0:
             yield transaction
             return
+        
         transaction_base = transaction
+        
         for node in details_nodes:
             transaction = transaction_base.copy()
             self.parse_transaction_details(ns, node, transaction)
             yield transaction
 
     def get_balance_amounts(self, ns, node):
-        """Return opening and closing balance.
+        """Return opening, available, closing, and forward balances."""
+        balance_nodes = node.findall("./ns:Bal", namespaces={'ns': ns})
+        balance_type_mapping = {
+            "OPBD": "opening",
+            "PRCD": "closing",
+            "CLBD": "closing",
+            "ITBD": "interim",
+            "CLAV": "available",
+            "FWAV": "forward",
+        }
+        balance_nodes_mapping = {balance_type: None for balance_type in balance_type_mapping.values()}
 
-        Depending on kind of balance and statement, the balance might be in a
-        different kind of node:
-        OPBD = OpeningBalance
-        PRCD = PreviousClosingBalance
-        ITBD = InterimBalance (first ITBD is start-, second is end-balance)
-        CLBD = ClosingBalance
+        for balance_node in balance_nodes:
+            try:
+                balance_type_node = balance_node.find("./ns:Tp/ns:CdOrPrtry/ns:Cd", namespaces={'ns': ns})
+                if balance_type_node is not None:
+                    balance_type = balance_type_node.text
+                    balance_mapping_key = balance_type_mapping.get(balance_type)
 
-        Added -
-        CLAV = Closing Available Balance
-        FWAV = Forward Available Balance
-        -
-        """
-        start_balance_node = None
-        end_balance_node = None
+                    if balance_mapping_key:
+                        balance_nodes_mapping[balance_mapping_key] = balance_node
+            except:
+                continue
 
-        avail_balance_node = None
-        forward_balance_node = None
-
-        for node_name in ["OPBD", "PRCD", "CLBD", "ITBD", "CLAV", "FWAV"]:
-            code_expr = (
-                f'./ns:Bal/ns:Tp/ns:CdOrPrtry/ns:Cd[text()="{node_name}"]/../../..'
-            )
-            balance_node = node.xpath(code_expr, namespaces={"ns": ns})
-            if balance_node:
-                if node_name in ["OPBD", "PRCD"]:
-                    start_balance_node = balance_node[0]
-                elif node_name == "CLBD":
-                    end_balance_node = balance_node[0]
-
-                elif node_name == "CLAV":
-                    avail_balance_node = balance_node[0]
-                elif node_name == "FWAV":
-                    forward_balance_node = balance_node[0]
-
-                else:
-                    if not start_balance_node:
-                        start_balance_node = balance_node[0]
-                    if not end_balance_node:
-                        end_balance_node = balance_node[-1]
-
-            if forward_balance_node is None:
-                forward_balance_node = end_balance_node
-            if avail_balance_node is None:
-                avail_balance_node = end_balance_node
+        # Set default values if nodes are not found
+        if balance_nodes_mapping["opening"] is None:
+            balance_nodes_mapping["opening"] = balance_nodes[0]
+        if balance_nodes_mapping["closing"] is None:
+            balance_nodes_mapping["closing"] = balance_nodes[-1]
+        if balance_nodes_mapping["forward"] is None:
+            balance_nodes_mapping["forward"] = balance_nodes_mapping["closing"]
+        if balance_nodes_mapping["available"] is None:
+            balance_nodes_mapping["available"] = balance_nodes_mapping["closing"]
 
         return (
-            Balance(self.parse_amount(ns, start_balance_node)),
-            Balance(self.parse_amount(ns, avail_balance_node)),
-            Balance(self.parse_amount(ns, end_balance_node)),
-            Balance(self.parse_amount(ns, forward_balance_node))
+            Balance(self.parse_amount(ns, balance_nodes_mapping["opening"])),
+            Balance(self.parse_amount(ns, balance_nodes_mapping["available"])),
+            Balance(self.parse_amount(ns, balance_nodes_mapping["closing"])),
+            Balance(self.parse_amount(ns, balance_nodes_mapping["forward"]))
         )
+
 
     def parse_statement(self, ns, node):
         """Parse a single Stmt node."""
@@ -258,7 +250,7 @@ class CamtParser():
         result["final_opening_balance"], result["available_balance"], result["final_closing_balance"], result["forward_available_balance"] = \
             self.get_balance_amounts(ns, node)
 
-        entry_nodes = node.xpath("./ns:Ntry", namespaces={"ns": ns})
+        entry_nodes = node.findall("./ns:Ntry", namespaces={"ns": ns})
         transactions = []
         for entry_node in entry_nodes:
             transactions.extend(self.parse_entry(ns, entry_node))
@@ -299,22 +291,26 @@ class CamtParser():
 
     def parse(self, data):
         """Parse a camt.052 or camt.053 or camt.054 file."""
+        statements = []
+        root = None
+
         try:
-            root = etree.fromstring(data, parser=etree.XMLParser(recover=True, resolve_entities=False)) # resolve_entities=False is to prevent XXE attacks (see https://gitlab.com/commonground/huishoudboekje/app-new/-/issues/915#note_1066352345)
-        except etree.ParseError:
+            root = ElementTree.fromstring(data)
+        except ElementTree.ParseError:
             try:
                 # ABNAmro is known to mix up encodings
-                root = etree.fromstring(data.decode("iso-8859-15").encode("utf-8"), parser=etree.XMLParser(recover=True, resolve_entities=False)) # resolve_entities=False is to prevent XXE attacks (see https://gitlab.com/commonground/huishoudboekje/app-new/-/issues/915#note_1066352345)
-            except etree.ParseError:
-                root = None
+                root = ElementTree.fromstring(data.decode("iso-8859-15").encode("utf-8"))
+            except ElementTree.ParseError:
+                raise ValueError("Not a valid xml file, or not an xml file at all.")
+
         if root is None:
             raise ValueError("Not a valid xml file, or not an xml file at all.")
-        ns = root.tag[1 : root.tag.index("}")]
-        self.check_version(ns, root)
-        statements = []
-        for node in root[0][1:]:
-            statement = self.parse_statement(ns, node)
 
+        namespace = root.tag[1:].split("}", 1)[0]
+        self.check_version(namespace, root)
+        
+        for node in root[0][1:]:
+            statement = self.parse_statement(namespace, node)
             statements.append(statement)
 
         return statements
@@ -344,10 +340,10 @@ class Transaction:
         self.searchAndReplace(transaction, "ref", "customer_reference")
         self.searchAndReplace(transaction, "narration", "extra_details")
 
-        if transaction["transaction_details"] == "/":
+        if transaction["transaction_details"].strip() == "/":
             transaction["transaction_details"] = transaction["customer_reference"]
 
-        if transaction["transaction_details"] == "":
+        if transaction["transaction_details"].strip() == "" or "/ NOTPROVIDED" == transaction["transaction_details"]:
             transaction["transaction_details"] = transaction["extra_details"]
 
         if transaction["amount"] < 0:
