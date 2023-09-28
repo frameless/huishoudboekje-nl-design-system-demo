@@ -14,7 +14,7 @@ def seed_database_with_test_data(sql_file_name, db_url):
 
     try:
         # Read the SQL file
-        with open(sql_file_path, "r", encoding="utf-16") as sql_file:
+        with open(sql_file_path, "r", encoding="utf-8") as sql_file:
             sql_script = sql_file.read()
 
         # Execute the SQL script using SQLAlchemy
