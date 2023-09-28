@@ -14,7 +14,6 @@ import {
 	useGetBurgerDetailsQuery,
 } from "../../../generated/graphql";
 import useStore from "../../../store";
-import {useFeatureFlag} from "../../../utils/features";
 import Queryable from "../../../utils/Queryable";
 import {formatBurgerName} from "../../../utils/things";
 import useToaster from "../../../utils/useToaster";
@@ -24,7 +23,6 @@ import MenuIcon from "../../shared/MenuIcon";
 import Page from "../../shared/Page";
 import PageNotFound from "../../shared/PageNotFound";
 import BurgerAfsprakenView from "./BurgerAfsprakenView";
-import BurgerSignalenView from "./BurgerSignalenView";
 import BurgerSaldoView from "./BurgerSaldoView";
 import BurgerContextContainer from "../BurgerContextContainer";
 
@@ -32,7 +30,6 @@ const BurgerDetailPage = () => {
 	const {id = ""} = useParams<{id: string}>();
 	const {t} = useTranslation();
 	const toast = useToaster();
-	const isSignalenEnabled = useFeatureFlag("signalen");
 	const navigate = useNavigate();
 	const deleteAlert = useDisclosure();
 	const deleteHuishoudenBurgerAlert = useDisclosure();
@@ -160,7 +157,7 @@ const BurgerDetailPage = () => {
 					</Menu>
 				)}>
 					<BurgerContextContainer burger={burger} />
-					<BurgerSaldoView burger={burger}></BurgerSaldoView>
+					<BurgerSaldoView burger={burger} />
 					{/* TODO: uncomment when singalen views are implemented */}
 					{/* {isSignalenEnabled && <BurgerSignalenView burger={burger} />} */}
 					<BurgerAfsprakenView burger={burger} />

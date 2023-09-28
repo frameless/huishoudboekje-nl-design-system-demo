@@ -12,6 +12,7 @@ from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.utils.find_matching_afspraken import find_matching_afspraken_by_afspraak
 from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
 from hhb_backend.service.model.afspraak import Afspraak
+from hhb_backend.graphql.mutations.json_input_validator import JsonInputValidator
 
 
 class AddAfspraakZoekterm(graphene.Mutation):
@@ -27,9 +28,12 @@ class AddAfspraakZoekterm(graphene.Mutation):
     matching_afspraken = graphene.List(lambda: graphene_afspraak.Afspraak)
 
     @staticmethod
-    def mutate(root, info, afspraak_id: int, zoekterm):
+    def mutate(root, info, afspraak_id: int, zoekterm, **kwargs):
         """ Add zoekterm to afspraak """
         logging.info(f"Adding zoekterm for afspraak: {id}")
+        validation_schema = {"type": "string", "minLength": 1}
+        JsonInputValidator(validation_schema).validate(zoekterm)
+
         previous: Afspraak = hhb_dataloader().afspraken.load_one(afspraak_id)
         if previous is None:
             raise GraphQLError("Afspraak not found")

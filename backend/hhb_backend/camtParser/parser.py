@@ -12,7 +12,6 @@ import re
 from lxml import etree
 from datetime import datetime
 
-
 class CamtParser():
     _name = "account.statement.import.camt.parser"
     _description = "Account Bank Statement Import CAMT parser"

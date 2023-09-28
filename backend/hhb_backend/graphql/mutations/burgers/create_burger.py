@@ -1,4 +1,5 @@
 """ GraphQL mutation for creating a new Burger """
+from datetime import datetime
 import json
 import logging
 
@@ -15,6 +16,8 @@ from hhb_backend.graphql.mutations.huishoudens.utils import create_huishouden_if
 from hhb_backend.graphql.mutations.rekeningen.utils import create_burger_rekening
 from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
 from hhb_backend.service.model import burger
+from hhb_backend.graphql.mutations.json_input_validator import JsonInputValidator
+from hhb_backend.graphql.mutations.validators import before_today
 
 
 class CreateBurgerInput(graphene.InputObjectType):
@@ -45,6 +48,37 @@ class CreateBurger(graphene.Mutation):
     def mutate(self, info, input):
         """ Create the new Burger """
         logging.info("Creating burger")
+        
+        validation_schema = {
+            "type": "object",
+            "properties": {
+                "voorletters": {"type": "string", "pattern": "^([A-Z]\.)+$"},
+                "voornamen": {"type": "string", "minLength": 1},
+                "achternaam": {"type": "string","minLength": 1},
+                "telefoonnummer": {"anyOf": [
+                    {"type": "null"},
+                    {"type": "string", "pattern": "^(((\+31|0|0031)6){1}[1-9]{1}[0-9]{7})$"}, #MobilePhoneNL
+                    {"type": "string", "pattern": "^(((0)[1-9]{2}[0-9][-]?[1-9][0-9]{5})|((\\+31|0|0031)[1-9][0-9][-]?[1-9][0-9]{6}))$"} #PhoneNumberNL
+                ]},
+                "email": {"anyOf": [
+                    {"type": "null"},
+                    {"type": "string", "pattern": "^\S+@\S+$"}
+                ]},
+                "straatnaam": {"type": "string","minLength": 1}, 
+                "huisnummer": {"type": "string", "minLength": 1},
+                "postcode": {"type": "string", "pattern": "^[1-9][0-9]{3}[A-Za-z]{2}$"}, #ZipcodeNL
+                "plaatsnaam": {"type": "string","minLength": 1}, 
+                "rekeningen": { "type": "array",  "items": { 
+                    "type": "object", "propeties": {
+                        "iban": {"type": "string","pattern": "^[a-zA-Z]{2}[0-9]{2}[a-zA-Z0-9]{4}[0-9]{7}([a-zA-Z0-9]{0,16})$"}, #IbanNL
+                        "rekeninghouder": {"type": "string","minLength": 1,"maxLength": 100}
+                }}},
+            },
+            "required": []
+        }
+        JsonInputValidator(validation_schema).validate(input)
+        if input.geboortedatum:
+            before_today(str(input.geboortedatum))
 
         bsn = input.get('bsn')
         graphene_burger.Burger.bsn_length(bsn)

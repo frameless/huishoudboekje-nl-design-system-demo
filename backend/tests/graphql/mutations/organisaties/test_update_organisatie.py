@@ -5,14 +5,14 @@ organisatie = {
     "id": 1,
     "naam": "query test organisation",
     "kvknummer": "98765432",
-    "vestigingsnummer": "9876"
+    "vestigingsnummer": "123456789112"
 }
 
 updated_organisatie = {
     "id": 1,
     "naam": "test",
     "kvknummer": "23456789",
-    "vestigingsnummer": "6789"
+    "vestigingsnummer": "123456789113"
 }
 
 def test_update_organisatie_success(client):
@@ -35,9 +35,9 @@ def test_update_organisatie_success(client):
                 'id': 1,
                 'naam': 'test',
                 'kvknummer': "23456789",
-                'vestigingsnummer': "6789"
+                'vestigingsnummer': "123456789112"
             }}
-        expected = {'data': {'updateOrganisatie': {'ok': True, 'organisatie': {'id': 1, 'naam': 'test', 'kvknummer': '23456789', 'vestigingsnummer': '6789'}}}}
+        expected = {'data': {'updateOrganisatie': {'ok': True, 'organisatie': {'id': 1, 'naam': 'test', 'kvknummer': '23456789', 'vestigingsnummer': '123456789113'}}}}
         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
         rm1 = rm.get(f"{settings.ORGANISATIE_SERVICES_URL}/organisaties/", status_code=200, json={"data":[organisatie]})
         rm2 = rm.post(f"{settings.ORGANISATIE_SERVICES_URL}/organisaties/1", status_code=200, json={"data":updated_organisatie})
@@ -112,7 +112,7 @@ def test_update_organisatie_success_limited(client):
             "variables": {
                 'id': 1,
                 'naam': 'test',
-                'vestigingsnummer': "23456789"
+                'vestigingsnummer': "123456789112"
             }}
         expected = {'data': {'updateOrganisatie': {'ok': True, 'organisatie': {'id': 1, 'naam': 'test', 'kvknummer': '23456789', 'vestigingsnummer': '23456789'}}}}
         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
@@ -174,7 +174,7 @@ def test_update_organisatie_fail(client):
             "id": 2,
             "naam": "test",
             "kvknummer": "23456789",
-            "vestigingsnummer": "6789"
+            "vestigingsnummer": "123456789112"
         }
         request = {
             "query": '''
@@ -193,7 +193,7 @@ def test_update_organisatie_fail(client):
                 'id': 1,
                 'naam': 'test',
                 'kvknummer': "23456789",
-                'vestigingsnummer': "6789"
+                'vestigingsnummer': "123456789112"
             }}
         expected = "Combination kvk-nummer and vestigingsnummer is not unique."
         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)

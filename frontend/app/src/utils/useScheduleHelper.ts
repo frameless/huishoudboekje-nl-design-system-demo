@@ -100,33 +100,37 @@ const useScheduleHelper = (schedule?: Schedule | Betaalinstructie) => {
 
 				upcoming.setDate(upcoming.getDate() + (upcomingDay - upcoming.getDay()));
 
-				result = upcoming.toLocaleDateString('nl-NL', {year: 'numeric', month: '2-digit', day: '2-digit'});
+				result = upcoming.toLocaleDateString("nl-NL", {year: "numeric", month: "2-digit", day: "2-digit"});
 			}
 
 			if (byMonth !== null && byMonth.length > 0 && byMonthDay.length > 0 && startDate !== endDate) {
 				const futureDays = byMonthDay.sort().filter(d => upcoming.getDate() < d);
 				const futureDay = futureDays.length ? futureDays[0] : byMonthDay[0];
 
-				if (futureDays.length == 0) upcoming.setMonth(upcoming.getMonth() + 1 > 11 ? 0 : upcoming.getMonth() + 1);
+				if (futureDays.length === 0) {
+					upcoming.setMonth(upcoming.getMonth() + 1 > 11 ? 0 : upcoming.getMonth() + 1);
+				}
 
 				const futureMonths = byMonth.map(d => d - 1).filter(d => upcoming.getMonth() <= d);
 				const futureMonth = futureMonths.length ? futureMonths[0] : byMonth[0] - 1;
 
-				if (futureMonths.length == 0) upcoming.setFullYear(upcoming.getFullYear() + 1);
+				if (futureMonths.length === 0) {
+					upcoming.setFullYear(upcoming.getFullYear() + 1);
+				}
 
 				const futureYear = upcoming.getFullYear();
 				upcoming = new Date(futureYear, futureMonth, futureDay);
 
-				if (upcoming.getTime() >= d(startDate, 'YYYY-MM-DD').toDate().getTime()
+				if (upcoming.getTime() >= d(startDate, "YYYY-MM-DD").toDate().getTime()
 					&& upcoming.getTime() >= new Date().getTime()
-					&& (endDate !== undefined || endDate == null || upcoming.getTime() <= d(endDate, 'YYYY-MM-DD').toDate().getTime())
+					&& (endDate !== undefined || endDate === null || upcoming.getTime() <= d(endDate, "YYYY-MM-DD").toDate().getTime())
 				) {
-					result = upcoming.toLocaleDateString('nl-NL', {year: 'numeric', month: '2-digit', day: '2-digit'});
+					result = upcoming.toLocaleDateString("nl-NL", {year: "numeric", month: "2-digit", day: "2-digit"});
 				}
 			}
 
-			if (startDate === endDate 
-				&& d(startDate, 'YYYY-MM-DD').toDate().getTime() >= new Date().getTime()
+			if (startDate === endDate
+				&& d(startDate, "YYYY-MM-DD").toDate().getTime() >= new Date().getTime()
 			) {
 				result = d(startDate, "YYYY-MM-DD").format("DD-MM-YYYY")
 			}

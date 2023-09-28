@@ -12,6 +12,7 @@ from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.models.rubriek import Rubriek
 from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
+from hhb_backend.graphql.mutations.json_input_validator import JsonInputValidator
 
 
 class UpdateRubriek(graphene.Mutation):
@@ -28,6 +29,17 @@ class UpdateRubriek(graphene.Mutation):
     def mutate(self, info, id, **kwargs):
         """ Update a Rubriek """
         logging.info(f"Updating rubriek {id}")
+
+        validation_schema = {
+            "type": "object",
+            "properties": {
+                "naam": {"type": "string","minLength": 1},
+                "grootboekrekening_id": {"type": "string","minLength": 1}
+            },
+            "required": []
+        }
+        JsonInputValidator(validation_schema).validate(kwargs)
+
         previous = hhb_dataloader().rubrieken.load_one(id)
         if (
             kwargs["grootboekrekening_id"]

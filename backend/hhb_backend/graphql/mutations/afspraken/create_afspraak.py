@@ -16,6 +16,7 @@ from hhb_backend.graphql.mutations.afspraken.update_afspraak_betaalinstructie im
 from hhb_backend.graphql.mutations.afspraken.update_afspraak_betaalinstructie import validate_afspraak_betaalinstructie
 from hhb_backend.graphql.scalars.bedrag import Bedrag
 from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
+from hhb_backend.graphql.mutations.json_input_validator import JsonInputValidator
 
 
 class CreateAfspraakInput(graphene.InputObjectType):
@@ -45,6 +46,33 @@ class CreateAfspraak(graphene.Mutation):
     def mutate(self, info, input: CreateAfspraakInput):
         """ Create the new Afspraak """
         logging.info("Creating afspraak")
+
+        validation_schema = {
+            "type": "object",
+            "properties": {
+                "omschrijving": {"type": "string","minLength": 1},
+                "bedrag": {"type": "integer", "minimum": 0},
+                "postadres_id": {"type": "string","format": "uuid"},
+                "alarm_id": {"type": "string","format": "uuid"},
+                "valid_from": {"type": "string", "format": "date"},
+                "valid_through": {"type": "string", "format": "date"},
+                "zoektermen": {  "type": "array", "items": {"type": "string", "minLength": 1 } },
+                "betaalinstructie":{
+                    "type": "object", 
+                    "properties": {
+                        "by_day" :{ "type": "array","prefixItems": [ { "type": "string" }, { "enum": ["Monday", "Tuesday", "Wednesday","Thursday","Friday","Saturday","Sunday"] },]},
+                        "by_month": { "type": "array",  "items": { "type": "integer", "minimum": 1, "maximum": 12 }},
+                        "by_month_day": { "type": "array", "items": {"type": "integer","minimum": 1, "maximum": 31}},
+                        "repeat_frequency": {"type": "string","minLength": 1},
+                        "except_dates": {"type": "array",  "items": {"type": "string","minLength": 1}},
+                        "start_date": {"type": "string", "format": "date"},
+                        "end_date": {"type": "string", "format": "date"}
+                    }
+                }
+            },
+            "required": []
+        }
+        JsonInputValidator(validation_schema).validate(input)
 
         if "valid_from" not in input:
             input["valid_from"] = str(date.today())

@@ -30,7 +30,8 @@ const AddAfdelingRekeningModal: React.FC<AddAfdelingRekeningModalProps> = ({afde
 			},
 		}).then(() => {
 			toast({
-				success: t("messages.rekeningen.createSuccess", {...rekening}),
+				success: "test"
+				// success: t("messages.rekeningen.createSuccess", {...rekening}),
 			});
 			onClose();
 		}).catch((err) => {

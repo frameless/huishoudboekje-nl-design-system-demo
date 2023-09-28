@@ -13,6 +13,8 @@ from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.mutations.huishoudens import huishouden_input as huishouden_input
 from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
 from hhb_backend.service.model import burger
+from hhb_backend.graphql.mutations.json_input_validator import JsonInputValidator
+from hhb_backend.graphql.mutations.validators import before_today
 
 
 class UpdateBurger(graphene.Mutation):
@@ -40,6 +42,33 @@ class UpdateBurger(graphene.Mutation):
     def mutate(self, info, id, **kwargs):
         """ Update the current Gebruiker/Burger """
         logging.info(f"Updating burger {id}")
+
+        validation_schema = {
+            "type": "object",
+            "properties": {
+                "voorletters": {"type": "string", "pattern": "^([A-Z]\.)+$"},
+                "voornamen": {"type": "string", "minLength": 1},
+                "achternaam": {"type": "string","minLength": 1},
+                "telefoonnummer": {"anyOf": [
+                    {"type": "string", "pattern": "^(((\+31|0|0031)6){1}[1-9]{1}[0-9]{7})$"}, #MobilePhoneNL
+                    {"type": "string", "pattern": "^(((0)[1-9]{2}[0-9][-]?[1-9][0-9]{5})|((\\+31|0|0031)[1-9][0-9][-]?[1-9][0-9]{6}))$"} #PhoneNumberNL
+                ]},
+                "email": {"type": "string", "pattern": "^\S+@\S+$"},
+                "straatnaam": {"type": "string","minLength": 1}, 
+                "huisnummer": {"type": "string", "minLength": 1},
+                "postcode": {"type": "string", "pattern": "^[1-9][0-9]{3}[A-Za-z]{2}$"}, #ZipcodeNL
+                "plaatsnaam": {"type": "string","minLength": 1}, 
+                "rekeningen": { "type": "array",  "items": { 
+                    "type": "object", "propeties": {
+                        "iban": {"type": "string","pattern": "^[a-zA-Z]{2}[0-9]{2}[a-zA-Z0-9]{4}[0-9]{7}([a-zA-Z0-9]{0,16})$"}, #IbanNL
+                        "rekeninghouder": {"type": "string","minLength": 1,"maxLength": 100}
+                }}},
+            },
+            "required": []
+        }
+        JsonInputValidator(validation_schema).validate(kwargs)
+        before_today(kwargs["geboortedatum"])
+
         previous = hhb_dataloader().burgers.load_one(id)
 
         bsn = kwargs.get("bsn")

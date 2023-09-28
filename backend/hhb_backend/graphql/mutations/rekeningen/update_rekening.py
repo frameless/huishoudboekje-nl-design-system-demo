@@ -11,7 +11,7 @@ from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
-
+from hhb_backend.graphql.mutations.json_input_validator import JsonInputValidator
 
 class UpdateRekening(graphene.Mutation):
     class Arguments:
@@ -28,6 +28,17 @@ class UpdateRekening(graphene.Mutation):
     def mutate(self, info, id, rekening):
         """ Create the new Rekening """
         logging.info(f"Updating rekening {id}")
+
+        validation_schema = {
+            "type": "object",
+            "properties": {
+                "iban": {"type": "string","pattern": "^[a-zA-Z]{2}[0-9]{2}[a-zA-Z0-9]{4}[0-9]{7}([a-zA-Z0-9]{0,16})$"}, #IbanNL
+                "rekeninghouder": {"type": "string","minLength": 1,"maxLength": 100}
+            },
+            "required": []
+        }
+        JsonInputValidator(validation_schema).validate(rekening)
+
         previous = hhb_dataloader().rekeningen.load_one(id)
 
         if previous is None:

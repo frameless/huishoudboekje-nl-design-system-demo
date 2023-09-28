@@ -105,7 +105,7 @@ const RekeningList: React.FC<TableProps & RekeningListProps> = ({rekeningen, bur
 			</Thead>
 			<Tbody>
 				{rekeningen.map((r, i) => (
-					<RekeningListItem key={i} rekening={r} {...burger && {
+					<RekeningListItem key={i} rekening={r} afdeling={afdeling} burger={burger} {...burger && {
 						onDelete: () => onDeleteBurgerRekening(r.id, burger.id),
 					}} {...afdeling && {
 						onDelete: () => onDeleteAfdelingRekening(r.id, afdeling.id),

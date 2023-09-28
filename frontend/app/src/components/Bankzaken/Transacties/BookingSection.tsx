@@ -24,7 +24,7 @@ const BookingSection = ({transaction, rubrieken}) => {
 	const toast = useToaster();
 	const {t} = useTranslation();
 	const suggesties: Afspraak[] = transaction.suggesties || [];
-	const ids = suggesties ? suggesties.map(suggestie => suggestie.id ? suggestie.id : -1).filter(id => id != -1) : []
+	const ids = suggesties ? suggesties.map(suggestie => suggestie.id ? suggestie.id : -1).filter(id => id !== -1) : []
 	const [showExtraAfspraken, setShowExtraAfspraken] = React.useState(false);
 
 
@@ -54,12 +54,12 @@ const BookingSection = ({transaction, rubrieken}) => {
 
 	const toggleShowExtraAfspraken = () => {
 		setShowExtraAfspraken(!showExtraAfspraken)
-		if (similairAfsprakenQuery.data == undefined && ids.length > 0) {
+		if (similairAfsprakenQuery.data === undefined && ids.length > 0) {
 			getSimilarAfspraken()
 		}
 	}
 
-	if (similairAfsprakenQuery.data != undefined && showExtraAfspraken) {
+	if (similairAfsprakenQuery.data !== undefined && similairAfsprakenQuery.data !== null && showExtraAfspraken) {
 		similairAfsprakenQuery.data.afspraken?.forEach(afspraak => {
 
 			const similar: Afspraak[] = afspraak.similarAfspraken ? afspraak.similarAfspraken : []
@@ -125,8 +125,6 @@ const BookingSection = ({transaction, rubrieken}) => {
 				console.error(err);
 				toast({error: err.message});
 			});
-			const transactionDate = transaction.transactieDatum
-			const burgerId: number = afspraak?.burger?.id ?? 0
 		}
 	};
 	const {offset, setTotal, goFirst, PaginationButtons} = usePagination({pageSize: 25});

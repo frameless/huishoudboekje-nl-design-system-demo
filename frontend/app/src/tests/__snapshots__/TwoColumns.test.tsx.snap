@@ -1,3 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`TwoColumns Renders the children 1`] = `"<div class=\\"css-ivkdgu\\"><div class=\\"chakra-stack css-1czofa7\\"><div class=\\"chakra-stack css-13z5mb4\\"><div class=\\"css-yjnu3x\\"><div to=\\"/\\" class=\\"css-4dhf1d\\"><img alt=\\"logo\\" src=\\"/theme/logo.svg\\" class=\\"chakra-image css-0\\"></div></div></div><div class=\\"chakra-stack css-k49deb\\"><div class=\\"chakra-stack css-16hczwi\\"><div class=\\"chakra-stack css-n21gh5\\"><p class=\\"chakra-text css-0\\">Children</p></div></div><div class=\\"chakra-stack css-nj1o9c\\"><div class=\\"chakra-stack css-1qpox0b\\"><p class=\\"chakra-text css-qljqz\\">version</p></div></div></div></div></div>"`;

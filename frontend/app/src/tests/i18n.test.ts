@@ -21,6 +21,6 @@ describe("Testing language files for missing translations.", () => {
 
 	test.each(files)("Testing for missing translations in %s...", file => {
 		const paths = jp.paths(file.content, `$..[?(@ === '${needle}')]`).map(x => jp.stringify(x));
-		expect(paths).toStrictEqual([]);
+		expect(paths).toHaveLength(0);
 	});
 });

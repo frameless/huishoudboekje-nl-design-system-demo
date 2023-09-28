@@ -9,7 +9,7 @@ import d from "../../../utils/dayjs";
 import {getBurgerHhbId} from "../../../utils/things";
 import Section from "../../shared/Section";
 import SectionContainer from "../../shared/SectionContainer";
-import BurgerContextContainer from "../BurgerContextContainer";
+
 
 const BurgerProfileView: React.FC<{burger: Burger}> = ({burger}) => {
 	const {t} = useTranslation();
@@ -36,21 +36,21 @@ const BurgerProfileView: React.FC<{burger: Burger}> = ({burger}) => {
 					</Stack>
 				</Stack>
 				<Stack spacing={2} mb={1} direction={["column", "row"]}>
-						<Stack direction={["column", "row"]} spacing={1} flex={1}>
-							<Stack spacing={1} flex={1}>
-								<FormLabel>{t("forms.burgers.fields.initials")}</FormLabel>
-								<Text>{burger.voorletters}</Text>
-							</Stack>
-							<Stack spacing={1} flex={1}>
-								<FormLabel>{t("forms.burgers.fields.firstName")}</FormLabel>
-								<Text>{burger.voornamen}</Text>
-							</Stack>
+					<Stack direction={["column", "row"]} spacing={1} flex={1}>
+						<Stack spacing={1} flex={1}>
+							<FormLabel>{t("forms.burgers.fields.initials")}</FormLabel>
+							<Text>{burger.voorletters}</Text>
 						</Stack>
 						<Stack spacing={1} flex={1}>
-							<FormLabel>{t("forms.burgers.fields.lastName")}</FormLabel>
-							<Text>{burger.achternaam}</Text>
+							<FormLabel>{t("forms.burgers.fields.firstName")}</FormLabel>
+							<Text>{burger.voornamen}</Text>
 						</Stack>
 					</Stack>
+					<Stack spacing={1} flex={1}>
+						<FormLabel>{t("forms.burgers.fields.lastName")}</FormLabel>
+						<Text>{burger.achternaam}</Text>
+					</Stack>
+				</Stack>
 				<Stack>
 					<Stack spacing={2} mb={1} direction={["column", "row"]}>
 						<Stack spacing={1} flex={1}>

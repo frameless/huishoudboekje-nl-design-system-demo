@@ -16,7 +16,7 @@ const SelectAfspraakOption: React.FC<SelectAfspraakOptionProps> = ({afspraak, is
 	const zoektermen: string[] = afspraak.zoektermen || [];
 
 	function isAfspraakActive(afspraak: Afspraak) {
-		if (afspraak.validThrough != undefined) {
+		if (afspraak.validThrough !== undefined) {
 			if (d(afspraak.validThrough) < d()) {
 				return false
 			}

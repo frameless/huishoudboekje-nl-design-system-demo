@@ -1,4 +1,4 @@
-import {Checkbox, CheckboxGroup, FormControl, FormErrorMessage, FormLabel, SimpleGrid, Stack} from "@chakra-ui/react";
+import {Checkbox, CheckboxGroup, FormControl, FormErrorMessage, FormLabel, SimpleGrid} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
 

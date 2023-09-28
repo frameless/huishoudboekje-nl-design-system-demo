@@ -387,7 +387,7 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 							<Text>{d(afspraak.validFrom).format("DD-MM-YYYY")}</Text>
 						</DataItem>
 						<DataItem label={t("afspraakDetailView.endDate")}>
-							{afspraak.validThrough != null ? (
+							{afspraak.validThrough !== null ? (
 								<Text>{d(afspraak.validThrough).format("DD-MM-YYYY")}</Text>
 							) : (
 								<>

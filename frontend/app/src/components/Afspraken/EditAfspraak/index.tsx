@@ -2,7 +2,7 @@ import React from "react";
 import {useTranslation} from "react-i18next";
 import {useNavigate, useParams} from "react-router-dom";
 import {AppRoutes} from "../../../config/routes";
-import {Afspraak, GetAfspraakDocument, UpdateAfspraakMutationVariables, useGetAfspraakFormDataQuery, useUpdateAfspraakMutation} from "../../../generated/graphql";
+import {Afspraak, GetAfspraakDocument, GetBurgerDetailsDocument, UpdateAfspraakMutationVariables, useGetAfspraakFormDataQuery, useUpdateAfspraakMutation} from "../../../generated/graphql";
 import Queryable from "../../../utils/Queryable";
 import useToaster from "../../../utils/useToaster";
 import BackButton from "../../shared/BackButton";
@@ -17,15 +17,21 @@ const EditAfspraak = () => {
 	const {t} = useTranslation();
 	const navigate = useNavigate();
 	const toast = useToaster();
-	const [updateAfspraakMutation, $updateAfspraakMutation] = useUpdateAfspraakMutation({
-		refetchQueries: [
-			{query: GetAfspraakDocument, variables: {id: parseInt(id)}},
-		],
-	});
 	const $afspraak = useGetAfspraakFormDataQuery({
 		variables: {
 			afspraakId: parseInt(id),
 		},
+	});
+
+	const refetchQueries = [
+		{query: GetAfspraakDocument, variables: {id: parseInt(id)}},
+	]
+	if ($afspraak.data?.afspraak?.burger?.id){
+		refetchQueries.push({query: GetBurgerDetailsDocument, variables: {id: $afspraak.data?.afspraak?.burger?.id}})
+	}
+	
+	const [updateAfspraakMutation, $updateAfspraakMutation] = useUpdateAfspraakMutation({
+		refetchQueries: refetchQueries,
 	});
 
 	return (

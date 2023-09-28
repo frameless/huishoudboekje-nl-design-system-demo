@@ -34,6 +34,7 @@ setup(
         'pandas==1.4.4',
         'XlsxWriter==3.0.3',
         'Deprecated==1.2.13',
-        'MarkupSafe==2.1.1'
+        'MarkupSafe==2.1.1',
+        "jsonschema>=4.15.0,<5"
     ],
 )
