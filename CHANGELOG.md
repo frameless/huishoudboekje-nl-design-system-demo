@@ -2,6 +2,8 @@
 
 ## 1.10.0
 
+Deze versie omvat verbeteringen aan functies voor inloggen en uitloggen.
+
 ### Minor Changes
 
 - 3a7543e7: Auth service was not up-to-par with current security standards and required a rework on the flow to properly handle JWT tokens of different OIDC providers
