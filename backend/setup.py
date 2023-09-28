@@ -34,6 +34,7 @@ setup(
         'XlsxWriter==3.0.3',
         'Deprecated==1.2.13',
         'MarkupSafe==2.1.1',
-        'defusedxml>=0.7.1'
+        'defusedxml>=0.7.1',
+        "jsonschema>=4.15.0,<5"
     ],
 )
