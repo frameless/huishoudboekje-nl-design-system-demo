@@ -6,6 +6,7 @@
 ### This parser is an altered version of the parser on
 ### https://github.com/OCA/bank-statement-import/blob/14.0/account_statement_import_camt/models/parser.py
 
+
 from decimal import Decimal
 import re
 from datetime import datetime
@@ -44,9 +45,11 @@ class CamtParser():
         in a found node will be used to set a value."""
         if not isinstance(xpath_str, (list, tuple)):
             xpath_str = [xpath_str]
+
         for search_str in xpath_str:
             found_node = node.findall(search_str, namespaces={"ns": ns})
-            if found_node:
+
+            if found_node: #type(found_node) in [list, dict] and len(found_node) == 0:
                 if isinstance(found_node[0], str):
                     attr_value = found_node[0]
                 elif join_str is None:
@@ -60,15 +63,17 @@ class CamtParser():
                     obj[attr_name] = attr_value
                 break
 
-    def parse_transaction_details(self, ns, node, transaction):
+    def parse_transaction_details(self, ns, node, transaction, parent_node):
         """Parse TxDtls node."""
         # message
+        self.add_value_from_node(ns,parent_node,["./ns:AddtlNtryInf"],transaction,"payment_ref",join_str="\n")
+
         self.add_value_from_node(
             ns,
             node,
             [
-                "../../ns:AddtlNtryInf",
-                "./ns:RmtInf/ns:Ustrd|./ns:RtrInf/ns:AddtlInf",
+                "./ns:RmtInf/ns:Ustrd",
+                "./ns:RtrInf/ns:AddtlInf",
                 "./ns:Refs/ns:InstrId",
             ],
             transaction,
@@ -180,9 +185,9 @@ class CamtParser():
         
         transaction_base = transaction
         
-        for node in details_nodes:
+        for detail_node in details_nodes:
             transaction = transaction_base.copy()
-            self.parse_transaction_details(ns, node, transaction)
+            self.parse_transaction_details(ns, detail_node, transaction, node)
             yield transaction
 
     def get_balance_amounts(self, ns, node):
@@ -296,11 +301,11 @@ class CamtParser():
 
         try:
             root = ElementTree.fromstring(data)
-        except ElementTree.ParseError:
+        except:
             try:
                 # ABNAmro is known to mix up encodings
                 root = ElementTree.fromstring(data.decode("iso-8859-15").encode("utf-8"))
-            except ElementTree.ParseError:
+            except:
                 raise ValueError("Not a valid xml file, or not an xml file at all.")
 
         if root is None:
@@ -340,10 +345,10 @@ class Transaction:
         self.searchAndReplace(transaction, "ref", "customer_reference")
         self.searchAndReplace(transaction, "narration", "extra_details")
 
-        if transaction["transaction_details"].strip() == "/":
+        if transaction["transaction_details"] == "/":
             transaction["transaction_details"] = transaction["customer_reference"]
 
-        if transaction["transaction_details"].strip() == "" or "/ NOTPROVIDED" == transaction["transaction_details"]:
+        if transaction["transaction_details"] == "":
             transaction["transaction_details"] = transaction["extra_details"]
 
         if transaction["amount"] < 0:
