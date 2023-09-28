@@ -52,13 +52,14 @@ class JournaalpostView(HHBView):
         """ Extend the get function with extra filter """
         self.add_filter_transactions()
         self.add_filter_afspraken()
+        self.add_filter_grootboekrekeningen()
 
     def add_filter_transactions(self):
         def add_filter(ids):
             self.hhb_query.query = self.hhb_query.query.filter(
                 Journaalpost.transaction_id.in_(ids)
             )
-            
+
         JournaalpostView.filter_in_string('filter_transactions', add_filter)
 
     def add_filter_afspraken(self):
@@ -66,5 +67,14 @@ class JournaalpostView(HHBView):
             self.hhb_query.query = self.hhb_query.query.filter(
                 Journaalpost.afspraak_id.in_(ids)
             )
-        
+
         JournaalpostView.filter_in_string('filter_afspraken', add_filter)
+
+    def add_filter_grootboekrekeningen(self):
+        def add_filter(ids):
+            self.hhb_query.query = self.hhb_query.query.filter(
+                Journaalpost.grootboekrekening_id.in_(ids)
+            )
+
+        JournaalpostView.filter_in_string(
+            'filter_grootboekrekeningen', add_filter)

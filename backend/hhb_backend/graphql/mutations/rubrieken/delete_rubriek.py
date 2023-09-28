@@ -28,19 +28,23 @@ class DeleteRubriek(graphene.Mutation):
         # Check if in use by afspraken
         afspraken = previous.afspraken
         if afspraken:
-            raise GraphQLError("Rubriek is used in one or multiple afspraken - deletion is not possible.")
+            raise GraphQLError(
+                "Rubriek is used in one or multiple afspraken - deletion is not possible.")
 
         # Check if in use by journaalposten
         grootboekrekening_id = previous.grootboekrekening_id
         if grootboekrekening_id:
-            journaalposten = hhb_dataloader().journaalposten.by_grootboekrekening(grootboekrekening_id)
+            journaalposten = hhb_dataloader().journaalposten.by_grootboekrekening(
+                grootboekrekening_id)
             if journaalposten:
                 raise GraphQLError(
                     "Rubriek is part of grootboekrekening that is used by journaalposten - deletion is not possible.")
 
-        delete_response = requests.delete(f"{settings.HHB_SERVICES_URL}/rubrieken/{id}")
+        delete_response = requests.delete(
+            f"{settings.HHB_SERVICES_URL}/rubrieken/{id}")
         if delete_response.status_code != 204:
-            raise GraphQLError(f"Upstream API responded: {delete_response.json()}")
+            raise GraphQLError(
+                f"Upstream API responded: {delete_response.json()}")
 
         AuditLogging.create(
             action=info.field_name,
