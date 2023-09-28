@@ -21,4 +21,4 @@ include:
 - "/.gitlab/ci/deploy.yaml"
 - "/.gitlab/ci/test.yaml"
 - "/.gitlab/ci/security.yaml"
-- "/.gitlab/ci/data.yaml"
+# - "/.gitlab/ci/data.yaml"

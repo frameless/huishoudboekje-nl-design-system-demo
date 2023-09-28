@@ -66,8 +66,12 @@ spec:
                 secretKeyRef:
                   name: hhb-database-secrets
                   key: POSTADRESSENSERVICE_DATABASE_URL
-          command: [ "npm" ]
-          args: [ "run", "db:deploy" ]
+          command: ["/bin/sh"]
+          args:
+            - -c
+            - |
+              npm run db:deploy
+              npm run seed-test-data
       containers:
         - name: hhb-postadressenservice
           image: postadressenservice

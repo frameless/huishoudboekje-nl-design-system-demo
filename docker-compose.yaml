@@ -115,6 +115,8 @@ x-py-tests: &x-py-tests
     - pytest tests --disable-pytest-warnings
   environment:
     JWT_AUDIENCE: pytest
+    JWT_ISSUER: pytest
+    JWT_ALGORITHMS: HS256
     JWT_SECRET: pytestsecret
 
 x-js-tests: &x-js-tests
@@ -205,8 +207,10 @@ services:
       PREFIX: /api
       LOG_LEVEL: DEBUG
       REQUIRE_AUTH: 0
-      JWT_AUDIENCE: huishoudboekje-medewerkers
+      JWT_AUDIENCE: Account
       JWT_SECRET: testtest
+      JWT_ISSUER: localhost
+      JWT_ALGORITHMS: HS256
       HHB_SERVICE_URL: "http://huishoudboekjeservice:8000"
       ORGANISATIE_SERVICE_URL: "http://organisatieservice:8000"
       TRANSACTIE_SERVICE_URL: "http://banktransactieservice:8000"
@@ -251,6 +255,7 @@ services:
     environment:
       DATABASE_URL: "postgresql://hhb:hhb@db/huishoudboekjeservice"
       LOG_LEVEL: DEBUG
+      SEED_TESTDATA: "true"
     ports:
       - 8001:8000
     depends_on:
@@ -265,6 +270,7 @@ services:
     environment:
       DATABASE_URL: "postgresql://hhb:hhb@db/organisatieservice"
       LOG_LEVEL: DEBUG
+      SEED_TESTDATA: "true"
     ports:
       - 8002:8000
     depends_on:
@@ -323,6 +329,7 @@ services:
     environment:
       DATABASE_URL: "postgresql://hhb:hhb@db/postadressenservice?connect_timeout=300"
       LOG_LEVEL: DEBUG
+      SEED_TESTDATA: "true"
     ports:
       - 8007:8080
     depends_on:

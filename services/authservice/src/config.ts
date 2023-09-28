@@ -5,6 +5,7 @@ export const getConfig = () => {
 		NODE_ENV,
 		JWT_SECRET,
 		JWT_ISSUER,
+		JWT_ALGORITHMS,
 		JWT_AUDIENCE,
 		JWT_EXPIRES_IN = "14d",
 		APP_PORT = 8080,
@@ -44,6 +45,10 @@ export const getConfig = () => {
 		missingEnvvarsError = true;
 		log.error("ERROR: Missing environment variable OIDC_ISSUER_URL");
 	}
+	if (!process.env.JWT_ALGORITHMS) {
+		missingEnvvarsError = true;
+		log.error("ERROR: Missing environment variable JWT_ALGORITHMS")
+	}
 
 	if (missingEnvvarsError) {
 		throw new Error("Failed to start service: missing configuration.");
@@ -54,6 +59,7 @@ export const getConfig = () => {
 		issuer: JWT_ISSUER,
 		audience: JWT_AUDIENCE,
 		expiresIn: JWT_EXPIRES_IN,
+		allowedAlgs: JWT_ALGORITHMS,
 		port: APP_PORT,
 		debug: NODE_ENV !== "production",
 	};
