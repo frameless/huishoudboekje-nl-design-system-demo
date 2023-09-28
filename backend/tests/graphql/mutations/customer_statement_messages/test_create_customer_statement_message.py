@@ -146,8 +146,6 @@ def test_create_csm_with_abn_camt_file(client, mocker: MockerFixture):
             m.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", json={"data": {"id": 1}})
             response = do_csm_post(client, testfile, mocker)
 
-            # print(response)
-            # print(adapter.request_history[0].json())
             # Customer Statement Message
             assert (
                 adapter.request_history[0].json()["account_identification"]
