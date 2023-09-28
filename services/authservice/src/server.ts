@@ -69,16 +69,14 @@ const server = (prefix: string = "/auth") => {
 		try {
 			// Check with the OIDC provider if the user is authenticated.
 			if (req.oidc.isAuthenticated()) {
-				const tokenContent = req.oidc.user;
 				const stringJWT = req.oidc.accessToken?.access_token
-				log.info(new Date().toISOString(), "token ", stringJWT)
-				log.info("OIDC provider found an authenticated user:", tokenContent);
+				log.info(new Date().toISOString(), "OIDC provider found an authenticated user");
 
 				// verify the token here before creating a new session because otherwise an app-token will be created that's not valid
 				return sessionHelper.verifyToken(stringJWT).then(async (result) => {
 					if (result) {
 						const user = await req.oidc.fetchUserInfo();
-						log.info("User found");
+						log.info(new Date().toISOString(), "User found");
 
 						sessionHelper.createSession(res, stringJWT);
 						return res.json({
@@ -87,20 +85,20 @@ const server = (prefix: string = "/auth") => {
 						});
 					}
 					else {
-						log.info("No user found.");
+						log.info(new Date().toISOString(), "No user found.");
 						sessionHelper.destroySession(req, res);
 						return res.status(401).json({ok: false, message: "Unauthorized"});
 					}
 				}).catch((error) => {
 					if (error == typeof (JsonWebTokenError)) {
-						log.error("token invalid: ", error)
+						log.error(new Date().toISOString(), "token invalid: ", error)
 						return res.status(401).json({ok: false, message: "Unauthorized"});
 					}
-					log.error('failed to authenticate user', error)
+					log.error(new Date().toISOString(), 'failed to authenticate user', error)
 					return res.status(500).json({ok: false, message: "Something went wrong"});
 				})
 			}
-			log.info("user not authenticated")
+			log.info(new Date().toISOString(), "user not authenticated")
 			return res.status(401).json({ok: false, message: "Unauthorized"});
 		}
 		catch (err) {
@@ -109,7 +107,7 @@ const server = (prefix: string = "/auth") => {
 		}
 
 		// If no user was found, deny access.
-		log.info("No user found.");
+		log.info(new Date().toISOString(), "No user found.");
 		return res.status(401).json({ok: false, message: "Unauthorized"});
 	});
 

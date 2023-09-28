@@ -66,7 +66,8 @@ class SessionHelper {
 							return true;
 						}
 					}).catch((error) => {
-						log.error(error)
+						log.error(new Date().toISOString(), error)
+						this.jwksClientInstance = null
 						return false
 					})
 
@@ -75,7 +76,7 @@ class SessionHelper {
 			return false
 		}
 		catch (err) {
-			log.error('failed to verify token', err)
+			log.error(new Date().toISOString(), 'failed to verify token', err)
 			return false;
 		}
 	}
@@ -89,11 +90,11 @@ class SessionHelper {
 				const jwtAlgorithm = jwtHeader.alg
 				return jwtAlgorithm as Algorithm
 			}
-			log.info("token did not contain a decode-able header")
+			log.info(new Date().toISOString(), "token did not contain a decode-able header")
 			return false
 		}
 		catch (err) {
-			log.error("failed to decode token or token did not contain alg header")
+			log.error(new Date().toISOString(), "failed to decode token or token did not contain alg header")
 			return false
 		}
 	}
@@ -153,7 +154,8 @@ class SessionHelper {
 			return true
 		}
 		catch (err) {
-			log.error(err)
+			log.error(new Date().toISOString(), err)
+			this.jwksClientInstance = null;
 		}
 	}
 
@@ -166,7 +168,8 @@ class SessionHelper {
 				return key.getPublicKey()
 			})
 			.catch((error) => {
-				log.error(error)
+				log.error(new Date().toISOString(), error)
+				this.jwksClientInstance = null;
 			})
 	}
 
