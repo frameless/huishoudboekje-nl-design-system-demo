@@ -71,7 +71,7 @@ class UpdateBurger(graphene.Mutation):
             "required": []
         }
         JsonInputValidator(validation_schema).validate(kwargs)
-        if input.geboortedatum:
+        if kwargs["geboortedatum"]:
             before_today(kwargs["geboortedatum"])
 
         previous = hhb_dataloader().burgers.load_one(id)
