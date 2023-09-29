@@ -86,9 +86,10 @@ deploy-deployment-test:
     OIDC_BASE_URL: "https://test.huishoudboekje.demoground.nl"
     OIDC_ISSUER_URL: https://keycloak.huishoudboekje.demoground.nl/realms/huishoudboekje/
     OIDC_CLIENT_ID: huishoudboekje-medewerkers
-    JWT_ISSUER: test.huishoudboekje.demoground.nl
-    JWT_AUDIENCE: test.huishoudboekje.demoground.nl
-    JWT_SECRET: testtest
+    JWT_ISSUER: https://keycloak.huishoudboekje.demoground.nl/realms/huishoudboekje
+    JWT_AUDIENCE: account
+    JWT_SECRET: $OIDC_CLIENT_SECRET
+    JWT_ALGORITHMS: HS256,RS256
   script:
     - sh ./k8s/overlay/hhb-cluster/apply-env-vars.sh
     - kubectl config use-context commonground/huishoudboekje/app-new:hhb-prod
