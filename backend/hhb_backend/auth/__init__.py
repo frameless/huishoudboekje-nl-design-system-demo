@@ -112,7 +112,6 @@ class Auth():
                 # Try to decode and verify the token
                 secret = self._public_key_or_secret(token)
                 if secret != None:
-                    logging.info(self.supported_algorithms)
                     claims = decode(
                         token, secret, algorithms=self.supported_algorithms, audience=self.audience, issuer=self.issuer)
                     email = claims.get('email', None)
@@ -137,7 +136,6 @@ class Auth():
 
     def _public_key_or_secret(self, token):
         alg = self._determine_alg_used(token)
-        self.logger.info(alg)
         if (alg in ['HS256', 'HS384', 'HS512']):
             return self.secret
         else:

@@ -70,13 +70,13 @@ const server = (prefix: string = "/auth") => {
 			// Check with the OIDC provider if the user is authenticated.
 			if (req.oidc.isAuthenticated()) {
 				const stringJWT = req.oidc.accessToken?.access_token
-				log.info(new Date().toISOString(), "OIDC provider found an authenticated user");
+				log.debug(new Date().toISOString(), "OIDC provider found an authenticated user");
 
 				// verify the token here before creating a new session because otherwise an app-token will be created that's not valid
 				return sessionHelper.verifyToken(stringJWT).then(async (result) => {
 					if (result) {
 						const user = await req.oidc.fetchUserInfo();
-						log.info(new Date().toISOString(), "User found");
+						log.debug(new Date().toISOString(), "User found");
 
 						sessionHelper.createSession(res, stringJWT);
 						return res.json({
@@ -85,7 +85,7 @@ const server = (prefix: string = "/auth") => {
 						});
 					}
 					else {
-						log.info(new Date().toISOString(), "No user found.");
+						log.warn(new Date().toISOString(), "No user found.");
 						sessionHelper.destroySession(req, res);
 						return res.status(401).json({ok: false, message: "Unauthorized"});
 					}
@@ -107,7 +107,7 @@ const server = (prefix: string = "/auth") => {
 		}
 
 		// If no user was found, deny access.
-		log.info(new Date().toISOString(), "No user found.");
+		log.warn(new Date().toISOString(), "No user found.");
 		return res.status(401).json({ok: false, message: "Unauthorized"});
 	});
 
