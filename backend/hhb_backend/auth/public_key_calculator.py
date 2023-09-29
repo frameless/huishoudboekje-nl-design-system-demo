@@ -17,7 +17,7 @@ class PublicKeyCalculator:
             config_data = requests.get(config_uri).json()
             jwks_uri = config_data.get('jwks_uri', None)
             if jwks_uri == None:
-                logging.info("JWKS endpoint not found for issuer")
+                logging.warning("JWKS endpoint not found for issuer")
             return jwks_uri
         except requests.exceptions.RequestException as e:
             logging.error(f'Error trying to fetch oidc configuration: {e}')
@@ -40,7 +40,7 @@ class PublicKeyCalculator:
                         public_key = key
                         break
                 if public_key == None:
-                    logging.info(f"public key not found for KID: {kid}")
+                    logging.warning(f"public key not found for KID: {kid}")
                 return public_key
             except requests.exceptions.RequestException as e:
                 logging.error(
