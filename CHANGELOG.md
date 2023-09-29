@@ -2,6 +2,8 @@
 
 ## 1.10.1
 
+Deze versie omvat een oplossing voor een probleem met het bijwerken van gegevens van een burger.
+
 ### Patch Changes
 
 - 61a46da9: Edit for env variables
