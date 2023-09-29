@@ -1,5 +1,13 @@
 # Huishoudboekje Changelog
 
+## 1.10.1
+
+### Patch Changes
+
+- 61a46da9: Edit for env variables
+- 8db7a3ab: Fixed input validation update burger, non required fields can now be null.
+- 8b204016: Removed logging clutter and added warning logging instead of info when users are not authenticated correctly/not found
+
 ## 1.10.0
 
 Deze versie omvat verbeteringen aan functies voor inloggen en uitloggen.
