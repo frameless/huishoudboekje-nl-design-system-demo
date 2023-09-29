@@ -9,7 +9,7 @@ async function seedDb() {
   if(seed_testdata !== undefined){
     try {
       await sequelize.sync(); // Sync the models with the database
-      const sqlScript = await fs.readFile('./test_data/postadressen.sql', 'utf16le');;
+      const sqlScript = await fs.readFile('./test_data/postadressen.sql', 'utf8');;
       await sequelize.query(sqlScript);
       console.log('SQL script executed successfully');
     } catch (error) {
