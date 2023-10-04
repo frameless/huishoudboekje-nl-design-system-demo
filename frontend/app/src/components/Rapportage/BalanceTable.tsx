@@ -38,13 +38,18 @@ const BalanceTable: React.FC<BalanceTableProps> = ({transactions, startDate, end
 								return (
 									<Stack key={category} spacing={3}>
 										<Text fontWeight={"bold"}>{translatedCategory[category]}</Text>
-										{Object.keys(aggregationByOrganisatie[category]).map((rubriek, rubriekKey) => {
+										{Object.keys(aggregationByOrganisatie[category]).sort((a,b)=> a.localeCompare(b)).map((rubriek, rubriekKey) => {
 											return (
 												<VStack alignItems={"left"} key={`${category}:${rubriekKey}`} spacing={0}>
 													<Box flex={1}>
 														<Text fontStyle={"italic"}>{rubriek === Type.Ongeboekt ? t("charts.inkomstenUitgaven.unbooked") : rubriek}</Text>
 													</Box>
-													{Object.keys(aggregationByOrganisatie[category][rubriek]).map((transaction, key) => {
+													{Object.keys(aggregationByOrganisatie[category][rubriek]
+															.sort((a,b) =>
+																d(a.transactieDatum).isSame(d(b.transactieDatum)) ? 
+																	a.bedrag - b.bedrag : 
+																	d(a.transactieDatum).isAfter(d(b.transactieDatum)) ? 1 : -1))
+															.map((transaction, key) => {
 														return (
 															<Stack direction={"row"} key={`${rubriekKey}:${key}`}>
 																<Box flex={2} textAlign={"left"}>
