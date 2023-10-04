@@ -47,7 +47,7 @@ const BalanceTable: React.FC<BalanceTableProps> = ({transactions, startDate, end
 													{Object.keys(aggregationByOrganisatie[category][rubriek]
 															.sort((a,b) =>
 																d(a.transactieDatum).isSame(d(b.transactieDatum)) ? 
-																	a.bedrag - b.bedrag : 
+																Math.abs(b.bedrag) - Math.abs(a.bedrag): 
 																	d(a.transactieDatum).isAfter(d(b.transactieDatum)) ? 1 : -1))
 															.map((transaction, key) => {
 														return (
