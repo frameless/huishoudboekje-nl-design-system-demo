@@ -184,7 +184,7 @@ const Transactions = () => {
 	}
 
 	const queryVariables: SearchTransactiesQueryVariables = {
-		offset: offset - 1,
+		offset: offset <= 1 ? 0 : offset,
 		limit: pageSize,
 		filters: banktransactieFilters,
 	};
