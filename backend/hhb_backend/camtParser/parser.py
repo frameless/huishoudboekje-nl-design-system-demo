@@ -49,7 +49,7 @@ class CamtParser():
         for search_str in xpath_str:
             found_node = node.findall(search_str, namespaces={"ns": ns})
 
-            if found_node: #type(found_node) in [list, dict] and len(found_node) == 0:
+            if found_node: 
                 if isinstance(found_node[0], str):
                     attr_value = found_node[0]
                 elif join_str is None:
