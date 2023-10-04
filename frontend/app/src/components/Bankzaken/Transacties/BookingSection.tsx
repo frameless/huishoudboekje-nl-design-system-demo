@@ -140,7 +140,7 @@ const BookingSection = ({transaction, rubrieken}) => {
 		max_bedrag: number | undefined,
 		zoektermen: string[] | undefined
 	} = {
-		offset: offset - 1,
+		offset: offset <= 1 ? 0 : offset,
 		limit: 25,
 		afspraken: undefined,
 		afdelingen: undefined,
