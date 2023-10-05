@@ -74,9 +74,8 @@ class CreateAfspraak(graphene.Mutation):
                     "properties": {
                         "postadres_id": { "type": "null" },
                         "afdeling_id": { "type": "null" },
-                        "burger_id": { "type": "integer", "minimum": 0 }
                     },
-                    "required": ["postadres_id","afdeling_id","burger_id"]
+                    "required": ["postadres_id","afdeling_id"]
                 },
                 {
                     "properties": {
