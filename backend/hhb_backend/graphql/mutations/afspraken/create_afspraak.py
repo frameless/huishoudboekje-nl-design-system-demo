@@ -52,7 +52,10 @@ class CreateAfspraak(graphene.Mutation):
             "properties": {
                 "omschrijving": {"type": "string","minLength": 1},
                 "bedrag": {"type": "integer", "minimum": 0},
-                "postadres_id": {"type": "string","format": "uuid"},
+                "postadres_id": {"anyOf": [
+                    {"type": "null"},
+                    {"type": "string","format": "uuid"}
+                ]},
                 "alarm_id": {"type": "string","format": "uuid"},
                 "valid_from": {"type": "string", "format": "date"},
                 "valid_through": {"type": "string", "format": "date"},
