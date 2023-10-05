@@ -12,6 +12,7 @@ afspraak = {
     'rubriek_id': 1,
     'burger_id': 1,
     'afdeling_id': 4,
+    'postadres_id': "a1ce81ca-4193-48dd-9a80-c75058a4b5a9",
     'tegen_rekening_id': 1,
     'zoektermen': ["test1", "test2"],
 }
@@ -38,7 +39,9 @@ def test_update_afspraak(client):
             "bedrag": "543.21",
             "credit": False,
             "validThrough": "",
-            "zoektermen": ["test1", "test2"]
+            "zoektermen": ["test1", "test2"],
+            "afdelingId": None,
+            "postadresId": None,
         }
         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
         rm1 = rm.post(f"{settings.HHB_SERVICES_URL}/afspraken/1", status_code=200, json={ "data": afspraak})
