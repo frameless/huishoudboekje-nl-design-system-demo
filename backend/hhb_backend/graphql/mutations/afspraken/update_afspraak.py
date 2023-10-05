@@ -59,6 +59,22 @@ class UpdateAfspraak(graphene.Mutation):
                 "valid_through": {"type": "string", "format": "date"},
                 "zoektermen": {  "type": "array", "items": {"type": "string", "minLength": 1 } }
             },
+            "anyOf": [
+                {
+                    "properties": {
+                        "postadres_id": { "type": "null" },
+                        "afdeling_id": { "type": "null" }
+                    },
+                    "required": ["postadres_id","afdeling_id"]
+                },
+                {
+                    "properties": {
+                        "postadres_id": {"type": "string","format": "uuid"},
+                        "afdeling_id": { "type": "integer", "minimum": 0 }
+                    },
+                    "required": ["postadres_id","afdeling_id"]
+                }
+            ],
             "required": []
         }
         JsonInputValidator(validation_schema).validate(input)

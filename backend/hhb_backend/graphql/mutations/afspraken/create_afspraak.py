@@ -52,10 +52,6 @@ class CreateAfspraak(graphene.Mutation):
             "properties": {
                 "omschrijving": {"type": "string","minLength": 1},
                 "bedrag": {"type": "integer", "minimum": 0},
-                "postadres_id": {"anyOf": [
-                    {"type": "null"},
-                    {"type": "string","format": "uuid"}
-                ]},
                 "alarm_id": {"type": "string","format": "uuid"},
                 "valid_from": {"type": "string", "format": "date"},
                 "valid_through": {"type": "string", "format": "date"},
@@ -73,6 +69,24 @@ class CreateAfspraak(graphene.Mutation):
                     }
                 }
             },
+            "anyOf": [
+                {
+                    "properties": {
+                        "postadres_id": { "type": "null" },
+                        "afdeling_id": { "type": "null" },
+                        "burger_id": { "type": "integer", "minimum": 0 }
+                    },
+                    "required": ["postadres_id","afdeling_id","burger_id"]
+                },
+                {
+                    "properties": {
+                        "postadres_id": {"type": "string","format": "uuid"},
+                        "afdeling_id": { "type": "integer", "minimum": 0 },
+                        "burger_id": { "type": "null" }
+                    },
+                    "required": ["postadres_id","afdeling_id","burger_id"]
+                }
+            ],
             "required": []
         }
         JsonInputValidator(validation_schema).validate(input)
