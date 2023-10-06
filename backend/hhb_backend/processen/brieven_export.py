@@ -30,7 +30,9 @@ brieven_fields = [
     "organisatie.postadres.plaats",
     "afspraak.id",
     "nu.datum",
-    "burger.naam",
+    "burger.voorletters",
+    "burger.voornamen",
+    "burger.achternaam",
     "burger.postadres.adresregel1",
     "burger.postadres.postcode",
     "burger.postadres.plaats"
@@ -194,7 +196,9 @@ def create_row(afdeling, afspraak, burger, current_date_str):
     row["organisatie.postadres.plaats"] = plaats if plaats else ""
     row["afspraak.id"] = ' '.join(afspraak["zoektermen"]) if afspraak["zoektermen"] else ""
     row["nu.datum"] = current_date_str
-    row["burger.naam"] = f"{burger['voornamen']} {burger['achternaam']}"
+    row["burger.voorletters"] = f"{burger['voorletters']}"
+    row["burger.voornamen"] = f"{burger['voornamen']}"
+    row["burger.achternaam"] = f"{burger['achternaam']}"
     row["burger.postadres.adresregel1"] = ""
     if burger['straatnaam'] and burger['huisnummer']:
         row["burger.postadres.adresregel1"] = f"{burger['straatnaam']} {burger['huisnummer']}"
