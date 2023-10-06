@@ -29,7 +29,7 @@ def test_create_export_brieven(client):
         burger = {'data': [{'achternaam': 'Do', 'bsn': 156807233, 'email': None, 'geboortedatum': None, 'huishouden_id': 2, 'huisnummer': '15a', 'id': 2, 'plaatsnaam': 'burger test plaats', 'postcode': '1234AB', 'straatnaam': 'burger test straat', 'telefoonnummer': None, 'voorletters': 'J', 'voornamen': 'John'}]}
         burger_endpoint = mock.get(f"{settings.HHB_SERVICES_URL}/burgers/?filter_ids={burger_id}", json=burger)
 
-        afspraken = {'data': [{'aantal_betalingen': None, 'afdeling_id': 12, 'bedrag': 1234, 'betaalinstructie': None, 'burger_id': 2, 'credit': True, 'id': 12, 'journaalposten': [], 'omschrijving': 'export test afspraak', 'overschrijvingen': [], 'postadres_id': 'ce2e9ac9-9759-48c5-85fa-7dacc9913e37', 'rubriek_id': 2, 'tegen_rekening_id': 1, 'valid_from': '2000-01-31', 'valid_through': '2021-12-01', 'zoektermen': ['stuff, things, test#1, com bi na ti']}]}
+        afspraken = {'data': [{'aantal_betalingen': None, 'afdeling_id': 12, 'bedrag': 1234, 'betaalinstructie': None, 'burger_id': 2, 'credit': True, 'id': 12, 'journaalposten': [], 'omschrijving': 'export test afspraak', 'overschrijvingen': [], 'postadres_id': 'ce2e9ac9-9759-48c5-85fa-7dacc9913e37', 'rubriek_id': 2, 'tegen_rekening_id': 1, 'valid_from': '2000-01-31', 'valid_through': '2021-12-01T00:00:00', 'zoektermen': ['stuff, things, test#1, com bi na ti']}]}
         afspraak_endpoint = mock.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_burgers={burger_id}", json=afspraken)
 
         postadres_ids_1 = 'ce2e9ac9-9759-48c5-85fa-7dacc9913e37'
@@ -56,7 +56,7 @@ def test_create_export_brieven(client):
 
         # act
         response_csv, filename_csv, data_excel, filename_excel = brieven_export.create_brieven_export(burger_id)
-        current_date_str = datetime.now().strftime("%Y-%m-%d")
+        current_date_str = datetime.now().strftime("%-d-%-m-%Y")
 
         # assert
         assert burger_endpoint.call_count == 1
@@ -67,7 +67,7 @@ def test_create_export_brieven(client):
         assert organisatie_endpoint.call_count == 1
         assert gebruikers_activiteit.call_count == 1
 
-        assert response_csv == f'betaalrichting|status.afspraak|organisatie.naam|organisatie.postadres.adresregel1|organisatie.postadres.postcode|organisatie.postadres.plaats|afspraak.id|nu.datum|burger.naam|burger.postadres.adresregel1|burger.postadres.postcode|burger.postadres.plaats\ncredit|2021-12-01|test organisatie 1|test straat 1.1 test huisnummer 1.1|code 1.1|test plaats 1.1|stuff, things, test#1, com bi na ti|{current_date_str}|John Do|burger test straat 15a|1234AB|burger test plaats\n'
+        assert response_csv == f'betaalrichting|status.afspraak|organisatie.naam|organisatie.postadres.adresregel1|organisatie.postadres.postcode|organisatie.postadres.plaats|afspraak.id|nu.datum|burger.naam|burger.postadres.adresregel1|burger.postadres.postcode|burger.postadres.plaats\ncredit|1-12-2021|test organisatie 1|test straat 1.1 test huisnummer 1.1|code 1.1|test plaats 1.1|stuff, things, test#1, com bi na ti|{current_date_str}|John Do|burger test straat 15a|1234AB|burger test plaats\n'
         assert filename_csv == f"{current_date_str}_{burger['data'][0]['voornamen']}_{burger['data'][0]['achternaam']}.csv"
         assert filename_excel == f"{current_date_str}_{burger['data'][0]['voornamen']}_{burger['data'][0]['achternaam']}.xlsx"
         assert fallback.call_count == 0
