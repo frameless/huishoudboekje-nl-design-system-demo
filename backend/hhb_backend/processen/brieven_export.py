@@ -36,6 +36,7 @@ brieven_fields = [
     "burger.postadres.plaats"
 ]
 
+dateformat = "%-d-%-m-%Y"
 
 def dict_keys_subset_builder(match_keys: list):
     """only include items with a matching key"""
@@ -75,7 +76,7 @@ def create_brieven_export(burger_id):
             if single_postadres_id in afdeling_postadres_ids:
                 afdeling["postadressen"].append(postadres)
 
-    current_date_str = datetime.now().strftime("%Y-%m-%d")
+    current_date_str = datetime.now().strftime(dateformat)
 
     data = []
     for afspraak in afspraken:
@@ -183,7 +184,7 @@ def create_row(afdeling, afspraak, burger, current_date_str):
 
     row = {}
     row["betaalrichting"] = "credit" if afspraak["credit"] is True else "debet"
-    row["status.afspraak"] = afspraak["valid_through"] if afspraak["valid_through"] else ""
+    row["status.afspraak"] = datetime.strptime(afspraak["valid_through"], '%Y-%m-%dT%H:%M:%S').strftime(dateformat) if afspraak["valid_through"] else ""
     row["organisatie.naam"] =  organisatie["naam"] if "naam" in organisatie else ""
     row["organisatie.postadres.adresregel1"] = ""
     if straat and huisnummer:
