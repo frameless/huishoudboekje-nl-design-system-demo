@@ -48,7 +48,7 @@ class CamtParser():
 
         for search_str in xpath_str:
             if "|" in search_str:
-                my_search_strs = search_str.explode("|")
+                my_search_strs = search_str.split("|")
                 found_node = False
 
                 for my_search_str in my_search_strs:
@@ -67,17 +67,16 @@ class CamtParser():
                 else:
                     attr_value = join_str.join([x.text for x in found_node])
 
-                if add_to_original and attr_name in obj:
+                if add_to_original and attr_name in obj and obj[attr_name] != '/':
+                    # Only add to current obj[attr_name] if it not is the default value
                     obj[attr_name] = " ".join([obj[attr_name],attr_value])
                 else:
                     obj[attr_name] = attr_value
                 break
 
-    def parse_transaction_details(self, ns, node, transaction, parent_node):
+    def parse_transaction_details(self, ns, node, transaction):
         """Parse TxDtls node."""
         # message
-        self.add_value_from_node(ns,parent_node,["./ns:AddtlNtryInf"],transaction,"payment_ref",join_str="\n")
-
         self.add_value_from_node(
             ns,
             node,
@@ -88,6 +87,7 @@ class CamtParser():
             transaction,
             "payment_ref",
             join_str="\n",
+            add_to_original=True
         )
 
         self.add_value_from_node(ns,node,["./ns:Refs/ns:EndToEndId"],transaction,"payment_ref",join_str="\n", add_to_original=True)
@@ -112,8 +112,10 @@ class CamtParser():
         self.add_value_from_node(ns,node,["./ns:Refs/ns:MndtId",],transaction,"ref",join_str="\n", add_to_original=True)
 
         amount = self.parse_amount(ns, node)
+
         if amount != 0.0:
             transaction["amount"] = amount
+            
         # remote party values
         party_type = "Dbtr"
         party_type_node = node.findall("../../ns:CdtDbtInd", namespaces={"ns": ns})
@@ -138,6 +140,7 @@ class CamtParser():
                     transaction,
                     "partner_name",
                 )
+
         # Get remote_account from iban or from domestic account:
         account_node = node.findall(
             f"./ns:RltdPties/ns:{party_type}Acct/ns:Id", namespaces={"ns": ns}
@@ -192,9 +195,11 @@ class CamtParser():
         
         transaction_base = transaction
         
+        self.add_value_from_node(ns, node, ["./ns:AddtlNtryInf"], transaction_base, "payment_ref")
+
         for detail_node in details_nodes:
             transaction = transaction_base.copy()
-            self.parse_transaction_details(ns, detail_node, transaction, node)
+            self.parse_transaction_details(ns, detail_node, transaction)
             yield transaction
 
     def get_balance_amounts(self, ns, node):

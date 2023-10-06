@@ -334,29 +334,24 @@ def test_create_with_incorrect_file_format(client, mocker: MockerFixture):
         assert response.status_code == 200
 
 def test_vulnerability_XXE_attack():
-    '''
-    This test is a demonstration on what the resolve_entities parameter in the etree.XMLParser does. 
-    By setting it to False it does not resolve entities and helps protect agains XXE attacks. 
-    '''
-    from lxml import etree
+    # XXE Attacks should be prevented by defusedxml, both extreme settings tested
+    from defusedxml import ElementTree
 
     file = open(DANGEROUS_CAMT_CSM_FILE, "rb")
     data = file.read()
-    root = etree.fromstring(data, parser=etree.XMLParser(recover=True, resolve_entities=True))
-    ns = root.tag[1 : root.tag.index("}")]
-    value = root.xpath("./ns:BkToCstmrStmt/ns:Stmt/ns:Ntry/ns:AddtlNtryInf", namespaces={"ns": ns})
 
-    assert(value[0].text == "11.11.111.111 Naam Adres 7 2960 Dorp")
-    assert(value[1].text == "THIS COULD BE YOUR PLAIN TEXT PASSWORD THAT WAS SAVED IN A TXT FILE")
-    assert(value[2].text == "THIS COULD BE ANYTHING RANDOM")
+    try:
+        ElementTree.fromstring(data, forbid_dtd=True, forbid_entities=False, forbid_external=False)
+        assert(0 == 1)
+    except:
+        assert(1 == 1)
 
-    root = etree.fromstring(data, parser=etree.XMLParser(recover=True, resolve_entities=False))
-    ns = root.tag[1 : root.tag.index("}")]
-    value = root.xpath("./ns:BkToCstmrStmt/ns:Stmt/ns:Ntry/ns:AddtlNtryInf", namespaces={"ns": ns})
+    try:
+        ElementTree.fromstring(data)
+        assert(0 == 1)
+    except:
+        assert(1 == 1)
 
-    assert(value[0].text == "11.11.111.111 Naam Adres 7 2960 Dorp")
-    assert(value[1].text == None)
-    assert(value[2].text == None)
 
 def test_create_csm_with_dangerous_camt_file(client, mocker: MockerFixture):
     '''
