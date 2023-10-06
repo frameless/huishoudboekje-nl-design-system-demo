@@ -47,7 +47,17 @@ class CamtParser():
             xpath_str = [xpath_str]
 
         for search_str in xpath_str:
-            found_node = node.findall(search_str, namespaces={"ns": ns})
+            if "|" in search_str:
+                my_search_strs = search_str.explode("|")
+                found_node = False
+
+                for my_search_str in my_search_strs:
+                    found_node = node.findall(my_search_str, namespaces={"ns": ns})
+                    
+                    if found_node and len(found_node) > 0:
+                        break
+            else:
+                found_node = node.findall(search_str, namespaces={"ns": ns})
 
             if found_node: 
                 if isinstance(found_node[0], str):
@@ -72,23 +82,20 @@ class CamtParser():
             ns,
             node,
             [
-                "./ns:RmtInf/ns:Ustrd",
-                "./ns:RtrInf/ns:AddtlInf",
+                "./ns:RmtInf/ns:Ustrd|./ns:RtrInf/ns:AddtlInf",
                 "./ns:Refs/ns:InstrId",
             ],
             transaction,
             "payment_ref",
             join_str="\n",
-            add_to_original=True
         )
 
         self.add_value_from_node(ns,node,["./ns:Refs/ns:EndToEndId"],transaction,"payment_ref",join_str="\n", add_to_original=True)
         self.add_value_from_node(ns,node,["./ns:Refs/ns:MndtId"],transaction,"payment_ref",join_str="\n", add_to_original=True)
 
         # name
-        self.add_value_from_node(
-            ns, node, ["./ns:AddtlTxInf"], transaction, "payment_ref", join_str="\n", add_to_original=True
-        )
+        self.add_value_from_node(ns, node, ["./ns:AddtlTxInf"], transaction, "payment_ref", join_str="\n")
+
         # eref
         self.add_value_from_node(
             ns,

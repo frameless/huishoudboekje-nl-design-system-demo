@@ -225,7 +225,8 @@ def test_create_csm_with_rabo_camt_file(client, mocker: MockerFixture):
             )
             assert adapter.request_history[1].json()[1]["bedrag"] == -3
             assert adapter.request_history[1].json()[1]["transactie_datum"] == "2015-01-23"
-            assert "Europayment Batch-id:0002" in adapter.request_history[1].json()[1]["information_to_account_owner"]
+            assert adapter.request_history[1].json()[1]["information_to_account_owner"] == "Europayment Batch-id:0002"
+
             # Overall response
             assert len(adapter.request_history[1].json()) == 6
             assert adapter.call_count == 3
@@ -263,7 +264,7 @@ def test_create_csm_with_ing_camt_file(client, mocker: MockerFixture):
             )
             assert adapter.request_history[1].json()[1]["bedrag"] == 12500
             assert adapter.request_history[1].json()[1]["transactie_datum"] == "2014-01-03"
-            assert 'UstrdRemi2014010323566INGBankNV' in adapter.request_history[1].json()[1]["information_to_account_owner"]
+            assert adapter.request_history[1].json()[1]["information_to_account_owner"] == 'UstrdRemi2014010323566INGBankNV'
             assert "20140103E2EIdA1INGBankNV" in adapter.request_history[1].json()[2]["information_to_account_owner"]
             # Overall response
             assert len(adapter.request_history[1].json()) == 9
