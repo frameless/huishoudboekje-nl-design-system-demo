@@ -8,7 +8,7 @@ class JsonInputValidator():
         self.schema = schema
 
     def validate(self, input,):
-        try:    
-            jsonschema.validate(input, self.schema)
-        except jsonschema.ValidationError as e:
-            raise GraphQLError("Invalid input")
+        # try:    
+        jsonschema.validate(input, self.schema)
+        # except jsonschema.ValidationError as e:
+        #     raise GraphQLError("Invalid input")
