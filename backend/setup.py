@@ -20,7 +20,6 @@ setup(
         'isodate==0.6.1',
         'mt-940>=4.26.0,<5',
         'nest-asyncio>=1.5.5,<2',
-        'pydash==5.1.0',
         'pyjwt==2.4.0',
         'pyjwt[crypto]',
         'python-jose>=3.3.0',
