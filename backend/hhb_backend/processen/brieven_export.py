@@ -30,9 +30,14 @@ brieven_fields = [
     "organisatie.postadres.plaats",
     "afspraak.id",
     "nu.datum",
+<<<<<<< HEAD
     "burger.voorletters",
     "burger.voornamen",
     "burger.achternaam",
+=======
+    "burger.hhbnummer",
+    "burger.naam",
+>>>>>>> fcc3ecd6 (Added hhbnummer to export for letters)
     "burger.postadres.adresregel1",
     "burger.postadres.postcode",
     "burger.postadres.plaats"
@@ -174,6 +179,10 @@ def get_organisaties(afdelingen):
         if afdeling_result["organisatie_id"]
     ])
 
+def __get_hhb_number(id: int):
+    id_as_string = str(id)
+    return "HHB" + id_as_string.zfill(6)
+
 
 def create_row(afdeling, afspraak, burger, current_date_str):
     organisatie = afdeling.get("organisatie", {})
@@ -196,6 +205,7 @@ def create_row(afdeling, afspraak, burger, current_date_str):
     row["organisatie.postadres.plaats"] = plaats if plaats else ""
     row["afspraak.id"] = ' '.join(afspraak["zoektermen"]) if afspraak["zoektermen"] else ""
     row["nu.datum"] = current_date_str
+    row["burger.hhbnummer"] = __get_hhb_number(burger['id'])
     row["burger.voorletters"] = f"{burger['voorletters']}"
     row["burger.voornamen"] = f"{burger['voornamen']}"
     row["burger.achternaam"] = f"{burger['achternaam']}"
