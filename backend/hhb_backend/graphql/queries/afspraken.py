@@ -53,13 +53,14 @@ class SearchAfsprakenQuery:
                                 afspraak_ids=graphene.List(graphene.Int),
                                 burger_ids=graphene.List(graphene.Int),
                                 afdeling_ids=graphene.List(graphene.Int),
+                                tegen_rekening_ids=graphene.List(graphene.Int),
                                 only_valid=graphene.Boolean(), 
                                 min_bedrag=graphene.Int(),
                                 max_bedrag=graphene.Int(),
                                 zoektermen=graphene.List(graphene.String))
 
     @classmethod
-    def resolver(cls, _, info, offset=None, limit=None, afspraak_ids=None, burger_ids=None, afdeling_ids=None, only_valid=None, min_bedrag=None, max_bedrag=None, zoektermen=None):
+    def resolver(cls, _, info, offset=None, limit=None, afspraak_ids=None, burger_ids=None, afdeling_ids=None, tegen_rekening_ids=None, only_valid=None, min_bedrag=None, max_bedrag=None, zoektermen=None):
         logging.info(f"Get afspraken paged")
 
         afspraken_filter_builder = AfsprakenGetRequestBuilder()
@@ -74,6 +75,9 @@ class SearchAfsprakenQuery:
 
         if afdeling_ids is not None:
             afspraken_filter_builder.by_afdeling_ids(afdeling_ids)
+
+        if tegen_rekening_ids is not None:
+            afspraken_filter_builder.by_tegen_rekening_ids(tegen_rekening_ids)
         
         if only_valid is not None:
             afspraken_filter_builder.by_valid(only_valid)
