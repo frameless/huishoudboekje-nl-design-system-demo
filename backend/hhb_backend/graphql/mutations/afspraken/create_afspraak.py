@@ -49,43 +49,34 @@ class CreateAfspraak(graphene.Mutation):
 
         validation_schema = {
             "type": "object",
-            "properties": {
-                "omschrijving": {"type": "string","minLength": 1},
-                "bedrag": {"type": "integer", "minimum": 0},
-                "alarm_id": {"type": "string","format": "uuid"},
-                "valid_from": {"type": "string", "format": "date"},
-                "valid_through": {"type": "string", "format": "date"},
-                "zoektermen": {  "type": "array", "items": {"type": "string", "minLength": 1 } },
-                "betaalinstructie":{
-                    "type": "object", 
-                    "properties": {
-                        "by_day" :{ "type": "array","prefixItems": [ { "type": "string" }, { "enum": ["Monday", "Tuesday", "Wednesday","Thursday","Friday","Saturday","Sunday"] },]},
-                        "by_month": { "type": "array",  "items": { "type": "integer", "minimum": 1, "maximum": 12 }},
-                        "by_month_day": { "type": "array", "items": {"type": "integer","minimum": 1, "maximum": 31}},
-                        "repeat_frequency": {"type": "string","minLength": 1},
-                        "except_dates": {"type": "array",  "items": {"type": "string","minLength": 1}},
-                        "start_date": {"type": "string", "format": "date"},
-                        "end_date": {"type": "string", "format": "date"}
-                    }
-                }
-            },
-            "anyOf": [
+            "oneOf": [
                 {
                     "properties": {
+                        "omschrijving": {"type": "string","minLength": 1},
+                        "bedrag": {"type": "integer", "minimum": 0},
+                        "alarm_id": {"type": "string","format": "uuid"},
+                        "valid_from": {"type": "string", "format": "date"},
+                        "valid_through": {"type": "string", "format": "date"},
+                        "zoektermen": {  "type": "array", "items": {"type": "string", "minLength": 1 } },
                         "postadres_id": { "type": "null" },
-                        "afdeling_id": { "type": "null" },
+                        "afdeling_id": { "type": "null" }
                     },
                     "required": ["postadres_id","afdeling_id"]
                 },
                 {
                     "properties": {
+                        "omschrijving": {"type": "string","minLength": 1},
+                        "bedrag": {"type": "integer", "minimum": 0},
+                        "alarm_id": {"type": "string","format": "uuid"},
+                        "valid_from": {"type": "string", "format": "date"},
+                        "valid_through": {"type": "string", "format": "date"},
+                        "zoektermen": {  "type": "array", "items": {"type": "string", "minLength": 1 } },
                         "postadres_id": {"type": "string","format": "uuid"},
                         "afdeling_id": { "type": "integer", "minimum": 0 }
                     },
                     "required": ["postadres_id","afdeling_id"]
                 }
-            ],
-            "required": []
+            ]
         }
         JsonInputValidator(validation_schema).validate(input)
 
