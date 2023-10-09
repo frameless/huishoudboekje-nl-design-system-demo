@@ -21,6 +21,12 @@ const PostadresListItem: React.FC<PostadresListItemProps> = ({postadres, afdelin
 
 	const onConfirmDelete = () => {
 		if (onDelete) {
+			const tableRow = document.getElementById("postal_address_" + postadres.id);
+
+			if (tableRow) {
+				tableRow.style.display = "none";
+			}
+
 			onDelete();
 			deleteAlert.onClose()
 		}
@@ -50,7 +56,7 @@ const PostadresListItem: React.FC<PostadresListItemProps> = ({postadres, afdelin
 			</Alert>
 		)}
 
-		<Tr>
+		<Tr id={"postal_address_"+ postadres.id}>
 			<Td>
 				<Text>{(postadres.straatnaam || "").length > 0 ? postadres.straatnaam : t("unknown")}</Text>
 			</Td>
