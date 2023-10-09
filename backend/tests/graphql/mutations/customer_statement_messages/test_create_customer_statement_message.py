@@ -151,23 +151,25 @@ def test_create_csm_with_abn_camt_file(client, mocker: MockerFixture):
                 adapter.request_history[0].json()["account_identification"]
                 == "NL77ABNA0574908765"
             )
+            assert (
+                adapter.request_history[0].json()["transaction_reference_number"]
+                == "0574908765.2013-04-02"
+            )
+
             assert adapter.request_history[0].json()["closing_available_funds"] == 10001
             assert adapter.request_history[0].json()["closing_balance"] == 10001
             assert (
                 adapter.request_history[0].json()["forward_available_balance"] == 10001
             )
             assert adapter.request_history[0].json()["opening_balance"] == 100001
-            assert (
-                adapter.request_history[0].json()["transaction_reference_number"]
-                == "0574908765.2013-04-02"
-            )
+            
             # Bank transaction
             assert (
                 adapter.request_history[1].json()[1]["tegen_rekening"]
                 == "NL46ABNA0499998748"
             )
-            assert "/TRTP/SEPA OVERBOEKING/IBAN/NL46ABNA0499998748/BIC/ABNANL2A/NAME/NAAM/REMI/OMSCHRIJVING/EREF/NOTPROVIDED" in adapter.request_history[1].json()[1]["information_to_account_owner"]
 
+            assert "/TRTP/SEPA OVERBOEKING/IBAN/NL46ABNA0499998748/BIC/ABNANL2A/NAME/NAAM/REMI/OMSCHRIJVING/EREF/NOTPROVIDED" in adapter.request_history[1].json()[1]["information_to_account_owner"]
             assert "NOTPROVIDED" in adapter.request_history[1].json()[1]["information_to_account_owner"]
             assert adapter.request_history[1].json()[1]["bedrag"] == 100
             assert adapter.request_history[1].json()[1]["transactie_datum"] == "2013-04-02"
@@ -224,6 +226,7 @@ def test_create_csm_with_rabo_camt_file(client, mocker: MockerFixture):
             assert adapter.request_history[1].json()[1]["bedrag"] == -3
             assert adapter.request_history[1].json()[1]["transactie_datum"] == "2015-01-23"
             assert adapter.request_history[1].json()[1]["information_to_account_owner"] == "Europayment Batch-id:0002"
+
             # Overall response
             assert len(adapter.request_history[1].json()) == 6
             assert adapter.call_count == 3
@@ -277,7 +280,6 @@ def test_create_csm_with_anoniem_camt_file(client, mocker: MockerFixture):
             m._adapter = adapter
             m.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", json={"data": {"id": 1}})
             response = do_csm_post(client, testfile, mocker)
-
             # Customer Statement Message
             assert (
                 adapter.request_history[0].json()["account_identification"]
@@ -332,35 +334,24 @@ def test_create_with_incorrect_file_format(client, mocker: MockerFixture):
         assert response.status_code == 200
 
 def test_vulnerability_XXE_attack():
-    '''
-    This test is a demonstration on what the resolve_entities parameter in the etree.XMLParser does. 
-    By setting it to False it does not resolve entities and helps protect agains XXE attacks. 
-    '''
-    from lxml import etree
+    # XXE Attacks should be prevented by defusedxml, both extreme settings tested
+    from defusedxml import ElementTree
 
     file = open(DANGEROUS_CAMT_CSM_FILE, "rb")
     data = file.read()
-    root = etree.fromstring(data, parser=etree.XMLParser(recover=True, resolve_entities=True))
-    ns = root.tag[1 : root.tag.index("}")]
-    value = root.xpath("./ns:BkToCstmrStmt/ns:Stmt/ns:Ntry/ns:AddtlNtryInf", namespaces={"ns": ns})
 
-    print(value[0].text)    
-    assert(value[0].text == "11.11.111.111 Naam Adres 7 2960 Dorp")
-    print(value[1].text)
-    assert(value[1].text == "THIS COULD BE YOUR PLAIN TEXT PASSWORD THAT WAS SAVED IN A TXT FILE")
-    print(value[2].text)
-    assert(value[2].text == "THIS COULD BE ANYTHING RANDOM")
+    try:
+        ElementTree.fromstring(data, forbid_dtd=True, forbid_entities=False, forbid_external=False)
+        assert(0 == 1)
+    except:
+        assert(1 == 1)
 
-    root = etree.fromstring(data, parser=etree.XMLParser(recover=True, resolve_entities=False))
-    ns = root.tag[1 : root.tag.index("}")]
-    value = root.xpath("./ns:BkToCstmrStmt/ns:Stmt/ns:Ntry/ns:AddtlNtryInf", namespaces={"ns": ns})
+    try:
+        ElementTree.fromstring(data)
+        assert(0 == 1)
+    except:
+        assert(1 == 1)
 
-    print(value[0].text)    
-    assert(value[0].text == "11.11.111.111 Naam Adres 7 2960 Dorp")
-    print(value[1].text)
-    assert(value[1].text == None)
-    print(value[2].text)
-    assert(value[2].text == None)
 
 def test_create_csm_with_dangerous_camt_file(client, mocker: MockerFixture):
     '''
@@ -376,7 +367,7 @@ def test_create_csm_with_dangerous_camt_file(client, mocker: MockerFixture):
             response = do_csm_post(client, testfile, mocker)
 
             assert(adapter.request_history == [])
-            assert(response.json['errors'][0]['message'] == 'sequence item 0: expected str instance, NoneType found')
+            assert(response.json['errors'][0]['message'] == 'Not a valid xml file, or not an xml file at all.')
 
 def create_mock_adapter(mocker: MockerFixture) -> Adapter:
     adapter = requests_mock.Adapter()

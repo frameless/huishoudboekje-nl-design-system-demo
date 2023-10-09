@@ -29,11 +29,11 @@ setup(
         'sepaxml>=2.5.0,<3',
         'Jinja2==3.1.2',
         'itsdangerous>=2.1.2,<3',
-        'lxml>=4.9.1,<5',
         'pandas==1.4.4',
         'XlsxWriter==3.0.3',
         'Deprecated==1.2.13',
         'MarkupSafe==2.1.1',
+        'defusedxml>=0.7.1',
         "jsonschema>=4.15.0,<5"
     ],
 )
