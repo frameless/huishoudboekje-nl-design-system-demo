@@ -17,6 +17,7 @@ const SignalenListItem: React.FC<SignalenListItemProps> = ({signaal}) => {
 	const toast = useToaster();
 
 	const [updateSignaal] = useUpdateSignaalMutation({
+		fetchPolicy: 'no-cache',
 		refetchQueries: [
 			{query: GetSignalenDocument},
 		],
