@@ -67,7 +67,7 @@ def test_create_export_brieven(client):
         assert organisatie_endpoint.call_count == 1
         assert gebruikers_activiteit.call_count == 1
 
-        assert response_csv == f'betaalrichting|status.afspraak|organisatie.naam|organisatie.postadres.adresregel1|organisatie.postadres.postcode|organisatie.postadres.plaats|afspraak.id|nu.datum|burger.voorletters|burger.voornamen|burger.achternaam|burger.postadres.adresregel1|burger.postadres.postcode|burger.postadres.plaats\ncredit|1-12-2021|test organisatie 1|test straat 1.1 test huisnummer 1.1|code 1.1|test plaats 1.1|stuff, things, test#1, com bi na ti|{current_date_str}|J|John|Do|burger test straat 15a|1234AB|burger test plaats\n'
+        assert response_csv == f'betaalrichting|status.afspraak|organisatie.naam|organisatie.postadres.adresregel1|organisatie.postadres.postcode|organisatie.postadres.plaats|afspraak.id|nu.datum|burger.hhbnummer|burger.voorletters|burger.voornamen|burger.achternaam|burger.postadres.adresregel1|burger.postadres.postcode|burger.postadres.plaats\ncredit|1-12-2021|test organisatie 1|test straat 1.1 test huisnummer 1.1|code 1.1|test plaats 1.1|stuff, things, test#1, com bi na ti|{current_date_str}|HHB000002|J|John|Do|burger test straat 15a|1234AB|burger test plaats\n'
         assert filename_csv == f"{current_date_str}_{burger['data'][0]['voornamen']}_{burger['data'][0]['achternaam']}.csv"
         assert filename_excel == f"{current_date_str}_{burger['data'][0]['voornamen']}_{burger['data'][0]['achternaam']}.xlsx"
         assert fallback.call_count == 0
