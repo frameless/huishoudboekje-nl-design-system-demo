@@ -29,6 +29,13 @@ const RubriekItem: React.FC<{rubriek: Rubriek}> = ({rubriek}) => {
 		})
 			.then(() => {
 				toast.closeAll();
+				
+				const tableRow = document.getElementById("rubriek_line_" + rubriek.id);
+
+				if (tableRow) {
+					tableRow.style.display = "none";
+				}
+
 				toast({
 					success: t("messages.rubrieken.deleteSuccess"),
 				});
@@ -44,7 +51,7 @@ const RubriekItem: React.FC<{rubriek: Rubriek}> = ({rubriek}) => {
 	return (<>
 		{updateRubriekenModal.isOpen && <UpdateRubriekModal onClose={updateRubriekenModal.onClose} rubriek={rubriek} />}
 
-		<Tr key={rubriek.id}>
+		<Tr key={rubriek.id} id={"rubriek_line_" + rubriek.id}>
 			<Td>
 				<Tooltip label={rubriek.grootboekrekening?.naam}>
 					<Stack spacing={0}>

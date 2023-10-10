@@ -24,7 +24,7 @@ const RekeningListItem: React.FC<RekeningListItemProps> = ({rekening, onDelete, 
 	const onConfirmDeleteDialog = () => {
 		if (onDelete) {
 			onDelete();
-			updateAfdelingRekeningModal.onClose();
+			deleteAlert.onClose()
 		}
 	};
 	const onCloseDeleteDialog = () => deleteAlert.onClose();
@@ -35,7 +35,6 @@ const RekeningListItem: React.FC<RekeningListItemProps> = ({rekening, onDelete, 
 			editablePreviewRef.current.innerText = truncateText(editablePreviewRef.current.innerText, 50);
 		}
 	});
-
 
 	if (!rekening) {
 		return null;
@@ -63,7 +62,7 @@ const RekeningListItem: React.FC<RekeningListItemProps> = ({rekening, onDelete, 
 			</Alert>)
 		}
 
-		<Tr>
+		<Tr id={"bank_account_"+rekening.id}>
 			<Td>
 				<Text>{(rekening.rekeninghouder || "").length > 0 ? rekening.rekeninghouder : t("unknown")}</Text>
 			</Td>

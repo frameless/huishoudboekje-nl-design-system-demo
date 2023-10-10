@@ -72,6 +72,12 @@ const RekeningList: React.FC<TableProps & RekeningListProps> = ({rekeningen, bur
 					afdelingId,
 				},
 			}).then(() => {
+				const tableRow = document.getElementById("bank_account_" + rekeningId);
+
+				if (tableRow) {
+					tableRow.style.display = "none";
+				}
+
 				toast({
 					success: t("messages.rekeningen.deleteSuccess"),
 				});

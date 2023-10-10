@@ -30,7 +30,7 @@ const HuishoudenListItem: React.FC<{ huishouden: Huishouden }> = ({huishouden}) 
 			)}
 			<Stack direction={["row", "column"]} spacing={5}>
 				{huishouden.burgers?.map(b => (
-					<Stack key={b.id} spacing={3} direction={"row"} align={"center"}>
+					<Stack id={"household_citizen_"+b.id} key={b.id} spacing={3} direction={"row"} align={"center"}>
 						<Avatar size={"xs"} name={formatBurgerName(b)} />
 						<Text fontSize={"md"}><strong>{formatBurgerName(b)}</strong></Text>
 					</Stack>

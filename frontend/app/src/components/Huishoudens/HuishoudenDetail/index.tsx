@@ -16,7 +16,7 @@ const HuishoudenDetails = () => {
 	const {t} = useTranslation();
 	const {id = ""} = useParams<{id: string}>();
 	const addBurgersModal = useDisclosure();
-	const $huishouden = useGetHuishoudenQuery({variables: {id: parseInt(id)}});
+	const $huishouden = useGetHuishoudenQuery({fetchPolicy: 'cache-and-network', variables: {id: parseInt(id)}});
 
 	return (
 		<Queryable query={$huishouden} children={data => {
