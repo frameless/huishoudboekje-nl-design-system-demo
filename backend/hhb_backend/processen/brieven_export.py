@@ -30,14 +30,10 @@ brieven_fields = [
     "organisatie.postadres.plaats",
     "afspraak.id",
     "nu.datum",
-<<<<<<< HEAD
+    "burger.hhbnummer",
     "burger.voorletters",
     "burger.voornamen",
     "burger.achternaam",
-=======
-    "burger.hhbnummer",
-    "burger.naam",
->>>>>>> fcc3ecd6 (Added hhbnummer to export for letters)
     "burger.postadres.adresregel1",
     "burger.postadres.postcode",
     "burger.postadres.plaats"
