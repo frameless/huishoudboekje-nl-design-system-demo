@@ -123,6 +123,8 @@ class BurgerView(HHBView):
                         Rekening.iban.ilike(search_value),
                         Rekening.rekeninghouder.ilike(search_value),
                         Rekening.rekeninghouder.ilike(search_value),
+                        Burger.straatnaam.ilike(search_value),
+                        Burger.postcode.ilike(search_value),
                         and_(Afspraak.burger_id != None,
                              func.array_to_string(Afspraak.zoektermen, ' ', '*').ilike(search_value))
                         ))\
