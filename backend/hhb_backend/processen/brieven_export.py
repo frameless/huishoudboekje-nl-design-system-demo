@@ -29,6 +29,7 @@ brieven_fields = [
     "organisatie.postadres.postcode",
     "organisatie.postadres.plaats",
     "afspraak.id",
+    "afspraak.omschrijving",
     "nu.datum",
     "burger.hhbnummer",
     "burger.voorletters",
@@ -200,6 +201,7 @@ def create_row(afdeling, afspraak, burger, current_date_str):
     row["organisatie.postadres.postcode"] = postcode if postcode else ""
     row["organisatie.postadres.plaats"] = plaats if plaats else ""
     row["afspraak.id"] = ' '.join(afspraak["zoektermen"]) if afspraak["zoektermen"] else ""
+    row["afspraak.omschrijving"] = afspraak['omschrijving'] if afspraak['omschrijving'] else ""
     row["nu.datum"] = current_date_str
     row["burger.hhbnummer"] = __get_hhb_number(burger['id'])
     row["burger.voorletters"] = f"{burger['voorletters']}"
