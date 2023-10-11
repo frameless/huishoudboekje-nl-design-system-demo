@@ -2,7 +2,7 @@ import {Box, Button, Divider, FormControl, FormLabel, HStack, Icon, Input, Input
 import React, {useState} from "react";
 import {useTranslation} from "react-i18next";
 import Select from "react-select";
-import {Afspraak, Burger, BankTransaction, GetTransactieDocument, Rubriek, useCreateJournaalpostAfspraakMutation, useCreateJournaalpostGrootboekrekeningMutation, useGetSimilarAfsprakenLazyQuery, useGetBurgersAndOrganisatiesQuery, Organisatie, useGetSearchAfsprakenQuery} from "../../../generated/graphql";
+import {Afspraak, Burger, BankTransaction, GetTransactieDocument, Rubriek, useCreateJournaalpostAfspraakMutation, useCreateJournaalpostGrootboekrekeningMutation, useGetSimilarAfsprakenLazyQuery, useGetBurgersAndOrganisatiesAndRekeningenQuery, Organisatie, useGetSearchAfsprakenQuery, Rekening} from "../../../generated/graphql";
 import useToaster from "../../../utils/useToaster";
 import SelectAfspraakOption from "../../shared/SelectAfspraakOption";
 import {TriangleDownIcon, TriangleUpIcon, WarningTwoIcon} from "@chakra-ui/icons";
@@ -134,6 +134,7 @@ const BookingSection = ({transaction, rubrieken}) => {
 		limit: number,
 		afspraken: number[] | undefined,
 		afdelingen: number[] | undefined,
+		tegenrekeningen: number[] | undefined,
 		burgers: number[] | undefined,
 		only_valid: boolean | undefined,
 		min_bedrag: number | undefined,
@@ -144,6 +145,7 @@ const BookingSection = ({transaction, rubrieken}) => {
 		limit: 25,
 		afspraken: undefined,
 		afdelingen: undefined,
+		tegenrekeningen: undefined,
 		burgers: undefined,
 		only_valid: true,
 		min_bedrag: undefined,
@@ -174,7 +176,8 @@ const BookingSection = ({transaction, rubrieken}) => {
 
 	const [filterBurgerIds, setFilterBurgerIds] = useState<number[]>([]);
 	const [filterOrganisatieids, setFilterOrganisatieIds] = useState<number[]>([]);
-	const $burgersAndOrganisaties = useGetBurgersAndOrganisatiesQuery();
+	const [filterTegenrekeningIds, setFilterTegenrekeningIds] = useState<number[]>([]);
+	const $burgersAndOrganisatiesAndRekeningen = useGetBurgersAndOrganisatiesAndRekeningenQuery();
 	const onSelectBurger = (value) => {
 		setFilterBurgerIds(value ? value.map(v => v.value) : [])
 		goFirst()
@@ -182,6 +185,12 @@ const BookingSection = ({transaction, rubrieken}) => {
 
 	const onSelectOrganisatie = (value) => {
 		setFilterOrganisatieIds(value ? value.map(v => v.value) : [])
+		goFirst()
+	};
+
+	
+	const onSelectTegenrekening = (value) => {
+		setFilterTegenrekeningIds(value ? value.map(v => v.value) : [])
 		goFirst()
 	};
 
@@ -212,7 +221,7 @@ const BookingSection = ({transaction, rubrieken}) => {
 	searchVariables.max_bedrag = maxBedrag ? Math.round(+maxBedrag * 100) : undefined
 	searchVariables.only_valid = valid
 	if (filterOrganisatieids.length > 0) {
-		const organisaties: Organisatie[] = $burgersAndOrganisaties.data?.organisaties || []
+		const organisaties: Organisatie[] = $burgersAndOrganisatiesAndRekeningen.data?.organisaties || []
 		const filteredOrganisaties = organisaties.filter(organisatie => organisatie.id ? filterOrganisatieids.includes(organisatie.id) : false)
 		const afdelingen = filteredOrganisaties.map(organisatie => organisatie.afdelingen ? organisatie.afdelingen : []).flat() || []
 		searchVariables.afdelingen = afdelingen.map(afdeling => afdeling.id ? afdeling.id : -1).filter(id => id !== -1)
@@ -220,9 +229,8 @@ const BookingSection = ({transaction, rubrieken}) => {
 	else {
 		searchVariables.afdelingen = undefined
 	}
+	searchVariables.tegenrekeningen = filterTegenrekeningIds.length > 0 ? filterTegenrekeningIds : undefined
 	searchVariables.zoektermen = zoektermen.length > 0 ? zoektermen : undefined
-
-
 
 	const onAddzoekterm = (e) => {
 		e.preventDefault();
@@ -304,7 +312,7 @@ const BookingSection = ({transaction, rubrieken}) => {
 									</Stack>
 								</TabPanel>
 								<TabPanel px={0}>
-									<Queryable query={$burgersAndOrganisaties} children={data => {
+									<Queryable query={$burgersAndOrganisatiesAndRekeningen} children={data => {
 										const burgers: Burger[] = data.burgers || [];
 										const burgers_filter = burgers.filter(b => filterBurgerIds.includes(b.id!)).map(b => ({
 											key: b.id,
@@ -316,6 +324,12 @@ const BookingSection = ({transaction, rubrieken}) => {
 											key: o.id,
 											value: o.id,
 											label: o.naam,
+										}));
+										const rekeningen: Rekening[] = data.rekeningen || [];
+										const tegen_rekeningen_filter = rekeningen.filter(o => filterTegenrekeningIds.includes(o.id!)).map(o => ({
+											key: o.id,
+											value: o.id,
+											label: o.rekeninghouder + ' (' + o.iban + ')',
 										}));
 										return (
 											<Stack direction={"column"} spacing={5} flex={1}>
@@ -338,6 +352,22 @@ const BookingSection = ({transaction, rubrieken}) => {
 													</FormControl>
 												</HStack>
 												<HStack paddingBottom={15}>
+													<FormControl as={Stack} flex={1} minWidth={"50%"}>
+														<FormLabel>{t("bookingSection.tegenrekening")}</FormLabel>
+														<Select onChange={onSelectTegenrekening} options={rekeningen.map(o => ({
+																key: o.id,
+																value: o.id,
+																label: o.rekeninghouder + ' (' + o.iban + ')',
+															}))} 
+															styles={reactSelectStyles.default} 
+															isMulti 
+															isClearable={true} 
+															noOptionsMessage={() => t("select.noOptions")} 
+															maxMenuHeight={200} 
+															placeholder={t("bookingSection.allRekeningen")} 
+															value={tegen_rekeningen_filter}
+														/>
+													</FormControl>
 													<FormControl>
 														<FormLabel>{t("transactionsPage.filters.amountFrom")}</FormLabel>
 														<InputGroup>

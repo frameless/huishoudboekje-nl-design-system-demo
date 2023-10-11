@@ -13,6 +13,9 @@ def add_afspraak_burger_ids_filter(burger_ids, query):
 def add_afspraak_afdeling_ids_filter(afdeling_ids, query):
     return query.filter(Afspraak.afdeling_id.in_(afdeling_ids))
 
+def add_afspraak_tegen_rekening_ids_filter(tegen_rekening_ids, query):
+    return query.filter(Afspraak.tegen_rekening_id.in_(tegen_rekening_ids))
+
 def add_afspraak_only_valid_filter(only_valid, query):
     today = datetime.now()
     if only_valid:

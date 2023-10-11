@@ -1,7 +1,7 @@
 """ MethodView for /afspraken/filter path """
 
 from core_service.views.basic_view.basic_filter_view import BasicFilterView
-from huishoudboekje_service.filters.afspraak_filters import add_afspraak_afspraak_ids_filter, add_afspraak_burger_ids_filter, add_afspraak_afdeling_ids_filter, add_afspraak_max_bedrag_filter, add_afspraak_min_bedrag_filter, add_afspraak_only_valid_filter, add_afspraak_text_zoektermen_filter
+from huishoudboekje_service.filters.afspraak_filters import add_afspraak_afspraak_ids_filter, add_afspraak_burger_ids_filter, add_afspraak_afdeling_ids_filter, add_afspraak_max_bedrag_filter, add_afspraak_min_bedrag_filter, add_afspraak_only_valid_filter, add_afspraak_tegen_rekening_ids_filter, add_afspraak_text_zoektermen_filter
 from models.afspraak import Afspraak
 
 
@@ -17,6 +17,7 @@ class AfsprakenFilterView(BasicFilterView):
         afspraak_ids = filter_options.get("afspraak_ids", None)
         burger_ids = filter_options.get("burger_ids", None)
         afdeling_ids = filter_options.get("afdeling_ids", None)
+        tegen_rekening_ids = filter_options.get("tegen_rekening_ids", None)
         only_valid = filter_options.get("only_valid", None)
         min_bedrag = filter_options.get("min_bedrag", None)
         max_bedrag = filter_options.get("max_bedrag", None)
@@ -31,6 +32,9 @@ class AfsprakenFilterView(BasicFilterView):
 
         if afdeling_ids:
             new_query = add_afspraak_afdeling_ids_filter(afdeling_ids, new_query)
+
+        if tegen_rekening_ids is not None:
+            new_query = add_afspraak_tegen_rekening_ids_filter(tegen_rekening_ids, new_query)
 
         if only_valid is not None:
             new_query = add_afspraak_only_valid_filter(only_valid, new_query)

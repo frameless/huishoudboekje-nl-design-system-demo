@@ -21,6 +21,10 @@ class AfsprakenGetRequestBuilder(GetRequestBuilder):
         self._request.add_to_filter("afdeling_ids", afdeling_ids)
         return self
     
+    def by_tegen_rekening_ids(self, tegen_rekening_ids: list[int]):
+        self._request.add_to_filter("tegen_rekening_ids", tegen_rekening_ids)
+        return self
+    
     def by_valid(self, only_valid: bool):
         self._request.add_to_filter("only_valid", only_valid)
         return self

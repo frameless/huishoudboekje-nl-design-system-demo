@@ -1496,6 +1496,7 @@ export type RootQuerySearchAfsprakenArgs = {
   minBedrag?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
   onlyValid?: InputMaybe<Scalars['Boolean']>;
+  tegenRekeningIds?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
   zoektermen?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
@@ -2124,10 +2125,10 @@ export type GetBurgersQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetBurgersQuery = { burgers?: Array<{ id?: number, voornamen?: string, achternaam?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }> };
 
-export type GetBurgersAndOrganisatiesQueryVariables = Exact<{ [key: string]: never; }>;
+export type GetBurgersAndOrganisatiesAndRekeningenQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetBurgersAndOrganisatiesQuery = { organisaties?: Array<{ id?: number, naam?: string, afdelingen?: Array<{ id?: number }> }>, burgers?: Array<{ id?: number, voornamen?: string, voorletters?: string, achternaam?: string }> };
+export type GetBurgersAndOrganisatiesAndRekeningenQuery = { organisaties?: Array<{ id?: number, naam?: string, afdelingen?: Array<{ id?: number }> }>, burgers?: Array<{ id?: number, voornamen?: string, voorletters?: string, achternaam?: string }>, rekeningen?: Array<{ iban?: string, rekeninghouder?: string, id?: number }> };
 
 export type GetBurgersSearchQueryVariables = Exact<{
   search?: InputMaybe<Scalars['String']>;
@@ -2235,6 +2236,7 @@ export type GetSearchAfsprakenQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Int']>;
   afspraken?: InputMaybe<Array<InputMaybe<Scalars['Int']>> | InputMaybe<Scalars['Int']>>;
   afdelingen?: InputMaybe<Array<InputMaybe<Scalars['Int']>> | InputMaybe<Scalars['Int']>>;
+  tegenrekeningen?: InputMaybe<Array<InputMaybe<Scalars['Int']>> | InputMaybe<Scalars['Int']>>;
   burgers?: InputMaybe<Array<InputMaybe<Scalars['Int']>> | InputMaybe<Scalars['Int']>>;
   only_valid?: InputMaybe<Scalars['Boolean']>;
   min_bedrag?: InputMaybe<Scalars['Int']>;
@@ -6138,8 +6140,8 @@ export function useGetBurgersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions
 export type GetBurgersQueryHookResult = ReturnType<typeof useGetBurgersQuery>;
 export type GetBurgersLazyQueryHookResult = ReturnType<typeof useGetBurgersLazyQuery>;
 export type GetBurgersQueryResult = Apollo.QueryResult<GetBurgersQuery, GetBurgersQueryVariables>;
-export const GetBurgersAndOrganisatiesDocument = gql`
-    query getBurgersAndOrganisaties {
+export const GetBurgersAndOrganisatiesAndRekeningenDocument = gql`
+    query getBurgersAndOrganisatiesAndRekeningen {
   organisaties {
     id
     naam
@@ -6153,35 +6155,40 @@ export const GetBurgersAndOrganisatiesDocument = gql`
     voorletters
     achternaam
   }
+  rekeningen {
+    iban
+    rekeninghouder
+    id
+  }
 }
     `;
 
 /**
- * __useGetBurgersAndOrganisatiesQuery__
+ * __useGetBurgersAndOrganisatiesAndRekeningenQuery__
  *
- * To run a query within a React component, call `useGetBurgersAndOrganisatiesQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetBurgersAndOrganisatiesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetBurgersAndOrganisatiesAndRekeningenQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetBurgersAndOrganisatiesAndRekeningenQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetBurgersAndOrganisatiesQuery({
+ * const { data, loading, error } = useGetBurgersAndOrganisatiesAndRekeningenQuery({
  *   variables: {
  *   },
  * });
  */
-export function useGetBurgersAndOrganisatiesQuery(baseOptions?: Apollo.QueryHookOptions<GetBurgersAndOrganisatiesQuery, GetBurgersAndOrganisatiesQueryVariables>) {
+export function useGetBurgersAndOrganisatiesAndRekeningenQuery(baseOptions?: Apollo.QueryHookOptions<GetBurgersAndOrganisatiesAndRekeningenQuery, GetBurgersAndOrganisatiesAndRekeningenQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetBurgersAndOrganisatiesQuery, GetBurgersAndOrganisatiesQueryVariables>(GetBurgersAndOrganisatiesDocument, options);
+        return Apollo.useQuery<GetBurgersAndOrganisatiesAndRekeningenQuery, GetBurgersAndOrganisatiesAndRekeningenQueryVariables>(GetBurgersAndOrganisatiesAndRekeningenDocument, options);
       }
-export function useGetBurgersAndOrganisatiesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetBurgersAndOrganisatiesQuery, GetBurgersAndOrganisatiesQueryVariables>) {
+export function useGetBurgersAndOrganisatiesAndRekeningenLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetBurgersAndOrganisatiesAndRekeningenQuery, GetBurgersAndOrganisatiesAndRekeningenQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetBurgersAndOrganisatiesQuery, GetBurgersAndOrganisatiesQueryVariables>(GetBurgersAndOrganisatiesDocument, options);
+          return Apollo.useLazyQuery<GetBurgersAndOrganisatiesAndRekeningenQuery, GetBurgersAndOrganisatiesAndRekeningenQueryVariables>(GetBurgersAndOrganisatiesAndRekeningenDocument, options);
         }
-export type GetBurgersAndOrganisatiesQueryHookResult = ReturnType<typeof useGetBurgersAndOrganisatiesQuery>;
-export type GetBurgersAndOrganisatiesLazyQueryHookResult = ReturnType<typeof useGetBurgersAndOrganisatiesLazyQuery>;
-export type GetBurgersAndOrganisatiesQueryResult = Apollo.QueryResult<GetBurgersAndOrganisatiesQuery, GetBurgersAndOrganisatiesQueryVariables>;
+export type GetBurgersAndOrganisatiesAndRekeningenQueryHookResult = ReturnType<typeof useGetBurgersAndOrganisatiesAndRekeningenQuery>;
+export type GetBurgersAndOrganisatiesAndRekeningenLazyQueryHookResult = ReturnType<typeof useGetBurgersAndOrganisatiesAndRekeningenLazyQuery>;
+export type GetBurgersAndOrganisatiesAndRekeningenQueryResult = Apollo.QueryResult<GetBurgersAndOrganisatiesAndRekeningenQuery, GetBurgersAndOrganisatiesAndRekeningenQueryVariables>;
 export const GetBurgersSearchDocument = gql`
     query getBurgersSearch($search: String) {
   burgers(search: $search) {
@@ -7046,12 +7053,13 @@ export type GetSaldoQueryHookResult = ReturnType<typeof useGetSaldoQuery>;
 export type GetSaldoLazyQueryHookResult = ReturnType<typeof useGetSaldoLazyQuery>;
 export type GetSaldoQueryResult = Apollo.QueryResult<GetSaldoQuery, GetSaldoQueryVariables>;
 export const GetSearchAfsprakenDocument = gql`
-    query getSearchAfspraken($offset: Int, $limit: Int, $afspraken: [Int], $afdelingen: [Int], $burgers: [Int], $only_valid: Boolean, $min_bedrag: Int, $max_bedrag: Int, $zoektermen: [String]) {
+    query getSearchAfspraken($offset: Int, $limit: Int, $afspraken: [Int], $afdelingen: [Int], $tegenrekeningen: [Int], $burgers: [Int], $only_valid: Boolean, $min_bedrag: Int, $max_bedrag: Int, $zoektermen: [String]) {
   searchAfspraken(
     offset: $offset
     limit: $limit
     afspraakIds: $afspraken
     afdelingIds: $afdelingen
+    tegenRekeningIds: $tegenrekeningen
     burgerIds: $burgers
     onlyValid: $only_valid
     minBedrag: $min_bedrag
@@ -7098,6 +7106,7 @@ export const GetSearchAfsprakenDocument = gql`
  *      limit: // value for 'limit'
  *      afspraken: // value for 'afspraken'
  *      afdelingen: // value for 'afdelingen'
+ *      tegenrekeningen: // value for 'tegenrekeningen'
  *      burgers: // value for 'burgers'
  *      only_valid: // value for 'only_valid'
  *      min_bedrag: // value for 'min_bedrag'

@@ -1,7 +1,7 @@
 import { gql } from "@apollo/client";
 
-export const GetBurgersAndOrganisaties = gql`
-query getBurgersAndOrganisaties{
+export const GetBurgersAndOrganisatiesAndRekeningen = gql`
+query getBurgersAndOrganisatiesAndRekeningen{
     organisaties{
       id
       naam
@@ -14,6 +14,11 @@ query getBurgersAndOrganisaties{
       voornamen
       voorletters
       achternaam
+    }
+    rekeningen{
+      iban
+      rekeninghouder
+      id
     }
   }
 `;
