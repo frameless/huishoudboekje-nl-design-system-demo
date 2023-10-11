@@ -176,8 +176,9 @@ const BookingSection = ({transaction, rubrieken}) => {
 
 	const [filterBurgerIds, setFilterBurgerIds] = useState<number[]>([]);
 	const [filterOrganisatieids, setFilterOrganisatieIds] = useState<number[]>([]);
-	const [filterTegenrekeningIds, setFilterTegenrekeningIds] = useState<number[]>([]);
+	const [filterTegenrekeningIbans, setFilterTegenrekeningIbans] = useState<string[]>(transaction.tegenRekeningIban ? [transaction.tegenRekeningIban] : []);
 	const $burgersAndOrganisatiesAndRekeningen = useGetBurgersAndOrganisatiesAndRekeningenQuery();
+
 	const onSelectBurger = (value) => {
 		setFilterBurgerIds(value ? value.map(v => v.value) : [])
 		goFirst()
@@ -190,7 +191,7 @@ const BookingSection = ({transaction, rubrieken}) => {
 
 	
 	const onSelectTegenrekening = (value) => {
-		setFilterTegenrekeningIds(value ? value.map(v => v.value) : [])
+		setFilterTegenrekeningIbans(value ? value.map(v => v.value) : [])
 		goFirst()
 	};
 
@@ -229,7 +230,13 @@ const BookingSection = ({transaction, rubrieken}) => {
 	else {
 		searchVariables.afdelingen = undefined
 	}
-	searchVariables.tegenrekeningen = filterTegenrekeningIds.length > 0 ? filterTegenrekeningIds : undefined
+	if(filterTegenrekeningIbans.length > 0) {
+		
+		const rekeningenlist: Rekening[] = $burgersAndOrganisatiesAndRekeningen.data?.rekeningen || []
+		searchVariables.tegenrekeningen = filterTegenrekeningIbans.map(iban => rekeningenlist.find(rekening => rekening.iban === iban)?.id ?? -1)
+	} else {
+		searchVariables.tegenrekeningen = undefined
+	}
 	searchVariables.zoektermen = zoektermen.length > 0 ? zoektermen : undefined
 
 	const onAddzoekterm = (e) => {
@@ -255,7 +262,8 @@ const BookingSection = ({transaction, rubrieken}) => {
 
 	const $searchAfspraken = useGetSearchAfsprakenQuery({
 		fetchPolicy: "no-cache",
-		variables: searchVariables
+		variables: searchVariables,
+		onCompleted: () => {goFirst()}
 	});
 
 
@@ -326,9 +334,9 @@ const BookingSection = ({transaction, rubrieken}) => {
 											label: o.naam,
 										}));
 										const rekeningen: Rekening[] = data.rekeningen || [];
-										const tegen_rekeningen_filter = rekeningen.filter(o => filterTegenrekeningIds.includes(o.id!)).map(o => ({
-											key: o.id,
-											value: o.id,
+										const tegen_rekeningen_filter = rekeningen.filter(o => filterTegenrekeningIbans.includes(o.iban!)).map(o => ({
+											key: o.iban,
+											value: o.iban,
 											label: o.rekeninghouder + ' (' + o.iban + ')',
 										}));
 										return (
@@ -355,8 +363,8 @@ const BookingSection = ({transaction, rubrieken}) => {
 													<FormControl as={Stack} flex={1} minWidth={"50%"}>
 														<FormLabel>{t("bookingSection.tegenrekening")}</FormLabel>
 														<Select onChange={onSelectTegenrekening} options={rekeningen.map(o => ({
-																key: o.id,
-																value: o.id,
+																key: o.iban,
+																value: o.iban,
 																label: o.rekeninghouder + ' (' + o.iban + ')',
 															}))} 
 															styles={reactSelectStyles.default} 
