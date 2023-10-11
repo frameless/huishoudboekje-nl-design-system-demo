@@ -17,6 +17,7 @@ query getBurgersAndOrganisatiesAndRekeningen{
     }
     rekeningen{
       iban
+      rekeninghouder
       id
     }
   }

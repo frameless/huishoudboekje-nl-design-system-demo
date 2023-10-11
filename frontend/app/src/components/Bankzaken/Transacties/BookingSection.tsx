@@ -329,7 +329,7 @@ const BookingSection = ({transaction, rubrieken}) => {
 										const tegen_rekeningen_filter = rekeningen.filter(o => filterTegenrekeningIds.includes(o.id!)).map(o => ({
 											key: o.id,
 											value: o.id,
-											label: o.iban,
+											label: o.rekeninghouder + ' (' + o.iban + ')',
 										}));
 										return (
 											<Stack direction={"column"} spacing={5} flex={1}>
@@ -350,16 +350,24 @@ const BookingSection = ({transaction, rubrieken}) => {
 															label: o.naam,
 														}))} styles={reactSelectStyles.default} isMulti isClearable={true} noOptionsMessage={() => t("select.noOptions")} maxMenuHeight={200} placeholder={t("bookingSection.allOrganisations")} value={organisaties_filter} />
 													</FormControl>
-													<FormControl as={Stack} flex={1}>
-														<FormLabel>{t("bookingSection.tegenrekening")}</FormLabel>
-														<Select onChange={onSelectTegenrekening} options={rekeningen.map(o => ({
-															key: o.id,
-															value: o.id,
-															label: o.iban,
-														}))} styles={reactSelectStyles.default} isMulti isClearable={true} noOptionsMessage={() => t("select.noOptions")} maxMenuHeight={200} placeholder={t("bookingSection.allRekeningen")} value={tegen_rekeningen_filter} />
-													</FormControl>
 												</HStack>
 												<HStack paddingBottom={15}>
+													<FormControl as={Stack} flex={1} minWidth={"50%"}>
+														<FormLabel>{t("bookingSection.tegenrekening")}</FormLabel>
+														<Select onChange={onSelectTegenrekening} options={rekeningen.map(o => ({
+																key: o.id,
+																value: o.id,
+																label: o.rekeninghouder + ' (' + o.iban + ')',
+															}))} 
+															styles={reactSelectStyles.default} 
+															isMulti 
+															isClearable={true} 
+															noOptionsMessage={() => t("select.noOptions")} 
+															maxMenuHeight={200} 
+															placeholder={t("bookingSection.allRekeningen")} 
+															value={tegen_rekeningen_filter}
+														/>
+													</FormControl>
 													<FormControl>
 														<FormLabel>{t("transactionsPage.filters.amountFrom")}</FormLabel>
 														<InputGroup>

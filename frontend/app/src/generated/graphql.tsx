@@ -2128,7 +2128,7 @@ export type GetBurgersQuery = { burgers?: Array<{ id?: number, voornamen?: strin
 export type GetBurgersAndOrganisatiesAndRekeningenQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetBurgersAndOrganisatiesAndRekeningenQuery = { organisaties?: Array<{ id?: number, naam?: string, afdelingen?: Array<{ id?: number }> }>, burgers?: Array<{ id?: number, voornamen?: string, voorletters?: string, achternaam?: string }>, rekeningen?: Array<{ iban?: string, id?: number }> };
+export type GetBurgersAndOrganisatiesAndRekeningenQuery = { organisaties?: Array<{ id?: number, naam?: string, afdelingen?: Array<{ id?: number }> }>, burgers?: Array<{ id?: number, voornamen?: string, voorletters?: string, achternaam?: string }>, rekeningen?: Array<{ iban?: string, rekeninghouder?: string, id?: number }> };
 
 export type GetBurgersSearchQueryVariables = Exact<{
   search?: InputMaybe<Scalars['String']>;
@@ -6157,6 +6157,7 @@ export const GetBurgersAndOrganisatiesAndRekeningenDocument = gql`
   }
   rekeningen {
     iban
+    rekeninghouder
     id
   }
 }
