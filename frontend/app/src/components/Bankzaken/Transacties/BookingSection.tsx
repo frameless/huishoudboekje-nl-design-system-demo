@@ -262,8 +262,7 @@ const BookingSection = ({transaction, rubrieken}) => {
 
 	const $searchAfspraken = useGetSearchAfsprakenQuery({
 		fetchPolicy: "no-cache",
-		variables: searchVariables,
-		onCompleted: () => {goFirst()}
+		variables: searchVariables
 	});
 
 
