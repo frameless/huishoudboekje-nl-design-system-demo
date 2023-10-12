@@ -10,6 +10,7 @@ from hhb_backend.graphql.dataloaders import hhb_dataloader
 class Afdeling(graphene.ObjectType):
     id = graphene.Int()
     naam = graphene.String()
+    organisatie_id = graphene.Int()
     organisatie = graphene.Field(lambda: organisatie.Organisatie)
     rekeningen = graphene.List(lambda: rekening.Rekening)
     postadressen = graphene.List(lambda: postadres.Postadres)

@@ -65,6 +65,7 @@ export type Afdeling = {
   id?: Maybe<Scalars['Int']>;
   naam?: Maybe<Scalars['String']>;
   organisatie?: Maybe<Organisatie>;
+  organisatieId?: Maybe<Scalars['Int']>;
   postadressen?: Maybe<Array<Maybe<Postadres>>>;
   rekeningen?: Maybe<Array<Maybe<Rekening>>>;
 };
@@ -1181,6 +1182,7 @@ export type RootMutationUpdateSignaalArgs = {
 export type RootQuery = {
   afdeling?: Maybe<Afdeling>;
   afdelingen?: Maybe<Array<Maybe<Afdeling>>>;
+  afdelingenByIban?: Maybe<Array<Maybe<Afdeling>>>;
   afspraak?: Maybe<Afspraak>;
   afspraken?: Maybe<Array<Maybe<Afspraak>>>;
   alarm?: Maybe<Alarm>;
@@ -1235,6 +1237,12 @@ export type RootQueryAfdelingArgs = {
 /** The root of all queries  */
 export type RootQueryAfdelingenArgs = {
   ids?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
+};
+
+
+/** The root of all queries  */
+export type RootQueryAfdelingenByIbanArgs = {
+  iban?: InputMaybe<Scalars['String']>;
 };
 
 
@@ -2125,10 +2133,12 @@ export type GetBurgersQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetBurgersQuery = { burgers?: Array<{ id?: number, voornamen?: string, achternaam?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }> };
 
-export type GetBurgersAndOrganisatiesAndRekeningenQueryVariables = Exact<{ [key: string]: never; }>;
+export type GetBurgersAndOrganisatiesAndRekeningenQueryVariables = Exact<{
+  iban: Scalars['String'];
+}>;
 
 
-export type GetBurgersAndOrganisatiesAndRekeningenQuery = { organisaties?: Array<{ id?: number, naam?: string, afdelingen?: Array<{ id?: number }> }>, burgers?: Array<{ id?: number, voornamen?: string, voorletters?: string, achternaam?: string }>, rekeningen?: Array<{ iban?: string, rekeninghouder?: string, id?: number }> };
+export type GetBurgersAndOrganisatiesAndRekeningenQuery = { organisaties?: Array<{ id?: number, naam?: string, afdelingen?: Array<{ id?: number }> }>, burgers?: Array<{ id?: number, voornamen?: string, voorletters?: string, achternaam?: string }>, rekeningen?: Array<{ iban?: string, rekeninghouder?: string, id?: number }>, afdelingenByIban?: Array<{ organisatieId?: number }> };
 
 export type GetBurgersSearchQueryVariables = Exact<{
   search?: InputMaybe<Scalars['String']>;
@@ -2274,7 +2284,7 @@ export type GetTransactieQueryVariables = Exact<{
 }>;
 
 
-export type GetTransactieQuery = { bankTransaction?: { id?: number, informationToAccountOwner?: string, statementLine?: string, bedrag?: any, isCredit?: boolean, tegenRekeningIban?: string, transactieDatum?: any, tegenRekening?: { iban?: string, rekeninghouder?: string }, journaalpost?: { id?: number, isAutomatischGeboekt?: boolean, afspraak?: { id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, burger?: { voornamen?: string, voorletters?: string, achternaam?: string, id?: number }, rubriek?: { id?: number, naam?: string } }, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } }, suggesties?: Array<{ id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, validFrom?: any, validThrough?: any, burger?: { voornamen?: string, voorletters?: string, achternaam?: string, id?: number } }> }, rubrieken?: Array<{ id?: number, naam?: string, grootboekrekening?: { id: string } }> };
+export type GetTransactieQuery = { bankTransaction?: { id?: number, informationToAccountOwner?: string, statementLine?: string, bedrag?: any, isCredit?: boolean, tegenRekeningIban?: string, transactieDatum?: any, tegenRekening?: { iban?: string, rekeninghouder?: string }, journaalpost?: { id?: number, isAutomatischGeboekt?: boolean, afspraak?: { id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, burger?: { voornamen?: string, voorletters?: string, achternaam?: string, id?: number }, rubriek?: { id?: number, naam?: string } }, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } } } };
 
 export type GetTransactionItemFormDataQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -6141,7 +6151,7 @@ export type GetBurgersQueryHookResult = ReturnType<typeof useGetBurgersQuery>;
 export type GetBurgersLazyQueryHookResult = ReturnType<typeof useGetBurgersLazyQuery>;
 export type GetBurgersQueryResult = Apollo.QueryResult<GetBurgersQuery, GetBurgersQueryVariables>;
 export const GetBurgersAndOrganisatiesAndRekeningenDocument = gql`
-    query getBurgersAndOrganisatiesAndRekeningen {
+    query getBurgersAndOrganisatiesAndRekeningen($iban: String!) {
   organisaties {
     id
     naam
@@ -6160,6 +6170,9 @@ export const GetBurgersAndOrganisatiesAndRekeningenDocument = gql`
     rekeninghouder
     id
   }
+  afdelingenByIban(iban: $iban) {
+    organisatieId
+  }
 }
     `;
 
@@ -6175,10 +6188,11 @@ export const GetBurgersAndOrganisatiesAndRekeningenDocument = gql`
  * @example
  * const { data, loading, error } = useGetBurgersAndOrganisatiesAndRekeningenQuery({
  *   variables: {
+ *      iban: // value for 'iban'
  *   },
  * });
  */
-export function useGetBurgersAndOrganisatiesAndRekeningenQuery(baseOptions?: Apollo.QueryHookOptions<GetBurgersAndOrganisatiesAndRekeningenQuery, GetBurgersAndOrganisatiesAndRekeningenQueryVariables>) {
+export function useGetBurgersAndOrganisatiesAndRekeningenQuery(baseOptions: Apollo.QueryHookOptions<GetBurgersAndOrganisatiesAndRekeningenQuery, GetBurgersAndOrganisatiesAndRekeningenQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<GetBurgersAndOrganisatiesAndRekeningenQuery, GetBurgersAndOrganisatiesAndRekeningenQueryVariables>(GetBurgersAndOrganisatiesAndRekeningenDocument, options);
       }
@@ -7352,28 +7366,6 @@ export const GetTransactieDocument = gql`
           naam
         }
       }
-    }
-    suggesties {
-      id
-      omschrijving
-      bedrag
-      credit
-      zoektermen
-      validFrom
-      validThrough
-      burger {
-        voornamen
-        voorletters
-        achternaam
-        id
-      }
-    }
-  }
-  rubrieken {
-    id
-    naam
-    grootboekrekening {
-      id
     }
   }
 }

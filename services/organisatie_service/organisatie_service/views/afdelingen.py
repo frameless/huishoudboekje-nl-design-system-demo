@@ -1,7 +1,6 @@
 """ HHBView for /afdelingen/ path """
-from models.afdeling import Afdeling
 from core_service.views.hhb_view import HHBView
-from flask import request, abort, make_response
+from models.afdeling import Afdeling
 
 
 class AfdelingView(HHBView):
@@ -40,6 +39,7 @@ class AfdelingView(HHBView):
     def extend_get(self, **kwargs):
         """ Extend the get function with extra filter """
         self.add_filter_filter_organisaties()
+        self.add_filter_filter_rekening()
 
     def add_filter_filter_organisaties(self):
         """ Add filter_organisaties filter based on the id of the afdeling model """
@@ -48,4 +48,12 @@ class AfdelingView(HHBView):
 
         AfdelingView.filter_in_string('filter_organisaties', add_filter)
 
+    def add_filter_filter_rekening(self):
+        """ Add filter_afdelingen filter based on the id of the organisatie model """
+
+        def add_filter(ids):
+            self.hhb_query.query = self.hhb_query.query.filter(self.hhb_model.rekeningen_ids.contains(ids))
+
+        AfdelingView.filter_in_string('filter_rekening', add_filter)
+        
     # TODO afspraken en rekeningen filter.

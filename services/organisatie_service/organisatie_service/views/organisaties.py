@@ -1,7 +1,6 @@
 """ HHBView for /organisaties/ path """
 from models.organisatie import Organisatie
 from core_service.views.hhb_view import HHBView
-from flask import request, abort, make_response
 
 
 class OrganisatieView(HHBView):

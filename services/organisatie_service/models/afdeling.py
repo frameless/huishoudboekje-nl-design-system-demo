@@ -1,7 +1,7 @@
 from core_service.database import db
-from sqlalchemy import Column, Integer, String, Sequence, ForeignKey, ARRAY, func
+from sqlalchemy import Column, Integer, String, Sequence, ForeignKey, func
 from sqlalchemy.orm import relationship
-from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.dialects.postgresql import UUID, ARRAY
 
 class Afdeling(db.Model):
     __tablename__ = 'afdelingen'
