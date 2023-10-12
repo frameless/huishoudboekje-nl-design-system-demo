@@ -12,7 +12,7 @@ class AfsprakenFilterView(BasicFilterView):
     model = "afspraken"
 
     def set_basic_query(self): 
-        self.query = Afspraak.query.join(Burger).order_by(Burger.voornamen.asc(), Burger.achternaam.asc(), Afspraak.omschrijving.asc(),Afspraak.zoektermen.asc())
+        self.query = Afspraak.query.join(Burger).order_by(Burger.voornamen.asc(), Burger.achternaam.asc(), Afspraak.omschrijving.asc(),Afspraak.zoektermen.asc(), Afspraak.bedrag.desc())
 
     def add_filter_options(self, filter_options, query):
         afspraak_ids = filter_options.get("afspraak_ids", None)
