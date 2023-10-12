@@ -2,4 +2,4 @@
 "huishoudboekje": patch
 ---
 
-Added pre-fill on iban filter afspraken search transactie page
+Combined suggesties and search afspraken field into one component
