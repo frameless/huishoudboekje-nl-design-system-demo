@@ -15,7 +15,9 @@ const config = getConfig();
 const sessionHelper = new SessionHelper({
 	secret: config.secret,
 	issuer: config.issuer,
-	audience: config.audience
+	audience: config.audience,
+	allowedAlgs: config.allowedAlgs,
+	scopes: config.scopes
 });
 
 const server = (prefix: string = "/auth") => {
@@ -44,7 +46,7 @@ const server = (prefix: string = "/auth") => {
 		issuerBaseURL: process.env.OIDC_ISSUER_URL,
 		authorizationParams: {
 			response_type: "code",
-			scope: "openid profile email offline_access"
+			scope: sessionHelper.scopes
 		},
 		secret: config.secret,
 		idpLogout: true,
