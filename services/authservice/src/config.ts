@@ -8,7 +8,6 @@ export const getConfig = () => {
 		JWT_ALGORITHMS,
 		JWT_AUDIENCE,
 		OIDC_SCOPES,
-		JWT_EXPIRES_IN = "14d",
 		APP_PORT = 8080,
 
 		OIDC_BASE_URL,
@@ -51,11 +50,6 @@ export const getConfig = () => {
 		missingEnvvarsError = true;
 		log.error("ERROR: Missing environment variable JWT_ALGORITHMS")
 	}
-	if (!process.env.OIDC_SCOPES) {
-		missingEnvvarsError = true;
-		log.error("ERROR: Missing environment vairable OIDC_SCOPES")
-	}
-
 	if (missingEnvvarsError) {
 		throw new Error("Failed to start service: missing configuration.");
 	}
@@ -64,9 +58,8 @@ export const getConfig = () => {
 		secret: JWT_SECRET,
 		issuer: JWT_ISSUER,
 		audience: JWT_AUDIENCE,
-		expiresIn: JWT_EXPIRES_IN,
 		allowedAlgs: JWT_ALGORITHMS,
-		scopes: OIDC_SCOPES,
+		scopes: OIDC_SCOPES ?? "",
 		port: APP_PORT,
 		debug: NODE_ENV !== "production",
 	};
