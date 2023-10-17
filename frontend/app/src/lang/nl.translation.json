@@ -878,6 +878,9 @@
     "till": "tot en met ",
     "incorrectDateRange": "De gegeven periode is niet correct"
   },
+  "total": "Totaal",
+  "total income": "Totaal Inkomsten",
+  "total expenses": "Totaal Uitgaven",
   "total income expenses in period": "Totaal inkomsten en uitgaven in periode",
   "end saldo at": "Saldo in Huishoudboekje op",
   "allBurgers": "Alle burgers",
