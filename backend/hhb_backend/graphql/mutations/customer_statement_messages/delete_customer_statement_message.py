@@ -27,6 +27,9 @@ class DeleteCustomerStatementMessage(graphene.Mutation):
         logging.info(f"Deleting csm {id}")
         previous = hhb_dataloader().csms.load_one(id)
 
+        if previous is None:
+            raise GraphQLError(f"Bankafschrift is al verwijderd")
+
         transactions = hhb_dataloader().bank_transactions.by_csm(id)
         transaction_ids = [t.id for t in transactions]
 
