@@ -16,7 +16,10 @@ class JournaalpostLoader(DataLoader[Journaalpost]):
         return self.load_one(transaction_id, filter_item="filter_transactions")
 
     def by_transactions(self, transaction_ids: List[int]) -> List[Journaalpost]:
-        return self.load(transaction_ids, filter_item="filter_transactions")
+        if len(transaction_ids) > 0:
+            return self.load(transaction_ids, filter_item="filter_transactions")
+        else:
+            return []
 
     def by_afspraak(self, afspraak_id: int) -> List[Journaalpost]:
         return self.load(afspraak_id, filter_item="filter_afspraken")
