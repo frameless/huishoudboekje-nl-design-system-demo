@@ -1,5 +1,28 @@
 # Huishoudboekje Changelog
 
+## 1.10.2
+
+### Patch Changes
+
+- 5b31f7af7: In export for letters column burger.naam is now divided into columns burger.voorletters, burger.voornamen and burger.achternaam
+- 8e9fb9982: Combined suggesties and search afspraken field into one component
+- 8a35a0dbb: Added afspraak.omschrijving to export for letters
+- d90351e16: added burger searching on postadress/streetname
+- 239143fa9: Check and fix unnecessary forced reloads to improve user experience
+- f508176d3: XML Parser change
+  Due to vulnerabilities, the parser for CAMT XML files had been changed from lxml to defusedxml
+- 8b3d3c86e: Changed date format status.afspraak and nu.datum to day-month-year no leading 0
+- 89ed9e505: Bugfix: Afspraak can now be updated with an end date (was caused by fix for previous bug with afspraak invut validation)
+- 2af63434e: Bugfix: All journaalposten are no longer deleted on delete csm request with not existing csm id.
+- c48981aa5: Changed sorting balance table rapportage(Wwithin income or expenses the sorting is now alphabetical on statements, within statments the rows are sorted on date then amount)
+- 7043ef6ef: Bugfix: addd missing translations rapportagepagina
+- 82878b835: Add OIDC_SCOPES environment variable that allows custom OIDC scopes to be requested. profile email openid offline_access are always requested because they are required by our app
+- 5013d75fc: Removing all autocomplete capabilities from all input fields
+- 6e5976305: Fixed bug that showed items twice in paged lists.
+- a431734fb: Added filter rekeningen option when searching afspraken transaction page
+- 73e0b8bbd: Fixed bug input validation, create and update afspraak with burger as tegenrekening is now possible again.
+- 85ad20e85: Added hhbnummer to export for letters
+
 ## 1.10.1
 
 Deze versie omvat een oplossing voor een probleem met het bijwerken van gegevens van een burger.

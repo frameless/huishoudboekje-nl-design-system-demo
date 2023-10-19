@@ -1,6 +1,6 @@
 {
   "name": "backend-burgers",
-  "version": "1.10.1",
+  "version": "1.10.2",
   "private": true,
   "description": "",
   "main": "main.ts",
