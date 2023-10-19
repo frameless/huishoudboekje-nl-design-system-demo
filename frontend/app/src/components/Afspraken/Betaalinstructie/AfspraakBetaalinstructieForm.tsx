@@ -171,6 +171,8 @@ const AfspraakBetaalinstructieForm: React.FC<AfspraakBetaalinstructieProps> = ({
 								<FormControl flex={1} isInvalid={!isFieldValid("startDate")} isRequired>
 									<FormLabel>{t("schedule.datum")}</FormLabel>
 									<DatePicker
+									 	autoComplete="no"
+										aria-autocomplete="none"
 										dateFormat={"dd-MM-yyyy"}
 										selected={form.startDate ? d(form.startDate).startOf("day").toDate() : null}
 										onChange={(value: Date) => {
@@ -185,7 +187,7 @@ const AfspraakBetaalinstructieForm: React.FC<AfspraakBetaalinstructieProps> = ({
 												}));
 											}
 										}}
-										customInput={<Input type={"text"} />}
+										customInput={<Input type={"text"} autoComplete="no" aria-autocomplete="none" />}
 									/>
 									<FormErrorMessage>{t("afspraakBetaalinstructie.invalidDateError")}</FormErrorMessage>
 								</FormControl>
@@ -198,6 +200,8 @@ const AfspraakBetaalinstructieForm: React.FC<AfspraakBetaalinstructieProps> = ({
 								<FormControl flex={1} isInvalid={!isFieldValid("startDate")} isRequired>
 									<FormLabel>{t("schedule.startDate")}</FormLabel>
 									<DatePicker
+									 	autoComplete="no"
+										aria-autocomplete="none"
 										dateFormat={"dd-MM-yyyy"}
 										selected={form.startDate}
 										onChange={(value: Date) => {
@@ -205,7 +209,7 @@ const AfspraakBetaalinstructieForm: React.FC<AfspraakBetaalinstructieProps> = ({
 												updateForm("startDate", value)
 											}
 										}}
-										customInput={<Input type={"text"} />}
+										customInput={<Input type={"text"} autoComplete="no" aria-autocomplete="none" />}
 										isClearable={true}
 									/>
 									<FormErrorMessage>{t("afspraakBetaalinstructie.invalidDateError")}</FormErrorMessage>
@@ -214,6 +218,8 @@ const AfspraakBetaalinstructieForm: React.FC<AfspraakBetaalinstructieProps> = ({
 								<FormControl flex={1} isInvalid={!isFieldValid("endDate")}>
 									<FormLabel>{t("schedule.endDate")}</FormLabel>
 									<DatePicker
+									 	autoComplete="no"
+										aria-autocomplete="none"
 										dateFormat={"dd-MM-yyyy"}
 										selected={form.endDate ? d(form.endDate).endOf("day").toDate() : null}
 										onChange={(value: Date) => {
@@ -221,7 +227,7 @@ const AfspraakBetaalinstructieForm: React.FC<AfspraakBetaalinstructieProps> = ({
 												updateForm("endDate", value)
 											}
 										}}
-										customInput={<Input type={"text"} />}
+										customInput={<Input type={"text"} autoComplete="no" aria-autocomplete="none" />}
 										isClearable={true}
 									/>
 									<FormErrorMessage>{t("afspraakBetaalinstructie.invalidDateError")}</FormErrorMessage>
@@ -305,10 +311,20 @@ const AfspraakBetaalinstructieForm: React.FC<AfspraakBetaalinstructieProps> = ({
 								<Stack direction={["column", "row"]}>
 									<FormControl flex={1} isInvalid={!isFieldValid("byMonthDay") || !isFieldValid2("byMonthDay")} isRequired>
 										<FormLabel>{t("schedule.byMonthDay")}</FormLabel>
-										<Input type={"number"} min={1} max={28} value={String(form.byMonthDay?.[0] || "")} onChange={e => updateForm("byMonthDay", [parseInt(e.target.value)], newData => ({
-											...newData,
-											byDay: undefined,
-										}))} />
+										<Input
+											autoComplete="no"
+											aria-autocomplete="none"
+											type={"number"}
+											min={1}
+											max={28}
+											value={String(form.byMonthDay?.[0] || "")}
+											onChange={
+												e => updateForm("byMonthDay", [parseInt(e.target.value)], newData => ({
+													...newData,
+													byDay: undefined,
+												})
+											)}
+										/>
 										<FormErrorMessage>{t("schedule.invalidByMonthDayError")}</FormErrorMessage>
 									</FormControl>
 								</Stack>

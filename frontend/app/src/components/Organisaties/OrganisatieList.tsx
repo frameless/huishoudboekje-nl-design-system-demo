@@ -55,7 +55,17 @@ const OrganisatieList = () => {
 						<InputLeftElement>
 							<SearchIcon color={"gray.300"} />
 						</InputLeftElement>
-						<Input type={"text"} bg={"white"} onChange={e => setSearch(e.target.value)} onKeyDown={onKeyDownOnSearchField} value={search || ""} placeholder={t("forms.search.fields.search")} ref={searchRef} />
+						<Input
+						 	autoComplete="no"
+							aria-autocomplete="none"
+							type={"text"}
+							bg={"white"}
+							onChange={e => setSearch(e.target.value)}
+							onKeyDown={onKeyDownOnSearchField}
+							value={search || ""}
+							placeholder={t("forms.search.fields.search")}
+							ref={searchRef}
+						/>
 						{search.length > 0 && (
 							<InputRightElement>
 								<IconButton size={"xs"} variant={"link"} icon={<CloseIcon />}

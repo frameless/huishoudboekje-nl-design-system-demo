@@ -55,7 +55,10 @@ const AfspraakEndModal: React.FC<AfspraakEndModalProps> = ({onClose, onSubmit, s
 
 				<FormControl flex={1} isInvalid={!isValid()}>
 					<FormLabel>{t("schedule.endDate")}</FormLabel>
-					<DatePicker selected={date && d(date).isValid() ? date : null} dateFormat={"dd-MM-yyyy"}
+					<DatePicker
+						selected={date && d(date).isValid() ? date : null} dateFormat={"dd-MM-yyyy"}
+						autoComplete="no"
+						aria-autocomplete="none"
 						isClearable={false}
 						selectsRange={false}
 						showYearDropdown
@@ -66,7 +69,7 @@ const AfspraakEndModal: React.FC<AfspraakEndModalProps> = ({onClose, onSubmit, s
 								setShowEndDateBeforeStartDateError(d(startDate).isAfter(d(value)))
 							}
 						}}
-						customInput={<Input type={"text"} isInvalid={!isValid()} />} />
+						customInput={<Input type={"text"} isInvalid={!isValid()} autoComplete="no" aria-autocomplete="none" />} />
 					<FormErrorMessage>{t("errors.invalidDateError")}</FormErrorMessage>
 					{showEndDateBeforeStartDateError === true && (<Text fontStyle={"italic"} color={"red.500"}>{t("errors.endDateBeforeStartDate")}</Text>)}
 

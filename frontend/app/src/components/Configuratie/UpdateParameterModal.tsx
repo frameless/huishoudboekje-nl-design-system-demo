@@ -72,11 +72,20 @@ const UpdateParameterModal: React.FC<UpdateParameterModalProps> = ({onClose, con
 				<Stack direction={"column"} alignItems={"flex-end"}>
 					<FormControl isDisabled={true}>
 						<FormLabel>{t("forms.configuratie.fields.id")}</FormLabel>
-						<Input value={form.id || ""} />
+						<Input
+						 	autoComplete="no"
+							aria-autocomplete="none"
+							value={form.id || ""} 
+						/>
 					</FormControl>
 					<FormControl isInvalid={!isFieldValid("waarde")} isRequired={true}>
 						<FormLabel>{t("forms.configuratie.fields.waarde")}</FormLabel>
-						<Input onChange={e => updateForm("waarde", e.target.value)} value={form.waarde || ""} />
+						<Input
+						 	autoComplete="no"
+							aria-autocomplete="none"
+							onChange={e => updateForm("waarde", e.target.value)}
+							value={form.waarde || ""}
+						/>
 						<FormErrorMessage>{t("configuratieForm.emptyWaardeError")}</FormErrorMessage>
 					</FormControl>
 					<HStack>

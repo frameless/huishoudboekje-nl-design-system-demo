@@ -92,8 +92,17 @@ const Betaalinstructies = () => {
 						<Stack direction={["column", "row"]} alignItems={"flex-end"}>
 							<FormControl flex={1}>
 								<FormLabel>{t("global.period")}</FormLabel>
-								<DatePicker dateFormat={"dd-MM-yyyy"} selectsRange={true} isClearable={true}
-									startDate={dateRange.from} endDate={dateRange.through} onChange={onChangeStartDate} customInput={<Input />} />
+								<DatePicker
+								 	autoComplete="no"
+									aria-autocomplete="none"
+									dateFormat={"dd-MM-yyyy"}
+									selectsRange={true}
+									isClearable={true}
+									startDate={dateRange.from}
+									endDate={dateRange.through}
+									onChange={onChangeStartDate}
+									customInput={<Input autoComplete="no" aria-autocomplete="none" />} 
+								/>
 							</FormControl>
 							<FormControl flex={1}>
 								<Stack direction={["column", "row"]} alignItems={"flex-end"}>
@@ -109,6 +118,8 @@ const Betaalinstructies = () => {
 								<FormControl flex={1} isInvalid={!paymentDateValid}>
 									<FormLabel>{t("exports.paymentDate")}</FormLabel>
 									<DatePicker
+									 	autoComplete="no"
+										aria-autocomplete="none"
 										dateFormat={"dd-MM-yyyy"}
 										isClearable={false}
 										selected={paymentDate}
@@ -120,7 +131,8 @@ const Betaalinstructies = () => {
 											validateCustomPaymentDate(date)
 											onChangePaymentDate(date)
 										}}
-										customInput={<Input />} />
+										customInput={<Input autoComplete="no" aria-autocomplete="none" />}
+									/>
 									<FormErrorMessage>{t("exports.invalidPaymentDate", {"startDate": d().subtract(7, "days").format("L"), "endDate": d(dateRange.through).add(7, "days").format("L")})}</FormErrorMessage>
 								</FormControl>
 								<FormLabel>{t("exports.customPaymentInformation")}</FormLabel>

@@ -277,7 +277,10 @@ const Transactions = () => {
 												<HStack>
 													<FormControl>
 														<FormLabel>{t("transactionsPage.filters.from")}</FormLabel>
-														<DatePicker selected={banktransactieFilters.startDate ? new Date(banktransactieFilters.startDate) : null}
+														<DatePicker
+															selected={banktransactieFilters.startDate ? new Date(banktransactieFilters.startDate) : null}
+															autoComplete="no"
+															aria-autocomplete="none"
 															dateFormat={"dd-MM-yyyy"}
 															onChange={(value: Date) => {
 																setBanktransactieFilters({
@@ -287,13 +290,16 @@ const Transactions = () => {
 															}}
 															showYearDropdown
 															dropdownMode={"select"}
-															customInput={<Input type={"text"} />}
+															customInput={<Input type={"text"} autoComplete="no" aria-autocomplete="none" />}
 															isClearable={true}
 														/>
 													</FormControl>
 													<FormControl>
 														<FormLabel>{t("transactionsPage.filters.to")}</FormLabel>
-														<DatePicker selected={banktransactieFilters.endDate ? new Date(banktransactieFilters.endDate) : null}
+														<DatePicker
+															selected={banktransactieFilters.endDate ? new Date(banktransactieFilters.endDate) : null}
+															autoComplete="no"
+															aria-autocomplete="none"
 															dateFormat={"dd-MM-yyyy"}
 															onChange={(value: Date) => {
 																setBanktransactieFilters({
@@ -311,7 +317,7 @@ const Transactions = () => {
 																}
 															}}
 															showYearDropdown={true}
-															customInput={<Input type={"text"} />}
+															customInput={<Input type={"text"} autoComplete="no" aria-autocomplete="none" />}
 															isClearable={true}
 														/>
 													</FormControl>
@@ -412,8 +418,16 @@ const Transactions = () => {
 														<FormLabel>{t("transactionsPage.filters.amountFrom")}</FormLabel>
 														<InputGroup>
 															<InputLeftAddon>€</InputLeftAddon>
-															<NumberInput w={"100%"} precision={2} value={minBedrag}>
-																<NumberInputField borderLeftRadius={0}
+															<NumberInput
+															 	aria-autocomplete="none"
+																w={"100%"}
+																precision={2}
+																value={minBedrag}
+															>
+																<NumberInputField
+																	borderLeftRadius={0}
+																	autoComplete="no"
+																	aria-autocomplete="none"
 																	onChange={(value) => {
 																		onChangeMinbedrag(value.target.value)
 																	}}
@@ -427,8 +441,16 @@ const Transactions = () => {
 														<FormLabel>{t("transactionsPage.filters.amountTo")}</FormLabel>
 														<InputGroup>
 															<InputLeftAddon>€</InputLeftAddon>
-															<NumberInput w={"100%"} precision={2} value={maxBedrag}>
-																<NumberInputField borderLeftRadius={0}
+															<NumberInput
+															 	aria-autocomplete="none"
+																w={"100%"}
+																precision={2}
+																value={maxBedrag}
+															>
+																<NumberInputField
+																	borderLeftRadius={0}
+																	autoComplete="no"
+																	aria-autocomplete="none"
 																	onChange={(value) => {
 																		onChangeMaxbedrag(value.target.value)
 																	}}
@@ -451,7 +473,13 @@ const Transactions = () => {
 													</FormLabel>
 													<form onSubmit={onAddzoekterm}>
 														<InputGroup size={"md"}>
-															<Input id={"zoektermen"} onChange={e => setZoekterm(e.target.value)} value={zoekterm || ""} />
+															<Input
+																autoComplete="no"
+																aria-autocomplete="none"
+																id={"zoektermen"}
+																onChange={e => setZoekterm(e.target.value)}
+																value={zoekterm || ""} 
+															/>
 															<InputRightElement width={"auto"} pr={1}>
 																<Button type={"submit"} size={"sm"} colorScheme={"primary"}>Zoeken</Button>
 															</InputRightElement>

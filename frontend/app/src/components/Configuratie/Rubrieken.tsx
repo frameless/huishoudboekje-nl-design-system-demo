@@ -97,7 +97,12 @@ const Rubrieken = () => {
 								<Stack direction={["column"]} alignItems={"flex-end"}>
 									<FormControl isInvalid={!isFieldValid("naam")} isRequired={true}>
 										<FormLabel>{t("forms.rubrieken.fields.naam")}</FormLabel>
-										<Input onChange={v => updateForm("naam", v.target.value)} value={form.naam || ""} />
+										<Input
+										 	autoComplete="no"
+											aria-autocomplete="none"
+											onChange={v => updateForm("naam", v.target.value)}
+											value={form.naam || ""}
+										/>
 										<FormErrorMessage>{t("configuratieForm.emptyNameErroror")}</FormErrorMessage>
 									</FormControl>
 									<FormControl isInvalid={!isFieldValid("grootboekrekening")} isRequired={true}>

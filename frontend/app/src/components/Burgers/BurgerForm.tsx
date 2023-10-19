@@ -77,7 +77,12 @@ const BurgerForm: React.FC<BurgerFormProps> = ({burger, onSubmit, isLoading, isB
 							<FormControl id={"bsn"} isInvalid={!isFieldValid("bsn") || !isBsnValid} isRequired={true}>
 								<Stack spacing={1} flex={1}>
 									<FormLabel>{t("forms.burgers.fields.bsn")}</FormLabel>
-									<Input onChange={e => updateForm("bsn", e.target.value)} value={form.bsn || ""} />
+									<Input
+										autoComplete="no"
+										aria-autocomplete="none"
+										onChange={e => updateForm("bsn", e.target.value)}
+										value={form.bsn || ""}
+									/>
 									<FormErrorMessage>{t("messages.burgers.invalidBsn")}</FormErrorMessage>
 								</Stack>
 							</FormControl>
@@ -86,21 +91,37 @@ const BurgerForm: React.FC<BurgerFormProps> = ({burger, onSubmit, isLoading, isB
 							<FormControl id={"voorletters"} isInvalid={!isFieldValid("voorletters")} isRequired={true}>
 								<Stack spacing={1} flex={1}>
 									<FormLabel>{t("forms.burgers.fields.voorletters")}</FormLabel>
-									<Input onChange={e => updateForm("voorletters", e.target.value)} value={form.voorletters || ""} onBlur={e => updateForm("voorletters", e.target.value.replaceAll(/[^A-Za-zÀ-ž]/g, "").toUpperCase().split("").join(".") + ".")} />
+									<Input
+									 	autoComplete="no"
+										aria-autocomplete="none"
+										onChange={e => updateForm("voorletters", e.target.value)}
+										value={form.voorletters || ""}
+										onBlur={e => updateForm("voorletters", e.target.value.replaceAll(/[^A-Za-zÀ-ž]/g, "").toUpperCase().split("").join(".") + ".")} 
+									/>
 									<FormErrorMessage>{t("messages.burgers.invalidVoorletters")}</FormErrorMessage>
 								</Stack>
 							</FormControl>
 							<FormControl id={"voornamen"} isInvalid={!isFieldValid("voornamen")} isRequired={true}>
 								<Stack spacing={1} flex={3}>
 									<FormLabel>{t("forms.burgers.fields.voornamen")}</FormLabel>
-									<Input onChange={e => updateForm("voornamen", e.target.value)} value={form.voornamen || ""} />
+									<Input
+										onChange={e => updateForm("voornamen", e.target.value)}
+										value={form.voornamen || ""}
+										autoComplete="no"
+										aria-autocomplete="none"
+									/>
 									<FormErrorMessage>{t("messages.burgers.invalidVoornamen")}</FormErrorMessage>
 								</Stack>
 							</FormControl>
 							<FormControl id={"achternaam"} isInvalid={!isFieldValid("achternaam")} isRequired={true}>
 								<Stack spacing={1} flex={3}>
 									<FormLabel>{t("forms.burgers.fields.achternaam")}</FormLabel>
-									<Input onChange={e => updateForm("achternaam", e.target.value)} value={form.achternaam || ""} />
+									<Input
+										onChange={e => updateForm("achternaam", e.target.value)}
+										value={form.achternaam || ""}
+										autoComplete="no"
+										aria-autocomplete="none"
+									/>
 									<FormErrorMessage>{t("messages.burgers.invalidAchternaam")}</FormErrorMessage>
 								</Stack>
 							</FormControl>
@@ -108,7 +129,10 @@ const BurgerForm: React.FC<BurgerFormProps> = ({burger, onSubmit, isLoading, isB
 						<FormControl id={"geboortedatum"} isInvalid={!isFieldValid("geboortedatum")} >
 							<Stack spacing={1}>
 								<FormLabel>{t("forms.burgers.fields.geboortedatum")}</FormLabel>
-								<DatePicker selected={d(form.geboortedatum, "L").isValid() ? d(form.geboortedatum, "L").toDate() : null}
+								<DatePicker
+									selected={d(form.geboortedatum, "L").isValid() ? d(form.geboortedatum, "L").toDate() : null}
+									autoComplete="no"
+									aria-autocomplete="none"
 									dateFormat={"dd-MM-yyyy"}
 									isClearable={true}
 									showYearDropdown
@@ -120,7 +144,7 @@ const BurgerForm: React.FC<BurgerFormProps> = ({burger, onSubmit, isLoading, isB
 										else {
 											updateForm("geboortedatum", null);
 										}
-									}} customInput={<Input type={"text"} />} />
+									}} customInput={<Input type={"text"} autoComplete="no" aria-autocomplete="none" />} />
 								<FormErrorMessage>{t("messages.burgers.invalidGeboortedatum")}</FormErrorMessage>
 							</Stack>
 						</FormControl>
@@ -133,14 +157,24 @@ const BurgerForm: React.FC<BurgerFormProps> = ({burger, onSubmit, isLoading, isB
 							<FormControl id={"straatnaam"} isInvalid={!isFieldValid("straatnaam")} isRequired={true}>
 								<Stack spacing={1} flex={2}>
 									<FormLabel>{t("forms.burgers.fields.straatnaam")}</FormLabel>
-									<Input onChange={e => updateForm("straatnaam", e.target.value)} value={form.straatnaam || ""} />
+									<Input
+										onChange={e => updateForm("straatnaam", e.target.value)}
+										value={form.straatnaam || ""}
+										autoComplete="no"
+										aria-autocomplete="none"
+									/>
 									<FormErrorMessage>{t("messages.burgers.invalidStraatnaam")}</FormErrorMessage>
 								</Stack>
 							</FormControl>
 							<FormControl id={"huisnummer"} isInvalid={!isFieldValid("huisnummer")} isRequired={true}>
 								<Stack spacing={1} flex={1}>
 									<FormLabel>{t("forms.burgers.fields.huisnummer")}</FormLabel>
-									<Input onChange={e => updateForm("huisnummer", e.target.value)} value={form.huisnummer || ""} />
+									<Input
+										onChange={e => updateForm("huisnummer", e.target.value)}
+										value={form.huisnummer || ""}
+										autoComplete="no"
+										aria-autocomplete="none"
+									/>
 									<FormErrorMessage>{t("messages.burgers.invalidHuisnummer")}</FormErrorMessage>
 								</Stack>
 							</FormControl>
@@ -150,7 +184,13 @@ const BurgerForm: React.FC<BurgerFormProps> = ({burger, onSubmit, isLoading, isB
 								<Stack spacing={1} flex={1}>
 									<FormLabel>{t("forms.burgers.fields.postcode")}</FormLabel>
 									<Tooltip label={t("forms.burgers.tooltips.postcode")} aria-label={t("forms.burgers.fields.postcode")} placement={isMobile ? "top" : "left"}>
-										<Input onChange={e => updateForm("postcode", e.target.value)} value={form.postcode || ""} onBlur={e => updateForm("postcode", e.target.value.replaceAll(/[^A-Za-z0-9]|[\s]/g, "").toUpperCase())} />
+										<Input
+											onChange={e => updateForm("postcode", e.target.value)}
+											value={form.postcode || ""}
+											onBlur={e => updateForm("postcode", e.target.value.replaceAll(/[^A-Za-z0-9]|[\s]/g, "").toUpperCase())}
+											autoComplete="no"
+											aria-autocomplete="none"
+										/>
 									</Tooltip>
 									<FormErrorMessage>{t("messages.burgers.invalidPostcode")}</FormErrorMessage>
 								</Stack>
@@ -158,7 +198,11 @@ const BurgerForm: React.FC<BurgerFormProps> = ({burger, onSubmit, isLoading, isB
 							<FormControl id={"plaatsnaam"} isInvalid={!isFieldValid("plaatsnaam")} isRequired={true}>
 								<Stack spacing={1} flex={2}>
 									<FormLabel>{t("forms.burgers.fields.plaatsnaam")}</FormLabel>
-									<Input onChange={e => updateForm("plaatsnaam", e.target.value)} value={form.plaatsnaam || ""} />
+									<Input
+									 	autoComplete="no"
+										aria-autocomplete="none"
+										onChange={e => updateForm("plaatsnaam", e.target.value)} value={form.plaatsnaam || ""}
+									/>
 									<FormErrorMessage>{t("messages.burgers.invalidPlaatsnaam")}</FormErrorMessage>
 								</Stack>
 							</FormControl>
@@ -167,7 +211,12 @@ const BurgerForm: React.FC<BurgerFormProps> = ({burger, onSubmit, isLoading, isB
 							<Stack spacing={1}>
 								<FormLabel>{t("forms.burgers.fields.telefoonnummer")}</FormLabel>
 								<Tooltip label={t("forms.burgers.tooltips.telefoonnummer")} aria-label={t("forms.burgers.tooltips.telefoonnummer")} placement={isMobile ? "top" : "left"}>
-									<Input onChange={e => updateForm("telefoonnummer", e.target.value || null)} value={form.telefoonnummer || ""} />
+									<Input
+										onChange={e => updateForm("telefoonnummer", e.target.value || null)}
+										value={form.telefoonnummer || ""}
+										autoComplete="no"
+										aria-autocomplete="none"
+									/>
 								</Tooltip>
 								<FormErrorMessage>{t("messages.burgers.invalidTelefoonnummer")}</FormErrorMessage>
 							</Stack>
@@ -175,7 +224,12 @@ const BurgerForm: React.FC<BurgerFormProps> = ({burger, onSubmit, isLoading, isB
 						<FormControl id={"mail"} isInvalid={!isFieldValid("email")}>
 							<Stack spacing={1}>
 								<FormLabel>{t("forms.burgers.fields.mail")}</FormLabel>
-								<Input onChange={e => updateForm("email", e.target.value || null)} value={form.email || ""} />
+								<Input
+									onChange={e => updateForm("email", e.target.value || null)}
+									value={form.email || ""}
+									autoComplete="no"
+									aria-autocomplete="none"
+								/>
 								<FormErrorMessage>{t("messages.burgers.invalidEmail")}</FormErrorMessage>
 							</Stack>
 						</FormControl>

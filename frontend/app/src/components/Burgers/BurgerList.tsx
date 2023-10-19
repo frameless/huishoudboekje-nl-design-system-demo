@@ -42,7 +42,16 @@ const BurgerList = () => {
 				<InputLeftElement>
 					<SearchIcon color={"gray.300"} />
 				</InputLeftElement>
-				<Input type={"text"} onChange={onChangeSearch} bg={"white"} placeholder={t("forms.search.fields.search")} ref={searchRef} value={burgerSearch || ""} />
+				<Input
+					type={"text"}
+					onChange={onChangeSearch}
+					bg={"white"}
+					placeholder={t("forms.search.fields.search")}
+					ref={searchRef}
+					value={burgerSearch || ""}
+					autoComplete="no"
+					aria-autocomplete="none"
+				/>
 				{burgerSearch.length > 0 && (
 					<InputRightElement zIndex={0}>
 						<IconButton onClick={onClickResetSearch} size={"xs"} variant={"link"} icon={<CloseIcon />} aria-label={t("global.actions.cancel")} color={"gray.300"} />

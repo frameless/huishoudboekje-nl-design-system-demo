@@ -13,7 +13,11 @@ const RadioButton: React.FC<RadioButtonProps> = ({children, radio, ...props}) =>
 
 	return (
 		<Button {...props} as={"label"} htmlFor={getInputProps().id} colorScheme={radio.isChecked ? "primary" : "gray"} {...checkbox}>
-			<Input {...(getInputProps())} />
+			<Input
+				autoComplete="no"
+				aria-autocomplete="none"
+				{...(getInputProps())}
+			/>
 			{children}
 		</Button>
 	);
