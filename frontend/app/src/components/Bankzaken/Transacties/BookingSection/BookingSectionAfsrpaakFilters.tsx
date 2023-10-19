@@ -37,11 +37,6 @@ const BookingSectionAfspraakFilters = ({organisaties, burgers, rekeningen, updat
 		max_bedrag: undefined,
 		zoektermen: undefined
 	}
-    
-    // const expectedTransactionOrganisation = organisaties.filter(organisatie => {
-    //     const afdelingen = organisatie.afdelingen?.filter(afdeling=> afdeling.rekeningen?.find(rekening => rekening.iban === transaction.tegenRekeningIban ) !== undefined)
-    //     return afdelingen === undefined ? false : afdelingen.length >0
-    // }).map(organisatie => organisatie.id)
 
 	const [minBedrag, setMinBedrag] = useState(searchVariables.min_bedrag)
 	const [maxBedrag, setMaxBedrag] = useState(searchVariables.max_bedrag)
