@@ -1,6 +1,6 @@
 import {useTranslation} from "react-i18next";
 import {useParams} from "react-router-dom";
-import {BankTransaction, Rubriek, useGetTransactieQuery} from "../../../generated/graphql";
+import {BankTransaction, useGetTransactieQuery} from "../../../generated/graphql";
 import Queryable from "../../../utils/Queryable";
 import Page from "../../shared/Page";
 import PageNotFound from "../../shared/PageNotFound";
@@ -23,13 +23,12 @@ const TransactieDetailPage = () => {
 	return (
 		<Queryable query={$transactie()} children={(data => {
 			const transactie: BankTransaction = data.bankTransaction;
-			const rubrieken: Rubriek[] = data.rubrieken;
 			if (!transactie?.id) {
 				return <PageNotFound />;
 			}
 			return (
 				<Page title={t("transaction")}>
-					<TransactieItemView transactie={transactie} rubrieken={rubrieken} />
+					<TransactieItemView transactie={transactie}/>
 				</Page>
 			);
 		})} />

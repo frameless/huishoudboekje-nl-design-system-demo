@@ -4,8 +4,8 @@ import {Afspraak, BankTransaction, Rubriek} from "../../../generated/graphql";
 import Section from "../../shared/Section";
 import SectionContainer from "../../shared/SectionContainer";
 import BookingDetailsView from "./BookingDetailsView";
-import BookingSection from "./BookingSection";
 import TransactieDetailsView from "./TransactieDetailsView";
+import BookingSection from "./BookingSection/BookingSection";
 
 type TransactieItemViewProps = {
 	transactie: BankTransaction,
@@ -13,7 +13,7 @@ type TransactieItemViewProps = {
 	rubrieken?: Rubriek[],
 };
 
-const TransactieItemView: React.FC<TransactieItemViewProps> = ({transactie, rubrieken}) => {
+const TransactieItemView: React.FC<TransactieItemViewProps> = ({transactie}) => {
 	const {t} = useTranslation();
 
 	return (
@@ -27,7 +27,7 @@ const TransactieItemView: React.FC<TransactieItemViewProps> = ({transactie, rubr
 				</Section>
 			) : (
 				<Section title={t("pages.transactieDetails.afletteren.title")} helperText={t("pages.transactieDetails.afletteren.helperText")}>
-					<BookingSection transaction={transactie} rubrieken={rubrieken || []} />
+					<BookingSection transaction={transactie}/>
 				</Section>
 			)}
 		</SectionContainer>

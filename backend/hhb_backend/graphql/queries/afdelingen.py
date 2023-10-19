@@ -43,3 +43,26 @@ class AfdelingenQuery:
             ] if ids else []
         )
         return result
+
+class AfdelingenByIbanQuery:
+    return_type = graphene.List(
+        Afdeling, iban=graphene.String()
+    )
+
+    @classmethod
+    def resolver(cls, root, info, iban=None):
+        logging.info(f"Get organisaties by iban")
+
+        rekeningen = hhb_dataloader().rekeningen.by_ibans([iban])
+        rekening_ids = [rekening.id if rekening is not None else -1 for rekening in rekeningen]
+        result = hhb_dataloader().afdelingen.by_rekeningen(rekening_ids)
+
+        AuditLogging().create(
+            action=info.field_name,
+            entities=[
+                GebruikersActiviteitEntity(entityType="afdeling", entityId=afdeling.id)
+                for afdeling in result
+            ] if result else []
+        )
+
+        return result

@@ -14,3 +14,6 @@ class AfdelingLoader(DataLoader[Afdeling]):
     
     def by_organisaties(self, organisatie_ids: List[int]) -> List[Afdeling]:
         return self.load(organisatie_ids, filter_item="filter_organisaties")
+    
+    def by_rekeningen(self, rekening_ids: List[int]) -> List[Afdeling]:
+        return self.load(rekening_ids, filter_item="filter_rekening")

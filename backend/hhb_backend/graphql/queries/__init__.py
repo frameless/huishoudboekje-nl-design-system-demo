@@ -1,7 +1,7 @@
 """ GraphQL schema queries module """
 import graphene
 
-from .afdelingen import AfdelingQuery, AfdelingenQuery
+from .afdelingen import AfdelingQuery, AfdelingenByIbanQuery, AfdelingenQuery
 from .afspraken import AfspraakQuery, SearchAfsprakenQuery, AfsprakenQuery
 from .alarmen import AlarmenQuery, AlarmQuery
 from .bank_transactions import BankTransactionQuery, BankTransactionsQuery, BankTransactionsPagedQuery, BankTransactionsSearchQuery
@@ -59,6 +59,7 @@ class RootQuery(graphene.ObjectType):
     huishoudens_paged = HuishoudensPagedQuery.return_type
     afdeling = AfdelingQuery.return_type
     afdelingen = AfdelingenQuery.return_type
+    afdelingen_by_iban = AfdelingenByIbanQuery.return_type
     postadres = PostadresQuery.return_type
     postadressen = PostadressenQuery.return_type
     saldo = SaldoQuery.return_type
@@ -174,6 +175,9 @@ class RootQuery(graphene.ObjectType):
 
     def resolve_afdelingen(root, info, **kwargs):
         return AfdelingenQuery.resolver(root, info, **kwargs)
+    
+    def resolve_afdelingen_by_iban(root, info, **kwargs):
+        return AfdelingenByIbanQuery.resolver(root, info, **kwargs)
 
     def resolve_postadres(root, info, **kwargs):
         return PostadresQuery.resolver(root, info, **kwargs)

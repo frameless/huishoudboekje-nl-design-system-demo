@@ -46,28 +46,6 @@ export const GetTransactieQuery = gql`
 					}
 				}
 			}
-			suggesties {
-				id
-				omschrijving
-				bedrag
-				credit
-				zoektermen
-				validFrom
-				validThrough
-				burger {
-					voornamen
-					voorletters
-					achternaam
-					id
-				}
-			}
-		}
-		rubrieken {
-			id
-			naam
-			grootboekrekening {
-				id
-			}
 		}
 	}
 `;

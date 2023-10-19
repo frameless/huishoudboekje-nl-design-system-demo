@@ -1,7 +1,7 @@
 import { gql } from "@apollo/client";
 
 export const GetBurgersAndOrganisatiesAndRekeningen = gql`
-query getBurgersAndOrganisatiesAndRekeningen{
+query getBurgersAndOrganisatiesAndRekeningen($iban: String!){
     organisaties{
       id
       naam
@@ -19,6 +19,9 @@ query getBurgersAndOrganisatiesAndRekeningen{
       iban
       rekeninghouder
       id
+    }
+    afdelingenByIban(iban: $iban){
+      organisatieId
     }
   }
 `;
