@@ -8,14 +8,16 @@ const defaultConfig: SessionHelperConfig = {
 	secret: "testtest",
 	audience: "huishoudboekje",
 	issuer: "huishoudboekje",
-	allowedAlgs: 'HS256,RS256'
+	allowedAlgs: 'HS256,RS256',
+	scopes: ''
 };
 
 type SessionHelperConfig = {
 	secret: string,
 	audience: string,
 	issuer: string,
-	allowedAlgs: string
+	allowedAlgs: string,
+	scopes: string
 }
 
 class SessionHelper {
@@ -27,6 +29,8 @@ class SessionHelper {
 	// we only need one jwksClient, but we can only configure it when we know the jwks uri. We will set the jwksclient when the first request is made to the auth service.
 	private jwksClientInstance: jwksClient.JwksClient | null = null
 
+	public readonly scopes: string;
+
 
 	constructor(config: Partial<SessionHelperConfig>) {
 		const _config = {
@@ -37,6 +41,8 @@ class SessionHelper {
 		this.audience = _config.audience;
 		this.issuer = _config.issuer;
 		this.allowedAlgs = this.parseAllowedAlgorithms(_config.allowedAlgs)
+		this.scopes = this.parseScopes(_config.scopes)
+
 	}
 
 	createSession(res, token) {
@@ -120,6 +126,14 @@ class SessionHelper {
 		});
 
 		return algorithms;
+	}
+
+	// scopes should be space delimited
+	parseScopes(scopesEnv: string): string {
+		const scopeList = scopesEnv.split(',')
+		// These are required for our application. offline_access gives us refresh tokens incase they are not defaulted by the OIDC provider
+		scopeList.concat(['email', 'profile', 'offline_access', 'openid'])
+		return scopeList.join(' ')
 	}
 
 	async getJWTKeyOrSecret(alg: Algorithm, token) {

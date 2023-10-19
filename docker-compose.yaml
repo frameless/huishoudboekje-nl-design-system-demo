@@ -194,6 +194,7 @@ services:
       JWT_ISSUER: huishoudboekje-localhost
       JWT_AUDIENCE: huishoudboekje-medewerkers
       JWT_EXPIRES_IN: 30d
+      OIDC_SCOPES: ""
       JWT_SECRET: testtest
     ports:
       - 4000:8080
