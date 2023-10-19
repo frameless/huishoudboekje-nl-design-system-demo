@@ -9,7 +9,7 @@ const defaultConfig: SessionHelperConfig = {
 	audience: "huishoudboekje",
 	issuer: "huishoudboekje",
 	allowedAlgs: 'HS256,RS256',
-	scopes: ''
+	scopes: null
 };
 
 type SessionHelperConfig = {
@@ -17,7 +17,7 @@ type SessionHelperConfig = {
 	audience: string,
 	issuer: string,
 	allowedAlgs: string,
-	scopes: string
+	scopes: string | null
 }
 
 class SessionHelper {
@@ -129,10 +129,11 @@ class SessionHelper {
 	}
 
 	// scopes should be space delimited
-	parseScopes(scopesEnv: string): string {
-		const scopeList = scopesEnv.split(',')
-		// These are required for our application. offline_access gives us refresh tokens incase they are not defaulted by the OIDC provider
-		scopeList.concat(['email', 'profile', 'offline_access', 'openid'])
+	parseScopes(scopesEnv: string | null): string {
+		const scopeList = ['email', 'profile', 'offline_access', 'openid']
+		if (scopesEnv != null) {
+			scopeList.concat(scopesEnv.split(','))
+		}
 		return scopeList.join(' ')
 	}
 
