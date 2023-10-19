@@ -2,6 +2,8 @@
 
 ## 1.10.2
 
+Deze versie omvat verbeteringen bij inloggen met Azure Active Directory (Azure AD), invullen van invoervelden met een browser welke opgeslagen gegevens suggereert, exporteren voor brieven, filteren van banktransacties, afletteren van een banktransactie, zoeken van burgers en sortering in rapportage. Er zijn problemen opgelost bij verwijderen van een bankafschrift en labels in rapportage.
+
 ### Patch Changes
 
 - 5b31f7af7: In export for letters column burger.naam is now divided into columns burger.voorletters, burger.voornamen and burger.achternaam
