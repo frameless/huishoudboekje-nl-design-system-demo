@@ -207,6 +207,8 @@ const BookingSectionAfspraakFilters = ({organisaties, burgers, rekeningen, updat
                         <InputLeftAddon>€</InputLeftAddon>
                         <NumberInput w={"100%"} precision={2} value={minBedrag}>
                             <NumberInputField borderLeftRadius={0}
+                                autoComplete={"no"} 
+                                aria-autocomplete={"none"}
                                 onChange={(value) => {
                                     onChangeMinbedrag(value.target.value)
                                 }}
@@ -222,6 +224,8 @@ const BookingSectionAfspraakFilters = ({organisaties, burgers, rekeningen, updat
                         <InputLeftAddon>€</InputLeftAddon>
                         <NumberInput w={"100%"} precision={2} value={maxBedrag}>
                             <NumberInputField borderLeftRadius={0}
+                                autoComplete={"no"} 
+                                aria-autocomplete={"none"}
                                 onChange={(value) => {
                                     onChangeMaxbedrag(value.target.value)
                                 }}
@@ -254,7 +258,7 @@ const BookingSectionAfspraakFilters = ({organisaties, burgers, rekeningen, updat
             <FormLabel flex={1}>{t("bookingSection.searchOmschrijvingAndTerms")}</FormLabel>
             <form onSubmit={onAddzoekterm}>
                 <InputGroup size={"md"}>
-                    <Input id={"zoektermen"} onChange={e => setZoekterm(e.target.value)} value={zoekterm || ""} />
+                    <Input id={"zoektermen"} autoComplete={"no"} aria-autocomplete={"none"} onChange={e => setZoekterm(e.target.value)} value={zoekterm || ""} />
                     <InputRightElement width={"auto"} pr={1}>
                         <Button type={"submit"} size={"sm"} colorScheme={"primary"}>Zoeken</Button>
                     </InputRightElement>
