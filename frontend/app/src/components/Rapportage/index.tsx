@@ -61,7 +61,10 @@ const Rapportage = () => {
 								<HStack width={"100%"} alignItems={"start"}>
 									<HStack width={"50%"}>
 										<FormControl maxWidth={"40%"}>
-											<DatePicker selected={startDate || null}
+											<DatePicker
+												selected={startDate || null}
+												autoComplete="no"
+												aria-autocomplete="none"
 												dateFormat={"dd-MM-yyyy"}
 												onChange={(value: Date) => {
 													if(value){
@@ -70,7 +73,7 @@ const Rapportage = () => {
 												}}
 												showYearDropdown
 												dropdownMode={"select"}
-												customInput={<Input/>}
+												customInput={<Input autoComplete="no" aria-autocomplete="none"/>}
 											>
 												<Box>
 													<Button width={"45%"} marginX={"2.5%"} colorScheme={"primary"} size={"xs"} onClick={setCurrentMonth}>{t("reports.currentMonth")}</Button>
@@ -80,7 +83,10 @@ const Rapportage = () => {
 										</FormControl>
 										<Text maxWidth={"20%"}fontSize={"sm"}>{t("reports.till")}</Text>
 										<FormControl maxWidth={"40%"}>
-											<DatePicker selected={endDate || null}
+											<DatePicker
+												selected={endDate || null}
+												autoComplete="no"
+												aria-autocomplete="none"
 												dateFormat={"dd-MM-yyyy"}
 												onChange={(value: Date) => {
 													if(value){
@@ -89,7 +95,7 @@ const Rapportage = () => {
 												}}
 												showYearDropdown
 												dropdownMode={"select"}
-												customInput={<Input/>}
+												customInput={<Input autoComplete="no" aria-autocomplete="none"/>}
 											>
 												<Box>
 													<Button width={"45%"} marginX={"2.5%"} colorScheme={"primary"} size={"xs"} onClick={setCurrentMonth}>{t("reports.currentMonth")}</Button>

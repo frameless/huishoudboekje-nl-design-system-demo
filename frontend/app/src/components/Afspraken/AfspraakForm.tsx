@@ -370,7 +370,12 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, or
 
 									<FormControl flex={1} isInvalid={!isFieldValid("omschrijving")} isRequired={true}>
 										<FormLabel>{t("afspraken.omschrijving")}</FormLabel>
-										<Input value={form.omschrijving || ""} onChange={e => updateForm("omschrijving", e.target.value)} />
+										<Input 
+											autoComplete="no" 
+											aria-autocomplete="none" 
+											value={form.omschrijving || ""} 
+											onChange={e => updateForm("omschrijving", e.target.value)} 
+										/>
 										<FormErrorMessage>{t("afspraakDetailView.invalidOmschrijvingError")}</FormErrorMessage>
 									</FormControl>
 								</Stack>
@@ -381,6 +386,8 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, or
 										<InputGroup>
 											<InputLeftElement zIndex={0}>&euro;</InputLeftElement>
 											<Input
+											 	autoComplete="no"
+												aria-autocomplete="none"
 												flex={3}
 												type={"number"}
 												pattern={"^\\d*(,{0,1}\\d{0,2})$"}
@@ -403,6 +410,8 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, or
 								<FormLabel>{t("afspraken.startdatum")}</FormLabel>
 								<InputGroup>
 									<DatePicker selected={d(form.validFrom).toDate() || d()}
+									 	autoComplete="no"
+										aria-autocomplete="none"
 										dateFormat={"dd-MM-yyyy"}
 										startDate={d(form.validFrom).toDate()}
 										isClearable={false}
@@ -414,7 +423,7 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, or
 												updateForm("validFrom", d(date).format("YYYY-MM-DD"))
 											}
 										}}
-										customInput={(<Input />)} />
+										customInput={(<Input autoComplete="no" aria-autocomplete="none" />)} />
 								</InputGroup>
 								<FormErrorMessage>{t("afspraakDetailView.invalidValidFromError")}</FormErrorMessage>
 							</FormControl>

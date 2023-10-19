@@ -58,12 +58,26 @@ const RekeningForm: React.FC<RekeningFormProps> = ({rekening, onSubmit, onCancel
 			<Stack>
 				<FormControl isInvalid={!isFieldValid("rekeninghouder")} id={"rekeninghouder"} isRequired={true}>
 					<FormLabel>{t("forms.rekeningen.fields.accountHolder")}</FormLabel>
-					<Input onChange={e => updateForm("rekeninghouder", e.target.value)} value={form.rekeninghouder || ""} autoFocus={!rekening?.rekeninghouder} />
+					<Input
+						autoComplete="no"
+						aria-autocomplete="none"
+						onChange={e => updateForm("rekeninghouder", e.target.value)}
+						value={form.rekeninghouder || ""}
+						autoFocus={!rekening?.rekeninghouder}
+					/>
 					<FormErrorMessage>{t("errors.rekeninghouder.generalError")}</FormErrorMessage>
 				</FormControl>
 				<FormControl isInvalid={!isFieldValid("iban") || !isIbanValid} id={"iban"} isRequired={!rekening?.iban} isDisabled={!!rekening?.iban}>
 					<FormLabel>{t("forms.rekeningen.fields.iban")}</FormLabel>
-					<Input onChange={e => updateForm("iban", e.target.value)} value={form.iban || ""} placeholder={"NL00BANK0123456789"} autoFocus={!!rekening?.rekeninghouder} onBlur={e => updateForm("iban", e.target.value.replaceAll(/[\s]/g, "").toUpperCase())} />
+					<Input
+						autoComplete="no"
+						aria-autocomplete="none"
+						onChange={e => updateForm("iban", e.target.value)}
+						value={form.iban || ""}
+						placeholder={"NL00BANK0123456789"}
+						autoFocus={!!rekening?.rekeninghouder}
+						onBlur={e => updateForm("iban", e.target.value.replaceAll(/[\s]/g, "").toUpperCase())}
+					/>
 					<FormErrorMessage>{t("errors.iban.generalError")}</FormErrorMessage>
 				</FormControl>
 				<Stack align={"flex-end"}>

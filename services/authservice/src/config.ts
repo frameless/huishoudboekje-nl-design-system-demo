@@ -59,7 +59,7 @@ export const getConfig = () => {
 		issuer: JWT_ISSUER,
 		audience: JWT_AUDIENCE,
 		allowedAlgs: JWT_ALGORITHMS,
-		scopes: OIDC_SCOPES ?? "",
+		scopes: OIDC_SCOPES ?? null,
 		port: APP_PORT,
 		debug: NODE_ENV !== "production",
 	};

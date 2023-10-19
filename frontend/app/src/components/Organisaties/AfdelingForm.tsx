@@ -46,7 +46,12 @@ const AfdelingForm: React.FC<AfdelingFormProps> = ({values, organisatie, onChang
 				<Stack>
 					<FormControl flex={1} isInvalid={!isFieldValid("naam")} isRequired={true}>
 						<FormLabel>{t("forms.createAfdeling.naam")}</FormLabel>
-						<Input value={form.naam || ""} onChange={e => updateForm("naam", e.target.value)} />
+						<Input
+						 	autoComplete="no"
+							aria-autocomplete="none"
+							value={form.naam || ""}
+							onChange={e => updateForm("naam", e.target.value)}
+						/>
 						<FormErrorMessage>{t("afspraakDetailView.invalidNaamError")}</FormErrorMessage>
 					</FormControl>
 				</Stack>

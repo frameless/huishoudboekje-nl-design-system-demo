@@ -64,7 +64,16 @@ const HuishoudensList = () => {
 						<InputLeftElement>
 							<SearchIcon color={"gray.300"} />
 						</InputLeftElement>
-						<Input type={"text"} onChange={e => setSearch(e.target.value)} bg={"white"} onKeyDown={onKeyDownOnSearch} placeholder={t("forms.search.fields.search")} ref={searchRef} />
+						<Input
+						 	autoComplete="no"
+							aria-autocomplete="none"
+							type={"text"}
+							onChange={e => setSearch(e.target.value)}
+							bg={"white"}
+							onKeyDown={onKeyDownOnSearch}
+							placeholder={t("forms.search.fields.search")}
+							ref={searchRef}
+						/>
 						{search.length > 0 && (
 							<InputRightElement zIndex={0}>
 								<IconButton onClick={() => setSearch("")} size={"xs"} variant={"link"} icon={

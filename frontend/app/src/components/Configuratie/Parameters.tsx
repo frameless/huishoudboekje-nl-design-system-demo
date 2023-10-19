@@ -85,12 +85,22 @@ const Parameters = () => {
 								<Stack direction={"column"} alignItems={"flex-end"}>
 									<FormControl isInvalid={!isFieldValid("id")} isRequired={true}>
 										<FormLabel>{t("forms.configuratie.fields.id")}</FormLabel>
-										<Input onChange={e => updateForm("id", e.target.value)} value={form.id || ""} />
+										<Input
+										 	autoComplete="no"
+											aria-autocomplete="none"
+											onChange={e => updateForm("id", e.target.value)}
+											value={form.id || ""}
+										/>
 										<FormErrorMessage>{t("configuratieForm.emptyIdError")}</FormErrorMessage>
 									</FormControl>
 									<FormControl isInvalid={!isFieldValid("waarde")} isRequired={true}>
 										<FormLabel>{t("forms.configuratie.fields.waarde")}</FormLabel>
-										<Input onChange={e => updateForm("waarde", e.target.value)} value={form.waarde || ""} />
+										<Input
+										 	autoComplete="no"
+											aria-autocomplete="none"
+											onChange={e => updateForm("waarde", e.target.value)}
+											value={form.waarde || ""}
+										/>
 										<FormErrorMessage>{t("configuratieForm.emptyWaardeError")}</FormErrorMessage>
 									</FormControl>
 									<Button type={"submit"} colorScheme={"primary"} isLoading={loading}>{t("global.actions.save")}</Button>

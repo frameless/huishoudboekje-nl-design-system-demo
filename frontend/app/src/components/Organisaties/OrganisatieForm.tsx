@@ -57,7 +57,12 @@ const OrganisatieForm: React.FC<OrganisatieFormProps> = ({organisatie, onSubmit,
 								<Stack spacing={1} flex={1}>
 									<FormLabel>{t("forms.organizations.fields.kvknummer")}</FormLabel>
 									<Tooltip label={t("forms.organizations.tooltips.kvknummer")} aria-label={t("forms.organizations.fields.kvknummer")} placement={isMobile ? "top" : "left"}>
-										<Input onChange={e => updateForm("kvknummer", e.target.value)} value={form.kvknummer || ""} />
+										<Input
+										 	autoComplete="no"
+											aria-autocomplete="none"
+											onChange={e => updateForm("kvknummer", e.target.value)}
+											value={form.kvknummer || ""}
+										/>
 									</Tooltip>
 									<FormErrorMessage>{t("messages.organisaties.invalidKvknummer")}</FormErrorMessage>
 								</Stack>
@@ -65,7 +70,12 @@ const OrganisatieForm: React.FC<OrganisatieFormProps> = ({organisatie, onSubmit,
 							<FormControl isInvalid={!isFieldValid("vestigingsnummer")} id={"vestigingsnummer"} isRequired={true}>
 								<Stack spacing={1} flex={1}>
 									<FormLabel>{t("forms.organizations.fields.vestigingsnummer")}</FormLabel>
-									<Input onChange={e => updateForm("vestigingsnummer", e.target.value)} value={form.vestigingsnummer || ""} />
+									<Input
+									 	autoComplete="no"
+										aria-autocomplete="none"
+										onChange={e => updateForm("vestigingsnummer", e.target.value)}
+										value={form.vestigingsnummer || ""}
+									/>
 									<FormErrorMessage>{t("messages.organisaties.invalidVestigingsnummer")}</FormErrorMessage>
 								</Stack>
 							</FormControl>
@@ -74,7 +84,12 @@ const OrganisatieForm: React.FC<OrganisatieFormProps> = ({organisatie, onSubmit,
 							<FormControl isInvalid={!isFieldValid("naam")} id={"naam"} isRequired={true}>
 								<Stack spacing={1} flex={2}>
 									<FormLabel>{t("forms.organizations.fields.naam")}</FormLabel>
-									<Input onChange={e => updateForm("naam", e.target.value)} value={form.naam || ""} />
+									<Input
+									 	autoComplete="no"
+										aria-autocomplete="none"
+										onChange={e => updateForm("naam", e.target.value)}
+										value={form.naam || ""}
+									/>
 									<FormErrorMessage>{t("messages.organisaties.invalidNaam")}</FormErrorMessage>
 								</Stack>
 							</FormControl>
