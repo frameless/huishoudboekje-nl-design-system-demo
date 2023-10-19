@@ -24,7 +24,9 @@ Deze versie omvat verbeteringen bij inloggen met Azure Active Directory (Azure A
 - a431734fb: Added filter rekeningen option when searching afspraken transaction page
 - 73e0b8bbd: Fixed bug input validation, create and update afspraak with burger as tegenrekening is now possible again.
 - 85ad20e85: Added hhbnummer to export for letters
-
+ 
+## Migration Guide
+A new ENV variable is added: OIDC_SCOPES
 ## 1.10.1
 
 Deze versie omvat een oplossing voor een probleem met het bijwerken van gegevens van een burger.
