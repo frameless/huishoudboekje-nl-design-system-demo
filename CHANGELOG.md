@@ -2,6 +2,8 @@
 
 ## 1.10.3
 
+Deze versie omvat een oplossing voor een probleem met inloggen via Azure Active Directory (Azure AD).
+
 ### Patch Changes
 
 - 7cbac2d3: properly assign scopes
