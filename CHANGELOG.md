@@ -1,5 +1,11 @@
 # Huishoudboekje Changelog
 
+## 1.10.3
+
+### Patch Changes
+
+- 7cbac2d3: properly assign scopes
+
 ## 1.10.2
 
 Deze versie omvat verbeteringen bij inloggen met Azure Active Directory (Azure AD), invullen van invoervelden met een browser welke opgeslagen gegevens suggereert, exporteren voor brieven, filteren van banktransacties, afletteren van een banktransactie, zoeken van burgers en sortering in rapportage. Er zijn problemen opgelost bij verwijderen van een bankafschrift en weergave van labels in rapportage.
@@ -24,9 +30,11 @@ Deze versie omvat verbeteringen bij inloggen met Azure Active Directory (Azure A
 - a431734fb: Added filter rekeningen option when searching afspraken transaction page
 - 73e0b8bbd: Fixed bug input validation, create and update afspraak with burger as tegenrekening is now possible again.
 - 85ad20e85: Added hhbnummer to export for letters
- 
+
 ## Migration Guide
+
 A new ENV variable is added: OIDC_SCOPES
+
 ## 1.10.1
 
 Deze versie omvat een oplossing voor een probleem met het bijwerken van gegevens van een burger.

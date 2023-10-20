@@ -1,6 +1,6 @@
 {
   "name": "@huishoudboekje/mijn-omgeving",
-  "version": "1.10.2",
+  "version": "1.10.3",
   "description": "Dit component kan als plugin worden gebruikt in een Mijn Gemeente-omgeving.",
   "author": {
     "name": "Koen Brouwer",
