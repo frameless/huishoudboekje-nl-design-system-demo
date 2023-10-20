@@ -78,7 +78,6 @@ const server = (prefix: string = "/auth") => {
 				return sessionHelper.verifyToken(stringJWT).then(async (result) => {
 					if (result) {
 						const user = sessionHelper.getUserInfoFromToken(stringJWT)
-						log.warn(user)
 						log.debug(new Date().toISOString(), "User found");
 
 						sessionHelper.createSession(res, stringJWT);
