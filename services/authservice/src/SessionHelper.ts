@@ -87,6 +87,18 @@ class SessionHelper {
 		}
 	}
 
+	getUserInfoFromToken(token) {
+		const decodedToken = jwt.decode(token, {complete: true})
+		if (decodedToken) {
+			const jwtBody: jwt.JwtPayload = decodedToken.payload as jwt.JwtPayload
+			const name = jwtBody.name ?? null
+			const email = jwtBody.email ?? null
+			const user = {name, email}
+			return user
+		}
+		return false
+	}
+
 	getAlgorithmFromHeader(token) {
 		try {
 			const decodedToken = jwt.decode(token, {complete: true})
