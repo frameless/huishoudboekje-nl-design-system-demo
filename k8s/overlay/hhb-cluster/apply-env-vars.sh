@@ -74,7 +74,7 @@ export JWT_AUDIENCE=${JWT_AUDIENCE:-$HHB_APP_HOST}
 export JWT_EXPIRES_IN=${JWT_EXPIRES_IN:-"30d"}
 export JWT_SECRET=${JWT_SECRET:-"this should come from a secret envvar"}
 export JWT_ALGORITHMS=${JWT_ALGORITHMS:-"HS256"}
-export OIDC_SCOPES=${OIDC_SCOPES}
+export OIDC_SCOPES=${OIDC_SCOPES:-"TEST"}
 
 cd k8s/overlay/hhb-cluster
 
