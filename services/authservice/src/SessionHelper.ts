@@ -134,7 +134,6 @@ class SessionHelper {
 		if (scopesEnv != null) {
 			scopeList = scopeList.concat(scopesEnv.split(','))
 		}
-		log.warn(scopeList.join(' '))
 		return scopeList.join(' ')
 	}
 
