@@ -130,9 +130,9 @@ class SessionHelper {
 
 	// scopes should be space delimited
 	parseScopes(scopesEnv: string | null): string {
-		const scopeList = ['email', 'profile', 'offline_access', 'openid']
+		let scopeList = ['email', 'profile', 'offline_access', 'openid']
 		if (scopesEnv != null) {
-			scopeList.concat(scopesEnv.split(','))
+			scopeList = scopeList.concat(scopesEnv.split(','))
 		}
 		log.warn(scopeList.join(' '))
 		return scopeList.join(' ')
