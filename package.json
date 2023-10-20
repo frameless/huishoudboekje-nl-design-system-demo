@@ -1,6 +1,6 @@
 {
   "name": "huishoudboekje",
-  "version": "1.10.3",
+  "version": "1.10.4",
   "description": "The scalable version of Huishoudboekje the software, usable for all Dutch municipalities. Huishoudboekje is developed based on the vision of Common Ground.",
   "private": true,
   "scripts": {

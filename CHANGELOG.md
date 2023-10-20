@@ -1,5 +1,11 @@
 # Huishoudboekje Changelog
 
+## 1.10.4
+
+### Patch Changes
+
+- c922255a9: get user from token instead of new call
+
 ## 1.10.3
 
 Deze versie omvat een oplossing voor een probleem met inloggen via Azure Active Directory (Azure AD).
