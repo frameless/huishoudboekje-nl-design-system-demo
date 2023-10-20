@@ -88,6 +88,7 @@ deploy-deployment-test:
     OIDC_CLIENT_ID: huishoudboekje-medewerkers
     JWT_ISSUER: https://keycloak.huishoudboekje.demoground.nl/realms/huishoudboekje
     JWT_AUDIENCE: account
+    OIDC_SCOPES: "test,api://some-test/.default"
     JWT_SECRET: $OIDC_CLIENT_SECRET
     JWT_ALGORITHMS: HS256,RS256
   script:

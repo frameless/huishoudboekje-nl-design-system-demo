@@ -53,6 +53,7 @@ export const getConfig = () => {
 	if (missingEnvvarsError) {
 		throw new Error("Failed to start service: missing configuration.");
 	}
+	log.warn(OIDC_SCOPES)
 
 	return {
 		secret: JWT_SECRET,
