@@ -114,7 +114,6 @@ deploy-deployment-review:
     APP_HOST: "hhb-$CI_COMMIT_REF_SLUG.nlx.reviews"
     NAMESPACE: "hhb-$CI_COMMIT_REF_SLUG"
     UNLEASH_OTAP: development
-    OIDC_SCOPES: "api://some-test/.default"
     OIDC_BASE_URL: "https://hhb-$CI_COMMIT_REF_SLUG.nlx.reviews"
     OIDC_ISSUER_URL: https://keycloak.huishoudboekje.demoground.nl/realms/huishoudboekje/
     OIDC_CLIENT_ID: huishoudboekje-medewerkers
