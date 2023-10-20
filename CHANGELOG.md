@@ -2,6 +2,8 @@
 
 ## 1.10.4
 
+Deze versie omvat een oplossing voor een probleem met inloggen via Azure Active Directory (Azure AD).
+
 ### Patch Changes
 
 - c922255a9: get user from token instead of new call
