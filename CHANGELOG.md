@@ -1,5 +1,11 @@
 # Huishoudboekje Changelog
 
+## 1.10.5
+
+### Patch Changes
+
+- 8aadeaed: AD does not have an algorithm header for jwks keys, backend expected one
+
 ## 1.10.4
 
 Deze versie omvat een oplossing voor een probleem met inloggen via Azure Active Directory (Azure AD).
