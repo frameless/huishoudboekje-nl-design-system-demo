@@ -1,5 +1,11 @@
 # Huishoudboekje Changelog
 
+## 1.10.6
+
+### Patch Changes
+
+- b55b8a95: remove email from backend claims jwt
+
 ## 1.10.5
 
 ### Patch Changes
