@@ -56,12 +56,10 @@ class PublicKeyCalculator:
         return get_unverified_header(token).get("kid")
 
     def _determine_key_to_use(self, key, algorithm):
-        alg = key.get("alg", None)
-        if (alg == algorithm):
-            if (algorithm in ALGORITHMS.RSA):
-                return RSAKey(key, algorithm)
-            elif (algorithm in ALGORITHMS.EC):
-                return ECKey(key, algorithm)
+        if (algorithm in ALGORITHMS.RSA):
+            return RSAKey(key, algorithm)
+        elif (algorithm in ALGORITHMS.EC):
+            return ECKey(key, algorithm)
 
         raise ValueError(
-            f"No key could be found or the algorithm: {algorithm} is not supported. Found alg: {alg if alg != None else 'None'}")
+            f"No key could be found or the algorithm: {algorithm} is not supported.")
