@@ -114,10 +114,9 @@ class Auth():
                 if secret != None:
                     claims = decode(
                         token, secret, algorithms=self.supported_algorithms, audience=self.audience, issuer=self.issuer)
-                    email = claims.get('email', None)
                     name = claims.get('name', None)
-                    if email and name:
-                        user = User(email=email, name=name)
+                    if name:
+                        user = User(name=name)
                         self.logger.debug(f"_user_loader: token user: {user}")
                         return user
             except InvalidTokenError as err:
