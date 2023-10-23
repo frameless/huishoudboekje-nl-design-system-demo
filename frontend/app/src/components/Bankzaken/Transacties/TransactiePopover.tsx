@@ -1,7 +1,7 @@
 import { InfoIcon } from "@chakra-ui/icons";
 import {
 	Box,
-	BoxProps,
+	PopoverProps,
 	Icon,
 	Text,
 	Popover,
@@ -16,7 +16,7 @@ import {useTranslation} from "react-i18next";
 import { formatIBAN } from "../../../utils/things";
 import { BankTransaction } from "../../../generated/graphql";
 
-type TransactiePopoverProps = BoxProps & {
+type TransactiePopoverProps = PopoverProps & {
 	bank_transaction: BankTransaction
 };
 
@@ -54,11 +54,11 @@ const TransactiePopover: React.FC<TransactiePopoverProps> = ({bank_transaction: 
 						width="100%"
 					>
 						<Text marginBottom={3}>
-								<h4><strong>{t("transactions.description")}:</strong></h4>
-								<p>
-									{bank_transaction.statementLine}<br/><br/>
-									{bank_transaction.informationToAccountOwner?.replace(/\s+/g, ' ')}
-								</p>
+							<h4><strong>{t("transactions.description")}:</strong></h4>
+							<p>
+								{bank_transaction.statementLine}<br/><br/>
+								{bank_transaction.informationToAccountOwner?.replace(/\s+/g, ' ')}
+							</p>
 						</Text>
 						<Text marginBottom={2}>
 							<h4><strong>{t("transacties.tegenrekening")}:</strong></h4>
