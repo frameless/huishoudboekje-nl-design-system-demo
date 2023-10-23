@@ -21,7 +21,7 @@ type TransactiePopoverProps = PopoverProps & {
 };
 
 const TransactiePopover: React.FC<TransactiePopoverProps> = ({bank_transaction: bank_transaction, ...props}) => {
-	const {t} = useTranslation();
+	const { t } = useTranslation();
 	const { isOpen, onOpen, onClose } = useDisclosure();
 
 	return (
@@ -53,19 +53,24 @@ const TransactiePopover: React.FC<TransactiePopoverProps> = ({bank_transaction: 
 						width="100%"
 					>
 						<Text marginBottom={3}>
-							<h4><strong>{t("transactions.description")}:</strong></h4>
+							<h4>
+								<strong>{t("transactions.description")}:</strong>
+							</h4>
 							<p>
 								{bank_transaction.statementLine}<br/><br/>
 								{bank_transaction.informationToAccountOwner?.replace(/\s+/g, ' ')}
 							</p>
 						</Text>
 						<Text marginBottom={2}>
-							<h4><strong>{t("transacties.tegenrekening")}:</strong></h4>
-							<p>{bank_transaction.tegenRekening?.rekeninghouder || t("unknown")}</p>
-						</Text>
-						<Text marginBottom={2}>
-							<h4><strong>{t("forms.rekeningen.fields.iban")}:</strong></h4>
-							<p>{formatIBAN(bank_transaction.tegenRekening?.iban) || t("unknown")}</p>
+							<h4>
+								<strong>{t("transacties.tegenrekening")}:</strong>
+							</h4>
+							<p>
+								{t("forms.rekeningen.fields.accountHolder")}{bank_transaction.tegenRekening?.rekeninghouder || t("unknown")}
+							</p>
+							<p>
+								{t("forms.rekeningen.fields.iban")}: {formatIBAN(bank_transaction.tegenRekening?.iban) || t("unknown")}
+							</p>
 						</Text>
 					</Box>
 				</PopoverBody>
