@@ -92,7 +92,7 @@ class SessionHelper {
 		if (decodedToken) {
 			const jwtBody: jwt.JwtPayload = decodedToken.payload as jwt.JwtPayload
 			const name = jwtBody.name ?? null
-			const email = jwtBody.email ?? null
+			const email = jwtBody.email ?? (jwtBody.preferred_username ?? null)
 			const user = {name, email}
 			return user
 		}
