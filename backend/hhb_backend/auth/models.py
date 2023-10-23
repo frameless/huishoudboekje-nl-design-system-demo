@@ -1,11 +1,10 @@
 
 class User():
-    def __init__(self, email: str = None, name: str = None):
-        self.email = email
+    def __init__(self, name: str = None):
         self.name = name
 
     def __str__(self):
-        return f"User(email={self.email},name={self.name})"
+        return f"User(name={self.name})"
 
     def to_json(self):
-        return { "email": self.email, "name": self.name }
+        return {"name": self.name}
