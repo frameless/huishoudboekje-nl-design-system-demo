@@ -63,13 +63,16 @@ const TransactiePopover: React.FC<TransactiePopoverProps> = ({bank_transaction: 
 						</Text>
 						<Text marginBottom={2}>
 							<h4>
-								<strong>{t("transacties.tegenrekening")}:</strong>
+								<strong>{t("forms.rekeningen.fields.accountHolder")}:</strong>
 							</h4>
 							<p>
-								{t("forms.rekeningen.fields.accountHolder")}{bank_transaction.tegenRekening?.rekeninghouder || t("unknown")}
+								{bank_transaction.tegenRekening?.rekeninghouder || t("unknown")}
 							</p>
+							<h4>
+								<strong>{t("forms.rekeningen.fields.iban")}:</strong>
+							</h4>
 							<p>
-								{t("forms.rekeningen.fields.iban")}: {formatIBAN(bank_transaction.tegenRekening?.iban) || t("unknown")}
+								{formatIBAN(bank_transaction.tegenRekening?.iban) || t("unknown")}
 							</p>
 						</Text>
 					</Box>
