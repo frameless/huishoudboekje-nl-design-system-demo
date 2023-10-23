@@ -12,7 +12,7 @@ import {
 	useDisclosure,
 } from '@chakra-ui/react'
 import React from "react";
-import {useTranslation} from "react-i18next";
+import { useTranslation } from "react-i18next";
 import { formatIBAN } from "../../../utils/things";
 import { BankTransaction } from "../../../generated/graphql";
 
@@ -44,7 +44,6 @@ const TransactiePopover: React.FC<TransactiePopoverProps> = ({bank_transaction: 
 				color='white'
 				bg='blue.800'
 				borderColor='blue.800'
-				onMouseLeave={onClose}
 				maxWidth='400'
 			>
 				<PopoverArrow bg='blue.800' />
