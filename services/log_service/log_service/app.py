@@ -7,7 +7,7 @@ from flask_migrate import Migrate
 
 from core_service import database
 from log_service.views.gebruikersactiviteit import GebruikersActiviteitView
-from core_service.sqlalchemy_statsd_metrics import add_sqlalchemy_statsd_metrics
+from core_service.statsd_metrics import add_statsd_metrics
 
 db = database.db
 
@@ -38,7 +38,7 @@ def create_app(
     # This can also cause parameters that are normally hidden to be logged
     logging.getLogger('werkzeug').setLevel(app.config["LOG_LEVEL"])
 
-    add_sqlalchemy_statsd_metrics(app)
+    add_statsd_metrics(app)
 
     @app.route("/health")
     def health():

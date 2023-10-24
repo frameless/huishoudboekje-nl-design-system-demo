@@ -1,11 +1,13 @@
 import logging
+from uuid import uuid4
+from flask import request
 from sqlalchemy import event
 from sqlalchemy.engine import Engine
 from sqlalchemy.pool import Pool
 import time
 from statsd import StatsClient
 
-def add_sqlalchemy_statsd_metrics(app):
+def add_statsd_metrics(app):
     if app.config["STATSD_HOSTPORT"] is not None and type(app.config["STATSD_HOSTPORT"]) is str:
         statsd = None
         try:
@@ -116,3 +118,25 @@ def add_sqlalchemy_statsd_metrics(app):
                 # Intercept all exceptions processed by the Connection.
                 statsd.incr('sqlalchemy.events.connections.exceptions')
                 logging.debug(f"handle_error")
+
+            #
+            # Flask metrics
+            #
+
+            @app.before_request
+            def metrics_before():
+                request.start_time = time.time()
+                endpoint = request.endpoint
+                statsd.incr('flask.requests.started')
+                statsd.incr('flask.requests.started.' + endpoint)
+                logging.debug(f"started_request")
+
+            @app.after_request
+            def metrics_after(response):
+                endpoint = request.endpoint
+                statsd.incr('flask.requests.finished')
+                statsd.incr('flask.requests.finished.' + endpoint)
+                total = int((time.time() - request.start_time * 1000)) #time in miliseconds
+                statsd.timing('flask.requests.' + endpoint + '.duration', total)
+                logging.debug(f"finished_request")
+                return response

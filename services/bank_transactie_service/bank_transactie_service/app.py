@@ -11,7 +11,7 @@ from core_service import database
 from bank_transactie_service.views.bank_transaction_range import BanktransactionRangeView
 from bank_transactie_service.views.transactions_filter_view import BanktransactionFilterView
 from bank_transactie_service.views.bank_transaction_sum import BanktransactionSumView
-from core_service.sqlalchemy_statsd_metrics import add_sqlalchemy_statsd_metrics
+from core_service.statsd_metrics import add_statsd_metrics
 
 db = database.db
 
@@ -40,7 +40,7 @@ def create_app(config_name='bank_transactie_service.config.Config'):
     # This can also cause parameters that are normally hidden to be logged
     logging.getLogger('werkzeug').setLevel(app.config["LOG_LEVEL"])
 
-    add_sqlalchemy_statsd_metrics(app)
+    add_statsd_metrics(app)
 
 
     @app.route('/health')

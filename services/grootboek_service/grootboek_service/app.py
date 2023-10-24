@@ -5,7 +5,7 @@ from flask import Flask, Response
 from flask_migrate import Migrate
 from core_service import database
 from grootboek_service.views.grootboekrekeningen import GrootboekrekeningenView
-from core_service.sqlalchemy_statsd_metrics import add_sqlalchemy_statsd_metrics
+from core_service.statsd_metrics import add_statsd_metrics
 
 db = database.db
 
@@ -27,7 +27,7 @@ def create_app(config_name='grootboek_service.config.Config'):
     db.init_app(app)
     Migrate(app, db)
 
-    add_sqlalchemy_statsd_metrics(app)
+    add_statsd_metrics(app)
 
     @app.route('/health')
     def health():
