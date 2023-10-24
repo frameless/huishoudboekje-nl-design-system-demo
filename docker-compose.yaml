@@ -257,7 +257,6 @@ services:
       DATABASE_URL: "postgresql://hhb:hhb@db/huishoudboekjeservice"
       LOG_LEVEL: DEBUG
       SEED_TESTDATA: "true"
-      STATSD_HOST: "statsd-exporter:9125"
     ports:
       - 8001:8000
     depends_on:
@@ -386,11 +385,3 @@ services:
 
   rapportageservice-test:
     <<: [ *x-py-tests, *x-rapportageservice ]
-
-
-  statsd-exporter:
-    image: prom/statsd-exporter:v0.24.0
-    container_name: statsd-exporter
-    ports:
-      - 9102:9102
-      - 9125:9125
