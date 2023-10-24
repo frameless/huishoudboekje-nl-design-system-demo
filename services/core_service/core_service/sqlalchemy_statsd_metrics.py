@@ -51,20 +51,20 @@ def add_sqlalchemy_statsd_metrics(app):
                 logging.debug(f"checkout")
 
             @event.listens_for(Pool, "close")
-            def receive_close(dbapi_connection, connection_record, connection_proxy):
+            def receive_close(dbapi_connection, connection_record):
                 # Called when a DBAPI connection is closed.
                 statsd.gauge('sqlalchemy.pool.connections', -1, delta=True)
                 logging.debug(f"close")
 
             @event.listens_for(Pool, "detach")
-            def receive_detach(dbapi_connection, connection_record, connection_proxy):
+            def receive_detach(dbapi_connection, connection_record):
                 # Called when a DBAPI connection is “detached” from a pool.
                 statsd.gauge('sqlalchemy.pool.connections', -1, delta=True)
                 statsd.gauge('sqlalchemy.detached.connections', 1, delta=True)
-                logging.debug(f"chedetachckin")
+                logging.debug(f"detach")
 
             @event.listens_for(Pool, "close_detached")
-            def receive_close_detached(dbapi_connection, connection_record, connection_proxy):
+            def receive_close_detached(dbapi_connection):
                 # Called when a detached DBAPI connection is closed.
                 statsd.gauge('sqlalchemy.detached.connections', -1, delta=True)
                 logging.debug(f"close_detached")
