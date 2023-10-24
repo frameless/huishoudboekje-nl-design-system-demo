@@ -16,9 +16,10 @@ def add_sqlalchemy_statsd_metrics(app):
             logging.warning("could not connect to statsd host")
 
         if statsd:
-            statsd.set('sqlalchemy.pool.connections', 0)
-            statsd.set('sqlalchemy.used.connections', 0)
-            statsd.set('sqlalchemy.detached.connections', 0)
+
+            #
+            # Query execution time
+            #
 
             @event.listens_for(Engine, "before_cursor_execute")
             def before_cursor_execute(conn, cursor, statement, parameters, context, executemany):
@@ -30,41 +31,88 @@ def add_sqlalchemy_statsd_metrics(app):
                 statsd.timing("sqlalchemy.query.execution.duration", total)
                 logging.info(f"Exexcuted query in {total} miliseconds:\n{statement} ")
 
-            @event.listens_for(Pool, "connect")
-            def receive_connect(dbapi_connection, connection_record):
-                # Called at the moment a particular DBAPI connection is first created for a given Pool.
-                statsd.gauge('sqlalchemy.pool.connections', 1, delta=True)
-                logging.debug(f"Connect")
+            #
+            # Pool events
+            #
 
             @event.listens_for(Pool, "checkin")
             def receive_checkin(dbapi_connection, connection_record):
                 # Called when a connection returns to the pool.
-                statsd.gauge('sqlalchemy.pool.connections', 1, delta=True)
-                statsd.gauge('sqlalchemy.used.connections', -1, delta=True)
+                statsd.incr('sqlalchemy.events.connections.pool.checkin')
                 logging.debug(f"checkin")
 
             @event.listens_for(Pool, "checkout")
             def receive_checkout(dbapi_connection, connection_record, connection_proxy):
                 # Called when a connection is retrieved from the Pool.
-                statsd.gauge('sqlalchemy.pool.connections', -1, delta=True)
-                statsd.gauge('sqlalchemy.used.connections', 1, delta=True)
+                statsd.incr('sqlalchemy.events.connections.pool.checkout')
                 logging.debug(f"checkout")
 
             @event.listens_for(Pool, "close")
             def receive_close(dbapi_connection, connection_record):
                 # Called when a DBAPI connection is closed.
-                statsd.gauge('sqlalchemy.pool.connections', -1, delta=True)
+                statsd.incr('sqlalchemy.events.connections.closed')
                 logging.debug(f"close")
-
-            @event.listens_for(Pool, "detach")
-            def receive_detach(dbapi_connection, connection_record):
-                # Called when a DBAPI connection is “detached” from a pool.
-                statsd.gauge('sqlalchemy.pool.connections', -1, delta=True)
-                statsd.gauge('sqlalchemy.detached.connections', 1, delta=True)
-                logging.debug(f"detach")
 
             @event.listens_for(Pool, "close_detached")
             def receive_close_detached(dbapi_connection):
                 # Called when a detached DBAPI connection is closed.
-                statsd.gauge('sqlalchemy.detached.connections', -1, delta=True)
+                statsd.incr('sqlalchemy.events.conections.detached.close')
                 logging.debug(f"close_detached")
+
+            @event.listens_for(Pool, "connect")
+            def receive_connect(dbapi_connection, connection_record):
+                # Called at the moment a particular DBAPI connection is first created for a given Pool.
+                statsd.incr('sqlalchemy.events.connections.pool.connect')
+                logging.debug(f"Connect")
+
+            @event.listens_for(Pool, "detach")
+            def receive_detach(dbapi_connection, connection_record):
+                # Called when a DBAPI connection is “detached” from a pool.
+                statsd.incr('sqlalchemy.events.connections.detatched')
+                logging.debug(f"detach")
+
+            @event.listens_for(Pool, 'first_connect')
+            def receive_first_connect(dbapi_connection, connection_record):
+                # Called exactly once for the first time a DBAPI connection is checked out from a particular Pool.
+                statsd.incr('sqlalchemy.events.connections.first_connect')
+                logging.debug(f"first_connect")
+
+            @event.listens_for(Pool, 'invalidate')
+            def receive_invalidate(dbapi_connection, connection_record, exception):
+                # Called when a DBAPI connection is to be “invalidated”.
+                statsd.incr('sqlalchemy.events.connections.invalidated')
+                logging.debug(f"invalidate")
+
+            @event.listens_for(Pool, 'reset')
+            def receive_reset(dbapi_connection, connection_record):
+                # Called before the “reset” action occurs for a pooled connection.
+                statsd.incr('sqlalchemy.events.connections.reset')
+                logging.debug(f"reset")
+
+            @event.listens_for(Pool, 'soft_invalidate')
+            def receive_soft_invalidate(dbapi_connection, connection_record, exception):
+                # Called when a DBAPI connection is to be “soft invalidated”.
+                statsd.incr('sqlalchemy.events.connections.invalidated.soft')
+                logging.debug(f"soft_invalidate")
+
+            #
+            # Connection events
+            #
+
+            @event.listens_for(Engine, 'engine_connect')
+            def receive_engine_connect(conn, branch):
+                # Intercept the creation of a new Connection.
+                statsd.incr('sqlalchemy.events.engine.connect')
+                logging.debug(f"engine_connect")
+
+            @event.listens_for(Engine, 'engine_disposed')
+            def receive_engine_disposed(engine):
+                # Intercept when the Engine.dispose() method is called.
+                statsd.incr('sqlalchemy.events.engine.dispose')
+                logging.debug(f"engine_disposed")
+
+            @event.listens_for(Engine, 'handle_error')
+            def receive_handle_error(exception_context):
+                # Intercept all exceptions processed by the Connection.
+                statsd.incr('sqlalchemy.events.connections.exceptions')
+                logging.debug(f"handle_error")
