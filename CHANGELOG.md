@@ -1,5 +1,13 @@
 # Huishoudboekje Changelog
 
+## 1.10.7
+
+Deze versie omvat een verbetering voor het versturen van SqlAlchemy metrics.
+
+### Patch Changes
+
+- eb3858e9d: Removed wrong paramaters sqlalchemy metrics functions so it does not cause errors
+
 ## 1.10.6
 
 ### Patch Changes
