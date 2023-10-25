@@ -1,5 +1,4 @@
 import logging
-from uuid import uuid4
 from flask import request
 from sqlalchemy import event
 from sqlalchemy.engine import Engine
