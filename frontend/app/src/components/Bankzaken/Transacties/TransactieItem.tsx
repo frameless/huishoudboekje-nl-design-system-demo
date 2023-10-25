@@ -1,12 +1,24 @@
-import {CheckIcon, WarningIcon} from "@chakra-ui/icons";
-import {Box, BoxProps, Icon, Stack, Tag, Text, Tooltip, useBreakpointValue} from "@chakra-ui/react";
+import {
+	CheckIcon,
+	WarningIcon,
+} from "@chakra-ui/icons";
+import {
+	Box,
+	BoxProps,
+	Icon,
+	Stack,
+	Tag,
+	Text,
+	useBreakpointValue,
+} from '@chakra-ui/react'
 import React from "react";
 import {useTranslation} from "react-i18next";
 import {useNavigate} from "react-router-dom";
 import {AppRoutes} from "../../../config/routes";
-import {currencyFormat2, formatIBAN} from "../../../utils/things";
+import { currencyFormat2 } from "../../../utils/things";
 import PrettyIban from "../../shared/PrettyIban";
 import { BankTransaction } from "../../../generated/graphql";
+import TransactiePopover from "./TransactiePopover"
 
 const hoverStyles = {
 	_hover: {
@@ -19,49 +31,92 @@ type TransactieItemProps = BoxProps & {
 	transactie: BankTransaction
 };
 
-const TransactieItem: React.FC<TransactieItemProps> = ({transactie: bt, ...props}) => {
+const TransactieItem: React.FC<TransactieItemProps> = ({transactie: bank_transaction, ...props}) => {
 	const {t} = useTranslation();
 	const isMobile = useBreakpointValue([true, null, null, false]);
 	const navigate = useNavigate();
+
+
 	return (
-		<Box px={2} mx={-2} {...!isMobile && hoverStyles}>
-			<Stack direction={"row"} alignItems={"center"} justifyContent={"center"} {...props} onClick={() => {
-				navigate(AppRoutes.ViewTransactie(String(bt.id)));
-			}}>
-				{bt.isGeboekt ? (
-					<Tag colorScheme={"green"} size={"sm"} variant={"subtle"}>
+		<Box
+			px={2}
+			mx={-2}
+			{...!isMobile && hoverStyles}
+		>
+			<Stack
+				direction={"row"}
+				alignItems={"center"}
+				justifyContent={"center"}
+				onClick={() => {
+					navigate(AppRoutes.ViewTransactie(String(bank_transaction.id)));
+				}}
+				{...props}
+			>
+				{bank_transaction.isGeboekt ? (
+					<Tag
+						colorScheme={"green"}
+						size={"sm"}
+						variant={"subtle"}
+					>
 						<Icon as={CheckIcon} />
 					</Tag>
 				) : (
-					<Tag colorScheme={"red"} size={"sm"} variant={"subtle"}>
+					<Tag
+						colorScheme={"red"}
+						size={"sm"}
+						variant={"subtle"}
+					>
 						<Icon as={WarningIcon} />
 					</Tag>
 				)}
+
 				<Box flex={2}>
-					{bt.tegenRekening ? (
+					{bank_transaction.tegenRekening ? (
 						<Text>
-							<Tooltip label={formatIBAN(bt.tegenRekening.iban) || t("unknown")} aria-label={formatIBAN(bt.tegenRekening.iban) || t("unknown")} placement={"right"}>
-								<span>{bt.tegenRekening.rekeninghouder}</span>
-							</Tooltip>
+							<span>{bank_transaction.tegenRekening.rekeninghouder}</span>
 						</Text>
 					) : (
 						<Text whiteSpace={"nowrap"}>
-							<PrettyIban iban={bt.tegenRekeningIban} fallback={t("unknownIban")} />
+							<PrettyIban iban={bank_transaction.tegenRekeningIban} fallback={t("unknownIban")} />
 						</Text>
 					)}
 				</Box>
-				<Box flex={0} minWidth={250}>
-					<Stack direction={"row"} justifyContent={"space-between"}>
+
+				<Box
+					flex={0}
+					minWidth={250}
+				>
+					<Stack
+						direction={"row"}
+						justifyContent={"space-between"}
+					>
 						<Text>
-							{bt.journaalpost?.rubriek ? bt.journaalpost?.rubriek.naam : ""}
+							{
+								bank_transaction.journaalpost?.rubriek 
+									? bank_transaction.journaalpost?.rubriek.naam 
+									: ""
+							}
 						</Text>
 					</Stack>
 				</Box>
-				<Box flex={0} minWidth={120}>
-					<Stack direction={"row"} justifyContent={"space-between"}>
+
+				<Box
+					flex={0}
+					minWidth={120}
+				>
+					<Stack
+						direction={"row"}
+						justifyContent={"space-between"}
+					>
 						<Text>&euro;</Text>
-						<Text>{currencyFormat2(false).format(bt.bedrag)}</Text>
+						<Text>{currencyFormat2(false).format(bank_transaction.bedrag)}</Text>
 					</Stack>
+				</Box>
+
+				<Box
+					flex={0}
+				>
+					<TransactiePopover bank_transaction={bank_transaction} />
 				</Box>
 			</Stack>
 		</Box>
