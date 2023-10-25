@@ -3,6 +3,7 @@ import logging
 from flask import Flask, Response
 from flask_migrate import Migrate
 from core_service.statsd_metrics import add_statsd_metrics
+from core_service.seed import seed_database_with_test_data
 
 
 from huishoudboekje_service.views import (
@@ -50,6 +51,13 @@ def create_app(config_name='huishoudboekje_service.config.Config'):
 
     db.init_app(app)
     Migrate(app, db)
+
+    @app.cli.command("seed-db-with-test-data")
+    def seed_database():
+        if app.config["SEED_TESTDATA"]:
+            seed_database_with_test_data('huishoudboekje.sql', app.config["SQLALCHEMY_DATABASE_URI"])
+        else:
+            logging.warning("Did not seed the db with test data, make sure to set the SEED_TESTDATA env variable")
 
     add_statsd_metrics(app)
 
