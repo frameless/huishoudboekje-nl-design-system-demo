@@ -1,5 +1,7 @@
+import logging
 import os
 basedir = os.path.abspath(os.path.dirname(__file__))
+
 
 class Config(object):
     LOG_LEVEL = os.getenv("LOG_LEVEL", "WARNING")
@@ -7,6 +9,10 @@ class Config(object):
     STATSD_HOSTPORT = os.getenv("STATSD_HOST", None)
     STATSD_PREFIX = os.getenv("STATSD_PREFIX", "hhb.organisatie")
     SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL', None)
+    if 'postgresql' in SQLALCHEMY_DATABASE_URI and 'psycopg' not in SQLALCHEMY_DATABASE_URI:
+        logging.info('using psycopg3 for SQLAlchemy')
+        SQLALCHEMY_DATABASE_URI = SQLALCHEMY_DATABASE_URI.replace(
+            'postgresql', 'postgresql+psycopg')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_ENGINE_OPTIONS = {
         "pool_pre_ping": True

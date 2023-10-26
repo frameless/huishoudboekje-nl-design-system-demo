@@ -7,8 +7,10 @@ from sqlalchemy.dialects.postgresql import UUID
 class CustomerStatementMessage(db.Model):
     __tablename__ = 'customer_statement_messages'
 
-    id = Column(Integer, Sequence("customer_statement_messages_id_seq"), primary_key=True)
-    uuid = Column(UUID, default = func.gen_random_uuid(), nullable = False, unique = True, index = True)
+    id = Column(Integer, Sequence(
+        "customer_statement_messages_id_seq"), primary_key=True)
+    uuid = Column(UUID, default=func.gen_random_uuid(),
+                  nullable=False, unique=True, index=True)
 
     upload_date = Column(DateTime, nullable=False)
     raw_data = Column(String, nullable=False)
@@ -23,4 +25,5 @@ class CustomerStatementMessage(db.Model):
     closing_available_funds = Column(Integer)  # Tag 64
     forward_available_balance = Column(Integer)  # Tag 65
 
-    bank_transactions = relationship("BankTransaction", back_populates="customer_statement_message", cascade="all, delete")
+    bank_transactions = relationship(
+        "BankTransaction", back_populates="customer_statement_message", cascade="all, delete")

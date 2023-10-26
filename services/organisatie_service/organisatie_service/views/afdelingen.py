@@ -44,7 +44,8 @@ class AfdelingView(HHBView):
     def add_filter_filter_organisaties(self):
         """ Add filter_organisaties filter based on the id of the afdeling model """
         def add_filter(ids):
-            self.hhb_query.query = self.hhb_query.query.filter(self.hhb_model.organisatie_id.in_(ids))
+            self.hhb_query.query = self.hhb_query.query.filter(
+                self.hhb_model.organisatie_id.in_(ids))
 
         AfdelingView.filter_in_string('filter_organisaties', add_filter)
 
@@ -52,8 +53,9 @@ class AfdelingView(HHBView):
         """ Add filter_afdelingen filter based on the id of the organisatie model """
 
         def add_filter(ids):
-            self.hhb_query.query = self.hhb_query.query.filter(self.hhb_model.rekeningen_ids.contains(ids))
+            self.hhb_query.query = self.hhb_query.query.filter(
+                self.hhb_model.rekeningen_ids.contains(ids))
 
         AfdelingView.filter_in_string('filter_rekening', add_filter)
-        
+
     # TODO afspraken en rekeningen filter.

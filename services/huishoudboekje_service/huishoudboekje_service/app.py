@@ -44,20 +44,24 @@ def create_app(config_name='huishoudboekje_service.config.Config'):
         level=app.config["LOG_LEVEL"],
         datefmt='%Y-%m-%d %H:%M:%S')
     logging.info(f"Starting {__name__} with {config_name}")
+    logging.warn(app.config['SQLALCHEMY_DATABASE_URI'])
 
     # Werkzeug has their own logger which outputs info level URL calls.
     # This can also cause parameters that are normally hidden to be logged
     logging.getLogger('werkzeug').setLevel(app.config["LOG_LEVEL"])
 
     db.init_app(app)
+    logging.warn("got to migrate")
     Migrate(app, db)
 
     @app.cli.command("seed-db-with-test-data")
     def seed_database():
         if app.config["SEED_TESTDATA"]:
-            seed_database_with_test_data('huishoudboekje.sql', app.config["SQLALCHEMY_DATABASE_URI"])
+            seed_database_with_test_data(
+                'huishoudboekje.sql', app.config["SQLALCHEMY_DATABASE_URI"])
         else:
-            logging.warning("Did not seed the db with test data, make sure to set the SEED_TESTDATA env variable")
+            logging.warning(
+                "Did not seed the db with test data, make sure to set the SEED_TESTDATA env variable")
 
     add_statsd_metrics(app)
 
@@ -77,7 +81,8 @@ def create_app(config_name='huishoudboekje_service.config.Config'):
         {"path": "/burgers/transacties/ids",
             "view": BurgerTransactieIdsView, "name": "burger_transactie_ids"},
         {"path": "/afspraken", "view": AfspraakView, "name": "afspraak_view"},
-        {"path": "/afspraken/filter", "view": AfsprakenFilterView, "name": "afspraak_filter_view"},
+        {"path": "/afspraken/filter", "view": AfsprakenFilterView,
+            "name": "afspraak_filter_view"},
         {"path": "/afspraken/<object_id>", "view": AfspraakView,
             "name": "afspraak_detail_view"},
         {"path": "/rekeningen", "view": RekeningView, "name": "rekening_view"},

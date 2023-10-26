@@ -1,4 +1,5 @@
 import json
+import logging
 import re
 from typing import Dict, Union, List
 
@@ -23,10 +24,12 @@ class HHBQuery():
         self.filtered_columns = []
 
     def expose_one_relation(self, relation, relation_property):
-        self._exposed_one_relations.append({"relation": relation, "relation_property": relation_property})
+        self._exposed_one_relations.append(
+            {"relation": relation, "relation_property": relation_property})
 
     def expose_many_relation(self, relation, relation_property):
-        self._exposed_many_relations.append({"relation": relation, "relation_property": relation_property})
+        self._exposed_many_relations.append(
+            {"relation": relation, "relation_property": relation_property})
 
     def add_filter_columns(self):
         """ Add column filters to query """
@@ -39,7 +42,8 @@ class HHBQuery():
                         {"errors": [
                             f"Input for columns is not correct, '{column_name}' is not a column."
                         ]}, 400))
-                column_filter.append(self.hhb_model.__table__.columns[column_name])
+                column_filter.append(
+                    self.hhb_model.__table__.columns[column_name])
                 self.filtered_columns.append(column_name)
             self.query = self.query.with_entities(*column_filter)
 
@@ -74,10 +78,12 @@ class HHBQuery():
         try:
             filter_kwargs = json.loads(filter_kwargs_str)
             if filter_kwargs:
-                filters = self.__parse_filter_kwargs(filter_kwargs=filter_kwargs)
+                filters = self.__parse_filter_kwargs(
+                    filter_kwargs=filter_kwargs)
                 self.query = self.query.filter(*filters)
         except ValueError as e:
-            abort(make_response({"errors": [f"Failed to parse filters: {e}"]}, 400))
+            abort(make_response(
+                {"errors": [f"Failed to parse filters: {e}"]}, 400))
 
     def __parse_filter_kwargs(self, filter_kwargs: Dict[str, Union[str, int, bool]],
                               col_name: str = None) -> List[ColumnElement]:
@@ -125,11 +131,13 @@ class HHBQuery():
                 if (operator := AndOrOperator.get(key, None)):
                     # value is dict with one or more filters
                     op = getattr(sql, operator.value)
-                    filter = op(*self.__parse_filter_kwargs(filter_kwargs=value))
+                    filter = op(
+                        *self.__parse_filter_kwargs(filter_kwargs=value))
                     sqlalchemy_filters.append(filter)
                 else:
                     # key is column name, value is operator. Pass col_name so it is remembered
-                    filters = self.__parse_filter_kwargs(filter_kwargs=value, col_name=key)
+                    filters = self.__parse_filter_kwargs(
+                        filter_kwargs=value, col_name=key)
                     sqlalchemy_filters.append(*filters)
             elif col_name:
                 # existence of col_name indicates a nested comparison with an operator
@@ -198,7 +206,8 @@ class HHBQuery():
             else:
                 start_copy = max(1, start - limit)
                 limit_copy = start - 1
-                obj['previous'] = '?start=%d&limit=%d' % (start_copy, limit_copy)
+                obj['previous'] = '?start=%d&limit=%d' % (
+                    start_copy, limit_copy)
             # make next url
             if start + limit > count:
                 obj['next'] = ''
@@ -218,18 +227,24 @@ class HHBQuery():
 
     def load_relations(self):
         for relation in self._exposed_many_relations + self._exposed_one_relations:
+            logging.warn(relation)
+
             if not self.filtered_columns or relation['relation'] in self.filtered_columns:
-                self.query = self.query.options(joinedload(relation["relation"]))
+                self.query = self.query.options(
+                    joinedload(getattr(self.hhb_model, relation['relation'])))
 
     def order_query(self, desc=False, sortingColumn="id"):
         if desc:
-            self.query = self.query.order_by(self.hhb_model.__table__.c[sortingColumn].desc())
+            self.query = self.query.order_by(
+                self.hhb_model.__table__.c[sortingColumn].desc())
         else:
-            self.query = self.query.order_by(self.hhb_model.__table__.c[sortingColumn])
+            self.query = self.query.order_by(
+                self.hhb_model.__table__.c[sortingColumn])
 
     def post_process_data(self, row):
         result_dict = row2dict(row)
         for relation in self._exposed_many_relations:
+
             if not self.filtered_columns or relation['relation'] in self.filtered_columns:
                 result_dict[relation["relation"]] = [getattr(item, relation["relation_property"]) for item in
                                                      getattr(row, relation["relation"])]

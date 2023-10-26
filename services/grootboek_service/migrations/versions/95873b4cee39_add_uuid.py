@@ -38,29 +38,31 @@ def upgrade():
             sa.Column(
                 'uuid',
                 UUID(),
-                unique = True,
-                index = True
+                unique=True,
+                index=True
             )
         )
 
-        content = connection.execute(f"SELECT id FROM {tableToEdit}")
+        content = connection.execute(
+            sa.text(f"SELECT id FROM {tableToEdit}")).fetchall()
 
         for row in content:
-            connection.execute(f"UPDATE {tableToEdit} SET uuid='{str(GEN_UUID.uuid4())}' WHERE id = '{row['id']}'")
+            connection.execute(sa.text(
+                f"UPDATE {tableToEdit} SET uuid='{str(GEN_UUID.uuid4())}' WHERE id = '{row[0]}'"))
 
-        op.alter_column(tableToEdit, 'uuid', nullable=False, server_default=sa.text("'{}'".format(str(GEN_UUID.uuid4()))))
-
+        op.alter_column(tableToEdit, 'uuid', nullable=False, server_default=sa.text(
+            "'{}'".format(str(GEN_UUID.uuid4()))))
 
     for tableReferenceEdit in tableReferenceEdits:
         table_name = tableReferenceEdit['table_name']
         new_foreign_key = tableReferenceEdit['new_foreign_key']
 
         op.add_column(
-            table_name, 
+            table_name,
             sa.Column(
                 new_foreign_key,
                 UUID(),
-                nullable = True
+                nullable=True
             )
         )
 
@@ -71,12 +73,12 @@ def downgrade():
         new_foreign_key = tableReferenceEdit['new_foreign_key']
 
         op.drop_column(
-            table_name, 
+            table_name,
             new_foreign_key
         )
 
     for tableToEdit in tablesToEdit:
         op.drop_column(
-            tableToEdit, 
+            tableToEdit,
             'uuid'
         )
