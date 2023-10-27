@@ -15,22 +15,10 @@ COPY ./core_service/core_service /app/core_service
 
 RUN pip install .
 
-ENV GUNICORN_PORT="8000" \
-    GUNICORN_WORKERS="2" \
-    GUNICORN_THREADS="4" \
-    GUNICORN_LOGLEVEL="info" \
-    PYTHONDONTWRITEBYTECODE="1" \
-    PYTHONUNBUFFERED="1" \
+ENV PYTHONUNBUFFERED="1" \
     PATH="/app/.local/bin:${PATH}" \
     APP_NAME="wsgi:app"
 
 CMD ["bash", "-c", "exec gunicorn \
-  -c gunicorn.conf.py \
-  --bind=0.0.0.0:${GUNICORN_PORT} \
-  --workers=${GUNICORN_WORKERS} \
-  --threads=${GUNICORN_THREADS} \
-  --log-level=${GUNICORN_LOGLEVEL} \
-  --capture-output \
-  --worker-class=gthread \
-  --worker-tmp-dir /dev/shm \
+  -c gunicorn/config/gunicorn.conf.py \
   ${APP_NAME}"]
