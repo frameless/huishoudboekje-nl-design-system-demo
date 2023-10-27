@@ -107,6 +107,12 @@ Deze versie omvat verbeteringen aan functies voor inloggen en uitloggen.
 - 51291ed6: Added ENV variables INTERNAL_CONNECTION_TIMEOUT and INTERNAL_READ_TIMEOUT to the backend. These ENV variables are used to set the timeout value (in seconds) for the get requests used inside the application. The default values are 10 and 30 (conenction and read). To set no timout set the value to 0.
 - 3c9fb546: Added extra input validation in the backend
 
+## 1.9.11
+
+### Patch Changes
+
+- a7610d1cc: Updated metrics python services (not backend) to gather more metrics
+
 ## 1.9.10
 
 Deze versie omvat gewijzigde functionaliteit voor het berekenen en weergeven van saldo op een pagina met een burger.

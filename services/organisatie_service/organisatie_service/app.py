@@ -9,7 +9,7 @@ from organisatie_service.views.organisaties import OrganisatieView
 from organisatie_service.views.organisatie_rekeningen import OrganisatieRekeningenView
 from organisatie_service.views.afdelingen import AfdelingView
 from core_service import database
-from core_service.sqlalchemy_statsd_metrics import add_sqlalchemy_statsd_metrics
+from core_service.statsd_metrics import add_statsd_metrics
 from core_service.seed import seed_database_with_test_data
 
 db = database.db
@@ -39,7 +39,7 @@ def create_app(config_name='organisatie_service.config.Config'):
         else:
             logging.warning("Did not seed the db with test data, make sure to set the SEED_TESTDATA env variable")
 
-    add_sqlalchemy_statsd_metrics(app)
+    add_statsd_metrics(app)
 
     @app.route('/health')
     def health():
