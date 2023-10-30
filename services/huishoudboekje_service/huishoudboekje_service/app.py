@@ -44,7 +44,6 @@ def create_app(config_name='huishoudboekje_service.config.Config'):
         level=app.config["LOG_LEVEL"],
         datefmt='%Y-%m-%d %H:%M:%S')
     logging.info(f"Starting {__name__} with {config_name}")
-    logging.warn(app.config['SQLALCHEMY_DATABASE_URI'])
 
     # Werkzeug has their own logger which outputs info level URL calls.
     # This can also cause parameters that are normally hidden to be logged

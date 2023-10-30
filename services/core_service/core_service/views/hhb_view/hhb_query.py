@@ -227,7 +227,6 @@ class HHBQuery():
 
     def load_relations(self):
         for relation in self._exposed_many_relations + self._exposed_one_relations:
-            logging.warn(relation)
 
             if not self.filtered_columns or relation['relation'] in self.filtered_columns:
                 self.query = self.query.options(
