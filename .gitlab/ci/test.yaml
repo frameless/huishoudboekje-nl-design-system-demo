@@ -275,12 +275,6 @@ backend-test:
     JWT_ISSUER: pytest
     JWT_ALGORITHMS: HS256
 
-core-service-test:
-  <<: *only-on-branches
-  extends: .Service Test
-  variables:
-    DIRECTORY: services/core_service
-
 rapportage-service-test:
   <<: *only-on-branches
   extends: .Service Test
