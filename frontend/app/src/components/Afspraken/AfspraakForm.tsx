@@ -369,12 +369,13 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, or
 									</FormControl>
 
 									<FormControl flex={1} isInvalid={!isFieldValid("omschrijving")} isRequired={true}>
-										<FormLabel>{t("afspraken.omschrijving")}</FormLabel>
+										<FormLabel>{t("afspraken.omschrijving")} <small>({t("afspraken.maxTekens")})</small></FormLabel>
 										<Input 
 											autoComplete="no" 
 											aria-autocomplete="none" 
 											value={form.omschrijving || ""} 
-											onChange={e => updateForm("omschrijving", e.target.value)} 
+											onChange={e => updateForm("omschrijving", e.target.value)}
+											maxLength={140}
 										/>
 										<FormErrorMessage>{t("afspraakDetailView.invalidOmschrijvingError")}</FormErrorMessage>
 									</FormControl>

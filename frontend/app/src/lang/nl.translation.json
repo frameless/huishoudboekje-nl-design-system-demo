@@ -373,7 +373,8 @@
     "showInActive": "Beëindigde afspraken",
     "tegenpartij": "Tegenpartij",
     "nextBooking": "Verwachte betaling",
-    "noResults": "Er zijn geen afspraken gevonden."
+    "noResults": "Er zijn geen afspraken gevonden.",
+    "maxTekens": "Max. 140 tekens"
   },
   "organisatie": "Organisatie",
   "burger": "Burger",
