@@ -15,7 +15,7 @@ capture_output = int(os.environ.get("GUNICORN_CAPTURE_OUTPUT", "1")) > 0
 worker_tmp_dir = os.environ.get("GUNICORN_WORKER_TMP_DIR", "/dev/shm")
 
 if threads > 1:
-    logging.warning("[CONFIG WARNING] Number of Threads is greater then one, this can cause unexpected behaviour. This application is not thread-safe")
+    logging.warning("[CONFIG WARNING] Number of threads is greater then one, this can cause unexpected behaviour. This application is not thread-safe")
 
 if loglevel == "debug":
     logging.warning("[CONFIG WARNING] Loglevel is set above warning, do not use this in production environments")
