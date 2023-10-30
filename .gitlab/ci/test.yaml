@@ -281,41 +281,11 @@ core-service-test:
   variables:
     DIRECTORY: services/core_service
 
-huishoudboekje-service-test:
-  <<: *only-on-branches
-  extends: .Service Test
-  variables:
-    DIRECTORY: services/huishoudboekje_service
-
-organisatie-service-test:
-  <<: *only-on-branches
-  extends: .Service Test
-  variables:
-    DIRECTORY: services/organisatie_service
-
-bank-transactie-service-test:
-  <<: *only-on-branches
-  extends: .Service Test
-  variables:
-    DIRECTORY: services/bank_transactie_service
-
 rapportage-service-test:
   <<: *only-on-branches
   extends: .Service Test
   variables:
     DIRECTORY: services/rapportage_service
-
-grootboek-service-test:
-  <<: *only-on-branches
-  extends: .Service Test
-  variables:
-    DIRECTORY: services/grootboek_service
-
-log-service-test:
-  <<: *only-on-branches
-  extends: .Service Test
-  variables:
-    DIRECTORY: services/log_service
 
 changeset:
   <<: *only-on-branches
