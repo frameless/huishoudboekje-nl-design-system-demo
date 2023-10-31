@@ -55,9 +55,11 @@ def create_app(config_name='huishoudboekje_service.config.Config'):
     @app.cli.command("seed-db-with-test-data")
     def seed_database():
         if app.config["SEED_TESTDATA"]:
-            seed_database_with_test_data('huishoudboekje.sql', app.config["SQLALCHEMY_DATABASE_URI"])
+            seed_database_with_test_data(
+                'huishoudboekje.sql', app.config["SQLALCHEMY_DATABASE_URI"])
         else:
-            logging.warning("Did not seed the db with test data, make sure to set the SEED_TESTDATA env variable")
+            logging.warning(
+                "Did not seed the db with test data, make sure to set the SEED_TESTDATA env variable")
 
     add_statsd_metrics(app)
 
@@ -77,7 +79,8 @@ def create_app(config_name='huishoudboekje_service.config.Config'):
         {"path": "/burgers/transacties/ids",
             "view": BurgerTransactieIdsView, "name": "burger_transactie_ids"},
         {"path": "/afspraken", "view": AfspraakView, "name": "afspraak_view"},
-        {"path": "/afspraken/filter", "view": AfsprakenFilterView, "name": "afspraak_filter_view"},
+        {"path": "/afspraken/filter", "view": AfsprakenFilterView,
+            "name": "afspraak_filter_view"},
         {"path": "/afspraken/<object_id>", "view": AfspraakView,
             "name": "afspraak_detail_view"},
         {"path": "/rekeningen", "view": RekeningView, "name": "rekening_view"},

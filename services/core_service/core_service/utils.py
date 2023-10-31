@@ -1,10 +1,12 @@
 """ Utility functions """
 import datetime
+import json
 import logging
 from datetime import date
 
 from flask import make_response
 from sqlalchemy.exc import OperationalError
+from sqlalchemy import inspect
 from werkzeug.exceptions import abort
 
 
@@ -12,7 +14,7 @@ def row2dict(result):
     if hasattr(result, "keys"):
         columns = result.keys()
     else:
-        columns = result.__table__.columns.keys()
+        columns = inspect(result).mapper.columns.keys()
     new_result = {}
     for c in columns:
         data = getattr(result, c)
@@ -26,7 +28,8 @@ def row2dict(result):
 def handle_operational_error(error: OperationalError):
     logging.exception("Could not connect to the database")
     logging.debug(error)
-    abort(make_response({"errors": ["Could not connect to the database"]}, 500))
+    abort(make_response(
+        {"errors": ["Could not connect to the database"]}, 500))
 
 
 def one_or_none(query):
@@ -42,18 +45,21 @@ def get_all(query):
     except OperationalError as error:
         handle_operational_error(error)
 
-def valid_date_range(startDate,endDate):
+
+def valid_date_range(startDate, endDate):
     '''Checks if both dates in the range are valid and that the end date is after start date'''
     try:
-        return  string_to_date(endDate) > string_to_date(startDate)
+        return string_to_date(endDate) > string_to_date(startDate)
     except:
         return False
-    
+
+
 def valid_date(date):
     try:
-        return  string_to_date(date)
+        return string_to_date(date)
     except:
         return False
+
 
 def string_to_date(date):
     dateformat = '%Y-%m-%d'
