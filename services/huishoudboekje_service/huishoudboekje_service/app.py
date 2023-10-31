@@ -50,7 +50,6 @@ def create_app(config_name='huishoudboekje_service.config.Config'):
     logging.getLogger('werkzeug').setLevel(app.config["LOG_LEVEL"])
 
     db.init_app(app)
-    logging.warn("got to migrate")
     Migrate(app, db)
 
     @app.cli.command("seed-db-with-test-data")
