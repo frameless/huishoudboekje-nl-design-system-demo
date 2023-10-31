@@ -17,15 +17,20 @@ class CamtParser():
     _name = "account.statement.import.camt.parser"
     _description = "Account Bank Statement Import CAMT parser"
 
-    def parse_amount(self, ns, node):
+    def parse_amount(self, ns, node, parent_node = None):
         """Parse element that contains Amount and CreditDebitIndicator."""
         if node is None:
             return 0.0
         sign = 1
         amount = 0.0
         sign_node = node.findall("ns:CdtDbtInd", namespaces={"ns": ns})
+        
         if not sign_node:
-            sign_node = node.findall("../../ns:CdtDbtInd", namespaces={"ns": ns})
+            sign_node = node.findall("./ns:CdtDbtInd", namespaces={"ns": ns})
+
+        if parent_node and not sign_node:
+            sign_node = parent_node.findall("./ns:CdtDbtInd", namespaces={"ns": ns})
+
         if sign_node and sign_node[0].text == "DBIT":
             sign = -1
         amount_node = node.findall("ns:Amt", namespaces={"ns": ns})
@@ -74,7 +79,7 @@ class CamtParser():
                     obj[attr_name] = attr_value
                 break
 
-    def parse_transaction_details(self, ns, node, transaction):
+    def parse_transaction_details(self, ns, node, transaction, parent_node):
         """Parse TxDtls node."""
         # message
         self.add_value_from_node(
@@ -111,16 +116,18 @@ class CamtParser():
         self.add_value_from_node(ns,node,["./ns:Refs/ns:EndToEndId",],transaction,"ref",join_str="\n", add_to_original=True)
         self.add_value_from_node(ns,node,["./ns:Refs/ns:MndtId",],transaction,"ref",join_str="\n", add_to_original=True)
 
-        amount = self.parse_amount(ns, node)
+        amount = self.parse_amount(ns, node, parent_node)
 
         if amount != 0.0:
             transaction["amount"] = amount
             
         # remote party values
         party_type = "Dbtr"
-        party_type_node = node.findall("../../ns:CdtDbtInd", namespaces={"ns": ns})
+        party_type_node = parent_node.findall("./ns:CdtDbtInd", namespaces={"ns": ns})
+
         if party_type_node and party_type_node[0].text != "CRDT":
             party_type = "Cdtr"
+
         party_node = node.findall(
             f"./ns:RltdPties/ns:{party_type}", namespaces={"ns": ns}
         )
@@ -199,7 +206,7 @@ class CamtParser():
 
         for detail_node in details_nodes:
             transaction = transaction_base.copy()
-            self.parse_transaction_details(ns, detail_node, transaction)
+            self.parse_transaction_details(ns, detail_node, transaction, node)
             yield transaction
 
     def get_balance_amounts(self, ns, node):
