@@ -65,22 +65,29 @@ const server = (prefix: string = "/auth") => {
 	// Use the auth router on /auth
 	app.use(prefix, authRouter);
 
-	// express-openid-connect automatically refreshes tokens when needed
-	// so there is no need to do it here
 	authRouter.get("/me", async (req, res) => {
 		try {
 			// Check with the OIDC provider if the user is authenticated.
 			if (req.oidc.isAuthenticated()) {
-				const stringJWT = req.oidc.accessToken?.access_token
+				let accessToken = req.oidc.accessToken
 				log.debug(new Date().toISOString(), "OIDC provider found an authenticated user");
-
 				// verify the token here before creating a new session because otherwise an app-token will be created that's not valid
-				return sessionHelper.verifyToken(stringJWT).then(async (result) => {
+				if (accessToken == null || accessToken == undefined) {
+					return res.status(401).json({ok: false, message: "Unauthorized: AccessToken not found."});
+				}
+				// refresh_token should be automatically stored by express-openid-connect in the session
+				// This also means that this app can only run ONE INSTANCE EVER. if there are more then 1 instance, the session should be properly shared
+				// or information regarding refresh_rokens should be shared between sessions/instances. 
+				if (accessToken.isExpired()) {
+					accessToken = await accessToken.refresh()
+				}
+				const tokenStr = accessToken.access_token
+				return sessionHelper.verifyToken(tokenStr).then(async (result) => {
 					if (result) {
-						const user = sessionHelper.getUserInfoFromToken(stringJWT)
+						const user = sessionHelper.getUserInfoFromToken(tokenStr)
 						log.debug(new Date().toISOString(), "User found");
 
-						sessionHelper.createSession(res, stringJWT);
+						sessionHelper.createSession(res, tokenStr);
 						return res.json({
 							ok: true,
 							user,
