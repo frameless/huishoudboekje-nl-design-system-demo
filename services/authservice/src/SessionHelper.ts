@@ -1,4 +1,3 @@
-import {AccessToken} from "express-openid-connect";
 import jwt from "jsonwebtoken";
 import {Algorithm} from "jsonwebtoken";
 import jwksClient from 'jwks-rsa'
