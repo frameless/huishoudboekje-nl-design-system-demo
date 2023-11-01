@@ -26,10 +26,11 @@ const validator2 = zod.object({
 	postadresId: zod.string().min(1),
 });
 
+const inputRegex = /^(-?\d+(\.\d{2}))|(-?\d+(\,\d{2}))$/;
 const validator = zod.object({
 	type: zod.enum(["burger", "organisatie"]),
 	bedrag: (zod.number().min(0).finite() && zod.string().refine((value) => {
-			return /^(-?\d+(\.\d{2}))|(-?\d+(\,\d{2}))$/.test(value) && !value.includes('e');
+			return inputRegex.test(value) && !value.includes('e');
 		})
 	),
 	rubriekId: zod.number().nonnegative(),
