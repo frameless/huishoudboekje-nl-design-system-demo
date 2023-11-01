@@ -28,9 +28,12 @@ const validator2 = zod.object({
 
 const validator = zod.object({
 	type: zod.enum(["burger", "organisatie"]),
-	bedrag: zod.number().min(0),
+	bedrag: (zod.number().min(0).finite() && zod.string().refine((value) => {
+			return /^(-?\d+(\.\d{2}))|(-?\d+(\,\d{2}))$/.test(value) && !value.includes('e');
+		})
+	),
 	rubriekId: zod.number().nonnegative(),
-	omschrijving: zod.string().min(1) && zod.string().max(140),
+	omschrijving: zod.string().min(1).max(140),
 	organisatieId: zod.number().nonnegative().optional(),
 	afdelingId: zod.number().nonnegative().optional(),
 	postadresId: zod.string().min(1).optional(),
