@@ -369,7 +369,7 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, or
 									</FormControl>
 
 									<FormControl flex={1} isInvalid={!isFieldValid("omschrijving")} isRequired={true}>
-										<FormLabel>{t("afspraken.omschrijving")} <small>({t("afspraken.maxTekens")})</small></FormLabel>
+										<FormLabel>{t("afspraken.omschrijving")}</FormLabel>
 										<Input
 											autoComplete="no"
 											aria-autocomplete="none"
