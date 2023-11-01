@@ -30,7 +30,7 @@ const validator = zod.object({
 	type: zod.enum(["burger", "organisatie"]),
 	bedrag: zod.number().min(0).finite(),
 	rubriekId: zod.number().nonnegative(),
-	omschrijving: zod.string().min(1).max(140),
+	omschrijving: zod.string().min(1).max(140, {message: 'Gebruik maximaal 140 tekens.'}),
 	organisatieId: zod.number().nonnegative().optional(),
 	afdelingId: zod.number().nonnegative().optional(),
 	postadresId: zod.string().min(1).optional(),
@@ -375,7 +375,7 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, or
 											aria-autocomplete="none"
 											value={form.omschrijving || ""}
 											onChange={e => updateForm("omschrijving", e.target.value)}
-											maxLength={140}
+											maxLength={141}
 										/>
 										<FormErrorMessage>{t("afspraakDetailView.invalidOmschrijvingError")}</FormErrorMessage>
 									</FormControl>
