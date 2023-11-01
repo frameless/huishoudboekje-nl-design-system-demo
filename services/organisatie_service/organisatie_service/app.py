@@ -27,7 +27,7 @@ def create_app(config_name='organisatie_service.config.Config'):
 
     # Werkzeug has their own logger which outputs info level URL calls.
     # This can also cause parameters that are normally hidden to be logged
-    logging.getLogger('werkzeug').setLevel(app.config["LOG_LEVEL"])
+    logging.getLogger('werkzeug').setLevel("WARNING")
 
     db.init_app(app)
     Migrate(app, db)
@@ -35,9 +35,11 @@ def create_app(config_name='organisatie_service.config.Config'):
     @app.cli.command("seed-db-with-test-data")
     def seed_database():
         if app.config["SEED_TESTDATA"]:
-            seed_database_with_test_data('organisatie.sql', app.config["SQLALCHEMY_DATABASE_URI"])
+            seed_database_with_test_data(
+                'organisatie.sql', app.config["SQLALCHEMY_DATABASE_URI"])
         else:
-            logging.warning("Did not seed the db with test data, make sure to set the SEED_TESTDATA env variable")
+            logging.warning(
+                "Did not seed the db with test data, make sure to set the SEED_TESTDATA env variable")
 
     add_statsd_metrics(app)
 
@@ -49,7 +51,8 @@ def create_app(config_name='organisatie_service.config.Config'):
         {"path": "/organisaties", "view": OrganisatieView, "name": "organisatie_view"},
         {"path": "/organisaties/<object_id>", "view": OrganisatieView,
             "name": "organisatie_detail_view"},
-        {"path": "/organisaties/rekeningen", "view": OrganisatieRekeningenView, "name": "organisatie_rekeningen_view"},
+        {"path": "/organisaties/rekeningen", "view": OrganisatieRekeningenView,
+            "name": "organisatie_rekeningen_view"},
         {"path": "/afdelingen", "view": AfdelingView, "name": "afdeling_view"},
         {"path": "/afdelingen/<object_id>", "view": AfdelingView,
             "name": "afdeling_detail_view"},

@@ -29,7 +29,7 @@ def create_app(config_name='rapportage_service.config.Config', dependency_inject
 
     # Werkzeug has their own logger which outputs info level URL calls.
     # This can also cause parameters that are normally hidden to be logged
-    logging.getLogger('werkzeug').setLevel(app.config["LOG_LEVEL"])
+    logging.getLogger('werkzeug').setLevel("WARNING")
 
     add_statsd_metrics(app)
 
@@ -51,8 +51,7 @@ def create_app(config_name='rapportage_service.config.Config', dependency_inject
             strict_slashes=False
         )
 
-
-    app.before_first_request_funcs = [] #added this to make test work
+    app.before_first_request_funcs = []  # added this to make test work
 
     # Initialize Flask-Injector. This needs to be run after you attached all
     # views, handlers, context processors and template globals.
