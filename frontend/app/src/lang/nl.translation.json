@@ -386,7 +386,7 @@
   "afspraakDetailView": {
     "invalidBetaalrichtingError": "Kies een betaalrichting.",
     "invalidRubriekError": "Kies een rubriek.",
-    "invalidOmschrijvingError": "Vul een omschrijving in.",
+    "invalidOmschrijvingError": "Vul een geldige omschrijving in.",
     "invalidBedragError": "Vul een geldig bedrag in.",
     "invalidValidFromError": "Selecteer een geldige datum",
     "title": "Afspraak bekijken",
