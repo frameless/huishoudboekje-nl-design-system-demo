@@ -30,7 +30,7 @@ const validator = zod.object({
 	type: zod.enum(["burger", "organisatie"]),
 	bedrag: zod.number().min(0),
 	rubriekId: zod.number().nonnegative(),
-	omschrijving: zod.string().min(1),
+	omschrijving: zod.string().min(1) && zod.string().max(140),
 	organisatieId: zod.number().nonnegative().optional(),
 	afdelingId: zod.number().nonnegative().optional(),
 	postadresId: zod.string().min(1).optional(),
@@ -370,10 +370,10 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, or
 
 									<FormControl flex={1} isInvalid={!isFieldValid("omschrijving")} isRequired={true}>
 										<FormLabel>{t("afspraken.omschrijving")} <small>({t("afspraken.maxTekens")})</small></FormLabel>
-										<Input 
-											autoComplete="no" 
-											aria-autocomplete="none" 
-											value={form.omschrijving || ""} 
+										<Input
+											autoComplete="no"
+											aria-autocomplete="none"
+											value={form.omschrijving || ""}
 											onChange={e => updateForm("omschrijving", e.target.value)}
 											maxLength={140}
 										/>
