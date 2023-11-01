@@ -23,20 +23,21 @@ def upgrade():
         sa.Column(
             'uuid',
             UUID(),
-            unique = True,
-            index = True
+            unique=True,
+            index=True
         )
     )
 
     connection = op.get_bind()
-    content = connection.execute(f"SELECT id FROM gebruikersactiviteiten")
+    content = connection.execute(
+        sa.text(f"SELECT id FROM gebruikersactiviteiten"))
 
     for row in content:
-        connection.execute(
-            f"UPDATE gebruikersactiviteiten SET uuid='{str(GEN_UUID.uuid4())}' WHERE id = '{row['id']}'")
+        connection.execute(sa.text(
+            f"UPDATE gebruikersactiviteiten SET uuid='{str(GEN_UUID.uuid4())}' WHERE id = '{row['id']}'"))
 
-    op.alter_column('gebruikersactiviteiten', 'uuid', nullable=False, server_default=sa.text("'{}'".format(str(GEN_UUID.uuid4()))))
-
+    op.alter_column('gebruikersactiviteiten', 'uuid', nullable=False,
+                    server_default=sa.text("'{}'".format(str(GEN_UUID.uuid4()))))
 
 
 def downgrade():

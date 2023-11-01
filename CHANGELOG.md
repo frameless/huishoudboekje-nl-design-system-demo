@@ -1,5 +1,17 @@
 # Huishoudboekje Changelog
 
+## 1.10.8
+
+Deze versie omvat een snelle weergave van details van banktransacties en een meting van verzoeken en verbindingen met de database.
+
+### Patch Changes
+
+- d6bf4faf3: Make tooltip for banktransaction details in transaction view
+- 25c1ced00: Added metrics update from 1.9.11
+- 6ad46ba7e: Made the gunicorn server better configurable in the services (not the backend).
+
+  ⚠️⚠️⚠️ GUNICORN_THREADS should be 1 (new default), there are new ENV variables added but its recommended to use the default values. If you want to changes some settings see the gunicorn.conf.py and the gunicorn documentation.
+
 ## 1.10.7
 
 Deze versie omvat een verbetering voor het versturen van SqlAlchemy metrics.

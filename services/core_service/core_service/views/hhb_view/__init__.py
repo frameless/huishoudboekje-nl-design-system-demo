@@ -69,7 +69,10 @@ class HHBView(MethodView):
             ids = request.json.get(name)
 
         if ids:
-            cb(ids)
+            if any(not id.isdigit() for id in ids):
+                cb(ids)
+            else:
+                cb(list(map(int, ids)))
 
     def get(self, **kwargs):
         """ GET /<view_path>/(<int:object_id>)?(columns=..,..,..)&(filter_ids=..,..,..))
