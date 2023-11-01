@@ -373,7 +373,8 @@
     "showInActive": "Beëindigde afspraken",
     "tegenpartij": "Tegenpartij",
     "nextBooking": "Verwachte betaling",
-    "noResults": "Er zijn geen afspraken gevonden."
+    "noResults": "Er zijn geen afspraken gevonden.",
+    "maxTekens": "Max. 140 tekens"
   },
   "organisatie": "Organisatie",
   "burger": "Burger",
@@ -385,7 +386,7 @@
   "afspraakDetailView": {
     "invalidBetaalrichtingError": "Kies een betaalrichting.",
     "invalidRubriekError": "Kies een rubriek.",
-    "invalidOmschrijvingError": "Vul een omschrijving in.",
+    "invalidOmschrijvingError": "Vul een geldige omschrijving in van maximaal 140 tekens.",
     "invalidBedragError": "Vul een geldig bedrag in.",
     "invalidValidFromError": "Selecteer een geldige datum",
     "title": "Afspraak bekijken",
