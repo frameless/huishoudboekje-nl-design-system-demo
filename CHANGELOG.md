@@ -2,6 +2,8 @@
 
 ## 1.10.9
 
+Deze versie omvat een oplossing voor een probleem met het inlezen van een bestand met formaat CAMT.053.
+
 ### Patch Changes
 
 - cc1da9042: iban camt fix
