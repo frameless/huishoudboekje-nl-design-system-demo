@@ -47,7 +47,7 @@ def create_app(config_name='huishoudboekje_service.config.Config'):
 
     # Werkzeug has their own logger which outputs info level URL calls.
     # This can also cause parameters that are normally hidden to be logged
-    logging.getLogger('werkzeug').setLevel(app.config["LOG_LEVEL"])
+    logging.getLogger('werkzeug').setLevel("WARNING")
 
     db.init_app(app)
     Migrate(app, db)

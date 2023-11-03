@@ -10,7 +10,7 @@ setup(
     description='Rapportage Service',
     install_requires=[
         "Flask>=2.3.1,<3",
-        "psycopg>=3.1.12,<4",
+        "psycopg[binary,pool]>=3.1.12,<4",
         "psycopg2-binary>=2.9.6,<3",
         "Flask-Migrate>=3.1.0,<4",
         "jsonschema>=4.15.0,<5",

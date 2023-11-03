@@ -1,5 +1,5 @@
 """ MethodView for /customerstatementmessages/ path """
-from core_service.utils import row2dict, valid_date
+from core_service.utils import row2dict, string_to_date, valid_date
 from flask import request, abort, make_response
 
 from models.bank_transaction import BankTransaction
@@ -36,7 +36,7 @@ class BanktransactionSumView(HHBView):
 
         query = BankTransaction.query\
                     .with_entities(func.coalesce(func.sum(BankTransaction.bedrag), 0).label("sum"))\
-                    .filter(BankTransaction.transactie_datum <= date)\
+                    .filter(BankTransaction.transactie_datum <= string_to_date(date))\
                     .filter(BankTransaction.is_geboekt == True)
         
         if ids and len(ids) > 0:

@@ -1,4 +1,4 @@
-from core_service.utils import valid_date_range, row2dict
+from core_service.utils import valid_date_range, string_to_date, row2dict
 from bank_transactie_service.repositories.BanktransactionRepository import BanktransactionRepository
 
 
@@ -13,7 +13,7 @@ class BanktransactionRangeController():
             return "Invalid date range", 400
             
         repository = BanktransactionRepository()
-        result_list = [row2dict(row) for row in repository.get_banktransactions_in_range(ids,startDate,endDate)]
+        result_list = [row2dict(row) for row in repository.get_banktransactions_in_range(ids,string_to_date(startDate),string_to_date(endDate))]
         return {"data": result_list}, 200
 
 

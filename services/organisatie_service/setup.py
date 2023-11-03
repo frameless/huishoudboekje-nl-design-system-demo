@@ -11,7 +11,7 @@ setup(
     install_requires=[
         "Flask>=2.3.1,<3",
         "SQLAlchemy>=2.0.22,<3",
-        "psycopg>=3.1.12,<4",
+        "psycopg[binary,pool]>=3.1.12,<4",
         "psycopg2-binary>=2.9.6,<3",
         "Flask-SQLAlchemy>=3.1.0",
         "Flask-Migrate>=4.0.5,<5",

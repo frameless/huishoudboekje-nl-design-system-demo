@@ -6,13 +6,16 @@ from datetime import date
 
 from flask import make_response
 from sqlalchemy.exc import OperationalError
-from sqlalchemy import inspect
+from sqlalchemy import inspect, Row
 from werkzeug.exceptions import abort
 
 
 def row2dict(result):
+
     if hasattr(result, "keys"):
         columns = result.keys()
+    elif type(result) == Row:
+        return result._asdict()
     else:
         columns = inspect(result).mapper.columns.keys()
     new_result = {}
