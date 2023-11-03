@@ -1,5 +1,16 @@
 # Huishoudboekje Changelog
 
+## 1.10.9
+
+Deze versie omvat een oplossing voor een probleem met het inlezen van een bestand met formaat CAMT.053.
+
+### Patch Changes
+
+- cc1da9042: iban camt fix
+- 7e2055d51: manually refresh tokens when needed because the library does not handle it properly, only after throwing an error
+- 2f8bfbe88: Updated all database related packages to their newest major version
+- 0b0563852: Check length of betalingsomschrijving
+
 ## 1.10.8
 
 Deze versie omvat een snelle weergave van details van banktransacties en een meting van verzoeken en verbindingen met de database.
