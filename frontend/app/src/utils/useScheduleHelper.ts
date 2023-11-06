@@ -92,7 +92,7 @@ const useScheduleHelper = (schedule?: Schedule | Betaalinstructie) => {
 
 			const {byDay, byMonth = [], byMonthDay = [], startDate = "", endDate = ""} = schedule;
 			let upcoming = new Date();
-			let today = new Date()
+			const today = new Date()
 			
 			today.setHours(0, 0, 0, 0)
 
