@@ -84,7 +84,7 @@ const useScheduleHelper = (schedule?: Schedule | Betaalinstructie) => {
 			return result;
 		},
 		nextScheduled: (): string => {
-			let result = t("schedule.n/a");
+			let result = "";
 
 			if (!schedule) {
 				return result;
