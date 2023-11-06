@@ -114,16 +114,12 @@ const useScheduleHelper = (schedule?: Schedule | Betaalinstructie) => {
 
 			if (byMonth !== null && byMonth.length > 0 && byMonthDay.length > 0 && startDate !== endDate) {
 				const futureDays = byMonthDay.sort().filter(d => upcoming.getDate() <= d);
-				const futureDay = futureDays.length ? futureDays[0] : byMonthDay[0];
-				let futureWorkingMonth = upcoming.getMonth();
-
-				if (futureDays.length === 0) {
-					futureWorkingMonth = futureWorkingMonth + 1 > 11 ? 0 : futureWorkingMonth + 1;
-				}
-
+				const futureWorkingMonth = futureDays.length === 0 ? (upcoming.getMonth() + 1) % 12 : upcoming.getMonth();
 				const futureMonths = byMonth.map(d => d - 1).filter(d => futureWorkingMonth <= d);
-				const futureMonth = futureMonths.length ? futureMonths[0] : byMonth[0] - 1;
+
 				const futureYear = futureMonths.length === 0 ? upcoming.getFullYear() + 1 : upcoming.getFullYear();
+				const futureMonth = futureMonths.length ? futureMonths[0] : byMonth[0] - 1;
+				const futureDay = futureDays.length ? futureDays[0] : byMonthDay[0];
 
 				upcoming = new Date(futureYear, futureMonth, futureDay);
 				upcoming.setHours(0, 0, 0, 0);
