@@ -94,6 +94,7 @@ const useScheduleHelper = (schedule?: Schedule | Betaalinstructie) => {
 			const today = new Date();
 			let upcoming = new Date();
 
+			upcoming.setHours(0, 0, 0, 0);
 			today.setHours(0, 0, 0, 0);
 
 			if (byDay && byDay.length > 0) {
@@ -123,17 +124,18 @@ const useScheduleHelper = (schedule?: Schedule | Betaalinstructie) => {
 
 				const futureYear = upcoming.getFullYear();
 				upcoming = new Date(futureYear, futureMonth, futureDay);
+				upcoming.setHours(0, 0, 0, 0);
 
 				if (upcoming.getTime() >= d(startDate, "YYYY-MM-DD").toDate().getTime()
-					&& upcoming.getTime() >= new Date().getTime()
-					&& (endDate !== undefined || endDate === null || upcoming.getTime() <= d(endDate, "YYYY-MM-DD").toDate().getTime())
+					&& upcoming.getTime() >= today.getTime()
+					&& (upcoming.getTime() <= d(endDate, "YYYY-MM-DD").toDate().getTime())
 				) {
 					result = upcoming.toLocaleDateString("nl-NL", {year: "numeric", month: "2-digit", day: "2-digit"});
 				}
 			}
 
 			if (startDate === endDate
-				|| d(startDate, "YYYY-MM-DD").toDate().getTime() >= today.getTime()
+				&& d(startDate, "YYYY-MM-DD").toDate().getTime() >= today.getTime()
 			) {
 				result = d(startDate, "YYYY-MM-DD").format("DD-MM-YYYY"); 
 			}
