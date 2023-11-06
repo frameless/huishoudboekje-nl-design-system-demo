@@ -9,8 +9,6 @@ const updateVersions = () => {
 
 	const npmPackages = [
 		resolve(__dirname, "..", "frontend", "app"),
-		resolve(__dirname, "..", "mijn-omgeving"),
-		resolve(__dirname, "..", "backend-burgers"),
 	];
 
 	npmPackages.forEach(directory => {
