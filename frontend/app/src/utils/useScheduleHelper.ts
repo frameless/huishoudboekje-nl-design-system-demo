@@ -127,7 +127,7 @@ const useScheduleHelper = (schedule?: Schedule | Betaalinstructie) => {
 
 				if (upcoming.getTime() >= d(startDate, "YYYY-MM-DD").toDate().getTime()
 					&& upcoming.getTime() >= today.getTime()
-					&& upcoming.getTime() <= d(endDate, "YYYY-MM-DD").toDate().getTime()
+					&& (endDate === null || upcoming.getTime() <= d(endDate, "YYYY-MM-DD").toDate().getTime())
 				) {
 					result = upcoming.toLocaleDateString(
 						"nl-NL",
