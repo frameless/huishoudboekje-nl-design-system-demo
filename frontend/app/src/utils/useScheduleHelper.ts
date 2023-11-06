@@ -104,7 +104,10 @@ const useScheduleHelper = (schedule?: Schedule | Betaalinstructie) => {
 
 				upcoming.setDate(upcoming.getDate() + (upcomingDay - upcoming.getDay()));
 
-				result = upcoming.toLocaleDateString("nl-NL", {year: "numeric", month: "2-digit", day: "2-digit"});
+				result = upcoming.toLocaleDateString(
+					"nl-NL",
+					{year: "numeric", month: "2-digit", day: "2-digit"}
+				);
 			}
 
 			if (byMonth !== null && byMonth.length > 0 && byMonthDay.length > 0 && startDate !== endDate) {
@@ -117,20 +120,19 @@ const useScheduleHelper = (schedule?: Schedule | Betaalinstructie) => {
 
 				const futureMonths = byMonth.map(d => d - 1).filter(d => upcoming.getMonth() <= d);
 				const futureMonth = futureMonths.length ? futureMonths[0] : byMonth[0] - 1;
+				const futureYear = futureMonths.length === 0 ? upcoming.getFullYear() + 1 : upcoming.getFullYear();
 
-				if (futureMonths.length === 0) {
-					upcoming.setFullYear(upcoming.getFullYear() + 1);
-				}
-
-				const futureYear = upcoming.getFullYear();
 				upcoming = new Date(futureYear, futureMonth, futureDay);
 				upcoming.setHours(0, 0, 0, 0);
 
 				if (upcoming.getTime() >= d(startDate, "YYYY-MM-DD").toDate().getTime()
 					&& upcoming.getTime() >= today.getTime()
-					&& (upcoming.getTime() <= d(endDate, "YYYY-MM-DD").toDate().getTime())
+					&& upcoming.getTime() <= d(endDate, "YYYY-MM-DD").toDate().getTime()
 				) {
-					result = upcoming.toLocaleDateString("nl-NL", {year: "numeric", month: "2-digit", day: "2-digit"});
+					result = upcoming.toLocaleDateString(
+						"nl-NL",
+						{year: "numeric", month: "2-digit", day: "2-digit"}
+					);
 				}
 			}
 
