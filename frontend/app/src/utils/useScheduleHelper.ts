@@ -115,12 +115,13 @@ const useScheduleHelper = (schedule?: Schedule | Betaalinstructie) => {
 			if (byMonth !== null && byMonth.length > 0 && byMonthDay.length > 0 && startDate !== endDate) {
 				const futureDays = byMonthDay.sort().filter(d => upcoming.getDate() <= d);
 				const futureDay = futureDays.length ? futureDays[0] : byMonthDay[0];
+				let futureWorkingMonth = upcoming.getMonth();
 
 				if (futureDays.length === 0) {
-					upcoming.setMonth(upcoming.getMonth() + 1 > 11 ? 0 : upcoming.getMonth() + 1);
+					futureWorkingMonth = futureWorkingMonth + 1 > 11 ? 0 : futureWorkingMonth + 1;
 				}
 
-				const futureMonths = byMonth.map(d => d - 1).filter(d => upcoming.getMonth() <= d);
+				const futureMonths = byMonth.map(d => d - 1).filter(d => futureWorkingMonth <= d);
 				const futureMonth = futureMonths.length ? futureMonths[0] : byMonth[0] - 1;
 				const futureYear = futureMonths.length === 0 ? upcoming.getFullYear() + 1 : upcoming.getFullYear();
 
