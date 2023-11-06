@@ -31,8 +31,6 @@
         DOCKERATTRIBUTES: "./frontend"
       - NAME: backend
         DOCKERATTRIBUTES: "./backend"
-      - NAME: backendburgers
-        DOCKERATTRIBUTES: "./backend-burgers"
       - NAME: unleashservice
         DOCKERATTRIBUTES: "./services/unleashservice"
       - NAME: postadressenservice

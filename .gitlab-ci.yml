@@ -1,6 +1,5 @@
 stages:
 - build
-- ship
 - deploy
 - test
 - security
@@ -17,7 +16,6 @@ variables:
 
 include:
 - "/.gitlab/ci/build.yaml"
-- "/.gitlab/ci/ship.yaml"
 - "/.gitlab/ci/deploy.yaml"
 - "/.gitlab/ci/test.yaml"
 - "/.gitlab/ci/security.yaml"

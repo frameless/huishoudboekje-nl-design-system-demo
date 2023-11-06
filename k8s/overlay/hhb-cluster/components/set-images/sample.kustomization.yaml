@@ -4,9 +4,6 @@ images:
 - name: backend
   newName: ${IMAGE_REGISTRY}/backend
   newTag: ${IMAGE_TAG}
-- name: backendburgers
-  newName: ${IMAGE_REGISTRY}/backendburgers
-  newTag: ${IMAGE_TAG}
 - name: banktransactieservice
   newName: ${IMAGE_REGISTRY}/banktransactieservice
   newTag: ${IMAGE_TAG}

@@ -7,7 +7,6 @@ set -e
 # Build docker images for all components
 docker build -t $CI_REGISTRY_IMAGE/frontend:$IMAGE_TAG               --build-arg "DOCKER_PROXY=$DOCKER_PROXY"   ./frontend
 docker build -t $CI_REGISTRY_IMAGE/backend:$IMAGE_TAG                --build-arg "DOCKER_PROXY=$DOCKER_PROXY"   ./backend
-docker build -t $CI_REGISTRY_IMAGE/backendburgers:$IMAGE_TAG         --build-arg "DOCKER_PROXY=$DOCKER_PROXY"   ./backend-burgers
 docker build -t $CI_REGISTRY_IMAGE/unleashservice:$IMAGE_TAG         --build-arg "DOCKER_PROXY=$DOCKER_PROXY"   ./services/unleashservice
 docker build -t $CI_REGISTRY_IMAGE/postadressenservice:$IMAGE_TAG    --build-arg "DOCKER_PROXY=$DOCKER_PROXY"   ./services/postadressenservice
 docker build -t $CI_REGISTRY_IMAGE/alarmenservice:$IMAGE_TAG         --build-arg "DOCKER_PROXY=$DOCKER_PROXY"   ./services/alarmenservice
@@ -23,7 +22,6 @@ docker build -t $CI_REGISTRY_IMAGE/rapportageservice:$IMAGE_TAG      --build-arg
 # Push all docker images to the registry
 docker push $CI_REGISTRY_IMAGE/frontend:$IMAGE_TAG
 docker push $CI_REGISTRY_IMAGE/backend:$IMAGE_TAG
-docker push $CI_REGISTRY_IMAGE/backendburgers:$IMAGE_TAG
 docker push $CI_REGISTRY_IMAGE/unleashservice:$IMAGE_TAG
 docker push $CI_REGISTRY_IMAGE/postadressenservice:$IMAGE_TAG
 docker push $CI_REGISTRY_IMAGE/alarmenservice:$IMAGE_TAG
