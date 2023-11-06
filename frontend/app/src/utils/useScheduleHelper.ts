@@ -90,12 +90,15 @@ const useScheduleHelper = (schedule?: Schedule | Betaalinstructie) => {
 				return result;
 			}
 
-			const {byDay, byMonth = [], byMonthDay = [], startDate, endDate} = schedule;
+			const {byDay, byMonth = [], byMonthDay = [], startDate = "", endDate = ""} = schedule;
 			let upcoming = new Date();
+			let today = new Date()
+			
+			today.setHours(0, 0, 0, 0)
 
 			if (byDay && byDay.length > 0) {
 				const bySortedDays = byDay.map(d => parseInt(DayNumberOfWeek[String(d)])).sort();
-				const futureDays = bySortedDays.filter(d => upcoming.getDay() < d);
+				const futureDays = bySortedDays.filter(d => upcoming.getDay() <= d);
 				const upcomingDay = futureDays.length ? futureDays[0] : bySortedDays[0];
 
 				upcoming.setDate(upcoming.getDate() + (upcomingDay - upcoming.getDay()));
@@ -104,7 +107,7 @@ const useScheduleHelper = (schedule?: Schedule | Betaalinstructie) => {
 			}
 
 			if (byMonth !== null && byMonth.length > 0 && byMonthDay.length > 0 && startDate !== endDate) {
-				const futureDays = byMonthDay.sort().filter(d => upcoming.getDate() < d);
+				const futureDays = byMonthDay.sort().filter(d => upcoming.getDate() <= d);
 				const futureDay = futureDays.length ? futureDays[0] : byMonthDay[0];
 
 				if (futureDays.length === 0) {
@@ -129,10 +132,10 @@ const useScheduleHelper = (schedule?: Schedule | Betaalinstructie) => {
 				}
 			}
 
-			if (startDate === endDate
-				&& d(startDate, "YYYY-MM-DD").toDate().getTime() >= new Date().getTime()
+			if (startDate <= endDate
+				&& d(startDate, "YYYY-MM-DD").toDate().getTime() >= today.getTime()
 			) {
-				result = d(startDate, "YYYY-MM-DD").format("DD-MM-YYYY")
+				result = d(startDate, "YYYY-MM-DD").format("DD-MM-YYYY"); 
 			}
 
 			return result;
