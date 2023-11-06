@@ -91,10 +91,10 @@ const useScheduleHelper = (schedule?: Schedule | Betaalinstructie) => {
 			}
 
 			const {byDay, byMonth = [], byMonthDay = [], startDate = "", endDate = ""} = schedule;
+			const today = new Date();
 			let upcoming = new Date();
-			const today = new Date()
-			
-			today.setHours(0, 0, 0, 0)
+
+			today.setHours(0, 0, 0, 0);
 
 			if (byDay && byDay.length > 0) {
 				const bySortedDays = byDay.map(d => parseInt(DayNumberOfWeek[String(d)])).sort();
