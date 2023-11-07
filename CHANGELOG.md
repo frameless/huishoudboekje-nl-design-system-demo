@@ -2,7 +2,7 @@
 
 ## 1.10.11
 
-Versie 1.10.10 bevatten een verkeerde import, dat is nu verbeterd.
+Deze versie omvat een oplossing voor een probleem bij het importeren van een module.
 
 ### Patch Changes
 
