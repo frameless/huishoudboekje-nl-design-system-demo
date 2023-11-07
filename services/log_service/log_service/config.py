@@ -1,7 +1,7 @@
 import os
-from services.core_service.core_service.utils import get_pool_class
-basedir = os.path.abspath(os.path.dirname(__file__))
+from core_service.utils import get_pool_class
 
+basedir = os.path.abspath(os.path.dirname(__file__))
 
 class Config(object):
     LOG_LEVEL = os.getenv("LOG_LEVEL", "WARNING")
