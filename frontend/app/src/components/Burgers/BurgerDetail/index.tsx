@@ -38,7 +38,6 @@ const BurgerDetailPage = () => {
 		variables: {
 			id: parseInt(id),
 		},
-		fetchPolicy: "no-cache"
 	});
 	const [deleteHuishoudenBurger, $deleteHuishoudenBurger] = useDeleteHuishoudenBurgerMutation({
 		refetchQueries: [
