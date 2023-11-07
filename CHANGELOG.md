@@ -1,5 +1,13 @@
 # Huishoudboekje Changelog
 
+## 1.10.11
+
+Deze versie omvat een oplossing voor een probleem bij het importeren van een module.
+
+### Patch Changes
+
+- 4e20f7443: Fixed import
+
 ## 1.10.10
 
 Deze versie omvat een oplossing voor een probleem met psychopg3 en EnterpriseDB.
