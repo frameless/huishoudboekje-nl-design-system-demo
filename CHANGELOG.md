@@ -2,6 +2,8 @@
 
 ## 1.10.10
 
+Deze versie omvat een oplossing voor een probleem met psychopg3 en EnterpriseDB.
+
 ### Patch Changes
 
 - 4ba767353: Relocated mijn omgeving plugin and backend burgers
