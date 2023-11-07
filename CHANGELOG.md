@@ -1,5 +1,15 @@
 # Huishoudboekje Changelog
 
+## 1.10.10
+
+Deze versie omvat een oplossing voor een probleem met psychopg3 en EnterpriseDB.
+
+### Patch Changes
+
+- 4ba767353: Relocated mijn omgeving plugin and backend burgers
+- 8d4a2c436: Only use psychopg2
+- c01f8aaa2: Sqlalchemy database pool config can now be changed using ENV variables
+
 ## 1.10.9
 
 Deze versie omvat een oplossing voor een probleem met het inlezen van een bestand met formaat CAMT.053.
