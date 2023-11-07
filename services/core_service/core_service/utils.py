@@ -8,7 +8,21 @@ from flask import make_response
 from sqlalchemy.exc import OperationalError
 from sqlalchemy import inspect, Row
 from werkzeug.exceptions import abort
+from sqlalchemy.pool import NullPool, QueuePool, SingletonThreadPool
 
+def get_pool_class(poolclassstring):
+    if poolclassstring is None:
+        return poolclassstring
+    
+    poolclassstring = poolclassstring.lower()
+    if poolclassstring == "nullpool":
+        return NullPool
+    elif poolclassstring == "queuepool":
+        return QueuePool
+    elif poolclassstring == "singletonthreadpool":
+        return SingletonThreadPool
+    else:
+        return None
 
 def row2dict(result):
 
