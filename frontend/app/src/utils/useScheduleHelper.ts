@@ -101,10 +101,10 @@ const useScheduleHelper = (schedule?: Schedule | Betaalinstructie) => {
 
 			if (byDay && byDay.length > 0) {
 				const bySortedDays = byDay.map(d => parseInt(DayNumberOfWeek[String(d)])).sort();
-				const futureDays = bySortedDays.filter(d => upcoming.getDay() <= d);
+				const futureDays = bySortedDays.filter(d => today.getDay() <= d);
 				const upcomingDay = futureDays.length ? futureDays[0] : bySortedDays[0];
 
-				upcoming.setDate(upcoming.getDate() + (upcomingDay - upcoming.getDay()));
+				upcoming.setDate(today.getDate() + (upcomingDay - today.getDay()));
 
 				result = upcoming.toLocaleDateString(
 					"nl-NL",
