@@ -1,5 +1,5 @@
 import os
-from services.core_service.core_service.utils import get_pool_class
+from core_service.utils import get_pool_class
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
