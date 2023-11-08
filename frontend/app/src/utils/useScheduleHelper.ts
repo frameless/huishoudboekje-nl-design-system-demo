@@ -92,19 +92,16 @@ const useScheduleHelper = (schedule?: Schedule | Betaalinstructie) => {
 
 			const {byDay, byMonth = [], byMonthDay = [], startDate = "", endDate = ""} = schedule;
 			const today = new Date();
-			let upcoming = new Date();
-			
-			today.setHours(0, 0, 0, 0)
-
-			upcoming.setHours(0, 0, 0, 0);
 			today.setHours(0, 0, 0, 0);
+			let upcoming = d(startDate, "YYYY-MM-DD").toDate();
+			const todayOrUpcoming = upcoming.getTime() >= today.getTime() ? upcoming : today;
 
 			if (byDay && byDay.length > 0) {
 				const bySortedDays = byDay.map(d => parseInt(DayNumberOfWeek[String(d)])).sort();
-				const futureDays = bySortedDays.filter(d => today.getDay() <= d);
+				const futureDays = bySortedDays.filter(d => todayOrUpcoming.getDay() <= d);
 				const upcomingDay = futureDays.length ? futureDays[0] : bySortedDays[0];
 
-				upcoming.setDate(today.getDate() + (upcomingDay - today.getDay()));
+				upcoming.setDate(todayOrUpcoming.getDate() + (upcomingDay - todayOrUpcoming.getDay()));
 
 				result = upcoming.toLocaleDateString(
 					"nl-NL",
@@ -113,16 +110,14 @@ const useScheduleHelper = (schedule?: Schedule | Betaalinstructie) => {
 			}
 
 			if (byMonth !== null && byMonth.length > 0 && byMonthDay.length > 0 && startDate !== endDate) {
-				const futureDays = byMonthDay.sort().filter(d => upcoming.getDate() <= d);
-				const futureWorkingMonth = futureDays.length === 0 ? (upcoming.getMonth() + 1) % 12 : upcoming.getMonth();
-				const futureMonths = byMonth.map(d => d - 1).filter(d => futureWorkingMonth <= d);
-
-				const futureYear = futureMonths.length === 0 ? upcoming.getFullYear() + 1 : upcoming.getFullYear();
+				const futureDays = byMonthDay.sort().filter(d => todayOrUpcoming.getDate() <= d);
+				const futureWorkingMonth = futureDays.length === 0 ? (todayOrUpcoming.getMonth() + 1) % 12 : todayOrUpcoming.getMonth();
+				const futureMonths = futureWorkingMonth === 0 ? [] : byMonth.map(d => d - 1).filter(d => futureWorkingMonth <= d);
+				const futureYear = futureMonths.length === 0 ? todayOrUpcoming.getFullYear() + 1 : todayOrUpcoming.getFullYear();
 				const futureMonth = futureMonths.length ? futureMonths[0] : byMonth[0] - 1;
 				const futureDay = futureDays.length ? futureDays[0] : byMonthDay[0];
 
-				upcoming = new Date(futureYear, futureMonth, futureDay);
-				upcoming.setHours(0, 0, 0, 0);
+				upcoming = new Date(futureYear, futureMonth, futureDay, 0, 0, 0, 0);
 
 				if (upcoming.getTime() >= d(startDate, "YYYY-MM-DD").toDate().getTime()
 					&& upcoming.getTime() >= today.getTime()
