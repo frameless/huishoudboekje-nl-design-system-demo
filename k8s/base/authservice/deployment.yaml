@@ -48,7 +48,7 @@ spec:
           envFrom:
             - configMapRef:
                 name: authservice-config
-            - configMapRef:
+            - secretKeyRef:
                 name: redis-url
           env:
             - name: LOG_LEVEL
