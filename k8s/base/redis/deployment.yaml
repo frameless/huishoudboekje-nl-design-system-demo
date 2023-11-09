@@ -33,4 +33,4 @@ spec:
       volumes:
         - name: config-volume
           secret:
-            secretname: redis-config-file
+            secretName: redis-config-file
