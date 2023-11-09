@@ -6,13 +6,16 @@ from sqlalchemy.pool import Pool
 import time
 from statsd import StatsClient
 
+
 def add_statsd_metrics(app):
     if app.config["STATSD_HOSTPORT"] is not None and type(app.config["STATSD_HOSTPORT"]) is str:
         statsd = None
         try:
             statsd_host_port = app.config["STATSD_HOSTPORT"].split(':')
-            statsd = StatsClient(host=statsd_host_port[0], port=int(statsd_host_port[1]), prefix=app.config["STATSD_PREFIX"])
-            logging.info(f"Connected to statsd host {app.config['STATSD_HOSTPORT']}")
+            statsd = StatsClient(host=statsd_host_port[0], port=int(
+                statsd_host_port[1]), prefix=app.config["STATSD_PREFIX"])
+            logging.info(
+                f"Connected to statsd host {app.config['STATSD_HOSTPORT']}")
         except:
             logging.warning("could not connect to statsd host")
 
@@ -24,13 +27,17 @@ def add_statsd_metrics(app):
 
             @event.listens_for(Engine, "before_cursor_execute")
             def before_cursor_execute(conn, cursor, statement, parameters, context, executemany):
-                conn.info.setdefault("query_start_time", []).append(time.time())
+                conn.info.setdefault("query_start_time",
+                                     []).append(time.time())
 
             @event.listens_for(Engine, "after_cursor_execute")
             def after_cursor_execute(conn, cursor, statement, parameters, context, executemany):
-                total = int((time.time() - conn.info["query_start_time"].pop(-1)) * 1000) #time in miliseconds
+                # time in miliseconds
+                total = int(
+                    (time.time() - conn.info["query_start_time"].pop(-1)) * 1000)
                 statsd.timing("sqlalchemy.query.execution.duration", total)
-                logging.info(f"Exexcuted query in {total} miliseconds:\n{statement} ")
+                logging.debug(
+                    f"Exexcuted query in {total} miliseconds:\n{statement} ")
 
             #
             # Pool events
@@ -82,6 +89,7 @@ def add_statsd_metrics(app):
             def receive_invalidate(dbapi_connection, connection_record, exception):
                 # Called when a DBAPI connection is to be “invalidated”.
                 statsd.incr('sqlalchemy.events.connections.invalidated')
+                logging.error(exception)
                 logging.debug(f"invalidate")
 
             @event.listens_for(Pool, 'reset')
@@ -135,7 +143,9 @@ def add_statsd_metrics(app):
                 endpoint = request.endpoint
                 statsd.incr('flask.requests.finished')
                 statsd.incr('flask.requests.finished.' + endpoint)
-                total = int((time.time() - request.start_time * 1000)) #time in miliseconds
-                statsd.timing('flask.requests.' + endpoint + '.duration', total)
+                # time in miliseconds
+                total = int((time.time() - request.start_time * 1000))
+                statsd.timing('flask.requests.' +
+                              endpoint + '.duration', total)
                 logging.debug(f"finished_request")
                 return response
