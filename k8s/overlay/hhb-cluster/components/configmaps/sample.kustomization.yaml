@@ -44,7 +44,7 @@ secretGenerator:
       - redis.conf
   - name: redis-url
     literals:
-      - REDIS_URL=redis;//auth:${REDIS_PASSWORD}@hhb-redis:6379
+      - REDIS_URL=redis://auth:${REDIS_PASSWORD}@hhb-redis:6379
   - name: hhb-database-secrets
     literals:
       - POSTGRESQL_PASSWORD=${POSTGRESQL_PASSWORD}
