@@ -8,8 +8,10 @@ import {getConfig} from "./config";
 import SessionHelper from "./SessionHelper";
 import log from "loglevel";
 import {JsonWebTokenError} from "jsonwebtoken";
+import RedisStore from "connect-redis"
+import {createClient} from "redis"
 
-const session = require('express-session')
+var session = require('express-session')
 const config = getConfig();
 
 const sessionHelper = new SessionHelper({
@@ -19,6 +21,12 @@ const sessionHelper = new SessionHelper({
 	allowedAlgs: config.allowedAlgs,
 	scopes: config.scopes
 });
+
+let redisClient = createClient({url: process.env.REDIS_URL})
+redisClient.connect().catch(console.error)
+let redisStore = new RedisStore({
+	client: redisClient,
+})
 
 const server = (prefix: string = "/auth") => {
 	const app = express();
@@ -33,6 +41,7 @@ const server = (prefix: string = "/auth") => {
 
 	app.use(
 		session({
+			store: redisStore,
 			secret: process.env.OIDC_CLIENT_SECRET,
 			resave: false,
 			saveUninitialized: true,

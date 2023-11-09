@@ -90,6 +90,7 @@ deploy-deployment-test:
     JWT_AUDIENCE: account
     JWT_SECRET: $OIDC_CLIENT_SECRET
     JWT_ALGORITHMS: HS256,RS256
+    REDIS_PASSWORD: $REDIS_PASSWORD
   script:
     - sh ./k8s/overlay/hhb-cluster/apply-env-vars.sh
     - kubectl config use-context commonground/huishoudboekje/app-new:hhb-prod

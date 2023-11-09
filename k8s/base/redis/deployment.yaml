@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hhb-redis
+  labels:
+    name: hhb-redis
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: hhb-redis
+  template:
+    metadata:
+      labels:
+        name: hhb-redis
+    spec:
+      containers:
+        - name: hhb-redis
+          image: redis:7-alpine
+          imagePullPolicy: "IfNotPresent"
+          ports:
+            - containerPort: 6379
+          volumeMounts:
+            - name: config-volume
+              mountPath: /usr/local/etc/redis
+          resources:
+            limits:
+              cpu: 200m
+              memory: 256Mi
+            requests:
+              cpu: 100m
+              memory: 256Mi
+      volumes:
+        - name: config-volume
+          configMap:
+            name: redis-config-file

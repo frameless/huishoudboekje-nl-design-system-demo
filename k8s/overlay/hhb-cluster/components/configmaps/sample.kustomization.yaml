@@ -39,6 +39,12 @@ configMapGenerator:
       - POSTGRESQL_USERNAME_ALMSVC=${POSTGRESQL_USERNAME_ALMSVC}
       - POSTGRESQL_USERNAME_SIGSVC=${POSTGRESQL_USERNAME_SIGSVC}
 secretGenerator:
+  - name: redis-config-file
+    files:
+      - redis.conf
+  - name: redis-url
+    literals:
+      - REDIS_URL=redis;//auth:${REDIS_PASSWORD}@hhb-redis:6379
   - name: hhb-database-secrets
     literals:
       - POSTGRESQL_PASSWORD=${POSTGRESQL_PASSWORD}
