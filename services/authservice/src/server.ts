@@ -40,12 +40,12 @@ const server = (prefix: string = "/auth") => {
 		res.send(`<a href="${prefix}">Go to auth</a>`);
 	});
 
-	app.use(session({
-		store: redisStore,
-		secret: process.env.OIDC_CLIENT_SECRET ?? "deafaultsupersecuresecret", //need to check, because i dont see this secret being set in the pipeline
-		resave: false,
-		saveUninitialized: true,
-	}))
+	// app.use(session({
+	// 	store: redisStore,
+	// 	secret: process.env.OIDC_CLIENT_SECRET ?? "deafaultsupersecuresecret", //need to check, because i dont see this secret being set in the pipeline
+	// 	resave: false,
+	// 	saveUninitialized: true,
+	// }))
 
 	app.use(auth({
 		session:{
