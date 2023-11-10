@@ -1,17 +1,17 @@
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import cors from "cors";
-import express from "express";
 
 import {auth} from "express-openid-connect";
 import {getConfig} from "./config";
 import SessionHelper from "./SessionHelper";
 import log from "loglevel";
 import {JsonWebTokenError} from "jsonwebtoken";
-import session from "express-session"
 import {createClient} from "redis"
-import RedisStore from "connect-redis"
 
+const RedisStore = require("connect-redis").default
+const session = require('express-session')
+const express = require('express');
 const config = getConfig();
 
 const sessionHelper = new SessionHelper({
@@ -48,6 +48,9 @@ const server = (prefix: string = "/auth") => {
 	}))
 
 	app.use(auth({
+		session:{
+			store: redisStore
+		},
 		baseURL: process.env.OIDC_BASE_URL,
 		clientID: process.env.OIDC_CLIENT_ID,
 		clientSecret: process.env.OIDC_CLIENT_SECRET,
