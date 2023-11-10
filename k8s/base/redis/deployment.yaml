@@ -22,7 +22,7 @@ spec:
             - containerPort: 6379
           volumeMounts:
             - name: config-volume
-              mountPath: /etc/redis
+              mountPath: /redis-master
           resources:
             limits:
               cpu: 200m
