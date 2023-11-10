@@ -8,10 +8,10 @@ import {getConfig} from "./config";
 import SessionHelper from "./SessionHelper";
 import log from "loglevel";
 import {JsonWebTokenError} from "jsonwebtoken";
-import RedisStore from "connect-redis"
 import {createClient} from "redis"
 
 var session = require('express-session')
+const RedisStore = require('connect-redis')(session)
 const config = getConfig();
 
 const sessionHelper = new SessionHelper({
@@ -39,18 +39,16 @@ const server = (prefix: string = "/auth") => {
 		res.send(`<a href="${prefix}">Go to auth</a>`);
 	});
 
-	app.use(
-		session({
-			store: redisStore,
-			secret: process.env.OIDC_CLIENT_SECRET,
-			resave: false,
-			saveUninitialized: true,
-		})
-	)
+	// app.use(session({
+	// 	store: redisStore,
+	// 	secret: process.env.OIDC_CLIENT_SECRET,
+	// 	resave: false,
+	// 	saveUninitialized: true,
+	// }))
 
 	app.use(auth({
 		session: {
-			store: session
+			store: redisStore
 		},
 		baseURL: process.env.OIDC_BASE_URL,
 		clientID: process.env.OIDC_CLIENT_ID,
