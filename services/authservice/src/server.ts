@@ -8,10 +8,10 @@ import {getConfig} from "./config";
 import SessionHelper from "./SessionHelper";
 import log from "loglevel";
 import {JsonWebTokenError} from "jsonwebtoken";
+import session from "express-session"
 import {createClient} from "redis"
+import RedisStore from "connect-redis"
 
-var session = require('express-session')
-const RedisStore = require('connect-redis')
 const config = getConfig();
 
 const sessionHelper = new SessionHelper({
@@ -24,6 +24,7 @@ const sessionHelper = new SessionHelper({
 
 let redisClient = createClient({url: process.env.REDIS_URL})
 redisClient.connect().catch(console.error)
+
 let redisStore = new RedisStore({
 	client: redisClient,
 })
@@ -39,17 +40,14 @@ const server = (prefix: string = "/auth") => {
 		res.send(`<a href="${prefix}">Go to auth</a>`);
 	});
 
-	// app.use(session({
-	// 	store: redisStore,
-	// 	secret: process.env.OIDC_CLIENT_SECRET,
-	// 	resave: false,
-	// 	saveUninitialized: true,
-	// }))
+	app.use(session({
+		store: redisStore,
+		secret: process.env.OIDC_CLIENT_SECRET ?? "deafaultsupersecuresecret", //need to check, because i dont see this secret being set in the pipeline
+		resave: false,
+		saveUninitialized: true,
+	}))
 
 	app.use(auth({
-		session: {
-			store: redisStore
-		},
 		baseURL: process.env.OIDC_BASE_URL,
 		clientID: process.env.OIDC_CLIENT_ID,
 		clientSecret: process.env.OIDC_CLIENT_SECRET,
