@@ -49,6 +49,9 @@ const server = (prefix: string = "/auth") => {
 	)
 
 	app.use(auth({
+		session: {
+			store: session
+		},
 		baseURL: process.env.OIDC_BASE_URL,
 		clientID: process.env.OIDC_CLIENT_ID,
 		clientSecret: process.env.OIDC_CLIENT_SECRET,
