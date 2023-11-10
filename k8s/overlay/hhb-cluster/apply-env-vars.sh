@@ -78,7 +78,7 @@ export OIDC_SCOPES=${OIDC_SCOPES}
 
 # redis
 export REDIS_PASSWORD=${REDIS_PASSWORD:-"averyinsecurebutstillalongpasswordbecausethedocssayithastobealongpaswordtobesecuresoihopethisislongenough"}
-
+export REDIS_AUTH_PASSWORD=${REDIS_AUTH_PASSWORD:-"authservicepasswordforredis12345"}
 
 cd k8s/overlay/hhb-cluster
 
