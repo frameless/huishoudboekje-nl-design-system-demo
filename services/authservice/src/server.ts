@@ -11,7 +11,7 @@ import {JsonWebTokenError} from "jsonwebtoken";
 import {createClient} from "redis"
 
 var session = require('express-session')
-const RedisStore = require('connect-redis')(session)
+const RedisStore = require('connect-redis')
 const config = getConfig();
 
 const sessionHelper = new SessionHelper({
