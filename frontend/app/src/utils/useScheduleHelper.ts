@@ -15,15 +15,26 @@ const useScheduleHelper = (schedule?: Schedule | Betaalinstructie) => {
 		Friday = 5,
 		Saturday = 6
 	}
-
-	const getCalculatingDate = function(startDate: string|Date): Date {
+	const getCalculatingDate = function(
+		startDate: string|Date,
+		validTrough: string|Date
+	): Date|false {
 		const upcoming = typeof startDate === "string"
 			? d(startDate, "YYYY-MM-DD").toDate()
 			: startDate;
+		const until = typeof validTrough === "string"
+			? d(validTrough, "YYYY-MM-DD").toDate()
+			: validTrough;
 		const today = new Date();
+
 		upcoming.setHours(0, 0, 0, 0);
+		until.setHours(0, 0, 0, 0);
 		today.setHours(0, 0, 0, 0);
-		
+
+		if (until.getTime() < upcoming.getTime() || until.getTime() < today.getTime()) {
+			return false;
+		}
+
 		return upcoming.getTime() >= today.getTime()
 			? upcoming
 			: today;
@@ -97,14 +108,19 @@ const useScheduleHelper = (schedule?: Schedule | Betaalinstructie) => {
 			return result;
 		},
 		nextScheduled: (): string => {
-			let result = "";
+			const result = "";
 
 			if (!schedule) {
 				return result;
 			}
 
 			const {byDay, byMonth = [], byMonthDay = [], startDate = "", endDate = ""} = schedule;
-			const calculatingDate = getCalculatingDate(startDate);
+			const calculatingDate = getCalculatingDate(startDate, endDate);
+
+			if (calculatingDate === false) {
+				return result;
+			}
+
 			const returnDate = new Date();
 			returnDate.setHours(0, 0, 0, 0);
 
