@@ -17,27 +17,45 @@ const useScheduleHelper = (schedule?: Schedule | Betaalinstructie) => {
 	}
 	const getCalculatingDate = function(
 		startDate: string|Date,
-		validTrough: string|Date
+		endDate: string|Date|null,
+		validFrom : string|Date, 
+		validThrough: string|Date
 	): Date|false {
-		const upcoming = typeof startDate === "string"
+		const start = typeof startDate === "string"
 			? d(startDate, "YYYY-MM-DD").toDate()
 			: startDate;
-		const until = typeof validTrough === "string"
-			? d(validTrough, "YYYY-MM-DD").toDate()
-			: validTrough;
+		const aStart = typeof validFrom === 'string'
+			? validFrom === '' ? new Date() : d(validFrom, "YYYY-MM-DD").toDate()
+			: validFrom;
+		const aEnd = typeof validThrough === 'string'
+			? validThrough === '' ? null : d(validThrough, "YYYY-MM-DD").toDate()
+			: validThrough;
 		const today = new Date();
-
-		upcoming.setHours(0, 0, 0, 0);
-		until.setHours(0, 0, 0, 0);
+		start.setHours(0, 0, 0, 0);
 		today.setHours(0, 0, 0, 0);
+		let upcoming = start.getTime() >= today.getTime() 
+			? start
+			: today;
+		upcoming = upcoming.getTime() >= aStart.getTime() 
+			? upcoming
+			: aStart;
 
-		if (until.getTime() < upcoming.getTime() || until.getTime() < today.getTime()) {
-			return false;
+		if (aEnd !== null && aEnd.getTime() < upcoming.getTime()) {
+			return false
 		}
 
-		return upcoming.getTime() >= today.getTime()
-			? upcoming
-			: today;
+		if (endDate !== null) {
+			const until = typeof endDate === "string"
+				? d(endDate, "YYYY-MM-DD").toDate()
+				: endDate;
+			until.setHours(0, 0, 0, 0);
+
+			if (until.getTime() < upcoming.getTime() || until.getTime() < today.getTime()) {
+				return false;
+			}
+		}
+
+		return upcoming;
 	}
 
 	return {
@@ -107,7 +125,7 @@ const useScheduleHelper = (schedule?: Schedule | Betaalinstructie) => {
 
 			return result;
 		},
-		nextScheduled: (): string => {
+		nextScheduled: (validFrom: string|Date, validThrough: string|Date): string => {
 			const result = "";
 
 			if (!schedule) {
@@ -115,7 +133,7 @@ const useScheduleHelper = (schedule?: Schedule | Betaalinstructie) => {
 			}
 
 			const {byDay, byMonth = [], byMonthDay = [], startDate = "", endDate = ""} = schedule;
-			const calculatingDate = getCalculatingDate(startDate, endDate);
+			const calculatingDate = getCalculatingDate(startDate, endDate, validFrom, validThrough);
 
 			if (calculatingDate === false) {
 				return result;
@@ -128,10 +146,12 @@ const useScheduleHelper = (schedule?: Schedule | Betaalinstructie) => {
 				const bySortedDays = byDay.map(d => parseInt(DayNumberOfWeek[String(d)])).sort();
 				const futureDays = bySortedDays.filter(d => calculatingDate.getDay() <= d);
 				const upcomingDay = futureDays.length ? futureDays[0] : bySortedDays[0];
+				const addDays = upcomingDay >= calculatingDate.getDay() 
+					? upcomingDay - calculatingDate.getDay() 
+					: (7 - (upcomingDay - calculatingDate.getDate()));
+				calculatingDate.setDate(calculatingDate.getDate() + addDays);
 
-				returnDate.setDate(calculatingDate.getDate() + (upcomingDay - calculatingDate.getDay()));
-
-				return returnDate.toLocaleDateString(
+				return calculatingDate.toLocaleDateString(
 					"nl-NL",
 					{year: "numeric", month: "2-digit", day: "2-digit"}
 				);
@@ -149,7 +169,7 @@ const useScheduleHelper = (schedule?: Schedule | Betaalinstructie) => {
 				returnDate.setMonth(futureMonth)
 				returnDate.setDate(futureDay);
 
-				if (returnDate.getTime() >= d(calculatingDate, "YYYY-MM-DD").toDate().getTime()
+				if (returnDate.getTime() >= calculatingDate.getTime()
 					&& returnDate.getTime() >= calculatingDate.getTime()
 					&& (endDate === null || returnDate.getTime() <= d(endDate, "YYYY-MM-DD").toDate().getTime())
 				) {

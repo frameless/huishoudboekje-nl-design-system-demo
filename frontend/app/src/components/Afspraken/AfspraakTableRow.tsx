@@ -13,7 +13,7 @@ const AfspraakTableRow: React.FC<TableRowProps & {afspraak: Afspraak}> = ({afspr
 	const isMobile = useBreakpointValue([true, null, null, false]);
 	const bedrag = afspraak.credit ? parseFloat(afspraak.bedrag) : parseFloat(afspraak.bedrag) * -1;
 	const isActive = isAfspraakActive(afspraak);
-	const betaalinstructieSchedule = useScheduleHelper(afspraak.betaalinstructie).nextScheduled();
+	const betaalinstructieSchedule = useScheduleHelper(afspraak.betaalinstructie).nextScheduled(afspraak.validFrom ?? '', afspraak.validThrough ?? '');
 
 	return (
 		<Tr color={!isActive ? "gray.400" : undefined} {...props}>
