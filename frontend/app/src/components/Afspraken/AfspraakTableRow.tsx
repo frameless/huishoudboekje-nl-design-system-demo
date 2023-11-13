@@ -13,7 +13,31 @@ const AfspraakTableRow: React.FC<TableRowProps & {afspraak: Afspraak}> = ({afspr
 	const isMobile = useBreakpointValue([true, null, null, false]);
 	const bedrag = afspraak.credit ? parseFloat(afspraak.bedrag) : parseFloat(afspraak.bedrag) * -1;
 	const isActive = isAfspraakActive(afspraak);
-	const betaalinstructieSchedule = useScheduleHelper(afspraak.betaalinstructie).nextScheduled();
+	const paymentInstructionDate = (afspraak) => {
+		const scheduledPaymentInstruction = useScheduleHelper(afspraak.betaalinstructie).nextScheduled();
+
+		if (scheduledPaymentInstruction === "") {
+			return scheduledPaymentInstruction;
+		}
+
+		const scheduled = new Date(scheduledPaymentInstruction),
+			from = new Date(afspraak.validFrom),
+			to = new Date(afspraak.validThrough),
+			today = new Date();
+		scheduled.setHours(0, 0, 0, 0);
+		from.setHours(0, 0, 0, 0);
+		to.setHours(0, 0, 0, 0);
+		today.setHours(0, 0, 0, 0);
+		const scheduledTime = scheduled.getTime(),
+			fromTime = from.getTime(),
+			toTime = to.getTime();
+		
+		if (scheduledTime >= fromTime && scheduledTime <= toTime) {
+			return scheduledPaymentInstruction;
+		}
+
+		return "";
+	}
 
 	return (
 		<Tr color={!isActive ? "gray.400" : undefined} {...props}>
@@ -27,7 +51,7 @@ const AfspraakTableRow: React.FC<TableRowProps & {afspraak: Afspraak}> = ({afspr
 				<Text>{afspraak.omschrijving}</Text>
 			</Td>)}
 			{!isMobile &&  (<Td>
-				<Text>{betaalinstructieSchedule}</Text>
+				<Text>{paymentInstructionDate}</Text>
 			</Td>)}
 			<Td verticalAlign={"top"}>
 				<Stack spacing={1} flex={1} align={"flex-end"} justify={"center"}>

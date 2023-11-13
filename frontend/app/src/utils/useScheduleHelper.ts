@@ -16,6 +16,19 @@ const useScheduleHelper = (schedule?: Schedule | Betaalinstructie) => {
 		Saturday = 6
 	}
 
+	const getCalculatingDate = function(startDate: string|Date): Date {
+		const upcoming = typeof startDate === "string"
+			? d(startDate, "YYYY-MM-DD").toDate()
+			: startDate;
+		const today = new Date();
+		upcoming.setHours(0, 0, 0, 0);
+		today.setHours(0, 0, 0, 0);
+		
+		return upcoming.getTime() >= today.getTime()
+			? upcoming
+			: today;
+	}
+
 	return {
 		toString: (): string => {
 			if (!schedule) {
@@ -91,39 +104,40 @@ const useScheduleHelper = (schedule?: Schedule | Betaalinstructie) => {
 			}
 
 			const {byDay, byMonth = [], byMonthDay = [], startDate = "", endDate = ""} = schedule;
-			const today = new Date();
-			today.setHours(0, 0, 0, 0);
-			let upcoming = d(startDate, "YYYY-MM-DD").toDate();
-			const todayOrUpcoming = upcoming.getTime() >= today.getTime() ? upcoming : today;
+			const calculatingDate = getCalculatingDate(startDate);
+			const returnDate = new Date();
+			returnDate.setHours(0, 0, 0, 0);
 
 			if (byDay && byDay.length > 0) {
 				const bySortedDays = byDay.map(d => parseInt(DayNumberOfWeek[String(d)])).sort();
-				const futureDays = bySortedDays.filter(d => todayOrUpcoming.getDay() <= d);
+				const futureDays = bySortedDays.filter(d => calculatingDate.getDay() <= d);
 				const upcomingDay = futureDays.length ? futureDays[0] : bySortedDays[0];
 
-				upcoming.setDate(todayOrUpcoming.getDate() + (upcomingDay - todayOrUpcoming.getDay()));
+				returnDate.setDate(calculatingDate.getDate() + (upcomingDay - calculatingDate.getDay()));
 
-				result = upcoming.toLocaleDateString(
+				return returnDate.toLocaleDateString(
 					"nl-NL",
 					{year: "numeric", month: "2-digit", day: "2-digit"}
 				);
 			}
 
 			if (byMonth !== null && byMonth.length > 0 && byMonthDay.length > 0 && startDate !== endDate) {
-				const futureDays = byMonthDay.sort().filter(d => todayOrUpcoming.getDate() <= d);
-				const futureWorkingMonth = futureDays.length === 0 ? (todayOrUpcoming.getMonth() + 1) % 12 : todayOrUpcoming.getMonth();
+				const futureDays = byMonthDay.sort().filter(d => calculatingDate.getDate() <= d);
+				const futureWorkingMonth = futureDays.length === 0 ? (calculatingDate.getMonth() + 1) % 12 : calculatingDate.getMonth();
 				const futureMonths = futureWorkingMonth === 0 ? [] : byMonth.map(d => d - 1).filter(d => futureWorkingMonth <= d);
-				const futureYear = futureMonths.length === 0 ? todayOrUpcoming.getFullYear() + 1 : todayOrUpcoming.getFullYear();
+				const futureYear = futureMonths.length === 0 ? calculatingDate.getFullYear() + 1 : calculatingDate.getFullYear();
 				const futureMonth = futureMonths.length ? futureMonths[0] : byMonth[0] - 1;
 				const futureDay = futureDays.length ? futureDays[0] : byMonthDay[0];
 
-				upcoming = new Date(futureYear, futureMonth, futureDay, 0, 0, 0, 0);
+				returnDate.setFullYear(futureYear);
+				returnDate.setMonth(futureMonth)
+				returnDate.setDate(futureDay);
 
-				if (upcoming.getTime() >= d(startDate, "YYYY-MM-DD").toDate().getTime()
-					&& upcoming.getTime() >= today.getTime()
-					&& (endDate === null || upcoming.getTime() <= d(endDate, "YYYY-MM-DD").toDate().getTime())
+				if (returnDate.getTime() >= d(calculatingDate, "YYYY-MM-DD").toDate().getTime()
+					&& returnDate.getTime() >= calculatingDate.getTime()
+					&& (endDate === null || returnDate.getTime() <= d(endDate, "YYYY-MM-DD").toDate().getTime())
 				) {
-					result = upcoming.toLocaleDateString(
+					return returnDate.toLocaleDateString(
 						"nl-NL",
 						{year: "numeric", month: "2-digit", day: "2-digit"}
 					);
@@ -131,9 +145,9 @@ const useScheduleHelper = (schedule?: Schedule | Betaalinstructie) => {
 			}
 
 			if (startDate === endDate
-				&& d(startDate, "YYYY-MM-DD").toDate().getTime() >= today.getTime()
+				&& d(startDate, "YYYY-MM-DD").toDate().getTime() >= calculatingDate.getTime()
 			) {
-				result = d(startDate, "YYYY-MM-DD").format("DD-MM-YYYY"); 
+				return d(startDate, "YYYY-MM-DD").format("DD-MM-YYYY"); 
 			}
 
 			return result;
