@@ -143,10 +143,10 @@ const useScheduleHelper = (schedule?: Schedule | Betaalinstructie) => {
 			returnDate.setHours(0, 0, 0, 0);
 
 			if (byDay && byDay.length > 0) {
-				const bySortedDays = byDay.map(d => parseInt(DayNumberOfWeek[String(d)])).sort();
-				const futureDays = bySortedDays.filter(d => calculatingDate.getDay() <= d);
-				const upcomingDay = futureDays.length ? futureDays[0] : bySortedDays[0];
 				const calculatedDay = calculatingDate.getDay();
+				const bySortedDays = byDay.map(d => parseInt(DayNumberOfWeek[String(d)])).sort();
+				const futureDays = bySortedDays.filter(d => calculatedDay <= d);
+				const upcomingDay = futureDays.length ? futureDays[0] : bySortedDays[0];
 				const addDays = calculatedDay <= upcomingDay
 					? upcomingDay - calculatedDay
 					: (upcomingDay + 7) - calculatedDay;
