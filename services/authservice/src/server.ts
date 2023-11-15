@@ -23,7 +23,7 @@ const sessionHelper = new SessionHelper({
 });
 
 let redisClient = createClient({url: process.env.REDIS_URL})
-redisClient.connect().catch(console.error)
+redisClient.connect()
 
 let redisStore = new RedisStore({
 	client: redisClient,
