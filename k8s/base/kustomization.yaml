@@ -17,4 +17,4 @@ resources:
   - ./rapportageservice
   - ./statsdexporter
   - ./prometheus
-  - ./redis
+  # - ./redis
