@@ -23,15 +23,16 @@ const sessionHelper = new SessionHelper({
 });
 
 let redisClient = createClient({url: process.env.REDIS_URL})
-redisClient.connect().catch(console.error)
-
-let redisStore = new RedisStore({
-	client: redisClient,
-})
 
 const server = (prefix: string = "/auth") => {
 	const app = express();
 
+	redisClient.connect().catch(console.error)
+
+	let redisStore = new RedisStore({
+		client: redisClient,
+	})
+	
 	app.use(cors());
 	app.use(bodyParser.json());
 	app.use(cookieParser());
