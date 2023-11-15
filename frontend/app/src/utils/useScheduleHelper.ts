@@ -39,7 +39,7 @@ const useScheduleHelper = (schedule?: Schedule | Betaalinstructie) => {
 		upcoming = upcoming.getTime() >= aStart.getTime() 
 			? upcoming
 			: aStart;
-
+		
 		if (aEnd !== null && (aEnd.getTime() < upcoming.getTime() || aEnd.getTime() < today.getTime())) {
 			return false
 		}
@@ -139,6 +139,12 @@ const useScheduleHelper = (schedule?: Schedule | Betaalinstructie) => {
 				return result;
 			}
 
+			const endDateInstruction = typeof endDate === 'string'
+				? endDate === '' ? null : d(endDate, "YYYY-MM-DD").toDate()
+				: endDate;
+			const endDateAppointment = typeof validThrough === 'string'
+				? validThrough === '' ? null : d(validThrough, "YYYY-MM-DD").toDate()
+				: validThrough;
 			const returnDate = new Date();
 			returnDate.setHours(0, 0, 0, 0);
 
@@ -152,6 +158,12 @@ const useScheduleHelper = (schedule?: Schedule | Betaalinstructie) => {
 					: (upcomingDay + 7) - calculatedDay;
 				
 				calculatingDate.setDate(calculatingDate.getDate() + addDays);
+
+				if (endDateAppointment && endDateAppointment.getTime() < calculatingDate.getTime()
+					|| endDateInstruction && endDateInstruction.getTime() < calculatingDate.getTime()
+				) {
+					return "";
+				}
 
 				return calculatingDate.toLocaleDateString(
 					"nl-NL",
@@ -177,9 +189,14 @@ const useScheduleHelper = (schedule?: Schedule | Betaalinstructie) => {
 				returnDate.setMonth(futureMonth)
 				returnDate.setDate(futureDay);
 
+				if (endDateAppointment && endDateAppointment.getTime() < returnDate.getTime()
+					|| endDateInstruction && endDateInstruction.getTime() < returnDate.getTime()
+				) {
+					return "";
+				}
+
 				if (returnDate.getTime() >= calculatingDate.getTime()
 					&& returnDate.getTime() >= calculatingDate.getTime()
-					&& (endDate === null || returnDate.getTime() <= d(endDate, "YYYY-MM-DD").toDate().getTime())
 				) {
 					return returnDate.toLocaleDateString(
 						"nl-NL",
