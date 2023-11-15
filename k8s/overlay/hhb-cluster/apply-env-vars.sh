@@ -76,9 +76,14 @@ export JWT_SECRET=${JWT_SECRET:-"this should come from a secret envvar"}
 export JWT_ALGORITHMS=${JWT_ALGORITHMS:-"HS256"}
 export OIDC_SCOPES=${OIDC_SCOPES}
 
+# redis
+export REDIS_PASSWORD=${REDIS_PASSWORD:-"averyinsecurebutstillalongpasswordbecausethedocssayithastobealongpaswordtobesecuresoihopethisislongenough"}
+export REDIS_AUTH_PASSWORD=${REDIS_AUTH_PASSWORD:-"authservicepasswordforredis12345"}
+
 cd k8s/overlay/hhb-cluster
 
 echo "Applying envvars."
+envsubst < components/configmaps/sample.redis.conf > components/configmaps/redis.conf
 envsubst < components/configmaps/sample.kustomization.yaml > components/configmaps/kustomization.yaml
 envsubst < components/set-images/sample.kustomization.yaml > components/set-images/kustomization.yaml
 envsubst < review/sample.ingress-host-patch.yaml > review/ingress-host-patch.yaml
