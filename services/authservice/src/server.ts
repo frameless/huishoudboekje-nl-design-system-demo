@@ -27,12 +27,12 @@ let redisClient = createClient({url: process.env.REDIS_URL})
 const server = (prefix: string = "/auth") => {
 	const app = express();
 
-	redisClient.connect().catch(console.error)
+	redisClient.connect()
 
 	let redisStore = new RedisStore({
 		client: redisClient,
 	})
-	
+
 	app.use(cors());
 	app.use(bodyParser.json());
 	app.use(cookieParser());
