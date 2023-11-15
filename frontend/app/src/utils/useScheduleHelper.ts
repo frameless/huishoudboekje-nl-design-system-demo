@@ -15,6 +15,48 @@ const useScheduleHelper = (schedule?: Schedule | Betaalinstructie) => {
 		Friday = 5,
 		Saturday = 6
 	}
+	const getCalculatingDate = function(
+		startDate: string|Date,
+		endDate: string|Date|null,
+		validFrom : string|Date, 
+		validThrough: string|Date
+	): Date|false {
+		const start = typeof startDate === "string"
+			? d(startDate, "YYYY-MM-DD").toDate()
+			: startDate;
+		const aStart = typeof validFrom === 'string'
+			? validFrom === '' ? new Date() : d(validFrom, "YYYY-MM-DD").toDate()
+			: validFrom;
+		const aEnd = typeof validThrough === 'string'
+			? validThrough === '' ? null : d(validThrough, "YYYY-MM-DD").toDate()
+			: validThrough;
+		const today = new Date();
+		start.setHours(0, 0, 0, 0);
+		today.setHours(0, 0, 0, 0);
+		let upcoming = start.getTime() >= today.getTime() 
+			? start
+			: today;
+		upcoming = upcoming.getTime() >= aStart.getTime() 
+			? upcoming
+			: aStart;
+		
+		if (aEnd !== null && (aEnd.getTime() < upcoming.getTime() || aEnd.getTime() < today.getTime())) {
+			return false
+		}
+
+		if (endDate !== null) {
+			const until = typeof endDate === "string"
+				? d(endDate, "YYYY-MM-DD").toDate()
+				: endDate;
+			until.setHours(0, 0, 0, 0);
+
+			if (until.getTime() < upcoming.getTime() || until.getTime() < today.getTime()) {
+				return false;
+			}
+		}
+
+		return upcoming;
+	}
 
 	return {
 		toString: (): string => {
@@ -83,56 +125,90 @@ const useScheduleHelper = (schedule?: Schedule | Betaalinstructie) => {
 
 			return result;
 		},
-		nextScheduled: (): string => {
-			let result = t("schedule.n/a");
+		nextScheduled: (validFrom: string|Date, validThrough: string|Date): string => {
+			const result = "";
 
 			if (!schedule) {
 				return result;
 			}
 
-			const {byDay, byMonth = [], byMonthDay = [], startDate, endDate} = schedule;
-			let upcoming = new Date();
+			const {byDay, byMonth = [], byMonthDay = [], startDate = "", endDate = ""} = schedule;
+			const calculatingDate = getCalculatingDate(startDate, endDate, validFrom, validThrough);
+
+			if (calculatingDate === false) {
+				return result;
+			}
+
+			const endDateInstruction = typeof endDate === 'string'
+				? endDate === '' ? null : d(endDate, "YYYY-MM-DD").toDate()
+				: endDate;
+			const endDateAppointment = typeof validThrough === 'string'
+				? validThrough === '' ? null : d(validThrough, "YYYY-MM-DD").toDate()
+				: validThrough;
+			const returnDate = new Date();
+			returnDate.setHours(0, 0, 0, 0);
 
 			if (byDay && byDay.length > 0) {
+				const calculatedDay = calculatingDate.getDay();
 				const bySortedDays = byDay.map(d => parseInt(DayNumberOfWeek[String(d)])).sort();
-				const futureDays = bySortedDays.filter(d => upcoming.getDay() < d);
+				const futureDays = bySortedDays.filter(d => calculatedDay <= d);
 				const upcomingDay = futureDays.length ? futureDays[0] : bySortedDays[0];
+				const addDays = calculatedDay <= upcomingDay
+					? upcomingDay - calculatedDay
+					: (upcomingDay + 7) - calculatedDay;
+				
+				calculatingDate.setDate(calculatingDate.getDate() + addDays);
 
-				upcoming.setDate(upcoming.getDate() + (upcomingDay - upcoming.getDay()));
+				if (endDateAppointment && endDateAppointment.getTime() < calculatingDate.getTime()
+					|| endDateInstruction && endDateInstruction.getTime() < calculatingDate.getTime()
+				) {
+					return "";
+				}
 
-				result = upcoming.toLocaleDateString("nl-NL", {year: "numeric", month: "2-digit", day: "2-digit"});
+				return calculatingDate.toLocaleDateString(
+					"nl-NL",
+					{year: "numeric", month: "2-digit", day: "2-digit"}
+				);
 			}
 
 			if (byMonth !== null && byMonth.length > 0 && byMonthDay.length > 0 && startDate !== endDate) {
-				const futureDays = byMonthDay.sort().filter(d => upcoming.getDate() < d);
+				const futureDays = byMonthDay.sort().filter(d => calculatingDate.getDate() <= d);
+				const futureWorkingMonth = futureDays.length === 0
+					? (calculatingDate.getMonth() + 1) % 12
+					: calculatingDate.getMonth();
+				const futureMonths = futureWorkingMonth === 0
+					? [] 
+					: byMonth.map(d => d - 1).filter(d => futureWorkingMonth <= d);
+				const futureYear = futureMonths.length === 0 && returnDate.getFullYear() === calculatingDate.getFullYear()
+					? calculatingDate.getFullYear() + 1
+					: calculatingDate.getFullYear();
+				const futureMonth = futureMonths.length ? futureMonths[0] : byMonth[0] - 1;
 				const futureDay = futureDays.length ? futureDays[0] : byMonthDay[0];
 
-				if (futureDays.length === 0) {
-					upcoming.setMonth(upcoming.getMonth() + 1 > 11 ? 0 : upcoming.getMonth() + 1);
-				}
+				returnDate.setFullYear(futureYear);
+				returnDate.setMonth(futureMonth)
+				returnDate.setDate(futureDay);
 
-				const futureMonths = byMonth.map(d => d - 1).filter(d => upcoming.getMonth() <= d);
-				const futureMonth = futureMonths.length ? futureMonths[0] : byMonth[0] - 1;
-
-				if (futureMonths.length === 0) {
-					upcoming.setFullYear(upcoming.getFullYear() + 1);
-				}
-
-				const futureYear = upcoming.getFullYear();
-				upcoming = new Date(futureYear, futureMonth, futureDay);
-
-				if (upcoming.getTime() >= d(startDate, "YYYY-MM-DD").toDate().getTime()
-					&& upcoming.getTime() >= new Date().getTime()
-					&& (endDate !== undefined || endDate === null || upcoming.getTime() <= d(endDate, "YYYY-MM-DD").toDate().getTime())
+				if (endDateAppointment && endDateAppointment.getTime() < returnDate.getTime()
+					|| endDateInstruction && endDateInstruction.getTime() < returnDate.getTime()
 				) {
-					result = upcoming.toLocaleDateString("nl-NL", {year: "numeric", month: "2-digit", day: "2-digit"});
+					return "";
+				}
+
+				if (returnDate.getTime() >= calculatingDate.getTime()
+					&& returnDate.getTime() >= calculatingDate.getTime()
+				) {
+					return returnDate.toLocaleDateString(
+						"nl-NL",
+						{year: "numeric", month: "2-digit", day: "2-digit"}
+					);
 				}
 			}
 
 			if (startDate === endDate
-				&& d(startDate, "YYYY-MM-DD").toDate().getTime() >= new Date().getTime()
+				&& d(startDate, "YYYY-MM-DD").toDate().getTime() >= calculatingDate.getTime()
 			) {
-				result = d(startDate, "YYYY-MM-DD").format("DD-MM-YYYY")
+				return d(startDate, "YYYY-MM-DD").format("DD-MM-YYYY"); 
 			}
 
 			return result;

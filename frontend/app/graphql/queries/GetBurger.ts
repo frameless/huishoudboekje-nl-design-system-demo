@@ -16,6 +16,7 @@ export const GetBurgerDetailsQuery = gql`
 				bedrag
 				credit
 				omschrijving
+				validFrom
 				validThrough
 				betaalinstructie {
 					byDay
