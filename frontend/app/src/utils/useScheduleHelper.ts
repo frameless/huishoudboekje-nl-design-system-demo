@@ -40,7 +40,7 @@ const useScheduleHelper = (schedule?: Schedule | Betaalinstructie) => {
 			? upcoming
 			: aStart;
 
-		if (aEnd !== null && aEnd.getTime() < upcoming.getTime()) {
+		if (aEnd !== null && (aEnd.getTime() < upcoming.getTime() || aEnd.getTime() < today.getTime())) {
 			return false
 		}
 
