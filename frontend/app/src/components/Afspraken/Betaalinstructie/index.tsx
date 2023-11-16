@@ -2,7 +2,7 @@ import React from "react";
 import {useTranslation} from "react-i18next";
 import {useNavigate, useParams} from "react-router-dom";
 import {AppRoutes} from "../../../config/routes";
-import {Afspraak, GetAfspraakDocument, UpdateAfspraakBetaalinstructieMutationVariables, useGetAfspraakQuery, useUpdateAfspraakBetaalinstructieMutation} from "../../../generated/graphql";
+import {Afspraak, GetAfspraakDocument, GetBurgerDetailsDocument, UpdateAfspraakBetaalinstructieMutationVariables, useGetAfspraakQuery, useUpdateAfspraakBetaalinstructieMutation} from "../../../generated/graphql";
 import Queryable from "../../../utils/Queryable";
 import useHandleMutation from "../../../utils/useHandleMutation";
 import BackButton from "../../shared/BackButton";
@@ -17,10 +17,17 @@ const BetaalinstructiePage = () => {
 	const handleMutation = useHandleMutation();
 
 	const $afspraak = useGetAfspraakQuery({variables: {id: parseInt(id)}});
+
+	const refetchQueries = [
+		{query: GetAfspraakDocument, variables: {id: parseInt(id)}}
+	]
+
+	if($afspraak.data?.afspraak?.burger?.id){
+		refetchQueries.push({query: GetBurgerDetailsDocument, variables: {id: $afspraak.data?.afspraak?.burger?.id}})
+	}
+
 	const [updateAfspraakBetaalinstructieMutation] = useUpdateAfspraakBetaalinstructieMutation({
-		refetchQueries: [
-			{query: GetAfspraakDocument, variables: {id: parseInt(id)}},
-		],
+		refetchQueries: refetchQueries,
 	});
 	const updateAfspraakBetaalinstructie = (data: UpdateAfspraakBetaalinstructieMutationVariables["betaalinstructie"]) => handleMutation(updateAfspraakBetaalinstructieMutation({
 		variables: {

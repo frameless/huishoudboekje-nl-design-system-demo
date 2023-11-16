@@ -42,7 +42,8 @@ import {
 	useDeleteAfspraakZoektermMutation,
 	useDeleteAlarmMutation,
 	useUpdateAlarmMutation,
-	useEndAfspraakMutation
+	useEndAfspraakMutation,
+	GetBurgerDetailsDocument
 } from "../../../generated/graphql";
 import d from "../../../utils/dayjs";
 import {useFeatureFlag} from "../../../utils/features";
@@ -102,6 +103,7 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 	const [deleteBetaalinstructie] = useDeleteAfspraakBetaalinstructieMutation({
 		refetchQueries: [
 			{query: GetAfspraakDocument, variables: {id: afspraak.id}},
+			{query: GetBurgerDetailsDocument, variables: {id: afspraak.burger?.id}}
 		],
 	});
 	const [createAlarm] = useCreateAlarmMutation({
