@@ -37,6 +37,9 @@ def get_config_value(config_id) -> str:
 
 def invalid_overschrijvingen_date(overschrijving, afspraak):
     overschrijving_date = to_date(overschrijving['datum'])
+    logging.info("TEST")
+    logging.info(overschrijving_date)
+    logging.info(to_date(afspraak['valid_through']))
     return to_date(afspraak['valid_from']) > overschrijving_date or to_date(afspraak['valid_through']) < overschrijving_date
 
 def filter_future_overschrijvingen_on_afspraak_startdate_and_enddate_before_payment_date(future_overschrijvingen, afspraken):
