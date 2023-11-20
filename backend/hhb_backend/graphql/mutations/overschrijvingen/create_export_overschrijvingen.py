@@ -35,13 +35,17 @@ def get_config_value(config_id) -> str:
     return hhb_dataloader().configuraties.load_one(config_id)["waarde"]
 
 
-def filter_future_overschrijvingen_on_afspraak_startdate_before_payment_date(future_overschrijvingen, afspraken):
+def invalid_overschrijvingen_date(overschrijving, afspraak):
+    overschrijving_date = to_date(overschrijving['datum'])
+    return to_date(afspraak['valid_from']) > overschrijving_date or to_date(afspraak['valid_through']) < overschrijving_date
+
+def filter_future_overschrijvingen_on_afspraak_startdate_and_enddate_before_payment_date(future_overschrijvingen, afspraken):
     count = 0
     for overschrijving in future_overschrijvingen:
         afspraak = next(
             filter(lambda x: x['id'] == overschrijving['afspraak_id'], afspraken), None)
         if afspraak is not None:
-            if to_date(afspraak['valid_from']) > to_date(overschrijving['datum']):
+            if invalid_overschrijvingen_date(overschrijving, afspraak):
                 future_overschrijvingen.pop(count)
         count += 1
     return future_overschrijvingen
@@ -108,7 +112,7 @@ class CreateExportOverschrijvingen(graphene.Mutation):
             )
 
         if future_overschrijvingen:
-            filter_future_overschrijvingen_on_afspraak_startdate_before_payment_date(
+            filter_future_overschrijvingen_on_afspraak_startdate_and_enddate_before_payment_date(
                 future_overschrijvingen, afspraken)
 
         if not future_overschrijvingen:
