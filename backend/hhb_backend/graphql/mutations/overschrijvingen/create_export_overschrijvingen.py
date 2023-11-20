@@ -35,29 +35,18 @@ def get_config_value(config_id) -> str:
     return hhb_dataloader().configuraties.load_one(config_id)["waarde"]
 
 
-def invalid_overschrijvingen_date(overschrijving, afspraak):
+def valid_overschrijvingen_date(overschrijving, afspraak):
     overschrijving_date = to_date(overschrijving['datum'])
-    logging.info("TEST")
-    logging.info(overschrijving_date)
-    logging.info(to_date(afspraak['valid_through']))
-    return to_date(afspraak['valid_from']) > overschrijving_date or to_date(afspraak['valid_through']) < overschrijving_date
+    return overschrijving_date >= to_date(afspraak['valid_from']) or overschrijving_date <= to_date(afspraak['valid_through'])
 
 def filter_future_overschrijvingen_on_afspraak_startdate_and_enddate_before_payment_date(future_overschrijvingen, afspraken):
-    count = 0
-    
-    logging.info("BEFORE")
-    logging.info(future_overschrijvingen)
+    valid_overschrijvingen = []
     for overschrijving in future_overschrijvingen:
         afspraak = next(
             filter(lambda x: x['id'] == overschrijving['afspraak_id'], afspraken), None)
         if afspraak is not None:
-            if invalid_overschrijvingen_date(overschrijving, afspraak):
-                future_overschrijvingen.pop(count)
-                logging.info(count)
-                logging.info("TEST2")
-        count += 1
-    logging.info("TEST3")
-    logging.info(future_overschrijvingen)
+            if valid_overschrijvingen_date(overschrijving, afspraak):
+                valid_overschrijvingen.append(overschrijving)
     return future_overschrijvingen
 
 
