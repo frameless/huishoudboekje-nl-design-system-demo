@@ -50,6 +50,7 @@ def filter_future_overschrijvingen_on_afspraak_startdate_and_enddate_before_paym
         if afspraak is not None:
             if invalid_overschrijvingen_date(overschrijving, afspraak):
                 future_overschrijvingen.pop(count)
+                logging.info(count)
                 logging.info("TEST2")
         count += 1
     logging.info("TEST3")
