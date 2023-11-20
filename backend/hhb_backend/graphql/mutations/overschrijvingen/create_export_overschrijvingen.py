@@ -44,6 +44,9 @@ def invalid_overschrijvingen_date(overschrijving, afspraak):
 
 def filter_future_overschrijvingen_on_afspraak_startdate_and_enddate_before_payment_date(future_overschrijvingen, afspraken):
     count = 0
+    
+    logging.info("BEFORE")
+    logging.info(future_overschrijvingen)
     for overschrijving in future_overschrijvingen:
         afspraak = next(
             filter(lambda x: x['id'] == overschrijving['afspraak_id'], afspraken), None)
