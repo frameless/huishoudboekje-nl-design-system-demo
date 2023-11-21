@@ -2,6 +2,8 @@
 
 ## 1.11.0
 
+Deze versie omvat oplosssingen voor problemen met een te groot verzoek aan een browser en het exporteren van betaalinstructies bij beëindigde afspraken.
+
 ### Minor Changes
 
 - ac63bcf21: The authservice now uses a redis session store instead of storing this in cookies.
