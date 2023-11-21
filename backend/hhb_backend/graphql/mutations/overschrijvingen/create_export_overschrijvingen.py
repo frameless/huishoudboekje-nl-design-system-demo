@@ -47,7 +47,7 @@ def filter_future_overschrijvingen_on_afspraak_startdate_and_enddate_before_paym
         if afspraak is not None:
             if valid_overschrijvingen_date(overschrijving, afspraak):
                 valid_overschrijvingen.append(overschrijving)
-    return future_overschrijvingen
+    return valid_overschrijvingen
 
 
 class CreateExportOverschrijvingen(graphene.Mutation):
