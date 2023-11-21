@@ -1,5 +1,31 @@
 # Huishoudboekje Changelog
 
+## 1.11.0
+
+Deze versie omvat oplosssingen voor problemen met een te groot verzoek aan een browser en het exporteren van betaalinstructies bij beëindigde afspraken.
+
+### Minor Changes
+
+- ac63bcf21: The authservice now uses a redis session store instead of storing this in cookies.
+
+### Patch Changes
+
+- 20db5eb7b: Fix displayed verwachte betaling date mismatch
+- 05ae39c13: Added env var GUNICORN_WORKER_TIMEOUT to set the gunicorn worker timeout, default is 600.
+- 86a5e8367: Added refetch burger after updating betaalinstructie
+- 9cb486450: Added end date check afspraak for overschrijvingen
+
+## Migration Guide
+
+- Authservice:
+  The authservice now uses a redis session store. ⚠️This requires a Redis database to connect to. The authservice will need ENV variable REDIS_URL that contains the conenction url to connect to the redis database.
+- GUNICORN_WORKER_TIMEOUT:
+  New env var GUNICORN_WORKER_TIMEOUT sets the timeout for gunicorn workers, default is 600s. This env var is available for: banktransactieservice, grootboekservice, huishoudboekjeservice, logservice, organisatieservice and rapportageservice. 
+
+## 1.10.12
+
+Log toegevoegd voor database connecties die invalidaten.
+
 ## 1.10.11
 
 Deze versie omvat een oplossing voor een probleem bij het importeren van een module.
