@@ -37,7 +37,9 @@ def get_config_value(config_id) -> str:
 
 def valid_overschrijvingen_date(overschrijving, afspraak):
     overschrijving_date = to_date(overschrijving['datum'])
-    return overschrijving_date >= to_date(afspraak['valid_from']) and overschrijving_date <= to_date(afspraak['valid_through'])
+    afspraak_valid_from = to_date(afspraak['valid_from'])
+    afspraak_valid_through = to_date(afspraak['valid_through'])
+    return overschrijving_date >= afspraak_valid_from and (afspraak_valid_through is None or overschrijving_date <= afspraak_valid_through)
 
 def filter_future_overschrijvingen_on_afspraak_startdate_and_enddate_before_payment_date(future_overschrijvingen, afspraken):
     valid_overschrijvingen = []
