@@ -30,9 +30,9 @@ class DataLoaderConcept():
 
 
         except requests.exceptions.ReadTimeout:
-            raise GraphQLError(f"Failed to read data from {service} in time ")
+            raise GraphQLError(f"Failed to read data from {request.get_service()} in time ")
         except requests.exceptions.ConnectTimeout:
-            raise GraphQLError(f"Failed to connect to {service} in time")
+            raise GraphQLError(f"Failed to connect to {request.get_service()} in time")
         except requests.exceptions.ConnectionError:
             raise GraphQLError(f"Failed to execute request to url {request.get_service()}")
         
