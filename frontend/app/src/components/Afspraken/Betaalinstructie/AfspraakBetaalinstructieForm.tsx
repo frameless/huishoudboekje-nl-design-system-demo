@@ -207,6 +207,8 @@ const AfspraakBetaalinstructieForm: React.FC<AfspraakBetaalinstructieProps> = ({
 										onChange={(value: Date) => {
 											if (value) {
 												updateForm("startDate", value)
+											} else {
+												updateForm("startDate", undefined)
 											}
 										}}
 										customInput={<Input type={"text"} autoComplete="no" aria-autocomplete="none" />}
@@ -225,6 +227,8 @@ const AfspraakBetaalinstructieForm: React.FC<AfspraakBetaalinstructieProps> = ({
 										onChange={(value: Date) => {
 											if (value) {
 												updateForm("endDate", value)
+											} else {
+												updateForm("endDate", undefined)
 											}
 										}}
 										customInput={<Input type={"text"} autoComplete="no" aria-autocomplete="none" />}
