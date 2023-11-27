@@ -1,9 +1,9 @@
 from flask import request, abort, make_response
 from flask.views import MethodView
 from injector import inject
-from rapportage_service.controllers.rapportageController import RapportageController
 from core_service.inputs.inputs import Inputs
 from core_service.inputs.validators import JsonSchema
+from rapportage_service.controllers.overviewController import OverviewController
 
 
 class InputValidator(Inputs):
@@ -11,20 +11,13 @@ class InputValidator(Inputs):
     json = [JsonSchema(schema={})]
 
 
-class BurgerRapportageView(MethodView):
-    _rapportage_controller: RapportageController
+class OverviewView(MethodView):
+    _overview_controller: OverviewController
 
     BURGER_IDS_LIST_NAME = "burger_ids"
-    RUBRIEKEN_FILTER_LIST_NAME = "filter_rubrieken"
 
     validation_data = {
         BURGER_IDS_LIST_NAME: {
-            "type": "array",
-            "items": {
-                "type": "number"
-            }
-        },
-        RUBRIEKEN_FILTER_LIST_NAME: {
             "type": "array",
             "items": {
                 "type": "number"
@@ -34,26 +27,23 @@ class BurgerRapportageView(MethodView):
     }
 
     @inject
-    def __init__(self, rapportage_controller: RapportageController):
-        self._rapportage_controller = rapportage_controller
+    def __init__(self, overview_controller: OverviewController):
+        self._overview_controller = overview_controller
         self.validator = InputValidator
         self.validator.json = [JsonSchema(schema=self.validation_data)]
         super().__init__()
 
     def get(self, **kwargs):
         """ 
-            GET rapportage?startDate=<start>&endDate=<end>
+            GET /overzicht?startDate=<start>&endDate=<end>
         """
         self.input_validate()
         burger_ids = request.json.get(self.BURGER_IDS_LIST_NAME)
-        filter_rubrieken = request.json.get(self.RUBRIEKEN_FILTER_LIST_NAME)
-        if not filter_rubrieken:
-            filter_rubrieken = []
 
         start = request.args.get('startDate')
         end = request.args.get('endDate')
 
-        return self._rapportage_controller.get_rapportage(burger_ids, filter_rubrieken, start, end)
+        return self._overview_controller.get_overview(burger_ids, start, end)
 
     def post(self, **kwargs):
         """ Not allowed """

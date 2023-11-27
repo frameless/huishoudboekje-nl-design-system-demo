@@ -11,6 +11,7 @@ from core_service import database
 from bank_transactie_service.views.bank_transaction_range import BanktransactionRangeView
 from bank_transactie_service.views.transactions_filter_view import BanktransactionFilterView
 from bank_transactie_service.views.bank_transaction_sum import BanktransactionSumView
+from bank_transactie_service.views.bank_transactions import BankTransactionsView
 from core_service.statsd_metrics import add_statsd_metrics
 
 db = database.db
@@ -62,6 +63,8 @@ def create_app(config_name='bank_transactie_service.config.Config'):
             "name": "banktransaction_range_view"},
         {"path": "/banktransactions/sum", "view": BanktransactionSumView,
             "name": "banktransaction_sum_view"},
+        {"path": "/banktransactions/ids", "view": BankTransactionsView,
+         "name": "banktransactions_view"},
     ]
     for route in routes:
         app.add_url_rule(

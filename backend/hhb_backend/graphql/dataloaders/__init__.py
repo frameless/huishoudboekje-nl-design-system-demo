@@ -25,6 +25,7 @@ from .saldo_loader import SaldoLoader
 from .afspraak_loader_concept import AfspraakLoaderConcept
 from .transactie_loader_concept import TransactieLoaderConcept
 from .journaalpost_loader_concept import JournaalpostLoaderConcept
+from .overzicht_loader import OverzichtLoader
 
 
 class HHBDataLoader:
@@ -52,8 +53,8 @@ class HHBDataLoader:
         self.overschrijvingen = OverschrijvingLoader()
         self.rapportage = RapportageLoader()
         self.saldo = SaldoLoader()
+        self.overzicht = OverzichtLoader()
 
-        
         self.afspraken_concept = AfspraakLoaderConcept()
         self.transacties_concept = TransactieLoaderConcept()
         self.journaalposten_concept = JournaalpostLoaderConcept()

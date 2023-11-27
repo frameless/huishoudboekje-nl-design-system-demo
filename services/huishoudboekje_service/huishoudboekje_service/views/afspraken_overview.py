@@ -1,10 +1,11 @@
 """ MethodView for /afspraken/overzicht path """
 
 import logging
-from flask import abort, make_response, request
+from flask import abort, json, make_response, request
 from flask.views import MethodView
 from sqlalchemy import and_, func, or_, select
 from sqlalchemy.orm import aliased
+from models.rekening import Rekening
 from core_service.views.basic_view.basic_filter_view import BasicFilterView
 from models.afspraak import Afspraak
 from models.burger import Burger
@@ -12,6 +13,7 @@ from models.journaalpost import Journaalpost
 from core_service.database import db
 
 from core_service.utils import row2dict
+from models.afdeling import Afdeling
 
 
 class AfsprakenOverviewView(BasicFilterView):
@@ -31,24 +33,19 @@ class AfsprakenOverviewView(BasicFilterView):
 
         data = self.__get_afspraken_with_journaalposten_in_months(
             burger_ids, startdate, enddate)
-        logging.warning(data)
+
         if data != None:
-            for row in data:
-                logging.warning(row)
-            return [self.__create_json_response(row) for row in data]
+            return {"data": self.build_response(data)}, 200
         else:
             return {}, 204
 
     def __get_afspraken_with_journaalposten_in_months(self, burger_ids, startdate, enddate):
-        # select a.id, (select array_agg(transaction_id) as transactions from journaalposten where journaalposten.afspraak_id = a.id) as transactions from afspraken as a where a.id = 39;
+        afspraken_with_transaction_ids = Afspraak.query\
+            .filter(Afspraak.burger_id.in_(burger_ids), and_(Afspraak.valid_from <= enddate, or_(Afspraak.valid_through >= startdate, Afspraak.valid_through == None)))\
+            .outerjoin(Journaalpost, Journaalpost.afspraak_id == Afspraak.id)\
+            .outerjoin(Afdeling, Afdeling.id == Afspraak.afdeling_id)\
+            .outerjoin(Rekening, Rekening.id == Afspraak.tegen_rekening_id)\
+            .with_entities(Afspraak.valid_from, Afspraak.valid_through, Rekening.rekeninghouder, Afspraak.id, Afspraak.burger_id, Afspraak.tegen_rekening_id, Afspraak.omschrijving, Afdeling.organisatie_id, func.array_agg(Journaalpost.transaction_id).label("transaction_ids"))\
+            .group_by(Afspraak.id, Afdeling.organisatie_id, Afspraak.tegen_rekening_id, Rekening.rekeninghouder)
 
-        subquery = (select(func.array_agg(Journaalpost.transaction_id).label('transactions'))
-                    .where(Journaalpost.afspraak_id == Afspraak.id).scalar_subquery())
-
-        query = select(Afspraak, subquery.label('transactions'))\
-            .filter(Afspraak.burger_id.in_(burger_ids), and_(Afspraak.valid_from <= enddate, or_(Afspraak.valid_through >= startdate, Afspraak.valid_through == None)))
-        return db.session.execute(query).all()
-
-    def __create_json_response(self, row):
-        (afspraak, transactions) = row
-        return afspraak.__dict__, transactions
+        return afspraken_with_transaction_ids

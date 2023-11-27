@@ -25,7 +25,7 @@ class HuishoudboekjeserviceRepository:
             f"{self.HHB_SERVICES_URL}/burgers/transacties/ids", json=json)
         return response.json()["data"]
 
-    def get_afspraken_with_journaalposten_in_period(self, burger_ids, startdate, enddate):
+    def get_afspraken_with_transactions_in_period(self, burger_ids, startdate, enddate):
         json = {
             "burger_ids": burger_ids,
             "startdate": startdate,

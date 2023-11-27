@@ -13,12 +13,14 @@ import React, {useState} from "react";
 import {useTranslation} from "react-i18next";
 import {NavLink, useLocation, useParams} from "react-router-dom";
 import {AppRoutes} from "../../../config/routes";
-import {Huishouden, useGetHuishoudenQuery} from "../../../generated/graphql";
+import {Huishouden, useGetHuishoudenOverzichtQuery, useGetHuishoudenQuery} from "../../../generated/graphql";
 import Queryable from "../../../utils/Queryable";
 import {formatHuishoudenName} from "../../../utils/things";
 import BackButton from "../../shared/BackButton";
 import Page from "../../shared/Page";
 import {ArrowLeftIcon, ArrowRightIcon} from "@chakra-ui/icons";
+import d from "../../../utils/dayjs";
+import {formatTableData, AgreementEntry, PaymentEntry, OrganisationEntry} from "./TableDataFormatter";
 
 
 
@@ -29,6 +31,7 @@ const HuishoudenOverzicht = () => {
     const [filterHouseholdIds, setFilterHouseholdIds] = useState<string>(new URLSearchParams(queryParams).get("huishoudenId") ?? "");
     const addBurgersModal = useDisclosure();
     const $huishouden = useGetHuishoudenQuery({fetchPolicy: 'cache-and-network', variables: {id: 3}});
+    const $overzicht = useGetHuishoudenOverzichtQuery({fetchPolicy: 'cache-and-network', variables: {burgers: [31], start: '2023-01-01', end: '2023-03-31'}})
     const months = ['Januari', 'Februari', 'Maart']
     const tabledata = [{
         "Organisatie": "Albert Heijn",
@@ -121,11 +124,9 @@ const HuishoudenOverzicht = () => {
 
 
     return (
-        <Queryable query={$huishouden} children={data => {
+        <Queryable query={$overzicht} children={data => {
 
-            const huishouden: Huishouden = data.huishouden;
-            const burgerIds: string[] = (huishouden.burgers || []).map(b => String(b.id));
-
+            formatTableData(data.overzicht, '2023-01-01', '2023-03-31')
 
             // HTML is dymanically generated here because of JSX limitations. For the use of rowSpan it is necesary that the next <Tr> is defined with only the not-yet-filled
             // columns in the row. This EXCLUDES rows that are filled by rowSpan. This is not an issue if a <Tr> could be dynamically closed. Unfortunately, this is not possible.
@@ -183,8 +184,8 @@ const HuishoudenOverzicht = () => {
 
 
             return (
-                <Page title={t("huishoudenName", {name: formatHuishoudenName(huishouden)})} backButton={(<BackButton to={AppRoutes.Huishoudens()} />)} right={(
-                    <Button size={"sm"} variant={"outline"} colorScheme={"primary"} as={NavLink} to={AppRoutes.RapportageBurger([...burgerIds])}>{t("global.actions.showReports")}</Button>
+                <Page title={t("huishoudenName", {name: 'temp'})} backButton={(<BackButton to={AppRoutes.Huishoudens()} />)} right={(
+                    <Button size={"sm"} variant={"outline"} colorScheme={"primary"} as={NavLink} to={AppRoutes.RapportageBurger(['31'])}>{t("global.actions.showReports")}</Button>
                 )}>
                     <Card w={'100%'}>
                         <TableContainer>

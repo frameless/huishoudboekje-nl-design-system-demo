@@ -21,6 +21,7 @@ from .rubrieken import RubriekQuery, RubriekenQuery
 from .saldo import SaldoQuery
 from .signalen import SignaalQuery, SignalenQuery
 from .rapportages import BurgerRapportagesQuery
+from .overzicht import OverzichtQuery
 
 
 class RootQuery(graphene.ObjectType):
@@ -70,6 +71,7 @@ class RootQuery(graphene.ObjectType):
     burger_rapportages = BurgerRapportagesQuery.return_type
     search_afspraken = SearchAfsprakenQuery.return_type
     search_transacties = BankTransactionsSearchQuery.return_type
+    overzicht = OverzichtQuery.return_type
 
     def resolve_burger(root, info, **kwargs):
         return BurgerQuery.resolver(root, info, **kwargs)
@@ -175,7 +177,7 @@ class RootQuery(graphene.ObjectType):
 
     def resolve_afdelingen(root, info, **kwargs):
         return AfdelingenQuery.resolver(root, info, **kwargs)
-    
+
     def resolve_afdelingen_by_iban(root, info, **kwargs):
         return AfdelingenByIbanQuery.resolver(root, info, **kwargs)
 
@@ -205,6 +207,9 @@ class RootQuery(graphene.ObjectType):
 
     def resolve_search_afspraken(root, info, **kwargs):
         return SearchAfsprakenQuery.resolver(root, info, **kwargs)
-    
+
     def resolve_search_transacties(root, info, **kwargs):
         return BankTransactionsSearchQuery.resolver(root, info, **kwargs)
+
+    def resolve_overzicht(root, info, **kwargs):
+        return OverzichtQuery.resolver(root, info, **kwargs)
