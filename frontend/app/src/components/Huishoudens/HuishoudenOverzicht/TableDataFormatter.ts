@@ -44,7 +44,6 @@ export function formatTableData(input, startDate, endDate): OrganisationEntry[] 
 
 	}
 	organisationEntries.sort((a, b) => (a.Organisation.localeCompare(b.Organisation)))
-
 	return organisationEntries
 }
 
@@ -53,7 +52,7 @@ function getMonthName(date): string {
 	return new Intl.DateTimeFormat('en-US', {month: 'long'}).format(date);
 }
 
-function getMonthsBetween(start, end): string[] {
+export function getMonthsBetween(start, end): string[] {
 	const months: string[] = [];
 	const currentDate = new Date(start);
 	const endDate = new Date(end)

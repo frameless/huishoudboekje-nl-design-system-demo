@@ -20,7 +20,7 @@ import BackButton from "../../shared/BackButton";
 import Page from "../../shared/Page";
 import {ArrowLeftIcon, ArrowRightIcon} from "@chakra-ui/icons";
 import d from "../../../utils/dayjs";
-import {formatTableData, AgreementEntry, PaymentEntry, OrganisationEntry} from "./TableDataFormatter";
+import {formatTableData, AgreementEntry, PaymentEntry, OrganisationEntry, getMonthsBetween} from "./TableDataFormatter";
 
 
 
@@ -30,9 +30,11 @@ const HuishoudenOverzicht = () => {
 	const {search: queryParams} = useLocation();
 	const [filterHouseholdIds, setFilterHouseholdIds] = useState<string>(new URLSearchParams(queryParams).get("huishoudenId") ?? "");
 	const addBurgersModal = useDisclosure();
+	const startDate = d().subtract(3, 'month').startOf('month').format('YYYY-MM-DD')
+	const endDate = d().subtract(1, 'month').endOf('month').format('YYYY-MM-DD')
 	const $huishouden = useGetHuishoudenQuery({fetchPolicy: 'cache-and-network', variables: {id: 3}});
-	const $overzicht = useGetHuishoudenOverzichtQuery({fetchPolicy: 'cache-and-network', variables: {burgers: [31], start: '2023-01-01', end: '2023-03-31'}})
-	const months = ['Januari', 'Februari', 'Maart']
+	const $overzicht = useGetHuishoudenOverzichtQuery({fetchPolicy: 'cache-and-network', variables: {burgers: [31], start: startDate, end: endDate}})
+	const months = getMonthsBetween(startDate, endDate)
 	// const tabledata = [{
 	//     "Organisatie": "Albert Heijn",
 	//     "Afspraken": [{
@@ -77,7 +79,9 @@ const HuishoudenOverzicht = () => {
 		for (const agreement of organisationData.Agreements) {
 			maxRowSpan += getRowspanForAfspraak(agreement)
 		}
-
+		if (maxRowSpan == 0) {
+			maxRowSpan = 1
+		}
 		return maxRowSpan
 	}
 
@@ -89,17 +93,19 @@ const HuishoudenOverzicht = () => {
 				maxAgreementRowSpan = paymentCount
 			}
 		}
+		if (maxAgreementRowSpan == 0) {
+			maxAgreementRowSpan = 1
+		}
 		return maxAgreementRowSpan
 	}
 
 	function getPaymentAmountOrEmpty(payments: PaymentEntry[], index) {
-		console.log(payments)
-		if (payments.length > index) {
-			return payments[index].Amount
+		if (payments) {
+			if (payments.length > index) {
+				return payments[index].Amount
+			}
 		}
-		else {
-			return ""
-		}
+		return ""
 	}
 
 	function getCorrectDividerClass(isLastInAgreements, isLastInOrganisations) {
@@ -117,9 +123,10 @@ const HuishoudenOverzicht = () => {
 	function getPaymentRowWithStyling(payments: Record<string, PaymentEntry[]>, index, isLastInAgreements, isLastInOrganisations) {
 		console.log(payments)
 		const paymentRow: JSX.Element[] = []
-		paymentRow.push(stylePaymentRow(getPaymentAmountOrEmpty(payments['January'], index), isLastInAgreements, isLastInOrganisations))
-		paymentRow.push(stylePaymentRow(getPaymentAmountOrEmpty(payments['February'], index), isLastInAgreements, isLastInOrganisations))
-		paymentRow.push(stylePaymentRow(getPaymentAmountOrEmpty(payments['March'], index), isLastInAgreements, isLastInOrganisations))
+		console.log(payments)
+		paymentRow.push(stylePaymentRow(getPaymentAmountOrEmpty(payments[months[2]], index), isLastInAgreements, isLastInOrganisations))
+		paymentRow.push(stylePaymentRow(getPaymentAmountOrEmpty(payments[months[1]], index), isLastInAgreements, isLastInOrganisations))
+		paymentRow.push(stylePaymentRow(getPaymentAmountOrEmpty(payments[months[0]], index), isLastInAgreements, isLastInOrganisations))
 
 		return paymentRow;
 	}
@@ -128,7 +135,7 @@ const HuishoudenOverzicht = () => {
 	return (
 		<Queryable query={$overzicht} children={data => {
 
-			const formattedData: OrganisationEntry[] = formatTableData(data.overzicht, '2023-01-01', '2023-03-31')
+			const formattedData: OrganisationEntry[] = formatTableData(data.overzicht.afspraken, startDate, endDate)
 
 			// HTML is dymanically generated here because of JSX limitations. For the use of rowSpan it is necesary that the next <Tr> is defined with only the not-yet-filled
 			// columns in the row. This EXCLUDES rows that are filled by rowSpan. This is not an issue if a <Tr> could be dynamically closed. Unfortunately, this is not possible.
@@ -197,9 +204,9 @@ const HuishoudenOverzicht = () => {
 										<Th textAlign={"left"}>Organisatie </Th>
 										<Th textAlign={"left"}>Afspraak</Th>
 										<Th className="small"><IconButton aria-label="move left" icon={<ArrowLeftIcon />}></IconButton></Th>
-										<Th textAlign={"right"}>Januari</Th>
-										<Th textAlign={"right"}>Februari</Th>
-										<Th textAlign={"right"}>Maart</Th>
+										<Th textAlign={"right"}>{months[2]}</Th>
+										<Th textAlign={"right"}>{months[1]}</Th>
+										<Th textAlign={"right"}>{months[0]}</Th>
 										<Th className="small"><IconButton aria-label="move right" icon={<ArrowRightIcon />}></IconButton></Th>
 									</Tr>
 								</Thead>

@@ -9,7 +9,7 @@ from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActivitei
 
 
 class OverzichtQuery:
-    return_type = graphene.Field(graphene.List(Overzicht), burger_ids=graphene.List(graphene.Int, required=True), start_date=graphene.String(
+    return_type = graphene.Field(Overzicht, burger_ids=graphene.List(graphene.Int, required=True), start_date=graphene.String(
         required=True), end_date=graphene.String(required=True))
 
     @classmethod
@@ -17,7 +17,6 @@ class OverzichtQuery:
         logging.info(f"Get overzicht")
         result = hhb_dataloader().overzicht.load_huishouden_overzicht(
             burger_ids, start_date, end_date)
-        logging.warning(burger_ids)
         AuditLogging.create(
             action=info.field_name,
             entities=[GebruikersActiviteitEntity(entityType="huishouden_overzicht", entityId=burger_id)

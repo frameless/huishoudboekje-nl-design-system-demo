@@ -1,3 +1,4 @@
+import logging
 import os
 import requests
 
@@ -16,8 +17,16 @@ class BanktransactieServiceRepository:
 
     def get_saldo(self, date, transactions=None):
         transactionsJson = {"transaction_ids": transactions}
+        logging.warning(date)
         response = requests.get(
             f"{self.BANKTRANSACTIES_SERVICE_URL}/banktransactions/sum?date={date}", json=transactionsJson)
+        logging.warning(response.json())
+        return response.json()["data"][0]["sum"]
+
+    def get_saldo_with_start_date(self, start, end, transactions=None):
+        transactionsJson = {"transaction_ids": transactions}
+        response = requests.get(
+            f"{self.BANKTRANSACTIES_SERVICE_URL}/banktransactions/sum?date={end}&start={start}", json=transactionsJson)
         return response.json()["data"][0]["sum"]
 
     def get_transactions_by_id(self, transaction_ids=[]):

@@ -744,16 +744,27 @@ export enum OverschrijvingStatus {
 }
 
 export type Overzicht = {
+  afspraken?: Maybe<Array<Maybe<OverzichtAfspraak>>>;
+  saldos?: Maybe<Array<Maybe<OverzichtSaldo>>>;
+};
+
+export type OverzichtAfspraak = {
   burgerId?: Maybe<Scalars['Int']>;
   id?: Maybe<Scalars['Int']>;
   omschrijving?: Maybe<Scalars['String']>;
   organisatieId?: Maybe<Scalars['Int']>;
   rekeninghouder?: Maybe<Scalars['String']>;
   tegenRekeningId?: Maybe<Scalars['Int']>;
-  totaalUitgaven?: Maybe<Scalars['Decimal']>;
   transactions?: Maybe<Array<Maybe<BankTransaction>>>;
   validFrom?: Maybe<Scalars['String']>;
   validThrough?: Maybe<Scalars['String']>;
+};
+
+export type OverzichtSaldo = {
+  eindSaldo?: Maybe<Scalars['Decimal']>;
+  maandnummer?: Maybe<Scalars['Int']>;
+  mutatie?: Maybe<Scalars['Decimal']>;
+  startSaldo?: Maybe<Scalars['Decimal']>;
 };
 
 export type PageInfo = {
@@ -1226,7 +1237,7 @@ export type RootQuery = {
   journaalpostenTransactieRubriek?: Maybe<Array<Maybe<JournaalpostTransactieRubriek>>>;
   organisatie?: Maybe<Organisatie>;
   organisaties?: Maybe<Array<Maybe<Organisatie>>>;
-  overzicht?: Maybe<Array<Maybe<Overzicht>>>;
+  overzicht?: Maybe<Overzicht>;
   postadres?: Maybe<Postadres>;
   postadressen?: Maybe<Array<Maybe<Postadres>>>;
   rekening?: Maybe<Rekening>;
@@ -2208,7 +2219,7 @@ export type GetHuishoudenOverzichtQueryVariables = Exact<{
 }>;
 
 
-export type GetHuishoudenOverzichtQuery = { overzicht?: Array<{ id?: number, burgerId?: number, organisatieId?: number, omschrijving?: string, rekeninghouder?: string, tegenRekeningId?: number, validFrom?: string, validThrough?: string, transactions?: Array<{ id?: number, informationToAccountOwner?: string, statementLine?: string, bedrag?: any, isCredit?: boolean, tegenRekeningIban?: string, transactieDatum?: any }> }> };
+export type GetHuishoudenOverzichtQuery = { overzicht?: { afspraken?: Array<{ id?: number, burgerId?: number, organisatieId?: number, omschrijving?: string, rekeninghouder?: string, tegenRekeningId?: number, validFrom?: string, validThrough?: string, transactions?: Array<{ id?: number, informationToAccountOwner?: string, statementLine?: string, bedrag?: any, isCredit?: boolean, tegenRekeningIban?: string, transactieDatum?: any }> }>, saldos?: Array<{ maandnummer?: number, startSaldo?: any, eindSaldo?: any, mutatie?: any }> } };
 
 export type GetHuishoudensQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -6474,22 +6485,30 @@ export type GetHuishoudenQueryResult = Apollo.QueryResult<GetHuishoudenQuery, Ge
 export const GetHuishoudenOverzichtDocument = gql`
     query getHuishoudenOverzicht($burgers: [Int!]!, $start: String!, $end: String!) {
   overzicht(burgerIds: $burgers, startDate: $start, endDate: $end) {
-    id
-    burgerId
-    organisatieId
-    omschrijving
-    rekeninghouder
-    tegenRekeningId
-    validFrom
-    validThrough
-    transactions {
+    afspraken {
       id
-      informationToAccountOwner
-      statementLine
-      bedrag
-      isCredit
-      tegenRekeningIban
-      transactieDatum
+      burgerId
+      organisatieId
+      omschrijving
+      rekeninghouder
+      tegenRekeningId
+      validFrom
+      validThrough
+      transactions {
+        id
+        informationToAccountOwner
+        statementLine
+        bedrag
+        isCredit
+        tegenRekeningIban
+        transactieDatum
+      }
+    }
+    saldos {
+      maandnummer
+      startSaldo
+      eindSaldo
+      mutatie
     }
   }
 }
