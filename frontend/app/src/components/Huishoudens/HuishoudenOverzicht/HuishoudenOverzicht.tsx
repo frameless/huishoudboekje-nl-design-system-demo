@@ -7,7 +7,7 @@ import {
 	Th,
 	Td,
 	TableCaption,
-	TableContainer, Tag, useDisclosure, IconButton, Text, Box, useTheme
+	TableContainer, Tag, useDisclosure, IconButton, Text, Box, useTheme, VStack
 } from "@chakra-ui/react";
 import React, {useState} from "react";
 import {useTranslation} from "react-i18next";
@@ -15,12 +15,13 @@ import {NavLink, useLocation, useParams} from "react-router-dom";
 import {AppRoutes} from "../../../config/routes";
 import {Huishouden, useGetHuishoudenOverzichtQuery, useGetHuishoudenQuery} from "../../../generated/graphql";
 import Queryable from "../../../utils/Queryable";
-import {formatHuishoudenName} from "../../../utils/things";
+import {currencyFormat2, formatHuishoudenName} from "../../../utils/things";
 import BackButton from "../../shared/BackButton";
 import Page from "../../shared/Page";
 import {ArrowLeftIcon, ArrowRightIcon} from "@chakra-ui/icons";
 import d from "../../../utils/dayjs";
-import {formatTableData, AgreementEntry, PaymentEntry, OrganisationEntry, getMonthsBetween} from "./TableDataFormatter";
+import {formatTableData, AgreementEntry, PaymentEntry, OrganisationEntry, getMonthsBetween, getMonthByNumber} from "./TableDataFormatter";
+import {DateRange} from "../../../models/models";
 
 
 
@@ -30,59 +31,20 @@ const HuishoudenOverzicht = () => {
 	const {search: queryParams} = useLocation();
 	const [filterHouseholdIds, setFilterHouseholdIds] = useState<string>(new URLSearchParams(queryParams).get("huishoudenId") ?? "");
 	const addBurgersModal = useDisclosure();
-	const startDate = d().subtract(3, 'month').startOf('month').format('YYYY-MM-DD')
-	const endDate = d().subtract(1, 'month').endOf('month').format('YYYY-MM-DD')
+
+	// This table shows 3 months, but we eager load 5 months here so that there is a smooth transition to the next month
+	const [dateRange, setDateRange] = useState<DateRange>({from: d().subtract(4, 'month').startOf('month').toDate(), through: d().subtract(0, 'month').endOf('month').toDate()})
 	const $huishouden = useGetHuishoudenQuery({fetchPolicy: 'cache-and-network', variables: {id: 3}});
-	const $overzicht = useGetHuishoudenOverzichtQuery({fetchPolicy: 'cache-and-network', variables: {burgers: [31], start: startDate, end: endDate}})
-	const months = getMonthsBetween(startDate, endDate)
-	// const tabledata = [{
-	//     "Organisatie": "Albert Heijn",
-	//     "Afspraken": [{
-	//         "Omschrijving": "Loon", "Betalingen": {
-	//             "Januari": [{"Datum": "01-01-2023", "Aantal": "15000"},
-	//             {"Datum": "25-01-2023", "Aantal": "15000"}],
-	//             "Februari": [{"Datum": "01-02-2023", "Aantal": "16000"},
-	//             {"Datum": "25-02-2023", "Aantal": "16000"},
-	//             {"Datum": "25-02-2023", "Aantal": "16000"}],
-	//             "Maart": [{"Datum": "01-03-2023", "Aantal": "17000"},
-	//             {"Datum": "25-03-2023", "Aantal": "17000"}, {"Datum": "25-03-2023", "Aantal": "17000"}],
-	//         }
-	//     }]
-	// },
-	// {
-	//     "Organisatie": "Eneco",
-	//     "Afspraken": [{
-	//         "Omschrijving": "Energie Kosten", "Betalingen": {
-	//             "Januari": [{"Datum": "01-01-2023", "Aantal": "-15000"},
-	//             {"Datum": "15-01-2023", "Aantal": "-15000"},
-	//             {"Datum": "25-01-2023", "Aantal": "-15000"}],
-	//             "Februari": [{"Datum": "01-02-2023", "Aantal": "-15000"},
-	//             {"Datum": "15-02-2023", "Aantal": "-15000"},
-	//             {"Datum": "25-02-2023", "Aantal": "-15000"}],
-	//             "Maart": [{"Datum": "01-03-2023", "Aantal": "-15000"},
-	//             {"Datum": "25-03-2023", "Aantal": "-15000"}],
-	//         }
-	//     },
-	//     {
-	//         "Omschrijving": "Toeslagen Korting", "Betalingen": {
-	//             "Januari": [{"Datum": "01-01-2023", "Aantal": "5000"}, {"Datum": "01-01-2023", "Aantal": "5000"}],
-	//             "Februari": [{"Datum": "01-02-2023", "Aantal": "2000"},
-	//             {"Datum": "01-02-2023", "Aantal": "3000"}],
-	//             "Maart": [{"Datum": "01-02-2023", "Aantal": "2000"}],
-	//         }
-	//     }]
-	// }
-	// ]
+	const $overzicht = useGetHuishoudenOverzichtQuery({fetchPolicy: 'cache-and-network', variables: {burgers: [31], start: d(dateRange.from).format('YYYY-MM-DD'), end: d(dateRange.through).format('YYYY-MM-DD')}})
+	const months = getMonthsBetween(d(dateRange.from).format('YYYY-MM-DD'), d(dateRange.through).format('YYYY-MM-DD'))
 
 	function getRowspanForOrganisation(organisationData: OrganisationEntry) {
 		let maxRowSpan = 0;
 		for (const agreement of organisationData.Agreements) {
 			maxRowSpan += getRowspanForAfspraak(agreement)
 		}
-		if (maxRowSpan == 0) {
-			maxRowSpan = 1
-		}
-		return maxRowSpan
+
+		return Math.max(maxRowSpan, 1)
 	}
 
 	function getRowspanForAfspraak(agreementData: AgreementEntry) {
@@ -93,16 +55,14 @@ const HuishoudenOverzicht = () => {
 				maxAgreementRowSpan = paymentCount
 			}
 		}
-		if (maxAgreementRowSpan == 0) {
-			maxAgreementRowSpan = 1
-		}
-		return maxAgreementRowSpan
+
+		return Math.max(maxAgreementRowSpan, 1)
 	}
 
 	function getPaymentAmountOrEmpty(payments: PaymentEntry[], index) {
 		if (payments) {
 			if (payments.length > index) {
-				return payments[index].Amount
+				return `€ ${currencyFormat2(false).format(+payments[index].Amount)}`
 			}
 		}
 		return ""
@@ -115,27 +75,47 @@ const HuishoudenOverzicht = () => {
 		return ""
 	}
 
-	function stylePaymentRow(paymentAmount, isLastInAgreements, isLastInOrganisations) {
+	function stylePaymentRow(content, textColor, isLastInAgreements, isLastInOrganisations) {
 		const classes = getCorrectDividerClass(isLastInAgreements, isLastInOrganisations)
-		return <Td textAlign={"right"} className={classes}>{paymentAmount}</Td>
+		return <Td textAlign={"right"} textColor={textColor} className={classes}>{content}</Td>
+	}
+
+	function getCorrectTextColorFromAmount(amount: number) {
+		return amount > 0 ? "undefined" : "red.500"
+	}
+
+	function getCorrectTextColorFromPayments(payments, index) {
+		if (payments) {
+			if (payments.length > index) {
+				return getCorrectTextColorFromAmount(+payments[index].Amount)
+			}
+		}
+		return "undefined"
 	}
 
 	function getPaymentRowWithStyling(payments: Record<string, PaymentEntry[]>, index, isLastInAgreements, isLastInOrganisations) {
-		console.log(payments)
 		const paymentRow: JSX.Element[] = []
-		console.log(payments)
-		paymentRow.push(stylePaymentRow(getPaymentAmountOrEmpty(payments[months[2]], index), isLastInAgreements, isLastInOrganisations))
-		paymentRow.push(stylePaymentRow(getPaymentAmountOrEmpty(payments[months[1]], index), isLastInAgreements, isLastInOrganisations))
-		paymentRow.push(stylePaymentRow(getPaymentAmountOrEmpty(payments[months[0]], index), isLastInAgreements, isLastInOrganisations))
+		paymentRow.push(stylePaymentRow(getPaymentAmountOrEmpty(payments[months[1].name], index), getCorrectTextColorFromPayments(payments[months[1].name], index), isLastInAgreements, isLastInOrganisations))
+		paymentRow.push(stylePaymentRow(getPaymentAmountOrEmpty(payments[months[2].name], index), getCorrectTextColorFromPayments(payments[months[2].name], index), isLastInAgreements, isLastInOrganisations))
+		paymentRow.push(stylePaymentRow(getPaymentAmountOrEmpty(payments[months[3].name], index), getCorrectTextColorFromPayments(payments[months[3].name], index), isLastInAgreements, isLastInOrganisations))
 
 		return paymentRow;
+	}
+
+	function moveMonthsByAmount(amount: number) {
+		const startDate = d(dateRange.from).subtract(amount, 'months').toDate()
+		const endDate = d(dateRange.through).subtract(amount, 'months').toDate()
+
+		setDateRange({from: startDate, through: endDate})
 	}
 
 
 	return (
 		<Queryable query={$overzicht} children={data => {
 
-			const formattedData: OrganisationEntry[] = formatTableData(data.overzicht.afspraken, startDate, endDate)
+			// we only want the months 2 till 4 from the data formatted. This function will check if the afspraak is active within these months
+			const formattedData: OrganisationEntry[] = formatTableData(data.overzicht.afspraken, d(dateRange.from).subtract(-1, 'month').startOf('month').format('YYYY-MM-DD'), d(dateRange.through).subtract(1, 'month').endOf('month').format('YYYY-MM-DD'))
+			const saldos = data.overzicht.saldos
 
 			// HTML is dymanically generated here because of JSX limitations. For the use of rowSpan it is necesary that the next <Tr> is defined with only the not-yet-filled
 			// columns in the row. This EXCLUDES rows that are filled by rowSpan. This is not an issue if a <Tr> could be dynamically closed. Unfortunately, this is not possible.
@@ -203,33 +183,45 @@ const HuishoudenOverzicht = () => {
 									<Tr>
 										<Th textAlign={"left"}>Organisatie </Th>
 										<Th textAlign={"left"}>Afspraak</Th>
-										<Th className="small"><IconButton aria-label="move left" icon={<ArrowLeftIcon />}></IconButton></Th>
-										<Th textAlign={"right"}>{months[2]}</Th>
-										<Th textAlign={"right"}>{months[1]}</Th>
-										<Th textAlign={"right"}>{months[0]}</Th>
-										<Th className="small"><IconButton aria-label="move right" icon={<ArrowRightIcon />}></IconButton></Th>
+										<Th className="small"><IconButton aria-label="move left" onClick={(value) => moveMonthsByAmount(1)} icon={<ArrowLeftIcon />}></IconButton></Th>
+										<Th textAlign={"right"}><VStack><Box>{months[1].name}</Box><Box fontWeight={"semibold"}>{months[1].year}</Box></VStack></Th>
+										<Th textAlign={"right"}><VStack><Box>{months[2].name}</Box><Box fontWeight={"semibold"}>{months[2].year}</Box></VStack></Th>
+										<Th textAlign={"right"}><VStack><Box>{months[3].name}</Box><Box fontWeight={"semibold"}>{months[3].year}</Box></VStack></Th>
+										<Th className="small"><IconButton aria-label="move right" onClick={(value) => moveMonthsByAmount(-1)} icon={<ArrowRightIcon />}></IconButton></Th>
 									</Tr>
 								</Thead>
 								<Tbody >
 									{renderTableRows(formattedData)}
+
 									<Tr className="divider-dark-top">
-										<Td className="divider-light">Eindsaldo</Td>
+										<Td fontWeight={"bold"} className="divider-light">Mutaties in periode</Td>
 										<Td className="divider-light"></Td>
 										<Td className="divider-light"></Td>
-										<Td className="divider-light" textAlign={"right"}>1000</Td>
-										<Td className="divider-light" textAlign={"right"}>1000</Td>
-										<Td className="divider-light" textAlign={"right"}>1000</Td>
+										<Td fontWeight={"bold"} textColor={getCorrectTextColorFromAmount(saldos[1].mutatie)} className="divider-light" textAlign={"right"}>€ {currencyFormat2(false).format(saldos[1].mutatie)}</Td>
+										<Td fontWeight={"bold"} textColor={getCorrectTextColorFromAmount(saldos[2].mutatie)} className="divider-light" textAlign={"right"}>€ {currencyFormat2(false).format(saldos[2].mutatie)}</Td>
+										<Td fontWeight={"bold"} textColor={getCorrectTextColorFromAmount(saldos[3].mutatie)} className="divider-light" textAlign={"right"}>€ {currencyFormat2(false).format(saldos[3].mutatie)}</Td>
 										<Td className="divider-light"></Td>
 									</Tr>
 									<Tr className="divider-light" >
-										<Td className="divider-light" >Saldo Mutatie</Td>
+										<Td fontWeight={"bold"} className="divider-light" >Saldo start van periode</Td>
 										<Td className="divider-light" ></Td>
 										<Td className="divider-light" ></Td>
-										<Td className="divider-light" textAlign={"right"}>1000</Td>
-										<Td className="divider-light" textAlign={"right"}>1000</Td>
-										<Td className="divider-light" textAlign={"right"}>1000</Td>
-										<Td className="divider-light"></Td>
+										<Td fontWeight={"bold"} textColor={getCorrectTextColorFromAmount(saldos[1].startSaldo)} className="divider-light" textAlign={"right"}>€ {currencyFormat2(false).format(saldos[1].startSaldo)}</Td>
+										<Td fontWeight={"bold"} textColor={getCorrectTextColorFromAmount(saldos[2].startSaldo)} className="divider-light" textAlign={"right"}>€ {currencyFormat2(false).format(saldos[2].startSaldo)}</Td>
+										<Td fontWeight={"bold"} textColor={getCorrectTextColorFromAmount(saldos[3].startSaldo)} className="divider-light" textAlign={"right"}>€ {currencyFormat2(false).format(saldos[3].startSaldo)}</Td>
+										<Td fontWeight={"bold"} className="divider-light"></Td>
 									</Tr>
+									<Tr className="divider-dark-top">
+										<Td fontWeight={"bold"} className="divider-light" >Saldo einde van periode</Td>
+										<Td className="divider-light" ></Td>
+										<Td className="divider-light" ></Td>
+										<Td fontWeight={"bold"} textColor={getCorrectTextColorFromAmount(saldos[1].eindSaldo)} className="divider-light" textAlign={"right"}>€ {currencyFormat2(false).format(saldos[1].eindSaldo)}</Td>
+										<Td fontWeight={"bold"} textColor={getCorrectTextColorFromAmount(saldos[2].eindSaldo)} className="divider-light" textAlign={"right"}>€ {currencyFormat2(false).format(saldos[2].eindSaldo)}</Td>
+										<Td fontWeight={"bold"} textColor={getCorrectTextColorFromAmount(saldos[3].eindSaldo)} className="divider-light" textAlign={"right"}>€ {currencyFormat2(false).format(saldos[3].eindSaldo)}</Td>
+										<Td className="divider-light" ></Td>
+
+									</Tr>
+
 								</Tbody>
 							</Table>
 						</TableContainer>
