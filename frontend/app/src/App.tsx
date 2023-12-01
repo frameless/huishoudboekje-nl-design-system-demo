@@ -38,7 +38,7 @@ import StatusErrorPage from "./components/Status/StatusErrorPage";
 import {RouteNames} from "./config/routes";
 import {useFeatureFlag, useInitializeFeatureFlags} from "./utils/features";
 import useAuth from "./utils/useAuth";
-import HuishoudenOverzicht from "./components/Huishoudens/HuishoudenOverzicht/HuishoudenOverzicht";
+import HuishoudenOverzichtIndex from "./components/Huishoudens/HuishoudenOverzicht/HuishoudenOverzichtIndex";
 
 const App = () => {
 	const {t} = useTranslation();
@@ -110,7 +110,7 @@ const App = () => {
 							<Route path={RouteNames.huishoudens} element={<Outlet />}>
 								<Route path={":id"} element={<HuishoudenDetails />} />
 								<Route index element={<HuishoudensList />} />
-								<Route path={RouteNames.overzicht} element={<HuishoudenOverzicht />} />
+								<Route path={RouteNames.overzicht} element={<HuishoudenOverzichtIndex />} />
 							</Route>
 							<Route path={RouteNames.burgers} element={<Outlet />}>
 								<Route index element={<BurgerList />} />

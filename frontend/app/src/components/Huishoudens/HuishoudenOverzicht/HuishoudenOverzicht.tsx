@@ -24,18 +24,16 @@ import {formatTableData, AgreementEntry, PaymentEntry, OrganisationEntry, getMon
 import {DateRange} from "../../../models/models";
 
 
+type BalanceTableProps = {burgerIds: number[]};
 
-const HuishoudenOverzicht = () => {
+const HuishoudenOverzicht: React.FC<BalanceTableProps> = ({burgerIds}) => {
 	const {t} = useTranslation();
-	const theme = useTheme();
 	const {search: queryParams} = useLocation();
-	const [filterHouseholdIds, setFilterHouseholdIds] = useState<string>(new URLSearchParams(queryParams).get("huishoudenId") ?? "");
-	const addBurgersModal = useDisclosure();
 
 	// This table shows 3 months, but we eager load 5 months here so that there is a smooth transition to the next month
 	const [dateRange, setDateRange] = useState<DateRange>({from: d().subtract(4, 'month').startOf('month').toDate(), through: d().subtract(0, 'month').endOf('month').toDate()})
-	const $huishouden = useGetHuishoudenQuery({fetchPolicy: 'cache-and-network', variables: {id: 3}});
-	const $overzicht = useGetHuishoudenOverzichtQuery({fetchPolicy: 'cache-and-network', variables: {burgers: [31], start: d(dateRange.from).format('YYYY-MM-DD'), end: d(dateRange.through).format('YYYY-MM-DD')}})
+
+	const $overzicht = useGetHuishoudenOverzichtQuery({fetchPolicy: 'cache-and-network', variables: {burgers: burgerIds, start: d(dateRange.from).format('YYYY-MM-DD'), end: d(dateRange.through).format('YYYY-MM-DD')}})
 	const months = getMonthsBetween(d(dateRange.from).format('YYYY-MM-DD'), d(dateRange.through).format('YYYY-MM-DD'))
 
 	function getRowspanForOrganisation(organisationData: OrganisationEntry) {
@@ -173,63 +171,60 @@ const HuishoudenOverzicht = () => {
 
 
 			return (
-				<Page title={t("huishoudenName", {name: 'temp'})} backButton={(<BackButton to={AppRoutes.Huishoudens()} />)} right={(
-					<Button size={"sm"} variant={"outline"} colorScheme={"primary"} as={NavLink} to={AppRoutes.RapportageBurger(['31'])}>{t("global.actions.showReports")}</Button>
-				)}>
-					<Card w={'100%'}>
-						<TableContainer>
-							<Table variant="unstyled" className="table-overzicht">
-								<Thead>
-									<Tr>
-										<Th textAlign={"left"}>Organisatie </Th>
-										<Th textAlign={"left"}>Afspraak</Th>
-										<Th className="small"><IconButton aria-label="move left" onClick={(value) => moveMonthsByAmount(1)} icon={<ArrowLeftIcon />}></IconButton></Th>
-										<Th textAlign={"right"}><VStack><Box>{months[1].name}</Box><Box fontWeight={"semibold"}>{months[1].year}</Box></VStack></Th>
-										<Th textAlign={"right"}><VStack><Box>{months[2].name}</Box><Box fontWeight={"semibold"}>{months[2].year}</Box></VStack></Th>
-										<Th textAlign={"right"}><VStack><Box>{months[3].name}</Box><Box fontWeight={"semibold"}>{months[3].year}</Box></VStack></Th>
-										<Th className="small"><IconButton aria-label="move right" onClick={(value) => moveMonthsByAmount(-1)} icon={<ArrowRightIcon />}></IconButton></Th>
-									</Tr>
-								</Thead>
-								<Tbody >
-									{renderTableRows(formattedData)}
+				<Card w={'100%'}>
+					<TableContainer>
+						<Table variant="unstyled" className="table-overzicht">
+							<Thead>
+								<Tr>
+									<Th textAlign={"left"}>Organisatie </Th>
+									<Th textAlign={"left"}>Afspraak</Th>
+									<Th className="small"><IconButton aria-label="move left" onClick={(value) => moveMonthsByAmount(1)} icon={<ArrowLeftIcon />}></IconButton></Th>
+									<Th textAlign={"right"}><VStack><Box>{months[1].name}</Box><Box fontWeight={"semibold"}>{months[1].year}</Box></VStack></Th>
+									<Th textAlign={"right"}><VStack><Box>{months[2].name}</Box><Box fontWeight={"semibold"}>{months[2].year}</Box></VStack></Th>
+									<Th textAlign={"right"}><VStack><Box>{months[3].name}</Box><Box fontWeight={"semibold"}>{months[3].year}</Box></VStack></Th>
+									<Th className="small"><IconButton aria-label="move right" onClick={(value) => moveMonthsByAmount(-1)} icon={<ArrowRightIcon />}></IconButton></Th>
+								</Tr>
+							</Thead>
+							<Tbody >
+								{renderTableRows(formattedData)}
 
-									<Tr className="divider-dark-top">
-										<Td fontWeight={"bold"} className="divider-light">Mutaties in periode</Td>
-										<Td className="divider-light"></Td>
-										<Td className="divider-light"></Td>
-										<Td fontWeight={"bold"} textColor={getCorrectTextColorFromAmount(saldos[1].mutatie)} className="divider-light" textAlign={"right"}>€ {currencyFormat2(false).format(saldos[1].mutatie)}</Td>
-										<Td fontWeight={"bold"} textColor={getCorrectTextColorFromAmount(saldos[2].mutatie)} className="divider-light" textAlign={"right"}>€ {currencyFormat2(false).format(saldos[2].mutatie)}</Td>
-										<Td fontWeight={"bold"} textColor={getCorrectTextColorFromAmount(saldos[3].mutatie)} className="divider-light" textAlign={"right"}>€ {currencyFormat2(false).format(saldos[3].mutatie)}</Td>
-										<Td className="divider-light"></Td>
-									</Tr>
-									<Tr className="divider-light" >
-										<Td fontWeight={"bold"} className="divider-light" >Saldo start van periode</Td>
-										<Td className="divider-light" ></Td>
-										<Td className="divider-light" ></Td>
-										<Td fontWeight={"bold"} textColor={getCorrectTextColorFromAmount(saldos[1].startSaldo)} className="divider-light" textAlign={"right"}>€ {currencyFormat2(false).format(saldos[1].startSaldo)}</Td>
-										<Td fontWeight={"bold"} textColor={getCorrectTextColorFromAmount(saldos[2].startSaldo)} className="divider-light" textAlign={"right"}>€ {currencyFormat2(false).format(saldos[2].startSaldo)}</Td>
-										<Td fontWeight={"bold"} textColor={getCorrectTextColorFromAmount(saldos[3].startSaldo)} className="divider-light" textAlign={"right"}>€ {currencyFormat2(false).format(saldos[3].startSaldo)}</Td>
-										<Td fontWeight={"bold"} className="divider-light"></Td>
-									</Tr>
-									<Tr className="divider-dark-top">
-										<Td fontWeight={"bold"} className="divider-light" >Saldo einde van periode</Td>
-										<Td className="divider-light" ></Td>
-										<Td className="divider-light" ></Td>
-										<Td fontWeight={"bold"} textColor={getCorrectTextColorFromAmount(saldos[1].eindSaldo)} className="divider-light" textAlign={"right"}>€ {currencyFormat2(false).format(saldos[1].eindSaldo)}</Td>
-										<Td fontWeight={"bold"} textColor={getCorrectTextColorFromAmount(saldos[2].eindSaldo)} className="divider-light" textAlign={"right"}>€ {currencyFormat2(false).format(saldos[2].eindSaldo)}</Td>
-										<Td fontWeight={"bold"} textColor={getCorrectTextColorFromAmount(saldos[3].eindSaldo)} className="divider-light" textAlign={"right"}>€ {currencyFormat2(false).format(saldos[3].eindSaldo)}</Td>
-										<Td className="divider-light" ></Td>
+								<Tr className="divider-dark-top">
+									<Td fontWeight={"bold"} className="divider-light">Mutaties in periode</Td>
+									<Td className="divider-light"></Td>
+									<Td className="divider-light"></Td>
+									<Td fontWeight={"bold"} textColor={getCorrectTextColorFromAmount(saldos[1].mutatie)} className="divider-light" textAlign={"right"}>€ {currencyFormat2(false).format(saldos[1].mutatie)}</Td>
+									<Td fontWeight={"bold"} textColor={getCorrectTextColorFromAmount(saldos[2].mutatie)} className="divider-light" textAlign={"right"}>€ {currencyFormat2(false).format(saldos[2].mutatie)}</Td>
+									<Td fontWeight={"bold"} textColor={getCorrectTextColorFromAmount(saldos[3].mutatie)} className="divider-light" textAlign={"right"}>€ {currencyFormat2(false).format(saldos[3].mutatie)}</Td>
+									<Td className="divider-light"></Td>
+								</Tr>
+								<Tr className="divider-light" >
+									<Td fontWeight={"bold"} className="divider-light" >Saldo start van periode</Td>
+									<Td className="divider-light" ></Td>
+									<Td className="divider-light" ></Td>
+									<Td fontWeight={"bold"} textColor={getCorrectTextColorFromAmount(saldos[1].startSaldo)} className="divider-light" textAlign={"right"}>€ {currencyFormat2(false).format(saldos[1].startSaldo)}</Td>
+									<Td fontWeight={"bold"} textColor={getCorrectTextColorFromAmount(saldos[2].startSaldo)} className="divider-light" textAlign={"right"}>€ {currencyFormat2(false).format(saldos[2].startSaldo)}</Td>
+									<Td fontWeight={"bold"} textColor={getCorrectTextColorFromAmount(saldos[3].startSaldo)} className="divider-light" textAlign={"right"}>€ {currencyFormat2(false).format(saldos[3].startSaldo)}</Td>
+									<Td fontWeight={"bold"} className="divider-light"></Td>
+								</Tr>
+								<Tr className="divider-dark-top">
+									<Td fontWeight={"bold"} className="divider-light" >Saldo einde van periode</Td>
+									<Td className="divider-light" ></Td>
+									<Td className="divider-light" ></Td>
+									<Td fontWeight={"bold"} textColor={getCorrectTextColorFromAmount(saldos[1].eindSaldo)} className="divider-light" textAlign={"right"}>€ {currencyFormat2(false).format(saldos[1].eindSaldo)}</Td>
+									<Td fontWeight={"bold"} textColor={getCorrectTextColorFromAmount(saldos[2].eindSaldo)} className="divider-light" textAlign={"right"}>€ {currencyFormat2(false).format(saldos[2].eindSaldo)}</Td>
+									<Td fontWeight={"bold"} textColor={getCorrectTextColorFromAmount(saldos[3].eindSaldo)} className="divider-light" textAlign={"right"}>€ {currencyFormat2(false).format(saldos[3].eindSaldo)}</Td>
+									<Td className="divider-light" ></Td>
 
-									</Tr>
+								</Tr>
 
-								</Tbody>
-							</Table>
-						</TableContainer>
-					</Card>
-				</Page >
-			);
+							</Tbody>
+						</Table>
+					</TableContainer>
+				</Card>
+			)
 		}} />
 	);
-};
+}
+
 
 export default HuishoudenOverzicht;

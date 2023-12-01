@@ -30,14 +30,6 @@ export function formatTableData(input, startDate, endDate): OrganisationEntry[] 
     const months: Month[] = getMonthsBetween(startDate, endDate)
     for (const overviewEntry of input) {
         const organisationName = overviewEntry.rekeninghouder
-        if (overviewEntry.omschrijving == "test") {
-            console.log(overviewEntry.validFrom <= endDate)
-
-            console.log(d(overviewEntry.validFrom).format('YYYY-MM-DD'))
-            console.log(endDate)
-
-            console.log(overviewEntry.validThrough == null ? true : overviewEntry.validThrough >= startDate)
-        }
         if (d(overviewEntry.validFrom).format('YYYY-MM-DD') <= endDate && (overviewEntry.validThrough == null ? true : d(overviewEntry.validThrough).format('YYYY-MM-DD') >= startDate)) {
             let orgIndex = organisationEntries.findIndex(entry => entry.Organisation === organisationName)
             if (orgIndex == -1) {
