@@ -24,12 +24,15 @@ const BookingSectionAfspraak = ({transaction}) => {
     const {offset, setTotal, goFirst, PaginationButtons} = usePagination({pageSize: 25});
 	const [isLoading, setIsLoading] = React.useState(true);
 
-    
+    const reset = ()=>{
+        setIsLoading(true)
+        goFirst()
+    }
+
 	const [afspraken, setAfspraken] = useState<Afspraak[]>([]);
 	const updateAfspraken = (newAfspraken: Afspraak[], total) =>{
 		setAfspraken(newAfspraken)
         setTotal(total)
-        goFirst()
         setIsLoading(false)
 	}
 
@@ -68,7 +71,7 @@ const BookingSectionAfspraak = ({transaction}) => {
             const expectedTransactionOrganisationsIds: number[] = Array.from(new Set(expectedTransactionAfdeling.map(afdeing => afdeing.organisatieId ?? -1)))
             return (
                 <Stack spacing={2}>
-                    <BookingSectionAfspraakFilters organisaties={organisaties} burgers={burgers} rekeningen={rekeningen} updateAfspraken={updateAfspraken} offset={offset} setIsLoading={setIsLoading} expectedTransactionOrganisation={expectedTransactionOrganisationsIds}></BookingSectionAfspraakFilters>
+                    <BookingSectionAfspraakFilters organisaties={organisaties} burgers={burgers} rekeningen={rekeningen} updateAfspraken={updateAfspraken} reset={reset}offset={offset} expectedTransactionOrganisation={expectedTransactionOrganisationsIds}></BookingSectionAfspraakFilters>
                     {
                         isLoading ? (
                             <Loading></Loading>

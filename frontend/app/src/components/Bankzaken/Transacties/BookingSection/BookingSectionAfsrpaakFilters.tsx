@@ -21,7 +21,7 @@ type AfspraakSearchVariables = {
 	zoektermen: string[] | undefined
 };
 
-const BookingSectionAfspraakFilters = ({organisaties, burgers, rekeningen, updateAfspraken, offset, setIsLoading, expectedTransactionOrganisation}) => {
+const BookingSectionAfspraakFilters = ({organisaties, burgers, rekeningen, updateAfspraken, reset, offset, expectedTransactionOrganisation}) => {
 	const reactSelectStyles = useReactSelectStyles();
 	const {t} = useTranslation();
     
@@ -47,10 +47,6 @@ const BookingSectionAfspraakFilters = ({organisaties, burgers, rekeningen, updat
 	const [zoekterm, setZoekterm] = useState<string>("");
 	const [zoektermen, setZoektermen] = useState<string[]>([]);
 
-    const loading = ()=>{
-        setIsLoading(true)
-    }
-
 	const invalidBedrag = () => {
 		let result = false;
 		if (maxBedrag !== undefined && minBedrag !== undefined) {
@@ -63,32 +59,32 @@ const BookingSectionAfspraakFilters = ({organisaties, burgers, rekeningen, updat
 
 	const onChangeMaxbedrag = (valueAsString) => {
 		setMaxBedrag(valueAsString)
-		loading()
+		reset()
 	}
 
 	const onChangeMinbedrag = (valueAsString) => {
 		setMinBedrag(valueAsString)
-		loading()
+		reset()
 	}
 
 	const onSelectBurger = (value) => {
 		setFilterBurgerIds(value ? value.map(v => v.value) : [])
-		loading()
+		reset()
 	};
 
 	const onSelectOrganisatie = (value) => {
 		setFilterOrganisatieIds(value ? value.map(v => v.value) : [])
-		loading()
+		reset()
 	};
 	
 	const onSelectTegenrekening = (value) => {
 		setFilterTegenrekeningIds(value ? value.map(v => v.value) : [])
-		loading()
+		reset()
 	};
 
 	const onSetOnlyValid = (value) => {
 		setOnlyValid(value)
-		loading()
+		reset()
 	};
 
 	const onChangeValidRadio = (value) => {
@@ -111,7 +107,7 @@ const BookingSectionAfspraakFilters = ({organisaties, burgers, rekeningen, updat
 			const newZoektermen = zoektermen.concat(list)
 			setZoektermen(newZoektermen)
 			setZoekterm("")
-			loading()
+			reset()
 		}
 	};
 
@@ -121,7 +117,7 @@ const BookingSectionAfspraakFilters = ({organisaties, burgers, rekeningen, updat
 		list.splice(index, 1)
 		setZoektermen(list)
 		setZoekterm(zoekterm)
-		loading()
+		reset()
 	}
 
 	searchVariables.burgers = filterBurgerIds.length > 0 ? filterBurgerIds : undefined
