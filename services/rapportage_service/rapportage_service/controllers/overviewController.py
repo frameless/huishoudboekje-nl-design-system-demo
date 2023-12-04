@@ -20,13 +20,6 @@ class OverviewController():
         self._hhb_repository = hhb_repository
         self._banktransactionservice_repository = banktransactionservice_repository
 
-    def get_saldos(self, burger_ids, date):
-
-        transaction_ids = [transaction[self.TRANSACTION_ID]
-                           for transaction in self._hhb_repository.get_transaction_ids_burgers(burger_ids)]
-
-        return self.__get_saldo(date, transaction_ids)
-
     def get_overview(self, burger_ids, start, end):
         if not valid_date_range(start, end):
             return "Invalid date range", 400
@@ -41,7 +34,7 @@ class OverviewController():
 
         transactions_info = self._banktransactionservice_repository.get_transacties_in_range(
             start, end, transaction_ids)
-        saldos = self.__get_saldos(start, end, transaction_ids)
+        saldos = self.__get_saldos(start, end, burger_ids)
 
         for afspraak in afspraken_info:
             transactions = []
@@ -53,17 +46,31 @@ class OverviewController():
             afspraak["transactions"] = transactions
 
         overzicht = {"afspraken": afspraken_info, "saldos": saldos}
-        logging.warning(overzicht)
         return {"data": overzicht}, 200
 
-    def __get_saldos(self, start, end, transaction_ids=None):
+    def __get_saldos(self, start, end, burger_ids):
         dates = self.__get_start_and_end_of_months_per_daterange(start, end)
+        transaction_ids = [transaction['transaction_id']
+                           for transaction in self._hhb_repository.get_transaction_ids_burgers(burger_ids)]
         saldos = []
-        for date in dates:
-            month_number = strptime(date['start'], "%Y-%m-%d").tm_mon
-            saldos.append({'maandnummer': month_number, 'start_saldo': self.__convert_value_into_decimal(self._banktransactionservice_repository.get_saldo(
-                date['start'], transaction_ids)), 'mutatie': self.__convert_value_into_decimal(self._banktransactionservice_repository.get_saldo_with_start_date(date['start'], date['end'], transaction_ids)),
-                'eind_saldo': self.__convert_value_into_decimal(self._banktransactionservice_repository.get_saldo(date['end']))})
+        if (len(transaction_ids) > 0):
+            start_saldo = self.__convert_value_into_decimal(self._banktransactionservice_repository.get_saldo(
+                dates[0]['start'], transaction_ids))
+
+            for date in dates:
+                month_number = strptime(date['start'], "%Y-%m-%d").tm_mon
+
+                end_saldo = self.__convert_value_into_decimal(
+                    self._banktransactionservice_repository.get_saldo(date['end'], transaction_ids))
+                saldos.append({'maandnummer': month_number, 'start_saldo': start_saldo, 'mutatie': self.__convert_value_into_decimal(self._banktransactionservice_repository.get_saldo_with_start_date(date['start'], date['end'], transaction_ids)),
+                               'eind_saldo': end_saldo})
+                start_saldo = end_saldo
+        else:
+            for date in dates:
+                month_number = strptime(date['start'], "%Y-%m-%d").tm_mon
+                decimal_zero = self.__convert_value_into_decimal(0)
+                saldos.append({'maandnummer': month_number, 'start_saldo': decimal_zero, 'mutatie': decimal_zero,
+                               'eind_saldo': decimal_zero})
         return saldos
 
     def __get_start_and_end_of_months_per_daterange(self, start, end):
