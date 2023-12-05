@@ -2219,7 +2219,7 @@ export type GetHuishoudenOverzichtQueryVariables = Exact<{
 }>;
 
 
-export type GetHuishoudenOverzichtQuery = { overzicht?: { afspraken?: Array<{ id?: number, burgerId?: number, organisatieId?: number, omschrijving?: string, rekeninghouder?: string, tegenRekeningId?: number, validFrom?: string, validThrough?: string, transactions?: Array<{ id?: number, informationToAccountOwner?: string, statementLine?: string, bedrag?: any, isCredit?: boolean, tegenRekeningIban?: string, transactieDatum?: any }> }>, saldos?: Array<{ maandnummer?: number, startSaldo?: any, eindSaldo?: any, mutatie?: any }> } };
+export type GetHuishoudenOverzichtQuery = { overzicht?: { afspraken?: Array<{ id?: number, burgerId?: number, organisatieId?: number, omschrijving?: string, rekeninghouder?: string, tegenRekeningId?: number, validFrom?: string, validThrough?: string, transactions?: Array<{ id?: number, informationToAccountOwner?: string, statementLine?: string, bedrag?: any, isCredit?: boolean, tegenRekeningIban?: string, transactieDatum?: any, tegenRekening?: { rekeninghouder?: string } }> }>, saldos?: Array<{ maandnummer?: number, startSaldo?: any, eindSaldo?: any, mutatie?: any }> } };
 
 export type GetHuishoudensQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -6502,6 +6502,9 @@ export const GetHuishoudenOverzichtDocument = gql`
         isCredit
         tegenRekeningIban
         transactieDatum
+        tegenRekening {
+          rekeninghouder
+        }
       }
     }
     saldos {

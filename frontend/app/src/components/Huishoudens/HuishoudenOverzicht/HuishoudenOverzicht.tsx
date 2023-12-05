@@ -13,7 +13,7 @@ import React, {useState} from "react";
 import {useTranslation} from "react-i18next";
 import {NavLink, useLocation, useParams} from "react-router-dom";
 import {AppRoutes} from "../../../config/routes";
-import {Huishouden, useGetHuishoudenOverzichtQuery, useGetHuishoudenQuery} from "../../../generated/graphql";
+import {Burger, Huishouden, useGetHuishoudenOverzichtQuery, useGetHuishoudenQuery} from "../../../generated/graphql";
 import Queryable from "../../../utils/Queryable";
 import {currencyFormat2, formatHuishoudenName} from "../../../utils/things";
 import BackButton from "../../shared/BackButton";
@@ -22,11 +22,13 @@ import {ArrowLeftIcon, ArrowRightIcon} from "@chakra-ui/icons";
 import d from "../../../utils/dayjs";
 import {formatTableData, AgreementEntry, PaymentEntry, OrganisationEntry, getMonthsBetween, getMonthByNumber} from "./TableDataFormatter";
 import {DateRange} from "../../../models/models";
+import TransactieOverzichtPopover from "./Popovers/TransactieOverzichtPopover";
+import AfspraakOverzichtPopover from "./Popovers/AfspraakOverzichtPopover";
 
 
-type BalanceTableProps = {burgerIds: number[]};
+type BalanceTableProps = {burgerIds: number[], burgers: Burger[]};
 
-const HuishoudenOverzicht: React.FC<BalanceTableProps> = ({burgerIds}) => {
+const HuishoudenOverzicht: React.FC<BalanceTableProps> = ({burgerIds, burgers}) => {
 	const {t} = useTranslation();
 	const {search: queryParams} = useLocation();
 
@@ -60,7 +62,9 @@ const HuishoudenOverzicht: React.FC<BalanceTableProps> = ({burgerIds}) => {
 	function getPaymentAmountOrEmpty(payments: PaymentEntry[], index) {
 		if (payments) {
 			if (payments.length > index) {
-				return `€ ${currencyFormat2(false).format(+payments[index].Amount)}`
+				const elements: any[] = [];
+				elements.push(<TransactieOverzichtPopover bank_transaction={payments[index].Transaction} content={`€ ${currencyFormat2(false).format(+payments[index].Amount)}`} />)
+				return elements
 			}
 		}
 		return ""
@@ -137,7 +141,7 @@ const HuishoudenOverzicht: React.FC<BalanceTableProps> = ({burgerIds}) => {
 								tableRows.push(
 									<Tr>
 										<Td textAlign={"left"} verticalAlign={"top"} padding={5} rowSpan={organisatieRowspan} fontWeight={"bold"} className="divider-light">{organisation.Organisation}</Td>
-										<Td textAlign={"left"} verticalAlign={"top"} padding={5} rowSpan={agreementRowspan} className={getCorrectDividerClass(true, isLastAgreementInOrganisation)}>{agreement.Description}</Td>
+										<Td textAlign={"left"} verticalAlign={"top"} padding={5} rowSpan={agreementRowspan} className={getCorrectDividerClass(true, isLastAgreementInOrganisation)}><AfspraakOverzichtPopover afspraak={agreement.Agreement} content={agreement.Description} burger={burgers.find(x => x.id == agreement.BurgerId)} /></Td>
 										<Td textAlign={"left"} verticalAlign={"top"} padding={5} rowSpan={agreementRowspan} className={getCorrectDividerClass(true, isLastAgreementInOrganisation)}></Td>
 										{paymentRow}
 										<Td textAlign={"left"} verticalAlign={"top"} padding={5} rowSpan={agreementRowspan} className={getCorrectDividerClass(true, isLastAgreementInOrganisation)}></Td>
@@ -148,7 +152,7 @@ const HuishoudenOverzicht: React.FC<BalanceTableProps> = ({burgerIds}) => {
 							else if (paymentIndex === 0) {
 								tableRows.push(
 									<Tr>
-										<Td textAlign={"left"} verticalAlign={"top"} padding={5} rowSpan={agreementRowspan} className={getCorrectDividerClass(true, isLastAgreementInOrganisation)}>{agreement.Description}</Td>
+										<Td textAlign={"left"} verticalAlign={"top"} padding={5} rowSpan={agreementRowspan} className={getCorrectDividerClass(true, isLastAgreementInOrganisation)}><AfspraakOverzichtPopover afspraak={agreement.Agreement} content={agreement.Description} burger={burgers.find(x => x.id == agreement.BurgerId)} /></Td>
 										<Td rowSpan={agreementRowspan} className={getCorrectDividerClass(true, isLastAgreementInOrganisation)}></Td>
 										{paymentRow}
 										<Td rowSpan={agreementRowspan} className={getCorrectDividerClass(true, isLastAgreementInOrganisation)}></Td>
@@ -176,7 +180,7 @@ const HuishoudenOverzicht: React.FC<BalanceTableProps> = ({burgerIds}) => {
 						<Table variant="unstyled" className="table-overzicht">
 							<Thead>
 								<Tr>
-									<Th textAlign={"left"}>Organisatie </Th>
+									<Th textAlign={"left"}>Tegenrekening</Th>
 									<Th textAlign={"left"}>Afspraak</Th>
 									<Th className="small"><IconButton aria-label="move left" onClick={(value) => moveMonthsByAmount(1)} icon={<ArrowLeftIcon />}></IconButton></Th>
 									<Th textAlign={"right"}><VStack><Box>{months[1].name}</Box><Box fontWeight={"semibold"}>{months[1].year}</Box></VStack></Th>

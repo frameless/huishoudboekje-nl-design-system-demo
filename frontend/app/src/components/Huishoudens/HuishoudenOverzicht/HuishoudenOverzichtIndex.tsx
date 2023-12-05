@@ -13,78 +13,49 @@ import {useTranslation} from "react-i18next";
 
 
 const HuishoudenOverzichtIndex = () => {
-	const {search: queryParams} = useLocation();
-	const {t} = useTranslation()
-	const [filterBurgerIds, setFilterBurgerIds] = useState<number[]>(new URLSearchParams(queryParams).get("burgerId")?.split(",").map(p => parseInt(p)) || []);
+    const {search: queryParams} = useLocation();
+    const {t} = useTranslation()
+    const [filterBurgerIds, setFilterBurgerIds] = useState<number[]>(new URLSearchParams(queryParams).get("burgerId")?.split(",").map(p => parseInt(p)) || []);
 
-	const reactSelectStyles = useReactSelectStyles();
-	const $huishoudens = useGetHuishoudensQuery({fetchPolicy: 'cache-and-network'});
+    const reactSelectStyles = useReactSelectStyles();
+    const $huishoudens = useGetHuishoudensQuery({fetchPolicy: 'cache-and-network'});
 
-	// function onSelectHuishouden(value) {
-	//     if (value) {
-	//         setHuishoudenId(value.value)
-	//     }
-	//     else {
-	//         setHuishoudenId(null)
-	//     }
+    return (
 
-	// }
+        <Queryable query={$huishoudens} children={data => {
+            const burgers: Burger[] = data.burgers || [];
+            const selectedBurgers = burgers.filter(b => filterBurgerIds.includes(b.id!));
+            const burgers_filter = burgers.filter(b => filterBurgerIds.includes(b.id!)).map(b => ({
+                key: b.id,
+                value: b.id,
+                label: formatBurgerName(b) + " " + getBurgerHhbId(b),
+            }));
+            const onSelectBurger = (value) => {
+                setFilterBurgerIds(value ? value.map(v => v.value) : [])
+            };
+            return (
+                <Page title="Huishouden Overzicht">
+                    <FormControl>
+                        <Select onChange={onSelectBurger} options={burgers.map(b => ({
+                            key: b.id,
+                            value: b.id,
+                            label: formatBurgerName(b) + " " + getBurgerHhbId(b),
+                        }))} styles={reactSelectStyles.default} isMulti isClearable={true} noOptionsMessage={() => t("select.noOptions")} maxMenuHeight={200} placeholder={t("charts.optionAllBurgers")} value={burgers_filter} />
+                    </FormControl>
+                    {}
+                    {(selectedBurgers.length > 0) &&
+                        <HuishoudenOverzicht burgerIds={filterBurgerIds} burgers={selectedBurgers}></HuishoudenOverzicht>
+                    }
+                    {(selectedBurgers.length == 0) &&
+                        <Box textColor={"red.500"}>
+                            Selecteer burger(s) om een overzicht te genereren
+                        </Box>
+                    }
+                </Page>
+            )
 
-	function getSelectedBurgersFromHuishouden(burgers: Burger[], huishoudenId) {
-		const burger_ids = burgers.filter(burger => burger.huishoudenId == huishoudenId).map(burger => (burger.id ?? -1))
-
-		return burger_ids
-	}
-
-	function getBurgersString(burgers) {
-		let resultstring = ""
-		for (const burger of burgers) {
-			resultstring += ` ${formatBurgerName(burger)}`
-			if (burgers.indexOf(burger) != burgers.length - 1) {
-				resultstring += ','
-			}
-
-		}
-		return resultstring
-	}
-
-
-	return (
-
-		<Queryable query={$huishoudens} children={data => {
-			const burgers: Burger[] = data.burgers || [];
-			const selectedBurgers = burgers.filter(b => filterBurgerIds.includes(b.id!));
-			const burgers_filter = burgers.filter(b => filterBurgerIds.includes(b.id!)).map(b => ({
-				key: b.id,
-				value: b.id,
-				label: formatBurgerName(b) + " " + getBurgerHhbId(b),
-			}));
-			const onSelectBurger = (value) => {
-				setFilterBurgerIds(value ? value.map(v => v.value) : [])
-			};
-			return (
-				<Page title="Huishouden Overzicht">
-					<FormControl>
-						<Select onChange={onSelectBurger} options={burgers.map(b => ({
-							key: b.id,
-							value: b.id,
-							label: formatBurgerName(b) + " " + getBurgerHhbId(b),
-						}))} styles={reactSelectStyles.default} isMulti isClearable={true} noOptionsMessage={() => t("select.noOptions")} maxMenuHeight={200} placeholder={t("charts.optionAllBurgers")} value={burgers_filter} />
-					</FormControl>
-					{}
-					{(selectedBurgers.length > 0) &&
-						<HuishoudenOverzicht burgerIds={filterBurgerIds}></HuishoudenOverzicht>
-					}
-					{(selectedBurgers.length == 0) &&
-						<Box textColor={"red.500"}>
-							Selecteer burger(s) om een overzicht te genereren
-						</Box>
-					}
-				</Page>
-			)
-
-		}} />
-	)
+        }} />
+    )
 
 }
 

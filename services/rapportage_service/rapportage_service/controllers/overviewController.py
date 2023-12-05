@@ -3,6 +3,7 @@ from datetime import datetime, timedelta
 from decimal import ROUND_HALF_DOWN, Context, Decimal
 import logging
 from time import strptime
+import time
 from core_service.utils import valid_date_range
 from injector import inject
 from rapportage_service.repositories.banktransactieservice_repository import BanktransactieServiceRepository
@@ -21,6 +22,7 @@ class OverviewController():
         self._banktransactionservice_repository = banktransactionservice_repository
 
     def get_overview(self, burger_ids, start, end):
+        starttime = time.time()
         if not valid_date_range(start, end):
             return "Invalid date range", 400
 
@@ -46,6 +48,7 @@ class OverviewController():
             afspraak["transactions"] = transactions
 
         overzicht = {"afspraken": afspraken_info, "saldos": saldos}
+        logging.warning(starttime - time.time())
         return {"data": overzicht}, 200
 
     def __get_saldos(self, start, end, burger_ids):

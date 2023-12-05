@@ -6,10 +6,8 @@ export const GetHuishoudenOverzichtQuery = gql`
 			afspraken {
 				id
 				burgerId
-				organisatieId
 				omschrijving
 				rekeninghouder
-				tegenRekeningId
 				validFrom
 				validThrough
 				transactions {
@@ -20,6 +18,9 @@ export const GetHuishoudenOverzichtQuery = gql`
 					isCredit
 					tegenRekeningIban
 					transactieDatum
+					tegenRekening {
+						rekeninghouder
+					}
 				}
 			}
 			saldos {

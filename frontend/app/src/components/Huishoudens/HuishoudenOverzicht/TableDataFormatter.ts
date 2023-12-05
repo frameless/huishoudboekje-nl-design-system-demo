@@ -1,15 +1,18 @@
 import {date} from "zod"
-import {GetHuishoudenOverzichtQuery} from "../../../generated/graphql"
+import {Afspraak, BankTransaction, GetHuishoudenOverzichtQuery} from "../../../generated/graphql"
 import d from "../../../utils/dayjs"
 
 export type PaymentEntry = {
     Date: string
     Amount: string
     TransactionId: string
+    Transaction: BankTransaction
 }
 
 export type AgreementEntry = {
     Description: string
+    Agreement: Afspraak
+    BurgerId: number
     Payments: Record<string, PaymentEntry[]>
 }
 
@@ -42,13 +45,13 @@ export function formatTableData(input, startDate, endDate): OrganisationEntry[] 
             }
             for (const transaction of overviewEntry.transactions) {
                 const monthName = getMonthName(d(transaction.transactieDatum))
-                const payment: PaymentEntry = {Date: transaction.transactieDatum, Amount: transaction.bedrag, TransactionId: transaction.id}
+                const payment: PaymentEntry = {Date: transaction.transactieDatum, Amount: transaction.bedrag, TransactionId: transaction.id, Transaction: transaction}
                 if (payments[monthName] != undefined) {
                     payments[monthName].push(payment)
                 }
             }
 
-            const agreement: AgreementEntry = {Description: overviewEntry.omschrijving, Payments: payments}
+            const agreement: AgreementEntry = {Agreement: overviewEntry, Description: overviewEntry.omschrijving, Payments: payments, BurgerId: overviewEntry.burgerId}
             organisationEntries[orgIndex].Agreements.push(agreement)
         }
 
