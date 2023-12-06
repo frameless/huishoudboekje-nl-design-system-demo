@@ -11,12 +11,14 @@ import {
 	PopoverArrow,
 	useDisclosure,
 	Portal,
+	Link,
 } from '@chakra-ui/react'
 import React from "react";
 import {Trans, useTranslation} from "react-i18next";
 import {formatBurgerName, formatIBAN, getBurgerHhbId} from "../../../../utils/things";
 import {Afspraak, BankTransaction, Burger} from "../../../../generated/graphql";
 import d from "../../../../utils/dayjs";
+import {useNavigate} from "react-router-dom";
 
 type AfspraakOverzichtPopover = PopoverProps & {
 	afspraak: Afspraak
@@ -27,14 +29,12 @@ type AfspraakOverzichtPopover = PopoverProps & {
 const AfspraakOverzichtPopover: React.FC<AfspraakOverzichtPopover> = ({afspraak: afspraak, content: content, burger: burger, ...props}) => {
 	const {t} = useTranslation();
 	const {isOpen, onOpen, onClose} = useDisclosure();
-	// id
-	// burgerId
-	// organisatieId
-	// omschrijving
-	// rekeninghouder
-	// tegenRekeningId
-	// validFrom
-	// validThrough
+	const navigate = useNavigate();
+
+	function goToAfspraak() {
+		navigate(`/afspraken/${afspraak.id}`)
+	}
+
 	if (burger) {
 		return (
 			<Popover
@@ -42,8 +42,8 @@ const AfspraakOverzichtPopover: React.FC<AfspraakOverzichtPopover> = ({afspraak:
 				placement='bottom-end'
 			>
 				<PopoverTrigger>
-					<Text onMouseEnter={onOpen}
-						onMouseLeave={onClose}>{content}</Text>
+					<Link onClick={goToAfspraak} onMouseEnter={onOpen}
+						onMouseLeave={onClose}>{content}</Link>
 				</PopoverTrigger>
 				<Portal>
 					<PopoverContent

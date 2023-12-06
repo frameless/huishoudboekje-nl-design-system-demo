@@ -28,7 +28,6 @@ const HuishoudenOverzichtIndex = () => {
 	return (
 
 		<Queryable query={$huishoudens} children={data => {
-			console.log(filterBurgerIds)
 			const burgers: Burger[] = data.burgers || [];
 			const selectedBurgers = burgers.filter(b => filterBurgerIds.includes(b.id!));
 			const burgers_filter = burgers.filter(b => filterBurgerIds.includes(b.id!)).map(b => ({
