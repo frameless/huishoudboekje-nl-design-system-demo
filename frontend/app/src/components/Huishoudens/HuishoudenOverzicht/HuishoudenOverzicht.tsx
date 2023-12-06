@@ -9,7 +9,7 @@ import {
 	TableCaption,
 	TableContainer, Tag, useDisclosure, IconButton, Text, Box, useTheme, VStack
 } from "@chakra-ui/react";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {useTranslation} from "react-i18next";
 import {NavLink, useLocation, useParams} from "react-router-dom";
 import {AppRoutes} from "../../../config/routes";
@@ -32,11 +32,17 @@ const HuishoudenOverzicht: React.FC<BalanceTableProps> = ({burgerIds, burgers}) 
 	const {t} = useTranslation();
 	const {search: queryParams} = useLocation();
 
+	const range = sessionStorage.getItem('overzicht-daterange') ? JSON.parse(sessionStorage.getItem('overzicht-daterange') ?? '{}') : {from: d().subtract(4, 'month').startOf('month').toDate(), through: d().subtract(0, 'month').endOf('month').toDate()}
+
 	// This table shows 3 months, but we eager load 5 months here so that there is a smooth transition to the next month
-	const [dateRange, setDateRange] = useState<DateRange>({from: d().subtract(4, 'month').startOf('month').toDate(), through: d().subtract(0, 'month').endOf('month').toDate()})
+	const [dateRange, setDateRange] = useState<DateRange>(range)
 
 	const $overzicht = useGetHuishoudenOverzichtQuery({fetchPolicy: 'cache-and-network', variables: {burgers: burgerIds, start: d(dateRange.from).format('YYYY-MM-DD'), end: d(dateRange.through).format('YYYY-MM-DD')}})
 	const months = getMonthsBetween(d(dateRange.from).format('YYYY-MM-DD'), d(dateRange.through).format('YYYY-MM-DD'))
+
+	useEffect(() => {
+		sessionStorage.setItem('overzicht-daterange', JSON.stringify(dateRange))
+	}, [dateRange])
 
 	function getRowspanForOrganisation(organisationData: OrganisationEntry) {
 		let maxRowSpan = 0;
