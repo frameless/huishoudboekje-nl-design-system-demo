@@ -142,5 +142,11 @@ export const AppRoutes = {
 		id: burgerId,
 		format,
 	}),
-	Overzicht: generatePath(AppRoutesNew.overzicht),
+	Overzicht: (burgerIds: string[]) => {
+		const url = generatePath(AppRoutesNew.overzicht)
+		const params = new URLSearchParams({
+			burgerId: burgerIds.join(",")
+		}).toString()
+		return url + "?" + params
+	}
 };

@@ -1,4 +1,4 @@
-import {Button, useDisclosure} from "@chakra-ui/react";
+import {Button, HStack, Stack, VStack, useDisclosure} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
 import {NavLink, useParams} from "react-router-dom";
@@ -30,7 +30,10 @@ const HuishoudenDetails = () => {
 
 			return (
 				<Page title={t("huishoudenName", {name: formatHuishoudenName(huishouden)})} backButton={(<BackButton to={AppRoutes.Huishoudens()} />)} right={(
-					<Button size={"sm"} variant={"outline"} colorScheme={"primary"} as={NavLink} to={AppRoutes.RapportageBurger([...burgerIds])}>{t("global.actions.showReports")}</Button>
+					<HStack margin={2}>
+						<Button size={"sm"} variant={"outline"} colorScheme={"primary"} as={NavLink} to={AppRoutes.Overzicht([...burgerIds])}>{t("global.actions.showOverzicht")}</Button>
+						<Button size={"sm"} variant={"outline"} colorScheme={"primary"} as={NavLink} to={AppRoutes.RapportageBurger([...burgerIds])}>{t("global.actions.showReports")}</Button>
+					</HStack>
 				)}>
 					{addBurgersModal.isOpen && (
 						<AddBurgerToHuishoudenModal huishouden={huishouden} onClose={addBurgersModal.onClose} />

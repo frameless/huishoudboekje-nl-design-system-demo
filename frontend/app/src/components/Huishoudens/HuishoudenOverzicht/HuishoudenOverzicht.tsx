@@ -32,13 +32,16 @@ const HuishoudenOverzicht: React.FC<BalanceTableProps> = ({burgerIds, burgers}) 
 	const {t} = useTranslation();
 	const {search: queryParams} = useLocation();
 
-	const range = sessionStorage.getItem('overzicht-daterange') ? JSON.parse(sessionStorage.getItem('overzicht-daterange') ?? '{}') : {from: d().subtract(4, 'month').startOf('month').toDate(), through: d().subtract(0, 'month').endOf('month').toDate()}
+
+	const range = sessionStorage.getItem('overzicht-daterange') && new URLSearchParams(queryParams).get("burgerId") == undefined ? JSON.parse(sessionStorage.getItem('overzicht-daterange') ?? '{}') : {from: d().subtract(4, 'month').startOf('month').toDate(), through: d().subtract(0, 'month').endOf('month').toDate()}
 
 	// This table shows 3 months, but we eager load 5 months here so that there is a smooth transition to the next month
 	const [dateRange, setDateRange] = useState<DateRange>(range)
 
 	const $overzicht = useGetHuishoudenOverzichtQuery({fetchPolicy: 'cache-and-network', variables: {burgers: burgerIds, start: d(dateRange.from).format('YYYY-MM-DD'), end: d(dateRange.through).format('YYYY-MM-DD')}})
 	const months = getMonthsBetween(d(dateRange.from).format('YYYY-MM-DD'), d(dateRange.through).format('YYYY-MM-DD'))
+
+	let saved_saldos: any[] = [];
 
 	useEffect(() => {
 		sessionStorage.setItem('overzicht-daterange', JSON.stringify(dateRange))
@@ -124,6 +127,7 @@ const HuishoudenOverzicht: React.FC<BalanceTableProps> = ({burgerIds, burgers}) 
 			// we only want the months 2 till 4 from the data formatted. This function will check if the afspraak is active within these months
 			const formattedData: OrganisationEntry[] = formatTableData(data.overzicht.afspraken, d(dateRange.from).subtract(-1, 'month').startOf('month').format('YYYY-MM-DD'), d(dateRange.through).subtract(1, 'month').endOf('month').format('YYYY-MM-DD'))
 			const saldos = data.overzicht.saldos
+			saved_saldos = [saldos[1], saldos[2], saldos[3]]
 
 			// HTML is dymanically generated here because of JSX limitations. For the use of rowSpan it is necesary that the next <Tr> is defined with only the not-yet-filled
 			// columns in the row. This EXCLUDES rows that are filled by rowSpan. This is not an issue if a <Tr> could be dynamically closed. Unfortunately, this is not possible.
@@ -202,27 +206,27 @@ const HuishoudenOverzicht: React.FC<BalanceTableProps> = ({burgerIds, burgers}) 
 									<Td fontWeight={"bold"} className="divider-light">Mutaties in periode</Td>
 									<Td className="divider-light"></Td>
 									<Td className="divider-light"></Td>
-									<Td fontWeight={"bold"} textColor={getCorrectTextColorFromAmount(saldos[1].mutatie)} className="divider-light" textAlign={"right"}>€ {currencyFormat2(false).format(saldos[1].mutatie)}</Td>
-									<Td fontWeight={"bold"} textColor={getCorrectTextColorFromAmount(saldos[2].mutatie)} className="divider-light" textAlign={"right"}>€ {currencyFormat2(false).format(saldos[2].mutatie)}</Td>
-									<Td fontWeight={"bold"} textColor={getCorrectTextColorFromAmount(saldos[3].mutatie)} className="divider-light" textAlign={"right"}>€ {currencyFormat2(false).format(saldos[3].mutatie)}</Td>
+									<Td fontWeight={"bold"} textColor={getCorrectTextColorFromAmount(saved_saldos[0].mutatie)} className="divider-light" textAlign={"right"}>€ {currencyFormat2(false).format(saved_saldos[0].mutatie)}</Td>
+									<Td fontWeight={"bold"} textColor={getCorrectTextColorFromAmount(saved_saldos[1].mutatie)} className="divider-light" textAlign={"right"}>€ {currencyFormat2(false).format(saved_saldos[1].mutatie)}</Td>
+									<Td fontWeight={"bold"} textColor={getCorrectTextColorFromAmount(saved_saldos[2].mutatie)} className="divider-light" textAlign={"right"}>€ {currencyFormat2(false).format(saved_saldos[2].mutatie)}</Td>
 									<Td className="divider-light"></Td>
 								</Tr>
 								<Tr className="divider-light" >
 									<Td fontWeight={"bold"} className="divider-light" >Saldo start van periode</Td>
 									<Td className="divider-light" ></Td>
 									<Td className="divider-light" ></Td>
-									<Td fontWeight={"bold"} textColor={getCorrectTextColorFromAmount(saldos[1].startSaldo)} className="divider-light" textAlign={"right"}>€ {currencyFormat2(false).format(saldos[1].startSaldo)}</Td>
-									<Td fontWeight={"bold"} textColor={getCorrectTextColorFromAmount(saldos[2].startSaldo)} className="divider-light" textAlign={"right"}>€ {currencyFormat2(false).format(saldos[2].startSaldo)}</Td>
-									<Td fontWeight={"bold"} textColor={getCorrectTextColorFromAmount(saldos[3].startSaldo)} className="divider-light" textAlign={"right"}>€ {currencyFormat2(false).format(saldos[3].startSaldo)}</Td>
+									<Td fontWeight={"bold"} textColor={getCorrectTextColorFromAmount(saved_saldos[0].startSaldo)} className="divider-light" textAlign={"right"}>€ {currencyFormat2(false).format(saved_saldos[0].startSaldo)}</Td>
+									<Td fontWeight={"bold"} textColor={getCorrectTextColorFromAmount(saved_saldos[1].startSaldo)} className="divider-light" textAlign={"right"}>€ {currencyFormat2(false).format(saved_saldos[1].startSaldo)}</Td>
+									<Td fontWeight={"bold"} textColor={getCorrectTextColorFromAmount(saved_saldos[2].startSaldo)} className="divider-light" textAlign={"right"}>€ {currencyFormat2(false).format(saved_saldos[2].startSaldo)}</Td>
 									<Td fontWeight={"bold"} className="divider-light"></Td>
 								</Tr>
 								<Tr className="divider-dark-top">
 									<Td fontWeight={"bold"} className="divider-light" >Saldo einde van periode</Td>
 									<Td className="divider-light" ></Td>
 									<Td className="divider-light" ></Td>
-									<Td fontWeight={"bold"} textColor={getCorrectTextColorFromAmount(saldos[1].eindSaldo)} className="divider-light" textAlign={"right"}>€ {currencyFormat2(false).format(saldos[1].eindSaldo)}</Td>
-									<Td fontWeight={"bold"} textColor={getCorrectTextColorFromAmount(saldos[2].eindSaldo)} className="divider-light" textAlign={"right"}>€ {currencyFormat2(false).format(saldos[2].eindSaldo)}</Td>
-									<Td fontWeight={"bold"} textColor={getCorrectTextColorFromAmount(saldos[3].eindSaldo)} className="divider-light" textAlign={"right"}>€ {currencyFormat2(false).format(saldos[3].eindSaldo)}</Td>
+									<Td fontWeight={"bold"} textColor={getCorrectTextColorFromAmount(saved_saldos[0].eindSaldo)} className="divider-light" textAlign={"right"}>€ {currencyFormat2(false).format(saved_saldos[0].eindSaldo)}</Td>
+									<Td fontWeight={"bold"} textColor={getCorrectTextColorFromAmount(saved_saldos[1].eindSaldo)} className="divider-light" textAlign={"right"}>€ {currencyFormat2(false).format(saved_saldos[1].eindSaldo)}</Td>
+									<Td fontWeight={"bold"} textColor={getCorrectTextColorFromAmount(saved_saldos[2].eindSaldo)} className="divider-light" textAlign={"right"}>€ {currencyFormat2(false).format(saved_saldos[2].eindSaldo)}</Td>
 									<Td className="divider-light" ></Td>
 
 								</Tr>

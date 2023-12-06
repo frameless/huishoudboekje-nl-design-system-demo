@@ -38,20 +38,19 @@ class OverviewController():
             start, end, transaction_ids)
         saldos = self.__get_saldos(start, end, burger_ids)
 
+        transactie_id_to_transactie_dict = {
+            transaction["id"]: transaction for transaction in transactions_info}
+
         for afspraak in afspraken_info:
-            transactions = []
-            for transaction_id in afspraak['transaction_ids']:
-                found_transaction = next(
-                    (transaction for transaction in transactions_info if transaction["id"] == transaction_id), None)
-                if found_transaction != None:
-                    transactions.append(found_transaction)
-            afspraak["transactions"] = transactions
+            afspraak["transactions"] = [transactie_id_to_transactie_dict[transaction_id]
+                                        for transaction_id in afspraak["transaction_ids"] if transactie_id_to_transactie_dict.get(transaction_id, None) is not None]
 
         overzicht = {"afspraken": afspraken_info, "saldos": saldos}
-        logging.warning(starttime - time.time())
+        logging.warning(time.time() - starttime)
         return {"data": overzicht}, 200
 
     def __get_saldos(self, start, end, burger_ids):
+
         dates = self.__get_start_and_end_of_months_per_daterange(start, end)
         transaction_ids = [transaction['transaction_id']
                            for transaction in self._hhb_repository.get_transaction_ids_burgers(burger_ids)]
@@ -74,6 +73,7 @@ class OverviewController():
                 decimal_zero = self.__convert_value_into_decimal(0)
                 saldos.append({'maandnummer': month_number, 'start_saldo': decimal_zero, 'mutatie': decimal_zero,
                                'eind_saldo': decimal_zero})
+
         return saldos
 
     def __get_start_and_end_of_months_per_daterange(self, start, end):
