@@ -55,7 +55,7 @@ const TransactieOverzichtPopover: React.FC<TransactieOverzichtPopover> = ({bank_
 					<PopoverBody>
 						<Box
 							flex="2">
-							<Text marginBottom={3}>
+							<Box marginBottom={3}>
 								<h4>
 									<strong>{t("transactions.description")}:</strong>
 								</h4>
@@ -65,8 +65,8 @@ const TransactieOverzichtPopover: React.FC<TransactieOverzichtPopover> = ({bank_
 								<Text wordBreak={"break-word"}>{bank_transaction.informationToAccountOwner?.replace(/\s+/g, ' ')}
 								</Text>
 
-							</Text>
-							<Text marginBottom={2}>
+							</Box>
+							<Box marginBottom={2}>
 								<h4>
 									<strong>{t("forms.rekeningen.fields.accountHolder")}:</strong>
 								</h4>
@@ -79,7 +79,7 @@ const TransactieOverzichtPopover: React.FC<TransactieOverzichtPopover> = ({bank_
 								<p>
 									{formatIBAN(bank_transaction.tegenRekeningIban) || t("unknown")}
 								</p>
-							</Text>
+							</Box>
 						</Box>
 					</PopoverBody>
 				</PopoverContent>

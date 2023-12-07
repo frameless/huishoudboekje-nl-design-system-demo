@@ -1,4 +1,4 @@
-import {useLocation} from "react-router-dom";
+import {useLocation, useSearchParams} from "react-router-dom";
 import _ from "lodash";
 import {Burger, Huishouden, useGetHuishoudensQuery} from "../../../generated/graphql";
 import Queryable from "../../../utils/Queryable";
@@ -13,9 +13,9 @@ import {useTranslation} from "react-i18next";
 
 
 const HuishoudenOverzichtIndex = () => {
-	const {search: queryParams} = useLocation();
+	const [searchParams, setSearchParams] = useSearchParams()
 	const {t} = useTranslation()
-	const burgerIds = new URLSearchParams(queryParams).get("burgerId")?.split(",").map(p => parseInt(p)) || JSON.parse(sessionStorage.getItem('overzicht-burgers') ?? `[]`);
+	const burgerIds = searchParams.get("burgerId")?.split(",").map(p => parseInt(p)) || JSON.parse(sessionStorage.getItem('overzicht-burgers') ?? `[]`);
 	const [filterBurgerIds, setFilterBurgerIds] = useState<number[]>(burgerIds);
 
 	const reactSelectStyles = useReactSelectStyles();
@@ -37,7 +37,11 @@ const HuishoudenOverzichtIndex = () => {
 			}));
 			const onSelectBurger = (value) => {
 				setFilterBurgerIds(value ? value.map(v => v.value) : [])
+				if (searchParams.has("burgerId")) {
+					searchParams.delete("burgerId")
+				}
 			};
+
 			return (
 				<Page title="Huishouden Overzicht">
 					<FormControl>
@@ -53,7 +57,7 @@ const HuishoudenOverzichtIndex = () => {
 					}
 					{(selectedBurgers.length == 0) &&
 						<Box textColor={"red.500"}>
-							Selecteer burger(s) om een overzicht te genereren
+							{t("overzicht.noData")}
 						</Box>
 					}
 				</Page>

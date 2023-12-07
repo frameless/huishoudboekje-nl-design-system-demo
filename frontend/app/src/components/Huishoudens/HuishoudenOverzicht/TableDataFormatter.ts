@@ -61,7 +61,7 @@ export function formatTableData(input, startDate, endDate): OrganisationEntry[] 
 }
 
 
-function getMonthName(date): string {
+export function getMonthName(date): string {
     return new Intl.DateTimeFormat('nl-NL', {month: 'long'}).format(date)
 }
 

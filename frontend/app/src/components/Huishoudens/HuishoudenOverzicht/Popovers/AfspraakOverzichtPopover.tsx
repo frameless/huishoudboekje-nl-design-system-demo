@@ -56,7 +56,7 @@ const AfspraakOverzichtPopover: React.FC<AfspraakOverzichtPopover> = ({afspraak:
 						<PopoverBody>
 							<Box
 								flex="2">
-								<Text marginBottom={3}>
+								<Box marginBottom={3}>
 									<h4>
 										<strong>{t("afspraken.omschrijving")}:</strong>
 									</h4>
@@ -64,8 +64,8 @@ const AfspraakOverzichtPopover: React.FC<AfspraakOverzichtPopover> = ({afspraak:
 										{afspraak.omschrijving}<br />
 									</Text>
 
-								</Text>
-								<Text marginBottom={2}>
+								</Box>
+								<Box marginBottom={2}>
 									<h4>
 										<strong>{t("burger")}:</strong>
 									</h4>
@@ -79,7 +79,7 @@ const AfspraakOverzichtPopover: React.FC<AfspraakOverzichtPopover> = ({afspraak:
 										from: afspraak.validFrom && d(afspraak.validFrom).format("L"),
 										through: afspraak.validThrough! + undefined ? d(afspraak.validThrough).format("L") : "∞",
 									}} />
-								</Text>
+								</Box>
 							</Box>
 						</PopoverBody>
 					</PopoverContent>
