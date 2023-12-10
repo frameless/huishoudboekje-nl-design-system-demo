@@ -1,6 +1,5 @@
 import {Prisma} from "@prisma/client";
 import {Request} from "express";
-import log from "loglevel";
 
 export const addFilterByIds = (req: Request): Partial<Prisma.AlarmWhereInput> => {
 	const bFilterIds: string = req.body.filter_ids;
@@ -31,11 +30,6 @@ export const addFilterByIds = (req: Request): Partial<Prisma.AlarmWhereInput> =>
 export const addFilterByActive = (req: Request): Partial<Prisma.AlarmWhereInput> => {
 	const bFilterActive: boolean = req.body.filter_active;
 	const qFilterActive: string = req.query.filter_active as string;
-
-	log.debug({
-		bFilterActive,
-		qFilterActive,
-	});
 
 	if (bFilterActive !== undefined) {
 		return {
