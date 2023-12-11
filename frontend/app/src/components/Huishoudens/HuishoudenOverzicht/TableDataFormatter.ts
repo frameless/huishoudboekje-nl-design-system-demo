@@ -50,9 +50,9 @@ export function formatTableData(input, startDate, endDate): OrganisationEntry[] 
                     payments[monthName].push(payment)
                 }
             }
-
             const agreement: AgreementEntry = {Agreement: overviewEntry, Description: overviewEntry.omschrijving, Payments: payments, BurgerId: overviewEntry.burgerId}
             organisationEntries[orgIndex].Agreements.push(agreement)
+            organisationEntries[orgIndex].Agreements.sort((a, b) => a.Agreement.omschrijving?.localeCompare(b.Agreement.omschrijving ?? "") ?? 0)
         }
 
     }

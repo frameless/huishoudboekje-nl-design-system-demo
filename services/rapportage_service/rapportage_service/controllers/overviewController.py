@@ -22,7 +22,6 @@ class OverviewController():
         self._banktransactionservice_repository = banktransactionservice_repository
 
     def get_overview(self, burger_ids, start, end):
-        starttime = time.time()
         if not valid_date_range(start, end):
             return "Invalid date range", 400
 
@@ -46,7 +45,6 @@ class OverviewController():
                                         for transaction_id in afspraak["transaction_ids"] if transactie_id_to_transactie_dict.get(transaction_id, None) is not None]
 
         overzicht = {"afspraken": afspraken_info, "saldos": saldos}
-        logging.warning(time.time() - starttime)
         return {"data": overzicht}, 200
 
     def __get_saldos(self, start, end, burger_ids):
