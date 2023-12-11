@@ -165,9 +165,10 @@
 		"date": "Datum"
 	},
 	"overzicht": {
-      "tegenrekening": "Tegenrekening",
-	  "afspraak" : "Afspraak",
-	  "noData" : "Selecteer burger(s) om een overzicht te genereren"
+		"tegenrekening": "Tegenrekening",
+		"afspraak": "Afspraak",
+		"noData": "Selecteer burger(s) om een overzicht te genereren",
+		"resetMonthView": "Bekijk afgelopen 3 maanden"
 	},
 	"forms": {
 		"afspraken": {

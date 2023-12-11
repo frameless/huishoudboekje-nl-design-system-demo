@@ -1,30 +1,21 @@
 import {
-	Card,
-	Table,
-	Thead,
 	Tbody,
 	Tr,
-	Th,
 	Td,
-	TableContainer, IconButton, Box, VStack
 } from "@chakra-ui/react";
-import React, {useEffect, useState} from "react";
+import React from "react";
 import {useTranslation} from "react-i18next";
-import {useLocation} from "react-router-dom";
-import {Burger, useGetHuishoudenOverzichtQuery} from "../../../generated/graphql";
-import Queryable from "../../../utils/Queryable";
+
+import {Burger} from "../../../generated/graphql";
 import {currencyFormat2} from "../../../utils/things";
-import {ArrowLeftIcon, ArrowRightIcon} from "@chakra-ui/icons";
-import d from "../../../utils/dayjs";
-import {formatTableData, AgreementEntry, PaymentEntry, OrganisationEntry, getMonthsBetween, getMonthName, Month} from "./TableDataFormatter";
-import {DateRange} from "../../../models/models";
+import {AgreementEntry, PaymentEntry, OrganisationEntry, Month} from "./TableDataFormatter";
 import TransactieOverzichtPopover from "./Popovers/TransactieOverzichtPopover";
 import AfspraakOverzichtPopover from "./Popovers/AfspraakOverzichtPopover";
 
 
-type OverzichtTableProps = {afspraken: any[], saldos: any[], loading: boolean, months: Month[], daterange: DateRange, burgers: Burger[]};
+type OverzichtTableProps = {afspraken: any[], saldos: any[], months: Month[], burgers: Burger[]};
 
-const HuishoudenOverzichtTable: React.FC<OverzichtTableProps> = ({afspraken, saldos, loading, months, daterange, burgers}) => {
+const HuishoudenOverzichtTable: React.FC<OverzichtTableProps> = ({afspraken, saldos, months, burgers}) => {
 	const {t} = useTranslation();
 
 	function renderTableRows(data: OrganisationEntry[]) {
@@ -43,8 +34,8 @@ const HuishoudenOverzichtTable: React.FC<OverzichtTableProps> = ({afspraken, sal
 					if (+agreementKey === 0 && paymentIndex === 0) {
 						tableRows.push(
 							<Tr>
-								<Td textAlign={"left"} verticalAlign={"top"} padding={5} rowSpan={organisatieRowspan} fontWeight={"bold"} className="divider-light">{organisation.Organisation}</Td>
-								<Td textAlign={"left"} verticalAlign={"top"} padding={5} rowSpan={agreementRowspan} className={getCorrectDividerClass(true, isLastAgreementInOrganisation)}><AfspraakOverzichtPopover afspraak={agreement.Agreement} content={agreement.Description} burger={burgers.find(x => x.id == agreement.BurgerId)} /></Td>
+								<Td w={"27.5%!important"} maxW={"27.5%!important"} minW={"27.5%!important"} textAlign={"left"} overflow={"clip"} verticalAlign={"top"} padding={5} rowSpan={organisatieRowspan} fontWeight={"bold"} className="divider-ligh td-word-wrap">{organisation.Organisation}</Td>
+								<Td w={"27.5%!important"} maxW={"27.5%!important"} minW={"27.5%!important"} textAlign={"left"} verticalAlign={"top"} overflow={"clip"} padding={5} rowSpan={agreementRowspan} className={getCorrectDividerClass(true, isLastAgreementInOrganisation) + " td-word-wrap"}><AfspraakOverzichtPopover afspraak={agreement.Agreement} content={agreement.Description} burger={burgers.find(x => x.id == agreement.BurgerId)} /></Td>
 								<Td textAlign={"left"} verticalAlign={"top"} padding={5} rowSpan={agreementRowspan} className={getCorrectDividerClass(true, isLastAgreementInOrganisation)}></Td>
 								{paymentRow}
 								<Td textAlign={"left"} verticalAlign={"top"} padding={5} rowSpan={agreementRowspan} className={getCorrectDividerClass(true, isLastAgreementInOrganisation)}></Td>
@@ -55,7 +46,7 @@ const HuishoudenOverzichtTable: React.FC<OverzichtTableProps> = ({afspraken, sal
 					else if (paymentIndex === 0) {
 						tableRows.push(
 							<Tr>
-								<Td textAlign={"left"} verticalAlign={"top"} padding={5} rowSpan={agreementRowspan} className={getCorrectDividerClass(true, isLastAgreementInOrganisation)}><AfspraakOverzichtPopover afspraak={agreement.Agreement} content={agreement.Description} burger={burgers.find(x => x.id == agreement.BurgerId)} /></Td>
+								<Td w={"27.5%!important"} maxW={"27.5%!important"} minW={"27.5%!important"} textAlign={"left"} overflow={"clip"} verticalAlign={"top"} padding={5} rowSpan={agreementRowspan} className={getCorrectDividerClass(true, isLastAgreementInOrganisation) + " td-word-wrap"}><AfspraakOverzichtPopover afspraak={agreement.Agreement} content={agreement.Description} burger={burgers.find(x => x.id == agreement.BurgerId)} /></Td>
 								<Td rowSpan={agreementRowspan} className={getCorrectDividerClass(true, isLastAgreementInOrganisation)}></Td>
 								{paymentRow}
 								<Td rowSpan={agreementRowspan} className={getCorrectDividerClass(true, isLastAgreementInOrganisation)}></Td>

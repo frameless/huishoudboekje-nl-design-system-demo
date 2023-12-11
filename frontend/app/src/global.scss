@@ -65,8 +65,8 @@
 		border-top: rgba(0, 0, 0, 0.60) 2px solid
 	}
 
-
-	.small {
-		width: .5%;
+	.td-word-wrap {
+		// word-wrap: break-word;
+		white-space: pre-wrap;
 	}
 }

@@ -42,7 +42,7 @@ const AfspraakOverzichtPopover: React.FC<AfspraakOverzichtPopover> = ({afspraak:
 				placement='bottom-end'
 			>
 				<PopoverTrigger>
-					<Link onClick={goToAfspraak} onMouseEnter={onOpen}
+					<Link className="td-word-wrap" onClick={goToAfspraak} onMouseEnter={onOpen}
 						onMouseLeave={onClose}>{content}</Link>
 				</PopoverTrigger>
 				<Portal>

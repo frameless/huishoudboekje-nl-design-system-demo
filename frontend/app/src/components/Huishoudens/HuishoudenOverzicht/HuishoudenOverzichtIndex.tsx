@@ -6,10 +6,12 @@ import Page from "../../shared/Page";
 
 import HuishoudenOverzicht from "./HuishoudenOverzicht";
 import {useEffect, useState} from "react";
-import {Box, Card, FormControl, filter} from "@chakra-ui/react";
+import {Box, Button, Card, FormControl, HStack, filter} from "@chakra-ui/react";
 import Select from "react-select";
 import {formatBurgerName, formatHuishoudenName, getBurgerHhbId, useReactSelectStyles} from "../../../utils/things";
 import {useTranslation} from "react-i18next";
+import d from "../../../utils/dayjs";
+import {DateRange} from "../../../models/models";
 
 
 const HuishoudenOverzichtIndex = () => {
@@ -21,12 +23,21 @@ const HuishoudenOverzichtIndex = () => {
 	const reactSelectStyles = useReactSelectStyles();
 	const $huishoudens = useGetHuishoudensQuery({fetchPolicy: 'cache-and-network'});
 
+	const {search: queryParams} = useLocation();
+
 	useEffect(() => {
 		sessionStorage.setItem('overzicht-burgers', JSON.stringify(filterBurgerIds))
 	}, [filterBurgerIds])
 
-	return (
+	const range = sessionStorage.getItem('overzicht-daterange') && new URLSearchParams(queryParams).get("burgerId") == undefined ? JSON.parse(sessionStorage.getItem('overzicht-daterange') ?? '{}') : {from: d().subtract(3, 'month').startOf('month').toDate(), through: d().subtract(1, 'month').endOf('month').toDate()}
 
+	const [dateRange, setDateRange] = useState<DateRange>(range)
+	useEffect(() => {
+		sessionStorage.setItem('overzicht-daterange', JSON.stringify(dateRange))
+	}, [dateRange])
+
+
+	return (
 		<Queryable query={$huishoudens} children={data => {
 			const burgers: Burger[] = data.burgers || [];
 			const selectedBurgers = burgers.filter(b => filterBurgerIds.includes(b.id!));
@@ -44,27 +55,38 @@ const HuishoudenOverzichtIndex = () => {
 
 			return (
 				<Page title="Huishouden Overzicht">
-					<FormControl>
-						<Select onChange={onSelectBurger} options={burgers.map(b => ({
-							key: b.id,
-							value: b.id,
-							label: formatBurgerName(b) + " " + getBurgerHhbId(b),
-						}))} styles={reactSelectStyles.default} isMulti isClearable={true} noOptionsMessage={() => t("select.noOptions")} maxMenuHeight={200} placeholder={t("charts.optionAllBurgers")} value={burgers_filter} />
-					</FormControl>
-					{}
+					<Card>
+						<HStack margin={2}>
+							<FormControl>
+								<Select onChange={onSelectBurger} options={burgers.map(b => ({
+									key: b.id,
+									value: b.id,
+									label: formatBurgerName(b) + " " + getBurgerHhbId(b),
+								}))} styles={reactSelectStyles.default} isMulti isClearable={true} noOptionsMessage={() => t("select.noOptions")} maxMenuHeight={200} placeholder={t("charts.optionAllBurgers")} value={burgers_filter} />
+							</FormControl>
+							<Button paddingLeft={"2.5%"} paddingRight={"2.5%"} size={"md"} variant={"outline"} colorScheme={"primary"} onClick={((value) => setDateRange({from: d().subtract(3, 'month').startOf('month').toDate(), through: d().subtract(1, 'month').endOf('month').toDate()}))}>{t("overzicht.resetMonthView")}</Button>
+						</HStack>
+					</Card>
 					{(selectedBurgers.length > 0) &&
-						<HuishoudenOverzicht burgerIds={filterBurgerIds} burgers={selectedBurgers}></HuishoudenOverzicht>
+						<HuishoudenOverzicht burgerIds={filterBurgerIds} burgers={selectedBurgers} dateRange={dateRange} changeDateCallback={moveMonthsByAmount}></HuishoudenOverzicht>
 					}
 					{(selectedBurgers.length == 0) &&
 						<Box textColor={"red.500"}>
 							{t("overzicht.noData")}
 						</Box>
 					}
+
 				</Page>
 			)
 
 		}} />
 	)
+	function moveMonthsByAmount(amount: number) {
+		const startDate = d(dateRange.from).subtract(amount, 'months').toDate()
+		const endDate = d(dateRange.through).subtract(amount, 'months').toDate()
+
+		setDateRange({from: startDate, through: endDate})
+	}
 
 }
 
