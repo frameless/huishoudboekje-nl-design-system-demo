@@ -53,26 +53,22 @@ class AlarmHelper:
     @staticmethod
     def create(input):
         logging.debug(f"AlarmHelper.create: creating alarm... Input: {input}")
-        logging.warning("test0")
         validate_input(input)
-        logging.warning("test02")
         # TODO eventually turn this back on, for testing purposes it is off
         # alarm_date = parser.parse(input.startDate).date()
         # utc_now = date.today()
         # if alarm_date < utc_now:
         #     raise GraphQLError(f"The alarm date has to be in the future.")
 
-        if (input.get("byMonth") or input.get("byMonthDay")) and not (input.get("byMonth") and input.get("byMonthDay")):
+        if (input.get("byMonth", None) or input.get("byMonthDay", None)) and not (input.get("byMonth", None) and input.get("byMonthDay", None)):
             raise GraphQLError(
                 "Either both byMonth and byMonthDay are required, or neither.")
 
-        logging.warning("test1")
         afspraak_id = input["afspraakId"]
         afspraak = hhb_dataloader().afspraken.load_one(afspraak_id)
         if not afspraak:
             raise GraphQLError(f"Afspraak not found.")
 
-        logging.warning("test2")
         if not input.get("endDate"):
             if input.get("startDate"):
                 startDate = to_date(input["startDate"])
@@ -85,7 +81,6 @@ class AlarmHelper:
             else:
                 input["startDate"] = generate_alarm_date(input).isoformat()
 
-        logging.warning("test3")
         start_date_alarm = to_date(input["startDate"])
         if not valid_afspraak(afspraak, start_date_alarm, future_afspraak_allowed=True):
             raise GraphQLError("The afspraak is not active.")
@@ -102,11 +97,9 @@ class AlarmHelper:
                                                  json=update_afspraak, headers={"Content-type": "application/json"})
         if update_afspraak_response.status_code != 200:
             raise UpstreamError(update_afspraak_response,
-                                "Failed to update afspraak with new alarm.")
-        logging.warning("test4")
+                                "Failed to update afspraak with new alarm.")")
         logging.debug(
             f"AlarmHelper.create: created alarm. Response: {response_alarm}")
-        logging.warning("test5")
         return AlarmHelper(alarm=response_alarm, previous=dict(), ok=True, burger_id=afspraak.burger_id)
 
     @staticmethod
@@ -190,8 +183,8 @@ def validate_input(input):
     }
 
     JsonInputValidator(validation_schema).validate(input)
-    if not input.get("endDate", None) and input.get("byMonthDay", None):
-        if any(day > 28 for day in input.byMonthDay):
+    if (not input.get("endDate", None) == "" or not input.get("endDate", None)) and input.get("byMonthDay", None):
+        if any(day > 28 for day in input.get("byMonthDay")):
             raise GraphQLError("Invalid input")
 
 

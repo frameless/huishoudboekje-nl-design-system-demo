@@ -42,11 +42,12 @@ class EvaluateAlarms(graphene.Mutation):
             raise GraphQLError("Feature signalen is disabled")
 
         triggered_alarms = evaluate_alarms(ids=ids)
-        
+
         AuditLogging.create(
             action=info.field_name,
             entities=[(
-                GebruikersActiviteitEntity(entityType="alarm", entityId=a["alarm"]["id"])
+                GebruikersActiviteitEntity(
+                    entityType="alarm", entityId=a["alarm"]["id"])
             ) for a in triggered_alarms]
         )
 
@@ -83,10 +84,12 @@ def evaluate_alarms(ids: list[String] = [], journaalposten=[]) -> list:
         alarms = hhb_dataloader().alarms.load(ids)
         for alarm in alarms:
             if alarm.isActive:
-                triggered_alarms.append(_evaluate_alarm(alarm, active_alarms, journaalposten))
+                triggered_alarms.append(_evaluate_alarm(
+                    alarm, active_alarms, journaalposten))
     else:
         for alarm in active_alarms:
-            triggered_alarms.append(_evaluate_alarm(alarm, active_alarms, journaalposten))
+            triggered_alarms.append(_evaluate_alarm(
+                alarm, active_alarms, journaalposten))
 
     return triggered_alarms
 
@@ -107,7 +110,8 @@ def evaluate_one_alarm(id: String, journaalpost=None) -> list:
 
     alarm_status: bool = alarm_.isActive
     if alarm_status:
-        evaluated_alarm = _evaluate_alarm(alarm_, active_alarms, journaalposten)
+        evaluated_alarm = _evaluate_alarm(
+            alarm_, active_alarms, journaalposten)
 
     if evaluated_alarm is None:
         return []
@@ -122,14 +126,16 @@ def _evaluate_alarm(alarm_: Alarm, active_alarms: list[Alarm], journaalposten: l
                             journaalpost["afspraak_id"] == alarm_.afspraakId]
     transactions = get_banktransactions_by_journaalposten(journaalposten_alarm)
 
-    alarm_check_date = to_date(alarm_.startDate) + timedelta(days=(alarm_.get("datumMargin") + 1))
+    alarm_check_date = to_date(alarm_.startDate) + \
+        timedelta(days=(alarm_.get("datumMargin") + 1))
     alarm_ = disable_alarm(alarm_check_date, alarm_)
 
     # check if there are transaction within the alarm specified margins
     next_alarm = None
     created_signaal = None
     if should_check_alarm(alarm_):
-        next_alarm = should_create_next_alarm(alarm_, alarm_check_date, active_alarms)
+        next_alarm = should_create_next_alarm(
+            alarm_, alarm_check_date, active_alarms)
         created_signaal = should_create_signaal(alarm_, transactions)
 
     return {
@@ -162,7 +168,8 @@ def should_create_next_alarm(alarm: Alarm, alarm_check_date: date, active_alarms
     # only generate next alarm if byDay, byMonth, and/or byMonthDay is present
     if alarm.byDay or alarm.byMonth or alarm.byMonthDay:
         # generate next alarm in the sequence
-        next_alarm_date = generate_alarm_date(alarm, alarm_date=alarm_check_date)
+        next_alarm_date = generate_alarm_date(
+            alarm, alarm_date=alarm_check_date)
 
         # check if the end date is past or not
         end_date = alarm.endDate
@@ -171,18 +178,21 @@ def should_create_next_alarm(alarm: Alarm, alarm_check_date: date, active_alarms
                 return None
 
         # add new alarm in sequence if it does not exist yet
-        next_alarm_already_exists = does_next_alarm_exist(next_alarm_date, alarm, active_alarms)
+        next_alarm_already_exists = does_next_alarm_exist(
+            next_alarm_date, alarm, active_alarms)
+
         if not next_alarm_already_exists:
             try:
-                return create_alarm(alarm)
-            except:
+                return create_alarm(alarm, next_alarm_date)
+            except Exception as e:
+                logging.error(e)
                 logging.warning("Creating alarm failed")
                 return None
 
     return None
 
 
-def create_alarm(alarm: Alarm) -> Optional[Alarm]:
+def create_alarm(alarm: Alarm, next_alarm_date: date) -> Optional[Alarm]:
     result = AlarmHelper.create({
         "isActive": True,
         "afspraakId": int(alarm.get("afspraakId")),
@@ -192,7 +202,8 @@ def create_alarm(alarm: Alarm) -> Optional[Alarm]:
         "bedragMargin": alarm.get("bedragMargin"),
         "byDay": alarm.get("byDay", []),
         "byMonth": alarm.get("byMonth", []),
-        "byMonthDay": alarm.get("byMonthDay", [])
+        "byMonthDay": alarm.get("byMonthDay", []),
+        "startDate": next_alarm_date.strftime("%Y-%m-%d")
     })
 
     if not result.ok:
@@ -227,12 +238,14 @@ def get_alarm(id: String) -> Optional[Alarm]:
 def get_banktransactions_by_journaalposten(journaalposten) -> list[BankTransaction]:
     if not journaalposten:
         return []
-    transaction_ids = [journaalpost["transaction_id"] for journaalpost in journaalposten]
+    transaction_ids = [journaalpost["transaction_id"]
+                       for journaalpost in journaalposten]
     return hhb_dataloader().bank_transactions.load(transaction_ids)
 
 
 def should_create_signaal(alarm: Alarm, transacties: list[BankTransaction]) -> Optional[Signaal]:
-    createSignal, difference, monetary_deviated_transaction_ids = get_bedrag_difference(alarm, transacties)
+    createSignal, difference, monetary_deviated_transaction_ids = get_bedrag_difference(
+        alarm, transacties)
     if createSignal:
         alarm_id = alarm.id
         new_signal = {
@@ -295,7 +308,8 @@ def get_bedrag_difference(alarm: Alarm, transacties: list[BankTransaction]):
 
     # initialize
     monetary_deviated_transaction_ids = []
-    transaction_ids_out_of_scope = []  # not used at the moment, but see reference GitLab issue #1099 https://gitlab.com/commonground/huishoudboekje/app-new/-/issues/1099
+    # not used at the moment, but see reference GitLab issue #1099 https://gitlab.com/commonground/huishoudboekje/app-new/-/issues/1099
+    transaction_ids_out_of_scope = []
     bedrag = 0
     createSignal = False
 
