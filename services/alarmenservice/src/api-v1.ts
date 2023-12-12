@@ -6,7 +6,6 @@ import getOneAlarm from "../prisma/operations/getOneAlarm";
 import updateAlarm from "../prisma/operations/updateAlarm";
 import {addFilterByActive, addFilterByIds} from "./filters";
 import healthRouter from "./health";
-import log from "loglevel";
 
 const app = express.Router();
 
@@ -52,7 +51,6 @@ app.post("/", async (req, res, next) => {
 	try {
 		const data = req.body;
 		const alarm = await createAlarm(data);
-		log.error(alarm)
 
 		return res.status(201).json({
 			ok: true,
@@ -60,7 +58,6 @@ app.post("/", async (req, res, next) => {
 		});
 	}
 	catch (err) {
-		log.error(err)
 		next(err);
 	}
 });
@@ -72,8 +69,6 @@ app.put("/:id", async (req, res, next) => {
 
 		const {id} = req.params;
 		const data = req.body;
-		log.info(id)
-		log.info(data)
 		const alarm = await updateAlarm({
 			id,
 			...data,
@@ -84,7 +79,6 @@ app.put("/:id", async (req, res, next) => {
 		});
 	}
 	catch (err) {
-		log.error(err)
 		next(err);
 	}
 });
