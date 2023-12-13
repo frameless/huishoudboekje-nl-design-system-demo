@@ -20,6 +20,7 @@ export enum RouteNames {
 	status = "status",
 	notFound = "404",
 	brievenExport = "brievenexport",
+	overzicht = "overzicht",
 
 	// Subroutes
 	view = "bekijken",
@@ -32,6 +33,7 @@ export enum RouteNames {
 const AppRoutesNew = {
 	signalen: `/${RouteNames.signalen}`,
 	huishoudens: `/${RouteNames.huishoudens}`,
+	overzicht: `/${RouteNames.huishoudens}/${RouteNames.overzicht}`,
 	huishouden: `/${RouteNames.huishoudens}/:id`,
 	burgers: `/${RouteNames.burgers}`,
 	burgersAction: `/${RouteNames.burgers}/:action`,
@@ -140,4 +142,11 @@ export const AppRoutes = {
 		id: burgerId,
 		format,
 	}),
+	Overzicht: (burgerIds: string[]) => {
+		const url = generatePath(AppRoutesNew.overzicht)
+		const params = new URLSearchParams({
+			burgerId: burgerIds.join(",")
+		}).toString()
+		return url + "?" + params
+	}
 };

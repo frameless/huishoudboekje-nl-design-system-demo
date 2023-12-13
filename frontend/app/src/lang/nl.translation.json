@@ -156,12 +156,19 @@
       "deleteBurgerFromHuishouden": "Verwijder burger uit huishouden",
       "clearSearch": "Zoekopdracht wissen",
       "back": "Terug",
-      "backToHome": "Terug naar de hoofdpagina"
+      "backToHome": "Terug naar de hoofdpagina",
+      "showOverzicht": "Bekijk overzicht"
     },
     "formError": "Er is een fout opgetreden. Controleer de invoer en probeer het nog eens.",
     "period": "Periode",
     "time": "Tijd",
     "date": "Datum"
+  },
+  "overzicht": {
+    "tegenrekening": "Tegenrekening",
+    "afspraak": "Afspraak",
+    "noData": "Selecteer burger(s) om een overzicht te genereren",
+    "resetMonthView": "Bekijk afgelopen 3 maanden"
   },
   "forms": {
     "afspraken": {
@@ -909,7 +916,8 @@
     "betaalinstructies": "Betaalinstructies",
     "rapportage": "Rapportage",
     "gebeurtenissen": "Gebeurtenissen",
-    "configuratie": "Configuratie"
+    "configuratie": "Configuratie",
+    "overview": "Overzichten"
   },
   "enabled": "Ingeschakeld",
   "disabled": "Uitgeschakeld",

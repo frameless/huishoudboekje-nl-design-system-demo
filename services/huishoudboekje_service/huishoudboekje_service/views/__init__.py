@@ -17,3 +17,4 @@ from .saldo import SaldoView
 from .afspraken_filter import AfsprakenFilterView
 from .journaalposten_filter import JournaalpostenFilterView
 from .burger_transaction_ids import BurgerTransactieIdsView
+from .afspraken_overview import AfsprakenOverviewView

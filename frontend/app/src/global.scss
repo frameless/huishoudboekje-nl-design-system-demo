@@ -1,5 +1,7 @@
 .react-datepicker {
-	&-wrapper, &__input-container input {
+
+	&-wrapper,
+	&__input-container input {
 		display: block;
 	}
 }
@@ -26,7 +28,7 @@
 		height: 0;
 	}
 
-	
+
 	.print {
 		display: inline-flex;
 		visibility: visible;
@@ -36,7 +38,7 @@
 		margin: 0 !important;
 	}
 
-	.printweergave-periode{
+	.printweergave-periode {
 		display: inline-flex;
 		visibility: visible;
 		max-width: 90%;
@@ -44,5 +46,27 @@
 		margin: 0 !important;
 		padding-top: 10px !important;
 		padding-bottom: 50px !important;
+	}
+}
+
+.table-overzicht {
+	th {
+		border-bottom: rgba(0, 0, 0, 0.349) 2px solid;
+		color: rgb(0, 0, 0) !important;
+		font-weight: bold !important;
+		font-size: medium !important;
+	}
+
+	.divider-light {
+		border-bottom: rgba(0, 0, 0, 0.45) 1px solid;
+	}
+
+	.divider-dark-top {
+		border-top: rgba(0, 0, 0, 0.60) 2px solid
+	}
+
+	.td-word-wrap {
+		// word-wrap: break-word;
+		white-space: pre-wrap;
 	}
 }

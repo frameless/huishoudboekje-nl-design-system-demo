@@ -46,10 +46,11 @@ const Sidebar = () => {
 					</SidebarLink>
 				)}
 				<Stack>
-					<SidebarLink to={RouteNames.huishoudens} icon={BsFillHouseDoorFill} isActive={cleanPathname.startsWith(RouteNames.huishoudens)}>{t("sidebar.huishoudens")}</SidebarLink>
+					<SidebarLink to={RouteNames.huishoudens} icon={BsFillHouseDoorFill} isActive={cleanPathname.startsWith(RouteNames.huishoudens) && !cleanPathname.includes(RouteNames.overzicht)}>{t("sidebar.huishoudens")}</SidebarLink>
 					<Box pl={"27px"}>
 						<Stack spacing={1} borderLeft={"1px solid"} borderLeftColor={"gray.400"} pl={"21px"}>
 							<SidebarLink size={"sm"} to={RouteNames.burgers} isActive={cleanPathname.startsWith(RouteNames.burgers)}>{t("sidebar.burgers")}</SidebarLink>
+							<SidebarLink size={"sm"} to={`${RouteNames.huishoudens}/${RouteNames.overzicht}`} isActive={cleanPathname.includes(RouteNames.overzicht)}>{t("sidebar.overview")}</SidebarLink>
 						</Stack>
 					</Box>
 				</Stack>
