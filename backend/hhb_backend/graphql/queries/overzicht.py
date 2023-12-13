@@ -19,7 +19,7 @@ class OverzichtQuery:
             burger_ids, start_date, end_date)
         AuditLogging.create(
             action=info.field_name,
-            entities=[GebruikersActiviteitEntity(entityType="huishouden_overzicht", entityId=burger_id)
+            entities=[GebruikersActiviteitEntity(entityType="burger_overzicht", entityId=burger_id)
                       for burger_id in burger_ids] if len(burger_ids) > 0 else []
         )
         return result
