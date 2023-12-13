@@ -7,6 +7,7 @@ from flask_injector import FlaskInjector
 from rapportage_service.dependencies import configure
 from rapportage_service.views.RapportageView import BurgerRapportageView
 from rapportage_service.views.SaldoView import SaldoView
+from rapportage_service.views.OverviewView import OverviewView
 from core_service.statsd_metrics import add_statsd_metrics
 
 
@@ -42,7 +43,9 @@ def create_app(config_name='rapportage_service.config.Config', dependency_inject
         {"path": "/rapportage", "view": BurgerRapportageView,
             "name": "rapportage_burger"},
         {"path": "/saldo", "view": SaldoView,
-            "name": "saldo"}
+            "name": "saldo"},
+        {"path": "/overzicht", "view": OverviewView,
+            "name": "overzicht"}
     ]
     for route in routes:
         app.add_url_rule(

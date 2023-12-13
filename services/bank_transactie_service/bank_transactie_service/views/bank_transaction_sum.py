@@ -14,7 +14,7 @@ class BanktransactionSumView(HHBView):
 
     hhb_model = BankTransaction
     validation_data = {
-        TRANSACTIONS_IDS_LIST_NAME:{
+        TRANSACTIONS_IDS_LIST_NAME: {
             "type": "array",
             "items": {
                 "type": "number"
@@ -28,6 +28,7 @@ class BanktransactionSumView(HHBView):
             GET /banktransactions/sum?date=<date>
         """
         date = request.args.get('date')
+        start = request.args.get('start')
 
         if not valid_date(date):
             abort(make_response({"errors": "invalid date"}, 400))
@@ -35,12 +36,15 @@ class BanktransactionSumView(HHBView):
         ids = self.__get_transaction_ids_from_body()
 
         query = BankTransaction.query\
-                    .with_entities(func.coalesce(func.sum(BankTransaction.bedrag), 0).label("sum"))\
-                    .filter(BankTransaction.transactie_datum <= string_to_date(date))\
-                    .filter(BankTransaction.is_geboekt == True)
-        
+            .with_entities(func.coalesce(func.sum(BankTransaction.bedrag), 0).label("sum"))\
+            .filter(BankTransaction.transactie_datum <= string_to_date(date))\
+            .filter(BankTransaction.is_geboekt == True)
+
         if ids and len(ids) > 0:
             query = query.filter(BankTransaction.id.in_(ids))
+        if start != None:
+            query = query.filter(
+                BankTransaction.transactie_datum >= string_to_date(start))
 
         result_list = [row2dict(row) for row in query]
         return {"data": result_list}, 200

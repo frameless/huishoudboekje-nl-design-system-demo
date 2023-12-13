@@ -24,7 +24,8 @@ from huishoudboekje_service.views import (
     SaldoView,
     AfsprakenFilterView,
     JournaalpostenFilterView,
-    BurgerTransactieIdsView
+    BurgerTransactieIdsView,
+    AfsprakenOverviewView
 )
 from core_service import database
 from core_service.seed import seed_database_with_test_data
@@ -116,7 +117,9 @@ def create_app(config_name='huishoudboekje_service.config.Config'):
             "name": "afdeling_detail_view"},
         {"path": "/afdelingen/<object_id>/rekeningen", "view": RekeningAfdelingView,
             "name": "afdeling_rekeningen_view"},
-        {"path": "/saldo", "view": SaldoView, "name": "saldo_view"}
+        {"path": "/saldo", "view": SaldoView, "name": "saldo_view"},
+        {"path": "/afspraken/overzicht", "view": AfsprakenOverviewView,
+            "name": "afspraken_overview"}
     ]
     for route in routes:
         app.add_url_rule(

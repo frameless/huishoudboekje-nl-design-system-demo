@@ -743,6 +743,30 @@ export enum OverschrijvingStatus {
   Verwachting = 'VERWACHTING'
 }
 
+export type Overzicht = {
+  afspraken?: Maybe<Array<Maybe<OverzichtAfspraak>>>;
+  saldos?: Maybe<Array<Maybe<OverzichtSaldo>>>;
+};
+
+export type OverzichtAfspraak = {
+  burgerId?: Maybe<Scalars['Int']>;
+  id?: Maybe<Scalars['Int']>;
+  omschrijving?: Maybe<Scalars['String']>;
+  organisatieId?: Maybe<Scalars['Int']>;
+  rekeninghouder?: Maybe<Scalars['String']>;
+  tegenRekeningId?: Maybe<Scalars['Int']>;
+  transactions?: Maybe<Array<Maybe<BankTransaction>>>;
+  validFrom?: Maybe<Scalars['String']>;
+  validThrough?: Maybe<Scalars['String']>;
+};
+
+export type OverzichtSaldo = {
+  eindSaldo?: Maybe<Scalars['Decimal']>;
+  maandnummer?: Maybe<Scalars['Int']>;
+  mutatie?: Maybe<Scalars['Decimal']>;
+  startSaldo?: Maybe<Scalars['Decimal']>;
+};
+
 export type PageInfo = {
   count?: Maybe<Scalars['Int']>;
   limit?: Maybe<Scalars['Int']>;
@@ -1213,6 +1237,7 @@ export type RootQuery = {
   journaalpostenTransactieRubriek?: Maybe<Array<Maybe<JournaalpostTransactieRubriek>>>;
   organisatie?: Maybe<Organisatie>;
   organisaties?: Maybe<Array<Maybe<Organisatie>>>;
+  overzicht?: Maybe<Overzicht>;
   postadres?: Maybe<Postadres>;
   postadressen?: Maybe<Array<Maybe<Postadres>>>;
   rekening?: Maybe<Rekening>;
@@ -1442,6 +1467,14 @@ export type RootQueryOrganisatieArgs = {
 /** The root of all queries  */
 export type RootQueryOrganisatiesArgs = {
   ids?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
+};
+
+
+/** The root of all queries  */
+export type RootQueryOverzichtArgs = {
+  burgerIds: Array<InputMaybe<Scalars['Int']>>;
+  endDate: Scalars['String'];
+  startDate: Scalars['String'];
 };
 
 
@@ -2178,6 +2211,15 @@ export type GetHuishoudenQueryVariables = Exact<{
 
 
 export type GetHuishoudenQuery = { huishouden?: { id?: number, burgers?: Array<{ id?: number, voorletters?: string, voornamen?: string, achternaam?: string }> } };
+
+export type GetHuishoudenOverzichtQueryVariables = Exact<{
+  burgers: Array<Scalars['Int']> | Scalars['Int'];
+  start: Scalars['String'];
+  end: Scalars['String'];
+}>;
+
+
+export type GetHuishoudenOverzichtQuery = { overzicht?: { afspraken?: Array<{ id?: number, burgerId?: number, organisatieId?: number, omschrijving?: string, rekeninghouder?: string, tegenRekeningId?: number, validFrom?: string, validThrough?: string, transactions?: Array<{ id?: number, informationToAccountOwner?: string, statementLine?: string, bedrag?: any, isCredit?: boolean, tegenRekeningIban?: string, transactieDatum?: any, tegenRekening?: { rekeninghouder?: string } }> }>, saldos?: Array<{ maandnummer?: number, startSaldo?: any, eindSaldo?: any, mutatie?: any }> } };
 
 export type GetHuishoudensQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -6440,6 +6482,70 @@ export function useGetHuishoudenLazyQuery(baseOptions?: Apollo.LazyQueryHookOpti
 export type GetHuishoudenQueryHookResult = ReturnType<typeof useGetHuishoudenQuery>;
 export type GetHuishoudenLazyQueryHookResult = ReturnType<typeof useGetHuishoudenLazyQuery>;
 export type GetHuishoudenQueryResult = Apollo.QueryResult<GetHuishoudenQuery, GetHuishoudenQueryVariables>;
+export const GetHuishoudenOverzichtDocument = gql`
+    query getHuishoudenOverzicht($burgers: [Int!]!, $start: String!, $end: String!) {
+  overzicht(burgerIds: $burgers, startDate: $start, endDate: $end) {
+    afspraken {
+      id
+      burgerId
+      organisatieId
+      omschrijving
+      rekeninghouder
+      tegenRekeningId
+      validFrom
+      validThrough
+      transactions {
+        id
+        informationToAccountOwner
+        statementLine
+        bedrag
+        isCredit
+        tegenRekeningIban
+        transactieDatum
+        tegenRekening {
+          rekeninghouder
+        }
+      }
+    }
+    saldos {
+      maandnummer
+      startSaldo
+      eindSaldo
+      mutatie
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetHuishoudenOverzichtQuery__
+ *
+ * To run a query within a React component, call `useGetHuishoudenOverzichtQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetHuishoudenOverzichtQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetHuishoudenOverzichtQuery({
+ *   variables: {
+ *      burgers: // value for 'burgers'
+ *      start: // value for 'start'
+ *      end: // value for 'end'
+ *   },
+ * });
+ */
+export function useGetHuishoudenOverzichtQuery(baseOptions: Apollo.QueryHookOptions<GetHuishoudenOverzichtQuery, GetHuishoudenOverzichtQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetHuishoudenOverzichtQuery, GetHuishoudenOverzichtQueryVariables>(GetHuishoudenOverzichtDocument, options);
+      }
+export function useGetHuishoudenOverzichtLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetHuishoudenOverzichtQuery, GetHuishoudenOverzichtQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetHuishoudenOverzichtQuery, GetHuishoudenOverzichtQueryVariables>(GetHuishoudenOverzichtDocument, options);
+        }
+export type GetHuishoudenOverzichtQueryHookResult = ReturnType<typeof useGetHuishoudenOverzichtQuery>;
+export type GetHuishoudenOverzichtLazyQueryHookResult = ReturnType<typeof useGetHuishoudenOverzichtLazyQuery>;
+export type GetHuishoudenOverzichtQueryResult = Apollo.QueryResult<GetHuishoudenOverzichtQuery, GetHuishoudenOverzichtQueryVariables>;
 export const GetHuishoudensDocument = gql`
     query getHuishoudens {
   burgers {
