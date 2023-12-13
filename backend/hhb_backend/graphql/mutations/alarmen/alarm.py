@@ -97,7 +97,7 @@ class AlarmHelper:
                                                  json=update_afspraak, headers={"Content-type": "application/json"})
         if update_afspraak_response.status_code != 200:
             raise UpstreamError(update_afspraak_response,
-                                "Failed to update afspraak with new alarm.")")
+                                "Failed to update afspraak with new alarm.")
         logging.debug(
             f"AlarmHelper.create: created alarm. Response: {response_alarm}")
         return AlarmHelper(alarm=response_alarm, previous=dict(), ok=True, burger_id=afspraak.burger_id)
