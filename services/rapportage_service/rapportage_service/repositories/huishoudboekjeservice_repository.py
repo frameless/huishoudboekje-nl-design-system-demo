@@ -35,3 +35,8 @@ class HuishoudboekjeserviceRepository:
             f"{self.HHB_SERVICES_URL}/afspraken/overzicht", json=json)
 
         return response.json()["data"]
+    
+    def get_rekeningen(self):
+        response = requests.get(
+            f"{self.HHB_SERVICES_URL}/rekeningen")
+        return response.json()["data"]

@@ -35,6 +35,14 @@ class OverviewController():
 
         transactions_info = self._banktransactionservice_repository.get_transacties_in_range(
             start, end, transaction_ids)
+        
+        rekeningen = {rekening["iban"]: rekening["rekeninghouder"] for rekening in self._hhb_repository.get_rekeningen()}
+
+        for transaction in transactions_info:
+            transaction.update({"rekening": {
+                                    "rekeninghouder": rekeningen[transaction["tegen_rekening"]]
+                                }})
+
         saldos = self.__get_saldos(start, end, burger_ids)
 
         transactie_id_to_transactie_dict = {
