@@ -146,6 +146,7 @@ const BurgerDetailPage = () => {
 						<IconButton as={MenuButton} icon={<MenuIcon />} variant={"solid"} aria-label={"Open menu"} />
 						<MenuList>
 							<Link href={AppRoutes.BrievenExport(id, "excel")} target={"_blank"}><MenuItem>{t("global.actions.brievenExport")}</MenuItem></Link>
+							<NavLink to={AppRoutes.Overzicht([...[String(burger.id)]])}><MenuItem>{t("global.actions.showOverzicht")}</MenuItem></NavLink>
 							<NavLink to={AppRoutes.RapportageBurger([id])}><MenuItem>{t("global.actions.showReports")}</MenuItem></NavLink>
 							<NavLink to={AppRoutes.ViewBurgerPersonalDetails(String(burger.id))}><MenuItem>{t("global.actions.showPersonalDetails")}</MenuItem></NavLink>
 							<NavLink to={AppRoutes.ViewBurgerAuditLog(String(burger.id))}><MenuItem>{t("global.actions.showBurgerAuditLog")}</MenuItem></NavLink>
