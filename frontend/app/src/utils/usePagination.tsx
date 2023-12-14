@@ -15,7 +15,7 @@ const defaultOptions = (t) => ({
 	},
 });
 
-const usePagination = (options?: Partial<typeof defaultOptions>) => {
+const usePagination = (options?: Partial<typeof defaultOptions>, customOnPaginationClick?) => {
 	const {t} = useTranslation();
 	const _options = {...defaultOptions(t), ...options};
 	const isMobile = useBreakpointValue([true, true, true, false]);
@@ -26,20 +26,31 @@ const usePagination = (options?: Partial<typeof defaultOptions>) => {
 	const [total, setTotal] = useState<number | null | undefined>();
 	const nPages = total ? Math.ceil(total / pageSize) : 0;
 
+	const onPaginationClick = () => {
+		if(customOnPaginationClick !== undefined){
+			customOnPaginationClick();
+		}
+	}
+
 	const fn = {
 		goNext: () => {
+			onPaginationClick();
 			setPage(Math.min(page + 1, nPages));
 		},
 		goPrevious: () => {
+			onPaginationClick();
 			setPage(Math.max(page - 1, 1));
 		},
 		goPage: (pageNumber: number) => {
+			onPaginationClick();
 			setPage(Math.min(pageNumber, Math.max(pageNumber, 1)));
 		},
 		goFirst: () => {
+			onPaginationClick();
 			setPage(1);
 		},
 		goLast: () => {
+			onPaginationClick();
 			setPage(nPages);
 		},
 		navigation: () => {

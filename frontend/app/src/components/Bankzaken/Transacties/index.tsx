@@ -504,7 +504,7 @@ const Transactions = () => {
 										{transacties.length > 0 ? (
 											<HStack>
 												<Text>{t("transactionsPage.filters.count")}: </Text>
-												<Box width={30}> {$transactions.loading ? <Spinner size={"xs"} /> : total}</Box>
+												<Box width={50}> {$transactions.loading ? <Spinner size={"xs"} /> : total}</Box>
 											</HStack>
 										) : (
 											<Text />
@@ -523,18 +523,20 @@ const Transactions = () => {
 										</HStack>
 									</HStack>
 								</Stack>
-								{transacties.length > 0 ? (
-									<Stack>
-										<TransactiesList transacties={transacties} />
-										<HStack justify={"center"}>
-											<PaginationButtons />
-										</HStack>
-									</Stack>
-								) : (
-									<Stack>
-										<Text>{t("messages.transactions.noResults")}</Text>
-									</Stack>
-								)}
+								{$transactions.loading ? <Spinner/> : <Stack>
+									{transacties.length > 0 ? (
+										<Stack>
+											<TransactiesList transacties={transacties} />
+											<HStack justify={"center"}>
+												<PaginationButtons />
+											</HStack>
+										</Stack>
+									) : (
+										<Stack>
+											<Text>{t("messages.transactions.noResults")}</Text>
+										</Stack>
+									)}
+								</Stack>}
 							</Stack>
 						</Section>
 					);

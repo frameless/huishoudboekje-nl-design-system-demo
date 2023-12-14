@@ -1,7 +1,7 @@
 import React from "react";
 import {useTranslation} from "react-i18next";
 import {GebruikersActiviteit, useGetGebeurtenissenQuery} from "../../generated/graphql";
-import Queryable from "../../utils/Queryable";
+import Queryable, { Loading } from "../../utils/Queryable";
 import usePagination from "../../utils/usePagination";
 import Page from "../shared/Page";
 import Section from "../shared/Section";
@@ -30,7 +30,7 @@ const Gebeurtenissen = () => {
 				return (
 					<SectionContainer>
 						<Section title={t("pages.gebeurtenissen.title")} helperText={t("pages.gebeurtenissen.helperText")} right={<PaginationButtons />}>
-							<GebeurtenissenTableView gebeurtenissen={gs} />
+							{$gebeurtenissen.loading ? <Loading/> : <GebeurtenissenTableView gebeurtenissen={gs} />}
 						</Section>
 					</SectionContainer>
 				);
