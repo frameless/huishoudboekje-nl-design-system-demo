@@ -21,8 +21,11 @@ import BookingSectionAfspraakFilters from "./BookingSectionAfsrpaakFilters";
 const BookingSectionAfspraak = ({transaction}) => {
 	const {t} = useTranslation();
 	const toast = useToaster();
-    const {offset, setTotal, goFirst, PaginationButtons} = usePagination({pageSize: 25});
 	const [isLoading, setIsLoading] = React.useState(true);
+    const onPaginationClick = () => {
+        setIsLoading(true)
+    }
+    const {offset, setTotal, goFirst, PaginationButtons} = usePagination({pageSize: 25}, onPaginationClick);
 
     const reset = ()=>{
         setIsLoading(true)
@@ -59,7 +62,10 @@ const BookingSectionAfspraak = ({transaction}) => {
 	};
 
     const $filter_data = useGetBurgersAndOrganisatiesAndRekeningenQuery({
-        variables: {iban: transaction.tegenRekeningIban}
+        variables: {iban: transaction.tegenRekeningIban},
+        onCompleted: () => {
+			setIsLoading(false)
+		},
     })
 
 	return (
