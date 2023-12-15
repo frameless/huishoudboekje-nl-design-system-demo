@@ -523,19 +523,19 @@ const Transactions = () => {
 										</HStack>
 									</HStack>
 								</Stack>
-								{$transactions.loading ? <Spinner/> : <Stack>
-									{transacties.length > 0 ? (
-										<Stack>
-											<TransactiesList transacties={transacties} />
-											<HStack justify={"center"}>
-												<PaginationButtons />
-											</HStack>
-										</Stack>
-									) : (
-										<Stack>
-											<Text>{t("messages.transactions.noResults")}</Text>
-										</Stack>
-									)}
+									{$transactions.loading ? <Spinner/> : <Stack>
+										{transacties.length > 0 ? (
+											<Stack>
+												<TransactiesList transacties={transacties} />
+											</Stack>
+										) : (
+											<Stack>
+												<Text>{t("messages.transactions.noResults")}</Text>
+											</Stack>
+										)}
+									<HStack justify={"center"}>
+										<PaginationButtons />
+									</HStack>
 								</Stack>}
 							</Stack>
 						</Section>
