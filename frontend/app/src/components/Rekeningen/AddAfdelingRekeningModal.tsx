@@ -22,6 +22,10 @@ const AddAfdelingRekeningModal: React.FC<AddAfdelingRekeningModalProps> = ({afde
 	const [isIbanValid, setIbanValid] = useState(true);
 
 	const onSaveRekening = (rekening) => {
+		const translation = {
+			"iban": rekening.iban,
+			"rekeninghouder": rekening.rekeninghouder
+		};
 		setIbanValid(true);
 		createAfdelingRekening({
 			variables: {
@@ -30,7 +34,7 @@ const AddAfdelingRekeningModal: React.FC<AddAfdelingRekeningModalProps> = ({afde
 			},
 		}).then(() => {
 			toast({
-				success: t("messages.rekeningen.createSuccess", {...rekening}),
+				success: t("messages.rekeningen.createSuccess", translation),
 			});
 			onClose();
 		}).catch((err) => {
