@@ -65,9 +65,10 @@ app.post("/", async (req, res, next) => {
 // Update an alarm by id
 app.put("/:id", async (req, res, next) => {
 	try {
+
+
 		const {id} = req.params;
 		const data = req.body;
-
 		const alarm = await updateAlarm({
 			id,
 			...data,
