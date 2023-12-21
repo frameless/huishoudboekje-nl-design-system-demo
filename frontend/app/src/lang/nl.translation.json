@@ -112,9 +112,9 @@
       "updateSucces": "Postadres gewijzigd."
     },
     "rekeningen": {
+      "createSuccess": "Bankrekening {{iban}} op naam van {{rekeninghouder}} is toegevoegd.",
       "alreadyExistsError": "Dit bankrekeningnummer wordt al gebruikt.",
       "invalidIbanError": "Er is een onjuiste IBAN ingevuld. Vul een geldige IBAN in.",
-      "createSuccess": "Bankrekening {{iban}} op naam van {{rekeninghouder}} is toegevoegd.",
       "deleteSuccess": "Bankrekening is verwijderd.",
       "inUseDeleteError": "Deze bankrekening is in gebruik en kan niet worden verwijderd.",
       "deleteTitle": "Bankrekening verwijderen.",
@@ -124,7 +124,7 @@
       "updateSucces": "Rekening gewijzigd."
     },
     "enableSignaalSuccess": "Het signaal is ingeschakeld.",
-    "disableSignaalSuccess": "Het signaal is uitgeschakeld.",
+    "disableSignaalSuccess": "Het alarm is uitgeschakeld.",
     "backendError": "Er is een systeemfout opgetreden. Neem contact op met de applicatiebeheerder voor ondersteuning.",
     "genericToastErrorTitle": "Er is een fout opgetreden.",
     "upload": {
@@ -163,12 +163,6 @@
     "period": "Periode",
     "time": "Tijd",
     "date": "Datum"
-  },
-  "overzicht": {
-    "tegenrekening": "Tegenrekening",
-    "afspraak": "Afspraak",
-    "noData": "Selecteer burger(s) om een overzicht te genereren",
-    "resetMonthView": "Bekijk afgelopen 3 maanden"
   },
   "forms": {
     "afspraken": {
@@ -214,6 +208,12 @@
         "transactions": {
           "title": "Transacties"
         }
+      }
+    },
+    "rekeningen": {
+      "fields": {
+        "accountHolder": "Rekeninghouder",
+        "iban": "IBAN"
       }
     },
     "burgers": {
@@ -340,12 +340,6 @@
         "huisnummer": "Huisnummer",
         "postcode": "Postcode",
         "plaatsnaam": "Plaatsnaam"
-      }
-    },
-    "rekeningen": {
-      "fields": {
-        "accountHolder": "Rekeninghouder",
-        "iban": "IBAN"
       }
     },
     "asterisk": "Verplicht veld",
@@ -850,6 +844,26 @@
   "unknownOs": "Onbekend besturingssysteem",
   "unknownBrowser": "Onbekende browser",
   "huishoudenName": "Huishouden {{name}}",
+  "overzicht": {
+    "tegenrekening": "Tegenrekening",
+    "afspraak": "Afspraak",
+    "resetMonthView": "Bekijk afgelopen 3 maanden",
+    "noData": "Selecteer burger(s) om een overzicht te genereren"
+  },
+  "interval": {
+    "period": "Periode",
+    "month_one": "maand",
+    "month_other": "maanden"
+  },
+  "reports": {
+    "period": "Van <strong>{{from}}</strong> tot en met <strong>{{through}}</strong>",
+    "noData": "Geen transacties gevonden van de gegeven burger(s) in de gegeven periode",
+    "title": "Rapportage",
+    "currentMonth": "Huidige maand",
+    "lastMonth": "Vorige maand",
+    "till": "tot en met ",
+    "incorrectDateRange": "De gegeven periode is niet correct"
+  },
   "huishoudens": {
     "title": "Huishoudens"
   },
@@ -877,26 +891,6 @@
     },
     "organizations": "Organisaties"
   },
-  "reports": {
-    "period": "Van <strong>{{from}}</strong> tot en met <strong>{{through}}</strong>",
-    "noData": "Geen transacties gevonden van de gegeven burger(s) in de gegeven periode",
-    "title": "Rapportage",
-    "currentMonth": "Huidige maand",
-    "lastMonth": "Vorige maand",
-    "till": "tot en met ",
-    "incorrectDateRange": "De gegeven periode is niet correct"
-  },
-  "total": "Totaal",
-  "total income": "Totaal Inkomsten",
-  "total expenses": "Totaal Uitgaven",
-  "total income expenses in period": "Totaal inkomsten en uitgaven in periode",
-  "end saldo at": "Saldo in Huishoudboekje op",
-  "allBurgers": "Alle burgers",
-  "interval": {
-    "period": "Periode",
-    "month_one": "maand",
-    "month_other": "maanden"
-  },
   "granularity": {
     "daily": "Dag",
     "weekly": "Week",
@@ -909,6 +903,7 @@
     "signalen": "Signalen",
     "huishoudens": "Huishoudens",
     "burgers": "Burgers",
+    "overview": "Overzichten",
     "organisaties": "Organisaties",
     "bankzaken": "Bankzaken",
     "transacties": "Transacties",
@@ -916,8 +911,7 @@
     "betaalinstructies": "Betaalinstructies",
     "rapportage": "Rapportage",
     "gebeurtenissen": "Gebeurtenissen",
-    "configuratie": "Configuratie",
-    "overview": "Overzichten"
+    "configuratie": "Configuratie"
   },
   "enabled": "Ingeschakeld",
   "disabled": "Uitgeschakeld",
