@@ -2,6 +2,8 @@
 
 ## 1.12.0
 
+Deze versie omvat een nieuw overzicht met banktransacties in drie maanden. Bij het laden van gegevens per pagina wordt visueel gemaakt dat het laden bezig is. Er is een probleem met het zetten van een alarm opgelost.
+
 ### Minor Changes
 
 - 08aa4b330: Introduced a new page "overzicht" that shows transactions per oganisation and agreement over the last three months.
