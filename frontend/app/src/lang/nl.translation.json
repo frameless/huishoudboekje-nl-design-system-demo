@@ -124,7 +124,7 @@
       "updateSucces": "Rekening gewijzigd."
     },
     "enableSignaalSuccess": "Het signaal is ingeschakeld.",
-    "disableSignaalSuccess": "Het alarm is uitgeschakeld.",
+    "disableSignaalSuccess": "Het signaal is uitgeschakeld.",
     "backendError": "Er is een systeemfout opgetreden. Neem contact op met de applicatiebeheerder voor ondersteuning.",
     "genericToastErrorTitle": "Er is een fout opgetreden.",
     "upload": {
@@ -149,6 +149,7 @@
       "filter": "Filteren",
       "viewBurgerHuishouden": "Bekijk huishouden",
       "brievenExport": "Exporteer gegevens voor brieven",
+      "showOverzicht": "Bekijk overzicht",
       "showReports": "Bekijk rapportage",
       "showPersonalDetails": "Bekijk persoonsgegevens",
       "showBurgerAuditLog": "Bekijk gebeurtenissen",
@@ -156,8 +157,7 @@
       "deleteBurgerFromHuishouden": "Verwijder burger uit huishouden",
       "clearSearch": "Zoekopdracht wissen",
       "back": "Terug",
-      "backToHome": "Terug naar de hoofdpagina",
-      "showOverzicht": "Bekijk overzicht"
+      "backToHome": "Terug naar de hoofdpagina"
     },
     "formError": "Er is een fout opgetreden. Controleer de invoer en probeer het nog eens.",
     "period": "Periode",
@@ -374,8 +374,7 @@
     "showInActive": "Beëindigde afspraken",
     "tegenpartij": "Tegenpartij",
     "nextBooking": "Verwachte betaling",
-    "noResults": "Er zijn geen afspraken gevonden.",
-    "maxTekens": "Max. 140 tekens"
+    "noResults": "Er zijn geen afspraken gevonden."
   },
   "organisatie": "Organisatie",
   "burger": "Burger",
@@ -463,8 +462,7 @@
     "onDates": "op de {{dates}}",
     "everyYear": "Elk jaar",
     "inMonths": "in {{months}}",
-    "onceOnDate": "Eenmalig, op {{date}}",
-    "n/a": "Niet van toepassing"
+    "onceOnDate": "Eenmalig, op {{date}}"
   },
   "afspraakBetaalinstructie": {
     "title": "Betaalinstructie instellen",
@@ -592,14 +590,10 @@
   "bookingSection": {
     "afspraak": "Afspraak",
     "rubriek": "Rubriek",
-    "sugestions": "Suggesties",
-    "search": "Zoeken",
     "noResults": "Er zijn geen afspraken gevonden. Voeg een afspraak toe, of kies een rubriek om deze transactie op af te letteren.",
-    "noSimilarAfspraken": "Geen soortgelijke afspraken gevonden",
-    "similarAfspraken": "Soortgelijke afspraken",
     "organisation": "Filter organisaties",
-    "tegenrekening": "Filter rekeningen",
     "allOrganisations": "Alle organisaties",
+    "tegenrekening": "Filter rekeningen",
     "allRekeningen": "Alle rekeningen",
     "active": "Actief",
     "ended": "Beëindigd",
@@ -891,6 +885,9 @@
     },
     "organizations": "Organisaties"
   },
+  "total income expenses in period": "Totaal inkomsten en uitgaven in periode",
+  "end saldo at": "Saldo in Huishoudboekje op",
+  "allBurgers": "Alle burgers",
   "granularity": {
     "daily": "Dag",
     "weekly": "Week",
