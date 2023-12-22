@@ -1,5 +1,22 @@
 # Huishoudboekje Changelog
 
+## 1.12.0
+
+Deze versie omvat een nieuw overzicht met banktransacties in drie maanden. Bij het laden van gegevens per pagina wordt visueel gemaakt dat het laden bezig is. Er is een probleem met het zetten van een alarm opgelost.
+
+### Minor Changes
+
+- 08aa4b330: Introduced a new page "overzicht" that shows transactions per oganisation and agreement over the last three months.
+
+### Patch Changes
+
+- a24fefe5c: Alarms are now properly recreated after creating a signal
+- b9c267332: Suggestions pagination does not return to first page anymore when other pages are loaded
+- 580a228c5: Added spinner on paginated pages when new set of data is loading.
+- 4180d67bd: Updated outdated JS and Python packages
+- 00a3b85b6: Fixed that start and end date betaalinstructies were not clearable
+- 4a811c6bb: Upgraded i18 packages
+
 ## 1.11.0
 
 Deze versie omvat oplosssingen voor problemen met een te groot verzoek aan een browser en het exporteren van betaalinstructies bij beëindigde afspraken.
@@ -20,7 +37,7 @@ Deze versie omvat oplosssingen voor problemen met een te groot verzoek aan een b
 - Authservice:
   The authservice now uses a redis session store. ⚠️This requires a Redis database to connect to. The authservice will need ENV variable REDIS_URL that contains the conenction url to connect to the redis database.
 - GUNICORN_WORKER_TIMEOUT:
-  New env var GUNICORN_WORKER_TIMEOUT sets the timeout for gunicorn workers, default is 600s. This env var is available for: banktransactieservice, grootboekservice, huishoudboekjeservice, logservice, organisatieservice and rapportageservice. 
+  New env var GUNICORN_WORKER_TIMEOUT sets the timeout for gunicorn workers, default is 600s. This env var is available for: banktransactieservice, grootboekservice, huishoudboekjeservice, logservice, organisatieservice and rapportageservice.
 
 ## 1.10.12
 
