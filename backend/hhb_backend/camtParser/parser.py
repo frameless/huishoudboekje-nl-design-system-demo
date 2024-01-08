@@ -82,18 +82,18 @@ class CamtParser():
     def parse_transaction_details(self, ns, node, transaction, parent_node):
         """Parse TxDtls node."""
         # message
-        self.add_value_from_node(
-            ns,
-            node,
-            [
-                "./ns:RmtInf/ns:Ustrd|./ns:RtrInf/ns:AddtlInf",
-                "./ns:Refs/ns:InstrId",
-            ],
-            transaction,
-            "payment_ref",
-            join_str="\n",
-            add_to_original=True
-        )
+        if transaction["payment_ref"] == "/":
+            self.add_value_from_node(
+                ns,
+                node,
+                [
+                    "./ns:RmtInf/ns:Ustrd|./ns:RtrInf/ns:AddtlInf",
+                    "./ns:Refs/ns:InstrId",
+                ],
+                transaction,
+                "payment_ref",
+                join_str="\n"
+            )
 
         self.add_value_from_node(ns,node,["./ns:Refs/ns:EndToEndId"],transaction,"payment_ref",join_str="\n", add_to_original=True)
         self.add_value_from_node(ns,node,["./ns:Refs/ns:MndtId"],transaction,"payment_ref",join_str="\n", add_to_original=True)
