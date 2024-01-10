@@ -25,13 +25,8 @@ def create_app(
         format='%(asctime)s %(levelname)-8s %(message)s',
         level=app.config["LOG_LEVEL"],
         datefmt='%Y-%m-%d %H:%M:%S')
-    # logging.config.dictConfig(
-    #     {
-    #         "version": 1,
-    #         "incremental": True,
-    #         "loggers": {"sqlalchemy.engine": {"level": app.config["LOG_LEVEL"]}},
-    #     }
-    # )
+
+
     logging.info(f"Starting {__name__} with {config_name}")
 
     # Werkzeug has their own logger which outputs info level URL calls.
