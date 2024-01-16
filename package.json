@@ -29,7 +29,12 @@
   },
   "homepage": "https://gitlab.com/commonground/huishoudboekje/app-new#readme",
   "dependencies": {
+    "@badeball/cypress-cucumber-preprocessor": "^20.0.0",
+    "@bahmutov/cypress-esbuild-preprocessor": "^2.2.0",
     "@changesets/cli": "^2.26.1",
     "express-session": "^1.17.3"
+  },
+  "devDependencies": {
+    "cypress": "^13.6.2"
   }
 }
