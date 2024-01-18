@@ -180,7 +180,7 @@ const useScheduleHelper = (schedule?: Schedule | Betaalinstructie) => {
 					? [] 
 					: byMonth.map(d => d - 1).filter(d => futureWorkingMonth <= d);
 				const futureYear = futureMonths.length === 0 && returnDate.getFullYear() === calculatingDate.getFullYear()
-					? calculatingDate.getFullYear() + 1
+					? calculatingDate.getFullYear()
 					: calculatingDate.getFullYear();
 				const futureMonth = futureMonths.length ? futureMonths[0] : byMonth[0] - 1;
 				const futureDay = futureDays.length ? futureDays[0] : byMonthDay[0];
