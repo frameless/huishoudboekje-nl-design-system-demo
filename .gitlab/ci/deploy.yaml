@@ -103,14 +103,14 @@ deploy-deployment-review:
   stage: deploy
   environment:
     name: review/$CI_COMMIT_REF_SLUG
-    url: https://hhb-$CI_COMMIT_REF_SLUG.nlx.reviews/
+    url: https://hhb-$CI_COMMIT_REF_SLUG.review.hhb-development.nl/
     on_stop: destroy-review
     auto_stop_in: 7 days
   variables:
-    APP_HOST: "hhb-$CI_COMMIT_REF_SLUG.nlx.reviews"
+    APP_HOST: "hhb-$CI_COMMIT_REF_SLUG.review.hhb-development.nl"
     NAMESPACE: "hhb-$CI_COMMIT_REF_SLUG"
     UNLEASH_OTAP: development
-    OIDC_BASE_URL: "https://hhb-$CI_COMMIT_REF_SLUG.nlx.reviews"
+    OIDC_BASE_URL: "https://hhb-$CI_COMMIT_REF_SLUG.review.hhb-development.nl"
     OIDC_ISSUER_URL: https://keycloak.huishoudboekje.demoground.nl/realms/huishoudboekje/
     OIDC_CLIENT_ID: huishoudboekje-medewerkers
     JWT_ISSUER: https://keycloak.huishoudboekje.demoground.nl/realms/huishoudboekje
@@ -121,7 +121,7 @@ deploy-deployment-review:
     REDIS_AUTH_PASSWORD: $REDIS_AUTH_PASSWORD
   script:
     - sh ./k8s/overlay/hhb-cluster/apply-env-vars.sh
-    - kubectl config use-context commonground/huishoudboekje/app-new:hhb-review
+    - kubectl config use-context huishoudboekje/aks-hhb-review/app-new:hhb-development
     - kubectl create ns $NAMESPACE || true
     - kubectl kustomize ./k8s/overlay/hhb-cluster/review
     - kubectl apply -k ./k8s/overlay/hhb-cluster/review --namespace=$NAMESPACE
