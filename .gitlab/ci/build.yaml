@@ -6,7 +6,7 @@
 .build-docker-images: &build-docker-images
   <<: *retry
   stage: build
-  image: docker:24.0.2-git
+  image: docker:25.0.0-rc.3-git
   needs: [ ]
   services:
     - docker:24.0.2-dind
