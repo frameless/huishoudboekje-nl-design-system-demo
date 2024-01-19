@@ -121,7 +121,7 @@ deploy-deployment-review:
     REDIS_AUTH_PASSWORD: $REDIS_AUTH_PASSWORD
   script:
     - sh ./k8s/overlay/hhb-cluster/apply-env-vars.sh
-    - kubectl config use-context huishoudboekje/aks-hhb-review/app-new:hhb-development
+    - kubectl config use-context commonground/huishoudboekje/app-new:hhb-development
     - kubectl create ns $NAMESPACE || true
     - kubectl kustomize ./k8s/overlay/hhb-cluster/review
     - kubectl apply -k ./k8s/overlay/hhb-cluster/review --namespace=$NAMESPACE
