@@ -6,7 +6,7 @@
 .build-docker-images: &build-docker-images
   <<: *retry
   stage: build
-  image: docker:25.0.0-rc.3-git
+  image: docker:24.0.2-git
   needs: [ ]
   services:
     - docker:24.0.2-dind
@@ -19,10 +19,7 @@
     - export DOCKER_CONFIG=/tmp/docker-config-$CI_JOB_ID
     - mkdir -p $DOCKER_CONFIG && echo $DOCKER_AUTH_CONFIG > $DOCKER_CONFIG/config.json
     - echo "$CI_REGISTRY_PASSWORD" | docker login $CI_REGISTRY --username $CI_REGISTRY_USER --password-stdin
-    - docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
-    - docker context create new-context
-    - docker buildx create new-context --name mybuilder --bootstrap --use
-    - docker buildx build --platform linux/arm64 --build-arg BUILDKIT_INLINE_CACHE=$BUILDKIT_INLINE_CACHE --cache-from $CI_REGISTRY_IMAGE/$NAME:$CI_COMMIT_REF_SLUG -t $CI_REGISTRY_IMAGE/$NAME:$IMAGE_TAG -t $CI_REGISTRY_IMAGE/$NAME:$CI_COMMIT_REF_SLUG $DOCKERATTRIBUTES --load
+    - docker build --build-arg BUILDKIT_INLINE_CACHE=$BUILDKIT_INLINE_CACHE --cache-from $CI_REGISTRY_IMAGE/$NAME:$CI_COMMIT_REF_SLUG -t $CI_REGISTRY_IMAGE/$NAME:$IMAGE_TAG -t $CI_REGISTRY_IMAGE/$NAME:$CI_COMMIT_REF_SLUG $DOCKERATTRIBUTES
     - docker push $CI_REGISTRY_IMAGE/$NAME:$CI_COMMIT_REF_SLUG
     - docker push $CI_REGISTRY_IMAGE/$NAME:$IMAGE_TAG
   parallel:
