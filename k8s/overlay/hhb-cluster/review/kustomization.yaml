@@ -12,9 +12,18 @@ patches:
     kind: Ingress
   path: ingress-host-patch.yaml
 - target:
+    group: networking.k8s.io
+    version: v1
+    kind: Ingress
+  path: ingress-className-patch.yaml
+- target:
     version: v1
     kind: Deployment
   path: resources-remove-patch.yaml
+- target:
+    version: v1
+    kind: Deployment
+  path: deployment-agentpool-patch.yaml
 - target:
     version: v1
     kind: Deployment
