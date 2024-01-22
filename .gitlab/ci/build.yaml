@@ -10,9 +10,6 @@
   needs: [ ]
   services:
     - docker:24.0.2-dind
-  tags:
-    - cg
-    - docker
   variables:
     DOCKER_BUILDKIT: 1
     BUILDKIT_INLINE_CACHE: 1
