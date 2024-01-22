@@ -17,8 +17,6 @@
   before_script:
     - cd ./frontend/app
     - npm ci --cache ${NPM_CACHE_DIR} --prefer-offline --no-progress --color=false --quiet
-  tags:
-    - docker
   retry:
     max: 2
     when: script_failure
@@ -47,8 +45,6 @@ frontend-test:
 #      DIRECTORY: <the directory of the application>
 .Service Test:
   stage: test
-  tags:
-    - docker
   needs: []
   retry:
     max: 2
@@ -97,8 +93,6 @@ postadressenservice-test:
     - cd ./services/postadressenservice
     - npm ci --cache ${NPM_CACHE_DIR} --prefer-offline --no-progress --color=false --quiet
     - npm run prisma:generate
-  tags:
-    - docker
   retry:
     max: 2
     when: script_failure
@@ -134,8 +128,6 @@ alarmenservice-test:
     - cd ./services/alarmenservice
     - npm ci --cache ${NPM_CACHE_DIR} --prefer-offline --no-progress --color=false --quiet
     - npm run prisma:generate
-  tags:
-    - docker
   retry:
     max: 2
     when: script_failure
@@ -171,8 +163,6 @@ signalenservice-test:
     - cd ./services/signalenservice
     - npm ci --cache ${NPM_CACHE_DIR} --prefer-offline --no-progress --color=false --quiet
     - npm run prisma:generate
-  tags:
-    - docker
   retry:
     max: 2
     when: script_failure
@@ -207,8 +197,6 @@ unleashservice-test:
   before_script:
     - cd ./services/unleashservice
     - npm ci --cache ${NPM_CACHE_DIR} --prefer-offline --no-progress --color=false --quiet
-  tags:
-    - docker
   retry:
     max: 2
     when: script_failure
@@ -264,8 +252,6 @@ changeset:
   before_script:
     - apk add git
     - npm i --cache ${NPM_CACHE_DIR} --prefer-offline --no-progress --color=false --quiet
-  tags:
-    - docker
   script:
     - git fetch origin develop:develop
     - npm run check-changeset

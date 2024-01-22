@@ -5,18 +5,12 @@
 
 .deployer: &deployer
   image: registry.gitlab.com/commonground/huishoudboekje/review-app-deployer:latest
-  tags:
-    - cg
-    - docker
 
 .authorize-keycloak: &authorize-keycloak
   stage: deploy
   image: registry.gitlab.com/commonground/huishoudboekje/keycloak-tools/keycloak-tools:1.0.0
   before_script:
     - cd /app
-  tags:
-    - cg
-    - docker
 
 #
 # demo.huishoudboekje is (currently) not used
