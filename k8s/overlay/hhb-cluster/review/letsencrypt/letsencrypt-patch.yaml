@@ -10,7 +10,7 @@ spec:
   tls:
     - hosts:
         - huishoudboekje.example.com
-      secretName: backend-ingress-tls-secret
+      secretName: hhb-development-ingress-tls-secret
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
