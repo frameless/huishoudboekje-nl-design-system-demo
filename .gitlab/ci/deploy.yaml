@@ -120,7 +120,7 @@ deploy-deployment-review:
     REDIS_PASSWORD: $REDIS_PASSWORD
     REDIS_AUTH_PASSWORD: $REDIS_AUTH_PASSWORD
     OIDC_SCOPES: api://f8628bdc-495b-4c88-a40b-c607336cfd44/.Default
-  script: 
+  script:  
     - sh ./k8s/overlay/hhb-cluster/apply-env-vars.sh
     - kubectl config use-context commonground/huishoudboekje/app-new:hhb-development
     - kubectl create ns $NAMESPACE || true
