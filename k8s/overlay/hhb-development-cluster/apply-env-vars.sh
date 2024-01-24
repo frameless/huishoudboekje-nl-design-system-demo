@@ -86,6 +86,6 @@ echo "Applying envvars."
 envsubst < components/configmaps/sample.redis.conf > components/configmaps/redis.conf
 envsubst < components/configmaps/sample.kustomization.yaml > components/configmaps/kustomization.yaml
 envsubst < components/set-images/sample.kustomization.yaml > components/set-images/kustomization.yaml
-envsubst < components/patches/ingress/host-name/sample.ingress-host-patch.yaml > review/ingress-host-patch.yaml
+envsubst < components/patches/ingress/host-name/sample.ingress-host-patch.yaml > components/patches/ingress/host-name/ingress-host-patch.yaml
 
 
