@@ -5,9 +5,9 @@ patches:
     group: networking.k8s.io
     version: v1
     kind: Ingress
-  path: ./host-name/ingress-host-patch.yaml
+  path: ./class-name/ingress-className-patch.yaml
 - target:
     group: networking.k8s.io
     version: v1
     kind: Ingress
-  path: ./class-name/ingress-className-patch.yaml
+  path: ./host-name/ingress-host-patch.yaml

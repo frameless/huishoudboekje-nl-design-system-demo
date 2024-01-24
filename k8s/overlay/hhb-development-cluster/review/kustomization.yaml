@@ -5,9 +5,9 @@ resources:
 components:
   - ../components/configmaps
   - ../components/set-images
+  - ../components/patches/letsencrypt
   - ../components/patches/ingress
   - ../components/patches/review-agent-pool
-  - ../components/patches/letsencrypt
 patches:
 - target:
     version: v1
