@@ -122,11 +122,11 @@ deploy-deployment-review:
     REDIS_AUTH_PASSWORD: $REDIS_AUTH_PASSWORD
     OIDC_SCOPES: api://hhb-development-login/.Default
   script:  
-    - sh ./k8s/overlay/hhb-cluster/apply-env-vars.sh
+    - sh ./k8s/overlay/hhb-development-cluster/apply-env-vars.sh
     - kubectl config use-context commonground/huishoudboekje/app-new:hhb-development
     - kubectl create ns $NAMESPACE || true
-    - kubectl kustomize ./k8s/overlay/hhb-cluster/review
-    - kubectl apply -k ./k8s/overlay/hhb-cluster/review --namespace=$NAMESPACE
+    - kubectl kustomize ./k8s/overlay/hhb-development-cluster/review
+    - kubectl apply -k ./k8s/overlay/hhb-development-cluster/review --namespace=$NAMESPACE
   only:
     - branches@commonground/huishoudboekje/app-new
   except:
