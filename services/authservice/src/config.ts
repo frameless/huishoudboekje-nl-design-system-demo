@@ -38,7 +38,6 @@ export const getConfig = () => {
 		missingEnvvarsError = true;
 		log.error("ERROR: Missing environment variable OIDC_CLIENT_ID");
 	}
-	log.error(process.env.OIDC_CLIENT_SECRET)
 	if (!process.env.OIDC_CLIENT_SECRET) {
 		missingEnvvarsError = true;
 		log.error("ERROR: Missing environment variable OIDC_CLIENT_SECRET");
