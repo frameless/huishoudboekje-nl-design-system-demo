@@ -3,6 +3,7 @@ kind: Kustomization
 resources:
   - ../../../base
 components:
+  - letsencrypt
   - ../components/configmaps
   - ../components/set-images
 patches:
