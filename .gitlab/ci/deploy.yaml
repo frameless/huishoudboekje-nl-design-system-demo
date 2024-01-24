@@ -111,11 +111,11 @@ deploy-deployment-review:
     NAMESPACE: "hhb-$CI_COMMIT_REF_SLUG"
     UNLEASH_OTAP: development
     OIDC_BASE_URL: "https://hhb-$CI_COMMIT_REF_SLUG.review.hhb-development.nl"
-    OIDC_ISSUER_URL: https://keycloak.huishoudboekje.demoground.nl/realms/huishoudboekje/
+    OIDC_ISSUER_URL: https://login.microsoftonline.com/45a7d209-9f15-4205-be07-32fd23c78671
     OIDC_CLIENT_ID: huishoudboekje-medewerkers
-    JWT_ISSUER: https://keycloak.huishoudboekje.demoground.nl/realms/huishoudboekje
+    JWT_ISSUER: https://login.microsoftonline.com/45a7d209-9f15-4205-be07-32fd23c78671
     JWT_AUDIENCE: account
-    JWT_SECRET: $OIDC_CLIENT_SECRET
+    JWT_SECRET: $OIDC_AZURE_CLIENT_SECRET
     JWT_ALGORITHMS: HS256,RS256
     REDIS_PASSWORD: $REDIS_PASSWORD
     REDIS_AUTH_PASSWORD: $REDIS_AUTH_PASSWORD
