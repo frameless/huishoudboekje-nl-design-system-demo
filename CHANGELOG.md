@@ -2,6 +2,8 @@
 
 ## 1.12.1
 
+Deze versie omvat verbeteringen bij het opslaan van de omschrijving van een banktransactie, de weergave van een verwachte betaaldatum en een vertaling van tekst. Daarnaast omvat het een aantal oplossingen voor kwetsbaarheden.
+
 ### Patch Changes
 
 - 33b9bef: Disabled sqlalchemy logging
