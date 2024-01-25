@@ -11,10 +11,10 @@ spec:
         - name: hhb-alarmenservice
           resources:
             limits:
-              memory: 64Mi
+              memory: 128Mi
             requests:
               cpu: 50m
-              memory: 64Mi
+              memory: 128Mi
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -29,10 +29,10 @@ spec:
         - name: hhb-authservice
           resources:
             limits:
-              memory: 64Mi
+              memory: 128Mi
             requests:
               cpu: 50m
-              memory: 64Mi
+              memory: 128Mi
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -47,10 +47,15 @@ spec:
         - name: hhb-backend
           resources:
             limits:
-              memory: 128Mi
+              memory: 256Mi
             requests:
               cpu: 100m
-              memory: 128Mi
+              memory: 256Mi
+          env:
+            - name: GUNICORN_WORKERS
+              value: 1
+            - name: GUNICORN_THREADS
+              value: 2
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -65,10 +70,10 @@ spec:
         - name: hhb-banktransactieservice
           resources:
             limits:
-              memory: 64Mi
+              memory: 128Mi
             requests:
               cpu: 50m
-              memory: 64Mi
+              memory: 128Mi
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -101,10 +106,10 @@ spec:
         - name: hhb-frontend
           resources:
             limits:
-              memory: 64Mi
+              memory: 32Mi
             requests:
               cpu: 10m
-              memory: 64Mi
+              memory: 32Mi
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -119,10 +124,10 @@ spec:
         - name: hhb-grootboekservice
           resources:
             limits:
-              memory: 64Mi
+              memory: 128Mi
             requests:
               cpu: 50m
-              memory: 64Mi
+              memory: 128Mi
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -137,10 +142,10 @@ spec:
         - name: hhb-huishoudboekjeservice
           resources:
             limits:
-              memory: 128Mi
+              memory: 256Mi
             requests:
               cpu: 50m
-              memory: 128Mi
+              memory: 256Mi
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -155,10 +160,10 @@ spec:
         - name: hhb-logservice
           resources:
             limits:
-              memory: 64Mi
+              memory: 128Mi
             requests:
               cpu: 50m
-              memory: 64Mi
+              memory: 128Mi
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -173,10 +178,10 @@ spec:
         - name: hhb-organisatieservice
           resources:
             limits:
-              memory: 64Mi
+              memory: 128Mi
             requests:
               cpu: 50m
-              memory: 64Mi
+              memory: 128Mi
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -191,10 +196,10 @@ spec:
         - name: hhb-postadressenservice
           resources:
             limits:
-              memory: 64Mi
+              memory: 256Mi
             requests:
               cpu: 50m
-              memory: 64Mi
+              memory: 256Mi
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -227,10 +232,10 @@ spec:
         - name: hhb-rapportageservice
           resources:
             limits:
-              memory: 64Mi
+              memory: 128Mi
             requests:
               cpu: 50m
-              memory: 64Mi
+              memory: 128Mi
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -299,7 +304,7 @@ spec:
         - name: hhb-unleashservice
           resources:
             limits:
-              memory: 64Mi
+              memory: 128Mi
             requests:
               cpu: 50m
-              memory: 64Mi
+              memory: 128Mi
