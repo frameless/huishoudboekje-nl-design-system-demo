@@ -41,7 +41,7 @@ const server = (prefix: string = "/auth") => {
 	});
 
 	app.use(auth({
-		session:{
+		session: {
 			store: redisStore
 		},
 		baseURL: process.env.OIDC_BASE_URL,
@@ -63,6 +63,10 @@ const server = (prefix: string = "/auth") => {
 		},
 		enableTelemetry: false,
 	}));
+	log.warn("baseURL: " + process.env.OIDC_BASE_URL)
+	log.warn("clientID: " + process.env.OIDC_CLIENT_ID)
+	log.warn("clientSecret: " + process.env.OIDC_CLIENT_SECRET)
+	log.warn("issuerBaseURL: " + process.env.OIDC_ISSUER_URL)
 
 	const authRouter = express.Router();
 
@@ -85,6 +89,8 @@ const server = (prefix: string = "/auth") => {
 				if (accessToken.isExpired()) {
 					accessToken = await accessToken.refresh()
 				}
+				log.warn("oidc: " + req.oidc.jsonwebtoken)
+				log.warn("token: " + accessToken)
 				const tokenStr = accessToken.access_token
 				return sessionHelper.verifyToken(tokenStr).then(async (result) => {
 					if (result) {
