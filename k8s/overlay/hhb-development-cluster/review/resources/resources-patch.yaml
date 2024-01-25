@@ -11,10 +11,10 @@ spec:
         - name: hhb-alarmenservice
           resources:
             limits:
-              memory: 128Mi
+              memory: 256Mi
             requests:
               cpu: 50m
-              memory: 128Mi
+              memory: 256Mi
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -29,10 +29,10 @@ spec:
         - name: hhb-authservice
           resources:
             limits:
-              memory: 128Mi
+              memory: 256Mi
             requests:
               cpu: 50m
-              memory: 128Mi
+              memory: 256Mi
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -106,10 +106,10 @@ spec:
         - name: hhb-grootboekservice
           resources:
             limits:
-              memory: 128Mi
+              memory: 256Mi
             requests:
               cpu: 50m
-              memory: 128Mi
+              memory: 256Mi
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -178,10 +178,10 @@ spec:
         - name: hhb-postadressenservice
           resources:
             limits:
-              memory: 256Mi
+              memory: 400Mi
             requests:
               cpu: 50m
-              memory: 256Mi
+              memory: 400Mi
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -250,10 +250,10 @@ spec:
         - name: hhb-signalenservice
           resources:
             limits:
-              memory: 100Mi
+              memory: 400Mi
             requests:
               cpu: 50m
-              memory: 100Mi
+              memory: 400Mi
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -286,7 +286,7 @@ spec:
         - name: hhb-unleashservice
           resources:
             limits:
-              memory: 128Mi
+              memory: 256Mi
             requests:
               cpu: 50m
               memory: 128Mi
