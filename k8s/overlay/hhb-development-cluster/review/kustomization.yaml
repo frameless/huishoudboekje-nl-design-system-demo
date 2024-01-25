@@ -8,7 +8,7 @@ components:
   - ../components/patches/letsencrypt
   - ../components/patches/ingress
   - ../components/patches/review-agent-pool
-  # - resources
+  - resources
 patches:
 - target:
     version: v1
