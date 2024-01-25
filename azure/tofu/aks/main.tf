@@ -73,7 +73,6 @@ resource "azurerm_kubernetes_cluster" "k8s" {
     network_plugin     = "azure"
     network_policy     = "calico"
     dns_service_ip     = "10.0.0.10"
-    docker_bridge_cidr = "172.17.0.1/16"
     service_cidr       = "10.0.0.0/16"
   }
     azure_active_directory_role_based_access_control {
