@@ -1,2 +1,2 @@
 - op: remove
-  path: /spec/template/spec/containers/0/resources/limits
+  path: /spec/template/spec/containers/0/resources/limits/cpu

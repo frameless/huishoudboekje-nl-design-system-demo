@@ -10,6 +10,8 @@ spec:
       containers:
         - name: hhb-alarmenservice
           resources:
+            limits:
+              memory: 64Mi
             requests:
               cpu: 50m
               memory: 64Mi
@@ -26,6 +28,8 @@ spec:
       containers:
         - name: hhb-authservice
           resources:
+            limits:
+              memory: 64Mi
             requests:
               cpu: 50m
               memory: 64Mi
@@ -42,6 +46,8 @@ spec:
       containers:
         - name: hhb-backend
           resources:
+            limits:
+              memory: 128Mi
             requests:
               cpu: 100m
               memory: 128Mi
@@ -58,8 +64,45 @@ spec:
       containers:
         - name: hhb-banktransactieservice
           resources:
+            limits:
+              memory: 64Mi
             requests:
               cpu: 50m
+              memory: 64Mi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hhb-database
+  labels:
+    name: hhb-database
+spec:
+  template:
+    spec:
+      containers:
+        - name: hhb-database
+          resources:
+            limits:
+              memory: 256Mi
+            requests:
+              cpu: 100m
+              memory: 256Mi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hhb-frontend
+  labels:
+    name: hhb-frontend
+spec:
+  template:
+    spec:
+      containers:
+        - name: hhb-frontend
+            limits:
+              memory: 64Mi
+            requests:
+              cpu: 10m
               memory: 64Mi
 ---
 apiVersion: apps/v1
@@ -74,6 +117,8 @@ spec:
       containers:
         - name: hhb-grootboekservice
           resources:
+            limits:
+              memory: 64Mi
             requests:
               cpu: 50m
               memory: 64Mi
@@ -90,6 +135,8 @@ spec:
       containers:
         - name: hhb-huishoudboekjeservice
           resources:
+            limits:
+              memory: 128Mi
             requests:
               cpu: 50m
               memory: 128Mi
@@ -106,6 +153,8 @@ spec:
       containers:
         - name: hhb-logservice
           resources:
+            limits:
+              memory: 64Mi
             requests:
               cpu: 50m
               memory: 64Mi
@@ -122,6 +171,8 @@ spec:
       containers:
         - name: hhb-organisatieservice
           resources:
+            limits:
+              memory: 64Mi
             requests:
               cpu: 50m
               memory: 64Mi
@@ -138,6 +189,26 @@ spec:
       containers:
         - name: hhb-postadressenservice
           resources:
+            limits:
+              memory: 64Mi
+            requests:
+              cpu: 50m
+              memory: 64Mi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hhb-prometheus
+  labels:
+    name: hhb-prometheus
+spec:
+  template:
+    spec:
+      containers:
+        - name: hhb-prometheus
+          resources:
+            limits:
+              memory: 128Mi
             requests:
               cpu: 50m
               memory: 64Mi
@@ -154,9 +225,29 @@ spec:
       containers:
         - name: hhb-rapportageservice
           resources:
+            limits:
+              memory: 64Mi
             requests:
               cpu: 50m
               memory: 64Mi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hhb-redis
+  labels:
+    name: hhb-redis
+spec:
+  template:
+    spec:
+      containers:
+        - name: hhb-redis
+          resources:
+            limits:
+              memory: 256Mi
+            requests:
+              cpu: 100m
+              memory: 256Mi
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -170,6 +261,26 @@ spec:
       containers:
         - name: hhb-signalenservice
           resources:
+            limits:
+              memory: 64Mi
+            requests:
+              cpu: 50m
+              memory: 64Mi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hhb-statsd-exporter
+  labels:
+    name: hhb-statsd-exporter
+spec:
+  template:
+    spec:
+      containers:
+        - name: hhb-statsd-exporter
+          resources:
+            limits:
+              memory: 128Mi
             requests:
               cpu: 50m
               memory: 128Mi
@@ -186,6 +297,8 @@ spec:
       containers:
         - name: hhb-unleashservice
           resources:
+            limits:
+              memory: 64Mi
             requests:
               cpu: 50m
               memory: 64Mi
