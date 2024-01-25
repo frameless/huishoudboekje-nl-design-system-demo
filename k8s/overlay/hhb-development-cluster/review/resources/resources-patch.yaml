@@ -99,6 +99,7 @@ spec:
     spec:
       containers:
         - name: hhb-frontend
+          resources:
             limits:
               memory: 64Mi
             requests:
@@ -205,7 +206,7 @@ spec:
   template:
     spec:
       containers:
-        - name: hhb-prometheus
+        - name: prometheus
           resources:
             limits:
               memory: 128Mi
