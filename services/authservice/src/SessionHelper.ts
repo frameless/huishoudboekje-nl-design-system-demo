@@ -42,6 +42,11 @@ class SessionHelper {
 		this.issuer = _config.issuer;
 		this.allowedAlgs = this.parseAllowedAlgorithms(_config.allowedAlgs)
 		this.scopes = this.parseScopes(_config.scopes)
+		log.warn("secr: " + this.secret)
+		log.warn("aud: " + this.audience)
+		log.warn("iss: " + this.issuer)
+		log.warn("allwdAlgs: " + this.allowedAlgs)
+		log.warn("scopes: " + this.scopes)
 
 	}
 
@@ -56,6 +61,7 @@ class SessionHelper {
 
 	async verifyToken(token) {
 		try {
+			log.warn("jwt: " + token)
 			const alg = this.getAlgorithmFromHeader(token)
 			if (alg) {
 				if (this.verifyAllowedAlgorithms(alg)) {
