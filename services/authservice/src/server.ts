@@ -63,10 +63,6 @@ const server = (prefix: string = "/auth") => {
 		},
 		enableTelemetry: false,
 	}));
-	log.warn("baseURL: " + process.env.OIDC_BASE_URL)
-	log.warn("clientID: " + process.env.OIDC_CLIENT_ID)
-	log.warn("clientSecret: " + process.env.OIDC_CLIENT_SECRET)
-	log.warn("issuerBaseURL: " + process.env.OIDC_ISSUER_URL)
 
 	const authRouter = express.Router();
 
