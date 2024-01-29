@@ -1,7 +1,8 @@
 .only-on-branches: &only-on-branches
   only:
-    - merge_requests
     - branches@commonground/huishoudboekje/app-new
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
 
 .frontend:
   stage: test

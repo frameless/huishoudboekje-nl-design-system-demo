@@ -33,7 +33,6 @@ deploy-deployment-test:
     - kubectl kustomize ./k8s/overlay/hhb-developent-cluster/test
     - kubectl apply -k ./k8s/overlay/hhb-developent-cluster/test --namespace=$NAMESPACE
   only:
-    - merge_requests
     - develop
 
 deploy-deployment-review:
@@ -61,12 +60,13 @@ deploy-deployment-review:
     - kubectl kustomize ./k8s/overlay/hhb-development-cluster/review
     - kubectl apply -k ./k8s/overlay/hhb-development-cluster/review --namespace=$NAMESPACE
   only:
-    - merge_requests
     - branches@commonground/huishoudboekje/app-new
   except:
     - master
     - develop
     - acceptance
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
 
 authorize-azure-ad-review:
   <<: *authorize-azure-ad
@@ -78,14 +78,15 @@ authorize-azure-ad-review:
     APP_HOST: "hhb-$CI_COMMIT_REF_SLUG.review.hhb-development.nl"
   script:
     - az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET --tenant $AZURE_TENANT_ID
-    - az ad app update --id $OIDC_CLIENT_ID --add replyUrls "https://${APP_HOST}/auth/callback"
+    - az ad app update --id $OIDC_CLIENT_ID --add replyUrls "https://${APP_HOST}/auth/callback" || true
   only:
-    - merge_requests
     - branches@commonground/huishoudboekje/app-new
   except:
     - master
     - develop
     - acceptance
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
 
 unauthorize-azure-ad-review:
   <<: *authorize-azure-ad
@@ -100,12 +101,13 @@ unauthorize-azure-ad-review:
     - az ad app update --id $OIDC_CLIENT_ID --remove replyUrls "https://${APP_HOST}/auth/callback"
   when: manual
   only:
-    - merge_requests
     - branches@commonground/huishoudboekje/app-new
   except:
     - master
     - develop
     - acceptance
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
 
 ## Destroy app (only review cluster)
 destroy-review:
@@ -126,9 +128,10 @@ destroy-review:
     - kubectl delete namespace ${NAMESPACE}
   when: manual
   only:
-    - merge_requests
     - branches@commonground/huishoudboekje/app-new
   except:
     - master
     - develop
     - acceptance
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'

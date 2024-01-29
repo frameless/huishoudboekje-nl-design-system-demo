@@ -9,14 +9,20 @@ sast:
   variables:
     SAST_EXCLUDED_ANALYZERS: brakeman, flawfinder, gosec, phpcs-security-audit, pmd-apex, security-code-scan, sobelow, eslint
     SAST_EXCLUDED_PATHS: spec, test, tests, tmp, htmlcov, coverage, docs
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
 
 dependency_scanning:
   stage: security
   needs: [ ]
   variables:
     SECURE_LOG_LEVEL: debug
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
 
 secret_detection:
   stage: security
   needs: [ ]
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
 
