@@ -1,4 +1,4 @@
 - op: add
   path: /spec/template/spec/nodeSelector
   value:
-    agentpool: reviewpool
+    deployment: review

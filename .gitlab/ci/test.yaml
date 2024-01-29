@@ -1,5 +1,6 @@
 .only-on-branches: &only-on-branches
   only:
+    - merge_requests
     - branches@commonground/huishoudboekje/app-new
 
 .frontend:
@@ -20,6 +21,8 @@
   retry:
     max: 2
     when: script_failure
+  only:
+    - merge_requests
 
 frontend-test:
   <<: *only-on-branches

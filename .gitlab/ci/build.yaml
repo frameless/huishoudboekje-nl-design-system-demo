@@ -55,6 +55,7 @@
 build-images-dev:
   <<: *build-docker-images
   only:
+    - merge_requests
     - branches@commonground/huishoudboekje/app-new
 
 # Build docker images with the name of the tag as the image tag.

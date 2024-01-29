@@ -6,6 +6,5 @@ components:
   - ../components/configmaps
   - ../components/set-images
   - ../components/patches/ingress
-  - ../components/patches/review-agent-pool
-  - ../components/patches/managed-csi
+  - ../components/patches/node-selector-patch
   - ../components/patches/letsencrypt

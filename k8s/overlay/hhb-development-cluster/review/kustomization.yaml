@@ -7,7 +7,7 @@ components:
   - ../components/set-images
   - ../components/patches/letsencrypt
   - ../components/patches/ingress
-  - ../components/patches/review-agent-pool
+  - ../components/patches/node-selector-patch
   - resources
 patches:
 - target:

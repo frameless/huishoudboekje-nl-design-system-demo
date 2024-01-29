@@ -4,4 +4,4 @@ patches:
 - target:
     version: v1
     kind: Deployment
-  path: deployment-agentpool-patch.yaml
+  path: node-selector-patch.yaml
