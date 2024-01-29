@@ -1,7 +1,19 @@
 include:
   - template: Security/SAST.gitlab-ci.yml
+    rules:
+      - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+      - if: $CI_PIPELINE_SOURCE == "schedule"
+      - if: $CI_COMMIT_BRANCH == "develop"
   - template: Security/Dependency-Scanning.gitlab-ci.yml
+    rules:
+      - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+      - if: $CI_PIPELINE_SOURCE == "schedule"
+      - if: $CI_COMMIT_BRANCH == "develop"
   - template: Security/Secret-Detection.gitlab-ci.yml
+    rules:
+      - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+      - if: $CI_PIPELINE_SOURCE == "schedule"
+      - if: $CI_COMMIT_BRANCH == "develop"
 
 sast:
   stage: security
@@ -9,12 +21,6 @@ sast:
   variables:
     SAST_EXCLUDED_ANALYZERS: brakeman, flawfinder, gosec, phpcs-security-audit, pmd-apex, security-code-scan, sobelow, eslint
     SAST_EXCLUDED_PATHS: spec, test, tests, tmp, htmlcov, coverage, docs
-  rules:
-    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
-    - if: $CI_PIPELINE_SOURCE == "schedule"
-    - if: $CI_COMMIT_BRANCH == "develop"
-    - if: $CI_PIPELINE_SOURCE == "push"
-      when: never
 
 
 dependency_scanning:
@@ -22,20 +28,8 @@ dependency_scanning:
   needs: [ ]
   variables:
     SECURE_LOG_LEVEL: debug
-  rules:
-    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
-    - if: $CI_PIPELINE_SOURCE == "schedule"
-    - if: $CI_COMMIT_BRANCH == "develop"
-    - if: $CI_PIPELINE_SOURCE == "push"
-      when: never
 
 secret_detection:
   stage: security
   needs: [ ]
-  rules:
-    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
-    - if: $CI_PIPELINE_SOURCE == "schedule"
-    - if: $CI_COMMIT_BRANCH == "develop"
-    - if: $CI_PIPELINE_SOURCE == "push"
-      when: never
 
