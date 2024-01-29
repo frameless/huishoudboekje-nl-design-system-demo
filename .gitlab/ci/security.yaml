@@ -6,8 +6,6 @@ include:
 sast:
   stage: security
   needs: [ ]
-  only:
-    - merge_requests
   variables:
     SAST_EXCLUDED_ANALYZERS: brakeman, flawfinder, gosec, phpcs-security-audit, pmd-apex, security-code-scan, sobelow, eslint
     SAST_EXCLUDED_PATHS: spec, test, tests, tmp, htmlcov, coverage, docs
@@ -15,14 +13,10 @@ sast:
 dependency_scanning:
   stage: security
   needs: [ ]
-  only:
-    - merge_requests
   variables:
     SECURE_LOG_LEVEL: debug
 
 secret_detection:
-  only:
-    - merge_requests
   stage: security
   needs: [ ]
 
