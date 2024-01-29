@@ -7,10 +7,6 @@ include {
   expose = true
 }
 
-dependency "keyvault" {
-  config_path = "../keyvault"
-}
-
 dependency "aks" {
   config_path = "../aks"
 }
