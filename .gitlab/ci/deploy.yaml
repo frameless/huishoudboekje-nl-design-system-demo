@@ -9,8 +9,6 @@
 .authorize-azure-ad: &authorize-azure-ad
   stage: deploy
   image: mcr.microsoft.com/azure-cli
-  before_script:
-    - cd /app
 
 
 deploy-deployment-test:
