@@ -76,7 +76,7 @@ authorize-azure-ad-review:
     APP_HOST: "hhb-$CI_COMMIT_REF_SLUG.review.hhb-development.nl"
   script:
     - az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET --tenant $AZURE_TENANT_ID
-    - az ad app update --id $OIDC_CLIENT_ID --add --web-redirect-uris "https://${APP_HOST}/auth/callback"
+    - az ad app update --id $OIDC_CLIENT_ID --add web.redirectUris "https://${APP_HOST}/auth/callback"
   only:
     - branches@commonground/huishoudboekje/app-new
   except:
@@ -94,7 +94,7 @@ unauthorize-azure-ad-review:
     APP_HOST: "hhb-$CI_COMMIT_REF_SLUG.review.hhb-development.nl"
   script:
     - az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET --tenant $AZURE_TENANT_ID
-    - az ad app update --id $AZURE_AD_APP_ID --remove --web-redirect-uris "https://${APP_HOST}/auth/callback"
+    - az ad app update --id $OIDC_CLIENT_ID --remove web.redirectUris "https://${APP_HOST}/auth/callback"
   when: manual
   only:
     - branches@commonground/huishoudboekje/app-new
