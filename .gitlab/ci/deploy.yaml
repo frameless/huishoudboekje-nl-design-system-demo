@@ -10,7 +10,6 @@
   stage: deploy
   image: mcr.microsoft.com/azure-cli:2.36.0
 
-
 deploy-deployment-test:
   <<: *deployer
   <<: *retry
@@ -32,8 +31,8 @@ deploy-deployment-test:
     - kubectl config use-context commonground/huishoudboekje/app-new:hhb-development
     - kubectl kustomize ./k8s/overlay/hhb-developent-cluster/test
     - kubectl apply -k ./k8s/overlay/hhb-developent-cluster/test --namespace=$NAMESPACE
-  only:
-    - develop
+  rules:
+    - if: $CI_COMMIT_BRANCH == "develop"
 
 deploy-deployment-review:
   <<: *deployer
@@ -58,13 +57,7 @@ deploy-deployment-review:
     - kubectl config use-context commonground/huishoudboekje/app-new:hhb-development
     - kubectl create ns $NAMESPACE || true
     - kubectl kustomize ./k8s/overlay/hhb-development-cluster/review
-    - kubectl apply -k ./k8s/overlay/hhb-development-cluster/review --namespace=$NAMESPACE
-  only:
-    - branches@commonground/huishoudboekje/app-new
-  except:
-    - master
-    - develop
-    - acceptance
+    - kubectl apply -k ./k8s/overlay/hhb-development-cluster/review --namespace=$NAMESPACE  
   rules:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
 
@@ -100,12 +93,6 @@ unauthorize-azure-ad-review:
     - az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET --tenant $AZURE_TENANT_ID
     - az ad app update --id $OIDC_CLIENT_ID --remove replyUrls "https://${APP_HOST}/auth/callback"
   when: manual
-  only:
-    - branches@commonground/huishoudboekje/app-new
-  except:
-    - master
-    - develop
-    - acceptance
   rules:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
 
@@ -127,11 +114,5 @@ destroy-review:
   script:
     - kubectl delete namespace ${NAMESPACE}
   when: manual
-  only:
-    - branches@commonground/huishoudboekje/app-new
-  except:
-    - master
-    - develop
-    - acceptance
   rules:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
