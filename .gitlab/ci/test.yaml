@@ -233,10 +233,6 @@ rapportage-service-test:
 
 changeset:
   <<: *only-on-branches
-  except:
-    - develop
-    - acceptance
-    - master
   stage: test
   needs: []
   image:
