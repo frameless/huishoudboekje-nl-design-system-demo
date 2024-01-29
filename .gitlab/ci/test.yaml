@@ -1,6 +1,12 @@
-.only-on-branches: &only-on-branches
+.only-on-merge-request: &only-on-merge-request
   rules:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+
+.rules-tests: &rules-tests
+  <<: *only-on-merge-request
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+    - if: $CI_COMMIT_BRANCH == "develop"
 
 .frontend:
   stage: test
@@ -22,7 +28,7 @@
     when: script_failure
 
 frontend-test:
-  <<: *only-on-branches
+  <<: *rules-tests
   extends: .frontend
   script:
     - npm run lint
@@ -77,7 +83,7 @@ frontend-test:
   when: on_success
 
 postadressenservice-test:
-  <<: *only-on-branches
+  <<: *rules-tests
   stage: test
   needs: []
   image:
@@ -112,7 +118,7 @@ postadressenservice-test:
   when: on_success
 
 alarmenservice-test:
-  <<: *only-on-branches
+  <<: *rules-tests
   stage: test
   needs: []
   image:
@@ -147,7 +153,7 @@ alarmenservice-test:
   when: on_success
 
 signalenservice-test:
-  <<: *only-on-branches
+  <<: *rules-tests
   stage: test
   needs: []
   image:
@@ -182,7 +188,7 @@ signalenservice-test:
   when: on_success
 
 unleashservice-test:
-  <<: *only-on-branches
+  <<: *rules-tests
   stage: test
   needs: []
   image:
@@ -216,7 +222,7 @@ unleashservice-test:
   when: on_success
 
 backend-test:
-  <<: *only-on-branches
+  <<: *rules-tests
   extends: .Service Test
   variables:
     DIRECTORY: backend
@@ -226,13 +232,13 @@ backend-test:
     JWT_ALGORITHMS: HS256
 
 rapportage-service-test:
-  <<: *only-on-branches
+  <<: *rules-tests
   extends: .Service Test
   variables:
     DIRECTORY: services/rapportage_service
 
 changeset:
-  <<: *only-on-branches
+  <<: *only-on-merge-request
   stage: test
   needs: []
   image:
