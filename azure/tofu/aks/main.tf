@@ -83,15 +83,18 @@ resource "azurerm_kubernetes_cluster" "k8s" {
 }
 
 resource "azurerm_kubernetes_cluster_node_pool" "node_pool" {
-  for_each              = toset(var.node_pools)
-  name                  = each.name
+  for_each              = {
+    for index , pool in var.node_pools:
+      pool.name => pool
+  }
+  name                  = each.value.name
   kubernetes_cluster_id = azurerm_kubernetes_cluster.k8s.id
-  vm_size               = each.vm_size
-  enable_auto_scaling   = each.enable_auto_scaling
-  node_count            = each.enable_auto_scaling ? null : each.max_nodes
-  max_count             = each.enable_auto_scaling ? each.max_nodes : null
-  min_count             = each.enable_auto_scaling ? each.min_nodes : null
-  node_labels           = each.labels
+  vm_size               = each.value.vm_size
+  enable_auto_scaling   = each.value.enable_auto_scaling
+  node_count            = each.value.enable_auto_scaling ? null : each.value.max_nodes
+  max_count             = each.value.enable_auto_scaling ? each.value.max_nodes : null
+  min_count             = each.value.enable_auto_scaling ? each.value.min_nodes : null
+  node_labels           = each.value.labels
 
   // Ignore node_count changes because of auto-scaling
   lifecycle {

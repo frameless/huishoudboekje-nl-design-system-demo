@@ -19,7 +19,7 @@ inputs = {
   dns_prefix           = "hhb"
   ssh_key_name         = "aks-ssh-review"
   default_pool_vm_size = "Standard_B2als_v2"
-  nodes_pools = [
+  node_pools = [
     {
       name                = "reviewpool",
       vm_size             = "Standard_E2as_v5"
@@ -32,8 +32,8 @@ inputs = {
     {
       name                = "scalepool"
       vm_size             = "Standard_B2als_v2"
-      max_nodes           = 0
-      min_nodes           = 5
+      max_nodes           = 5
+      min_nodes           = 0
       enable_auto_scaling = true
       labels = {
         deployment = "review"

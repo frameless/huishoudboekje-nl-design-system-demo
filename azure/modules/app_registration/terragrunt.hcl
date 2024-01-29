@@ -9,4 +9,7 @@ include {
 
 inputs = {
   name = "app-${include.locals.client}-${include.locals.environment}"
+  redirect_uris = [
+    "https://test.hhb-development.nl/auth/callback"
+  ]
 }

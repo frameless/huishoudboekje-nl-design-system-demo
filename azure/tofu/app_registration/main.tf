@@ -25,7 +25,19 @@ resource "azuread_application" "application" {
 
   api {
     requested_access_token_version = 2
+
+      oauth2_permission_scope {
+      admin_consent_description  = "Default user access to all environments for hhb-development"
+      admin_consent_display_name = "Access to HHB development environments"
+      enabled                    = true
+      id                         = random_uuid.oath2_uuid.result
+      type                       = "Admin"
+      user_consent_description   = "Default user access to all environments for hhb-development"
+      user_consent_display_name  = "Access to HHB development environments"
+      value                      = "default"
+    }
   }
+
   app_role {
     allowed_member_types = ["Application", "User"]
     description          = "Default application app role"
@@ -37,6 +49,17 @@ resource "azuread_application" "application" {
 
   web {
     redirect_uris = var.redirect_uris
+    implicit_grant {
+      access_token_issuance_enabled = true
+      id_token_issuance_enabled = false
+    }
+  }
+
+
+  lifecycle {
+    ignore_changes = [ 
+      web[0].redirect_uris
+     ]
   }
 }
 
@@ -46,3 +69,5 @@ resource "azuread_application_password" "secret" {
 
 
 resource "random_uuid" "app_role_uuid" {}
+
+resource "random_uuid" "oath2_uuid" {}
