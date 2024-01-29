@@ -4,7 +4,7 @@ output "client_certificate" {
 }
 
 output "kube_config" {
-  value = azurerm_kubernetes_cluster.k8s.kube_config_raw
+  value     = azurerm_kubernetes_cluster.k8s.kube_config_raw
   sensitive = true
 }
 
@@ -41,11 +41,11 @@ output "admin_host" {
 }
 
 output "node_resource_group" {
-    description = "The resource group created by the AKS for it's resources"
-    value = azurerm_kubernetes_cluster.k8s.node_resource_group
+  description = "The resource group created by the AKS for it's resources"
+  value       = azurerm_kubernetes_cluster.k8s.node_resource_group
 }
 
 output "node_resource_group_id" {
-    description = "The id for the resource group created by the AKS for it's resources"
-    value = azurerm_kubernetes_cluster.k8s.node_resource_group_id
+  description = "The id for the resource group created by the AKS for it's resources"
+  value       = azurerm_kubernetes_cluster.k8s.node_resource_group_id
 }

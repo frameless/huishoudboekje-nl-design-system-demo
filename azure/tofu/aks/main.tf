@@ -7,12 +7,12 @@ terraform {
       version = "~> 3.48"
     }
     azapi = {
-        source = "azure/azapi"
-        version = "~> 1.11.0"
+      source  = "azure/azapi"
+      version = "~> 1.11.0"
     }
     azuread = {
-        source = "hashicorp/azuread"
-        version = "~> 2.47.0"
+      source  = "hashicorp/azuread"
+      version = "~> 2.47.0"
     }
   }
 
@@ -68,33 +68,36 @@ resource "azurerm_kubernetes_cluster" "k8s" {
   }
 
   network_profile {
-    load_balancer_sku  = "standard"
-    outbound_type      = "loadBalancer"
-    network_plugin     = "azure"
-    network_policy     = "calico"
-    dns_service_ip     = "10.0.0.10"
-    service_cidr       = "10.0.0.0/16"
+    load_balancer_sku = "standard"
+    outbound_type     = "loadBalancer"
+    network_plugin    = "azure"
+    network_policy    = "calico"
+    dns_service_ip    = "10.0.0.10"
+    service_cidr      = "10.0.0.0/16"
   }
-    azure_active_directory_role_based_access_control {
-    managed = true
-    azure_rbac_enabled = true
+  azure_active_directory_role_based_access_control {
+    managed                = true
+    azure_rbac_enabled     = true
     admin_group_object_ids = concat([data.azuread_client_config.current.object_id], var.admin_group)
   }
 }
 
 resource "azurerm_kubernetes_cluster_node_pool" "node_pool" {
-  name                  = "reviewpool"
+  for_each              = toset(var.node_pools)
+  name                  = each.name
   kubernetes_cluster_id = azurerm_kubernetes_cluster.k8s.id
-  vm_size               = var.vm_size
-  enable_auto_scaling = true
-  max_count = var.max_nodes
-  min_count = var.min_nodes
+  vm_size               = each.vm_size
+  enable_auto_scaling   = each.enable_auto_scaling
+  node_count            = each.enable_auto_scaling ? null : each.max_nodes
+  max_count             = each.enable_auto_scaling ? each.max_nodes : null
+  min_count             = each.enable_auto_scaling ? each.min_nodes : null
+  node_labels           = each.labels
 
   // Ignore node_count changes because of auto-scaling
   lifecycle {
-    ignore_changes = [ 
-        node_count
-     ]
+    ignore_changes = [
+      node_count
+    ]
   }
 }
 

@@ -40,4 +40,5 @@ k8s/overlay/hhb-cluster/components/set-images/kustomization.yaml
 k8s/overlay/hhb-cluster/review/ingress-host-patch.yaml
 k8s/overlay/hhb-cluster/review/ingress-sb-host-patch.yaml
 
+env.hcl
 /**/env.hcl
