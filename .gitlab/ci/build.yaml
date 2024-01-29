@@ -54,10 +54,10 @@
 # Build docker images with default tag ("branchName-commitSha").
 build-images-dev:
   <<: *build-docker-images
-  rules:
-    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
   only:
     - branches@commonground/huishoudboekje/app-new
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
 
 # Build docker images with the name of the tag as the image tag.
 build-tagged-images:
