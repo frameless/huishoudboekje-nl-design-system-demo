@@ -85,8 +85,6 @@ const server = (prefix: string = "/auth") => {
 				if (accessToken.isExpired()) {
 					accessToken = await accessToken.refresh()
 				}
-				log.warn("oidc: " + req.oidc.jsonwebtoken)
-				log.warn("token: " + accessToken)
 				const tokenStr = accessToken.access_token
 				return sessionHelper.verifyToken(tokenStr).then(async (result) => {
 					if (result) {
