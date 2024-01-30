@@ -34,12 +34,6 @@ environment.env
 .envrc
 .env
 
-k8s/overlay/hhb-cluster/components/configmaps/redis.conf
-k8s/overlay/hhb-cluster/components/configmaps/kustomization.yaml
-k8s/overlay/hhb-cluster/components/set-images/kustomization.yaml
-k8s/overlay/hhb-cluster/review/ingress-host-patch.yaml
-k8s/overlay/hhb-cluster/review/ingress-sb-host-patch.yaml
-
 k8s/overlay/hhb-development-cluster/components/configmaps/redis.conf
 k8s/overlay/hhb-development-cluster/components/configmaps/kustomization.yaml
 k8s/overlay/hhb-development-cluster/components/set-images/kustomization.yaml
