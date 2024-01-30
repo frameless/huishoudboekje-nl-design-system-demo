@@ -94,6 +94,7 @@ resource "azurerm_kubernetes_cluster_node_pool" "node_pool" {
   node_count            = each.value.enable_auto_scaling ? null : each.value.max_nodes
   max_count             = each.value.enable_auto_scaling ? each.value.max_nodes : null
   min_count             = each.value.enable_auto_scaling ? each.value.min_nodes : null
+  max_pods              = each.value.max_pods
   node_labels           = each.value.labels
 
   // Ignore node_count changes because of auto-scaling

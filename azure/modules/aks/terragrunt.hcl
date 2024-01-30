@@ -25,6 +25,7 @@ inputs = {
       vm_size             = "Standard_E2as_v5"
       max_nodes           = 1
       enable_auto_scaling = false
+      max_pods            = 100
       labels = {
         deployment = "review"
       }
@@ -35,6 +36,7 @@ inputs = {
       max_nodes           = 5
       min_nodes           = 0
       enable_auto_scaling = true
+      max_pods            = 30
       labels = {
         deployment = "review"
       }

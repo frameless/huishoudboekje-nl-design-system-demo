@@ -43,6 +43,7 @@ variable "node_pools" {
     vm_size             = string
     max_nodes           = number
     min_nodes           = optional(number)
+    max_pods            = number
     enable_auto_scaling = bool
     labels              = optional(map(any))
   }))
