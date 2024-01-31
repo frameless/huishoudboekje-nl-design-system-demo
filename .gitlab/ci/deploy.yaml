@@ -89,9 +89,7 @@ unauthorize-azure-ad-review:
     - redirect_urls=$(az ad app show --id $OIDC_CLIENT_ID --query "web.redirectUris" --output json)
     - index=$(echo $redirect_urls | jq -r ". | index(\"https://${APP_HOST}/auth/callback\")")
     - if [ "$index" == "null" ]; then echo "URL not found"; exit 2; fi
-    - echo "URL not found"
-    - echo "$redirect_urls"
-    - az ad app update --id $OIDC_CLIENT_ID --remove replyUrls 1
+    - az ad app update --id $OIDC_CLIENT_ID --remove replyUrls $index
   when: manual
   rules:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
