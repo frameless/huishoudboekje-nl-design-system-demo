@@ -88,7 +88,7 @@ unauthorize-azure-ad-review:
     - az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET --tenant $AZURE_TENANT_ID
     # find the index of the url that needs to be removed
     - export redirect_urls=$(az ad app show --id $OIDC_CLIENT_ID  --query "replyUrls")
-    - export index=$(echo $redirect_urls | jq -r ". | index(\"https://${APP_HOST}etest/auth/callback\")")
+    - export index=$(echo $redirect_urls | jq -r ". | index(\"https://${APP_HOST}/auth/callback\")")
     - echo "$index"
     - if [ "$index" == "null" -o "$index" == "-1" ]; then echo "URL not found"; exit 2; fi
     # use the index to remove the url from azure ad
