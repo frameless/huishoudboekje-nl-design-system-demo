@@ -86,10 +86,15 @@ unauthorize-azure-ad-review:
     APP_HOST: "hhb-$CI_COMMIT_REF_SLUG.review.hhb-development.nl"
   script:
     - az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET --tenant $AZURE_TENANT_ID
-    - redirect_urls=$(az ad app show --id $OIDC_CLIENT_ID --query "web.redirectUris" --output json)
-    - index=$(echo $redirect_urls | jq -r ". | index(\"https://${APP_HOST}/auth/callback\")")
-    - if [ "$index" == "null" ]; then echo "URL not found"; exit 2; fi
+    # find the index of the url that needs to be removed
+    - export redirect_urls=$(az ad app show --id $OIDC_CLIENT_ID  --query "replyUrls")
+    - export index=$(echo $redirect_urls | jq -r ". | index(\"https://${APP_HOST}/auth/callback\")")
+    - echo "$index"
+    - if [ "$index" == "null" -o "$index" == "-1" ]; then echo "URL not found"; exit 2; fi
+    # use the index to remove the url from azure ad
     - az ad app update --id $OIDC_CLIENT_ID --remove replyUrls $index
+    - unset index
+    - unset redirect_urls
   when: manual
   rules:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
