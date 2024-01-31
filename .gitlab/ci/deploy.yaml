@@ -89,7 +89,7 @@ unauthorize-azure-ad-review:
     - redirect_urls=$(az ad app show --id $OIDC_CLIENT_ID --query "web.redirectUris" --output json)
     - index=$(echo $redirect_urls | jq -r ". | index(\"$target_url\")")
     - echo "$index"
-    - [ "$index" == "null" ] && { echo "URL not found"; exit 2; }
+    - if [ "$index" == "null" ]; then echo "URL not found"; exit 2;
     # - ad app update --id $OIDC_CLIENT_ID --remove 1
   when: manual
   rules:
