@@ -29,8 +29,9 @@ deploy-deployment-test:
   script:
     - sh ./k8s/overlay/hhb-development-cluster/apply-env-vars.sh
     - kubectl config use-context commonground/huishoudboekje/app-new:hhb-development
-    - kubectl kustomize ./k8s/overlay/hhb-developent-cluster/test
-    - kubectl apply -k ./k8s/overlay/hhb-developent-cluster/test --namespace=$NAMESPACE
+    - kubectl create ns $NAMESPACE || true
+    - kubectl kustomize ./k8s/overlay/hhb-development-cluster/test
+    - kubectl apply -k ./k8s/overlay/hhb-development-cluster/test --namespace=$NAMESPACE
   rules:
     - if: $CI_COMMIT_BRANCH == "develop"
 
@@ -85,7 +86,10 @@ unauthorize-azure-ad-review:
     APP_HOST: "hhb-$CI_COMMIT_REF_SLUG.review.hhb-development.nl"
   script:
     - az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET --tenant $AZURE_TENANT_ID
-    - az ad app update --id $OIDC_CLIENT_ID --remove replyUrls "https://${APP_HOST}/auth/callback"
+    - redirect_urls=$(az ad app show --id $OIDC_CLIENT_ID --query "web.redirectUris" --output json)
+    - index=$(echo $redirect_urls | jq -r ". | index(\"https://${APP_HOST}/auth/callback\")")
+    - if [ "$index" == "null" ]; then echo "URL not found"; exit 2; fi
+    - az ad app update --id $OIDC_CLIENT_ID --remove replyUrls $index
   when: manual
   rules:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
