@@ -29,8 +29,9 @@ deploy-deployment-test:
   script:
     - sh ./k8s/overlay/hhb-development-cluster/apply-env-vars.sh
     - kubectl config use-context commonground/huishoudboekje/app-new:hhb-development
-    - kubectl kustomize ./k8s/overlay/hhb-developent-cluster/test
-    - kubectl apply -k ./k8s/overlay/hhb-developent-cluster/test --namespace=$NAMESPACE
+    - kubectl create ns $NAMESPACE || true
+    - kubectl kustomize ./k8s/overlay/hhb-development-cluster/test
+    - kubectl apply -k ./k8s/overlay/hhb-development-cluster/test --namespace=$NAMESPACE
   rules:
     - if: $CI_COMMIT_BRANCH == "develop"
 
