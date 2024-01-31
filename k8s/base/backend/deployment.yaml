@@ -48,22 +48,22 @@ spec:
           env:
             - name: JWT_AUDIENCE
               valueFrom:
-                configMapKeyRef:
+                secretKeyRef:
                   name: authservice-config
                   key: JWT_AUDIENCE
             - name: JWT_SECRET
               valueFrom:
-                configMapKeyRef:
+                secretKeyRef:
                   name: authservice-config
                   key: JWT_SECRET
             - name: JWT_ALGORITHMS
               valueFrom:
-                configMapKeyRef:
+                secretKeyRef:
                   name: authservice-config
                   key: JWT_ALGORITHMS
             - name: JWT_ISSUER
               valueFrom:
-                configMapKeyRef:
+                secretKeyRef:
                   name: authservice-config
                   key: JWT_ISSUER
             - name: PREFIX

@@ -5,12 +5,12 @@ metadata:
   labels:
     name: hhb-backend-ingress
   annotations:
-    cert-manager.io/cluster-issuer: letsencrypt-prod
+    cert-manager.io/cluster-issuer: letsencrypt-staging
 spec:
   tls:
     - hosts:
         - huishoudboekje.example.com
-      secretName: medewerker-frontend-ingress-tls
+      secretName: hhb-development-ingress-tls-secret
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -19,12 +19,12 @@ metadata:
   labels:
     name: hhb-frontend-ingress
   annotations:
-    cert-manager.io/cluster-issuer: letsencrypt-prod
+    cert-manager.io/cluster-issuer: letsencrypt-staging
 spec:
   tls:
     - hosts:
         - huishoudboekje.example.com
-      secretName: medewerker-frontend-ingress-tls
+      secretName: hhb-development-ingress-tls-secret
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -33,12 +33,12 @@ metadata:
   labels:
     name: hhb-authservice-ingress
   annotations:
-    cert-manager.io/cluster-issuer: letsencrypt-prod
+    cert-manager.io/cluster-issuer: letsencrypt-staging
 spec:
   tls:
     - hosts:
         - huishoudboekje.example.com
-      secretName: medewerker-frontend-ingress-tls
+      secretName: hhb-development-ingress-tls-secret
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -47,9 +47,9 @@ metadata:
   labels:
     name: hhb-unleashservice-ingress
   annotations:
-    cert-manager.io/cluster-issuer: letsencrypt-prod
+    cert-manager.io/cluster-issuer: letsencrypt-staging
 spec:
   tls:
     - hosts:
         - huishoudboekje.example.com
-      secretName: medewerker-frontend-ingress-tls
+      secretName: hhb-development-ingress-tls-secret

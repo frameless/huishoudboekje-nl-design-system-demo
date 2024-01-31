@@ -5,34 +5,33 @@ resources:
 components:
   - ../components/configmaps
   - ../components/set-images
+  - ../components/patches/letsencrypt
+  - ../components/patches/ingress
+  - ../components/patches/node-selector-patch
+  - resources
 patches:
-- target:
-    group: networking.k8s.io
-    version: v1
-    kind: Ingress
-  path: ingress-host-patch.yaml
 - target:
     version: v1
     kind: Deployment
-  path: resources-remove-patch.yaml
+  path: patches/remove-resource-limits-patch.yaml
 - target:
     version: v1
     kind: Deployment
     name: hhb-backend
-  path: allow-introspection-patch.yaml
+  path: patches/allow-introspection-patch.yaml
 - target:
     version: v1
     kind: Deployment
     name: hhb-huishoudboekjeservice
-  path: seed-test-data-patch.yaml
+  path: patches/seed-test-data-patch.yaml
 - target:
     version: v1
     kind: Deployment
     name: hhb-organisatieservice
-  path: seed-test-data-patch.yaml
+  path: patches/seed-test-data-patch.yaml
 - target:
     version: v1
     kind: Deployment
     name: hhb-postadressenservice
-  path: seed-test-data-patch.yaml
+  path: patches/seed-test-data-patch.yaml
 

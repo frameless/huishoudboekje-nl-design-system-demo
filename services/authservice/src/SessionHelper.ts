@@ -42,7 +42,6 @@ class SessionHelper {
 		this.issuer = _config.issuer;
 		this.allowedAlgs = this.parseAllowedAlgorithms(_config.allowedAlgs)
 		this.scopes = this.parseScopes(_config.scopes)
-
 	}
 
 	createSession(res, token) {

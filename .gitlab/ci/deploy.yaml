@@ -6,63 +6,9 @@
 .deployer: &deployer
   image: registry.gitlab.com/commonground/huishoudboekje/review-app-deployer:latest
 
-.authorize-keycloak: &authorize-keycloak
+.authorize-azure-ad: &authorize-azure-ad
   stage: deploy
-  image: registry.gitlab.com/commonground/huishoudboekje/keycloak-tools/keycloak-tools:1.0.0
-  before_script:
-    - cd /app
-
-#
-# demo.huishoudboekje is (currently) not used
-#
-# deploy-deployment-master:
-#   <<: *deploy
-#   needs:
-#     - build-images-dev
-#   environment:
-#     name: demo
-#     url: https://demo.huishoudboekje.demoground.nl/
-#   variables:
-#     APP_HOST: "demo.huishoudboekje.demoground.nl"
-#     NAMESPACE: "hhb-demo"
-#     USE_LETSENCRYPT: 1
-#     UNLEASH_OTAP: production
-#     OIDC_BASE_URL: "https://demo.huishoudboekje.demoground.nl"
-#     OIDC_ISSUER_URL: https://keycloak.huishoudboekje.demoground.nl/realms/huishoudboekje/
-#     OIDC_CLIENT_ID: huishoudboekje-medewerkers
-#     JWT_ISSUER: demo.huishoudboekje.demoground.nl
-#     JWT_AUDIENCE: demo.huishoudboekje.demoground.nl
-#     JWT_SECRET: demodemo
-#   before_script:
-#     - kubectl config use-context commonground/huishoudboekje/app-new:hhb-prod
-#   only:
-#     - master
-
-#
-# acc.huishoudboekje is (currently) not used
-#
-# deploy-deployment-acceptance:
-#   <<: *deploy
-#   needs:
-#     - build-images-dev
-#   environment:
-#     name: acc
-#     url: https://acc.huishoudboekje.demoground.nl/
-#   variables:
-#     APP_HOST: "acc.huishoudboekje.demoground.nl"
-#     NAMESPACE: "hhb-acc"
-#     USE_LETSENCRYPT: 1
-#     UNLEASH_OTAP: acceptance
-#     OIDC_BASE_URL: "https://acc.huishoudboekje.demoground.nl"
-#     OIDC_ISSUER_URL: https://keycloak.huishoudboekje.demoground.nl/realms/huishoudboekje/
-#     OIDC_CLIENT_ID: huishoudboekje-medewerkers
-#     JWT_ISSUER: acc.huishoudboekje.demoground.nl
-#     JWT_AUDIENCE: acc.huishoudboekje.demoground.nl
-#     JWT_SECRET: accaccacc
-#   before_script:
-#     - kubectl config use-context commonground/huishoudboekje/app-new:hhb-prod
-#   only:
-#     - acceptance
+  image: mcr.microsoft.com/azure-cli:2.36.0
 
 deploy-deployment-test:
   <<: *deployer
@@ -72,29 +18,22 @@ deploy-deployment-test:
     - build-images-dev
   environment:
     name: test
-    url: https://test.huishoudboekje.demoground.nl/
+    url: https://test.hhb-development.nl/
   variables:
-    APP_HOST: "test.huishoudboekje.demoground.nl"
+    APP_HOST: "test.hhb-development.nl"
     NAMESPACE: "hhb-test"
     UNLEASH_OTAP: test
-    OIDC_BASE_URL: "https://test.huishoudboekje.demoground.nl"
-    OIDC_ISSUER_URL: https://keycloak.huishoudboekje.demoground.nl/realms/huishoudboekje/
-    OIDC_CLIENT_ID: huishoudboekje-medewerkers
-    JWT_ISSUER: https://keycloak.huishoudboekje.demoground.nl/realms/huishoudboekje
-    JWT_AUDIENCE: account
+    OIDC_BASE_URL: "https://test.hhb-development.nl"
     JWT_SECRET: $OIDC_CLIENT_SECRET
     JWT_ALGORITHMS: HS256,RS256
-    REDIS_PASSWORD: $REDIS_PASSWORD
-    REDIS_AUTH_PASSWORD: $REDIS_AUTH_PASSWORD
   script:
-    - sh ./k8s/overlay/hhb-cluster/apply-env-vars.sh
-    - kubectl config use-context commonground/huishoudboekje/app-new:hhb-prod
-    - kubectl kustomize ./k8s/overlay/hhb-cluster/prod/test
-    - kubectl apply -k ./k8s/overlay/hhb-cluster/prod/test --namespace=$NAMESPACE
-  only:
-    - develop
+    - sh ./k8s/overlay/hhb-development-cluster/apply-env-vars.sh
+    - kubectl config use-context commonground/huishoudboekje/app-new:hhb-development
+    - kubectl kustomize ./k8s/overlay/hhb-developent-cluster/test
+    - kubectl apply -k ./k8s/overlay/hhb-developent-cluster/test --namespace=$NAMESPACE
+  rules:
+    - if: $CI_COMMIT_BRANCH == "develop"
 
-# Deploy for review cluster
 deploy-deployment-review:
   <<: *deployer
   <<: *retry
@@ -103,75 +42,53 @@ deploy-deployment-review:
   stage: deploy
   environment:
     name: review/$CI_COMMIT_REF_SLUG
-    url: https://hhb-$CI_COMMIT_REF_SLUG.nlx.reviews/
+    url: https://hhb-$CI_COMMIT_REF_SLUG.review.hhb-development.nl/
     on_stop: destroy-review
     auto_stop_in: 7 days
   variables:
-    APP_HOST: "hhb-$CI_COMMIT_REF_SLUG.nlx.reviews"
+    APP_HOST: "hhb-$CI_COMMIT_REF_SLUG.review.hhb-development.nl"
     NAMESPACE: "hhb-$CI_COMMIT_REF_SLUG"
     UNLEASH_OTAP: development
-    OIDC_BASE_URL: "https://hhb-$CI_COMMIT_REF_SLUG.nlx.reviews"
-    OIDC_ISSUER_URL: https://keycloak.huishoudboekje.demoground.nl/realms/huishoudboekje/
-    OIDC_CLIENT_ID: huishoudboekje-medewerkers
-    JWT_ISSUER: https://keycloak.huishoudboekje.demoground.nl/realms/huishoudboekje
-    JWT_AUDIENCE: account
+    OIDC_BASE_URL: "https://hhb-$CI_COMMIT_REF_SLUG.review.hhb-development.nl"
     JWT_SECRET: $OIDC_CLIENT_SECRET
     JWT_ALGORITHMS: HS256,RS256
-    REDIS_PASSWORD: $REDIS_PASSWORD
-    REDIS_AUTH_PASSWORD: $REDIS_AUTH_PASSWORD
-  script:
-    - sh ./k8s/overlay/hhb-cluster/apply-env-vars.sh
-    - kubectl config use-context commonground/huishoudboekje/app-new:hhb-review
+  script:  
+    - sh ./k8s/overlay/hhb-development-cluster/apply-env-vars.sh
+    - kubectl config use-context commonground/huishoudboekje/app-new:hhb-development
     - kubectl create ns $NAMESPACE || true
-    - kubectl kustomize ./k8s/overlay/hhb-cluster/review
-    - kubectl apply -k ./k8s/overlay/hhb-cluster/review --namespace=$NAMESPACE
-  only:
-    - branches@commonground/huishoudboekje/app-new
-  except:
-    - master
-    - develop
-    - acceptance
+    - kubectl kustomize ./k8s/overlay/hhb-development-cluster/review
+    - kubectl apply -k ./k8s/overlay/hhb-development-cluster/review --namespace=$NAMESPACE  
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
 
-authorize-keycloak-review:
-  <<: *authorize-keycloak
+authorize-azure-ad-review:
+  <<: *authorize-azure-ad
   environment:
     name: review/$CI_COMMIT_REF_SLUG
-    on_stop: unauthorize-keycloak-review
+    on_stop: unauthorize-azure-ad-review
   variables:
     GIT_STRATEGY: none # the runner won’t try to check out the code after the branch is deleted.
-    KEYCLOAK_REALM_NAME: huishoudboekje
-    KEYCLOAK_BASE_URL: https://keycloak.huishoudboekje.demoground.nl
-    APP_HOST: "hhb-$CI_COMMIT_REF_SLUG.nlx.reviews"
+    APP_HOST: "hhb-$CI_COMMIT_REF_SLUG.review.hhb-development.nl"
   script:
-    - echo "Adding application to Keycloak..."
-    - npm run start -- redirect-uri add --uri="https://${APP_HOST}/auth/callback" --client-id=huishoudboekje-medewerkers
-  only:
-    - branches@commonground/huishoudboekje/app-new
-  except:
-    - master
-    - develop
-    - acceptance
+    - az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET --tenant $AZURE_TENANT_ID
+    - az ad app update --id $OIDC_CLIENT_ID --add replyUrls "https://${APP_HOST}/auth/callback" || true
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
 
-unauthorize-keycloak-review:
-  <<: *authorize-keycloak
+unauthorize-azure-ad-review:
+  <<: *authorize-azure-ad
   environment:
     name: review/$CI_COMMIT_REF_SLUG
     action: stop
   variables:
     GIT_STRATEGY: none # the runner won’t try to check out the code after the branch is deleted.
-    KEYCLOAK_REALM_NAME: huishoudboekje
-    KEYCLOAK_BASE_URL: https://keycloak.huishoudboekje.demoground.nl
-    APP_HOST: "hhb-$CI_COMMIT_REF_SLUG.nlx.reviews"
+    APP_HOST: "hhb-$CI_COMMIT_REF_SLUG.review.hhb-development.nl"
   script:
-    - echo "Removing application from Keycloak..."
-    - npm run start -- redirect-uri remove --uri="https://${APP_HOST}/auth/callback" --client-id=huishoudboekje-medewerkers
+    - az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET --tenant $AZURE_TENANT_ID
+    - az ad app update --id $OIDC_CLIENT_ID --remove replyUrls "https://${APP_HOST}/auth/callback"
   when: manual
-  only:
-    - branches@commonground/huishoudboekje/app-new
-  except:
-    - master
-    - develop
-    - acceptance
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
 
 ## Destroy app (only review cluster)
 destroy-review:
@@ -185,15 +102,11 @@ destroy-review:
   variables:
     GIT_STRATEGY: none # the runner won’t try to check out the code after the branch is deleted.
     NAMESPACE: "hhb-$CI_COMMIT_REF_SLUG"
-    APP_HOST: "hhb-$CI_COMMIT_REF_SLUG.nlx.reviews"
+    APP_HOST: "hhb-$CI_COMMIT_REF_SLUG.review.hhb-development.nl"
   before_script:
-    - kubectl config use-context commonground/huishoudboekje/app-new:hhb-review
+    - kubectl config use-context commonground/huishoudboekje/app-new:hhb-development
   script:
     - kubectl delete namespace ${NAMESPACE}
   when: manual
-  only:
-    - branches@commonground/huishoudboekje/app-new
-  except:
-    - master
-    - develop
-    - acceptance
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
