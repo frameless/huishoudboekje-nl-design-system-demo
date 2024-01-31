@@ -86,7 +86,7 @@ unauthorize-azure-ad-review:
     APP_HOST: "hhb-$CI_COMMIT_REF_SLUG.review.hhb-development.nl"
   script:
     - az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET --tenant $AZURE_TENANT_ID
-    - sh scripts/remove-azure-ad-redirect-url.sh $OIDC_CLIENT_ID "https://${APP_HOST}/auth/callback"
+    - sh ./scripts/remove-azure-ad-redirect-url.sh $OIDC_CLIENT_ID "https://${APP_HOST}/auth/callback"
   when: manual
   rules:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
