@@ -2,6 +2,8 @@
 
 ## 1.12.2
 
+Deze versie omvat een verbetering bij de weergave van een verwacht betaalmoment.
+
 ### Patch Changes
 
 - cdf883f: Fixed wrong calculation next date in schedule on days that do not exists in the next month
