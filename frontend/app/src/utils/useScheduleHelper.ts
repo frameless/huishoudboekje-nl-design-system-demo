@@ -147,6 +147,8 @@ const useScheduleHelper = (schedule?: Schedule | Betaalinstructie) => {
 				: validThrough;
 			const returnDate = new Date();
 			returnDate.setHours(0, 0, 0, 0);
+			returnDate.setDate(0);
+			returnDate.setMonth(0)
 
 			if (byDay && byDay.length > 0) {
 				const calculatedDay = calculatingDate.getDay();
@@ -186,8 +188,8 @@ const useScheduleHelper = (schedule?: Schedule | Betaalinstructie) => {
 				const futureDay = futureDays.length ? futureDays[0] : byMonthDay[0];
 
 				returnDate.setFullYear(futureYear);
-				returnDate.setMonth(futureMonth)
 				returnDate.setDate(futureDay);
+				returnDate.setMonth(futureMonth)
 
 				if (endDateAppointment && endDateAppointment.getTime() < returnDate.getTime()
 					|| endDateInstruction && endDateInstruction.getTime() < returnDate.getTime()
