@@ -46,7 +46,7 @@ spec:
               cpu: 100m
               memory: 128Mi
           envFrom:
-            - configMapRef:
+            - secretRef:
                 name: authservice-config
           env:
             - name: LOG_LEVEL

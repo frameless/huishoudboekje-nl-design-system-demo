@@ -1,6 +1,12 @@
-.only-on-branches: &only-on-branches
-  only:
-    - branches@commonground/huishoudboekje/app-new
+.only-on-merge-request: &only-on-merge-request
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+
+.rules-tests: &rules-tests
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+    - if: $CI_COMMIT_BRANCH == "develop"
 
 .frontend:
   stage: test
@@ -17,14 +23,12 @@
   before_script:
     - cd ./frontend/app
     - npm ci --cache ${NPM_CACHE_DIR} --prefer-offline --no-progress --color=false --quiet
-  tags:
-    - docker
   retry:
     max: 2
     when: script_failure
 
 frontend-test:
-  <<: *only-on-branches
+  <<: *rules-tests
   extends: .frontend
   script:
     - npm run lint
@@ -47,8 +51,6 @@ frontend-test:
 #      DIRECTORY: <the directory of the application>
 .Service Test:
   stage: test
-  tags:
-    - docker
   needs: []
   retry:
     max: 2
@@ -81,7 +83,7 @@ frontend-test:
   when: on_success
 
 postadressenservice-test:
-  <<: *only-on-branches
+  <<: *rules-tests
   stage: test
   needs: []
   image:
@@ -97,8 +99,6 @@ postadressenservice-test:
     - cd ./services/postadressenservice
     - npm ci --cache ${NPM_CACHE_DIR} --prefer-offline --no-progress --color=false --quiet
     - npm run prisma:generate
-  tags:
-    - docker
   retry:
     max: 2
     when: script_failure
@@ -118,7 +118,7 @@ postadressenservice-test:
   when: on_success
 
 alarmenservice-test:
-  <<: *only-on-branches
+  <<: *rules-tests
   stage: test
   needs: []
   image:
@@ -134,8 +134,6 @@ alarmenservice-test:
     - cd ./services/alarmenservice
     - npm ci --cache ${NPM_CACHE_DIR} --prefer-offline --no-progress --color=false --quiet
     - npm run prisma:generate
-  tags:
-    - docker
   retry:
     max: 2
     when: script_failure
@@ -155,7 +153,7 @@ alarmenservice-test:
   when: on_success
 
 signalenservice-test:
-  <<: *only-on-branches
+  <<: *rules-tests
   stage: test
   needs: []
   image:
@@ -171,8 +169,6 @@ signalenservice-test:
     - cd ./services/signalenservice
     - npm ci --cache ${NPM_CACHE_DIR} --prefer-offline --no-progress --color=false --quiet
     - npm run prisma:generate
-  tags:
-    - docker
   retry:
     max: 2
     when: script_failure
@@ -192,7 +188,7 @@ signalenservice-test:
   when: on_success
 
 unleashservice-test:
-  <<: *only-on-branches
+  <<: *rules-tests
   stage: test
   needs: []
   image:
@@ -207,8 +203,6 @@ unleashservice-test:
   before_script:
     - cd ./services/unleashservice
     - npm ci --cache ${NPM_CACHE_DIR} --prefer-offline --no-progress --color=false --quiet
-  tags:
-    - docker
   retry:
     max: 2
     when: script_failure
@@ -228,7 +222,7 @@ unleashservice-test:
   when: on_success
 
 backend-test:
-  <<: *only-on-branches
+  <<: *rules-tests
   extends: .Service Test
   variables:
     DIRECTORY: backend
@@ -238,17 +232,13 @@ backend-test:
     JWT_ALGORITHMS: HS256
 
 rapportage-service-test:
-  <<: *only-on-branches
+  <<: *rules-tests
   extends: .Service Test
   variables:
     DIRECTORY: services/rapportage_service
 
 changeset:
-  <<: *only-on-branches
-  except:
-    - develop
-    - acceptance
-    - master
+  <<: *only-on-merge-request
   stage: test
   needs: []
   image:
@@ -264,8 +254,6 @@ changeset:
   before_script:
     - apk add git
     - npm i --cache ${NPM_CACHE_DIR} --prefer-offline --no-progress --color=false --quiet
-  tags:
-    - docker
   script:
     - git fetch origin develop:develop
     - npm run check-changeset

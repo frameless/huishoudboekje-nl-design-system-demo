@@ -14,7 +14,6 @@ GitLab. It is recommended to have at least some knowledge of the following techn
 
 - You can use Kustomize with your Kubernetes cluster out of the box. No need to install plugins or modules.
 
-
 We use Kustomize for our deploys in Kubernetes. Kustomize uses so called patches to change the base yaml files with the correct values. It is reccomended to create an overlay for each environment that you want to deploy on. For each environment you should create patches with the corerct values. 
 
 ### [Base](./base)
@@ -22,19 +21,19 @@ We use Kustomize for our deploys in Kubernetes. Kustomize uses so called patches
 All components within Huishoudboekje have their own directory in [base](./base) with YAML-files that contain all the
 shared configurations for that component.
 
-### [Components](./components)
-
-Components are patches that can be used in more then one overlay.
-
 ### [Overlay](./overlay)
 
 This is where customizations are made for a specific environment.
 
-#### [cluster/prod](./overlay/cluster/prod)
+### [Components](./components)
 
-This contains all the patches for deploying to our prod cluster. 
+Components are patches that can be used in more then one overlay.
 
-#### [cluster/review](./overlay/cluster/review)
+#### [hhb-development-cluster/test](./overlay/cluster/prod)
+
+This contains all the patches for deploying our test environment. 
+
+#### [hhb-development-cluster/review](./overlay/cluster/review)
 
 This contains all the patches for deploying to our review cluster. 
 
@@ -56,7 +55,7 @@ We use two clusters, however, we set the required env variables for both cluster
 To set env variables, run the following command:
 
 ```shell
-sh k8s/overlay/hhb-cluser/apply-env-vars.sh
+sh k8s/overlay/hhb-development-cluser/apply-env-vars.sh
 ```
 
 This will generate the necessary kustomization YAML-files.
@@ -86,13 +85,13 @@ Deploy Huishoudboekje with these commands:
 
 ```shell
 # To check if the right files and values are being created run.
-kubectl kustomize ./k8s/overlay/hhb-cluster/review
+kubectl kustomize ./k8s/overlay/hhb-development-cluster/review
 
 # Create the namespace if it doesn't exist yet.
 kubectl create namespace $NAMESPACE
 
 #deploy
-kubectl apply -k ./k8s/overlay/hhb-cluster/review --namespace=$NAMESPACE
+kubectl apply -k ./k8s/overlay/hhb-development-cluster/review --namespace=$NAMESPACE
 ```
 
 Huishoudboekje will now run on your Kubernetes cluster.

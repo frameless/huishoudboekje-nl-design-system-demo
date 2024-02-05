@@ -1,5 +1,17 @@
 # Huishoudboekje Changelog
 
+## 1.12.1
+
+Deze versie omvat verbeteringen bij het opslaan van de omschrijving van een banktransactie, de weergave van een verwachte betaaldatum en een vertaling van tekst. Daarnaast omvat het een aantal oplossingen voor kwetsbaarheden.
+
+### Patch Changes
+
+- 33b9bef: Disabled sqlalchemy logging
+- a6f3be2: Removed duplicate entries in transaction description
+- 91db733: Fixed calculating year mistake in next schedule alarm
+- 44159b9: Fixed mssing translations rapportage
+- f773842: Upgraded Python packages
+
 ## 1.12.0
 
 Deze versie omvat een nieuw overzicht met banktransacties in drie maanden. Bij het laden van gegevens per pagina wordt visueel gemaakt dat het laden bezig is. Er is een probleem met het zetten van een alarm opgelost.

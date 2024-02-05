@@ -1,0 +1,292 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hhb-alarmenservice
+  labels:
+    name: hhb-alarmenservice
+spec:
+  template:
+    spec:
+      containers:
+        - name: hhb-alarmenservice
+          resources:
+            limits:
+              memory: 256Mi
+            requests:
+              cpu: 50m
+              memory: 256Mi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hhb-authservice
+  labels:
+    name: hhb-authservice
+spec:
+  template:
+    spec:
+      containers:
+        - name: hhb-authservice
+          resources:
+            limits:
+              memory: 256Mi
+            requests:
+              cpu: 50m
+              memory: 256Mi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hhb-backend
+  labels:
+    name: hhb-backend
+spec:
+  template:
+    spec:
+      containers:
+        - name: hhb-backend
+          resources:
+            limits:
+              memory: 256Mi
+            requests:
+              cpu: 100m
+              memory: 256Mi
+          env:
+            - name: GUNICORN_WORKERS
+              value: "1"
+            - name: GUNICORN_THREADS
+              value: "2"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hhb-banktransactieservice
+  labels:
+    name: hhb-banktransactieservice
+spec:
+  template:
+    spec:
+      containers:
+        - name: hhb-banktransactieservice
+          resources:
+            limits:
+              memory: 128Mi
+            requests:
+              cpu: 50m
+              memory: 128Mi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hhb-frontend
+  labels:
+    name: hhb-frontend
+spec:
+  template:
+    spec:
+      containers:
+        - name: hhb-frontend
+          resources:
+            limits:
+              memory: 32Mi
+            requests:
+              cpu: 10m
+              memory: 32Mi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hhb-grootboekservice
+  labels:
+    name: hhb-grootboekservice
+spec:
+  template:
+    spec:
+      containers:
+        - name: hhb-grootboekservice
+          resources:
+            limits:
+              memory: 256Mi
+            requests:
+              cpu: 50m
+              memory: 256Mi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hhb-huishoudboekjeservice
+  labels:
+    name: hhb-huishoudboekjeservice
+spec:
+  template:
+    spec:
+      containers:
+        - name: hhb-huishoudboekjeservice
+          resources:
+            limits:
+              memory: 256Mi
+            requests:
+              cpu: 50m
+              memory: 256Mi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hhb-logservice
+  labels:
+    name: hhb-logservice
+spec:
+  template:
+    spec:
+      containers:
+        - name: hhb-logservice
+          resources:
+            limits:
+              memory: 128Mi
+            requests:
+              cpu: 50m
+              memory: 128Mi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hhb-organisatieservice
+  labels:
+    name: hhb-organisatieservice
+spec:
+  template:
+    spec:
+      containers:
+        - name: hhb-organisatieservice
+          resources:
+            limits:
+              memory: 128Mi
+            requests:
+              cpu: 50m
+              memory: 128Mi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hhb-postadressenservice
+  labels:
+    name: hhb-postadressenservice
+spec:
+  template:
+    spec:
+      containers:
+        - name: hhb-postadressenservice
+          resources:
+            limits:
+              memory: 400Mi
+            requests:
+              cpu: 50m
+              memory: 400Mi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hhb-prometheus
+  labels:
+    name: hhb-prometheus
+spec:
+  template:
+    spec:
+      containers:
+        - name: prometheus
+          resources:
+            limits:
+              memory: 128Mi
+            requests:
+              cpu: 50m
+              memory: 64Mi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hhb-rapportageservice
+  labels:
+    name: hhb-rapportageservice
+spec:
+  template:
+    spec:
+      containers:
+        - name: hhb-rapportageservice
+          resources:
+            limits:
+              memory: 256Mi
+            requests:
+              cpu: 50m
+              memory: 256Mi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hhb-redis
+  labels:
+    name: hhb-redis
+spec:
+  template:
+    spec:
+      containers:
+        - name: hhb-redis
+          resources:
+            limits:
+              memory: 256Mi
+            requests:
+              cpu: 100m
+              memory: 256Mi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hhb-signalenservice
+  labels:
+    name: hhb-signalenservice
+spec:
+  template:
+    spec:
+      containers:
+        - name: hhb-signalenservice
+          resources:
+            limits:
+              memory: 400Mi
+            requests:
+              cpu: 50m
+              memory: 400Mi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hhb-statsd-exporter
+  labels:
+    name: hhb-statsd-exporter
+spec:
+  template:
+    spec:
+      containers:
+        - name: hhb-statsd-exporter
+          resources:
+            limits:
+              memory: 128Mi
+            requests:
+              cpu: 50m
+              memory: 128Mi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hhb-unleashservice
+  labels:
+    name: hhb-unleashservice
+spec:
+  template:
+    spec:
+      containers:
+        - name: hhb-unleashservice
+          resources:
+            limits:
+              memory: 256Mi
+            requests:
+              cpu: 50m
+              memory: 128Mi

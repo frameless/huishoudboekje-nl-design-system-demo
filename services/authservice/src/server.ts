@@ -41,7 +41,7 @@ const server = (prefix: string = "/auth") => {
 	});
 
 	app.use(auth({
-		session:{
+		session: {
 			store: redisStore
 		},
 		baseURL: process.env.OIDC_BASE_URL,

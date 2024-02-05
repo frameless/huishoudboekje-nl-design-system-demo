@@ -65,8 +65,8 @@ export POSTGRESQL_PASSWORD_SIGSVC="sigsvc"
 export UNLEASH_OTAP=${UNLEASH_OTAP:-"production"}
 
 # OIDC Settings
-export OIDC_ISSUER_URL=${OIDC_ISSUER_URL:-"https://keycloak.huishoudboekje.demoground.nl/realms/huishoudboekje"}
-export OIDC_CLIENT_ID=${OIDC_CLIENT_ID:-"huishoudboekje-medewerkers"}
+export OIDC_ISSUER_URL=${OIDC_ISSUER_URL:-"this should be a issuer url"}
+export OIDC_CLIENT_ID=${OIDC_CLIENT_ID:-"this should come from a secret envvar"}
 export OIDC_CLIENT_SECRET=${OIDC_CLIENT_SECRET:-"this should come from a secret envvar"}
 export OIDC_BASE_URL=${OIDC_BASE_URL:-$HHB_APP_HOST}
 export JWT_ISSUER=${JWT_ISSUER:-$HHB_APP_HOST}
@@ -80,13 +80,12 @@ export OIDC_SCOPES=${OIDC_SCOPES}
 export REDIS_PASSWORD=${REDIS_PASSWORD:-"averyinsecurebutstillalongpasswordbecausethedocssayithastobealongpaswordtobesecuresoihopethisislongenough"}
 export REDIS_AUTH_PASSWORD=${REDIS_AUTH_PASSWORD:-"authservicepasswordforredis12345"}
 
-cd k8s/overlay/hhb-cluster
+cd k8s/overlay/hhb-development-cluster
 
 echo "Applying envvars."
 envsubst < components/configmaps/sample.redis.conf > components/configmaps/redis.conf
 envsubst < components/configmaps/sample.kustomization.yaml > components/configmaps/kustomization.yaml
 envsubst < components/set-images/sample.kustomization.yaml > components/set-images/kustomization.yaml
-envsubst < review/sample.ingress-host-patch.yaml > review/ingress-host-patch.yaml
-envsubst < review/sample.ingress-sb-host-patch.yaml > review/ingress-sb-host-patch.yaml
+envsubst < components/patches/ingress/host-name/sample.ingress-host-patch.yaml > components/patches/ingress/host-name/ingress-host-patch.yaml
 
 
