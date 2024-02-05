@@ -1,5 +1,12 @@
 # Huishoudboekje Changelog
 
+## 1.12.2
+
+### Patch Changes
+
+- cdf883f: Fixed wrong calculation next date in schedule on days that do not exists in the next month
+- fe475a3: Change review environment to be run on azure. Also added tofu/terragrunt configuration for this purpose
+
 ## 1.12.1
 
 Deze versie omvat verbeteringen bij het opslaan van de omschrijving van een banktransactie, de weergave van een verwachte betaaldatum en een vertaling van tekst. Daarnaast omvat het een aantal oplossingen voor kwetsbaarheden.
