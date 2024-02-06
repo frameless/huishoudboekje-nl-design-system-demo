@@ -2,6 +2,8 @@
 
 ## 1.12.3
 
+Deze versie lost een probleem op met de weergave van banktransacties en berekening van totalen in het overzicht met betalingen.
+
 ### Patch Changes
 
 - d502ba0: Fixed a bug that caused transactions to be hidden in overview and a similair bug that caused saldo mutation per month to include a transaction if it was on the last day of the previous month
