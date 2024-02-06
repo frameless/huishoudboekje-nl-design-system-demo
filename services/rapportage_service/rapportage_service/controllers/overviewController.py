@@ -92,7 +92,7 @@ class OverviewController():
             month_number = month_info.tm_mon
             last_day = calendar.monthrange(year, month_number)[1]
             start_day = datetime.strptime(
-                month, "%Y-%m-%d") - timedelta(days=1)
+                month, "%Y-%m-%d")
             dates.append(
                 {'start': start_day.strftime('%Y-%m-%d'), 'end': f"{year}-{month_number}-{last_day}"})
         return dates

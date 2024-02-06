@@ -78,12 +78,11 @@ const HuishoudenOverzichtIndex = () => {
 
 				</Page>
 			)
-
 		}} />
 	)
 	function moveMonthsByAmount(amount: number) {
-		const startDate = d(dateRange.from).subtract(amount, 'months').toDate()
-		const endDate = d(dateRange.through).subtract(amount, 'months').toDate()
+		const startDate = d(dateRange.from).subtract(amount, 'months').startOf('month').toDate()
+		const endDate = d(dateRange.through).subtract(amount, 'months').endOf('month').toDate()
 
 		setDateRange({from: startDate, through: endDate})
 	}
