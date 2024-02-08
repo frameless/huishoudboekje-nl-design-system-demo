@@ -4,4 +4,8 @@ patches:
 - target:
     version: v1
     kind: Deployment
-  path: remove-resource-limits-patch.yaml
+  path: remove-resource-cpu-limits-patch.yaml
+- target:
+    version: v1
+    kind: Deployment
+  path: remove-resource-cpu-requests-patch.yaml
