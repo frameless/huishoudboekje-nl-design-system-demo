@@ -34,7 +34,10 @@
     },
     "journals": {
       "deleteSuccessMessage": "De aflettering van de transactie is ongedaan gemaakt.",
-      "createSuccessMessage": "De transactie is afgeletterd."
+      "createSuccessMessage": "De transactie is afgeletterd.",
+      "errors": {
+        "unknownTransactionIban" : "Transactie bevat een onbekende iban"
+      }
     },
     "transactions": {
       "noResults": "Er zijn geen banktransacties gevonden. Let op: er kunnen filteropties actief zijn waardoor er geen resultaten worden weergegeven."
