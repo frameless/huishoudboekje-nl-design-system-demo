@@ -8,6 +8,18 @@
     - if: $CI_PIPELINE_SOURCE == "schedule"
     - if: $CI_COMMIT_BRANCH == "develop"
 
+
+cypress-tests:
+  <<: *rules-tests
+  image: cypress/browsers:node-20.9.0-chrome-118.0.5993.88-1-ff-118.0.2-edge-118.0.2088.46-1
+  stage: test
+  script:
+    - npm ci
+    - npm start &
+    - npx cypress run
+  when: on_success
+
+
 .frontend:
   stage: test
   needs: []
