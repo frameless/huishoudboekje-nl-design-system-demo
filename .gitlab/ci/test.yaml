@@ -14,10 +14,15 @@ cypress-tests:
   stage: test
   needs: []
   image: cypress/browsers:node-20.9.0-chrome-118.0.5993.88-1-ff-118.0.2-edge-118.0.2088.46-1
+  variables:
+    APP_HOST: "hhb-$CI_COMMIT_REF_SLUG.review.hhb-development.nl"
+    NAMESPACE: "hhb-$CI_COMMIT_REF_SLUG"
   script:
-    - npm ci
-    - npm start &
-    - npx cypress run
+    - wget -O /usr/local/bin/kubectl https://storage.googleapis.com/kubernetes-release/release/v1.22.2/bin/linux/amd64/kubectl && \
+    chmod +x /usr/local/bin/kubectl && \
+    kubectl version --client
+    - sh cypress/scripts/pipeline-execution.sh
+  when: manual
 
 
 .frontend:
