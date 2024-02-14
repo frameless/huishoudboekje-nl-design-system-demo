@@ -12,15 +12,20 @@
 cypress-tests:
   <<: *rules-tests
   stage: test
-  needs: []
+  needs: 
+    - deploy-deployment-review
+  when: delayed
+  start_in: 2 minutes
   image: registry.gitlab.com/commonground/huishoudboekje/cypress-test-executor-with-kubectl:latest
   variables:
     APP_HOST: "https://hhb-$CI_COMMIT_REF_SLUG.review.hhb-development.nl"
     NAMESPACE: "hhb-$CI_COMMIT_REF_SLUG"
   script:
     - kubectl config use-context commonground/huishoudboekje/app-new:hhb-development
+    - kubectl wait pod --all --for=condition=Ready --namespace=$NAMESPACE
     - sh cypress/scripts/pipeline-execution.sh
-  when: manual
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event' #Checken when we want to run these tests, for now only on mr
 
 
 .frontend:
