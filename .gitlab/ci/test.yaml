@@ -13,9 +13,9 @@ cypress-tests:
   <<: *rules-tests
   stage: test
   needs: []
-  image: cypress/browsers:node-20.9.0-chrome-118.0.5993.88-1-ff-118.0.2-edge-118.0.2088.46-1
+  image: registry.gitlab.com/commonground/huishoudboekje/cypress-test-executor-with-kubectl:latest
   variables:
-    APP_HOST: "hhb-$CI_COMMIT_REF_SLUG.review.hhb-development.nl"
+    APP_HOST: "https://hhb-$CI_COMMIT_REF_SLUG.review.hhb-development.nl"
     NAMESPACE: "hhb-$CI_COMMIT_REF_SLUG"
   script:
     - wget -O /usr/local/bin/kubectl https://storage.googleapis.com/kubernetes-release/release/v1.22.2/bin/linux/amd64/kubectl && chmod +x /usr/local/bin/kubectl && kubectl version --client
