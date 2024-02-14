@@ -56,7 +56,11 @@ const BookingSectionAfspraak = ({transaction}) => {
 				toast({success: t("messages.journals.createSuccessMessage")});
 			}).catch(err => {
 				console.error(err);
-				toast({error: err.message});
+                if(err.message.includes("(some) transactions have unknown ibans ")){
+                    toast({error: t("messages.journals.errors.unknownTransactionIban")})
+                } else {
+                    toast({error: err.message});
+                }
 			});
 		}
 	};

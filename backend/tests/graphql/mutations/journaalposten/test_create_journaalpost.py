@@ -29,11 +29,20 @@ mock_grootboekrekeningen = {
     "m2": {"id": "m2", "naam": "uitgaven", "debet": True}
 }
 mock_bank_transactions = {
-    31: {"id": 31, "is_credit": True, "bedrag": 8000, "transactie_datum": "2021-12-07"},
-    32: {"id": 32, "is_credit": False, "bedrag": 8000, "transactie_datum": "2021-12-07"},
-    33: {"id": 33, "is_credit": False, "bedrag": 8000, "transactie_datum": "2021-12-07"},
-    34: {"id": 34, "is_credit": False, "bedrag": 6000, "transactie_datum": "2021-12-07"},
+    31: {"id": 31, "is_credit": True, "bedrag": 8000, "transactie_datum": "2021-12-07", "tegen_rekening": "NLTEST1234567801"},
+    32: {"id": 32, "is_credit": False, "bedrag": 8000, "transactie_datum": "2021-12-07", "tegen_rekening": "NLTEST1234567802"},
+    33: {"id": 33, "is_credit": False, "bedrag": 8000, "transactie_datum": "2021-12-07", "tegen_rekening": "NLTEST1234567803"},
+    34: {"id": 34, "is_credit": False, "bedrag": 6000, "transactie_datum": "2021-12-07", "tegen_rekening": "NLTEST1234567804"},
+    35: {"id": 35, "is_credit": False, "bedrag": 6000, "transactie_datum": "2021-12-07", "tegen_rekening": "NLTEST1234567805"},
 }
+
+mock_rekeningen = {
+    "NLTEST1234567801": {"id": 1, "iban": "NLTEST1234567801"},
+    "NLTEST1234567802": {"id": 2, "iban": "NLTEST1234567802"},
+    "NLTEST1234567803": {"id": 3, "iban": "NLTEST1234567803"},
+    "NLTEST1234567804": {"id": 4, "iban": "NLTEST1234567804"},
+}
+
 mock_alarmen = {alarm1_id:
                 {"id": alarm1_id,
                  "isActive": True,
@@ -113,6 +122,9 @@ def get_afspraken(req, _ctx):
 def get_transactions(req: requests.PreparedRequest, _ctx):
     return get_by_filter(req, mock_bank_transactions)
 
+def get_rekeningen(req: requests.PreparedRequest, _ctx):
+    return get_by_filter(req, mock_rekeningen)
+
 
 def get_grootboekrekeningen(req: requests.PreparedRequest, _ctx):
     return get_by_filter(req, mock_grootboekrekeningen)
@@ -168,6 +180,11 @@ def setup_services(mock):
             f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/\\?filter_ids=.*"),
         json=get_transactions
     )
+    rekeningen_adapter = mock.get(
+        re.compile(
+            f"{settings.HHB_SERVICES_URL}/rekeningen/\\?filter_ibans=.*"),
+        json=get_rekeningen
+    )
     alarmen_get_adapter = mock.get(
         re.compile(f"{settings.ALARMENSERVICE_URL}/alarms/\\?filter_ids=.*"),
         json=get_alarmen
@@ -197,6 +214,7 @@ def setup_services(mock):
         "afspraken": afspraken_adapter,
         "afspraken_post": afspraken_post_adapter,
         "transacties": bank_transactions_adapter,
+        "rekeningen": rekeningen_adapter,
         "transacties_update": bank_transactions_update,
         "grootboekrekeningen": grootboekrekeningen_adapter,
         "rubrieken": rubrieken_get,
@@ -259,6 +277,7 @@ def test_create_journaalpost_grootboekrekening(client):
         assert adapters["afspraken"].call_count == 0
         assert adapters["afspraken_post"].call_count == 0
         assert adapters["transacties"].call_count == 2
+        assert adapters["rekeningen"].call_count == 0
         assert adapters["transacties_update"].call_count == 1
         assert adapters["grootboekrekeningen"].call_count == 2
         assert adapters["rubrieken"].call_count == 0
@@ -302,6 +321,7 @@ def test_create_journaalpost_grootboekrekening_unknown_transaction(client):
         assert adapters["afspraken"].call_count == 0
         assert adapters["afspraken_post"].call_count == 0
         assert adapters["transacties"].call_count == 1
+        assert adapters["rekeningen"].call_count == 0
         assert adapters["transacties_update"].call_count == 0
         assert adapters["grootboekrekeningen"].call_count == 0
         assert adapters["rubrieken"].call_count == 0
@@ -354,6 +374,7 @@ def test_create_journaalpost_grootboekrekening_duplicate_not_allowed(client):
         assert adapters["afspraken"].call_count == 0
         assert adapters["afspraken_post"].call_count == 0
         assert adapters["transacties"].call_count == 1
+        assert adapters["rekeningen"].call_count == 0
         assert adapters["transacties_update"].call_count == 0
         assert adapters["grootboekrekeningen"].call_count == 1
         assert adapters["rubrieken"].call_count == 0
@@ -408,6 +429,7 @@ def test_create_journaalpost_afspraak(client, mocker):
         assert adapters["afspraken"].call_count == 2
         assert adapters["afspraken_post"].call_count == 0
         assert adapters["transacties"].call_count == 2
+        assert adapters["rekeningen"].call_count == 1
         assert adapters["transacties_update"].call_count == 1
         assert adapters["grootboekrekeningen"].call_count == 0
         assert adapters["rubrieken"].call_count == 1
@@ -462,6 +484,7 @@ def test_create_journaalpost_afspraak_journaalpost_exists(client):
         assert adapters["afspraken"].call_count == 0
         assert adapters["afspraken_post"].call_count == 0
         assert adapters["transacties"].call_count == 1
+        assert adapters["rekeningen"].call_count == 1
         assert adapters["transacties_update"].call_count == 0
         assert adapters["grootboekrekeningen"].call_count == 0
         assert adapters["rubrieken"].call_count == 0
@@ -480,6 +503,57 @@ def test_create_journaalpost_afspraak_journaalpost_exists(client):
                 {
                     "locations": [{"column": 25, "line": 3}],
                     "message": "(some) journaalposten already exist",
+                    "path": ["createJournaalpostAfspraak"],
+                }
+            ],
+        }
+
+def test_create_journaalpost_afspraak_unknown_iban_transaction(client):
+    with requests_mock.Mocker() as mock:
+        adapters = setup_services(mock)
+
+        response = client.post(
+            "/graphql",
+            json={
+                "query": """
+                    mutation test($input:[CreateJournaalpostAfspraakInput!]!) {
+                        createJournaalpostAfspraak(input:$input) {
+                            ok
+                            journaalposten {
+                            id
+                            afspraak { id }
+                            transaction { id }
+                            isAutomatischGeboekt
+                            }
+                        }
+                    }""",
+                "variables": {"input": [{"transactionId": 35, "afspraakId": 12, "isAutomatischGeboekt": False}, ]},
+            },
+            content_type="application/json",
+        )
+
+        assert adapters["afspraken"].call_count == 0
+        assert adapters["afspraken_post"].call_count == 0
+        assert adapters["transacties"].call_count == 1
+        assert adapters["rekeningen"].call_count == 1
+        assert adapters["transacties_update"].call_count == 0
+        assert adapters["grootboekrekeningen"].call_count == 0
+        assert adapters["rubrieken"].call_count == 0
+        assert adapters["journaalposten"].call_count == 0
+        assert adapters["journaalposten_get"].call_count == 0
+        assert adapters["journaalposten_get_ids"].call_count == 0
+        assert adapters["alarmen_get"].call_count == 0
+        assert adapters["active_alarmen_get"].call_count == 0
+        assert adapters["alarmen_post"].call_count == 0
+        assert adapters["alarmen_update"].call_count == 0
+        assert adapters["signalen_post"].call_count == 0
+
+        assert response.json == {
+            "data": {"createJournaalpostAfspraak": None},
+            "errors": [
+                {
+                    "locations": [{"column": 25, "line": 3}],
+                    "message": "(some) transactions have unknown ibans ['NLTEST1234567805']",
                     "path": ["createJournaalpostAfspraak"],
                 }
             ],
@@ -523,6 +597,7 @@ def test_create_journaalpost_per_afspraak(client, mocker):
         assert adapters["afspraken"].call_count == 3
         assert adapters["afspraken_post"].call_count == 0
         assert adapters["transacties"].call_count == 3
+        assert adapters["rekeningen"].call_count == 1
         assert adapters["transacties_update"].call_count == 1
         assert adapters["grootboekrekeningen"].call_count == 0
         assert adapters["rubrieken"].call_count == 1
@@ -587,6 +662,7 @@ def test_create_journaalpost_automatically_evaluate_alarms_no_signal_created(cli
         assert adapters["afspraken"].call_count == 3
         assert adapters["afspraken_post"].call_count == 1
         assert adapters["transacties"].call_count == 3
+        assert adapters["rekeningen"].call_count == 1
         assert adapters["transacties_update"].call_count == 1
         assert adapters["grootboekrekeningen"].call_count == 0
         assert adapters["rubrieken"].call_count == 1
@@ -644,6 +720,7 @@ def test_create_journaalpost_automatically_evaluate_alarms_signal_created(client
         assert adapters["afspraken"].call_count == 3
         assert adapters["afspraken_post"].call_count == 1
         assert adapters["transacties"].call_count == 3
+        assert adapters["rekeningen"].call_count == 1
         assert adapters["transacties_update"].call_count == 1
         assert adapters["grootboekrekeningen"].call_count == 0
         assert adapters["rubrieken"].call_count == 1

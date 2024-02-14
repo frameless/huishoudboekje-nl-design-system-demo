@@ -40,7 +40,7 @@ class OverviewController():
 
         for transaction in transactions_info:
             transaction.update({"rekening": {
-                                    "rekeninghouder": rekeningen[transaction["tegen_rekening"]]
+                                    "rekeninghouder": rekeningen.get(transaction["tegen_rekening"], None)
                                 }})
 
         saldos = self.__get_saldos(start, end, burger_ids)

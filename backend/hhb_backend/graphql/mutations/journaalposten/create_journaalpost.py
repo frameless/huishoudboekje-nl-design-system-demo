@@ -50,6 +50,14 @@ class CreateJournaalpostAfspraak(graphene.Mutation):
         transactions = hhb_dataloader().bank_transactions.load(transaction_ids)
         if len(transactions) != len(transaction_ids):
             raise GraphQLError("(some) transactions not found ")
+        
+        ibans = [t.tegen_rekening for t in transactions]
+
+        rekeningen = hhb_dataloader().rekeningen.by_ibans(ibans)
+        if len(transactions) != len(rekeningen):
+            rekening_ibans = [r.iban for r in rekeningen]
+            unknown_ibans = [iban for iban in ibans if iban not in rekening_ibans]
+            raise GraphQLError(f"(some) transactions have unknown ibans {unknown_ibans}")
 
         previous = hhb_dataloader().journaalposten.by_transactions(transaction_ids)
         if previous:
