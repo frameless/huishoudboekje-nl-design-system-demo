@@ -8,7 +8,7 @@ forwarding_pid=$!
 echo "Installing..."
 npm ci
 echo "Executing tests..."
-npx cypress run --env baseUrl=$APP_HOST
+npx cypress run --config baseUrl=$APP_HOST
 cypress_exit_code=$?
 
 # Stop port forwarding
