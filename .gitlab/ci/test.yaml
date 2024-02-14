@@ -20,9 +20,7 @@ cypress-tests:
   script:
     - wget -O /usr/local/bin/kubectl https://storage.googleapis.com/kubernetes-release/release/v1.22.2/bin/linux/amd64/kubectl && chmod +x /usr/local/bin/kubectl && kubectl version --client
     - kubectl config use-context commonground/huishoudboekje/app-new:hhb-development
-    - kubectl port-forward deployment/hhb-database 5432:5432 --namespace=$NAMESPACE
-    - npm ci 
-    - npx cypress run --env baseUrl=$APP_HOST
+    - sh cypress/scripts/pipeline-execution.sh
   when: manual
 
 

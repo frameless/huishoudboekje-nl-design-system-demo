@@ -4,10 +4,10 @@
 kubectl port-forward deployment/hhb-database 5432:5432 --namespace=$NAMESPACE &
 forwarding_pid=$!
 
-# Task you want to perform while port forwarding is active
-echo "Performing some task..."
+echo "Installing..."
 npm ci
-npm start & 
+
+echo "Executing tests..."
 npx cypress run --env baseUrl=$APP_HOST,
 
 # Stop port forwarding
