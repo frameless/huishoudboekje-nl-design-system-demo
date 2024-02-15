@@ -20,7 +20,7 @@ async function setupNodeEvents(on, config) {
   );
 
   on("task", {
-      dbQuery:(query)=> require("cypress-postgres")(query.query,query.connection)
+      dbQuery:(query)=> require("cypress-postgres-10v-compatibility")(query.query,query.connection)
   });
 
   // Make sure to return the config object as it might have been modified by the plugin.
