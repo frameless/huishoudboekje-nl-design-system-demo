@@ -26,22 +26,6 @@ const connectionSignal =
   "port": Cypress.config().databasePort
 };
 
-// Before each test, run this
-beforeEach(() => {
-
-// Clean up
-  // Truncate alarms
-  cy.task("dbQuery", {"query":`TRUNCATE TABLE public."Alarm"`,"connection":connectionAlarm}).then(queryResponse => {
-    cy.log(queryResponse)
-  });
-
-  // Truncate signals
-  cy.task("dbQuery", {"query":`TRUNCATE TABLE public."Signal"`,"connection":connectionSignal}).then(queryResponse => {
-    cy.log(queryResponse)
-  });
-
-});
-
 //#region Scenario: delete alarm
 
 // When('I view the "Agreement" page')

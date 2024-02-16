@@ -1,6 +1,6 @@
 // cypress/support/step_definitions/Alarms/set-alarm-availability.js
 
-import { Given, When, Then } from "@badeball/cypress-cucumber-preprocessor";
+import { Given, When, Then, BeforeStep, Before, BeforeAll } from "@badeball/cypress-cucumber-preprocessor";
 
 const header = {
   'content-type': 'application/json',
@@ -25,31 +25,6 @@ const connectionSignal =
   "password": Cypress.config().databaseSignalPassword,
   "port": Cypress.config().databasePort
 };
-
-// Before *all* tests, run this (so this runs once)
-before(() => {
-
-// Clean up
-  // Truncate alarms
-  cy.task("dbQuery", {"query":`TRUNCATE TABLE public."Alarm"`,"connection":connectionAlarm}).then(queryResponse => {
-    cy.log(queryResponse)
-    });
-
-  // Truncate signals
-  cy.task("dbQuery", {"query":`TRUNCATE TABLE public."Signal"`,"connection":connectionSignal}).then(queryResponse => {
-    cy.log(queryResponse)
-    });
-
-});
-
-// Before *each* test, run this (so this runs equal to the amount of tests)
-beforeEach(() => {
-
-  // If not on localhost, log out of application
-
-  // If not on localhost, log into application
-  
-  });
 
 //#region Scenario: toggle alarm to disabled
 
@@ -182,7 +157,7 @@ Then('the alarm availability is "Enabled"', () => {
 
   // Assert that the alarm availability is displayed
   cy.get('input[type="checkbox"]')
-  cy.get('label[data-checked=""]')
+  cy.get('label[data-checked]')
     .should('be.visible')
 
   // Check success message
@@ -256,7 +231,7 @@ When('I click the "Disable alarm" button', () => {
 
   // Assert that the alarm availability is displayed
   cy.get('input[type="checkbox"]')
-  cy.get('label[data-checked=""]')
+  cy.get('label[data-checked]')
     .should('be.visible')
     .click()
   cy.waitForReact()
@@ -334,12 +309,12 @@ Then('the alarm status is "Disabled"', () => {
 
   // Assert that the alarm is toggled to disabled after click
   cy.get('input[type="checkbox"]')
-  cy.get('label[data-checked=""]')
+  cy.get('label[data-checked]')
     .should('be.visible')
     .click()
   cy.waitForReact()
   cy.get('input[type="checkbox"]')
-  cy.get('label[data-checked=""]')
+  cy.get('label[data-checked]')
     .should('not.exist')
 
   // Check success message
@@ -423,14 +398,14 @@ Then('the alarm status is "Disabled"', () => {
     
     // Toggle the alarm to be disabled
     cy.get('input[type="checkbox"]')
-    cy.get('label[data-checked=""]')
+    cy.get('label[data-checked]')
       .should('be.visible')
       .click()
     cy.waitForReact()
 
     // Assert that the alarm is disabled
     cy.get('input[type="checkbox"]')
-    cy.get('label[data-checked=""]')
+    cy.get('label[data-checked]')
       .should('not.exist')
   
     // Check success message
@@ -502,19 +477,19 @@ Then('the alarm status is "Disabled"', () => {
     cy.get('.chakra-modal__footer')
       .should('not.exist')
   
-    // Click the alarm toggle
-    cy.get('label[data-checked=""]')
-      .should('not.exist')
-      cy.get('label[class^="chakra-switch"]')
-      .click()
-    cy.waitForReact()
-    cy.get('input[type="checkbox"]')
-      .should('be.visible')
-  
     // Check success message
     cy.get('[data-status="success"]')
       .should('be.visible')
     cy.contains('Het alarm is opgeslagen')
+      
+    // Click the alarm toggle
+    cy.get('label[data-checked]')
+      .should('be.visible')
+    cy.get('label[class^="chakra-switch"]')
+      .click()
+    cy.waitForReact()
+    cy.get('input[type="checkbox"]')
+      .should('be.visible')
   
     // Clean up alarm
     cy.get('button[aria-label="Verwijderen"]')
@@ -582,12 +557,12 @@ Then('the alarm status is "Disabled"', () => {
   
     // Assert that the alarm is toggled to disabled after click
     cy.get('input[type="checkbox"]')
-    cy.get('label[data-checked=""]')
+    cy.get('label[data-checked]')
       .should('be.visible')
       .click()
     cy.waitForReact()
     cy.get('input[type="checkbox"]')
-    cy.get('label[data-checked=""]')
+    cy.get('label[data-checked]')
       .should('not.exist')
   
     // Check success message
