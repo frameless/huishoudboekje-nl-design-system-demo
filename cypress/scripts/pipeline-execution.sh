@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Start port forwarding
-kubectl port-forward deployment/hhb-database 5432:5432 --namespace=$NAMESPACE &
+kubectl port-forward service/hhb-database 5432:5432 -v=8 --namespace=$NAMESPACE &
 forwarding_pid=$!
 
 #running cypress tests
