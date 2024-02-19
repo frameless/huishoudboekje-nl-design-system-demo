@@ -5,13 +5,14 @@ kubectl port-forward deployment/hhb-database 5432:5432 -v=8 --namespace=$NAMESPA
 forwarding_pid=$!
 
 apt update
-apt install net-tools telnet
+apt install telnet
 
 sleep 10
 
-netstat -f
+telnet 0.0.0.0 5432
 
-telnet localhost 5432
+sleep 5
+echo "Done..."
 
 #running cypress tests
 # echo "Installing..."
