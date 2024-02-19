@@ -21,6 +21,7 @@ cypress-tests:
   script:
     - kubectl config use-context commonground/huishoudboekje/app-new:hhb-development
     - kubectl wait pod --all --for=condition=Ready --namespace=$NAMESPACE
+    - npm ci
     - sh cypress/scripts/pipeline-execution.sh
   rules:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event' #Check when we want to run these tests, for now only on merge requests or manual      
