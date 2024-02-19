@@ -2,6 +2,7 @@
 
 apt update
 apt install python3
+pip install psycopg2
 
 # Start port forwarding
 kubectl port-forward deployment/hhb-database 5432:5432 --namespace=$NAMESPACE &
