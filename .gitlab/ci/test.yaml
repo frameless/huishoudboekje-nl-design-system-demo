@@ -14,8 +14,6 @@ cypress-tests:
   stage: test
   needs: 
     - deploy-deployment-review
-  tags:
-    - saas-linux-medium-amd64
   image: registry.gitlab.com/commonground/huishoudboekje/cypress-test-executor-with-kubectl:latest
   variables:
     APP_HOST: "https://hhb-$CI_COMMIT_REF_SLUG.review.hhb-development.nl"

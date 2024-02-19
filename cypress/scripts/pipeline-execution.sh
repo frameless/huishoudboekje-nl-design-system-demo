@@ -2,6 +2,8 @@
 
 apt update
 apt install python3
+apt install python3-pip
+
 pip install psycopg2
 
 # Start port forwarding
@@ -10,7 +12,7 @@ forwarding_pid=$!
 
 sleep 5
 
-python cypress/scripts/test.py
+python3 cypress/scripts/test.py
 
 #running cypress tests
 # echo "Executing tests..."
