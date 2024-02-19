@@ -1,10 +1,10 @@
 #!/bin/bash
 
 # Start port forwarding
-# kubectl port-forward deployment/hhb-database 5432:5432 --namespace=$NAMESPACE &
-# forwarding_pid=$!
+kubectl port-forward deployment/hhb-database 5432:5432 --namespace=$NAMESPACE &
+forwarding_pid=$!
 
-# sleep 5
+sleep 5
 
 #running cypress tests
 echo "Executing tests..."
