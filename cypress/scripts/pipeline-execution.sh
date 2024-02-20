@@ -1,12 +1,18 @@
 #!/bin/bash
 
+POD_NAME=$(kubectl get pods --selector=job-name=cypress-tests --output=jsonpath='{.items[*].metadata.name}' --namespace=$NAMESPACE)
+
+kubectl cp execute_query.sh $POD_NAME:/tmp/execute_query.sh
+
+kubectl exec -it $POD_NAME -- bash /tmp/execute_query.sh "SELECT * FROM "Alarm";"
+
 # Start port forwarding
-kubectl port-forward --address 0.0.0.0 deployment/hhb-database 1234:5432 -v=8 --namespace=$NAMESPACE &
-forwarding_pid=$!
+# kubectl port-forward --address 0.0.0.0 deployment/hhb-database 1234:5432 -v=8 --namespace=$NAMESPACE &
+# forwarding_pid=$!
 
-sleep 5
+# sleep 5
 
-pg_isready -h 0.0.0.0 -p 1234
+# pg_isready -h 0.0.0.0 -p 1234
 
 #running cypress tests
 # echo "Installing..."
@@ -15,9 +21,9 @@ pg_isready -h 0.0.0.0 -p 1234
 # cypress_exit_code=$?
 
 # Stop port forwarding
-kill $forwarding_pid
-wait $forwarding_pid 2>/dev/null
-echo "Port forwarding stopped."
+# kill $forwarding_pid
+# wait $forwarding_pid 2>/dev/null
+# echo "Port forwarding stopped."
 
 # Exit with the exit code of Cypress tests
-exit $cypress_exit_code
+# exit $cypress_exit_code
