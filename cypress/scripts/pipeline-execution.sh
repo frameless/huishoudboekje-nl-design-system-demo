@@ -1,16 +1,11 @@
 #!/bin/bash
 
-# Execute query
 
+POD_NAME=$(kubectl get pods --selector=job-name=hhb-database --output=jsonpath='{.items[*].metadata.name}' --namespace=$NAMESPACE)
 
-POD_NAME=$(kubectl get pods --selector=job-name=cypress-tests --output=jsonpath='{.items[*].metadata.name}' --namespace=$NAMESPACE)
+kubectl cp ./cypress/scripts/execute_query.sh $POD_NAME:/tmp/execute_query.sh --namespace=$NAMESPACE
 
-kubectl exec -it $POD_NAME -- bash -c 'PGPASSWORD="postgres" psql -h "0.0.0.0" -p "5432" -U "postgres" -d "postgres" -c "SELECT * FROM \"Alarm\";"'
-
-
-# kubectl cp ./cypress/scripts/execute_query.sh $POD_NAME:/tmp/execute_query.sh --namespace=$NAMESPACE
-
-# kubectl exec -it $POD_NAME -- bash /tmp/execute_query.sh "SELECT * FROM "Alarm";" --namespace=$NAMESPACE
+kubectl exec -it $POD_NAME -- bash /tmp/execute_query.sh "SELECT * FROM "Alarm";" --namespace=$NAMESPACE
 
 # Start port forwarding
 # kubectl port-forward --address 0.0.0.0 deployment/hhb-database 1234:5432 -v=8 --namespace=$NAMESPACE &
