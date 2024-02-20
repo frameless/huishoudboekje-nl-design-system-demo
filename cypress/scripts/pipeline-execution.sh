@@ -1,7 +1,7 @@
 #!/bin/bash
 
 
-POD_NAME=$(kubectl get pods --selector=job-name=hhb-database --output=jsonpath='{.items[*].metadata.name}' --namespace=$NAMESPACE)
+POD_NAME=$(kubectl get pods --selector=name=hhb-database --output=jsonpath='{.items[*].metadata.name}' --namespace=$NAMESPACE)
 
 
 echo "Installing..  {$POD_NAME}."
