@@ -3,6 +3,8 @@
 
 POD_NAME=$(kubectl get pods --selector=name=hhb-database --output=jsonpath='{.items[*].metadata.name}' --namespace=$NAMESPACE)
 
+curl -v telnet://127.0.0.1:8080
+
 
 kubectl get pods $POD_NAME -o jsonpath='{.spec.containers[*].name}' --namespace=$NAMESPACE
 
