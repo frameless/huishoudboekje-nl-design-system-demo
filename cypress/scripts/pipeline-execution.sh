@@ -4,11 +4,15 @@
 POD_NAME=$(kubectl get pods --selector=name=hhb-database --output=jsonpath='{.items[*].metadata.name}' --namespace=$NAMESPACE)
 
 
-echo "Installing..  {$POD_NAME}."
+echo "pod..  {$POD_NAME}."
+echo "copy..."
 
 kubectl cp ./cypress/scripts/execute_query.sh $POD_NAME:/tmp/execute_query.sh --namespace=$NAMESPACE
 
+echo "exec..."
+
 kubectl exec -it $POD_NAME -- bash /tmp/execute_query.sh "SELECT * FROM "Alarm";" --namespace=$NAMESPACE
+echo "done..."
 
 # Start port forwarding
 # kubectl port-forward --address 0.0.0.0 deployment/hhb-database 1234:5432 -v=8 --namespace=$NAMESPACE &
