@@ -31,6 +31,8 @@ forwarding_pid=$!
 
 sleep 5
 
+ss -tnl
+
 # running cypress tests
 echo "Installing..."
 echo "Executing tests..."
