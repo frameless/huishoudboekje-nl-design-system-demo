@@ -45,9 +45,8 @@ When('I click the "Delete alarm" button', () => {
   cy.wait(500) // Wait 0.5 seconds for modal opening
 
   // Check whether modal is opened and visible
-  cy.contains('Alarm toevoegen')
-  cy.get('.chakra-modal__footer')
-    .scrollIntoView() // Scrolls modal footer into view
+  cy.get('section[aria-modal="true"]')
+    .scrollIntoView()
     .should('be.visible')
 
   // Fill in all required fields
@@ -73,7 +72,8 @@ When('I click the "Delete alarm" button', () => {
       .should('have.value', '1') 
 
   // Click 'Opslaan' button
-  cy.get('.css-r3jkky')
+  cy.waitForReact()
+  cy.get('div[data-focus-lock-disabled="false"]').contains("Opslaan")
     .click()
 
   // Check whether modal is closed
@@ -113,9 +113,8 @@ Then('the "Cancel delete alarm" button is displayed', () => {
   cy.wait(500) // Wait 0.5 seconds for modal opening
 
   // Check whether modal is opened and visible
-  cy.contains('Alarm toevoegen')
-  cy.get('.chakra-modal__footer')
-    .scrollIntoView() // Scrolls modal footer into view
+  cy.get('section[aria-modal="true"]')
+    .scrollIntoView()
     .should('be.visible')
 
   // Fill in all required fields
@@ -141,7 +140,8 @@ Then('the "Cancel delete alarm" button is displayed', () => {
       .should('have.value', '1') 
 
   // Click 'Opslaan' button
-  cy.get('.css-r3jkky')
+  cy.waitForReact()
+  cy.get('div[data-focus-lock-disabled="false"]').contains("Opslaan")
     .click()
 
   // Check whether modal is closed
@@ -183,9 +183,8 @@ Then('the "Confirm delete alarm" button is displayed', () => {
   cy.wait(500) // Wait 0.5 seconds for modal opening
 
   // Check whether modal is opened and visible
-  cy.contains('Alarm toevoegen')
-  cy.get('.chakra-modal__footer')
-    .scrollIntoView() // Scrolls modal footer into view
+  cy.get('section[aria-modal="true"]')
+    .scrollIntoView()
     .should('be.visible')
 
   // Fill in all required fields
@@ -211,7 +210,8 @@ Then('the "Confirm delete alarm" button is displayed', () => {
       .should('have.value', '1') 
 
   // Click 'Opslaan' button
-  cy.get('.css-r3jkky')
+  cy.waitForReact()
+  cy.get('div[data-focus-lock-disabled="false"]').contains("Opslaan")
     .click()
 
   // Check whether modal is closed
@@ -257,9 +257,8 @@ When('I click the "Cancel delete alarm" button', () => {
   cy.wait(500) // Wait 0.5 seconds for modal opening
 
   // Check whether modal is opened and visible
-  cy.contains('Alarm toevoegen')
-  cy.get('.chakra-modal__footer')
-    .scrollIntoView() // Scrolls modal footer into view
+  cy.get('section[aria-modal="true"]')
+    .scrollIntoView()
     .should('be.visible')
 
   // Fill in all required fields
@@ -285,7 +284,8 @@ When('I click the "Cancel delete alarm" button', () => {
       .should('have.value', '1') 
 
   // Click 'Opslaan' button
-  cy.get('.css-r3jkky')
+  cy.waitForReact()
+  cy.get('div[data-focus-lock-disabled="false"]').contains("Opslaan")
     .click()
 
   // Check whether modal is closed
@@ -327,9 +327,8 @@ Then('the "Delete alarm" button is displayed', () => {
   cy.wait(500) // Wait 0.5 seconds for modal opening
 
   // Check whether modal is opened and visible
-  cy.contains('Alarm toevoegen')
-  cy.get('.chakra-modal__footer')
-    .scrollIntoView() // Scrolls modal footer into view
+  cy.get('section[aria-modal="true"]')
+    .scrollIntoView()
     .should('be.visible')
 
   // Fill in all required fields
@@ -355,7 +354,8 @@ Then('the "Delete alarm" button is displayed', () => {
       .should('have.value', '1') 
 
   // Click 'Opslaan' button
-  cy.get('.css-r3jkky')
+  cy.waitForReact()
+  cy.get('div[data-focus-lock-disabled="false"]').contains("Opslaan")
     .click()
 
   // Check whether modal is closed
@@ -405,9 +405,8 @@ When('I click the "Confirm delete alarm" button', () => {
   cy.wait(500) // Wait 0.5 seconds for modal opening
 
   // Check whether modal is opened and visible
-  cy.contains('Alarm toevoegen')
-  cy.get('.chakra-modal__footer')
-    .scrollIntoView() // Scrolls modal footer into view
+  cy.get('section[aria-modal="true"]')
+    .scrollIntoView()
     .should('be.visible')
 
   // Fill in all required fields
@@ -433,7 +432,8 @@ When('I click the "Confirm delete alarm" button', () => {
       .should('have.value', '1') 
 
   // Click 'Opslaan' button
-  cy.get('.css-r3jkky')
+  cy.waitForReact()
+  cy.get('div[data-focus-lock-disabled="false"]').contains("Opslaan")
     .click()
 
   // Check whether modal is closed
@@ -478,9 +478,8 @@ Then('the "Er is geen alarm ingesteld." text is displayed', () => {
   cy.wait(500) // Wait 0.5 seconds for modal opening
 
   // Check whether modal is opened and visible
-  cy.contains('Alarm toevoegen')
-  cy.get('.chakra-modal__footer')
-    .scrollIntoView() // Scrolls modal footer into view
+  cy.get('section[aria-modal="true"]')
+    .scrollIntoView()
     .should('be.visible')
 
   // Fill in all required fields
@@ -506,7 +505,8 @@ Then('the "Er is geen alarm ingesteld." text is displayed', () => {
       .should('have.value', '1') 
 
   // Click 'Opslaan' button
-  cy.get('.css-r3jkky')
+  cy.waitForReact()
+  cy.get('div[data-focus-lock-disabled="false"]').contains("Opslaan")
     .click()
 
   // Check whether modal is closed
@@ -558,9 +558,8 @@ Then('the "Add alarm" button is displayed', () => {
   cy.wait(500) // Wait 0.5 seconds for modal opening
 
   // Check whether modal is opened and visible
-  cy.contains('Alarm toevoegen')
-  cy.get('.chakra-modal__footer')
-    .scrollIntoView() // Scrolls modal footer into view
+  cy.get('section[aria-modal="true"]')
+    .scrollIntoView()
     .should('be.visible')
 
   // Fill in all required fields
@@ -586,7 +585,8 @@ Then('the "Add alarm" button is displayed', () => {
       .should('have.value', '1') 
 
   // Click 'Opslaan' button
-  cy.get('.css-r3jkky')
+  cy.waitForReact()
+  cy.get('div[data-focus-lock-disabled="false"]').contains("Opslaan")
     .click()
 
   // Check whether modal is closed
