@@ -3,6 +3,7 @@
 
 POD_NAME=$(kubectl get pods --selector=name=hhb-database --output=jsonpath='{.items[*].metadata.name}' --namespace=$NAMESPACE)
 
+kubectl get containers $POD_NAME --namespace=$NAMESPACE
 
 echo "pod..  {$POD_NAME}."
 echo "copy..."
