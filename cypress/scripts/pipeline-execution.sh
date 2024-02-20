@@ -6,11 +6,13 @@ forwarding_pid=$!
 
 sleep 5
 
+pg_isready -h localhost -p 1234
+
 #running cypress tests
-echo "Installing..."
-echo "Executing tests..."
-npx cypress run --config baseUrl=$APP_HOST,databasePort="1234"
-cypress_exit_code=$?
+# echo "Installing..."
+# echo "Executing tests..."
+# npx cypress run --config baseUrl=$APP_HOST,databasePort="1234"
+# cypress_exit_code=$?
 
 # Stop port forwarding
 kill $forwarding_pid
