@@ -1,13 +1,15 @@
 #!/bin/bash
 
 # Start port forwarding
-kubectl port-forward deployment/hhb-database 5432:1234  --namespace=$NAMESPACE &
+kubectl port-forward deployment/hhb-database 1234:5432  --namespace=$NAMESPACE &
 forwarding_pid=$!
+
+sleep 5
 
 #running cypress tests
 echo "Installing..."
 echo "Executing tests..."
-npx cypress run --config baseUrl=$APP_HOST,databasePort=1234 
+npx cypress run --config baseUrl=$APP_HOST,databasePort="1234"
 cypress_exit_code=$?
 
 # Stop port forwarding
