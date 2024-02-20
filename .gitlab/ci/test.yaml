@@ -11,8 +11,8 @@
 
 cypress-tests:
   stage: test
-  needs: 
-    - deploy-deployment-review
+  # needs: 
+  #   - deploy-deployment-review
   image: registry.gitlab.com/commonground/huishoudboekje/cypress-test-executor-with-kubectl:latest
   variables:
     APP_HOST: "https://hhb-$CI_COMMIT_REF_SLUG.review.hhb-development.nl"
@@ -23,7 +23,7 @@ cypress-tests:
     - sleep 5
     - ss -tnl
     - netstat -tuln | grep ':5432'
-    - telnet localhost 5432
+    - telnet localhost 5432 &
     - ss -tnl
     # - kubectl wait pod --all --for=condition=Ready --namespace=$NAMESPACE
     # - npm ci
@@ -31,9 +31,9 @@ cypress-tests:
     # - apt install -y postgresql-client
     # - sh cypress/scripts/pipeline-execution.sh
   rules:
-    - if: $CI_PIPELINE_SOURCE == 'merge_request_event' #Check when we want to run these tests, for now only on merge requests or manual      
-      when: delayed
-      start_in: 2 minutes
+    # - if: $CI_PIPELINE_SOURCE == 'merge_request_event' #Check when we want to run these tests, for now only on merge requests or manual      
+    #   when: delayed
+    #   start_in: 2 minutes
     - when: manual     
 
 
