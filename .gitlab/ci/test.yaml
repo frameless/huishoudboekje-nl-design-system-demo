@@ -25,7 +25,7 @@ cypress-tests:
     - sleep 5
     - ss -tnl
     - netstat -tuln | grep ':5432'
-    - psql -h localhost -U postgres -d alarmenservice -c "SELECT * FROM \"Alarm\";"
+    - psql -h 127.0.0.1 -U postgres -d alarmenservice -c "SELECT * FROM \"Alarm\";"
     - ss -tnl
     - curl ifconfig.me
 
