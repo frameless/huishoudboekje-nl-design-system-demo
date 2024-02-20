@@ -31,6 +31,8 @@ forwarding_pid=$!
 
 sleep 5
 
+
+echo "ss"
 ss -tnl
 
 # running cypress tests

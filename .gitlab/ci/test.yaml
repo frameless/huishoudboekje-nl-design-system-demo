@@ -19,7 +19,7 @@ cypress-tests:
     NAMESPACE: "hhb-$CI_COMMIT_REF_SLUG"
   script:
     - kubectl config use-context commonground/huishoudboekje/app-new:hhb-development
-    - kubectl port-forward  deployment/hhb-database 5432:5432 -v=8 --namespace=$NAMESPACE
+    - kubectl port-forward  deployment/hhb-database 5432:5432 -v=8 --namespace=$NAMESPACE &
     - ss -tnl
     - netstat -tuln | grep ':5432'
     # - kubectl wait pod --all --for=condition=Ready --namespace=$NAMESPACE
