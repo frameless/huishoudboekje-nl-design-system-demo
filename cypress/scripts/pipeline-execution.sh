@@ -1,12 +1,12 @@
 #!/bin/bash
 
 # Start port forwarding
-kubectl port-forward deployment/hhb-database 1234:5432  --namespace=$NAMESPACE &
+kubectl port-forward --address 0.0.0.0 deployment/hhb-database 1234:5432  --namespace=$NAMESPACE &
 forwarding_pid=$!
 
 sleep 5
 
-pg_isready -h localhost -p 1234
+pg_isready -h 0.0.0.0 -p 1234
 
 #running cypress tests
 # echo "Installing..."
