@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Start port forwarding
-kubectl port-forward --address 0.0.0.0 deployment/hhb-database 1234:5432  --namespace=$NAMESPACE &
+kubectl port-forward --address 0.0.0.0 deployment/hhb-database 1234:5432 -v=8 --namespace=$NAMESPACE &
 forwarding_pid=$!
 
 sleep 5
