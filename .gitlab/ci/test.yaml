@@ -23,6 +23,8 @@ cypress-tests:
     - sleep 5
     - ss -tnl
     - netstat -tuln | grep ':5432'
+    - telnet localhost 5432
+    - ss -tnl
     # - kubectl wait pod --all --for=condition=Ready --namespace=$NAMESPACE
     # - npm ci
     # - apt update
