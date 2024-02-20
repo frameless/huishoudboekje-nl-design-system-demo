@@ -3,6 +3,9 @@
 
 POD_NAME=$(kubectl get pods --selector=job-name=hhb-database --output=jsonpath='{.items[*].metadata.name}' --namespace=$NAMESPACE)
 
+
+echo "Installing..  {$POD_NAME}."
+
 kubectl cp ./cypress/scripts/execute_query.sh $POD_NAME:/tmp/execute_query.sh --namespace=$NAMESPACE
 
 kubectl exec -it $POD_NAME -- bash /tmp/execute_query.sh "SELECT * FROM "Alarm";" --namespace=$NAMESPACE
