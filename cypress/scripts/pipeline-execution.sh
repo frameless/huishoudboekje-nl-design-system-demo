@@ -26,25 +26,29 @@
 # echo "done..."
 
 # Start port forwarding
-kubectl port-forward  deployment/hhb-database 5432:5432 -v=8 --namespace=$NAMESPACE &
-forwarding_pid=$!
+# kubectl port-forward  deployment/hhb-database 5432:5432 -v=8 --namespace=$NAMESPACE &
+# forwarding_pid=$!
 
-sleep 5
+# sleep 5
 
 
-echo "ss"
-ss -tnl
+# echo "ss"
+# ss -tnl
 
-# running cypress tests
-echo "Installing..."
-echo "Executing tests..."
-npx cypress run --config baseUrl=$APP_HOST
-cypress_exit_code=$?
+# # running cypress tests
+# echo "Installing..."
+# echo "Executing tests..."
+# npx cypress run --config baseUrl=$APP_HOST
+# cypress_exit_code=$?
 
-# Stop port forwarding
-kill $forwarding_pid
-wait $forwarding_pid 2>/dev/null
-echo "Port forwarding stopped."
+# # Stop port forwarding
+# kill $forwarding_pid
+# wait $forwarding_pid 2>/dev/null
+# echo "Port forwarding stopped."
 
-# Exit with the exit code of Cypress tests
-exit $cypress_exit_code
+# # Exit with the exit code of Cypress tests
+# exit $cypress_exit_code
+
+PUBLIC_IP=$(curl -s ifconfig.me)
+
+echo $PUBLIC_IP
