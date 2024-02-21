@@ -58,6 +58,10 @@ echo "Adding temporary database ingress"
 kubectl apply -f cypress/scripts/extra-database-service.yaml  --namespace=$NAMESPACE
 sleep 5
 
+echo "Getting db host..."
+DB_DATABASE_HOSTPUBLIC_IP=$(kubectl get svc hhb-database-public-service -o=jsonpath='{.status.loadBalancer.ingress[0].ip}')
+
+
 echo "Executing"
 psql -h ${DATABASE_HOST} -U postgres -d alarmenservice -c "SELECT * FROM \"Alarm\";"
 sleep 5
