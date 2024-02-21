@@ -52,7 +52,6 @@
         DOCKERATTRIBUTES: "--file=./services/rapportage_service/Dockerfile services"
 
 build-databasemesh-image:
-  <<: *retry
   stage: build
   image: docker:24.0.2-git
   needs: [ ]
