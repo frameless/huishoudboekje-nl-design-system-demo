@@ -49,6 +49,18 @@
 # # Exit with the exit code of Cypress tests
 # exit $cypress_exit_code
 
-PUBLIC_IP=$(curl -s ifconfig.me)
+export PUBLIC_IP=$(curl -s ifconfig.me)
 
-echo $PUBLIC_IP
+echo "Applying envvars."
+envsubst < cypress/scripts/sample.database-ingress.yaml > cypress/scripts/database-ingress.yaml
+
+echo "Adding temporary database ingress"
+kubectl apply -f cypress/scripts/database-ingress.yaml  --namespace=$NAMESPACE
+sleep 5
+
+echo "Executing"
+psql -h ${DATABASE_HOST} -U postgres -d alarmenservice -c "SELECT * FROM \"Alarm\";"
+sleep 5
+
+echo "Deleting temporary database ingress"
+kubectl delete -f cypress/scripts/database-ingress.yaml  --namespace=$NAMESPACE
