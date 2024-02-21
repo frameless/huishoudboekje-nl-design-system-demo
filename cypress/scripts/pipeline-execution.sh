@@ -70,5 +70,5 @@ echo "Executing"
 psql -h $DATABASE_HOST -U postgres -d alarmenservice -c "SELECT * FROM \"Alarm\";"
 sleep 5
 
-echo "Deleting temporary database ingress"
-kubectl delete -f cypress/scripts/extra-database-service.yaml  --namespace=$NAMESPACE
+# echo "Deleting temporary database ingress"
+# kubectl delete -f cypress/scripts/extra-database-service.yaml  --namespace=$NAMESPACE
