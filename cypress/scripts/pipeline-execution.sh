@@ -59,7 +59,7 @@ kubectl apply -f cypress/scripts/extra-database-service.yaml  --namespace=$NAMES
 sleep 5
 
 echo "Getting db host..."
-DB_DATABASE_HOSTPUBLIC_IP=$(kubectl get svc hhb-database-public-service -o=jsonpath='{.status.loadBalancer.ingress[0].ip}')
+DATABASE_HOST=$(kubectl get svc hhb-database-public-service -o=jsonpath='{.status.loadBalancer.ingress[0].ip}')
 
 
 echo "Executing"
