@@ -62,7 +62,7 @@ echo "Getting db host..."
 DATABASE_HOST=$(kubectl get svc hhb-database-public-service -o=jsonpath='{.status.loadBalancer.ingress[0].ip}' --namespace=$NAMESPACE) 
 
 
-echo $DATABASE_HOST
+echo "host : $DATABASE_HOST"
 
 echo "Executing"
 psql -h $DATABASE_HOST -U postgres -d alarmenservice -c "SELECT * FROM \"Alarm\";"
