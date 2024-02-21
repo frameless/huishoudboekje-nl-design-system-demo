@@ -52,10 +52,10 @@
 export PUBLIC_IP=$(curl -s ifconfig.me)
 
 echo "Applying envvars."
-envsubst < cypress/scripts/sample.database-ingress.yaml > cypress/scripts/database-ingress.yaml
+envsubst < cypress/scripts/sample.extra-database-service.yaml > cypress/scripts/extra-database-service.yaml
 
 echo "Adding temporary database ingress"
-kubectl apply -f cypress/scripts/database-ingress.yaml  --namespace=$NAMESPACE
+kubectl apply -f cypress/scripts/extra-database-service.yaml  --namespace=$NAMESPACE
 sleep 5
 
 echo "Executing"
@@ -63,4 +63,4 @@ psql -h ${DATABASE_HOST} -U postgres -d alarmenservice -c "SELECT * FROM \"Alarm
 sleep 5
 
 echo "Deleting temporary database ingress"
-kubectl delete -f cypress/scripts/database-ingress.yaml  --namespace=$NAMESPACE
+kubectl delete -f cypress/scripts/extra-database-service.yaml  --namespace=$NAMESPACE
