@@ -49,26 +49,33 @@
 # # Exit with the exit code of Cypress tests
 # exit $cypress_exit_code
 
+cleanup() {
+    echo "Deleting temporary database mesh ingress..."
+    kubectl delete -f cypress/scripts/database-mesh-ingress.yaml  --namespace=$NAMESPACE
+}
+trap cleanup EXIT
+
+echo "Getting runner public ip..."
 export PUBLIC_IP=$(curl -s ifconfig.me)
 
-echo "Applying envvars."
-envsubst < cypress/scripts/sample.extra-database-service.yaml > cypress/scripts/extra-database-service.yaml
+echo "Applying envvars..."
+envsubst < cypress/scripts/sample.database-mesh-ingress.yaml > cypress/scripts/database-mesh-ingress.yaml
 
-echo "Adding temporary database ingress"
-kubectl apply -f cypress/scripts/extra-database-service.yaml  --namespace=$NAMESPACE
+echo "Adding temporary database mesh ingress"
+kubectl apply -f cypress/scripts/database-mesh-ingress.yaml --namespace=$NAMESPACE
 sleep 30
 
-kubectl get svc hhb-database-public-service --namespace=$NAMESPACE
+# echo "Installing..."
+# npm ci
 
-echo "Getting db host..."
-DATABASE_HOST=$(kubectl get svc hhb-database-public-service -o=jsonpath='{.status.loadBalancer.ingress[0].ip}' --namespace=$NAMESPACE) 
+# echo "Executing tests..."
+# npx cypress run --config baseUrl=$APP_HOST
+
+curl -X POST \
+  -H "Content-Type: application/json" \
+  -d '{"query": "mutation CreateAlarm { createAlarm(input: { alarm: { afspraakId: 12, id: \"testfrompipeline\", isActive: false, datumMargin: 20, bedrag: 1230, bedragMargin: 5, startDate: \"20-12-2023\" } }) { id isActive startDate }}" }' \
+  $DATABASE_HOST
 
 
-echo "host : $DATABASE_HOST"
 
-echo "Executing"
-psql -h $DATABASE_HOST -U postgres -d alarmenservice -c "SELECT * FROM \"Alarm\";"
-sleep 5
 
-# echo "Deleting temporary database ingress"
-# kubectl delete -f cypress/scripts/extra-database-service.yaml  --namespace=$NAMESPACE

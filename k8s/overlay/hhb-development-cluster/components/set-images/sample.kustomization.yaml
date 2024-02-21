@@ -43,3 +43,6 @@ images:
 - name: rapportageservice
   newName: ${IMAGE_REGISTRY}/rapportageservice
   newTag: ${IMAGE_TAG}
+- name: databasemesh
+  newName: ${IMAGE_REGISTRY}/databasemesh
+  newTag: ${IMAGE_TAG}

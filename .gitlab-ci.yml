@@ -14,7 +14,7 @@ variables:
   UNLEASH_OTAP: development
 
 include:
-# - "/.gitlab/ci/build.yaml"
-# - "/.gitlab/ci/deploy.yaml"
+- "/.gitlab/ci/build.yaml"
+- "/.gitlab/ci/deploy.yaml"
 - "/.gitlab/ci/test.yaml"
-# - "/.gitlab/ci/security.yaml"
+- "/.gitlab/ci/security.yaml"

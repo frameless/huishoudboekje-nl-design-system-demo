@@ -51,6 +51,28 @@
       - NAME: rapportageservice
         DOCKERATTRIBUTES: "--file=./services/rapportage_service/Dockerfile services"
 
+build-databasemesh-image:
+  <<: *retry
+  stage: build
+  image: docker:24.0.2-git
+  needs: [ ]
+  services:
+    - docker:24.0.2-dind
+  variables:
+    DOCKER_BUILDKIT: 1
+    BUILDKIT_INLINE_CACHE: 1
+    DOCKER_TLS_CERTDIR: "/certs"
+    CYPRESS_INSTALL_BINARY: "0"
+  script:
+    - export DOCKER_CONFIG=/tmp/docker-config-$CI_JOB_ID
+    - mkdir -p $DOCKER_CONFIG && echo $DOCKER_AUTH_CONFIG > $DOCKER_CONFIG/config.json
+    - echo "$CI_REGISTRY_PASSWORD" | docker login $CI_REGISTRY --username $CI_REGISTRY_USER --password-stdin
+    - docker build --build-arg BUILDKIT_INLINE_CACHE=$BUILDKIT_INLINE_CACHE --cache-from $CI_REGISTRY_IMAGE/databasemesh:$CI_COMMIT_REF_SLUG -t $CI_REGISTRY_IMAGE/databasemesh:$IMAGE_TAG -t $CI_REGISTRY_IMAGE/databasemesh:$CI_COMMIT_REF_SLUG --file=./databasemesh/dev.Dockerfile ./databasemesh
+    - docker push $CI_REGISTRY_IMAGE/databasemesh:$CI_COMMIT_REF_SLUG
+    - docker push $CI_REGISTRY_IMAGE/databasemesh:$IMAGE_TAG
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+
 # Build docker images with default tag ("branchName-commitSha").
 build-images-dev:
   <<: *build-docker-images
