@@ -56,7 +56,7 @@ envsubst < cypress/scripts/sample.extra-database-service.yaml > cypress/scripts/
 
 echo "Adding temporary database ingress"
 kubectl apply -f cypress/scripts/extra-database-service.yaml  --namespace=$NAMESPACE
-sleep 5
+kubectl wait --for=condition=Ready svc/hhb-database-public-service --timeout=5m  --namespace=$NAMESPACE
 
 kubectl get svc hhb-database-public-service --namespace=$NAMESPACE
 
