@@ -49,11 +49,11 @@
 # # Exit with the exit code of Cypress tests
 # exit $cypress_exit_code
 
-cleanup() {
-    echo "Deleting temporary database mesh ingress..."
-    kubectl delete -f cypress/scripts/database-mesh-ingress.yaml  --namespace=$NAMESPACE
-}
-trap cleanup EXIT
+# cleanup() {
+#     echo "Deleting temporary database mesh ingress..."
+#     kubectl delete -f cypress/scripts/database-mesh-ingress.yaml  --namespace=$NAMESPACE
+# }
+# trap cleanup EXIT
 
 echo "Getting runner public ip..."
 export PUBLIC_IP=$(curl -s ifconfig.me)

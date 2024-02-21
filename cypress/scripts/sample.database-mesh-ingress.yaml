@@ -4,6 +4,7 @@ metadata:
   name: hhb-database-mesh-ingress
   annotations:
     nginx.ingress.kubernetes.io/whitelist-source-range: "${PUBLIC_IP}/32"
+    cert-manager.io/cluster-issuer: letsencrypt-staging
   labels:
     name: hhb-database-mesh-ingress
 spec:
@@ -19,3 +20,7 @@ spec:
                 name: hhb-database-mesh
                 port:
                   number: 80
+  tls:
+    - hosts:
+        - database.${APP_HOST_NAME}
+      secretName: hhb-development-ingress-tls-secret
