@@ -56,8 +56,7 @@ Then('the "Create alarm form" is displayed', () => {
   
   // Check whether modal is opened and visible
   cy.get('section[aria-modal="true"]')
-  cy.get('.chakra-modal__footer')
-    .scrollIntoView() // Scrolls 'footer' into view
+    .scrollIntoView()
     .should('be.visible')
   
 });
@@ -76,11 +75,11 @@ Then('the recurrency is monthly', () => {
   cy.waitForReact(); // Wait 0.5 seconds for modal opening
   
   // Check whether modal is opened and visible
-  cy.contains('Alarm toevoegen')
-  cy.get('.chakra-modal__footer')
+  cy.get('section[aria-modal="true"]')
+    .scrollIntoView()
+    .should('be.visible')
 
   // Check recurrency
-  cy.get('.css-1y3f6ad > :nth-child(1) > .chakra-text')
   cy.contains('Elke maand')
   
 });
@@ -99,12 +98,13 @@ Then('the link "Meer opties" is displayed', () => {
   cy.wait(500) // Wait 0.5 seconds for modal opening
   
   // Check whether modal is opened and visible
-  cy.contains('Alarm toevoegen')
-  cy.get('.chakra-modal__footer')
+  cy.get('section[aria-modal="true"]')
+    .scrollIntoView()
+    .should('be.visible')
 
   // Check link 'Meer opties'
-  cy.get('.css-1jjjd9b > .css-1y3f6ad > :nth-child(2) > .chakra-button')
-  cy.contains('Meer opties')
+  cy.get('button')
+    .contains('Meer opties')
   
 });
 
@@ -122,8 +122,9 @@ Then('the start date is today', () => {
   cy.wait(500) // Wait 0.5 seconds for modal opening
   
   // Check whether modal is opened and visible
-  cy.contains('Alarm toevoegen')
-  cy.get('.chakra-modal__footer')
+  cy.get('section[aria-modal="true"]')
+    .scrollIntoView()
+    .should('be.visible')
 
   // Set date constants for comparison
   const dateNow = new Date().toLocaleDateString('nl-NL', {
@@ -152,8 +153,9 @@ Then('the day of the month is empty', () => {
   cy.wait(500) // Wait 0.5 seconds for modal opening
   
   // Check whether modal is opened and visible
-  cy.contains('Alarm toevoegen')
-  cy.get('.chakra-modal__footer')
+  cy.get('section[aria-modal="true"]')
+    .scrollIntoView()
+    .should('be.visible')
 
   // Check date field  
   cy.get('\#field\\-\\\:r17\\\:')
@@ -175,8 +177,9 @@ Then('the allowed deviation in days is empty', () => {
   cy.wait(500) // Wait 0.5 seconds for modal opening
   
   // Check whether modal is opened and visible
-  cy.contains('Alarm toevoegen')
-  cy.get('.chakra-modal__footer')
+  cy.get('section[aria-modal="true"]')
+    .scrollIntoView()
+    .should('be.visible')
 
   // Check date field  
   cy.get('\#field\\-\\\:r19\\\:')
@@ -192,7 +195,8 @@ Then('the expected amount is equal to the amount of the agreement', () => {
   cy.visit('/afspraken/1');
   cy.waitForReact();
   cy.url().should('eq', Cypress.config().baseUrl + '/afspraken/1')
-  cy.get(':nth-child(3) > .css-1loywkv > div.css-0 > .css-8g8ihq > :nth-child(2) > .chakra-stack > .chakra-text')
+  cy.get('label[class^="chakra-form__label"]').contains('Bedrag')
+    .siblings()
     .then(($value) => {
       agreementValue = $value.text() // Store the agreement amount in a variable
       const newValue1 = agreementValue.slice(2) // Remove the valuta symbol from string
@@ -205,10 +209,11 @@ Then('the expected amount is equal to the amount of the agreement', () => {
   cy.wait(500) // Wait 0.5 seconds for modal opening
   
   // Check whether modal is opened and visible
-  cy.contains('Alarm toevoegen')
-  cy.get('.chakra-modal__footer')
+  cy.get('section[aria-modal="true"]')
+    .scrollIntoView()
+    .should('be.visible')
 
-  // Check date field  
+  // Check expected payment-field  
   cy.get('\#field\\-\\\:r1b\\\:')
     .invoke('val')
     .should((val2) => {
@@ -232,8 +237,9 @@ Then('the allowed deviation in amount is empty', () => {
   cy.wait(500) // Wait 0.5 seconds for modal opening
   
   // Check whether modal is opened and visible
-  cy.contains('Alarm toevoegen')
-  cy.get('.chakra-modal__footer')
+  cy.get('section[aria-modal="true"]')
+    .scrollIntoView()
+    .should('be.visible')
 
   // Check date field  
   cy.get('\#field\\-\\\:r1d\\\:')
@@ -255,11 +261,13 @@ Then('the "Cancel" button is displayed', () => {
   cy.wait(500) // Wait 0.5 seconds for modal opening
   
   // Check whether modal is opened and visible
-  cy.contains('Alarm toevoegen')
-  cy.get('.chakra-modal__footer')
+  cy.get('section[aria-modal="true"]')
+    .scrollIntoView()
+    .should('be.visible')
 
   // Check whether 'Annuleren' button exists
-  cy.get('.css-1doc3ye')
+  cy.get('button')
+    .contains('Annuleren')
 
 });
 
@@ -277,11 +285,14 @@ Then('the "Submit form" button is displayed', () => {
   cy.wait(500) // Wait 0.5 seconds for modal opening
   
   // Check whether modal is opened and visible
-  cy.contains('Alarm toevoegen')
-  cy.get('.chakra-modal__footer')
+  cy.get('section[aria-modal="true"]')
+    .scrollIntoView()
+    .should('be.visible')
 
   // Check whether 'Opslaan' button exists
-  cy.get('.css-r3jkky')
+  cy.waitForReact()
+  cy.get('div[data-focus-lock-disabled="false"]').contains("Opslaan")
+    .click()
 
 });
 
@@ -299,8 +310,9 @@ Then('the "Close modal" button is displayed', () => {
   cy.wait(500) // Wait 0.5 seconds for modal opening
   
   // Check whether modal is opened and visible
-  cy.contains('Alarm toevoegen')
-  cy.get('.chakra-modal__footer')
+  cy.get('section[aria-modal="true"]')
+    .scrollIntoView()
+    .should('be.visible')
 
   // Check whether the 'X' button exists in the top right
   cy.get('.chakra-modal__close-btn')
@@ -322,12 +334,12 @@ When('I view the "Agreement" page', () => {
   cy.url().should('eq', Cypress.config().baseUrl + '/burgers')
 
   // Navigate to first displayed cilivian's detail page
-  cy.get('.css-1ybnofw > :nth-child(2) > .chakra-stack')
+  cy.contains('HHB000001')
     .click()
   cy.url().should('contains', Cypress.config().baseUrl + '/burgers/')
 
   // Navigate to first displayed agreement's detail page
-  cy.get(':nth-child(5) > .chakra-button')
+  cy.get('[aria-label="Bekijken"]:visible')
     .click()
   cy.url().should('contains', Cypress.config().baseUrl + '/afspraken/')
   cy.get('h2').contains('Alarm').should('be.visible')
@@ -364,8 +376,7 @@ Then('a modal opens', () => {
   
   // Check whether modal is opened and visible
   cy.get('section[aria-modal="true"]')
-  cy.get('.chakra-modal__footer')
-    .scrollIntoView() // Scrolls 'footer' into view
+    .scrollIntoView()
     .should('be.visible')
  
 });
@@ -387,9 +398,8 @@ Then('I fill in the current date for alarm start date', () => {
   cy.wait(500) // Wait 0.5 seconds for modal opening
   
   // Check whether modal is opened and visible
-  cy.contains('Alarm toevoegen')
-  cy.get('.chakra-modal__footer')
-    .scrollIntoView() // Scrolls modal footer into view
+  cy.get('section[aria-modal="true"]')
+    .scrollIntoView()
     .should('be.visible')
 
   // Set date constants for comparison
@@ -426,9 +436,8 @@ Then('I fill in the alarm day of the month', () => {
   cy.wait(500) // Wait 0.5 seconds for modal opening
   
   // Check whether modal is opened and visible
-  cy.contains('Alarm toevoegen')
-  cy.get('.chakra-modal__footer')
-    .scrollIntoView() // Scrolls modal footer into view
+  cy.get('section[aria-modal="true"]')
+    .scrollIntoView()
     .should('be.visible')
 
   // Check 'Dag in de maand' field
@@ -456,9 +465,8 @@ Then('I fill in the alarm allowed deviation in days', () => {
   cy.wait(500) // Wait 0.5 seconds for modal opening
   
   // Check whether modal is opened and visible
-  cy.contains('Alarm toevoegen')
-  cy.get('.chakra-modal__footer')
-    .scrollIntoView() // Scrolls modal footer into view
+  cy.get('section[aria-modal="true"]')
+    .scrollIntoView()
     .should('be.visible')
 
   // Check 'Toegestane afwijking' field
@@ -480,35 +488,36 @@ Then('I fill in the expected payment amount', () => {
   cy.visit('/afspraken/1');
   cy.waitForReact();
   cy.url().should('eq', Cypress.config().baseUrl + '/afspraken/1')
-  cy.get(':nth-child(3) > .css-1loywkv > div.css-0 > .css-8g8ihq > :nth-child(2) > .chakra-stack > .chakra-text')
+  cy.get('label[class^="chakra-form__label"]').contains('Bedrag')
+    .siblings()
     .then(($value) => {
       agreementValue = $value.text() // Store the agreement amount in a variable
       const newValue1 = agreementValue.slice(2) // Remove the valuta symbol from string
       const newValue2 = newValue1.replace(",", ".") // Replace the comma with a full stop
-  cy.get('h2').contains('Alarm').should('be.visible')
-    .scrollIntoView() // Scrolls 'Alarm' into view
-  cy.contains('Toevoegen')
-  cy.get('.css-1loywkv > :nth-child(1) > .chakra-stack > div.css-0 > .chakra-button')
-    .click()
-  cy.wait(500) // Wait 0.5 seconds for modal opening
-  
-  // Check whether modal is opened and visible
-  cy.contains('Alarm toevoegen')
-  cy.get('.chakra-modal__footer')
+    cy.get('h2').contains('Alarm').should('be.visible')
+      .scrollIntoView() // Scrolls 'Alarm' into view
+    cy.get('button')
+      .contains('Toevoegen')
+      .click()
+    cy.wait(500) // Wait 0.5 seconds for modal opening
+    
+    // Check whether modal is opened and visible
+    cy.get('section[aria-modal="true"]')
+      .scrollIntoView()
+      .should('be.visible')
 
-  // Check field  
-  cy.get('\#field\\-\\\:r1b\\\:')
-    .invoke('val')
-    .then((val2) => {
-      expect(val2).to.eq(newValue2)
+    // Check expected amount-field  
+    cy.get('\#field\\-\\\:r1b\\\:')
+      .invoke('val')
+      .then((val2) => {
+        expect(val2).to.eq(newValue2)
 
-  // Clear and refill field  
-  cy.get('\#field\\-\\\:r1b\\\:')
-    .type('{selectAll}' + newValue2) // Done via 'selectAll', as a clear() will automatically leave a zero
-    .should('have.value', newValue2)
+      // Clear and refill expected amount-field
+      cy.get('\#field\\-\\\:r1b\\\:')
+        .type('{selectAll}' + newValue2) // Done via 'selectAll', as a clear() will automatically leave a zero
+        .should('have.value', newValue2)
+        })
     })
-  })
-
 });
 
 Then('I fill in the alarm allowed deviation in payment amount', () => {
@@ -525,9 +534,8 @@ Then('I fill in the alarm allowed deviation in payment amount', () => {
   cy.wait(500) // Wait 0.5 seconds for modal opening
   
   // Check whether modal is opened and visible
-  cy.contains('Alarm toevoegen')
-  cy.get('.chakra-modal__footer')
-    .scrollIntoView() // Scrolls modal footer into view
+  cy.get('section[aria-modal="true"]')
+    .scrollIntoView()
     .should('be.visible')
 
   // Check 'Toegestane afwijking bedrag' field
@@ -555,9 +563,8 @@ Then('I click the "Submit form" button', () => {
   cy.wait(500) // Wait 0.5 seconds for modal opening
 
   // Check whether modal is opened and visible
-  cy.contains('Alarm toevoegen')
-  cy.get('.chakra-modal__footer')
-    .scrollIntoView() // Scrolls modal footer into view
+  cy.get('section[aria-modal="true"]')
+    .scrollIntoView()
     .should('be.visible')
 
   // Fill in all required fields
@@ -583,7 +590,8 @@ Then('I click the "Submit form" button', () => {
       .should('have.value', '1')
 
   // Click 'Opslaan' button
-  cy.get('.css-r3jkky')
+  cy.waitForReact()
+  cy.get('div[data-focus-lock-disabled="false"]').contains("Opslaan")
     .click()
 
   // Wait for modal to close
@@ -616,9 +624,8 @@ Then('the modal is closed', () => {
   cy.wait(500) // Wait 0.5 seconds for modal opening
 
   // Check whether modal is opened and visible
-  cy.contains('Alarm toevoegen')
-  cy.get('.chakra-modal__footer')
-    .scrollIntoView() // Scrolls modal footer into view
+  cy.get('section[aria-modal="true"]')
+    .scrollIntoView()
     .should('be.visible')
 
   // Fill in all required fields
@@ -644,13 +651,14 @@ Then('the modal is closed', () => {
       .should('have.value', '1') 
 
   // Click 'Opslaan' button
-  cy.get('.css-r3jkky')
+  cy.waitForReact()
+  cy.get('div[data-focus-lock-disabled="false"]').contains("Opslaan")
     .click()
 
   // Check whether modal is closed
   cy.contains('Alarm toevoegen')
     .should('not.exist')
-  cy.get('.chakra-modal__footer')
+  cy.get('section[aria-modal="true"]')
     .should('not.exist')
 
   // Clean up alarm
@@ -680,9 +688,8 @@ Then('a notification of success is displayed', () => {
   cy.wait(500) // Wait 0.5 seconds for modal opening
 
   // Check whether modal is opened and visible
-  cy.contains('Alarm toevoegen')
-  cy.get('.chakra-modal__footer')
-    .scrollIntoView() // Scrolls modal footer into view
+  cy.get('section[aria-modal="true"]')
+    .scrollIntoView()
     .should('be.visible')
 
   // Fill in all required fields
@@ -708,13 +715,14 @@ Then('a notification of success is displayed', () => {
       .should('have.value', '1') 
 
   // Click 'Opslaan' button
-  cy.get('.css-r3jkky')
+  cy.waitForReact()
+  cy.get('div[data-focus-lock-disabled="false"]').contains("Opslaan")
     .click()
 
   // Check whether modal is closed
   cy.contains('Alarm toevoegen')
     .should('not.exist')
-  cy.get('.chakra-modal__footer')
+  cy.get('section[aria-modal="true"]')
     .should('not.exist')
 
   // Check success message
@@ -749,9 +757,8 @@ Then('the current status of the alarm on the agreements page is displayed', () =
   cy.wait(500) // Wait 0.5 seconds for modal opening
 
   // Check whether modal is opened and visible
-  cy.contains('Alarm toevoegen')
-  cy.get('.chakra-modal__footer')
-    .scrollIntoView() // Scrolls modal footer into view
+  cy.get('section[aria-modal="true"]')
+    .scrollIntoView()
     .should('be.visible')
 
   // Fill in all required fields
@@ -777,13 +784,14 @@ Then('the current status of the alarm on the agreements page is displayed', () =
       .should('have.value', '1') 
 
   // Click 'Opslaan' button
-  cy.get('.css-r3jkky')
+  cy.waitForReact()
+  cy.get('div[data-focus-lock-disabled="false"]').contains("Opslaan")
     .click()
 
   // Check whether modal is closed
   cy.contains('Alarm toevoegen')
     .should('not.exist')
-  cy.get('.chakra-modal__footer')
+  cy.get('section[aria-modal="true"]')
     .should('not.exist')
 
   // Check success message

@@ -58,9 +58,8 @@ Then('the alarm recurrency is displayed', () => {
   cy.wait(500) // Wait 0.5 seconds for modal opening
 
   // Check whether modal is opened and visible
-  cy.contains('Alarm toevoegen')
-  cy.get('.chakra-modal__footer')
-    .scrollIntoView() // Scrolls modal footer into view
+  cy.get('section[aria-modal="true"]')
+    .scrollIntoView()
     .should('be.visible')
 
   // Fill in all required fields
@@ -86,7 +85,8 @@ Then('the alarm recurrency is displayed', () => {
       .should('have.value', '1') 
 
   // Click 'Opslaan' button
-  cy.get('.css-r3jkky')
+  cy.waitForReact()
+  cy.get('div[data-focus-lock-disabled="false"]').contains("Opslaan")
     .click()
 
   // Check whether modal is closed
@@ -130,9 +130,8 @@ Then('the alarm day of the month is displayed', () => {
   cy.wait(500) // Wait 0.5 seconds for modal opening
 
   // Check whether modal is opened and visible
-  cy.contains('Alarm toevoegen')
-  cy.get('.chakra-modal__footer')
-    .scrollIntoView() // Scrolls modal footer into view
+  cy.get('section[aria-modal="true"]')
+    .scrollIntoView()
     .should('be.visible')
 
   // Fill in all required fields
@@ -158,7 +157,8 @@ Then('the alarm day of the month is displayed', () => {
       .should('have.value', '1') 
 
   // Click 'Opslaan' button
-  cy.get('.css-r3jkky')
+  cy.waitForReact()
+  cy.get('div[data-focus-lock-disabled="false"]').contains("Opslaan")
     .click()
 
   // Check whether modal is closed
@@ -202,9 +202,8 @@ Then('the alarm allowed deviation in days is displayed', () => {
   cy.wait(500) // Wait 0.5 seconds for modal opening
 
   // Check whether modal is opened and visible
-  cy.contains('Alarm toevoegen')
-  cy.get('.chakra-modal__footer')
-    .scrollIntoView() // Scrolls modal footer into view
+  cy.get('section[aria-modal="true"]')
+    .scrollIntoView()
     .should('be.visible')
 
   // Fill in all required fields
@@ -230,7 +229,8 @@ Then('the alarm allowed deviation in days is displayed', () => {
       .should('have.value', '1') 
 
   // Click 'Opslaan' button
-  cy.get('.css-r3jkky')
+  cy.waitForReact()
+  cy.get('div[data-focus-lock-disabled="false"]').contains("Opslaan")
     .click()
 
   // Check whether modal is closed
@@ -274,9 +274,8 @@ Then('the alarm next date is displayed', () => {
   cy.wait(500) // Wait 0.5 seconds for modal opening
 
   // Check whether modal is opened and visible
-  cy.contains('Alarm toevoegen')
-  cy.get('.chakra-modal__footer')
-    .scrollIntoView() // Scrolls modal footer into view
+  cy.get('section[aria-modal="true"]')
+    .scrollIntoView()
     .should('be.visible')
 
   // Fill in all required fields
@@ -303,7 +302,8 @@ Then('the alarm next date is displayed', () => {
       .should('have.value', '1') 
 
   // Click 'Opslaan' button
-  cy.get('.css-r3jkky')
+  cy.waitForReact()
+  cy.get('div[data-focus-lock-disabled="false"]').contains("Opslaan")
     .click()
 
   // Check whether modal is closed
@@ -348,9 +348,8 @@ Then('the alarm expected amount is displayed', () => {
   cy.wait(500) // Wait 0.5 seconds for modal opening
 
   // Check whether modal is opened and visible
-  cy.contains('Alarm toevoegen')
-  cy.get('.chakra-modal__footer')
-    .scrollIntoView() // Scrolls modal footer into view
+  cy.get('section[aria-modal="true"]')
+    .scrollIntoView()
     .should('be.visible')
 
   // Fill in all required fields
@@ -378,7 +377,8 @@ Then('the alarm expected amount is displayed', () => {
       .should('have.value', '1') 
 
   // Click 'Opslaan' button
-  cy.get('.css-r3jkky')
+  cy.waitForReact()
+  cy.get('div[data-focus-lock-disabled="false"]').contains("Opslaan")
     .click()
 
   // Check whether modal is closed
@@ -423,9 +423,8 @@ Then('the alarm allowed deviation of the expected amount is displayed', () => {
   cy.wait(500) // Wait 0.5 seconds for modal opening
 
   // Check whether modal is opened and visible
-  cy.contains('Alarm toevoegen')
-  cy.get('.chakra-modal__footer')
-    .scrollIntoView() // Scrolls modal footer into view
+  cy.get('section[aria-modal="true"]')
+    .scrollIntoView()
     .should('be.visible')
 
   // Fill in all required fields
@@ -451,7 +450,8 @@ Then('the alarm allowed deviation of the expected amount is displayed', () => {
       .should('have.value', '37')
 
   // Click 'Opslaan' button
-  cy.get('.css-r3jkky')
+  cy.waitForReact()
+  cy.get('div[data-focus-lock-disabled="false"]').contains("Opslaan")
     .click()
 
   // Check whether modal is closed
@@ -495,9 +495,8 @@ Then('the alarm status is displayed', () => {
   cy.wait(500) // Wait 0.5 seconds for modal opening
 
   // Check whether modal is opened and visible
-  cy.contains('Alarm toevoegen')
-  cy.get('.chakra-modal__footer')
-    .scrollIntoView() // Scrolls modal footer into view
+  cy.get('section[aria-modal="true"]')
+    .scrollIntoView()
     .should('be.visible')
 
   // Fill in all required fields
@@ -523,7 +522,8 @@ Then('the alarm status is displayed', () => {
       .should('have.value', '1') 
 
   // Click 'Opslaan' button
-  cy.get('.css-r3jkky')
+  cy.waitForReact()
+  cy.get('div[data-focus-lock-disabled="false"]').contains("Opslaan")
     .click()
 
   // Check whether modal is closed
