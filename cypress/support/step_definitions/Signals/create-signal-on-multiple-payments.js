@@ -45,7 +45,7 @@ Then('a "Multiple payments" signal is created', () => {
     // Run query
     cy.request({
       method: "post",
-      url: Cypress.config().graphqlUrl + '/graphql',
+      url: Cypress.env().graphqlUrl + '/graphql',
       body: { query: queryAddAlarm },
     }).then((res) => {
       console.log(res.body);
@@ -61,7 +61,7 @@ Then('a "Multiple payments" signal is created', () => {
     // Truncate alarms
     cy.request({
       method: "post",
-      url: Cypress.config().graphqlUrl + '/graphql',
+      url: Cypress.env().graphqlUrl + '/graphql',
       body: { query: queryTruncateAlarm },
     }).then((res) => {
       console.log(res.body);
@@ -70,7 +70,7 @@ Then('a "Multiple payments" signal is created', () => {
     // Truncate signals
     cy.request({
       method: "post",
-      url: Cypress.config().graphqlUrl + '/graphql',
+      url: Cypress.env().graphqlUrl + '/graphql',
       body: { query: queryTruncateSignal },
     }).then((res) => {
       console.log(res.body);

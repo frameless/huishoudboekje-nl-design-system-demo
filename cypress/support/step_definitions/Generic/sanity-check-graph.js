@@ -31,7 +31,7 @@ When('I call the database to insert data', () => {
   // Create an alarm
   cy.request({
     method: "post",
-    url: Cypress.config().graphqlUrl + '/graphql',
+    url: Cypress.env().graphqlUrl + '/graphql',
     body: { query: queryAlarm },
   }).then((res) => {
     console.log(res.body);
@@ -44,7 +44,7 @@ Then('I truncate the tables', () => {
   // Truncate the tables
   cy.request({
     method: "post",
-    url: Cypress.config().graphqlUrl + '/graphql',
+    url: Cypress.env().graphqlUrl + '/graphql',
     body: { query: queryTruncate },
   }).then((res) => {
     console.log(res.body);

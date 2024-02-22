@@ -83,7 +83,7 @@ When('I click the "Delete alarm" button', () => {
     // Truncate alarms
     cy.request({
       method: "post",
-      url: Cypress.config().graphqlUrl + '/graphql',
+      url: Cypress.env().graphqlUrl + '/graphql',
       body: { query: queryTruncateAlarm },
     }).then((res) => {
       console.log(res.body);
@@ -92,7 +92,7 @@ When('I click the "Delete alarm" button', () => {
     // Truncate signals
     cy.request({
       method: "post",
-      url: Cypress.config().graphqlUrl + '/graphql',
+      url: Cypress.env().graphqlUrl + '/graphql',
       body: { query: queryTruncateSignal },
     }).then((res) => {
       console.log(res.body);
@@ -164,7 +164,7 @@ Then('the "Cancel delete alarm" button is displayed', () => {
     // Truncate alarms
     cy.request({
       method: "post",
-      url: Cypress.config().graphqlUrl + '/graphql',
+      url: Cypress.env().graphqlUrl + '/graphql',
       body: { query: queryTruncateAlarm },
     }).then((res) => {
       console.log(res.body);
@@ -173,7 +173,7 @@ Then('the "Cancel delete alarm" button is displayed', () => {
     // Truncate signals
     cy.request({
       method: "post",
-      url: Cypress.config().graphqlUrl + '/graphql',
+      url: Cypress.env().graphqlUrl + '/graphql',
       body: { query: queryTruncateSignal },
     }).then((res) => {
       console.log(res.body);
@@ -245,7 +245,7 @@ Then('the "Confirm delete alarm" button is displayed', () => {
     // Truncate alarms
     cy.request({
       method: "post",
-      url: Cypress.config().graphqlUrl + '/graphql',
+      url: Cypress.env().graphqlUrl + '/graphql',
       body: { query: queryTruncateAlarm },
     }).then((res) => {
       console.log(res.body);
@@ -254,7 +254,7 @@ Then('the "Confirm delete alarm" button is displayed', () => {
     // Truncate signals
     cy.request({
       method: "post",
-      url: Cypress.config().graphqlUrl + '/graphql',
+      url: Cypress.env().graphqlUrl + '/graphql',
       body: { query: queryTruncateSignal },
     }).then((res) => {
       console.log(res.body);
@@ -330,7 +330,7 @@ When('I click the "Cancel delete alarm" button', () => {
     // Truncate alarms
     cy.request({
       method: "post",
-      url: Cypress.config().graphqlUrl + '/graphql',
+      url: Cypress.env().graphqlUrl + '/graphql',
       body: { query: queryTruncateAlarm },
     }).then((res) => {
       console.log(res.body);
@@ -339,7 +339,7 @@ When('I click the "Cancel delete alarm" button', () => {
     // Truncate signals
     cy.request({
       method: "post",
-      url: Cypress.config().graphqlUrl + '/graphql',
+      url: Cypress.env().graphqlUrl + '/graphql',
       body: { query: queryTruncateSignal },
     }).then((res) => {
       console.log(res.body);
@@ -415,7 +415,7 @@ Then('the "Delete alarm" button is displayed', () => {
     // Truncate alarms
     cy.request({
       method: "post",
-      url: Cypress.config().graphqlUrl + '/graphql',
+      url: Cypress.env().graphqlUrl + '/graphql',
       body: { query: queryTruncateAlarm },
     }).then((res) => {
       console.log(res.body);
@@ -424,7 +424,7 @@ Then('the "Delete alarm" button is displayed', () => {
     // Truncate signals
     cy.request({
       method: "post",
-      url: Cypress.config().graphqlUrl + '/graphql',
+      url: Cypress.env().graphqlUrl + '/graphql',
       body: { query: queryTruncateSignal },
     }).then((res) => {
       console.log(res.body);
@@ -500,7 +500,7 @@ When('I click the "Confirm delete alarm" button', () => {
     // Truncate alarms
     cy.request({
       method: "post",
-      url: Cypress.config().graphqlUrl + '/graphql',
+      url: Cypress.env().graphqlUrl + '/graphql',
       body: { query: queryTruncateAlarm },
     }).then((res) => {
       console.log(res.body);
@@ -509,7 +509,7 @@ When('I click the "Confirm delete alarm" button', () => {
     // Truncate signals
     cy.request({
       method: "post",
-      url: Cypress.config().graphqlUrl + '/graphql',
+      url: Cypress.env().graphqlUrl + '/graphql',
       body: { query: queryTruncateSignal },
     }).then((res) => {
       console.log(res.body);
@@ -594,7 +594,7 @@ Then('the "Er is geen alarm ingesteld." text is displayed', () => {
     // Truncate alarms
     cy.request({
       method: "post",
-      url: Cypress.config().graphqlUrl + '/graphql',
+      url: Cypress.env().graphqlUrl + '/graphql',
       body: { query: queryTruncateAlarm },
     }).then((res) => {
       console.log(res.body);
@@ -603,7 +603,7 @@ Then('the "Er is geen alarm ingesteld." text is displayed', () => {
     // Truncate signals
     cy.request({
       method: "post",
-      url: Cypress.config().graphqlUrl + '/graphql',
+      url: Cypress.env().graphqlUrl + '/graphql',
       body: { query: queryTruncateSignal },
     }).then((res) => {
       console.log(res.body);
@@ -685,7 +685,7 @@ Then('the "Add alarm" button is displayed', () => {
     // Truncate alarms
     cy.request({
       method: "post",
-      url: Cypress.config().graphqlUrl + '/graphql',
+      url: Cypress.env().graphqlUrl + '/graphql',
       body: { query: queryTruncateAlarm },
     }).then((res) => {
       console.log(res.body);
@@ -694,7 +694,7 @@ Then('the "Add alarm" button is displayed', () => {
     // Truncate signals
     cy.request({
       method: "post",
-      url: Cypress.config().graphqlUrl + '/graphql',
+      url: Cypress.env().graphqlUrl + '/graphql',
       body: { query: queryTruncateSignal },
     }).then((res) => {
       console.log(res.body);
