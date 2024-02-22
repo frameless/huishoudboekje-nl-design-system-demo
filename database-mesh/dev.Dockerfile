@@ -3,7 +3,7 @@ WORKDIR /app
 ENV DEBUG=1
 ENV DB_USER="postgres"
 ENV DB_PASSWORD="postgres"
-ENV HHB_BACKEND_URL="localhost"
+ENV DB_HOST="database"
 ENV DB_PORT="5432"
 
 EXPOSE 4000

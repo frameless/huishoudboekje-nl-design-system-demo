@@ -13,3 +13,5 @@ additionalTypeDefs: |
   }
 additionalResolvers:
   - './resolvers'
+serve:
+  hostname: 0.0.0.0
