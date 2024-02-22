@@ -17,7 +17,7 @@ echo "Installing npm packages..."
 npm ci
 
 echo "Executing tests..."
-npx cypress run --config baseUrl=$APP_HOST,graphqlUrl=$DATABASE_HOST
+npx cypress run --config baseUrl=$APP_HOST,graphqlUrl=$DATABASE_HOST --record --key $CYPRESS_KEY
 
 
 
