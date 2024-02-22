@@ -22,5 +22,5 @@ spec:
                   number: 80
   tls:
     - hosts:
-        - database.${APP_HOST_NAME}
+        - ${DATABASE_HOST_NAME}
       secretName: hhb-development-ingress-tls-secret
