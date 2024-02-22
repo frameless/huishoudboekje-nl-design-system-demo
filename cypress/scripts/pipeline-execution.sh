@@ -55,8 +55,8 @@ cleanup() {
 }
 trap cleanup EXIT
 
-# echo "Getting runner public ip..."
-# export PUBLIC_IP=$(curl -s ifconfig.me)
+echo "Getting runner public ip..."
+export PUBLIC_IP=$(curl -s ifconfig.me)
 
 echo "Applying envvars..."
 envsubst < cypress/scripts/sample.database-mesh-ingress.yaml > cypress/scripts/database-mesh-ingress.yaml

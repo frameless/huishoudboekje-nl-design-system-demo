@@ -3,7 +3,7 @@ kind: Ingress
 metadata:
   name: hhb-database-mesh-ingress
   annotations:
-    # nginx.ingress.kubernetes.io/whitelist-source-range: "${PUBLIC_IP}/32"
+    nginx.ingress.kubernetes.io/whitelist-source-range: "${PUBLIC_IP}/32"
     cert-manager.io/cluster-issuer: letsencrypt-staging
   labels:
     name: hhb-database-mesh-ingress
@@ -13,7 +13,7 @@ spec:
     - host: database.${APP_HOST_NAME}
       http:
         paths:
-          - path: /
+          - path: /graphql
             pathType: Prefix
             backend:
               service:
