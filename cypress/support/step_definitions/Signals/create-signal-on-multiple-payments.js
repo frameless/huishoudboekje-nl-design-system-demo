@@ -52,12 +52,10 @@ Then('a "Multiple payments" signal is created', () => {
     });
 
   // Run command to trigger alarm
-  cy.exec('docker-compose exec -T backend flask alarms evaluate')
-  cy.wait(1000)
+    // [TO-DO] Will be done by alarmservice in new version
 
   // Check whether notification is set
-
-    // [TO-DO] Will be checked by alarmservice in new version
+    // [TO-DO] Will be done by alarmservice in new version
 
   // Clean up
     // Truncate alarms
