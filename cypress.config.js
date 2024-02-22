@@ -40,6 +40,7 @@ module.exports = defineConfig({
   e2e: {
     // Host Url
     baseUrl: "http://localhost:3000",
+    graphqlUrl: "http://localhost:4200",
 
     // Azure AD
     experimentalModifyObstructiveThirdPartyCode: true,
@@ -49,4 +50,3 @@ module.exports = defineConfig({
     setupNodeEvents,
   },
 });
-
