@@ -23,4 +23,4 @@ spec:
   tls:
     - hosts:
         - ${DATABASE_HOST_NAME}
-      secretName: hhb-development-ingress-tls-secret
+      secretName: hhb-development-database-ingress-tls-secret
