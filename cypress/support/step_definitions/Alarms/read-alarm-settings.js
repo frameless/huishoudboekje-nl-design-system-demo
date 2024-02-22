@@ -7,42 +7,23 @@ const header = {
   'Accept-Encoding': 'gzip, deflate, br',
 };
 
-// Set database connections
-const connectionAlarm =
-{
-  "user": Cypress.config().databaseAlarmUser,
-  "host": Cypress.config().databaseAlarmHost,
-  "database": Cypress.config().databaseAlarm,
-  "password": Cypress.config().databaseAlarmPassword,
-  "port": Cypress.config().databasePort
-};
-
-const connectionSignal =
-{
-  "user": Cypress.config().databaseSignalUser,
-  "host": Cypress.config().databaseSignalHost,
-  "database": Cypress.config().databaseSignal,
-  "password": Cypress.config().databaseSignalPassword,
-  "port": Cypress.config().databasePort
-};
-
 //#region Scenario: no alarm exists
 
-//When('I view the "Agreement" page', () => {});
-// Is already defined in other test
+  //When('I view the "Agreement" page', () => {});
+  // Is already defined in other test
 
-//Then('the "Er is geen alarm ingesteld." text is displayed', () => {
-// Is already defined in other test
+  //Then('the "Er is geen alarm ingesteld." text is displayed', () => {
+  // Is already defined in other test
 
-//Then('the "Add alarm" button is displayed', () => {
-// Is already defined in other test
+  //Then('the "Add alarm" button is displayed', () => {
+  // Is already defined in other test
 
 //#endregion
 
 //#region Scenario: monthly recurring alarm exists
 
-//When('I view the "Agreement" page', () => {});
-// Is already defined in other test
+  //When('I view the "Agreement" page', () => {});
+  // Is already defined in other test
 
 Then('the alarm recurrency is displayed', () => {
  

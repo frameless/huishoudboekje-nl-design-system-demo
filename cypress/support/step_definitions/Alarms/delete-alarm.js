@@ -7,24 +7,14 @@ const header = {
   'Accept-Encoding': 'gzip, deflate, br',
 };
 
-// Set database connections
-const connectionAlarm =
-{
-  "user": Cypress.config().databaseAlarmUser,
-  "host": Cypress.config().databaseAlarmHost,
-  "database": Cypress.config().databaseAlarm,
-  "password": Cypress.config().databaseAlarmPassword,
-  "port": Cypress.config().databasePort
-};
+// Set database query
+const queryTruncateAlarm = `mutation Truncate {
+  truncateTable(databaseName: "alarmenservice", tableName: "Alarm")
+}`
 
-const connectionSignal =
-{
-  "user": Cypress.config().databaseSignalUser,
-  "host": Cypress.config().databaseSignalHost,
-  "database": Cypress.config().databaseSignal,
-  "password": Cypress.config().databaseSignalPassword,
-  "port": Cypress.config().databasePort
-};
+const queryTruncateSignal = `mutation Truncate {
+  truncateTable(databaseName: "signalenservice", tableName: "Signal")
+}`
 
 //#region Scenario: delete alarm
 
@@ -88,13 +78,21 @@ When('I click the "Delete alarm" button', () => {
 
   // Clean up
     // Truncate alarms
-    cy.task("dbQuery", {"query":`TRUNCATE TABLE public."Alarm"`,"connection":connectionAlarm}).then(queryResponse => {
-      cy.log(queryResponse)
+    cy.request({
+      method: "post",
+      url: Cypress.config().graphqlUrl + '/graphql',
+      body: { query: queryTruncateAlarm },
+    }).then((res) => {
+      console.log(res.body);
     });
 
     // Truncate signals
-    cy.task("dbQuery", {"query":`TRUNCATE TABLE public."Signal"`,"connection":connectionSignal}).then(queryResponse => {
-      cy.log(queryResponse)
+    cy.request({
+      method: "post",
+      url: Cypress.config().graphqlUrl + '/graphql',
+      body: { query: queryTruncateSignal },
+    }).then((res) => {
+      console.log(res.body);
     });
   
 });
@@ -158,13 +156,21 @@ Then('the "Cancel delete alarm" button is displayed', () => {
 
   // Clean up
     // Truncate alarms
-    cy.task("dbQuery", {"query":`TRUNCATE TABLE public."Alarm"`,"connection":connectionAlarm}).then(queryResponse => {
-      cy.log(queryResponse)
+    cy.request({
+      method: "post",
+      url: Cypress.config().graphqlUrl + '/graphql',
+      body: { query: queryTruncateAlarm },
+    }).then((res) => {
+      console.log(res.body);
     });
 
     // Truncate signals
-    cy.task("dbQuery", {"query":`TRUNCATE TABLE public."Signal"`,"connection":connectionSignal}).then(queryResponse => {
-      cy.log(queryResponse)
+    cy.request({
+      method: "post",
+      url: Cypress.config().graphqlUrl + '/graphql',
+      body: { query: queryTruncateSignal },
+    }).then((res) => {
+      console.log(res.body);
     });
   
 });
@@ -228,13 +234,21 @@ Then('the "Confirm delete alarm" button is displayed', () => {
 
   // Clean up
     // Truncate alarms
-    cy.task("dbQuery", {"query":`TRUNCATE TABLE public."Alarm"`,"connection":connectionAlarm}).then(queryResponse => {
-      cy.log(queryResponse)
+    cy.request({
+      method: "post",
+      url: Cypress.config().graphqlUrl + '/graphql',
+      body: { query: queryTruncateAlarm },
+    }).then((res) => {
+      console.log(res.body);
     });
 
     // Truncate signals
-    cy.task("dbQuery", {"query":`TRUNCATE TABLE public."Signal"`,"connection":connectionSignal}).then(queryResponse => {
-      cy.log(queryResponse)
+    cy.request({
+      method: "post",
+      url: Cypress.config().graphqlUrl + '/graphql',
+      body: { query: queryTruncateSignal },
+    }).then((res) => {
+      console.log(res.body);
     });
   
 });
@@ -302,13 +316,21 @@ When('I click the "Cancel delete alarm" button', () => {
 
   // Clean up
     // Truncate alarms
-    cy.task("dbQuery", {"query":`TRUNCATE TABLE public."Alarm"`,"connection":connectionAlarm}).then(queryResponse => {
-      cy.log(queryResponse)
+    cy.request({
+      method: "post",
+      url: Cypress.config().graphqlUrl + '/graphql',
+      body: { query: queryTruncateAlarm },
+    }).then((res) => {
+      console.log(res.body);
     });
 
     // Truncate signals
-    cy.task("dbQuery", {"query":`TRUNCATE TABLE public."Signal"`,"connection":connectionSignal}).then(queryResponse => {
-      cy.log(queryResponse)
+    cy.request({
+      method: "post",
+      url: Cypress.config().graphqlUrl + '/graphql',
+      body: { query: queryTruncateSignal },
+    }).then((res) => {
+      console.log(res.body);
     });
   
 });
@@ -376,15 +398,23 @@ Then('the "Delete alarm" button is displayed', () => {
 
   // Clean up
     // Truncate alarms
-    cy.task("dbQuery", {"query":`TRUNCATE TABLE public."Alarm"`,"connection":connectionAlarm}).then(queryResponse => {
-      cy.log(queryResponse)
+    cy.request({
+      method: "post",
+      url: Cypress.config().graphqlUrl + '/graphql',
+      body: { query: queryTruncateAlarm },
+    }).then((res) => {
+      console.log(res.body);
     });
 
     // Truncate signals
-    cy.task("dbQuery", {"query":`TRUNCATE TABLE public."Signal"`,"connection":connectionSignal}).then(queryResponse => {
-      cy.log(queryResponse)
+    cy.request({
+      method: "post",
+      url: Cypress.config().graphqlUrl + '/graphql',
+      body: { query: queryTruncateSignal },
+    }).then((res) => {
+      console.log(res.body);
     });
-  
+
 });
 
 //#endregion
@@ -450,15 +480,23 @@ When('I click the "Confirm delete alarm" button', () => {
 
   // Clean up
     // Truncate alarms
-    cy.task("dbQuery", {"query":`TRUNCATE TABLE public."Alarm"`,"connection":connectionAlarm}).then(queryResponse => {
-      cy.log(queryResponse)
+    cy.request({
+      method: "post",
+      url: Cypress.config().graphqlUrl + '/graphql',
+      body: { query: queryTruncateAlarm },
+    }).then((res) => {
+      console.log(res.body);
     });
 
     // Truncate signals
-    cy.task("dbQuery", {"query":`TRUNCATE TABLE public."Signal"`,"connection":connectionSignal}).then(queryResponse => {
-      cy.log(queryResponse)
+    cy.request({
+      method: "post",
+      url: Cypress.config().graphqlUrl + '/graphql',
+      body: { query: queryTruncateSignal },
+    }).then((res) => {
+      console.log(res.body);
     });
-  
+
 });
 
 // Then('a notification of success is displayed', () => {}
@@ -533,13 +571,21 @@ Then('the "Er is geen alarm ingesteld." text is displayed', () => {
 
   // Clean up
     // Truncate alarms
-    cy.task("dbQuery", {"query":`TRUNCATE TABLE public."Alarm"`,"connection":connectionAlarm}).then(queryResponse => {
-      cy.log(queryResponse)
+    cy.request({
+      method: "post",
+      url: Cypress.config().graphqlUrl + '/graphql',
+      body: { query: queryTruncateAlarm },
+    }).then((res) => {
+      console.log(res.body);
     });
 
     // Truncate signals
-    cy.task("dbQuery", {"query":`TRUNCATE TABLE public."Signal"`,"connection":connectionSignal}).then(queryResponse => {
-      cy.log(queryResponse)
+    cy.request({
+      method: "post",
+      url: Cypress.config().graphqlUrl + '/graphql',
+      body: { query: queryTruncateSignal },
+    }).then((res) => {
+      console.log(res.body);
     });
   
 });
@@ -613,13 +659,21 @@ Then('the "Add alarm" button is displayed', () => {
 
   // Clean up
     // Truncate alarms
-    cy.task("dbQuery", {"query":`TRUNCATE TABLE public."Alarm"`,"connection":connectionAlarm}).then(queryResponse => {
-      cy.log(queryResponse)
+    cy.request({
+      method: "post",
+      url: Cypress.config().graphqlUrl + '/graphql',
+      body: { query: queryTruncateAlarm },
+    }).then((res) => {
+      console.log(res.body);
     });
 
     // Truncate signals
-    cy.task("dbQuery", {"query":`TRUNCATE TABLE public."Signal"`,"connection":connectionSignal}).then(queryResponse => {
-      cy.log(queryResponse)
+    cy.request({
+      method: "post",
+      url: Cypress.config().graphqlUrl + '/graphql',
+      body: { query: queryTruncateSignal },
+    }).then((res) => {
+      console.log(res.body);
     });
   
 });
