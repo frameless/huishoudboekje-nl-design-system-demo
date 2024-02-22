@@ -32,6 +32,7 @@ module.exports = defineConfig({
   video: false,
   screenshotOnRunFailure: false,
   env: {
+    graphqlUrl: "http://localhost:4200",
     'cypress-react-selector': {
       root: '#root',
     },
