@@ -13,7 +13,3 @@ Feature: create signal on no payment
   Scenario: no transaction within timeframe
     When the alarm timeframe expires
     Then a "Payment missing" signal is created
-
-  Scenario: multiple payments within timeframe
-    When 1 or more bank transactions with a transaction date within the alarm timeframe are linked to the agreement
-    Then a "Multiple payments" signal is created

@@ -26,20 +26,35 @@ const connectionSignal =
   "port": Cypress.config().databasePort
 };
 
+const queryTruncateAlarm = `mutation Truncate {
+  truncateTable(databaseName: "alarmenservice", tableName: "Alarm")
+}`
+
+const queryTruncateSignal = `mutation Truncate {
+  truncateTable(databaseName: "signalenservice", tableName: "Signal")
+}`
+
 // Before *all* tests, run this (so this runs once at the start)
 Before(() => {
 
 // Clean up
   // Truncate alarms
-  cy.task("dbQuery", {"query":`TRUNCATE TABLE public."Alarm"`,"connection":connectionAlarm}).then(queryResponse => {
-    cy.log(queryResponse)
+  cy.request({
+    method: "post",
+    url: Cypress.config().graphqlUrl + '/graphql',
+    body: { query: queryTruncateAlarm },
+  }).then((res) => {
+    console.log(res.body);
   });
 
   // Truncate signals
-  cy.task("dbQuery", {"query":`TRUNCATE TABLE public."Signal"`,"connection":connectionSignal}).then(queryResponse => {
-    cy.log(queryResponse)
+  cy.request({
+    method: "post",
+    url: Cypress.config().graphqlUrl + '/graphql',
+    body: { query: queryTruncateSignal },
+  }).then((res) => {
+    console.log(res.body);
   });
-
 });
 
 // Before *each* test, run this (so this runs equal to the amount of tests)

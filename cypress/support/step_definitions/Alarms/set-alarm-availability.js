@@ -7,29 +7,10 @@ const header = {
   'Accept-Encoding': 'gzip, deflate, br',
 };
 
-// Set database connections
-const connectionAlarm =
-{
-  "user": Cypress.config().databaseAlarmUser,
-  "host": Cypress.config().databaseAlarmHost,
-  "database": Cypress.config().databaseAlarm,
-  "password": Cypress.config().databaseAlarmPassword,
-  "port": Cypress.config().databasePort
-};
-
-const connectionSignal =
-{
-  "user": Cypress.config().databaseSignalUser,
-  "host": Cypress.config().databaseSignalHost,
-  "database": Cypress.config().databaseSignal,
-  "password": Cypress.config().databaseSignalPassword,
-  "port": Cypress.config().databasePort
-};
-
 //#region Scenario: toggle alarm to disabled
 
-// Given('I view the "Agreement" page')
-  // Already part of create-alarm.js
+  // Given('I view the "Agreement" page')
+    // Already part of create-alarm.js
 
 Then('the alarm availability is displayed', () => {
 

@@ -1,4 +1,4 @@
-// cypress/support/step_definitions/Signals/create-signal-on-no-payment.js
+// cypress/support/step_definitions/Signals/create-signal-on-multiple-payments.js
 
 import { Given, When, Then } from "@badeball/cypress-cucumber-preprocessor";
 
@@ -33,50 +33,12 @@ const queryAddAlarm = `mutation CreateAlarm {
    }
   }`
 
-//#region Scenario: no transaction within timeframe
+//#region Scenario: multiple payments within timeframe
 
-When('the alarm timeframe expires', () => {
-
-  // Add alarm to database
-
-    // Run query
-    cy.request({
-      method: "post",
-      url: Cypress.config().graphqlUrl + '/graphql',
-      body: { query: queryAddAlarm },
-    }).then((res) => {
-      console.log(res.body);
-    });
-
-  // Run command to trigger alarm
-  cy.exec('docker-compose exec -T backend flask alarms evaluate')
-  cy.wait(1000)
-
-  // Check whether notification is set
-    // [TO-DO] Will be checked by alarmservice in new version
-
-  // Clean up
-    // Truncate alarms
-    cy.request({
-      method: "post",
-      url: Cypress.config().graphqlUrl + '/graphql',
-      body: { query: queryTruncateAlarm },
-    }).then((res) => {
-      console.log(res.body);
-    });
-
-    // Truncate signals
-    cy.request({
-      method: "post",
-      url: Cypress.config().graphqlUrl + '/graphql',
-      body: { query: queryTruncateSignal },
-    }).then((res) => {
-      console.log(res.body);
-    });
+// When('the alarm timeframe expires', () => {});
+  // Part of create-signal-on-no-payment.feature
  
-});
- 
-Then('a "Payment missing" signal is created', () => {
+Then('a "Multiple payments" signal is created', () => {
   
   // Add alarm to database
 
@@ -94,6 +56,7 @@ Then('a "Payment missing" signal is created', () => {
   cy.wait(1000)
 
   // Check whether notification is set
+
     // [TO-DO] Will be checked by alarmservice in new version
 
   // Clean up
