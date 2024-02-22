@@ -1,5 +1,18 @@
 # Huishoudboekje Changelog
 
+## 1.12.4
+
+Deze versie lost een probleem op met de overzicht weergave wanneer er een transactie is met een onbekende iban. Daarnaast zijn ook aanpassingen gedaan om dit te voorkomen.
+
+### Patch Changes
+
+- 499d03b: lay groundwork for addition of automatic tests to pipeline
+- d358863: replaced volatile css element selectors
+- 9759077: Added error on trying to create journaalpost with transaction that has a unknown iban
+- 63cd235: Fixed black screen overview when transaction iban is unknown
+- f3d66b4: added alarm test, removed old tests
+- 0b82ae5: replaced postgres plugin
+
 ## 1.12.3
 
 Deze versie lost een probleem op met de weergave van banktransacties en berekening van totalen in het overzicht met betalingen.
