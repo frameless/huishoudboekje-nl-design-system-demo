@@ -49,14 +49,14 @@
 # # Exit with the exit code of Cypress tests
 # exit $cypress_exit_code
 
-# cleanup() {
-#     echo "Deleting temporary database mesh ingress..."
-#     kubectl delete -f cypress/scripts/database-mesh-ingress.yaml  --namespace=$NAMESPACE
-# }
-# trap cleanup EXIT
+cleanup() {
+    echo "Deleting temporary database mesh ingress..."
+    kubectl delete -f cypress/scripts/database-mesh-ingress.yaml  --namespace=$NAMESPACE
+}
+trap cleanup EXIT
 
-echo "Getting runner public ip..."
-export PUBLIC_IP=$(curl -s ifconfig.me)
+# echo "Getting runner public ip..."
+# export PUBLIC_IP=$(curl -s ifconfig.me)
 
 echo "Applying envvars..."
 envsubst < cypress/scripts/sample.database-mesh-ingress.yaml > cypress/scripts/database-mesh-ingress.yaml
@@ -74,7 +74,7 @@ sleep 30
 curl -X POST \
   -H "Content-Type: application/json" \
   -d '{"query": "mutation CreateAlarm { createAlarm(input: { alarm: { afspraakId: 12, id: \"testfrompipeline\", isActive: false, datumMargin: 20, bedrag: 1230, bedragMargin: 5, startDate: \"20-12-2023\" } }) { id isActive startDate }}" }' \
-  $DATABASE_HOST
+  $DATABASE_HOST/graphql
 
 
 
