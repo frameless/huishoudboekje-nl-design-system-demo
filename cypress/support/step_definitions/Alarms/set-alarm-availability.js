@@ -35,12 +35,14 @@ Then('the alarm availability is displayed', () => {
       // Is automatically filled in
 
     // 'Dag in de maand'
-    cy.get('\#field\\-\\\:r17\\\:')
-    .type('1')
-    .should('have.value', '1')
+    cy.get('*input[max="28"]')
+      .type('1')
+      .should('have.value', '1')
 
     // 'Toegestane afwijking'
-    cy.get('\#field\\-\\\:r19\\\:')
+    cy.get('*input[min="0"]')
+      .not('*input[max="28"]')
+      .not('*input[pattern]')
       .type('1')
       .should('have.value', '1')
 
@@ -48,7 +50,8 @@ Then('the alarm availability is displayed', () => {
       // Is automatically filled in
 
     // 'Toegestane afwijking bedrag'
-    cy.get('\#field\\-\\\:r1d\\\:')
+    cy.get('*input[pattern]')
+      .filter('*input[value=""]')
       .type('1')
       .should('have.value', '1') 
 
@@ -108,12 +111,14 @@ Then('the alarm availability is "Enabled"', () => {
       // Is automatically filled in
 
     // 'Dag in de maand'
-    cy.get('\#field\\-\\\:r17\\\:')
-    .type('1')
-    .should('have.value', '1')
+    cy.get('*input[max="28"]')
+      .type('1')
+      .should('have.value', '1')
 
     // 'Toegestane afwijking'
-    cy.get('\#field\\-\\\:r19\\\:')
+    cy.get('*input[min="0"]')
+      .not('*input[max="28"]')
+      .not('*input[pattern]')
       .type('1')
       .should('have.value', '1')
 
@@ -121,7 +126,8 @@ Then('the alarm availability is "Enabled"', () => {
       // Is automatically filled in
 
     // 'Toegestane afwijking bedrag'
-    cy.get('\#field\\-\\\:r1d\\\:')
+    cy.get('*input[pattern]')
+      .filter('*input[value=""]')
       .type('1')
       .should('have.value', '1') 
 
@@ -182,12 +188,14 @@ When('I click the "Disable alarm" button', () => {
       // Is automatically filled in
 
     // 'Dag in de maand'
-    cy.get('\#field\\-\\\:r17\\\:')
-    .type('1')
-    .should('have.value', '1')
+    cy.get('*input[max="28"]')
+      .type('1')
+      .should('have.value', '1')
 
     // 'Toegestane afwijking'
-    cy.get('\#field\\-\\\:r19\\\:')
+    cy.get('*input[min="0"]')
+      .not('*input[max="28"]')
+      .not('*input[pattern]')
       .type('1')
       .should('have.value', '1')
 
@@ -195,7 +203,8 @@ When('I click the "Disable alarm" button', () => {
       // Is automatically filled in
 
     // 'Toegestane afwijking bedrag'
-    cy.get('\#field\\-\\\:r1d\\\:')
+    cy.get('*input[pattern]')
+      .filter('*input[value=""]')
       .type('1')
       .should('have.value', '1') 
 
@@ -260,12 +269,14 @@ Then('the alarm status is "Disabled"', () => {
       // Is automatically filled in
 
     // 'Dag in de maand'
-    cy.get('\#field\\-\\\:r17\\\:')
-    .type('1')
-    .should('have.value', '1')
+    cy.get('*input[max="28"]')
+      .type('1')
+      .should('have.value', '1')
 
     // 'Toegestane afwijking'
-    cy.get('\#field\\-\\\:r19\\\:')
+    cy.get('*input[min="0"]')
+      .not('*input[max="28"]')
+      .not('*input[pattern]')
       .type('1')
       .should('have.value', '1')
 
@@ -273,7 +284,8 @@ Then('the alarm status is "Disabled"', () => {
       // Is automatically filled in
 
     // 'Toegestane afwijking bedrag'
-    cy.get('\#field\\-\\\:r1d\\\:')
+    cy.get('*input[pattern]')
+      .filter('*input[value=""]')
       .type('1')
       .should('have.value', '1') 
 
@@ -347,29 +359,32 @@ Then('the alarm status is "Disabled"', () => {
     // Fill in all required fields
       // 'Startdatum'
         // Is automatically filled in
-  
+
       // 'Dag in de maand'
-      cy.get('\#field\\-\\\:r17\\\:')
-      .type('1')
-      .should('have.value', '1')
-  
+      cy.get('*input[max="28"]')
+        .type('1')
+        .should('have.value', '1')
+
       // 'Toegestane afwijking'
-      cy.get('\#field\\-\\\:r19\\\:')
+      cy.get('*input[min="0"]')
+        .not('*input[max="28"]')
+        .not('*input[pattern]')
+        .type('1')
+        .should('have.value', '1')
+
+      // 'Bedrag verwachte betaling'
+        // Is automatically filled in
+
+      // 'Toegestane afwijking bedrag'
+      cy.get('*input[pattern]')
+        .filter('*input[value=""]')
         .type('1')
         .should('have.value', '1')
   
-      // 'Bedrag verwachte betaling'
-        // Is automatically filled in
-  
-      // 'Toegestane afwijking bedrag'
-      cy.get('\#field\\-\\\:r1d\\\:')
-        .type('1')
-        .should('have.value', '1') 
-  
     // Click 'Opslaan' button
     cy.waitForReact()
-  cy.get('div[data-focus-lock-disabled="false"]').contains("Opslaan")
-    .click()
+    cy.get('div[data-focus-lock-disabled="false"]').contains("Opslaan")
+      .click()
   
     // Check whether modal is closed
     cy.contains('Alarm toevoegen')
@@ -428,24 +443,27 @@ Then('the alarm status is "Disabled"', () => {
     // Fill in all required fields
       // 'Startdatum'
         // Is automatically filled in
-  
+
       // 'Dag in de maand'
-      cy.get('\#field\\-\\\:r17\\\:')
-      .type('1')
-      .should('have.value', '1')
-  
-      // 'Toegestane afwijking'
-      cy.get('\#field\\-\\\:r19\\\:')
+      cy.get('*input[max="28"]')
         .type('1')
         .should('have.value', '1')
-  
+
+      // 'Toegestane afwijking'
+      cy.get('*input[min="0"]')
+        .not('*input[max="28"]')
+        .not('*input[pattern]')
+        .type('1')
+        .should('have.value', '1')
+
       // 'Bedrag verwachte betaling'
         // Is automatically filled in
-  
+
       // 'Toegestane afwijking bedrag'
-      cy.get('\#field\\-\\\:r1d\\\:')
+      cy.get('*input[pattern]')
+        .filter('*input[value=""]')
         .type('1')
-        .should('have.value', '1') 
+        .should('have.value', '1')
   
     // Click 'Opslaan' button
     cy.waitForReact()
@@ -506,24 +524,27 @@ Then('the alarm status is "Disabled"', () => {
     // Fill in all required fields
       // 'Startdatum'
         // Is automatically filled in
-  
+
       // 'Dag in de maand'
-      cy.get('\#field\\-\\\:r17\\\:')
-      .type('1')
-      .should('have.value', '1')
-  
-      // 'Toegestane afwijking'
-      cy.get('\#field\\-\\\:r19\\\:')
+      cy.get('*input[max="28"]')
         .type('1')
         .should('have.value', '1')
-  
+
+      // 'Toegestane afwijking'
+      cy.get('*input[min="0"]')
+        .not('*input[max="28"]')
+        .not('*input[pattern]')
+        .type('1')
+        .should('have.value', '1')
+
       // 'Bedrag verwachte betaling'
         // Is automatically filled in
-  
+
       // 'Toegestane afwijking bedrag'
-      cy.get('\#field\\-\\\:r1d\\\:')
+      cy.get('*input[pattern]')
+        .filter('*input[value=""]')
         .type('1')
-        .should('have.value', '1') 
+        .should('have.value', '1')
   
     // Click 'Opslaan' button
     cy.waitForReact()

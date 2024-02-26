@@ -44,12 +44,14 @@ When('I click the "Delete alarm" button', () => {
       // Is automatically filled in
 
     // 'Dag in de maand'
-    cy.get('\#field\\-\\\:r17\\\:')
-    .type('1')
-    .should('have.value', '1')
+    cy.get('*input[max="28"]')
+      .type('1')
+      .should('have.value', '1')
 
     // 'Toegestane afwijking'
-    cy.get('\#field\\-\\\:r19\\\:')
+    cy.get('*input[min="0"]')
+      .not('*input[max="28"]')
+      .not('*input[pattern]')
       .type('1')
       .should('have.value', '1')
 
@@ -57,7 +59,8 @@ When('I click the "Delete alarm" button', () => {
       // Is automatically filled in
 
     // 'Toegestane afwijking bedrag'
-    cy.get('\#field\\-\\\:r1d\\\:')
+    cy.get('*input[pattern]')
+      .filter('*input[value=""]')
       .type('1')
       .should('have.value', '1') 
 
@@ -120,12 +123,14 @@ Then('the "Cancel delete alarm" button is displayed', () => {
       // Is automatically filled in
 
     // 'Dag in de maand'
-    cy.get('\#field\\-\\\:r17\\\:')
-    .type('1')
-    .should('have.value', '1')
+    cy.get('*input[max="28"]')
+      .type('1')
+      .should('have.value', '1')
 
     // 'Toegestane afwijking'
-    cy.get('\#field\\-\\\:r19\\\:')
+    cy.get('*input[min="0"]')
+      .not('*input[max="28"]')
+      .not('*input[pattern]')
       .type('1')
       .should('have.value', '1')
 
@@ -133,7 +138,8 @@ Then('the "Cancel delete alarm" button is displayed', () => {
       // Is automatically filled in
 
     // 'Toegestane afwijking bedrag'
-    cy.get('\#field\\-\\\:r1d\\\:')
+    cy.get('*input[pattern]')
+      .filter('*input[value=""]')
       .type('1')
       .should('have.value', '1') 
 
@@ -198,12 +204,14 @@ Then('the "Confirm delete alarm" button is displayed', () => {
       // Is automatically filled in
 
     // 'Dag in de maand'
-    cy.get('\#field\\-\\\:r17\\\:')
-    .type('1')
-    .should('have.value', '1')
+    cy.get('*input[max="28"]')
+      .type('1')
+      .should('have.value', '1')
 
     // 'Toegestane afwijking'
-    cy.get('\#field\\-\\\:r19\\\:')
+    cy.get('*input[min="0"]')
+      .not('*input[max="28"]')
+      .not('*input[pattern]')
       .type('1')
       .should('have.value', '1')
 
@@ -211,7 +219,8 @@ Then('the "Confirm delete alarm" button is displayed', () => {
       // Is automatically filled in
 
     // 'Toegestane afwijking bedrag'
-    cy.get('\#field\\-\\\:r1d\\\:')
+    cy.get('*input[pattern]')
+      .filter('*input[value=""]')
       .type('1')
       .should('have.value', '1') 
 
@@ -280,12 +289,14 @@ When('I click the "Cancel delete alarm" button', () => {
       // Is automatically filled in
 
     // 'Dag in de maand'
-    cy.get('\#field\\-\\\:r17\\\:')
-    .type('1')
-    .should('have.value', '1')
+    cy.get('*input[max="28"]')
+      .type('1')
+      .should('have.value', '1')
 
     // 'Toegestane afwijking'
-    cy.get('\#field\\-\\\:r19\\\:')
+    cy.get('*input[min="0"]')
+      .not('*input[max="28"]')
+      .not('*input[pattern]')
       .type('1')
       .should('have.value', '1')
 
@@ -293,7 +304,8 @@ When('I click the "Cancel delete alarm" button', () => {
       // Is automatically filled in
 
     // 'Toegestane afwijking bedrag'
-    cy.get('\#field\\-\\\:r1d\\\:')
+    cy.get('*input[pattern]')
+      .filter('*input[value=""]')
       .type('1')
       .should('have.value', '1') 
 
@@ -358,12 +370,14 @@ Then('the "Delete alarm" button is displayed', () => {
       // Is automatically filled in
 
     // 'Dag in de maand'
-    cy.get('\#field\\-\\\:r17\\\:')
-    .type('1')
-    .should('have.value', '1')
+    cy.get('*input[max="28"]')
+      .type('1')
+      .should('have.value', '1')
 
     // 'Toegestane afwijking'
-    cy.get('\#field\\-\\\:r19\\\:')
+    cy.get('*input[min="0"]')
+      .not('*input[max="28"]')
+      .not('*input[pattern]')
       .type('1')
       .should('have.value', '1')
 
@@ -371,7 +385,8 @@ Then('the "Delete alarm" button is displayed', () => {
       // Is automatically filled in
 
     // 'Toegestane afwijking bedrag'
-    cy.get('\#field\\-\\\:r1d\\\:')
+    cy.get('*input[pattern]')
+      .filter('*input[value=""]')
       .type('1')
       .should('have.value', '1') 
 
@@ -444,12 +459,14 @@ When('I click the "Confirm delete alarm" button', () => {
       // Is automatically filled in
 
     // 'Dag in de maand'
-    cy.get('\#field\\-\\\:r17\\\:')
-    .type('1')
-    .should('have.value', '1')
+    cy.get('*input[max="28"]')
+      .type('1')
+      .should('have.value', '1')
 
     // 'Toegestane afwijking'
-    cy.get('\#field\\-\\\:r19\\\:')
+    cy.get('*input[min="0"]')
+      .not('*input[max="28"]')
+      .not('*input[pattern]')
       .type('1')
       .should('have.value', '1')
 
@@ -457,7 +474,8 @@ When('I click the "Confirm delete alarm" button', () => {
       // Is automatically filled in
 
     // 'Toegestane afwijking bedrag'
-    cy.get('\#field\\-\\\:r1d\\\:')
+    cy.get('*input[pattern]')
+      .filter('*input[value=""]')
       .type('1')
       .should('have.value', '1') 
 
@@ -525,12 +543,14 @@ Then('the "Er is geen alarm ingesteld." text is displayed', () => {
       // Is automatically filled in
 
     // 'Dag in de maand'
-    cy.get('\#field\\-\\\:r17\\\:')
-    .type('1')
-    .should('have.value', '1')
+    cy.get('*input[max="28"]')
+      .type('1')
+      .should('have.value', '1')
 
     // 'Toegestane afwijking'
-    cy.get('\#field\\-\\\:r19\\\:')
+    cy.get('*input[min="0"]')
+      .not('*input[max="28"]')
+      .not('*input[pattern]')
       .type('1')
       .should('have.value', '1')
 
@@ -538,7 +558,8 @@ Then('the "Er is geen alarm ingesteld." text is displayed', () => {
       // Is automatically filled in
 
     // 'Toegestane afwijking bedrag'
-    cy.get('\#field\\-\\\:r1d\\\:')
+    cy.get('*input[pattern]')
+      .filter('*input[value=""]')
       .type('1')
       .should('have.value', '1') 
 
@@ -613,12 +634,14 @@ Then('the "Add alarm" button is displayed', () => {
       // Is automatically filled in
 
     // 'Dag in de maand'
-    cy.get('\#field\\-\\\:r17\\\:')
-    .type('1')
-    .should('have.value', '1')
+    cy.get('*input[max="28"]')
+      .type('1')
+      .should('have.value', '1')
 
     // 'Toegestane afwijking'
-    cy.get('\#field\\-\\\:r19\\\:')
+    cy.get('*input[min="0"]')
+      .not('*input[max="28"]')
+      .not('*input[pattern]')
       .type('1')
       .should('have.value', '1')
 
@@ -626,7 +649,8 @@ Then('the "Add alarm" button is displayed', () => {
       // Is automatically filled in
 
     // 'Toegestane afwijking bedrag'
-    cy.get('\#field\\-\\\:r1d\\\:')
+    cy.get('*input[pattern]')
+      .filter('*input[value=""]')
       .type('1')
       .should('have.value', '1') 
 

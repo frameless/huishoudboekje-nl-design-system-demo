@@ -41,6 +41,9 @@ module.exports = defineConfig({
     // Host Url
     baseUrl: "http://localhost:3000",
 
+    // Azure AD
+    experimentalModifyObstructiveThirdPartyCode: true,
+
     // Database variables
       // Generic
       databasePort: 5432,

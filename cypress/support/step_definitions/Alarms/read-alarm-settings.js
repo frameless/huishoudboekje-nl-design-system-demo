@@ -48,12 +48,14 @@ Then('the alarm recurrency is displayed', () => {
       // Is automatically filled in
 
     // 'Dag in de maand'
-    cy.get('\#field\\-\\\:r17\\\:')
-    .type('1')
-    .should('have.value', '1')
+    cy.get('*input[max="28"]')
+      .type('1')
+      .should('have.value', '1')
 
     // 'Toegestane afwijking'
-    cy.get('\#field\\-\\\:r19\\\:')
+    cy.get('*input[min="0"]')
+      .not('*input[max="28"]')
+      .not('*input[pattern]')
       .type('1')
       .should('have.value', '1')
 
@@ -61,7 +63,8 @@ Then('the alarm recurrency is displayed', () => {
       // Is automatically filled in
 
     // 'Toegestane afwijking bedrag'
-    cy.get('\#field\\-\\\:r1d\\\:')
+    cy.get('*input[pattern]')
+      .filter('*input[value=""]')
       .type('1')
       .should('have.value', '1') 
 
@@ -120,12 +123,14 @@ Then('the alarm day of the month is displayed', () => {
       // Is automatically filled in
 
     // 'Dag in de maand'
-    cy.get('\#field\\-\\\:r17\\\:')
-    .type('16')
-    .should('have.value', '16')
+    cy.get('*input[max="28"]')
+      .type('16')
+      .should('have.value', '16')
 
     // 'Toegestane afwijking'
-    cy.get('\#field\\-\\\:r19\\\:')
+    cy.get('*input[min="0"]')
+      .not('*input[max="28"]')
+      .not('*input[pattern]')
       .type('1')
       .should('have.value', '1')
 
@@ -133,7 +138,8 @@ Then('the alarm day of the month is displayed', () => {
       // Is automatically filled in
 
     // 'Toegestane afwijking bedrag'
-    cy.get('\#field\\-\\\:r1d\\\:')
+    cy.get('*input[pattern]')
+      .filter('*input[value=""]')
       .type('1')
       .should('have.value', '1') 
 
@@ -192,12 +198,14 @@ Then('the alarm allowed deviation in days is displayed', () => {
       // Is automatically filled in
 
     // 'Dag in de maand'
-    cy.get('\#field\\-\\\:r17\\\:')
+    cy.get('*input[max="28"]')
     .type('1')
     .should('have.value', '1')
 
     // 'Toegestane afwijking'
-    cy.get('\#field\\-\\\:r19\\\:')
+    cy.get('*input[min="0"]')
+      .not('*input[max="28"]')
+      .not('*input[pattern]')
       .type('23')
       .should('have.value', '23')
 
@@ -205,7 +213,8 @@ Then('the alarm allowed deviation in days is displayed', () => {
       // Is automatically filled in
 
     // 'Toegestane afwijking bedrag'
-    cy.get('\#field\\-\\\:r1d\\\:')
+    cy.get('*input[pattern]')
+      .filter('*input[value=""]')
       .type('1')
       .should('have.value', '1') 
 
@@ -261,16 +270,27 @@ Then('the alarm next date is displayed', () => {
 
   // Fill in all required fields
     // 'Startdatum'
-    cy.get('\#field\\-\\\:r15\\\:')
-    .type('{selectAll}01-01-2099{enter}')
+      // Set date constants for comparison
+      const dateNow = new Date().toLocaleDateString('nl-NL', {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+      })
+
+    cy.get('*[class*="datepicker"]')
+      .find('input')
+      .should('have.value', dateNow)
+      .type('{selectAll}01-01-2099{enter}')
 
     // 'Dag in de maand'
-    cy.get('\#field\\-\\\:r17\\\:')
+    cy.get('*input[max="28"]')
     .type('1')
     .should('have.value', '1')
 
     // 'Toegestane afwijking'
-    cy.get('\#field\\-\\\:r19\\\:')
+    cy.get('*input[min="0"]')
+      .not('*input[max="28"]')
+      .not('*input[pattern]')
       .type('1')
       .should('have.value', '1')
 
@@ -278,7 +298,8 @@ Then('the alarm next date is displayed', () => {
       // Is automatically filled in
 
     // 'Toegestane afwijking bedrag'
-    cy.get('\#field\\-\\\:r1d\\\:')
+    cy.get('*input[pattern]')
+      .filter('*input[value=""]')
       .type('1')
       .should('have.value', '1') 
 
@@ -338,22 +359,26 @@ Then('the alarm expected amount is displayed', () => {
       // Is automatically filled in
 
     // 'Dag in de maand'
-    cy.get('\#field\\-\\\:r17\\\:')
+    cy.get('*input[max="28"]')
     .type('1')
     .should('have.value', '1')
 
     // 'Toegestane afwijking'
-    cy.get('\#field\\-\\\:r19\\\:')
+    cy.get('*input[min="0"]')
+      .not('*input[max="28"]')
+      .not('*input[pattern]')
       .type('1')
       .should('have.value', '1')
 
     // 'Bedrag verwachte betaling'
-    cy.get('\#field\\-\\\:r1b\\\:')
+    cy.get('*input[pattern]')
+      .not('*input[value=""]')
       .type('{selectAll}123.45')
       .should('have.value', '123.45') 
 
     // 'Toegestane afwijking bedrag'
-    cy.get('\#field\\-\\\:r1d\\\:')
+    cy.get('*input[pattern]')
+      .filter('*input[value=""]')
       .type('1')
       .should('have.value', '1') 
 
@@ -413,12 +438,14 @@ Then('the alarm allowed deviation of the expected amount is displayed', () => {
       // Is automatically filled in
 
     // 'Dag in de maand'
-    cy.get('\#field\\-\\\:r17\\\:')
+    cy.get('*input[max="28"]')
     .type('1')
     .should('have.value', '1')
 
     // 'Toegestane afwijking'
-    cy.get('\#field\\-\\\:r19\\\:')
+    cy.get('*input[min="0"]')
+      .not('*input[max="28"]')
+      .not('*input[pattern]')
       .type('1')
       .should('have.value', '1')
 
@@ -426,7 +453,8 @@ Then('the alarm allowed deviation of the expected amount is displayed', () => {
       // Is automatically filled in
 
     // 'Toegestane afwijking bedrag'
-    cy.get('\#field\\-\\\:r1d\\\:')
+    cy.get('*input[pattern]')
+      .filter('*input[value=""]')
       .type('{selectAll}37')
       .should('have.value', '37')
 
@@ -485,12 +513,14 @@ Then('the alarm status is displayed', () => {
       // Is automatically filled in
 
     // 'Dag in de maand'
-    cy.get('\#field\\-\\\:r17\\\:')
-    .type('1')
-    .should('have.value', '1')
+    cy.get('*input[max="28"]')
+      .type('1')
+      .should('have.value', '1')
 
     // 'Toegestane afwijking'
-    cy.get('\#field\\-\\\:r19\\\:')
+    cy.get('*input[min="0"]')
+      .not('*input[max="28"]')
+      .not('*input[pattern]')
       .type('1')
       .should('have.value', '1')
 
@@ -498,7 +528,8 @@ Then('the alarm status is displayed', () => {
       // Is automatically filled in
 
     // 'Toegestane afwijking bedrag'
-    cy.get('\#field\\-\\\:r1d\\\:')
+    cy.get('*input[pattern]')
+      .filter('*input[value=""]')
       .type('1')
       .should('have.value', '1') 
 
