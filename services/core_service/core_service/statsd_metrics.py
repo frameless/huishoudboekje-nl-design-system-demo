@@ -124,6 +124,7 @@ def add_statsd_metrics(app):
             def receive_handle_error(exception_context):
                 # Intercept all exceptions processed by the Connection.
                 statsd.incr('sqlalchemy.events.connections.exceptions')
+                logging.error(exception_context)
                 logging.debug(f"handle_error")
 
             #
