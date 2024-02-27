@@ -114,8 +114,9 @@ Then('the start date is today', () => {
     day: "2-digit",
   })
 
-  // Check date field
-  cy.get('\#field\\-\\\:r15\\\:')
+  // Check 'Startdatum' field
+  cy.get('*[class*="datepicker"]')
+    .find('input')
     .should('have.value', dateNow)
 
 });
@@ -138,8 +139,8 @@ Then('the day of the month is empty', () => {
     .scrollIntoView()
     .should('be.visible')
 
-  // Check date field  
-  cy.get('\#field\\-\\\:r17\\\:')
+  // Check day field  
+  cy.get('*input[max="28"]')
     .should('have.value', '')
 
 });
@@ -162,8 +163,10 @@ Then('the allowed deviation in days is empty', () => {
     .scrollIntoView()
     .should('be.visible')
 
-  // Check date field  
-  cy.get('\#field\\-\\\:r19\\\:')
+  // Check 'Toegestane afwijking (in dagen)' field  
+  cy.get('*input[min="0"]')
+    .not('*input[max="28"]')
+    .not('*input[pattern]')
     .should('have.value', '')
 
 });
@@ -194,8 +197,9 @@ Then('the expected amount is equal to the amount of the agreement', () => {
     .scrollIntoView()
     .should('be.visible')
 
-  // Check expected payment-field  
-  cy.get('\#field\\-\\\:r1b\\\:')
+  // Check 'Bedrag verwachte betaling' field  
+  cy.get('*input[pattern]')
+    .not('*input[value=""]')
     .invoke('val')
     .should((val2) => {
       expect(val2).to.eq(newValue2)
@@ -222,8 +226,9 @@ Then('the allowed deviation in amount is empty', () => {
     .scrollIntoView()
     .should('be.visible')
 
-  // Check date field  
-  cy.get('\#field\\-\\\:r1d\\\:')
+  // Check 'Toegestane afwijking bedrag (in euro's)' field  
+  cy.get('*input[pattern]')
+    .filter('*input[value=""]')
     .should('have.value', '')
 
 });
@@ -391,13 +396,14 @@ Then('I fill in the current date for alarm start date', () => {
   })
 
   // Check 'Startdatum' field
-  cy.get('\#field\\-\\\:r15\\\:')
-    .should('have.value', dateNow)
+  cy.get('*[class*="datepicker"]')
+    .find('input')
     .clear()
     .should('have.value', '')
 
   // Fill in 'Startdatum' field
-  cy.get('\#field\\-\\\:r15\\\:')
+  cy.get('*[class*="datepicker"]')
+    .find('input')
     .type(dateNow)
     .should('have.value', dateNow)
 
@@ -421,12 +427,12 @@ Then('I fill in the alarm day of the month', () => {
     .scrollIntoView()
     .should('be.visible')
 
-  // Check 'Dag in de maand' field
-  cy.get('\#field\\-\\\:r17\\\:')
+  // Check 'Dag in de maand' field  
+  cy.get('*input[max="28"]')
     .should('have.value', '')
 
   // Fill in 'Dag in de maand' field
-  cy.get('\#field\\-\\\:r17\\\:')
+  cy.get('*input[max="28"]')
     .type('1')
     .should('have.value', '1')
 
@@ -450,12 +456,16 @@ Then('I fill in the alarm allowed deviation in days', () => {
     .scrollIntoView()
     .should('be.visible')
 
-  // Check 'Toegestane afwijking' field
-  cy.get('\#field\\-\\\:r19\\\:')
+  // Check 'Toegestane afwijking (in dagen)' field  
+  cy.get('*input[min="0"]')
+    .not('*input[max="28"]')
+    .not('*input[pattern]')
     .should('have.value', '')
 
-  // Fill in 'Toegestane afwijking' field
-  cy.get('\#field\\-\\\:r19\\\:')
+  // Fill in 'Toegestane afwijking (in dagen)' field  
+  cy.get('*input[min="0"]')
+    .not('*input[max="28"]')
+    .not('*input[pattern]')
     .type('1')
     .should('have.value', '1')
 
@@ -486,15 +496,17 @@ Then('I fill in the expected payment amount', () => {
     cy.get('section[aria-modal="true"]')
       .scrollIntoView()
       .should('be.visible')
-
-    // Check expected amount-field  
-    cy.get('\#field\\-\\\:r1b\\\:')
+    
+    // Check 'Bedrag verwachte betaling' field   
+    cy.get('*input[pattern]')
+      .not('*input[value=""]')
       .invoke('val')
       .then((val2) => {
         expect(val2).to.eq(newValue2)
 
-      // Clear and refill expected amount-field
-      cy.get('\#field\\-\\\:r1b\\\:')
+      // Clear and refill 'Bedrag verwachte betaling' field   
+      cy.get('*input[pattern]')
+        .not('*input[value=""]')
         .type('{selectAll}' + newValue2) // Done via 'selectAll', as a clear() will automatically leave a zero
         .should('have.value', newValue2)
         })
@@ -519,12 +531,14 @@ Then('I fill in the alarm allowed deviation in payment amount', () => {
     .scrollIntoView()
     .should('be.visible')
 
-  // Check 'Toegestane afwijking bedrag' field
-  cy.get('\#field\\-\\\:r1d\\\:')
+  // Check 'Toegestane afwijking bedrag (in euro's)' field  
+  cy.get('*input[pattern]')
+    .filter('*input[value=""]')
     .should('have.value', '')
 
-  // Fill in 'Toegestane afwijking bedrag' field
-  cy.get('\#field\\-\\\:r1d\\\:')
+  // Fill in 'Toegestane afwijking bedrag (in euro's)' field  
+  cy.get('*input[pattern]')
+    .filter('*input[value=""]')
     .type('1')
     .should('have.value', '1')
 
@@ -553,20 +567,23 @@ Then('I click the "Submit form" button', () => {
       // Is automatically filled in
 
     // 'Dag in de maand'
-    cy.get('\#field\\-\\\:r17\\\:')
-    .type('1')
-    .should('have.value', '1')
+    cy.get('*input[max="28"]')
+      .type('1')
+      .should('have.value', '1')
 
     // 'Toegestane afwijking'
-    cy.get('\#field\\-\\\:r19\\\:')
+    cy.get('*input[min="0"]')
+      .not('*input[max="28"]')
+      .not('*input[pattern]')
       .type('1')
       .should('have.value', '1')
 
     // 'Bedrag verwachte betaling'
       // Is automatically filled in
 
-    // 'Toegestane afwijking bedrag'
-    cy.get('\#field\\-\\\:r1d\\\:')
+    // 'Toegestane afwijking bedrag (in euro's)'
+    cy.get('*input[pattern]')
+      .filter('*input[value=""]')
       .type('1')
       .should('have.value', '1')
 
@@ -614,12 +631,14 @@ Then('the modal is closed', () => {
       // Is automatically filled in
 
     // 'Dag in de maand'
-    cy.get('\#field\\-\\\:r17\\\:')
-    .type('1')
-    .should('have.value', '1')
+    cy.get('*input[max="28"]')
+      .type('1')
+      .should('have.value', '1')
 
     // 'Toegestane afwijking'
-    cy.get('\#field\\-\\\:r19\\\:')
+    cy.get('*input[min="0"]')
+      .not('*input[max="28"]')
+      .not('*input[pattern]')
       .type('1')
       .should('have.value', '1')
 
@@ -627,7 +646,8 @@ Then('the modal is closed', () => {
       // Is automatically filled in
 
     // 'Toegestane afwijking bedrag'
-    cy.get('\#field\\-\\\:r1d\\\:')
+    cy.get('*input[pattern]')
+      .filter('*input[value=""]')
       .type('1')
       .should('have.value', '1') 
 
@@ -678,12 +698,14 @@ Then('a notification of success is displayed', () => {
       // Is automatically filled in
 
     // 'Dag in de maand'
-    cy.get('\#field\\-\\\:r17\\\:')
-    .type('1')
-    .should('have.value', '1')
+    cy.get('*input[max="28"]')
+      .type('1')
+      .should('have.value', '1')
 
     // 'Toegestane afwijking'
-    cy.get('\#field\\-\\\:r19\\\:')
+    cy.get('*input[min="0"]')
+      .not('*input[max="28"]')
+      .not('*input[pattern]')
       .type('1')
       .should('have.value', '1')
 
@@ -691,7 +713,8 @@ Then('a notification of success is displayed', () => {
       // Is automatically filled in
 
     // 'Toegestane afwijking bedrag'
-    cy.get('\#field\\-\\\:r1d\\\:')
+    cy.get('*input[pattern]')
+      .filter('*input[value=""]')
       .type('1')
       .should('have.value', '1') 
 
@@ -747,12 +770,14 @@ Then('the current status of the alarm on the agreements page is displayed', () =
       // Is automatically filled in
 
     // 'Dag in de maand'
-    cy.get('\#field\\-\\\:r17\\\:')
-    .type('1')
-    .should('have.value', '1')
+    cy.get('*input[max="28"]')
+      .type('1')
+      .should('have.value', '1')
 
     // 'Toegestane afwijking'
-    cy.get('\#field\\-\\\:r19\\\:')
+    cy.get('*input[min="0"]')
+      .not('*input[max="28"]')
+      .not('*input[pattern]')
       .type('1')
       .should('have.value', '1')
 
@@ -760,7 +785,8 @@ Then('the current status of the alarm on the agreements page is displayed', () =
       // Is automatically filled in
 
     // 'Toegestane afwijking bedrag'
-    cy.get('\#field\\-\\\:r1d\\\:')
+    cy.get('*input[pattern]')
+      .filter('*input[value=""]')
       .type('1')
       .should('have.value', '1') 
 

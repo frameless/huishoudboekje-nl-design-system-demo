@@ -41,21 +41,8 @@ module.exports = defineConfig({
     // Host Url
     baseUrl: "http://localhost:3000",
 
-    // Database variables
-      // Generic
-      databasePort: 5432,
-
-      // Alarmservice
-      databaseAlarm: "alarmenservice",
-      databaseAlarmUser:"postgres",
-      databaseAlarmHost: "localhost",
-      databaseAlarmPassword: "postgres",
-
-      // Signalenservice
-      databaseSignal: "signalenservice",
-      databaseSignalUser:"postgres",
-      databaseSignalHost: "localhost",
-      databaseSignalPassword: "postgres",
+    // Azure AD
+    experimentalModifyObstructiveThirdPartyCode: true,
 
     specPattern: ["**/*.feature"],
     excludeSpecPattern: ['**/__snapshots__/*', '**/__image_snapshots__/*'],
