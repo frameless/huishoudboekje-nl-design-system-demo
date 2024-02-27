@@ -25,7 +25,7 @@ function loginViaAAD(username: string, password: string) {
     cy.visit('/')
     cy.get('button').contains('Inloggen').click()
   
-    // Login to your AAD tenant.
+    // Login to the AAD tenant.
     cy.origin(
       'login.microsoftonline.com',
       {
@@ -54,6 +54,18 @@ function loginViaAAD(username: string, password: string) {
           log: false,
         })
         cy.get('input[type="submit"]').click()
+
+        // In case of 2FA warning message
+        cy.get('body').then(($body) => {
+          const buttonLogin = $body.find('input[value="Later vragen"]')
+          if (buttonLogin.length) {
+            cy.get('button').contains('Later vragen').click()
+          }
+          else {
+            // no 2FA warning message, so do nothing
+          }
+        })
+
         cy.get('#idBtn_Back').click()
       }
     )
