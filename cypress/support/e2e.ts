@@ -22,7 +22,7 @@ import './commands'
 import 'cypress-react-selector';
 
 function loginViaAAD(username: string, password: string) {
-    cy.visit('https://test.hhb-development.nl/')
+    cy.visit('/')
     cy.get('button').contains('Inloggen').click()
   
     // Login to your AAD tenant.
