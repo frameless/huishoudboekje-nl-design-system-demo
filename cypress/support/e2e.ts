@@ -71,7 +71,7 @@ function loginViaAAD(username: string, password: string) {
     )
   
     // Ensure Microsoft has redirected us back to the sample app with our logged in user.
-    cy.url().should('contain', '/huishoudens')
+    cy.url({ timeout: 10000 }).should('contain', '/huishoudens')
     cy.contains(`${Cypress.env('aad_username')}`)
   }
   
