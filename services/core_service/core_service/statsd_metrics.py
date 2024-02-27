@@ -1,6 +1,6 @@
 import logging
 from flask import request
-from sqlalchemy import event
+from sqlalchemy import ExceptionContext, event
 from sqlalchemy.engine import Engine
 from sqlalchemy.pool import Pool
 import time
@@ -121,11 +121,13 @@ def add_statsd_metrics(app):
                 logging.debug(f"engine_disposed")
 
             @event.listens_for(Engine, 'handle_error')
-            def receive_handle_error(exception_context):
+            def receive_handle_error(exception_context: ExceptionContext):
                 # Intercept all exceptions processed by the Connection.
                 statsd.incr('sqlalchemy.events.connections.exceptions')
-                logging.error(exception_context)
                 logging.debug(f"handle_error")
+                    
+                if(app.config["DATABASE_LOG_HANDLE_ERROR_EVENT"]):
+                    logging.error(exception_context)
 
             #
             # Flask metrics

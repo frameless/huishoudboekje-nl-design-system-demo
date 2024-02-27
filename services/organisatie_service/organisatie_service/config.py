@@ -15,6 +15,7 @@ class Config(object):
     DATABASE_POOL_SIZE = int(os.getenv('DATABASE_POOL_SIZE', "10"))
     DATABASE_POOL_MAX_OVERFLOW = int(os.getenv('DATABASE_POOL_MAX_OVERFLOW', "5"))
     DATABASE_POOL_RECYCLE = int(os.getenv('DATABASE_POOL_RECYCLE', "590"))
+    DATABASE_LOG_HANDLE_ERROR_EVENT = int(os.getenv('DATABASE_LOG_HANDLE_ERROR_EVENT', "0")) > 0
 
     SQLALCHEMY_ENGINE_OPTIONS = {
         "pool_pre_ping": DATABASE_POOL_PRE_PING,
