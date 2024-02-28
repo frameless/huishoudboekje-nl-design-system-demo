@@ -385,3 +385,11 @@ services:
 
   rapportageservice-test:
     <<: [ *x-py-tests, *x-rapportageservice ]
+
+  database-mesh:
+    build:
+      context: ./database-mesh
+      dockerfile: ./dev.Dockerfile
+    ports:
+      - 4200:4000
+

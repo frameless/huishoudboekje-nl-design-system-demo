@@ -46,3 +46,7 @@ k8s/overlay/hhb-development-cluster/components/configmaps/redis.conf
 k8s/overlay/hhb-development-cluster/components/configmaps/kustomization.yaml
 k8s/overlay/hhb-development-cluster/components/set-images/kustomization.yaml
 k8s/overlay/hhb-development-cluster/components/patches/ingress/host-name/ingress-host-patch.yaml
+
+cypress/pipeline/database-mesh-ingress.yaml
+
+database-mesh/.mesh

@@ -42,7 +42,7 @@ When('the alarm timeframe expires', () => {
     // Run query
     cy.request({
       method: "post",
-      url: Cypress.config().graphqlUrl + '/graphql',
+      url: Cypress.env().graphqlUrl + '/graphql',
       body: { query: queryAddAlarm },
     }).then((res) => {
       console.log(res.body);
@@ -58,7 +58,7 @@ When('the alarm timeframe expires', () => {
     // Truncate alarms
     cy.request({
       method: "post",
-      url: Cypress.config().graphqlUrl + '/graphql',
+      url: Cypress.env().graphqlUrl + '/graphql',
       body: { query: queryTruncateAlarm },
     }).then((res) => {
       console.log(res.body);
@@ -67,7 +67,7 @@ When('the alarm timeframe expires', () => {
     // Truncate signals
     cy.request({
       method: "post",
-      url: Cypress.config().graphqlUrl + '/graphql',
+      url: Cypress.env().graphqlUrl + '/graphql',
       body: { query: queryTruncateSignal },
     }).then((res) => {
       console.log(res.body);
@@ -82,7 +82,7 @@ Then('a "Payment missing" signal is created', () => {
     // Run query
     cy.request({
       method: "post",
-      url: Cypress.config().graphqlUrl + '/graphql',
+      url: Cypress.env().graphqlUrl + '/graphql',
       body: { query: queryAddAlarm },
     }).then((res) => {
       console.log(res.body);
@@ -98,7 +98,7 @@ Then('a "Payment missing" signal is created', () => {
     // Truncate alarms
     cy.request({
       method: "post",
-      url: Cypress.config().graphqlUrl + '/graphql',
+      url: Cypress.env().graphqlUrl + '/graphql',
       body: { query: queryTruncateAlarm },
     }).then((res) => {
       console.log(res.body);
@@ -107,7 +107,7 @@ Then('a "Payment missing" signal is created', () => {
     // Truncate signals
     cy.request({
       method: "post",
-      url: Cypress.config().graphqlUrl + '/graphql',
+      url: Cypress.env().graphqlUrl + '/graphql',
       body: { query: queryTruncateSignal },
     }).then((res) => {
       console.log(res.body);
