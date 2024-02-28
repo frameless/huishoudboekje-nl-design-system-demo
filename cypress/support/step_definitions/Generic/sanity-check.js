@@ -14,7 +14,8 @@ When('I visit the baseUrl', () => {
  
 Then('I am actually on the baseUrl', () => {
 
-  cy.visit('/')
+  Step(this, 'I visit the baseUrl');
+  
   cy.url().should('include', Cypress.config().baseUrl)
  
 });

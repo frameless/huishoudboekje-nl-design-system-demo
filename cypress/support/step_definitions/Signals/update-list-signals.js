@@ -33,7 +33,7 @@ Then('the "Refresh signals" button is displayed', () => {
 
   Then('5 minutes pass', () => {
 
-    cy.wait(300000)
+    //cy.wait(300000)
   
   });
   

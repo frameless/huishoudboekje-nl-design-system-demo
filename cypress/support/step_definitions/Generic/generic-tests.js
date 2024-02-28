@@ -17,8 +17,10 @@ const queryTruncateSignal = `mutation Truncate {
 }`
 
 // Before *all* tests, run this (so this runs once at the start)
-Before(() => {
+//BeforeAll(() => {});
 
+// Before *each* test, run this (so this runs equal to the amount of tests)
+BeforeStep(() => {
 // Clean up
   // Truncate alarms
   cy.request({
@@ -37,20 +39,18 @@ Before(() => {
   }).then((res) => {
     console.log(res.body);
   });
- });
 
-// Before *each* test, run this (so this runs equal to the amount of tests)
-  BeforeStep(() => {
-    cy.visit('/');
-    cy.wait(500);
-    cy.get('body').then(($body) => {
-      const buttonLogin = $body.find('button[type="submit"]')
-      if (buttonLogin.length) {
-        cy.get('button').contains('Inloggen').click()
-        cy.loginToAAD(Cypress.env('aad_username'), Cypress.env('aad_password'))
-      }
-      else {
-        // already logged in; do nothing
-      }
-    })
-  });
+// Log in
+  cy.visit('/');
+  cy.wait(500);
+  cy.get('body').then(($body) => {
+    const buttonLogin = $body.find('button[type="submit"]')
+    if (buttonLogin.length) {
+      cy.get('button').contains('Inloggen').click()
+      cy.loginToAAD(Cypress.env('aad_username'), Cypress.env('aad_password'))
+    }
+    else {
+      // already logged in; do nothing
+    }
+  })
+});
