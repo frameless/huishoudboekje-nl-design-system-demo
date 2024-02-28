@@ -55,23 +55,27 @@ function loginViaAAD(username: string, password: string) {
         })
         cy.get('input[type="submit"]').click()
 
+        cy.wait(500)
+
         // In case of 2FA warning message
         cy.get('body').then(($body) => {
-          const buttonLogin = $body.find('input[value="Later vragen"]')
+          const buttonLogin = $body.find('#btnAskLater')
           if (buttonLogin.length) {
-            cy.get('button').contains('Later vragen').click()
+            cy.get('#btnAskLater').click()
           }
           else {
             // no 2FA warning message, so do nothing
           }
         })
 
+        cy.wait(500)
+
         cy.get('#idBtn_Back').click()
       }
     )
   
     // Ensure Microsoft has redirected us back to the sample app with our logged in user.
-    cy.url({ timeout: 10000 }).should('contain', '/huishoudens')
+    cy.url({ timeout: 10000 }).should('contain', Cypress.config().baseUrl)
     cy.contains(`${Cypress.env('aad_username')}`)
   }
   
