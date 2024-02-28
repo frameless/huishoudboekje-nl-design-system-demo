@@ -55,16 +55,20 @@ function loginViaAAD(username: string, password: string) {
         })
         cy.get('input[type="submit"]').click()
 
+        cy.wait(500)
+
         // In case of 2FA warning message
         cy.get('body').then(($body) => {
-          const buttonLogin = $body.find('input[value="Later vragen"]')
+          const buttonLogin = $body.find('#btnAskLater')
           if (buttonLogin.length) {
-            cy.get('button').contains('Later vragen').click()
+            cy.get('#btnAskLater').click()
           }
           else {
             // no 2FA warning message, so do nothing
           }
         })
+
+        cy.wait(500)
 
         cy.get('#idBtn_Back').click()
       }
