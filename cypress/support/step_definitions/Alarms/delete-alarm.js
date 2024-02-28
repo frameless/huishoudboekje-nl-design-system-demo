@@ -16,7 +16,7 @@ const queryTruncateSignal = `mutation Truncate {
   truncateTable(databaseName: "signalenservice", tableName: "Signal")
 }`
 
-//#region Scenario: delete alarm
+//#region Scenario: view delete alarm form
 
 // When('I view the "Agreement" page')
   // Is part of Scenario 'view create alarm form with default options' in create-alarm.js
@@ -34,6 +34,25 @@ When('I click the "Delete alarm" button', () => {
   // Check assertion
   cy.get('button[aria-label="Verwijderen"]')
     .click()
+
+  // Clean up
+    // Truncate alarms
+    cy.request({
+      method: "post",
+      url: Cypress.env().graphqlUrl + '/graphql',
+      body: { query: queryTruncateAlarm },
+    }).then((res) => {
+      console.log(res.body);
+    });
+
+    // Truncate signals
+    cy.request({
+      method: "post",
+      url: Cypress.env().graphqlUrl + '/graphql',
+      body: { query: queryTruncateSignal },
+    }).then((res) => {
+      console.log(res.body);
+    });
   
 });
 
@@ -52,6 +71,25 @@ Then('the "Cancel delete alarm" button is displayed', () => {
     .click()
   cy.get('button[aria-label="Annuleren"]')
     .should('be.visible')
+
+  // Clean up
+    // Truncate alarms
+    cy.request({
+      method: "post",
+      url: Cypress.env().graphqlUrl + '/graphql',
+      body: { query: queryTruncateAlarm },
+    }).then((res) => {
+      console.log(res.body);
+    });
+
+    // Truncate signals
+    cy.request({
+      method: "post",
+      url: Cypress.env().graphqlUrl + '/graphql',
+      body: { query: queryTruncateSignal },
+    }).then((res) => {
+      console.log(res.body);
+    });
   
 });
 
@@ -65,11 +103,30 @@ Then('the "Confirm delete alarm" button is displayed', () => {
   cy.get('button[aria-label="Verwijderen"]')
     .should('be.visible')
   
+  // Clean up
+    // Truncate alarms
+    cy.request({
+      method: "post",
+      url: Cypress.env().graphqlUrl + '/graphql',
+      body: { query: queryTruncateAlarm },
+    }).then((res) => {
+      console.log(res.body);
+    });
+
+    // Truncate signals
+    cy.request({
+      method: "post",
+      url: Cypress.env().graphqlUrl + '/graphql',
+      body: { query: queryTruncateSignal },
+    }).then((res) => {
+      console.log(res.body);
+    });
+  
 });
 
 //#endregion
 
-//#region Scenario: cancel delete alarm
+//#region Scenario: cancel alarm deletion
 
 When('I click the "Cancel delete alarm" button', () => {
  
@@ -86,6 +143,25 @@ When('I click the "Cancel delete alarm" button', () => {
     .click()
   cy.get('button[aria-label="Annuleren"]')
     .click()
+
+  // Clean up
+    // Truncate alarms
+    cy.request({
+      method: "post",
+      url: Cypress.env().graphqlUrl + '/graphql',
+      body: { query: queryTruncateAlarm },
+    }).then((res) => {
+      console.log(res.body);
+    });
+
+    // Truncate signals
+    cy.request({
+      method: "post",
+      url: Cypress.env().graphqlUrl + '/graphql',
+      body: { query: queryTruncateSignal },
+    }).then((res) => {
+      console.log(res.body);
+    });
   
 });
 
@@ -109,11 +185,30 @@ Then('the "Delete alarm" button is displayed', () => {
     cy.get('button[aria-label="Annuleren"]')
     .should('not.exist')
 
+  // Clean up
+    // Truncate alarms
+    cy.request({
+      method: "post",
+      url: Cypress.env().graphqlUrl + '/graphql',
+      body: { query: queryTruncateAlarm },
+    }).then((res) => {
+      console.log(res.body);
+    });
+
+    // Truncate signals
+    cy.request({
+      method: "post",
+      url: Cypress.env().graphqlUrl + '/graphql',
+      body: { query: queryTruncateSignal },
+    }).then((res) => {
+      console.log(res.body);
+    });
+
 });
 
 //#endregion
 
-//#region Scenario: confirm delete alarm
+//#region Scenario: confirm alarm deletion
 
 When('I click the "Confirm delete alarm" button', () => {
  
@@ -130,6 +225,25 @@ When('I click the "Confirm delete alarm" button', () => {
     .click()
   cy.get('button[aria-label="Verwijderen"]')
     .click()
+
+  // Clean up
+    // Truncate alarms
+    cy.request({
+      method: "post",
+      url: Cypress.env().graphqlUrl + '/graphql',
+      body: { query: queryTruncateAlarm },
+    }).then((res) => {
+      console.log(res.body);
+    });
+
+    // Truncate signals
+    cy.request({
+      method: "post",
+      url: Cypress.env().graphqlUrl + '/graphql',
+      body: { query: queryTruncateSignal },
+    }).then((res) => {
+      console.log(res.body);
+    });
 
 });
 

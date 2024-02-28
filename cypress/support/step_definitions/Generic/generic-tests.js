@@ -1,6 +1,6 @@
 // cypress/support/step_definitions/Generic/generic-tests.js
 
-import { BeforeStep, Before, BeforeAll, After, AfterAll, AfterStep } from "@badeball/cypress-cucumber-preprocessor";
+import { BeforeStep, Before } from "@badeball/cypress-cucumber-preprocessor";
 
 const header = {
   'content-type': 'application/json',
@@ -17,10 +17,8 @@ const queryTruncateSignal = `mutation Truncate {
 }`
 
 // Before *all* tests, run this (so this runs once at the start)
-//BeforeAll(() => {});
+before(() => {
 
-// Before *each* test, run this (so this runs equal to the amount of tests)
-Before(() => {
 // Clean up
   // Truncate alarms
   cy.request({
@@ -40,7 +38,12 @@ Before(() => {
     console.log(res.body);
   });
 
-// Log in
+});
+
+// Before *each* test, run this (so this runs equal to the amount of tests)
+BeforeStep(() => {
+
+  // Log in
   cy.visit('/');
   cy.wait(500);
   cy.get('body').then(($body) => {
@@ -52,5 +55,7 @@ Before(() => {
     else {
       // already logged in; do nothing
     }
+
   })
+
 });
