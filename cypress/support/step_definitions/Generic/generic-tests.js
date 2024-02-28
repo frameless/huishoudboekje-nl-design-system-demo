@@ -20,7 +20,7 @@ const queryTruncateSignal = `mutation Truncate {
 //BeforeAll(() => {});
 
 // Before *each* test, run this (so this runs equal to the amount of tests)
-BeforeStep(() => {
+Before(() => {
 // Clean up
   // Truncate alarms
   cy.request({
