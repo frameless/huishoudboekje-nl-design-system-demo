@@ -125,6 +125,9 @@ def add_statsd_metrics(app):
                 # Intercept all exceptions processed by the Connection.
                 statsd.incr('sqlalchemy.events.connections.exceptions')
                 logging.debug(f"handle_error")
+                    
+                if(app.config["DATABASE_LOG_HANDLE_ERROR_EVENT"]):
+                    logging.error(exception_context)
 
             #
             # Flask metrics
