@@ -1,6 +1,6 @@
 // cypress/support/step_definitions/Alarms/delete-alarm.js
 
-import { Given, When, Then } from "@badeball/cypress-cucumber-preprocessor";
+import { Given, When, Then, Step } from "@badeball/cypress-cucumber-preprocessor";
 
 const header = {
   'content-type': 'application/json',
@@ -16,58 +16,14 @@ const queryTruncateSignal = `mutation Truncate {
   truncateTable(databaseName: "signalenservice", tableName: "Signal")
 }`
 
-//#region Scenario: delete alarm
+//#region Scenario: view delete alarm form
 
 // When('I view the "Agreement" page')
   // Is part of Scenario 'view create alarm form with default options' in create-alarm.js
 
 When('I click the "Delete alarm" button', () => {
  
-  // Click button element
-  cy.visit('/afspraken/1');
-  cy.waitForReact();
-  cy.url().should('eq', Cypress.config().baseUrl + '/afspraken/1')
-  cy.get('h2').contains('Alarm').should('be.visible')
-    .scrollIntoView() // Scrolls 'Alarm' into view
-  cy.get('button')
-    .contains('Toevoegen')
-    .click()
-  cy.wait(500) // Wait 0.5 seconds for modal opening
-
-  // Check whether modal is opened and visible
-  cy.get('section[aria-modal="true"]')
-    .scrollIntoView()
-    .should('be.visible')
-
-  // Fill in all required fields
-    // 'Startdatum'
-      // Is automatically filled in
-
-    // 'Dag in de maand'
-    cy.get('*input[max="28"]')
-      .type('1')
-      .should('have.value', '1')
-
-    // 'Toegestane afwijking'
-    cy.get('*input[min="0"]')
-      .not('*input[max="28"]')
-      .not('*input[pattern]')
-      .type('1')
-      .should('have.value', '1')
-
-    // 'Bedrag verwachte betaling'
-      // Is automatically filled in
-
-    // 'Toegestane afwijking bedrag'
-    cy.get('*input[pattern]')
-      .filter('*input[value=""]')
-      .type('1')
-      .should('have.value', '1') 
-
-  // Click 'Opslaan' button
-  cy.waitForReact()
-  cy.get('div[data-focus-lock-disabled="false"]').contains("Opslaan")
-    .click()
+  Step(this, 'I click the "Submit form" button');
 
   // Check whether modal is closed
   cy.contains('Alarm toevoegen')
@@ -102,51 +58,7 @@ When('I click the "Delete alarm" button', () => {
 
 Then('the "Cancel delete alarm" button is displayed', () => {
  
-  // Click button element
-  cy.visit('/afspraken/1');
-  cy.waitForReact();
-  cy.url().should('eq', Cypress.config().baseUrl + '/afspraken/1')
-  cy.get('h2').contains('Alarm').should('be.visible')
-    .scrollIntoView() // Scrolls 'Alarm' into view
-  cy.get('button')
-    .contains('Toevoegen')
-    .click()
-  cy.wait(500) // Wait 0.5 seconds for modal opening
-
-  // Check whether modal is opened and visible
-  cy.get('section[aria-modal="true"]')
-    .scrollIntoView()
-    .should('be.visible')
-
-  // Fill in all required fields
-    // 'Startdatum'
-      // Is automatically filled in
-
-    // 'Dag in de maand'
-    cy.get('*input[max="28"]')
-      .type('1')
-      .should('have.value', '1')
-
-    // 'Toegestane afwijking'
-    cy.get('*input[min="0"]')
-      .not('*input[max="28"]')
-      .not('*input[pattern]')
-      .type('1')
-      .should('have.value', '1')
-
-    // 'Bedrag verwachte betaling'
-      // Is automatically filled in
-
-    // 'Toegestane afwijking bedrag'
-    cy.get('*input[pattern]')
-      .filter('*input[value=""]')
-      .type('1')
-      .should('have.value', '1') 
-
-  // Click 'Opslaan' button
-  cy.waitForReact()
-  cy.get('div[data-focus-lock-disabled="false"]').contains("Opslaan")
-    .click()
+  Step(this, 'I click the "Submit form" button');
 
   // Check whether modal is closed
   cy.contains('Alarm toevoegen')
@@ -183,64 +95,14 @@ Then('the "Cancel delete alarm" button is displayed', () => {
 
 Then('the "Confirm delete alarm" button is displayed', () => {
  
-  // Click button element
-  cy.visit('/afspraken/1');
-  cy.waitForReact();
-  cy.url().should('eq', Cypress.config().baseUrl + '/afspraken/1')
-  cy.get('h2').contains('Alarm').should('be.visible')
-    .scrollIntoView() // Scrolls 'Alarm' into view
-  cy.get('button')
-    .contains('Toevoegen')
-    .click()
-  cy.wait(500) // Wait 0.5 seconds for modal opening
-
-  // Check whether modal is opened and visible
-  cy.get('section[aria-modal="true"]')
-    .scrollIntoView()
-    .should('be.visible')
-
-  // Fill in all required fields
-    // 'Startdatum'
-      // Is automatically filled in
-
-    // 'Dag in de maand'
-    cy.get('*input[max="28"]')
-      .type('1')
-      .should('have.value', '1')
-
-    // 'Toegestane afwijking'
-    cy.get('*input[min="0"]')
-      .not('*input[max="28"]')
-      .not('*input[pattern]')
-      .type('1')
-      .should('have.value', '1')
-
-    // 'Bedrag verwachte betaling'
-      // Is automatically filled in
-
-    // 'Toegestane afwijking bedrag'
-    cy.get('*input[pattern]')
-      .filter('*input[value=""]')
-      .type('1')
-      .should('have.value', '1') 
-
-  // Click 'Opslaan' button
-  cy.waitForReact()
-  cy.get('div[data-focus-lock-disabled="false"]').contains("Opslaan")
-    .click()
-
-  // Check whether modal is closed
-  cy.contains('Alarm toevoegen')
-    .should('not.exist')
-  cy.get('.chakra-modal__footer')
-    .should('not.exist')
+  Step(this, 'I click the "Submit form" button');
 
   // Check assertion
   cy.get('button[aria-label="Verwijderen"]')
     .click()
   cy.get('button[aria-label="Verwijderen"]')
     .should('be.visible')
-
+  
   // Clean up
     // Truncate alarms
     cy.request({
@@ -264,55 +126,11 @@ Then('the "Confirm delete alarm" button is displayed', () => {
 
 //#endregion
 
-//#region Scenario: cancel delete alarm
+//#region Scenario: cancel alarm deletion
 
 When('I click the "Cancel delete alarm" button', () => {
  
-  // Click button element
-  cy.visit('/afspraken/1');
-  cy.waitForReact();
-  cy.url().should('eq', Cypress.config().baseUrl + '/afspraken/1')
-  cy.get('h2').contains('Alarm').should('be.visible')
-    .scrollIntoView() // Scrolls 'Alarm' into view
-  cy.get('button')
-    .contains('Toevoegen')
-    .click()
-  cy.wait(500) // Wait 0.5 seconds for modal opening
-
-  // Check whether modal is opened and visible
-  cy.get('section[aria-modal="true"]')
-    .scrollIntoView()
-    .should('be.visible')
-
-  // Fill in all required fields
-    // 'Startdatum'
-      // Is automatically filled in
-
-    // 'Dag in de maand'
-    cy.get('*input[max="28"]')
-      .type('1')
-      .should('have.value', '1')
-
-    // 'Toegestane afwijking'
-    cy.get('*input[min="0"]')
-      .not('*input[max="28"]')
-      .not('*input[pattern]')
-      .type('1')
-      .should('have.value', '1')
-
-    // 'Bedrag verwachte betaling'
-      // Is automatically filled in
-
-    // 'Toegestane afwijking bedrag'
-    cy.get('*input[pattern]')
-      .filter('*input[value=""]')
-      .type('1')
-      .should('have.value', '1') 
-
-  // Click 'Opslaan' button
-  cy.waitForReact()
-  cy.get('div[data-focus-lock-disabled="false"]').contains("Opslaan")
-    .click()
+  Step(this, 'I click the "Submit form" button');
 
   // Check whether modal is closed
   cy.contains('Alarm toevoegen')
@@ -349,51 +167,7 @@ When('I click the "Cancel delete alarm" button', () => {
 
 Then('the "Delete alarm" button is displayed', () => {
  
-  // Click button element
-  cy.visit('/afspraken/1');
-  cy.waitForReact();
-  cy.url().should('eq', Cypress.config().baseUrl + '/afspraken/1')
-  cy.get('h2').contains('Alarm').should('be.visible')
-    .scrollIntoView() // Scrolls 'Alarm' into view
-  cy.get('button')
-    .contains('Toevoegen')
-    .click()
-  cy.wait(500) // Wait 0.5 seconds for modal opening
-
-  // Check whether modal is opened and visible
-  cy.get('section[aria-modal="true"]')
-    .scrollIntoView()
-    .should('be.visible')
-
-  // Fill in all required fields
-    // 'Startdatum'
-      // Is automatically filled in
-
-    // 'Dag in de maand'
-    cy.get('*input[max="28"]')
-      .type('1')
-      .should('have.value', '1')
-
-    // 'Toegestane afwijking'
-    cy.get('*input[min="0"]')
-      .not('*input[max="28"]')
-      .not('*input[pattern]')
-      .type('1')
-      .should('have.value', '1')
-
-    // 'Bedrag verwachte betaling'
-      // Is automatically filled in
-
-    // 'Toegestane afwijking bedrag'
-    cy.get('*input[pattern]')
-      .filter('*input[value=""]')
-      .type('1')
-      .should('have.value', '1') 
-
-  // Click 'Opslaan' button
-  cy.waitForReact()
-  cy.get('div[data-focus-lock-disabled="false"]').contains("Opslaan")
-    .click()
+  Step(this, 'I click the "Submit form" button');
 
   // Check whether modal is closed
   cy.contains('Alarm toevoegen')
@@ -434,55 +208,11 @@ Then('the "Delete alarm" button is displayed', () => {
 
 //#endregion
 
-//#region Scenario: confirm delete alarm
+//#region Scenario: confirm alarm deletion
 
 When('I click the "Confirm delete alarm" button', () => {
  
-  // Click button element
-  cy.visit('/afspraken/1');
-  cy.waitForReact();
-  cy.url().should('eq', Cypress.config().baseUrl + '/afspraken/1')
-  cy.get('h2').contains('Alarm').should('be.visible')
-    .scrollIntoView() // Scrolls 'Alarm' into view
-  cy.get('button')
-    .contains('Toevoegen')
-    .click()
-  cy.wait(500) // Wait 0.5 seconds for modal opening
-
-  // Check whether modal is opened and visible
-  cy.get('section[aria-modal="true"]')
-    .scrollIntoView()
-    .should('be.visible')
-
-  // Fill in all required fields
-    // 'Startdatum'
-      // Is automatically filled in
-
-    // 'Dag in de maand'
-    cy.get('*input[max="28"]')
-      .type('1')
-      .should('have.value', '1')
-
-    // 'Toegestane afwijking'
-    cy.get('*input[min="0"]')
-      .not('*input[max="28"]')
-      .not('*input[pattern]')
-      .type('1')
-      .should('have.value', '1')
-
-    // 'Bedrag verwachte betaling'
-      // Is automatically filled in
-
-    // 'Toegestane afwijking bedrag'
-    cy.get('*input[pattern]')
-      .filter('*input[value=""]')
-      .type('1')
-      .should('have.value', '1') 
-
-  // Click 'Opslaan' button
-  cy.waitForReact()
-  cy.get('div[data-focus-lock-disabled="false"]').contains("Opslaan")
-    .click()
+  Step(this, 'I click the "Submit form" button');
 
   // Check whether modal is closed
   cy.contains('Alarm toevoegen')
@@ -518,55 +248,11 @@ When('I click the "Confirm delete alarm" button', () => {
 });
 
 // Then('a notification of success is displayed', () => {}
-  // This test can be found in /Alarms/set-alarm
+  // This test can be found in /Alarms/create-alarm
 
 Then('the "Er is geen alarm ingesteld." text is displayed', () => {
  
-  // Click button element
-  cy.visit('/afspraken/1');
-  cy.waitForReact();
-  cy.url().should('eq', Cypress.config().baseUrl + '/afspraken/1')
-  cy.get('h2').contains('Alarm').should('be.visible')
-    .scrollIntoView() // Scrolls 'Alarm' into view
-  cy.get('button')
-    .contains('Toevoegen')
-    .click()
-  cy.wait(500) // Wait 0.5 seconds for modal opening
-
-  // Check whether modal is opened and visible
-  cy.get('section[aria-modal="true"]')
-    .scrollIntoView()
-    .should('be.visible')
-
-  // Fill in all required fields
-    // 'Startdatum'
-      // Is automatically filled in
-
-    // 'Dag in de maand'
-    cy.get('*input[max="28"]')
-      .type('1')
-      .should('have.value', '1')
-
-    // 'Toegestane afwijking'
-    cy.get('*input[min="0"]')
-      .not('*input[max="28"]')
-      .not('*input[pattern]')
-      .type('1')
-      .should('have.value', '1')
-
-    // 'Bedrag verwachte betaling'
-      // Is automatically filled in
-
-    // 'Toegestane afwijking bedrag'
-    cy.get('*input[pattern]')
-      .filter('*input[value=""]')
-      .type('1')
-      .should('have.value', '1') 
-
-  // Click 'Opslaan' button
-  cy.waitForReact()
-  cy.get('div[data-focus-lock-disabled="false"]').contains("Opslaan")
-    .click()
+  Step(this, 'I click the "Submit form" button');
 
   // Check whether modal is closed
   cy.contains('Alarm toevoegen')
@@ -589,75 +275,12 @@ Then('the "Er is geen alarm ingesteld." text is displayed', () => {
   cy.get('h2').contains('Alarm').should('be.visible')
     .scrollIntoView() // Scrolls 'Alarm' into view
   cy.contains('Er is geen alarm ingesteld.')
-
-  // Clean up
-    // Truncate alarms
-    cy.request({
-      method: "post",
-      url: Cypress.env().graphqlUrl + '/graphql',
-      body: { query: queryTruncateAlarm },
-    }).then((res) => {
-      console.log(res.body);
-    });
-
-    // Truncate signals
-    cy.request({
-      method: "post",
-      url: Cypress.env().graphqlUrl + '/graphql',
-      body: { query: queryTruncateSignal },
-    }).then((res) => {
-      console.log(res.body);
-    });
   
 });
 
 Then('the "Add alarm" button is displayed', () => {
  
-  // Click button element
-  cy.visit('/afspraken/1');
-  cy.waitForReact();
-  cy.url().should('eq', Cypress.config().baseUrl + '/afspraken/1')
-  cy.get('h2').contains('Alarm').should('be.visible')
-    .scrollIntoView() // Scrolls 'Alarm' into view
-  cy.get('button')
-    .contains('Toevoegen')
-    .click()
-  cy.wait(500) // Wait 0.5 seconds for modal opening
-
-  // Check whether modal is opened and visible
-  cy.get('section[aria-modal="true"]')
-    .scrollIntoView()
-    .should('be.visible')
-
-  // Fill in all required fields
-    // 'Startdatum'
-      // Is automatically filled in
-
-    // 'Dag in de maand'
-    cy.get('*input[max="28"]')
-      .type('1')
-      .should('have.value', '1')
-
-    // 'Toegestane afwijking'
-    cy.get('*input[min="0"]')
-      .not('*input[max="28"]')
-      .not('*input[pattern]')
-      .type('1')
-      .should('have.value', '1')
-
-    // 'Bedrag verwachte betaling'
-      // Is automatically filled in
-
-    // 'Toegestane afwijking bedrag'
-    cy.get('*input[pattern]')
-      .filter('*input[value=""]')
-      .type('1')
-      .should('have.value', '1') 
-
-  // Click 'Opslaan' button
-  cy.waitForReact()
-  cy.get('div[data-focus-lock-disabled="false"]').contains("Opslaan")
-    .click()
+  Step(this, 'I click the "Submit form" button');
 
   // Check whether modal is closed
   cy.contains('Alarm toevoegen')
@@ -680,25 +303,6 @@ Then('the "Add alarm" button is displayed', () => {
   cy.get('h2').contains('Alarm').should('be.visible')
     .scrollIntoView() // Scrolls 'Alarm' into view
   cy.get('button').contains('Toevoegen');
-
-  // Clean up
-    // Truncate alarms
-    cy.request({
-      method: "post",
-      url: Cypress.env().graphqlUrl + '/graphql',
-      body: { query: queryTruncateAlarm },
-    }).then((res) => {
-      console.log(res.body);
-    });
-
-    // Truncate signals
-    cy.request({
-      method: "post",
-      url: Cypress.env().graphqlUrl + '/graphql',
-      body: { query: queryTruncateSignal },
-    }).then((res) => {
-      console.log(res.body);
-    });
   
 });
 

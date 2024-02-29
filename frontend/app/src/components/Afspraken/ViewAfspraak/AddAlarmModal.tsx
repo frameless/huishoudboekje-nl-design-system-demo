@@ -221,6 +221,7 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 										<DatePicker selected={form.startDate}
 										 	autoComplete="no"
 											aria-autocomplete="none"
+											data-test="alarmForm.startDate"
 											dateFormat={"dd-MM-yyyy"}
 											showYearDropdown={true}
 											dropdownMode={"select"}
@@ -238,6 +239,7 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 										<Input
 										 	autoComplete="no"
 											aria-autocomplete="none"
+											data-test="alarmForm.dateMargin"
 											type={"number"}
 											value={form.datumMargin ?? ""}
 											onChange={
@@ -263,6 +265,7 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 										<DatePicker
 										 	autoComplete="no"
 											aria-autocomplete="none"
+											data-test="alarmForm.startDate"
 											selected={form.startDate}
 											dateFormat={"dd-MM-yyyy"}
 											showYearDropdown={true}
@@ -272,7 +275,7 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 													updateForm("startDate", date)
 												}
 											}}
-											customInput={(<Input autoComplete="no" aria-autocomplete="none" />)} />
+											customInput={(<Input autoComplete="no" aria-autocomplete="none" data-test="alarmForm.startDate"/>)} />
 										<FormErrorMessage>{t("afspraakDetailView.invalidValidFromError")}</FormErrorMessage>
 									</FormControl>
 
@@ -281,6 +284,7 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 										<Input
 										 	autoComplete="no"
 											aria-autocomplete="none"
+											data-test="alarmForm.byMonthDay"
 											type={"number"}
 											value={form.byMonthDay || ""}
 											onChange={e => updateForm("byMonthDay", parseInt(e.target.value))}
@@ -295,6 +299,7 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 										<Input
 										 	autoComplete="no"
 											aria-autocomplete="none"
+											data-test="alarmForm.dateMargin"
 											type={"number"}
 											value={form.datumMargin ?? ""}
 											onChange={
@@ -319,6 +324,7 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 										<Input
 										 	autoComplete="no"
 											aria-autocomplete="none"
+											data-test="alarmForm.amount"
 											type={"number"}
 											pattern={"^\\d*(,{0,1}\\d{0,2})$"}
 											value={form.bedrag ? form.bedrag : 0}
@@ -337,6 +343,7 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 										<Input
 										 	autoComplete="no"
 											aria-autocomplete="none"
+											data-test="alarmForm.amountMargin"
 											type={"number"}
 											pattern={"^\\d*"}
 											value={form.bedragMargin && form.bedragMargin > 0 ? parseInt(form.bedragMargin.toString()) : undefined}
@@ -352,8 +359,8 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 
 							<Stack align={"flex-end"}>
 								<HStack>
-									<Button variant={"ghost"} onClick={onClose}>{t("global.actions.cancel")}</Button>
-									<Button type={"submit"} colorScheme={"primary"}>{t("global.actions.save")}</Button>
+									<Button variant={"ghost"} data-test="alarmForm.buttonCancel" onClick={onClose}>{t("global.actions.cancel")}</Button>
+									<Button type={"submit"} data-test="alarmForm.buttonSubmit" colorScheme={"primary"}>{t("global.actions.save")}</Button>
 								</HStack>
 								<Asterisk />
 							</Stack>

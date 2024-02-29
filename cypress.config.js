@@ -44,6 +44,9 @@ module.exports = defineConfig({
     // Azure AD
     experimentalModifyObstructiveThirdPartyCode: true,
 
+    // Output
+    reporter: require.resolve("@badeball/cypress-cucumber-preprocessor/pretty-reporter"),
+
     specPattern: ["**/*.feature"],
     excludeSpecPattern: ['**/__snapshots__/*', '**/__image_snapshots__/*'],
     setupNodeEvents,

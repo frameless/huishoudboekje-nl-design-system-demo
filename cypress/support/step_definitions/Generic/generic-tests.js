@@ -1,6 +1,6 @@
 // cypress/support/step_definitions/Generic/generic-tests.js
 
-import { BeforeStep, Before, BeforeAll, After, AfterAll, AfterStep } from "@badeball/cypress-cucumber-preprocessor";
+import { BeforeStep, Before } from "@badeball/cypress-cucumber-preprocessor";
 
 const header = {
   'content-type': 'application/json',
@@ -17,7 +17,7 @@ const queryTruncateSignal = `mutation Truncate {
 }`
 
 // Before *all* tests, run this (so this runs once at the start)
-Before(() => {
+before(() => {
 
 // Clean up
   // Truncate alarms
@@ -37,20 +37,25 @@ Before(() => {
   }).then((res) => {
     console.log(res.body);
   });
- });
+
+});
 
 // Before *each* test, run this (so this runs equal to the amount of tests)
-  BeforeStep(() => {
-    cy.visit('/');
-    cy.wait(500);
-    cy.get('body').then(($body) => {
-      const buttonLogin = $body.find('button[type="submit"]')
-      if (buttonLogin.length) {
-        cy.get('button').contains('Inloggen').click()
-        cy.loginToAAD(Cypress.env('aad_username'), Cypress.env('aad_password'))
-      }
-      else {
-        // already logged in; do nothing
-      }
-    })
-  });
+BeforeStep(() => {
+
+  // Log in
+  cy.visit('/');
+  cy.wait(500);
+  cy.get('body').then(($body) => {
+    const buttonLogin = $body.find('button[type="submit"]')
+    if (buttonLogin.length) {
+      cy.get('button').contains('Inloggen').click()
+      cy.loginToAAD(Cypress.env('aad_username'), Cypress.env('aad_password'))
+    }
+    else {
+      // already logged in; do nothing
+    }
+
+  })
+
+});

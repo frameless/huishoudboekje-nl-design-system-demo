@@ -1,6 +1,6 @@
 // cypress/support/step_definitions/Alarms/read-alarm-settings.js
 
-import { Given, When, Then } from "@badeball/cypress-cucumber-preprocessor";
+import { Given, When, Then, Step } from "@badeball/cypress-cucumber-preprocessor";
 
 const header = {
   'content-type': 'application/json',
@@ -27,51 +27,7 @@ const header = {
 
 Then('the alarm recurrency is displayed', () => {
  
-  // Click button element
-  cy.visit('/afspraken/1');
-  cy.waitForReact();
-  cy.url().should('eq', Cypress.config().baseUrl + '/afspraken/1')
-  cy.get('h2').contains('Alarm').should('be.visible')
-    .scrollIntoView() // Scrolls 'Alarm' into view
-  cy.get('button')
-    .contains('Toevoegen')
-    .click()
-  cy.wait(500) // Wait 0.5 seconds for modal opening
-
-  // Check whether modal is opened and visible
-  cy.get('section[aria-modal="true"]')
-    .scrollIntoView()
-    .should('be.visible')
-
-  // Fill in all required fields
-    // 'Startdatum'
-      // Is automatically filled in
-
-    // 'Dag in de maand'
-    cy.get('*input[max="28"]')
-      .type('1')
-      .should('have.value', '1')
-
-    // 'Toegestane afwijking'
-    cy.get('*input[min="0"]')
-      .not('*input[max="28"]')
-      .not('*input[pattern]')
-      .type('1')
-      .should('have.value', '1')
-
-    // 'Bedrag verwachte betaling'
-      // Is automatically filled in
-
-    // 'Toegestane afwijking bedrag'
-    cy.get('*input[pattern]')
-      .filter('*input[value=""]')
-      .type('1')
-      .should('have.value', '1') 
-
-  // Click 'Opslaan' button
-  cy.waitForReact()
-  cy.get('div[data-focus-lock-disabled="false"]').contains("Opslaan")
-    .click()
+  Step(this, 'I click the "Submit form" button');
 
   // Check whether modal is closed
   cy.contains('Alarm toevoegen')
@@ -102,35 +58,19 @@ Then('the alarm recurrency is displayed', () => {
 
 Then('the alarm day of the month is displayed', () => {
 
-  // Click button element
-  cy.visit('/afspraken/1');
-  cy.waitForReact();
-  cy.url().should('eq', Cypress.config().baseUrl + '/afspraken/1')
-  cy.get('h2').contains('Alarm').should('be.visible')
-    .scrollIntoView() // Scrolls 'Alarm' into view
-  cy.get('button')
-    .contains('Toevoegen')
-    .click()
-  cy.wait(500) // Wait 0.5 seconds for modal opening
-
-  // Check whether modal is opened and visible
-  cy.get('section[aria-modal="true"]')
-    .scrollIntoView()
-    .should('be.visible')
+  Step(this, 'I view the "Add alarm" modal');
 
   // Fill in all required fields
     // 'Startdatum'
       // Is automatically filled in
 
     // 'Dag in de maand'
-    cy.get('*input[max="28"]')
+    cy.get('[data-test="alarmForm.byMonthDay"]')
       .type('16')
       .should('have.value', '16')
 
-    // 'Toegestane afwijking'
-    cy.get('*input[min="0"]')
-      .not('*input[max="28"]')
-      .not('*input[pattern]')
+    // 'Toegestane afwijking (in dagen)'
+    cy.get('[data-test="alarmForm.dateMargin"]')
       .type('1')
       .should('have.value', '1')
 
@@ -138,14 +78,13 @@ Then('the alarm day of the month is displayed', () => {
       // Is automatically filled in
 
     // 'Toegestane afwijking bedrag'
-    cy.get('*input[pattern]')
-      .filter('*input[value=""]')
+    cy.get('[data-test="alarmForm.amountMargin"]')
       .type('1')
       .should('have.value', '1') 
 
   // Click 'Opslaan' button
   cy.waitForReact()
-  cy.get('div[data-focus-lock-disabled="false"]').contains("Opslaan")
+  cy.get('[data-test="alarmForm.buttonSubmit"]')
     .click()
 
   // Check whether modal is closed
@@ -177,35 +116,19 @@ Then('the alarm day of the month is displayed', () => {
 
 Then('the alarm allowed deviation in days is displayed', () => {
 
-  // Click button element
-  cy.visit('/afspraken/1');
-  cy.waitForReact();
-  cy.url().should('eq', Cypress.config().baseUrl + '/afspraken/1')
-  cy.get('h2').contains('Alarm').should('be.visible')
-    .scrollIntoView() // Scrolls 'Alarm' into view
-  cy.get('button')
-    .contains('Toevoegen')
-    .click()
-  cy.wait(500) // Wait 0.5 seconds for modal opening
-
-  // Check whether modal is opened and visible
-  cy.get('section[aria-modal="true"]')
-    .scrollIntoView()
-    .should('be.visible')
+  Step(this, 'I view the "Add alarm" modal');
 
   // Fill in all required fields
     // 'Startdatum'
       // Is automatically filled in
 
     // 'Dag in de maand'
-    cy.get('*input[max="28"]')
+    cy.get('[data-test="alarmForm.byMonthDay"]')
     .type('1')
     .should('have.value', '1')
 
-    // 'Toegestane afwijking'
-    cy.get('*input[min="0"]')
-      .not('*input[max="28"]')
-      .not('*input[pattern]')
+    // 'Toegestane afwijking (in dagen)'
+    cy.get('[data-test="alarmForm.dateMargin"]')
       .type('23')
       .should('have.value', '23')
 
@@ -213,14 +136,13 @@ Then('the alarm allowed deviation in days is displayed', () => {
       // Is automatically filled in
 
     // 'Toegestane afwijking bedrag'
-    cy.get('*input[pattern]')
-      .filter('*input[value=""]')
+    cy.get('[data-test="alarmForm.amountMargin"]')
       .type('1')
       .should('have.value', '1') 
 
   // Click 'Opslaan' button
   cy.waitForReact()
-  cy.get('div[data-focus-lock-disabled="false"]').contains("Opslaan")
+  cy.get('[data-test="alarmForm.buttonSubmit"]')
     .click()
 
   // Check whether modal is closed
@@ -252,21 +174,7 @@ Then('the alarm allowed deviation in days is displayed', () => {
 
 Then('the alarm next date is displayed', () => {
 
-  // Click button element
-  cy.visit('/afspraken/1');
-  cy.waitForReact();
-  cy.url().should('eq', Cypress.config().baseUrl + '/afspraken/1')
-  cy.get('h2').contains('Alarm').should('be.visible')
-    .scrollIntoView() // Scrolls 'Alarm' into view
-  cy.get('button')
-    .contains('Toevoegen')
-    .click()
-  cy.wait(500) // Wait 0.5 seconds for modal opening
-
-  // Check whether modal is opened and visible
-  cy.get('section[aria-modal="true"]')
-    .scrollIntoView()
-    .should('be.visible')
+  Step(this, 'I view the "Add alarm" modal');
 
   // Fill in all required fields
     // 'Startdatum'
@@ -277,20 +185,17 @@ Then('the alarm next date is displayed', () => {
         day: "2-digit",
       })
 
-    cy.get('*[class*="datepicker"]')
-      .find('input')
+    cy.get('[data-test="alarmForm.startDate"]')
       .should('have.value', dateNow)
       .type('{selectAll}01-01-2099{enter}')
 
     // 'Dag in de maand'
-    cy.get('*input[max="28"]')
+    cy.get('[data-test="alarmForm.byMonthDay"]')
     .type('1')
     .should('have.value', '1')
 
-    // 'Toegestane afwijking'
-    cy.get('*input[min="0"]')
-      .not('*input[max="28"]')
-      .not('*input[pattern]')
+    // 'Toegestane afwijking (in dagen)'
+    cy.get('[data-test="alarmForm.dateMargin"]')
       .type('1')
       .should('have.value', '1')
 
@@ -298,14 +203,13 @@ Then('the alarm next date is displayed', () => {
       // Is automatically filled in
 
     // 'Toegestane afwijking bedrag'
-    cy.get('*input[pattern]')
-      .filter('*input[value=""]')
+    cy.get('[data-test="alarmForm.amountMargin"]')
       .type('1')
       .should('have.value', '1') 
 
   // Click 'Opslaan' button
   cy.waitForReact()
-  cy.get('div[data-focus-lock-disabled="false"]').contains("Opslaan")
+  cy.get('[data-test="alarmForm.buttonSubmit"]')
     .click()
 
   // Check whether modal is closed
@@ -338,53 +242,35 @@ Then('the alarm next date is displayed', () => {
 
 Then('the alarm expected amount is displayed', () => {
 
-  // Click button element
-  cy.visit('/afspraken/1');
-  cy.waitForReact();
-  cy.url().should('eq', Cypress.config().baseUrl + '/afspraken/1')
-  cy.get('h2').contains('Alarm').should('be.visible')
-    .scrollIntoView() // Scrolls 'Alarm' into view
-  cy.get('button')
-    .contains('Toevoegen')
-    .click()
-  cy.wait(500) // Wait 0.5 seconds for modal opening
-
-  // Check whether modal is opened and visible
-  cy.get('section[aria-modal="true"]')
-    .scrollIntoView()
-    .should('be.visible')
+  Step(this, 'I view the "Add alarm" modal');
 
   // Fill in all required fields
     // 'Startdatum'
       // Is automatically filled in
 
     // 'Dag in de maand'
-    cy.get('*input[max="28"]')
+    cy.get('[data-test="alarmForm.byMonthDay"]')
     .type('1')
     .should('have.value', '1')
 
-    // 'Toegestane afwijking'
-    cy.get('*input[min="0"]')
-      .not('*input[max="28"]')
-      .not('*input[pattern]')
+    // 'Toegestane afwijking (in dagen)'
+    cy.get('[data-test="alarmForm.dateMargin"]')
       .type('1')
       .should('have.value', '1')
 
     // 'Bedrag verwachte betaling'
-    cy.get('*input[pattern]')
-      .not('*input[value=""]')
+    cy.get('[data-test="alarmForm.amount"]')
       .type('{selectAll}123.45')
       .should('have.value', '123.45') 
 
     // 'Toegestane afwijking bedrag'
-    cy.get('*input[pattern]')
-      .filter('*input[value=""]')
+    cy.get('[data-test="alarmForm.amountMargin"]')
       .type('1')
       .should('have.value', '1') 
 
   // Click 'Opslaan' button
   cy.waitForReact()
-  cy.get('div[data-focus-lock-disabled="false"]').contains("Opslaan")
+  cy.get('[data-test="alarmForm.buttonSubmit"]')
     .click()
 
   // Check whether modal is closed
@@ -417,35 +303,19 @@ Then('the alarm expected amount is displayed', () => {
 
 Then('the alarm allowed deviation of the expected amount is displayed', () => {
 
-  // Click button element
-  cy.visit('/afspraken/1');
-  cy.waitForReact();
-  cy.url().should('eq', Cypress.config().baseUrl + '/afspraken/1')
-  cy.get('h2').contains('Alarm').should('be.visible')
-    .scrollIntoView() // Scrolls 'Alarm' into view
-  cy.get('button')
-    .contains('Toevoegen')
-    .click()
-  cy.wait(500) // Wait 0.5 seconds for modal opening
-
-  // Check whether modal is opened and visible
-  cy.get('section[aria-modal="true"]')
-    .scrollIntoView()
-    .should('be.visible')
+  Step(this, 'I view the "Add alarm" modal');
 
   // Fill in all required fields
     // 'Startdatum'
       // Is automatically filled in
 
     // 'Dag in de maand'
-    cy.get('*input[max="28"]')
+    cy.get('[data-test="alarmForm.byMonthDay"]')
     .type('1')
     .should('have.value', '1')
 
-    // 'Toegestane afwijking'
-    cy.get('*input[min="0"]')
-      .not('*input[max="28"]')
-      .not('*input[pattern]')
+    // 'Toegestane afwijking (in dagen)'
+    cy.get('[data-test="alarmForm.dateMargin"]')
       .type('1')
       .should('have.value', '1')
 
@@ -453,14 +323,13 @@ Then('the alarm allowed deviation of the expected amount is displayed', () => {
       // Is automatically filled in
 
     // 'Toegestane afwijking bedrag'
-    cy.get('*input[pattern]')
-      .filter('*input[value=""]')
+    cy.get('[data-test="alarmForm.amountMargin"]')
       .type('{selectAll}37')
       .should('have.value', '37')
 
   // Click 'Opslaan' button
   cy.waitForReact()
-  cy.get('div[data-focus-lock-disabled="false"]').contains("Opslaan")
+  cy.get('[data-test="alarmForm.buttonSubmit"]')
     .click()
 
   // Check whether modal is closed
@@ -492,35 +361,19 @@ Then('the alarm allowed deviation of the expected amount is displayed', () => {
 
 Then('the alarm status is displayed', () => {
 
-  // Click button element
-  cy.visit('/afspraken/1');
-  cy.waitForReact();
-  cy.url().should('eq', Cypress.config().baseUrl + '/afspraken/1')
-  cy.get('h2').contains('Alarm').should('be.visible')
-    .scrollIntoView() // Scrolls 'Alarm' into view
-  cy.get('button')
-    .contains('Toevoegen')
-    .click()
-  cy.wait(500) // Wait 0.5 seconds for modal opening
-
-  // Check whether modal is opened and visible
-  cy.get('section[aria-modal="true"]')
-    .scrollIntoView()
-    .should('be.visible')
+  Step(this, 'I view the "Add alarm" modal');
 
   // Fill in all required fields
     // 'Startdatum'
       // Is automatically filled in
 
     // 'Dag in de maand'
-    cy.get('*input[max="28"]')
+    cy.get('[data-test="alarmForm.byMonthDay"]')
       .type('1')
       .should('have.value', '1')
 
-    // 'Toegestane afwijking'
-    cy.get('*input[min="0"]')
-      .not('*input[max="28"]')
-      .not('*input[pattern]')
+    // 'Toegestane afwijking (in dagen)'
+    cy.get('[data-test="alarmForm.dateMargin"]')
       .type('1')
       .should('have.value', '1')
 
@@ -528,14 +381,13 @@ Then('the alarm status is displayed', () => {
       // Is automatically filled in
 
     // 'Toegestane afwijking bedrag'
-    cy.get('*input[pattern]')
-      .filter('*input[value=""]')
+    cy.get('[data-test="alarmForm.amountMargin"]')
       .type('1')
       .should('have.value', '1') 
 
   // Click 'Opslaan' button
   cy.waitForReact()
-  cy.get('div[data-focus-lock-disabled="false"]').contains("Opslaan")
+  cy.get('[data-test="alarmForm.buttonSubmit"]')
     .click()
 
   // Check whether modal is closed
