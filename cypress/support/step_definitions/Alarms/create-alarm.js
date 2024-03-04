@@ -372,7 +372,7 @@ Then('I click the "Submit form" button', () => {
 });
 
 Then('the modal is closed', () => {
-  
+
   // Clean up
     // Truncate alarms
     cy.request({
@@ -381,36 +381,11 @@ Then('the modal is closed', () => {
       body: { query: queryTruncateAlarm },
     }).then((res) => {
       console.log(res.body);
-    });   
+    });
+  
+  cy.wait(1000);
 
-  Step(this, 'the "Create alarm form" is displayed');
-
-  // Fill in all required fields
-    // 'Startdatum'
-      // Is automatically filled in
-
-    // 'Dag in de maand'
-    cy.get('[data-test="alarmForm.byMonthDay"]')
-      .type('1')
-      .should('have.value', '1')
-
-    // 'Toegestane afwijking (in dagen)'
-    cy.get('[data-test="alarmForm.dateMargin"]')
-      .type('1')
-      .should('have.value', '1')
-
-    // 'Bedrag verwachte betaling'
-      // Is automatically filled in
-
-    // 'Toegestane afwijking bedrag'
-    cy.get('[data-test="alarmForm.amountMargin"]')
-      .type('1')
-      .should('have.value', '1') 
-
-  // Click 'Opslaan' button
-  cy.waitForReact()
-  cy.get('[data-test="alarmForm.buttonSubmit"]')
-    .click()
+  Step(this, 'I click the "Submit form" button');
 
   // Check whether modal is closed
   cy.contains('Alarm toevoegen')
