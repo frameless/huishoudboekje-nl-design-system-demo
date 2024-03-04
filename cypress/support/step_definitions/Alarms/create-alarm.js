@@ -19,7 +19,17 @@ const queryTruncateSignal = `mutation Truncate {
 //#region Scenario: view create alarm form with default options
 
 When('I view the "Add alarm" modal', () => {
- 
+  
+  // Wipe alarms clean
+    // Truncate alarms
+    cy.request({
+      method: "post",
+      url: Cypress.env().graphqlUrl + '/graphql',
+      body: { query: queryTruncateAlarm },
+    }).then((res) => {
+      console.log(res.body);
+    });
+
   // Click button element
   cy.visit('/afspraken/1');
   cy.waitForReact();
@@ -362,26 +372,7 @@ Then('I click the "Submit form" button', () => {
 });
 
 Then('the modal is closed', () => {
-  
-  // Clean up
-    // Truncate alarms
-    cy.request({
-      method: "post",
-      url: Cypress.env().graphqlUrl + '/graphql',
-      body: { query: queryTruncateAlarm },
-    }).then((res) => {
-      console.log(res.body);
-    });
-
-    // Truncate signals
-    cy.request({
-      method: "post",
-      url: Cypress.env().graphqlUrl + '/graphql',
-      body: { query: queryTruncateSignal },
-    }).then((res) => {
-      console.log(res.body);
-    });
-    
+     
   Step(this, 'the "Create alarm form" is displayed');
 
   // Fill in all required fields
