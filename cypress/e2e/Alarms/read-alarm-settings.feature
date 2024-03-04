@@ -1,4 +1,6 @@
 # cypress/e2e/Alarms/read-alarm-settings.feature
+
+@alarmservice
 Feature: read alarm
 
   # Read the properties of an alarm.

@@ -18,24 +18,28 @@ const header = {
 Then('I enable the active signals filter', () => {
 
   // Skip unfinished test
+  return "pending";
 
 });
 
 Then('I disable the suppressed signals filter', () => {
 
   // Skip unfinished test
+  return "pending";
 
 });
 
 Then('I click the "Suppress signal" button of a signal', () => {
 
   // Skip unfinished test
+  return "pending";
 
 });
 
 Then('that signal is closed', () => {
 
   // Skip unfinished test
+  return "pending";
 
 });
 

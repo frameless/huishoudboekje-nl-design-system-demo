@@ -1,4 +1,6 @@
 # cypress/e2e/Signals/create-signal-on-unexpected-payment.feature
+
+@signalservice
 Feature: create signal on unexpected payment amount
 
   # Signal a user when an unexpected payment amount occurs within a timeframe.
