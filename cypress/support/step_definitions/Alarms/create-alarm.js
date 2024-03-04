@@ -372,7 +372,17 @@ Then('I click the "Submit form" button', () => {
 });
 
 Then('the modal is closed', () => {
-     
+  
+  // Clean up
+    // Truncate alarms
+    cy.request({
+      method: "post",
+      url: Cypress.env().graphqlUrl + '/graphql',
+      body: { query: queryTruncateAlarm },
+    }).then((res) => {
+      console.log(res.body);
+    });   
+
   Step(this, 'the "Create alarm form" is displayed');
 
   // Fill in all required fields
