@@ -23,7 +23,8 @@ import 'cypress-react-selector';
 
 function loginViaAAD(username: string, password: string) {
     cy.visit('/')
-    cy.get('button').contains('Inloggen').click()
+    cy.get('[data-test="button.Login"]').click()
+    //cy.get('button').contains('Inloggen').click()
   
     // Login to the AAD tenant.
     cy.origin(

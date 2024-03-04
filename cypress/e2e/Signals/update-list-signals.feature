@@ -1,4 +1,6 @@
 # cypress/e2e/Signals/update-list-signals.feature
+
+@signalservice
 Feature: update list signals
 
   # Refresh the listed signals manually and automatic.

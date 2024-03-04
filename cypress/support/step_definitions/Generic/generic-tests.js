@@ -17,7 +17,7 @@ const queryTruncateSignal = `mutation Truncate {
 }`
 
 // Before *all* tests, run this (so this runs once at the start)
-before(() => {
+Before({ tags: "@alarmservice" }, function () {
 
 // Clean up
   // Truncate alarms
@@ -29,31 +29,48 @@ before(() => {
     console.log(res.body);
   });
 
-  // Truncate signals
-  cy.request({
-    method: "post",
-    url: Cypress.env().graphqlUrl + '/graphql',
-    body: { query: queryTruncateSignal },
-  }).then((res) => {
-    console.log(res.body);
-  });
-
 });
 
-// Before *each* test, run this (so this runs equal to the amount of tests)
-BeforeStep(() => {
+Before({ tags: "@signalservice" }, function () {
 
-  // Log in
-  cy.visit('/');
-  cy.wait(500);
-  cy.get('body').then(($body) => {
-    const buttonLogin = $body.find('button[type="submit"]')
-    if (buttonLogin.length) {
-      cy.get('button').contains('Inloggen').click()
-      cy.loginToAAD(Cypress.env('aad_username'), Cypress.env('aad_password'))
+  // Clean up
+    // Truncate signals
+    cy.request({
+      method: "post",
+      url: Cypress.env().graphqlUrl + '/graphql',
+      body: { query: queryTruncateSignal },
+    }).then((res) => {
+      console.log(res.body);
+    });
+  
+  });
+
+// Before *each* test, run this (so this runs equal to the amount of tests)
+BeforeStep(function () {
+  
+  cy.getCookie('appSession').then((c) => {
+    const cookie = c
+    if(c) {
+    // If there is a cookie, do this
     }
     else {
-      // already logged in; do nothing
+    // If no cookie, log in
+      // Log in
+      cy.visit('/');
+      cy.wait(500);
+      cy.get('body').then(($body) => {
+        const buttonLogin = $body.find('button[type="submit"]')
+        if (buttonLogin.length) {
+          cy.get('[data-test="button.Login"]').click()
+          //cy.get('button').contains('Inloggen').click()
+          cy.loginToAAD(Cypress.env('aad_username'), Cypress.env('aad_password'))
+        }
+        else {
+          // Already logged in; do nothing
+        }
+
+      })
+
     }
 
   })

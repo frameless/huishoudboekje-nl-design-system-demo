@@ -12,24 +12,28 @@ const header = {
 When('a bank transaction is booked to an agreement', () => {
 
   // Skip unfinished test
+  return "pending";
  
 });
 
 Then('the bank transaction date is within the alarm timeframe', () => {
 
   // Skip unfinished test
+  return "pending";
  
 });
 
 Then('the bank transaction amount is greater than the sum of the expected amount plus the allowed amount deviation', () => {
 
   // Skip unfinished test
+  return "pending";
  
 });
 
 Then('a "Payment amount too high" signal is created', () => {
 
   // Skip unfinished test
+  return "pending";
  
 });
 
@@ -46,12 +50,14 @@ Then('a "Payment amount too high" signal is created', () => {
 Then('the bank transaction amount is smaller than the sum of the expected amount minus the allowed amount deviation', () => {
 
   // Skip unfinished test
+  return "pending";
  
 });
 
 Then('a "Payment amount too low" signal is created', () => {
 
   // Skip unfinished test
+  return "pending";
  
 });
 
@@ -68,12 +74,14 @@ Then('a "Payment amount too low" signal is created', () => {
   Then('the bank transaction amount is smaller than the sum of the expected amount plus the allowed amount deviation or greater than the sum of the expected amount minus the allowed amount deviation', () => {
 
     // Skip unfinished test
+  return "pending";
    
   });
   
   Then('no signal is created', () => {
   
     // Skip unfinished test
+  return "pending";
    
   });
   

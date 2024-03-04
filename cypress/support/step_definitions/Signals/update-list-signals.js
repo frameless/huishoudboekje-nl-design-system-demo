@@ -15,12 +15,14 @@ const header = {
 Then('the signals refresh timestamp is displayed', () => {
 
   // Skip unfinished test
+  return "pending";
 
 });
 
 Then('the "Refresh signals" button is displayed', () => {
 
   // Skip unfinished test
+  return "pending";
 
 });
 
@@ -34,12 +36,14 @@ Then('the "Refresh signals" button is displayed', () => {
   Then('5 minutes pass', () => {
 
     //cy.wait(300000)
+    return "pending";
   
   });
   
   Then('the "Signals" page is refreshed', () => {
   
     // Skip unfinished test
+    return "pending";
   
   });
 
@@ -56,6 +60,7 @@ Then('the "Refresh signals" button is displayed', () => {
   Then('I click the "Refresh signals" button', () => {
 
     // Skip unfinished test
+    return "pending";
   
   });
   
