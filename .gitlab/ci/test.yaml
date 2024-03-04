@@ -27,7 +27,6 @@ cypress-tests:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event' #Check when we want to run these tests, for now only on merge requests or manual      
       when: delayed
       start_in: 2 minutes
-    - when: manual     
 
 
 .frontend:
