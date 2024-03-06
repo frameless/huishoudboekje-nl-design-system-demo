@@ -28,7 +28,7 @@ const validator2 = zod.object({
 
 const validator = zod.object({
 	type: zod.enum(["burger", "organisatie"]),
-	bedrag: zod.number().min(1).finite(),
+	bedrag: zod.number().positive().finite(),
 	rubriekId: zod.number().nonnegative(),
 	omschrijving: zod.string().min(1).max(140, {message: 'Gebruik maximaal 140 tekens.'}),
 	organisatieId: zod.number().nonnegative().optional(),
