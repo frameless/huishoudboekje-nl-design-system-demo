@@ -24,10 +24,9 @@ cypress-tests:
     - kubectl wait pod --all --for=condition=Ready --namespace=$NAMESPACE --timeout=5m
     - sh cypress/pipeline/pipeline-execution.sh
   rules:
-    - if: $CI_PIPELINE_SOURCE == 'merge_request_event' #Check when we want to run these tests, for now only on merge requests or manual      
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event' #Check when we want to run these tests, for now only on merge requests
       when: delayed
       start_in: 2 minutes
-    - when: manual     
 
 
 .frontend:
