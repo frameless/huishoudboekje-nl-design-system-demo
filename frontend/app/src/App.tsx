@@ -68,7 +68,7 @@ const App = () => {
 					<Stack spacing={5} maxWidth={300} alignSelf={["center", null, null, "flex-start"]}>
 						<Heading size={"sm"}>{t("messages.welcome", {tenantName: theme.tenantName})}</Heading>
 						<Text fontSize={"sm"}>{t("messages.clickHereToContinue")}</Text>
-						<Button colorScheme={"primary"} type={"submit"} onClick={() => login()}>{t("global.actions.login")}</Button>
+						<Button colorScheme={"primary"} type={"submit"} data-test="button.Login" onClick={() => login()}>{t("global.actions.login")}</Button>
 					</Stack>
 				)}
 			</TwoColumns>

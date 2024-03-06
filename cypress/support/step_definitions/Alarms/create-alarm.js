@@ -19,7 +19,17 @@ const queryTruncateSignal = `mutation Truncate {
 //#region Scenario: view create alarm form with default options
 
 When('I view the "Add alarm" modal', () => {
- 
+  
+  // Wipe alarms clean
+    // Truncate alarms
+    cy.request({
+      method: "post",
+      url: Cypress.env().graphqlUrl + '/graphql',
+      body: { query: queryTruncateAlarm },
+    }).then((res) => {
+      console.log(res.body);
+    });
+
   // Click button element
   cy.visit('/afspraken/1');
   cy.waitForReact();
@@ -362,7 +372,7 @@ Then('I click the "Submit form" button', () => {
 });
 
 Then('the modal is closed', () => {
-  
+
   // Clean up
     // Truncate alarms
     cy.request({
@@ -372,44 +382,10 @@ Then('the modal is closed', () => {
     }).then((res) => {
       console.log(res.body);
     });
+  
+  cy.wait(1000);
 
-    // Truncate signals
-    cy.request({
-      method: "post",
-      url: Cypress.env().graphqlUrl + '/graphql',
-      body: { query: queryTruncateSignal },
-    }).then((res) => {
-      console.log(res.body);
-    });
-    
-  Step(this, 'the "Create alarm form" is displayed');
-
-  // Fill in all required fields
-    // 'Startdatum'
-      // Is automatically filled in
-
-    // 'Dag in de maand'
-    cy.get('[data-test="alarmForm.byMonthDay"]')
-      .type('1')
-      .should('have.value', '1')
-
-    // 'Toegestane afwijking (in dagen)'
-    cy.get('[data-test="alarmForm.dateMargin"]')
-      .type('1')
-      .should('have.value', '1')
-
-    // 'Bedrag verwachte betaling'
-      // Is automatically filled in
-
-    // 'Toegestane afwijking bedrag'
-    cy.get('[data-test="alarmForm.amountMargin"]')
-      .type('1')
-      .should('have.value', '1') 
-
-  // Click 'Opslaan' button
-  cy.waitForReact()
-  cy.get('[data-test="alarmForm.buttonSubmit"]')
-    .click()
+  Step(this, 'I click the "Submit form" button');
 
   // Check whether modal is closed
   cy.contains('Alarm toevoegen')
