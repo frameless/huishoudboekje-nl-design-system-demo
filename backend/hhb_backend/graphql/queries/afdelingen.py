@@ -53,6 +53,10 @@ class AfdelingenByIbanQuery:
     def resolver(cls, root, info, iban=None):
         logging.info(f"Get organisaties by iban")
 
+        if iban is None:
+            return []
+
+
         rekeningen = hhb_dataloader().rekeningen.by_ibans([iban])
         rekening_ids = [rekening.id if rekening is not None else -1 for rekening in rekeningen]
         result = hhb_dataloader().afdelingen.by_rekeningen(rekening_ids)

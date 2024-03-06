@@ -2162,7 +2162,7 @@ export type GetBurgersQueryVariables = Exact<{ [key: string]: never; }>;
 export type GetBurgersQuery = { burgers?: Array<{ id?: number, voornamen?: string, achternaam?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }> };
 
 export type GetBurgersAndOrganisatiesAndRekeningenQueryVariables = Exact<{
-  iban: Scalars['String'];
+  iban?: InputMaybe<Scalars['String']>;
 }>;
 
 
@@ -6043,7 +6043,7 @@ export type GetBurgersQueryHookResult = ReturnType<typeof useGetBurgersQuery>;
 export type GetBurgersLazyQueryHookResult = ReturnType<typeof useGetBurgersLazyQuery>;
 export type GetBurgersQueryResult = Apollo.QueryResult<GetBurgersQuery, GetBurgersQueryVariables>;
 export const GetBurgersAndOrganisatiesAndRekeningenDocument = gql`
-    query getBurgersAndOrganisatiesAndRekeningen($iban: String!) {
+    query getBurgersAndOrganisatiesAndRekeningen($iban: String) {
   organisaties {
     id
     naam
@@ -6084,7 +6084,7 @@ export const GetBurgersAndOrganisatiesAndRekeningenDocument = gql`
  *   },
  * });
  */
-export function useGetBurgersAndOrganisatiesAndRekeningenQuery(baseOptions: Apollo.QueryHookOptions<GetBurgersAndOrganisatiesAndRekeningenQuery, GetBurgersAndOrganisatiesAndRekeningenQueryVariables>) {
+export function useGetBurgersAndOrganisatiesAndRekeningenQuery(baseOptions?: Apollo.QueryHookOptions<GetBurgersAndOrganisatiesAndRekeningenQuery, GetBurgersAndOrganisatiesAndRekeningenQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<GetBurgersAndOrganisatiesAndRekeningenQuery, GetBurgersAndOrganisatiesAndRekeningenQueryVariables>(GetBurgersAndOrganisatiesAndRekeningenDocument, options);
       }
