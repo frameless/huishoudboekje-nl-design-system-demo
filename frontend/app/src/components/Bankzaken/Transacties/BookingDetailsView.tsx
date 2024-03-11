@@ -99,7 +99,7 @@ const BookingDetailsView: React.FC<BookingDetailsViewProps> = ({transactie}) => 
 					</Box>
 				</Box>
 				<Box>
-					<Button leftIcon={
+					<Button data-test="button.undoReconciliation" leftIcon={
 						<DeleteIcon />} variant={"ghost"} colorScheme={"red"} size={"sm"} onClick={onDelete} isLoading={$deleteJournaalpost.loading}>{t("global.actions.undoAfletteren")}</Button>
 				</Box>
 			</Stack>

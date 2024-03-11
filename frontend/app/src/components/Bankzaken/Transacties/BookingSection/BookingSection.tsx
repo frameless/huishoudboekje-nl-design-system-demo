@@ -10,8 +10,8 @@ const BookingSection = ({transaction}) => {
 		<Stack>
 			<Tabs align={"start"} variant={"enclosed"}>
 				<TabList>
-					<Tab>{t("bookingSection.afspraak")}</Tab>
-					<Tab>{t("bookingSection.rubriek")}</Tab>
+					<Tab data-test="tab.bookingSection.agreement">{t("bookingSection.afspraak")}</Tab>
+					<Tab data-test="tab.bookingSection.rubric">{t("bookingSection.rubriek")}</Tab>
 				</TabList>
 				<TabPanels>
 					<TabPanel px={0}>

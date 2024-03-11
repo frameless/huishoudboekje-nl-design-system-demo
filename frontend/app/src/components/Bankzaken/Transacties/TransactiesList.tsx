@@ -44,6 +44,7 @@ const TransactiesList: React.FC<TransactiesListProps> = ({transacties}) => {
 				<Box
 					flex={0}
 					minWidth={250}
+					data-test=""
 				>
 					<FormLabel>{t("transacties.rubriek")}</FormLabel>
 				</Box>

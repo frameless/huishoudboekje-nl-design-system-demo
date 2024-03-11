@@ -15,7 +15,7 @@ const CsmUploadItem = ({upload}) => {
 				)}
 			</Stack>
 			{upload.state === UploadState.DONE && !upload.error && (
-				<CheckIcon color={"green.500"} />
+				<CheckIcon data-test="uploadItem.check" color={"green.500"} />
 			)}
 			{upload.state === UploadState.DONE && upload.error && (
 				<WarningIcon color={"red.500"} />

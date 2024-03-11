@@ -1,4 +1,8 @@
 sources:
+  - name: huishoudboekjeDatabase
+    handler:
+      postgraphile:
+        connectionString: postgres://{env.DB_USER}:{env.DB_PASSWORD}@{env.DB_HOST}:{env.DB_PORT}/huishoudboekjeservice
   - name: alarmDatabase
     handler:
       postgraphile:

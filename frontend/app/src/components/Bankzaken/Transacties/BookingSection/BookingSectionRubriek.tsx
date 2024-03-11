@@ -20,7 +20,7 @@ const BookingSectionRubriek = ({transaction}) => {
 	});
 	
 	return (
-		<Queryable query={$rubrieken} children={(data => {
+		<Queryable data-test="select.bookingSection.rubric" query={$rubrieken} children={(data => {
 			const rubrieken: Rubriek[] = data.rubrieken;
 
             const onSelectRubriek = (val) => {
