@@ -243,13 +243,13 @@ const Transactions = () => {
 												<FormLabel>{t("transactionsPage.filters.status")}</FormLabel>
 												<RadioGroup defaultValue={defaultValueRadio(banktransactieFilters.onlyBooked)} onChange={onChangeBookedRadio}>
 													<Stack spacing={5} direction={"row"}>
-														<Radio colorScheme={"blue"} value={"1"}>
+														<Radio colorScheme={"blue"} data-test="transactionsPage.filters.notReconciliated" value={"1"}>
 															{t("transactionsPage.filters.unbooked")}
 														</Radio>
-														<Radio colorScheme={"blue"} value={"2"}>
+														<Radio colorScheme={"blue"} data-test="transactionsPage.filters.reconciliated" value={"2"}>
 															{t("transactionsPage.filters.booked")}
 														</Radio>
-														<Radio colorScheme={"blue"} value={"3"}>
+														<Radio colorScheme={"blue"} data-test="transactionsPage.filters.allReconciliated" value={"3"}>
 															{t("transactionsPage.filters.all")}
 														</Radio>
 													</Stack>
@@ -290,7 +290,7 @@ const Transactions = () => {
 															}}
 															showYearDropdown
 															dropdownMode={"select"}
-															customInput={<Input type={"text"} autoComplete="no" aria-autocomplete="none" />}
+															customInput={<Input type={"text"} data-test="transactionsPage.filters.from" autoComplete="no" aria-autocomplete="none" />}
 															isClearable={true}
 														/>
 													</FormControl>
@@ -317,7 +317,7 @@ const Transactions = () => {
 																}
 															}}
 															showYearDropdown={true}
-															customInput={<Input type={"text"} autoComplete="no" aria-autocomplete="none" />}
+															customInput={<Input type={"text"} data-test="transactionsPage.filters.to" autoComplete="no" aria-autocomplete="none" />}
 															isClearable={true}
 														/>
 													</FormControl>
@@ -481,7 +481,7 @@ const Transactions = () => {
 																value={zoekterm || ""} 
 															/>
 															<InputRightElement width={"auto"} pr={1}>
-																<Button type={"submit"} size={"sm"} colorScheme={"primary"}>Zoeken</Button>
+																<Button data-test="transactions.submitSearch" type={"submit"} size={"sm"} colorScheme={"primary"}>Zoeken</Button>
 															</InputRightElement>
 														</InputGroup>
 														<ZoektermenList zoektermen={zoektermen} onClickDelete={(zoekterm: string) => onDeleteZoekterm(zoekterm)} />
@@ -489,7 +489,7 @@ const Transactions = () => {
 												</FormLabel>
 											</Stack>
 										</Collapse>
-										<Button leftIcon={isOpen ? <TriangleUpIcon /> : <TriangleDownIcon />} colorScheme={"blue"} variant={"outline"} onClick={onToggle}>{t("transactionsPage.filters.extensive")}</Button>
+										<Button data-test="transactions.expandFilter" leftIcon={isOpen ? <TriangleUpIcon /> : <TriangleDownIcon />} colorScheme={"blue"} variant={"outline"} onClick={onToggle}>{t("transactionsPage.filters.extensive")}</Button>
 										{extraFiltersUsed() && !isOpen ?
 											<Tag colorScheme={"red"} size={"md"} variant={"subtle"}>
 												<Icon as={WarningTwoIcon} />

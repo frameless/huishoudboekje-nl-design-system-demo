@@ -43,7 +43,7 @@ const CsmUpload: React.FC<{refetch: VoidFunction}> = ({refetch}) => {
 
 		<Box>
 			<Input type={"file"} id={"fileUpload"} onChange={onChangeFiles} ref={fileUploadInput} hidden={true} multiple={true} />
-			<AddButton onClick={() => fileUploadInput.current?.click()}>{t("global.actions.add")}</AddButton>
+			<AddButton data-test="fileUpload" onClick={() => fileUploadInput.current?.click()}>{t("global.actions.add")}</AddButton>
 		</Box>
 	</>);
 };
