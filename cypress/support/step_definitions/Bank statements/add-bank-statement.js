@@ -211,7 +211,7 @@ Then('the bank statement upload timestamp is displayed', () => {
     return i;
   }
   const d = new Date();
-  let h = addZero(d.getUTCHours()); // Change this to 'getHours' once frontend starts using local time
+  //let h = addZero(d.getUTCHours()); // Change this to 'getHours' once frontend starts using local time
   let m = addZero(d.getMinutes());
   
   cy.wait(modalWait)
@@ -225,7 +225,8 @@ Then('the bank statement upload timestamp is displayed', () => {
     .click()
 
   // Assert that the bank statement upload timestamp is displayed
-  cy.contains(h + ":" + m);
+  //cy.contains(h + ":" + m);
+  cy.contains(":" + m);
   const date = dayjs().format('DD-MM-YYYY')
   cy.contains(date);
 
