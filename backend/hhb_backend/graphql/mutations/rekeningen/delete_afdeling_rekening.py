@@ -31,18 +31,25 @@ class DeleteAfdelingRekening(graphene.Mutation):
 
         # check uses, if used in afspraak - stop
         afdelingen, afspraken, burgers = rekening_used_check(rekening_id)
-        if afspraken:
-            raise GraphQLError(f"Rekening is used in an afspraak - deletion is not possible.")
+        if afdelingen and len(afdelingen) > 1:
+            afdeling_afspraken = hhb_dataloader().afspraken.by_afdeling(afdeling_id)
+            if len(afdeling_afspraken) == 0:
+                disconnect_afdeling_rekening(afdeling_id, rekening_id)
+            else:
+                raise GraphQLError(f"Rekening and with afdeling are used in an afspraak - deletion is not possible.")
+        else:     
+            if afspraken:
+                raise GraphQLError(f"Rekening and with afdeling are used in an afspraak - deletion is not possible.")
 
-        # if used by afdeling, disconnect
-        if afdelingen and afdeling_id in afdelingen:
-            disconnect_afdeling_rekening(afdeling_id, rekening_id)
-        elif afdeling_id not in afdelingen:
-            raise GraphQLError(f"Specified afdeling does not have the specified rekening.")
+            # if used by afdeling, disconnect
+            if afdelingen and afdeling_id in afdelingen:
+                disconnect_afdeling_rekening(afdeling_id, rekening_id)
+            elif afdeling_id not in afdelingen:
+                raise GraphQLError(f"Specified afdeling does not have the specified rekening.")
 
-        # if not used - remove completely
-        if len(afdelingen) == 1 and not burgers and not afspraken:
-            delete_rekening(rekening_id)
+            # if not used - remove completely
+            if len(afdelingen) == 1 and not burgers and not afspraken:
+                delete_rekening(rekening_id)
 
         AuditLogging.create(
             action=info.field_name,
