@@ -10,13 +10,13 @@ const DeleteConfirmButton: React.FC<{onConfirm: VoidFunction}> = ({onConfirm}) =
 	return (
 		<HStack spacing={1}>
 			{!isConfirmed ? (
-				<IconButton size={"sm"} variant={"ghost"} colorScheme={"gray"} icon={<DeleteIcon />} aria-label={t("global.actions.delete")} onClick={() => setConfirmed(true)} />
+				<IconButton data-test="button.Delete" size={"sm"} variant={"ghost"} colorScheme={"gray"} icon={<DeleteIcon />} aria-label={t("global.actions.delete")} onClick={() => setConfirmed(true)} />
 			) : (<>
-				<IconButton size={"sm"} variant={"solid"} colorScheme={"red"} icon={<CheckIcon />} aria-label={t("global.actions.delete")} onClick={() => {
+				<IconButton data-test="button.Delete" size={"sm"} variant={"solid"} colorScheme={"red"} icon={<CheckIcon />} aria-label={t("global.actions.delete")} onClick={() => {
 					setConfirmed(false);
 					onConfirm();
 				}} />
-				<IconButton size={"sm"} variant={"ghost"} colorScheme={"gray"} icon={<CloseIcon />} aria-label={t("global.actions.cancel")} onClick={() => setConfirmed(false)} />
+				<IconButton data-test="button.Cancel" size={"sm"} variant={"ghost"} colorScheme={"gray"} icon={<CloseIcon />} aria-label={t("global.actions.cancel")} onClick={() => setConfirmed(false)} />
 			</>)}
 		</HStack>
 	);

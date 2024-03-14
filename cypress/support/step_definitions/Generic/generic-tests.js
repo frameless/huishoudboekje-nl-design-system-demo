@@ -1,6 +1,6 @@
 // cypress/support/step_definitions/Generic/generic-tests.js
 
-import { BeforeStep, Before } from "@badeball/cypress-cucumber-preprocessor";
+import { BeforeStep, Before, After } from "@badeball/cypress-cucumber-preprocessor";
 
 const header = {
   'content-type': 'application/json',
@@ -46,7 +46,7 @@ Before({ tags: "@signalservice" }, function () {
   });
 
 // Before *each* test, run this (so this runs equal to the amount of tests)
-BeforeStep(function () {
+Before(function () {
   
   cy.getCookie('appSession').then((c) => {
     const cookie = c
@@ -74,5 +74,22 @@ BeforeStep(function () {
     }
 
   })
+
+});
+
+// Clean-up testdata after Scenario 'organisation and bank account are not used for reconciliation'
+After({ tags: "@cleanupDepartment" }, function ()  {
+
+  cy.get('[data-test="menuDepartment"]')
+    .click();
+  cy.get('[data-test="menuDepartment.delete"]')
+    .click();
+  cy.get('[data-test="modalDepartment.delete"]')
+    .click();
+  cy.waitForReact();
+
+  // Check success message
+  cy.get('[data-status="success"]')
+    .should('be.visible')
 
 });

@@ -22,7 +22,7 @@ const Alert: React.FC<AlertProps> = ({title, children, confirmButton, cancelButt
 				<AlertDialogCloseButton />
 				<AlertDialogBody>{children}</AlertDialogBody>
 				<AlertDialogFooter>
-					{cancelButton && <Button ref={cancelDeleteRef} onClick={onClose}>{t("global.actions.cancel")}</Button>}
+					{cancelButton && <Button data-test="buttonModal.Cancel" ref={cancelDeleteRef} onClick={onClose}>{t("global.actions.cancel")}</Button>}
 					{confirmButton}
 				</AlertDialogFooter>
 			</AlertDialogContent>

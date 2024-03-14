@@ -47,7 +47,7 @@ const RekeningListItem: React.FC<RekeningListItemProps> = ({rekening, onDelete, 
 				title={t("messages.rekeningen.deleteTitle")}
 				cancelButton={true}
 				confirmButton={
-					<Button colorScheme={"red"} onClick={onConfirmDeleteDialog} ml={3}>
+					<Button colorScheme={"red"} data-test="button.Delete" onClick={onConfirmDeleteDialog} ml={3}>
 						{t("global.actions.delete")}
 					</Button>
 				}
@@ -71,9 +71,9 @@ const RekeningListItem: React.FC<RekeningListItemProps> = ({rekening, onDelete, 
 			</Td>
 			<Td isNumeric>
 				<HStack justify={"flex-end"}>
-					<IconButton size={"sm"} variant={"ghost"} colorScheme={"gray"} icon={<EditIcon />} aria-label={t("global.actions.edit")} onClick={() => updateAfdelingRekeningModal.onOpen()} />
+					<IconButton data-test="buttonIcon.Edit" size={"sm"} variant={"ghost"} colorScheme={"gray"} icon={<EditIcon />} aria-label={t("global.actions.edit")} onClick={() => updateAfdelingRekeningModal.onOpen()} />
 					{onDelete && (
-						<IconButton icon={<DeleteIcon />} size={"xs"} variant={"ghost"} onClick={() => deleteAlert.onOpen()} aria-label={t("global.actions.delete")} />
+						<IconButton data-test="buttonIcon.Delete" icon={<DeleteIcon />} size={"xs"} variant={"ghost"} onClick={() => deleteAlert.onOpen()} aria-label={t("global.actions.delete")} />
 					)}
 				</HStack>
 			</Td>

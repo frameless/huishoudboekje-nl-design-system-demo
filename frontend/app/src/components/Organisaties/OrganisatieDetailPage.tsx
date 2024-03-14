@@ -93,7 +93,7 @@ const OrganisatieDetailPage = () => {
 
 					<Heading size={"md"}>{t("afdelingen")}</Heading>
 					<Grid maxWidth={"100%"} gridTemplateColumns={["repeat(1, 1fr)", "repeat(2, 1fr)", "repeat(3, 1fr)"]} gap={5}>
-						<Box>
+						<Box data-test="button.addDepartment">
 							<DashedAddButton onClick={() => addAfdelingModal.onOpen()} />
 						</Box>
 
