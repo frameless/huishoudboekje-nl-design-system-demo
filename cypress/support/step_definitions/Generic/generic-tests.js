@@ -90,6 +90,7 @@ After({ tags: "@cleanupDepartment" }, function ()  {
 
   // Check success message
   cy.get('[data-status="success"]')
+    .contains('Bankrekening is verwijderd.')
     .should('be.visible')
 
 });
