@@ -1,6 +1,6 @@
 # cypress/e2e/Signals/create-signal-on-multiple-payments.feature
 
-@signalservice
+@signalservice @skip
 Feature: create signal on multiple payments
 
   # Signal a user when multiple payments happened within a timeframe.

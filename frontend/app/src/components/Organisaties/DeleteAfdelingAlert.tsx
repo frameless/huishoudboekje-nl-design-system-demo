@@ -51,7 +51,7 @@ const DeleteAfdelingAlert: React.FC<DeleteAfdelingAlertProps> = ({afdeling, onCl
 			title={t("deleteAfdelingAlert.title")}
 			cancelButton={true}
 			confirmButton={
-				<Button colorScheme={"red"} ml={3} onClick={onClickSubmit}>
+				<Button data-test="modalDepartment.delete" colorScheme={"red"} ml={3} onClick={onClickSubmit}>
 					{t("global.actions.delete")}
 				</Button>
 			}

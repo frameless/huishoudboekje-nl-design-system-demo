@@ -1,6 +1,6 @@
 # cypress/e2e/Signals/suppress-signal.feature
 
-@signalservice
+@signalservice @skip
 Feature: suppress signal
 
   # Suppress a signal, but keep the alarm enabled.

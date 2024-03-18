@@ -38,10 +38,10 @@ const AfdelingDetailView: React.FC<{afdeling: Afdeling}> = ({afdeling}) => {
 
 		<Page title={afdeling.naam || t("afdeling")} backButton={<BackButton to={AppRoutes.Organisatie(String(organisatieId))} />} menu={(
 			<Menu>
-				<IconButton as={MenuButton} icon={<MenuIcon />} variant={"solid"} aria-label={"Open menu"} />
+				<IconButton as={MenuButton} data-test="menuDepartment" icon={<MenuIcon />} variant={"solid"} aria-label={"Open menu"} />
 				<MenuList>
-					<MenuItem onClick={() => updateAfdelingModal.onOpen()}>{t("global.actions.edit")}</MenuItem>
-					<MenuItem onClick={() => deleteAfdelingAlert.onOpen()}>{t("global.actions.delete")}</MenuItem>
+					<MenuItem data-test="menuDepartment.edit" onClick={() => updateAfdelingModal.onOpen()}>{t("global.actions.edit")}</MenuItem>
+					<MenuItem data-test="menuDepartment.delete" onClick={() => deleteAfdelingAlert.onOpen()}>{t("global.actions.delete")}</MenuItem>
 				</MenuList>
 			</Menu>
 		)}>
@@ -51,7 +51,7 @@ const AfdelingDetailView: React.FC<{afdeling: Afdeling}> = ({afdeling}) => {
 					<Stack>
 						<PostadresList postadressen={postadressen} afdeling={afdeling} />
 						<Box>
-							<AddButton onClick={() => addPostadresModal.onOpen()} />
+							<AddButton data-test="button.addPostaddressModal" onClick={() => addPostadresModal.onOpen()} />
 						</Box>
 					</Stack>
 				</Section>
@@ -60,7 +60,7 @@ const AfdelingDetailView: React.FC<{afdeling: Afdeling}> = ({afdeling}) => {
 					<Stack>
 						<RekeningList rekeningen={rekeningen} afdeling={afdeling} />
 						<Box>
-							<AddButton onClick={() => addRekeningModal.onOpen()} />
+							<AddButton data-test="button.addBankAccountModal" onClick={() => addRekeningModal.onOpen()} />
 						</Box>
 					</Stack>
 				</Section>

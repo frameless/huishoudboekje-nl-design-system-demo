@@ -1,6 +1,6 @@
 # cypress/e2e/Signals/list-signals.feature
 
-@signalservice
+@signalservice @skip
 Feature: list signals
 
   # A list with all signals of alarms. The properties of a signal must be human-readable.

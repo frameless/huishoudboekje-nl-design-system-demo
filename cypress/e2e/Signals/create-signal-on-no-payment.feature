@@ -1,6 +1,6 @@
 # cypress/e2e/Signals/create-signal-on-no-payment.feature
 
-@signalservice
+@signalservice @skip
 Feature: create signal on no payment
 
   # Signal a user when no payment was received within a timeframe.

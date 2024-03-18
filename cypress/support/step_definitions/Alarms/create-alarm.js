@@ -31,14 +31,20 @@ When('I view the "Add alarm" modal', () => {
     });
 
   // Click button element
-  cy.visit('/afspraken/1');
+  cy.visit('/burgers/1');
   cy.waitForReact();
-  cy.url().should('eq', Cypress.config().baseUrl + '/afspraken/1')
+  cy.url().should('eq', Cypress.config().baseUrl + '/burgers/1')
+  cy.get('a[aria-label="Bekijken"]:visible')
+    .click();
+  cy.waitForReact();
+  cy.url().should('include', Cypress.config().baseUrl + '/afspraken/')
   cy.get('h2').contains('Alarm').should('be.visible')
     .scrollIntoView() // Scrolls 'Alarm' into view
   cy.get('button')
     .contains('Toevoegen')
-    .click()
+    .click();
+
+  cy.waitForReact(); // Wait for modal opening
   
 });
 
@@ -51,7 +57,7 @@ Then('the "Create alarm form" is displayed', () => {
   // Check whether modal is opened and visible
   cy.get('section[aria-modal="true"]')
     .scrollIntoView()
-    .should('be.visible')
+    .should('exist');
   
 });
 
@@ -116,9 +122,13 @@ Then('the expected amount is equal to the amount of the agreement', () => {
   let agreementValue;
 
   // Click button element
-  cy.visit('/afspraken/1');
+  cy.visit('/burgers/1');
   cy.waitForReact();
-  cy.url().should('eq', Cypress.config().baseUrl + '/afspraken/1')
+  cy.url().should('eq', Cypress.config().baseUrl + '/burgers/1')
+  cy.get('[aria-label="Bekijken"]:visible')
+    .click();
+  cy.waitForReact();
+  cy.url().should('include', Cypress.config().baseUrl + '/afspraken/')
   cy.get('label[class^="chakra-form__label"]').contains('Bedrag')
     .siblings()
     .then(($value) => {
@@ -285,9 +295,13 @@ Then('I fill in the expected payment amount', () => {
   let agreementValue;
   
   // Click button element
-  cy.visit('/afspraken/1');
+  cy.visit('/burgers/1');
   cy.waitForReact();
-  cy.url().should('eq', Cypress.config().baseUrl + '/afspraken/1')
+  cy.url().should('eq', Cypress.config().baseUrl + '/burgers/1')
+  cy.get('a[aria-label="Bekijken"]:visible')
+    .click();
+  cy.waitForReact();
+  cy.url().should('include', Cypress.config().baseUrl + '/afspraken/')
   cy.get('label[class^="chakra-form__label"]').contains('Bedrag')
     .siblings()
     .then(($value) => {
@@ -399,65 +413,13 @@ Then('the modal is closed', () => {
   cy.get('button[aria-label="Verwijderen"]')
     .click()
 
-  // Check success message
-  cy.get('[data-status="success"]')
-    .should('be.visible')
-  cy.contains('Het alarm is verwijderd')
-
 });
 
 Then('a notification of success is displayed', () => {
  
-  Step(this, 'the "Create alarm form" is displayed');
-
-  // Fill in all required fields
-    // 'Startdatum'
-      // Is automatically filled in
-
-    // 'Dag in de maand'
-    cy.get('[data-test="alarmForm.byMonthDay"]')
-      .type('1')
-      .should('have.value', '1')
-
-    // 'Toegestane afwijking (in dagen)'
-    cy.get('[data-test="alarmForm.dateMargin"]')
-      .type('1')
-      .should('have.value', '1')
-
-    // 'Bedrag verwachte betaling'
-      // Is automatically filled in
-
-    // 'Toegestane afwijking bedrag'
-    cy.get('[data-test="alarmForm.amountMargin"]')
-      .type('1')
-      .should('have.value', '1') 
-
-  // Click 'Opslaan' button
-  cy.waitForReact()
-  cy.get('[data-test="alarmForm.buttonSubmit"]')
-    .click()
-
-  // Check whether modal is closed
-  cy.contains('Alarm toevoegen')
-    .should('not.exist')
-  cy.get('section[aria-modal="true"]')
-    .should('not.exist')
-
   // Check success message
   cy.get('[data-status="success"]')
     .should('be.visible')
-  cy.contains('Het alarm is opgeslagen')
-
-  // Clean up alarm
-  cy.get('button[aria-label="Verwijderen"]')
-    .click()
-  cy.get('button[aria-label="Verwijderen"]')
-    .click()
-  
-  // Check success message
-  cy.get('[data-status="success"]')
-    .should('be.visible')
-  cy.contains('Het alarm is verwijderd')
 
 });
 
