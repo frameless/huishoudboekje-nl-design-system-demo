@@ -238,7 +238,6 @@ rapportage-service-test:
     DIRECTORY: services/rapportage_service
 
 changeset:
-  <<: *only-on-merge-request
   stage: test
   needs: []
   image:
@@ -257,3 +256,5 @@ changeset:
   script:
     - git fetch origin develop:develop
     - npm run check-changeset
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event' && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == 'develop'
