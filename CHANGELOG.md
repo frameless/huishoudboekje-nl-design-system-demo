@@ -2,6 +2,8 @@
 
 ## 1.12.5
 
+Deze versie omvat meerdere oplossingen voor gemelde problemen. Er is een verbetering gemaakt voor de communicatie tussen applicatie en hostingomgeving waardoor gebruikers minder foutmeldingen ervaren. Daarnaast zijn er aanpassingen gedaan voor het uitvoeren van geautomatiseerde testen.
+
 ### Patch Changes
 
 - 619efed: Fixed error when iban is null transaction page
