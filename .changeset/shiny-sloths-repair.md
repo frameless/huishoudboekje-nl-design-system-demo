@@ -1,0 +1,5 @@
+---
+"huishoudboekje": patch
+---
+
+fixed typo
