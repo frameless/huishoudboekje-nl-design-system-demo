@@ -220,6 +220,9 @@ When('I click the "Confirm delete alarm" button', () => {
   cy.get('.chakra-modal__footer')
     .should('not.exist')
 
+  // Wait for back-end to catch up to front-end
+  cy.wait(500);
+
   // Check assertion
   cy.get('button[aria-label="Verwijderen"]')
     .click()
