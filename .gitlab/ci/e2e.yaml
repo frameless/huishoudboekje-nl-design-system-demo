@@ -1,0 +1,23 @@
+
+e2e-tests:
+  stage: e2e
+  needs: 
+    - deploy-deployment-review
+  image: registry.gitlab.com/commonground/huishoudboekje/cypress-test-executor-with-kubectl:latest
+  variables:
+    APP_HOST_NAME: "hhb-$CI_COMMIT_REF_SLUG.review.hhb-development.nl"
+    APP_HOST: "https://hhb-$CI_COMMIT_REF_SLUG.review.hhb-development.nl"
+    NAMESPACE: "hhb-$CI_COMMIT_REF_SLUG"
+    DATABASE_HOST: "https://database.hhb-$CI_COMMIT_REF_SLUG.review.hhb-development.nl"
+  script:
+    - kubectl config use-context commonground/huishoudboekje/app-new:hhb-development
+    - kubectl wait pod --all --for=condition=Ready --namespace=$NAMESPACE --timeout=5m
+    - sh cypress/pipeline/pipeline-execution.sh
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event' && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == 'main'
+      when: delayed
+      start_in: 2 minutes
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event' && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == 'develop'
+      when: manual
+      allow_failure: true
+      start_in: 2 minutes
