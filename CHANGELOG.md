@@ -1,5 +1,23 @@
 # Huishoudboekje Changelog
 
+## 1.12.5
+
+### Patch Changes
+
+- 619efed: Fixed error when iban is null transaction page
+- 4d21830: implemented best practice improvements in alarmservice tests
+- c4685fe: add 'delete bank account' tests
+- e15b74d: Added env variable DATABASE_POOL_RECYCLE to set the recyle time period, default is 590 seconds
+- 1e95e75: added 2fa warning support to tests
+- 8f42e49: Made it possible to disconntect rekening from afdeling when the rekening and afdeling combination is not used in afspraken
+- 9fc8b58: test-added support for pipeline
+- e15b74d: Added env variable DATABASE_LOG_HANDLE_ERROR_EVENT to enable the logging of the handle_error event, this is default 0 because it is unclear if and what data will be logged. It is added for debug purposes.
+- ffc88c8: fixed typo
+- 7f1e194: The payment amount in agreements should be higher then 0
+- 05f6922: added unknown iban test
+- a510fe0: test final changes pipeline
+- dd9ee5a: added tags to test
+
 ## 1.12.4
 
 Deze versie lost een probleem op met de overzicht weergave wanneer er een transactie is met een onbekende iban. Daarnaast zijn ook aanpassingen gedaan om dit te voorkomen.
