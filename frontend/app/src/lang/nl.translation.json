@@ -5,7 +5,7 @@
     "genericError": {
       "title": "Fout.",
       "description": "Er is een fout opgetreden. Probeer het later nog eens.",
-      "downloadReportInstruction": "Download een foutrappport door te klikken op deze knop:",
+      "downloadReportInstruction": "Download een foutrapport door te klikken op deze knop:",
       "downloadReportButtonLabel": "Download foutrapport"
     },
     "updateBetaalinstructieSuccess": "De betaalinstructie is ingesteld.",
