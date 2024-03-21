@@ -78,7 +78,7 @@ function loginViaAAD(username: string, password: string) {
     // Ensure Microsoft has redirected us back to the sample app with our logged in user.
     cy.url({ timeout: 10000 }).should('contain', Cypress.config().baseUrl);
     cy.waitForReact();
-    cy.contains(`${Cypress.env('aad_username')}`);
+    cy.contains(`${Cypress.env('aad_username')}`, { timeout: 100000 });
   }
   
   Cypress.Commands.add('loginToAAD', (username: string, password: string) => {
