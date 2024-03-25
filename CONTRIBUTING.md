@@ -8,7 +8,7 @@ When it comes to open source, there are different ways you can contribute, all o
 
 We don't really have one yet. Just be clear about what you're changing.
 
-## Git Flow
+## Git
 
 We use Git for version management. We try to maintain a [semi-linear history](https://stackoverflow.com/questions/20348629/what-are-advantages-of-keeping-linear-history-in-git):
 
@@ -30,6 +30,15 @@ If your work is not related to a specific issue, give your branch a clear name, 
 
 > The name of your branch will be used to spin up a review app on our Kubernetes cluster.
 > The URL to that review app will be `https://hhb-{branch-name}.nlx.reviews`.
+
+
+## Git flow
+
+To give a structure to the branches gitflow is used. Therefore, there are two long-lived branches, `main` and `develop`. And several feature and release branches. When releasing it is important to remember to merge into both `main` and `develop`!. Using gitflow also helps in having one stable `main` branch while features and automated tests are developed on the develop branch. When a release branch is merged into `main` the automated tests are automatically executed for that merge request and these tests have to be successful.
+
+![Gitflow](https://miro.medium.com/v2/resize:fit:1400/1*3-0EDzE63S_UZx2KbIz_dg.png "Gitflow")
+[image source](https://medium.com/@yanminthwin/understanding-github-flow-and-git-flow-957bc6e12220) 
+
 
 ## Merging your changes
 
@@ -54,16 +63,15 @@ Pushing directly to `develop` is disabled.
 
 We use a DTRAP setup (Develop, Test, Review, Acceptance, Production), linked to specific branches. When you push, Gitlab CI will automatically deploy a new environment or update an existing one.
 
-| Branch      | Environment       | URL                                       |
-|-------------|-------------------|-------------------------------------------|
-| your-branch | Review            | https://hhb-your-branch.nlx.reviews       |
-| feature/420 | Review            | https://hhb-feature-420.nlx.reviews       |
-| 999         | Review            | https://hhb-999.nlx.reviews               |
-| develop     | Test              | https://test.huishoudboekje.demoground.nl |
-| acceptance  | Acceptance        | https://acc.huishoudboekje.demoground.nl  |
-| master      | Production (Demo) | https://huishoudboekje.demoground.nl      |
+| Branch      | Environment       | URL                                                        |
+|-------------|-------------------|------------------------------------------------------------|
+| your-branch | Review            | https://hhb-your-branch.review.hhb-development.nl          |
+| feature/420 | Review            | https://hhb-feature-420.review.hhb-development.nl          |
+| 999         | Review            | https://hhb-999.review.hhb-development.nl                  |
+| develop     | Test              | https://test.hhb-development.nl                            |
+| release     | Review            | https://hhb-your-release-branch.review.hhb-development.nl  |
+| master      | -                 | -                                                          |
 
-You might have noticed that the `Development` environment doesn't have a URL that it is deployed to. That's right, because it should be running on your own local machine!
 
 # Changesets
 
