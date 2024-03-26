@@ -21,6 +21,7 @@ const uploadLink = createUploadLink({
 
 const authErrorLink = onError(({graphQLErrors, networkError, operation, forward}) => {
 	if (graphQLErrors) {
+		console.log("test")
 		for (const error of graphQLErrors) {
 			if (error.extensions.code == "UNAUTHENTICATED") {
 				const oldheaders = operation.getContext().headers;
@@ -31,7 +32,7 @@ const authErrorLink = onError(({graphQLErrors, networkError, operation, forward}
 					}
 				})
 					alert("getting auth")
-					useAuth();
+				// useAuth();
 				return forward(operation)
 			}
 		}
