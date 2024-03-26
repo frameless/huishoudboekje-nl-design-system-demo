@@ -2,6 +2,7 @@ import itsdangerous
 import traceback
 import logging
 import re
+from jose import ExpiredSignatureError
 from jose.jwt import decode, get_unverified_header
 from flask import Flask, abort, g, make_response, request
 from hhb_backend.auth.public_key_calculator import PublicKeyCalculator
@@ -45,7 +46,7 @@ class Auth():
         app.auth = self
 
     def _not_logged_in(self):
-        return make_response(({"message": "Not logged in"}, 401))
+        return make_response(({"message": "Unauthorized"}, 401))
 
     def _init_auth(self):
         self.logger.debug("init_auth")
@@ -124,6 +125,9 @@ class Auth():
                 self.logger.warning("Invalid token")
                 self.logger.debug(
                     f"""_user_loader: {err}; claims: {claims}""")
+            except ExpiredSignatureError as err:
+                self.logger.warning("Expired token given")
+                return None
 
         self.logger.debug(f"_user_loader: no user")
         return None
