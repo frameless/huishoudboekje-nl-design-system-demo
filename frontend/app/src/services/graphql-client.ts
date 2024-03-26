@@ -24,6 +24,7 @@ const authErrorLink = onError(({graphQLErrors, networkError, operation, forward}
 		for (const error of graphQLErrors) {
 			switch (error.extensions.code) {
 				case "UNAUTHENTICATED":
+					alert("getting auth")
 					useAuth();
 					return forward(operation)
 				default:
