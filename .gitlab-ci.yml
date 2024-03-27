@@ -2,6 +2,7 @@ stages:
 - build
 - deploy
 - test
+- e2e
 - security
 
 variables:
@@ -17,4 +18,5 @@ include:
 - "/.gitlab/ci/build.yaml"
 - "/.gitlab/ci/deploy.yaml"
 - "/.gitlab/ci/test.yaml"
+- "/.gitlab/ci/e2e.yaml"
 - "/.gitlab/ci/security.yaml"
