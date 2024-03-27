@@ -56,7 +56,7 @@ function loginViaAAD(username: string, password: string) {
         })
         cy.get('input[type="submit"]').click()
 
-        cy.wait(500)
+        cy.wait(1000)
 
         // In case of 2FA warning message
         cy.get('body').then(($body) => {
@@ -69,16 +69,15 @@ function loginViaAAD(username: string, password: string) {
           }
         })
 
-        cy.wait(500)
-
-        cy.get('#idBtn_Back').click()
+        cy.wait(3000);
+        cy.get('#idBtn_Back').click();
       }
     )
   
     // Ensure Microsoft has redirected us back to the sample app with our logged in user.
     cy.url({ timeout: 10000 }).should('contain', Cypress.config().baseUrl + '/huishoudens');
     cy.waitForReact();
-    cy.contains(`${Cypress.env('aad_username')}`, { timeout: 100000 });
+    cy.contains(`${Cypress.env('aad_username')}`, { timeout: 10000 });
   }
   
   Cypress.Commands.add('loginToAAD', (username: string, password: string) => {
