@@ -34,7 +34,12 @@ const Queryable: React.FC<QueryableProps> = ({query, loading = true, error = tru
 			return null;
 		}
 
-		return error === true && _error.graphQLErrors.every(error => error.extensions.code != "UNAUTHENTICATED") ? <QueryableError error={_error} query={query} /> : error;
+		_error.graphQLErrors.forEach(element => {
+			console.log(element.extensions.code)
+			console.log(element)
+		});
+
+		return error === true ? <QueryableError error={_error} query={query} /> : error;
 	}
 
 	return children(_data);
