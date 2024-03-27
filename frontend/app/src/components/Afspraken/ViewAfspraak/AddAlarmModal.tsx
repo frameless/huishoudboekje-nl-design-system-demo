@@ -359,8 +359,8 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 
 							<Stack align={"flex-end"}>
 								<HStack>
-									<Button variant={"ghost"} data-test="alarmForm.buttonCancel" onClick={onClose}>{t("global.actions.cancel")}</Button>
-									<Button type={"submit"} data-test="alarmForm.buttonSubmit" colorScheme={"primary"}>{t("global.actions.save")}</Button>
+									<Button variant={"ghost"} data-test="buttonModal.cancel" onClick={onClose}>{t("global.actions.cancel")}</Button>
+									<Button type={"submit"} data-test="buttonModal.submit" colorScheme={"primary"}>{t("global.actions.save")}</Button>
 								</HStack>
 								<Asterisk />
 							</Stack>

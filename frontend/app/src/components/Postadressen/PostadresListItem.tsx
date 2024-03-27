@@ -46,7 +46,7 @@ const PostadresListItem: React.FC<PostadresListItemProps> = ({postadres, afdelin
 				title={t("messages.postadressen.deleteTitle")}
 				cancelButton={true}
 				confirmButton={
-					<Button colorScheme={"red"} onClick={onConfirmDelete} ml={3}>
+					<Button data-test="modalPostaddress.delete" colorScheme={"red"} onClick={onConfirmDelete} ml={3}>
 						{t("global.actions.delete")}
 					</Button>
 				}
@@ -73,7 +73,7 @@ const PostadresListItem: React.FC<PostadresListItemProps> = ({postadres, afdelin
 				<HStack justify={"flex-end"}>
 					<IconButton size={"sm"} variant={"ghost"} colorScheme={"gray"} icon={<EditIcon />} aria-label={t("global.actions.edit")} onClick={() => updatePostadresModal.onOpen()} />
 					{onDelete && (
-						<IconButton icon={<DeleteIcon />} size={"xs"} variant={"ghost"} onClick={() => deleteAlert.onOpen()}
+						<IconButton data-test="departmentPostaddress.delete" icon={<DeleteIcon />} size={"xs"} variant={"ghost"} onClick={() => deleteAlert.onOpen()}
 							aria-label={t("global.actions.delete")} />
 					)}
 				</HStack>

@@ -51,6 +51,7 @@ const AfdelingForm: React.FC<AfdelingFormProps> = ({values, organisatie, onChang
 							aria-autocomplete="none"
 							value={form.naam || ""}
 							onChange={e => updateForm("naam", e.target.value)}
+							data-test="input.createDepartment.name"
 						/>
 						<FormErrorMessage>{t("afspraakDetailView.invalidNaamError")}</FormErrorMessage>
 					</FormControl>

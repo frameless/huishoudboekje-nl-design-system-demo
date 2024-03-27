@@ -34,6 +34,6 @@ Feature: create alarm
     Then I fill in the expected payment amount
     Then I fill in the alarm allowed deviation in payment amount
     Then I click the "Submit form" button
-    Then the modal is closed
+    Then the "Create alarm form" modal is closed
     Then a notification of success is displayed
     Then the current status of the alarm on the agreements page is displayed
