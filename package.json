@@ -32,6 +32,7 @@
     "@badeball/cypress-cucumber-preprocessor": "^20.0.1",
     "@bahmutov/cypress-esbuild-preprocessor": "^2.2.0",
     "@changesets/cli": "^2.26.1",
+    "changeset": "^0.2.6",
     "cypress-postgres-10v-compatibility": "^1.0.0",
     "express-session": "^1.17.3"
   },

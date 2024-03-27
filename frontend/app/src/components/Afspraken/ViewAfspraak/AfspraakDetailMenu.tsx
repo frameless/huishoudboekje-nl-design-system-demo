@@ -80,12 +80,12 @@ const AfspraakDetailMenu: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 		{endModal.isOpen && <AfspraakEndModal startDate={afspraak.validFrom} onSubmit={onSubmitEndAfspraak} onClose={endModal.onClose} />}
 
 		<Menu>
-			<IconButton as={MenuButton} icon={<MenuIcon />} variant={"solid"} aria-label={"Open menu"} />
+			<IconButton data-test="agreement.menuKebab" as={MenuButton} icon={<MenuIcon />} variant={"solid"} aria-label={"Open menu"} />
 			<MenuList>
 				<NavLink
-					to={AppRoutes.EditAfspraak(String(afspraak.id))}><MenuItem>{t("global.actions.edit")}</MenuItem></NavLink>
-				<MenuItem onClick={endModal.onOpen}>{t("global.actions.end")}</MenuItem>
-				<MenuItem onClick={deleteAlert.onOpen}>{t("global.actions.delete")}</MenuItem>
+					to={AppRoutes.EditAfspraak(String(afspraak.id))}><MenuItem data-test="agreement.menuEdit">{t("global.actions.edit")}</MenuItem></NavLink>
+				<MenuItem data-test="agreement.menuEnd" onClick={endModal.onOpen}>{t("global.actions.end")}</MenuItem>
+				<MenuItem data-test="agreement.menuDelete" onClick={deleteAlert.onOpen}>{t("global.actions.delete")}</MenuItem>
 			</MenuList>
 		</Menu>
 	</>);
