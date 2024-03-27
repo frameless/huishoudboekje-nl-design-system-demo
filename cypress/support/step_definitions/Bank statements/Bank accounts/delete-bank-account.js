@@ -170,7 +170,7 @@ When('I click the "Add bank account" button', () => {
 
 });
 
-Then('the "Add bank account" modal is displayed', () => {
+Then('I view the "Add bank account" modal', () => {
 
   // Assertion
   cy.get('header[id^="chakra-modal"]')
@@ -199,7 +199,6 @@ Then('the "Delete bank account" modal is displayed', () => {
   cy.get('header[id^="chakra-modal"]')
     .should('be.visible');
 
-
 });
 
 When('I click the "Delete" button', () => {
@@ -208,8 +207,6 @@ When('I click the "Delete" button', () => {
     .click();
 
 });
-
-
 
 //endregion
 

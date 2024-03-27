@@ -84,7 +84,7 @@ Then('the alarm day of the month is displayed', () => {
 
   // Click 'Opslaan' button
   cy.waitForReact()
-  cy.get('[data-test="alarmForm.buttonSubmit"]')
+  cy.get('[data-test="buttonModal.submit"]')
     .click()
 
   // Check whether modal is closed
@@ -142,7 +142,7 @@ Then('the alarm allowed deviation in days is displayed', () => {
 
   // Click 'Opslaan' button
   cy.waitForReact()
-  cy.get('[data-test="alarmForm.buttonSubmit"]')
+  cy.get('[data-test="buttonModal.submit"]')
     .click()
 
   // Check whether modal is closed
@@ -209,7 +209,7 @@ Then('the alarm next date is displayed', () => {
 
   // Click 'Opslaan' button
   cy.waitForReact()
-  cy.get('[data-test="alarmForm.buttonSubmit"]')
+  cy.get('[data-test="buttonModal.submit"]')
     .click()
 
   // Check whether modal is closed
@@ -270,7 +270,7 @@ Then('the alarm expected amount is displayed', () => {
 
   // Click 'Opslaan' button
   cy.waitForReact()
-  cy.get('[data-test="alarmForm.buttonSubmit"]')
+  cy.get('[data-test="buttonModal.submit"]')
     .click()
 
   // Check whether modal is closed
@@ -329,7 +329,7 @@ Then('the alarm allowed deviation of the expected amount is displayed', () => {
 
   // Click 'Opslaan' button
   cy.waitForReact()
-  cy.get('[data-test="alarmForm.buttonSubmit"]')
+  cy.get('[data-test="buttonModal.submit"]')
     .click()
 
   // Check whether modal is closed
@@ -387,7 +387,7 @@ Then('the alarm status is displayed', () => {
 
   // Click 'Opslaan' button
   cy.waitForReact()
-  cy.get('[data-test="alarmForm.buttonSubmit"]')
+  cy.get('[data-test="buttonModal.submit"]')
     .click()
 
   // Check whether modal is closed

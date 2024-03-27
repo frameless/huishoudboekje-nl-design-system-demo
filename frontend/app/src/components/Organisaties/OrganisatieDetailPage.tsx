@@ -64,10 +64,10 @@ const OrganisatieDetailPage = () => {
 				<Page title={truncateText(organisatie.naam || "", maxOrganisatieNaamLength)} backButton={<BackButton to={AppRoutes.Organisaties} />}
 					menu={(
 						<Menu>
-							<IconButton as={MenuButton} icon={<MenuIcon />} variant={"solid"} aria-label={"Open menu"} />
+							<IconButton data-test="menuOrganization" as={MenuButton} icon={<MenuIcon />} variant={"solid"} aria-label={"Open menu"} />
 							<MenuList>
-								<MenuItem onClick={() => navigate(AppRoutes.EditOrganisatie(id))}>{t("global.actions.edit")}</MenuItem>
-								<MenuItem onClick={() => deleteAlert.onOpen()}>{t("global.actions.delete")}</MenuItem>
+								<MenuItem data-test="menuOrganization.edit" onClick={() => navigate(AppRoutes.EditOrganisatie(id))}>{t("global.actions.edit")}</MenuItem>
+								<MenuItem data-test="menuOrganization.delete" onClick={() => deleteAlert.onOpen()}>{t("global.actions.delete")}</MenuItem>
 							</MenuList>
 						</Menu>
 					)}>
@@ -79,7 +79,7 @@ const OrganisatieDetailPage = () => {
 							title={t("messages.organisaties.deleteTitle")}
 							cancelButton={true}
 							confirmButton={(
-								<Button isLoading={deleteLoading} colorScheme={"red"} onClick={onConfirmDeleteDialog} ml={3}>
+								<Button data-test="buttonModal.delete" isLoading={deleteLoading} colorScheme={"red"} onClick={onConfirmDeleteDialog} ml={3}>
 									{t("global.actions.delete")}
 								</Button>
 							)}
