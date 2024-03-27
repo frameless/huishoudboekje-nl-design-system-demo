@@ -47,7 +47,7 @@ Before({ tags: "@signalservice" }, function () {
 
 // Before *each* test, run this (so this runs equal to the amount of tests)
 Before(function () {
-  
+  cy.visit('/');
   cy.getCookie('appSession').then((c) => {
     const cookie = c
     if(c) {
@@ -56,7 +56,6 @@ Before(function () {
     else {
     // If no cookie, log in
       // Log in
-      cy.visit('/');
       cy.wait(500);
       cy.get('body').then(($body) => {
         const buttonLogin = $body.find('button[type="submit"]')
