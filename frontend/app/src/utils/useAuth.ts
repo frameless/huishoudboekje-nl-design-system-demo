@@ -7,7 +7,7 @@ type User = {
 	email: string,
 }
 
-const AuthRoutes = {
+export const AuthRoutes = {
 	check: "/auth/me",
 	login: "/auth/login",
 	logout: "/auth/logout",

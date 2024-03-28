@@ -179,21 +179,17 @@ Then('the "Cancel" button is displayed', () => {
 
 Then('the "Submit form" button is displayed', () => {
  
-  Step(this, 'the "Create alarm form" is displayed');
-
   // Check whether 'Opslaan' button exists
-  cy.waitForReact()
-  cy.get('[data-test="alarmForm.buttonSubmit"]')
+  cy.get('[data-test="buttonModal.submit"]')
     .click()
 
 });
 
 Then('the "Close modal" button is displayed', () => {
 
-  Step(this, 'the "Create alarm form" is displayed');
-
   // Check whether the 'X' button exists in the top right
-  cy.get('.chakra-modal__close-btn')
+  cy.get('button[aria-label="Close"]')
+  .should('be.visible');
 
 });
 
@@ -377,7 +373,7 @@ Then('I click the "Submit form" button', () => {
 
   // Click 'Opslaan' button
   cy.waitForReact()
-  cy.get('[data-test="alarmForm.buttonSubmit"]')
+  cy.get('[data-test="buttonModal.submit"]')
     .click()
 
   // Wait for modal to close
@@ -385,7 +381,7 @@ Then('I click the "Submit form" button', () => {
   
 });
 
-Then('the modal is closed', () => {
+Then('the "Create alarm form" modal is closed', () => {
 
   // Clean up
     // Truncate alarms
@@ -451,7 +447,7 @@ Then('the current status of the alarm on the agreements page is displayed', () =
 
   // Click 'Opslaan' button
   cy.waitForReact()
-  cy.get('[data-test="alarmForm.buttonSubmit"]')
+  cy.get('[data-test="buttonModal.submit"]')
     .click()
 
   // Check whether modal is closed

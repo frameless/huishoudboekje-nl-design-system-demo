@@ -17,7 +17,7 @@ const AfspraakDeleteAlert: React.FC<AfspraakDeleteAlertProps> = ({onClose, onCon
 			cancelButton={true}
 			onClose={onClose}
 			confirmButton={(
-				<Button colorScheme={"red"} ml={3} onClick={onConfirm}>
+				<Button data-test="button.Delete" colorScheme={"red"} ml={3} onClick={onConfirm}>
 					{t("global.actions.delete")}
 				</Button>
 			)}

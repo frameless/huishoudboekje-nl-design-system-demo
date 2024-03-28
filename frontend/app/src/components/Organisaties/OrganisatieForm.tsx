@@ -62,6 +62,7 @@ const OrganisatieForm: React.FC<OrganisatieFormProps> = ({organisatie, onSubmit,
 											aria-autocomplete="none"
 											onChange={e => updateForm("kvknummer", e.target.value)}
 											value={form.kvknummer || ""}
+											data-test="input.KvK"
 										/>
 									</Tooltip>
 									<FormErrorMessage>{t("messages.organisaties.invalidKvknummer")}</FormErrorMessage>
@@ -75,6 +76,7 @@ const OrganisatieForm: React.FC<OrganisatieFormProps> = ({organisatie, onSubmit,
 										aria-autocomplete="none"
 										onChange={e => updateForm("vestigingsnummer", e.target.value)}
 										value={form.vestigingsnummer || ""}
+										data-test="input.branchnumber"
 									/>
 									<FormErrorMessage>{t("messages.organisaties.invalidVestigingsnummer")}</FormErrorMessage>
 								</Stack>
@@ -89,6 +91,7 @@ const OrganisatieForm: React.FC<OrganisatieFormProps> = ({organisatie, onSubmit,
 										aria-autocomplete="none"
 										onChange={e => updateForm("naam", e.target.value)}
 										value={form.naam || ""}
+										data-test="input.companyname"
 									/>
 									<FormErrorMessage>{t("messages.organisaties.invalidNaam")}</FormErrorMessage>
 								</Stack>

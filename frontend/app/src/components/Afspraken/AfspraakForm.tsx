@@ -209,8 +209,8 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, or
 										updateForm("postadresId", undefined);
 									}}>
 										<Stack>
-											<Radio value={"organisatie"}>{t("organisatie")}</Radio>
-											<Radio value={"burger"}>{t("burger")}</Radio>
+											<Radio data-test="radio.agreementOrganization" value={"organisatie"}>{t("organisatie")}</Radio>
+											<Radio data-test="radio.agreementCitizen" value={"burger"}>{t("burger")}</Radio>
 										</Stack>
 									</RadioGroup>
 									<FormErrorMessage>{t("afspraakForm.invalidTypeError")}</FormErrorMessage>
@@ -350,8 +350,8 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, or
 										updateForm("rubriekId", undefined);
 									}} value={form.credit !== undefined ? form.credit ? "inkomsten" : "uitgaven" : undefined}>
 										<Stack>
-											<Radio value={"inkomsten"}>{t("afspraken.inkomsten")}</Radio>
-											<Radio value={"uitgaven"}>{t("afspraken.uitgaven")}</Radio>
+											<Radio data-test="radio.agreementIncome" value={"inkomsten"}>{t("afspraken.inkomsten")}</Radio>
+											<Radio data-test="radio.agreementExpense" value={"uitgaven"}>{t("afspraken.uitgaven")}</Radio>
 										</Stack>
 									</RadioGroup>
 									<FormErrorMessage>{t("afspraakDetailView.invalidBetaalrichtingError")}</FormErrorMessage>
@@ -363,6 +363,7 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, or
 									<FormControl flex={1} isInvalid={!isFieldValid("rubriekId")} isRequired>
 										<FormLabel>{t("afspraken.rubriek")}</FormLabel>
 										<Select id={"rubriek"} isClearable={true} noOptionsMessage={() => t("forms.afspraken.fields.rubriekChoose")} placeholder={t("select.placeholder")} maxMenuHeight={350}
+											data-test= "radio.agreementIncome"
 											options={rubriekOptions} value={form.rubriekId ? rubriekOptions.find(r => r.value === form.rubriekId) : null}
 											onChange={(result) => updateForm("rubriekId", result?.value)} styles={isFieldValid("rubriekId") ? reactSelectStyles.default : reactSelectStyles.error} />
 										<FormErrorMessage>{t("afspraakDetailView.invalidRubriekError")}</FormErrorMessage>
@@ -371,6 +372,7 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, or
 									<FormControl flex={1} isInvalid={!isFieldValid("omschrijving")} isRequired={true}>
 										<FormLabel>{t("afspraken.omschrijving")}</FormLabel>
 										<Input
+											data-test="select.agreementIncomeDescription"
 											autoComplete="no"
 											aria-autocomplete="none"
 											value={form.omschrijving || ""}
@@ -387,6 +389,7 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, or
 										<InputGroup>
 											<InputLeftElement zIndex={0}>&euro;</InputLeftElement>
 											<Input
+												data-test="select.agreementIncomeAmount"
 											 	autoComplete="no"
 												aria-autocomplete="none"
 												flex={3}
@@ -430,7 +433,7 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, or
 							</FormControl>
 						</Stack>
 						<Stack marginTop={5} align={"flex-end"}>
-							<Button type={"submit"} colorScheme={"primary"}>{t("global.actions.save")}</Button>
+							<Button type={"submit"} data-test="button.Submit" colorScheme={"primary"}>{t("global.actions.save")}</Button>
 							<Asterisk />
 						</Stack>
 					</Section>
