@@ -134,8 +134,10 @@ function loginViaAAD(username: string, password: string) {
       else {
         // Already logged in; check for username
         cy.contains(`${Cypress.env('aad_username')}`, { timeout: 10000 });
-      }    
+      }
 
+    })
+    
   }
   
   Cypress.Commands.add('loginToAAD', (username: string, password: string) => {
