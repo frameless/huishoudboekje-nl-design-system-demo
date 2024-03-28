@@ -34,14 +34,8 @@ const authErrorLink = onError(({graphQLErrors, networkError, operation, forward}
 		}
 	}
 	if (networkError?.message.includes("401")) {
+		// Same issue here
 		fetch(AuthRoutes.check)
-		const oldheaders = operation.getContext().headers;
-		operation.setContext({
-			headers: {
-				...oldheaders,
-				test: "test"
-			}
-		})
 		return forward(operation)
 	}
 
