@@ -23,10 +23,10 @@ Feature: create alarm
     Then the "Submit form" button is displayed
     Then the "Close modal" button is displayed
 
+  @cleanupAlarm
   Scenario: save monthly alarm with basic options
     When I view the "Agreement" page
     When I click the "Add alarm" button
-    Then a modal opens
     Then the "Create alarm form" is displayed
     Then I fill in the current date for alarm start date
     Then I fill in the alarm day of the month

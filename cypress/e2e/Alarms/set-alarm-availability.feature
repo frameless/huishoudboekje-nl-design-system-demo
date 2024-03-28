@@ -1,6 +1,6 @@
 # cypress/e2e/Alarms/set-alarm-availability.feature
 
-@alarmservice
+@alarmservice @cleanupAlarm
 Feature: set alarm availability
 
   #Disable and enable an alarm. Only enabled alarms create a notification.
