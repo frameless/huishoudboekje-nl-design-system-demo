@@ -114,7 +114,7 @@ class Auth():
                 secret = self._public_key_or_secret(token)
                 if secret != None:
                     if 'test' not in request.headers:
-                        raise ExpiredSignatureError("error hihi")
+                        raise ExpiredSignatureError("error test")
                     claims = decode(
                         token, secret, algorithms=self.supported_algorithms, audience=self.audience, issuer=self.issuer)
                     name = claims.get('name', None)

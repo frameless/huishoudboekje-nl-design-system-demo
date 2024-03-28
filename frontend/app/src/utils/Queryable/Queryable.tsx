@@ -34,11 +34,6 @@ const Queryable: React.FC<QueryableProps> = ({query, loading = true, error = tru
 			return null;
 		}
 
-		_error.graphQLErrors.forEach(element => {
-			console.log(element.extensions.code)
-			console.log(element)
-		});
-
 		return error === true ? <QueryableError error={_error} query={query} /> : error;
 	}
 
