@@ -57,6 +57,7 @@ const PostadresForm: React.FC<PostadresFormProps> = ({postadres, onChange, onCan
 					<FormLabel>{t("forms.postadressen.fields.straatnaam")}</FormLabel>
 					<Input
 					 	autoComplete="no"
+						data-test="postaddress.streetname"
 						aria-autocomplete="none"
 						onChange={e => updateForm("straatnaam", e.target.value)}
 						value={form.straatnaam || ""}
@@ -70,6 +71,7 @@ const PostadresForm: React.FC<PostadresFormProps> = ({postadres, onChange, onCan
 					<Input
 					 	autoComplete="no"
 						aria-autocomplete="none"
+						data-test="postaddress.housenumber"
 						onChange={e => updateForm("huisnummer", e.target.value)}
 						value={form.huisnummer || ""}
 					/>
@@ -81,6 +83,7 @@ const PostadresForm: React.FC<PostadresFormProps> = ({postadres, onChange, onCan
 					<Input
 					 	autoComplete="no"
 						aria-autocomplete="none"
+						data-test="postaddress.postcode"
 						onChange={e => updateForm("postcode", e.target.value)}
 						value={form.postcode || ""}
 					/>
@@ -92,6 +95,7 @@ const PostadresForm: React.FC<PostadresFormProps> = ({postadres, onChange, onCan
 					<Input
 						autoComplete="no"
 						aria-autocomplete="none"
+						data-test="postaddress.placename"
 						onChange={e => updateForm("plaatsnaam", e.target.value)}
 						value={form.plaatsnaam || ""}
 					/>
@@ -100,8 +104,8 @@ const PostadresForm: React.FC<PostadresFormProps> = ({postadres, onChange, onCan
 
 				<Stack align={"flex-end"}>
 					<HStack justify={"flex-end"}>
-						<Button type={"reset"} onClick={() => onCancel()}>{t("global.actions.cancel")}</Button>
-						<Button type={"submit"} colorScheme={"primary"} onClick={onSubmitForm}>{t("global.actions.save")}</Button>
+						<Button data-test="buttonModal.reset" type={"reset"} onClick={() => onCancel()}>{t("global.actions.cancel")}</Button>
+						<Button data-test="buttonModal.submit" type={"submit"} colorScheme={"primary"} onClick={onSubmitForm}>{t("global.actions.save")}</Button>
 					</HStack>
 					<Asterisk />
 				</Stack>

@@ -23,7 +23,7 @@ Feature: delete a bank account
     Then a notification of success is displayed
     When I click the "Meervoudig gebruik IBAN" department
     When I click the "Add bank account" button
-    Then the "Add bank account" modal is displayed
+    Then I view the "Add bank account" modal
     When I input the IBAN "NL86INGB0002445588"
     When I click the "Save" button
     Then a notification of success is displayed

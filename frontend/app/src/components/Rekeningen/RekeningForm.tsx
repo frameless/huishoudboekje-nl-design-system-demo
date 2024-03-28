@@ -64,6 +64,7 @@ const RekeningForm: React.FC<RekeningFormProps> = ({rekening, onSubmit, onCancel
 						onChange={e => updateForm("rekeninghouder", e.target.value)}
 						value={form.rekeninghouder || ""}
 						autoFocus={!rekening?.rekeninghouder}
+						data-test="input.accountHolder"
 					/>
 					<FormErrorMessage>{t("errors.rekeninghouder.generalError")}</FormErrorMessage>
 				</FormControl>
@@ -76,14 +77,15 @@ const RekeningForm: React.FC<RekeningFormProps> = ({rekening, onSubmit, onCancel
 						value={form.iban || ""}
 						placeholder={"NL00BANK0123456789"}
 						autoFocus={!!rekening?.rekeninghouder}
+						data-test="input.IBAN"
 						onBlur={e => updateForm("iban", e.target.value.replaceAll(/[\s]/g, "").toUpperCase())}
 					/>
 					<FormErrorMessage>{t("errors.iban.generalError")}</FormErrorMessage>
 				</FormControl>
 				<Stack align={"flex-end"}>
 					<HStack justify={"flex-end"}>
-						<Button type={"reset"} onClick={() => onCancel()}>{t("global.actions.cancel")}</Button>
-						<Button type={"submit"} colorScheme={"primary"} onClick={onSubmitForm}>{t("global.actions.save")}</Button>
+						<Button data-test="buttonModal.reset" type={"reset"} onClick={() => onCancel()}>{t("global.actions.cancel")}</Button>
+						<Button data-test="buttonModal.submit" type={"submit"} colorScheme={"primary"} onClick={onSubmitForm}>{t("global.actions.save")}</Button>
 					</HStack>
 					<Asterisk />
 				</Stack>
