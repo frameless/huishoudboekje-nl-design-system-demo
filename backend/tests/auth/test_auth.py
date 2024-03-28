@@ -14,7 +14,7 @@ def test_graphql_unauthenticated(no_auth_client, mocker: MockerFixture):
     response = no_auth_client.post('/api/graphql?query=%7B%20__typename%20%7D')
 
     assert response.status_code == 401
-    assert response.json == {'message': 'Not logged in'}
+    assert response.json == {'message': 'Unauthorized'}
 
 
 def test_graphql_authenticated_cookie(client, mocker: MockerFixture):
@@ -45,7 +45,7 @@ def test_invalid_signature(token_app: Flask, mocker: MockerFixture):
         response = client.post('/api/graphql?query=%7B%20__typename%20%7D')
 
         assert response.status_code == 401
-        assert response.json == {'message': 'Not logged in'}
+        assert response.json == {'message': 'Unauthorized'}
 
 
 def test_invalid_audience(token_app: Flask, mocker: MockerFixture):
@@ -55,7 +55,7 @@ def test_invalid_audience(token_app: Flask, mocker: MockerFixture):
         response = client.post("/api/graphql?query=%7B%20__typename%20%7D")
 
         assert response.status_code == 401
-        assert response.json == {'message': 'Not logged in'}
+        assert response.json == {'message': 'Unauthorized'}
 
 
 def test_invalid_exp(token_app: Flask, mocker: MockerFixture):
@@ -65,4 +65,4 @@ def test_invalid_exp(token_app: Flask, mocker: MockerFixture):
         response = client.post('/api/graphql?query=%7B%20__typename%20%7D')
 
         assert response.status_code == 401
-        assert response.json == {'message': 'Not logged in'}
+        assert response.json == {'message': 'Unauthorized'}
