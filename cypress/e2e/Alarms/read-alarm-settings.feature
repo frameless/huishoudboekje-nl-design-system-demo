@@ -16,9 +16,11 @@ Feature: read alarm
 
   # Scenario: one-time alarm exists
     # TODO
-
+    
+  @cleanupAlarm
   Scenario: monthly recurring alarm exists
     When I view the "Agreement" page
+    Given a monthly recurring alarm exists
     Then the alarm recurrency is displayed
     Then the alarm day of the month is displayed
     Then the alarm allowed deviation in days is displayed

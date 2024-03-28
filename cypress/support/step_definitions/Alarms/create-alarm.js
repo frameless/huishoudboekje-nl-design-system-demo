@@ -20,22 +20,20 @@ const queryTruncateSignal = `mutation Truncate {
 
 When('I view the "Add alarm" modal', () => {
   
-  // Wipe alarms clean
-    // Truncate alarms
-    cy.request({
-      method: "post",
-      url: Cypress.env().graphqlUrl + '/graphql',
-      body: { query: queryTruncateAlarm },
-    }).then((res) => {
-      console.log(res.body);
-    });
-
   // Click button element
   cy.visit('/burgers/1');
   cy.waitForReact();
   cy.url().should('eq', Cypress.config().baseUrl + '/burgers/1')
-  cy.get('a[aria-label="Bekijken"]:visible')
+
+  // Open first agreement
+  cy.get('tbody')
+    .find('tr')
+    .first()
+    .children()
+    .last()
+    .find('a[aria-label="Bekijken"]:visible')
     .click();
+
   cy.waitForReact();
   cy.url().should('include', Cypress.config().baseUrl + '/afspraken/')
   cy.get('h2').contains('Alarm').should('be.visible')
@@ -50,10 +48,6 @@ When('I view the "Add alarm" modal', () => {
 
 Then('the "Create alarm form" is displayed', () => {
  
-  Step(this, 'I view the "Add alarm" modal');
-
-  cy.waitForReact(); // Wait for modal opening
-  
   // Check whether modal is opened and visible
   cy.get('section[aria-modal="true"]')
     .scrollIntoView()
@@ -62,9 +56,7 @@ Then('the "Create alarm form" is displayed', () => {
 });
 
 Then('the recurrency is monthly', () => {
- 
-  Step(this, 'the "Create alarm form" is displayed');
-  
+   
   // Check recurrency
   cy.contains('Elke maand')
   
@@ -72,8 +64,6 @@ Then('the recurrency is monthly', () => {
 
 Then('the link "Meer opties" is displayed', () => {
  
-  Step(this, 'the "Create alarm form" is displayed');
-
   // Check link 'Meer opties'
   cy.get('button')
     .contains('Meer opties')
@@ -82,8 +72,6 @@ Then('the link "Meer opties" is displayed', () => {
 
 Then('the start date is today', () => {
  
-  Step(this, 'the "Create alarm form" is displayed');
-
   // Set date constants for comparison
   const dateNow = new Date().toLocaleDateString('nl-NL', {
     year: "numeric",
@@ -99,8 +87,6 @@ Then('the start date is today', () => {
 
 Then('the day of the month is empty', () => {
 
-  Step(this, 'the "Create alarm form" is displayed');
-
   // Check 'Dag in de maand' field  
   cy.get('[data-test="alarmForm.byMonthDay"]')
     .should('have.value', '')
@@ -109,8 +95,6 @@ Then('the day of the month is empty', () => {
 
 Then('the allowed deviation in days is empty', () => {
  
-  Step(this, 'the "Create alarm form" is displayed');
-
   // Check 'Toegestane afwijking (in dagen)' field  
   cy.get('[data-test="alarmForm.dateMargin"]')
     .should('have.value', '')
@@ -121,31 +105,12 @@ Then('the expected amount is equal to the amount of the agreement', () => {
   
   let agreementValue;
 
-  // Click button element
-  cy.visit('/burgers/1');
-  cy.waitForReact();
-  cy.url().should('eq', Cypress.config().baseUrl + '/burgers/1')
-  cy.get('[aria-label="Bekijken"]:visible')
-    .click();
-  cy.waitForReact();
-  cy.url().should('include', Cypress.config().baseUrl + '/afspraken/')
   cy.get('label[class^="chakra-form__label"]').contains('Bedrag')
     .siblings()
     .then(($value) => {
       agreementValue = $value.text() // Store the agreement amount in a variable
       const newValue1 = agreementValue.slice(2) // Remove the valuta symbol from string
       const newValue2 = newValue1.replace(",", ".") // Replace the comma with a full stop
-  cy.get('h2').contains('Alarm').should('be.visible')
-    .scrollIntoView() // Scrolls 'Alarm' into view
-  cy.get('button')
-    .contains('Toevoegen')
-    .click()
-  cy.wait(500) // Wait 0.5 seconds for modal opening
-  
-  // Check whether modal is opened and visible
-  cy.get('section[aria-modal="true"]')
-    .scrollIntoView()
-    .should('be.visible')
 
   // Check 'Bedrag verwachte betaling' field  
   cy.get('[data-test="alarmForm.amount"]')
@@ -159,8 +124,6 @@ Then('the expected amount is equal to the amount of the agreement', () => {
 
 Then('the allowed deviation in amount is empty', () => {
  
-  Step(this, 'the "Create alarm form" is displayed');
-
   // Check 'Toegestane afwijking bedrag (in euro's)' field  
   cy.get('[data-test="alarmForm.amountMargin"]')
     .should('have.value', '')
@@ -168,8 +131,6 @@ Then('the allowed deviation in amount is empty', () => {
 });
 
 Then('the "Cancel" button is displayed', () => {
- 
-  Step(this, 'the "Create alarm form" is displayed');
 
   // Check whether 'Annuleren' button exists
   cy.get('button')
@@ -213,8 +174,13 @@ When('I view the "Agreement" page', () => {
   cy.url().should('contains', Cypress.config().baseUrl + '/burgers/')
 
   // Navigate to first displayed agreement's detail page
-  cy.get('[aria-label="Bekijken"]:visible')
-    .click()
+  cy.get('tbody')
+    .find('tr')
+    .first()
+    .children()
+    .last()
+    .find('a[aria-label="Bekijken"]:visible')
+    .click();
   cy.url().should('contains', Cypress.config().baseUrl + '/afspraken/')
   cy.get('h2').contains('Alarm').should('be.visible')
     .scrollIntoView() // Scrolls 'Alarm' into view
@@ -223,20 +189,14 @@ When('I view the "Agreement" page', () => {
 
 When('I click the "Add alarm" button', () => {
  
-  Step(this, 'I view the "Add alarm" modal');
+  cy.get('button')
+    .contains('Toevoegen')
+    .click();
 
-});
-
-Then('a modal opens', () => {
- 
-  Step(this, 'the "Create alarm form" is displayed');
- 
 });
 
 Then('I fill in the current date for alarm start date', () => {
  
-  Step(this, 'the "Create alarm form" is displayed');
-
   // Set date constants for comparison
   const dateNow = new Date().toLocaleDateString('nl-NL', {
     year: "numeric",
@@ -251,15 +211,13 @@ Then('I fill in the current date for alarm start date', () => {
 
   // Fill in 'Startdatum' field
   cy.get('[data-test="alarmForm.startDate"]')
-    .type(dateNow)
+    .type(dateNow + '{enter}')
     .should('have.value', dateNow)
 
 });
 
 Then('I fill in the alarm day of the month', () => {
  
-  Step(this, 'the "Create alarm form" is displayed');
-
   // Check 'Dag in de maand' field  
   cy.get('[data-test="alarmForm.byMonthDay"]')
     .should('have.value', '')
@@ -273,8 +231,6 @@ Then('I fill in the alarm day of the month', () => {
 
 Then('I fill in the alarm allowed deviation in days', () => {
  
-  Step(this, 'the "Create alarm form" is displayed');
-
   // Check 'Toegestane afwijking (in dagen)' field  
   cy.get('[data-test="alarmForm.dateMargin"]')
     .should('have.value', '')
@@ -290,31 +246,12 @@ Then('I fill in the expected payment amount', () => {
  
   let agreementValue;
   
-  // Click button element
-  cy.visit('/burgers/1');
-  cy.waitForReact();
-  cy.url().should('eq', Cypress.config().baseUrl + '/burgers/1')
-  cy.get('a[aria-label="Bekijken"]:visible')
-    .click();
-  cy.waitForReact();
-  cy.url().should('include', Cypress.config().baseUrl + '/afspraken/')
   cy.get('label[class^="chakra-form__label"]').contains('Bedrag')
     .siblings()
     .then(($value) => {
       agreementValue = $value.text() // Store the agreement amount in a variable
       const newValue1 = agreementValue.slice(2) // Remove the valuta symbol from string
       const newValue2 = newValue1.replace(",", ".") // Replace the comma with a full stop
-    cy.get('h2').contains('Alarm').should('be.visible')
-      .scrollIntoView() // Scrolls 'Alarm' into view
-    cy.get('button')
-      .contains('Toevoegen')
-      .click()
-    cy.wait(500) // Wait 0.5 seconds for modal opening
-    
-    // Check whether modal is opened and visible
-    cy.get('section[aria-modal="true"]')
-      .scrollIntoView()
-      .should('be.visible')
     
     // Check 'Bedrag verwachte betaling' field   
     cy.get('[data-test="alarmForm.amount"]')
@@ -332,8 +269,6 @@ Then('I fill in the expected payment amount', () => {
 
 Then('I fill in the alarm allowed deviation in payment amount', () => {
  
-  Step(this, 'the "Create alarm form" is displayed');
-
   // Check 'Toegestane afwijking bedrag (in euro's)' field  
   cy.get('[data-test="alarmForm.amountMargin"]')
     .should('have.value', '')
@@ -347,30 +282,6 @@ Then('I fill in the alarm allowed deviation in payment amount', () => {
 
 Then('I click the "Submit form" button', () => {
  
-  Step(this, 'the "Create alarm form" is displayed');
-
-  // Fill in all required fields
-    // 'Startdatum'
-      // Is automatically filled in
-
-    // 'Dag in de maand'
-    cy.get('[data-test="alarmForm.byMonthDay"]')
-      .type('1')
-      .should('have.value', '1')
-
-    // 'Toegestane afwijking (in dagen)'
-    cy.get('[data-test="alarmForm.dateMargin"]')
-      .type('1')
-      .should('have.value', '1')
-
-    // 'Bedrag verwachte betaling'
-      // Is automatically filled in
-
-    // 'Toegestane afwijking bedrag (in euro's)'
-    cy.get('[data-test="alarmForm.amountMargin"]')
-      .type('1')
-      .should('have.value', '1')
-
   // Click 'Opslaan' button
   cy.waitForReact()
   cy.get('[data-test="buttonModal.submit"]')
@@ -383,31 +294,11 @@ Then('I click the "Submit form" button', () => {
 
 Then('the "Create alarm form" modal is closed', () => {
 
-  // Clean up
-    // Truncate alarms
-    cy.request({
-      method: "post",
-      url: Cypress.env().graphqlUrl + '/graphql',
-      body: { query: queryTruncateAlarm },
-    }).then((res) => {
-      console.log(res.body);
-    });
-  
-  cy.wait(1000);
-
-  Step(this, 'I click the "Submit form" button');
-
   // Check whether modal is closed
   cy.contains('Alarm toevoegen')
     .should('not.exist')
   cy.get('section[aria-modal="true"]')
     .should('not.exist')
-
-  // Clean up alarm
-  cy.get('button[aria-label="Verwijderen"]')
-    .click()
-  cy.get('button[aria-label="Verwijderen"]')
-    .click()
 
 });
 
@@ -421,61 +312,10 @@ Then('a notification of success is displayed', () => {
 
 Then('the current status of the alarm on the agreements page is displayed', () => {
  
-  Step(this, 'the "Create alarm form" is displayed');
-
-  // Fill in all required fields
-    // 'Startdatum'
-      // Is automatically filled in
-
-    // 'Dag in de maand'
-    cy.get('[data-test="alarmForm.byMonthDay"]')
-      .type('1')
-      .should('have.value', '1')
-
-    // 'Toegestane afwijking (in dagen)'
-    cy.get('[data-test="alarmForm.dateMargin"]')
-      .type('1')
-      .should('have.value', '1')
-
-    // 'Bedrag verwachte betaling'
-      // Is automatically filled in
-
-    // 'Toegestane afwijking bedrag'
-    cy.get('[data-test="alarmForm.amountMargin"]')
-      .type('1')
-      .should('have.value', '1') 
-
-  // Click 'Opslaan' button
-  cy.waitForReact()
-  cy.get('[data-test="buttonModal.submit"]')
-    .click()
-
-  // Check whether modal is closed
-  cy.contains('Alarm toevoegen')
-    .should('not.exist')
-  cy.get('section[aria-modal="true"]')
-    .should('not.exist')
-
-  // Check success message
-  cy.get('[data-status="success"]')
-    .should('be.visible')
-  cy.contains('Het alarm is opgeslagen')
-
   // Check current status of alarm
   cy.get('.chakra-switch__track')
   cy.get('.chakra-switch__thumb')
   cy.get('[data-checked=""]')
-
-  // Clean up alarm
-  cy.get('button[aria-label="Verwijderen"]')
-    .click()
-  cy.get('button[aria-label="Verwijderen"]')
-    .click()
-  
-  // Check success message
-  cy.get('[data-status="success"]')
-    .should('be.visible')
-  cy.contains('Het alarm is verwijderd')
 
 });
 

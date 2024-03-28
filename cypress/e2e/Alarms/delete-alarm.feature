@@ -17,10 +17,12 @@ Feature: delete alarm
     Then the "Confirm delete alarm" button is displayed
 
   Scenario: cancel alarm deletion
+    Given I view the "Agreement" page
     When I click the "Cancel delete alarm" button
     Then the "Delete alarm" button is displayed
 
   Scenario: confirm alarm deletion
+    Given I view the "Agreement" page
     When I click the "Confirm delete alarm" button
     Then a notification of success is displayed
     Then the "Er is geen alarm ingesteld." text is displayed
