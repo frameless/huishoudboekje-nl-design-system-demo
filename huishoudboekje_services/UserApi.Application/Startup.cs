@@ -18,6 +18,7 @@ public class Startup(IConfiguration configuration)
       services.AddMetricServer(options => { options.Port = (ushort)Configuration.GetValue("HHB_METRICS_PORT", 9000); });
       services.AddMassTransitService(Configuration, AddConsumers);
       services.AddUserApi(Configuration);
+      services.AddHealthChecks();
       AddDependencyInjectionServices(services);
     }
 
@@ -25,6 +26,7 @@ public class Startup(IConfiguration configuration)
     {
       app.UseMetricServer();
       app.UseHttpMetrics();
+      app.MapHealthChecks("/healthz");
       app.AddUserApi(env);
     }
     private IBusRegistrationConfigurator AddConsumers(IBusRegistrationConfigurator massTransit)

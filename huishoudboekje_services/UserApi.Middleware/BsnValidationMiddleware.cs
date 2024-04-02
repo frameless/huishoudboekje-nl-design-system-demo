@@ -8,6 +8,10 @@ public class BsnValidationMiddleware(RequestDelegate next)
 {
   public Task InvokeAsync(HttpContext context, IBsnService bsnService)
     {
+      if (context.Request.Path.Equals("/healthz"))
+      {
+        return next(context);
+      }
       if (!context.Request.Headers.TryGetValue("X-User-Bsn", out var bsn))
       {
         throw new HHBInvalidInputException($"Bsn parameter not provided", "Incorrect request");

@@ -8,6 +8,10 @@ public class SamlAuthMiddleware(IConfiguration configuration, RequestDelegate ne
 {
   public Task InvokeAsync(HttpContext context)
   {
+    if (context.Request.Path.Equals("/healthz"))
+    {
+      return next(context);
+    }
     if (configuration["HHB_USE_AUTH"] == "0")
     {
       return next(context);
