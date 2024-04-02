@@ -25,8 +25,8 @@ class Afspraak(BaseModel):
     zoektermen: Optional[List[str]]
     burger_id: int
     afdeling_id: Optional[int]
-    postadres_id: Optional[int]
-    alarm_id: Optional[int]
+    postadres_id: Optional[str]
+    alarm_id: Optional[str]
     tegen_rekening_id: int
     betaalinstructie: Optional[Betaalinstructie]
     aantal_betalingen: Optional[int]  # unused

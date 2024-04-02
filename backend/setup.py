@@ -34,6 +34,7 @@ setup(
         'Deprecated==1.2.13',
         'MarkupSafe==2.1.1',
         'defusedxml>=0.7.1',
-        "jsonschema>=4.15.0,<5"
+        "jsonschema>=4.15.0,<5",
+        'pika==1.3.2'
     ],
 )

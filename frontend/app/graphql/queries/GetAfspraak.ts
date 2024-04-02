@@ -4,6 +4,7 @@ export const GetAfspraakQuery = gql`
     query getAfspraak($id: Int!) {
         afspraak(id: $id){
             id
+            uuid
             omschrijving
             bedrag
             credit
@@ -27,17 +28,20 @@ export const GetAfspraakQuery = gql`
                 achternaam
                 plaatsnaam
             }
+            alarmId
             alarm {
                 id
                 isActive
-                bedrag
-                bedragMargin
+                amount
+                amountMargin
                 startDate
                 endDate
-                datumMargin
-                byDay
-                byMonth
-                byMonthDay
+                dateMargin
+                checkOnDate
+                recurringDay
+                recurringMonths
+                recurringDayOfMonth
+                AlarmType
             }
             afdeling {
                 id

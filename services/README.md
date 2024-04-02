@@ -8,7 +8,6 @@ Each service has a `README.md` file that describes the service and how to run it
 - [Huishoudboekjeservice](huishoudboekje_service/)*
 - [Logservice](log_service/)*
 - [Organisatieservice](organisatie_service/)*
-- [Unleashservice](unleashservice/)
 - [Postadressenservice](postadressenservice/)
 - [Alarmenservice](alarmenservice/)
 - [Signalenservice](signalanservice/)

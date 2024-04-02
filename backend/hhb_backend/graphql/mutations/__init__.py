@@ -11,11 +11,6 @@ from .afspraken.delete_afspraak_betaalinstructie import DeleteAfspraakBetaalinst
 from .afspraken.delete_afspraak_zoekterm import DeleteAfspraakZoekterm
 from .afspraken.update_afspraak import UpdateAfspraak
 from .afspraken.update_afspraak_betaalinstructie import UpdateAfspraakBetaalinstructie
-from .alarmen.create_alarm import CreateAlarm
-from .alarmen.delete_alarm import DeleteAlarm
-from .alarmen.evaluate_alarm import EvaluateAlarm
-from .alarmen.evaluate_alarm import EvaluateAlarms
-from .alarmen.update_alarm import UpdateAlarm
 from .burgers.create_burger import CreateBurger
 from .burgers.delete_burger import DeleteBurger
 from .burgers.update_burger import UpdateBurger
@@ -45,9 +40,6 @@ from .rekeningen.update_rekening import UpdateRekening
 from .rubrieken.create_rubriek import CreateRubriek
 from .rubrieken.delete_rubriek import DeleteRubriek
 from .rubrieken.update_rubriek import UpdateRubriek
-from .signalen.create_signaal import CreateSignaal
-from .signalen.delete_signaal import DeleteSignaal
-from .signalen.update_signaal import UpdateSignaal
 
 
 class RootMutation(graphene.ObjectType):
@@ -105,12 +97,3 @@ class RootMutation(graphene.ObjectType):
     updatePostadres = UpdatePostadres.Field()
     deletePostadres = DeletePostadres.Field()
 
-    createAlarm = CreateAlarm.Field()
-    updateAlarm = UpdateAlarm.Field()
-    deleteAlarm = DeleteAlarm.Field()
-    evaluateAlarm = EvaluateAlarm.Field()
-    evaluateAlarms = EvaluateAlarms.Field()
-
-    createSignaal = CreateSignaal.Field()
-    updateSignaal = UpdateSignaal.Field()
-    deleteSignaal = DeleteSignaal.Field()

@@ -9,42 +9,36 @@ import {RiBarChartFill} from "react-icons/ri";
 import {TiCog} from "react-icons/ti";
 import {useLocation} from "react-router-dom";
 import {RouteNames} from "../../config/routes";
-import {Signaal, useGetSignalenQuery} from "../../generated/graphql";
-import {useFeatureFlag} from "../../utils/features";
 import Queryable from "../../utils/Queryable";
 import NumberBadge from "../shared/NumberBadge";
 import SidebarLink from "./SidebarLink";
+import { GetSignalsCountQuery, useGetSignalsCountQuery } from "../../generated/graphql";
 
 const Sidebar = () => {
 	const {t} = useTranslation();
 	const location = useLocation();
 	const cleanPathname = location.pathname.substring(1);
 
-	const isSignalenEnabled = useFeatureFlag("signalen");
-	const $signalen = useGetSignalenQuery({
+	const $signalsCount = useGetSignalsCountQuery({
 		pollInterval: 300 * 1000, // Every 5 minutes
-		skip: !isSignalenEnabled, // Do not execute when signalen featureflag is off.
 	});
 
 	return (
 		<Stack spacing={5} p={5} alignSelf={"center"} borderRadius={5} bg={"white"} divider={<Divider />} width={"100%"}>
 			<Stack spacing={5}>
-				{isSignalenEnabled && (
-					<SidebarLink to={RouteNames.signalen} icon={FiBell} isActive={cleanPathname.startsWith(RouteNames.signalen)}>
-						<HStack justify={"space-between"} w={"100%"}>
-							<Text>{t("sidebar.signalen")}</Text>
-							<Queryable query={$signalen} loading={false} error={false}>
-								{(data) => {
-									const signalen: Signaal[] = data.signalen;
-									const nActiveSignalen = signalen.filter(s => s.isActive).length;
-									return nActiveSignalen > 0 ? (
-										<NumberBadge count={nActiveSignalen} />
-									) : null;
-								}}
-							</Queryable>
-						</HStack>
-					</SidebarLink>
-				)}
+				<SidebarLink to={RouteNames.signalen} icon={FiBell} isActive={cleanPathname.startsWith(RouteNames.signalen)}>
+					<HStack justify={"space-between"} w={"100%"}>
+						<Text>{t("sidebar.signalen")}</Text>
+						<Queryable query={$signalsCount} loading={false} error={false}>
+							{(data: GetSignalsCountQuery) => {
+								const activeSignalsCount = data.Signals_GetActiveSignalsCount?.count ?? 0
+								return activeSignalsCount > 0 ? (
+									<NumberBadge count={activeSignalsCount} />
+								) : null;
+							}}
+						</Queryable>
+					</HStack>
+				</SidebarLink>
 				<Stack>
 					<SidebarLink to={RouteNames.huishoudens} icon={BsFillHouseDoorFill} isActive={cleanPathname.startsWith(RouteNames.huishoudens) && !cleanPathname.includes(RouteNames.overzicht)}>{t("sidebar.huishoudens")}</SidebarLink>
 					<Box pl={"27px"}>

@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <LangVersion>12</LangVersion>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Core.Auth\Core.Auth.csproj" />
+      <ProjectReference Include="..\Core.Logging\Core.Logging.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Google.Protobuf" Version="3.25.1" />
+      <PackageReference Include="Grpc.AspNetCore" Version="2.60.0" />
+      <PackageReference Include="Grpc.AspNetCore.HealthChecks" Version="2.60.0" />
+      <PackageReference Include="Grpc.Tools" Version="2.60.0">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      </PackageReference>
+      <PackageReference Include="prometheus-net.AspNetCore.Grpc" Version="8.2.0" />
+      <PackageReference Include="protobuf-net" Version="3.2.30" />
+    </ItemGroup>
+
+</Project>

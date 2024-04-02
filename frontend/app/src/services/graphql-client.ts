@@ -5,8 +5,8 @@ import {createUploadLink} from "apollo-upload-client";
 import {onError} from "@apollo/client/link/error";
 import {AuthRoutes} from "../utils/useAuth";
 
-const GraphqlApiUrl = "/api/graphql";
-const GraphqlApiUrlUpload = "/api/graphql";
+const GraphqlApiUrl = "/apiV2/graphql";
+const GraphqlApiUrlUpload = "/apiV2/graphql";
 
 const defaultLink = new BatchHttpLink({
 	uri: GraphqlApiUrl,

@@ -12,9 +12,6 @@ export const CreateJournaalpostAfspraakMutation = gql`
                 id
                 afspraak {
                     id
-                    alarm {
-                        id
-                    }
                 }
             }
         }

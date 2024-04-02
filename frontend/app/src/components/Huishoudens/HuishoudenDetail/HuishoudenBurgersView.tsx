@@ -8,21 +8,21 @@ import DashedAddButton from "../../shared/DashedAddButton";
 import GridCard from "../../shared/GridCard";
 
 const HuishoudenBurgerItem: React.FC<{burger: Burger}> = ({burger}) => {
-	const signalen = (burger.afspraken || [])
-		.map(a => a.alarm)
-		.map(a => a?.signaal)
-		.filter(s => s?.isActive)
-		.filter(s => s !== undefined);
+	// const signalen = (burger.afspraken || [])
+	// 	.map(a => a.alarm)
+	// 	.map(a => a?.signaal)
+	// 	.filter(s => s?.isActive)
+	// 	.filter(s => s !== undefined);
 
 	return (
 		<GridCard as={NavLink} justify={["flex-start", "center"]} to={AppRoutes.ViewBurger(String(burger.id))} position={"relative"}>
-			{signalen.length > 0 && (
+			{/* {signalen.length > 0 && (
 				<Box position={"absolute"} top={1} right={1}>
 					<Badge fontSize={"sm"} p={1} colorScheme={"secondary"}>
 						{signalen.length > 99 ? "99+" : signalen.length}
 					</Badge>
 				</Box>
-			)}
+			)} */}
 			<Stack direction={["row", "column"]} spacing={5} align={"center"} justify={["flex-start", "center"]}>
 				<Avatar name={formatBurgerName(burger, true)} />
 				<Text fontSize={"md"} textAlign={["left", "center"]}>

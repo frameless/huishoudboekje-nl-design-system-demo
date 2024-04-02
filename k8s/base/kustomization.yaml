@@ -9,12 +9,11 @@ resources:
   - ./huishoudboekjeservice
   - ./logservice
   - ./organisatieservice
-  - ./unleashservice
   - ./postadressenservice
   - ./alarmenservice
-  - ./signalenservice
   - ./authservice
   - ./rapportageservice
   - ./statsdexporter
   - ./prometheus
   - ./redis
+  - ./mesh

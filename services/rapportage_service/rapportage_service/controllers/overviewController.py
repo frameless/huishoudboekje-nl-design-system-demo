@@ -25,7 +25,7 @@ class OverviewController():
         if not valid_date_range(start, end):
             return "Invalid date range", 400
 
-        afspraken_info = self._hhb_repository.get_afspraken_with_transactions_in_period(
+        afspraken_info = self._hhb_repository.get_afspraken_with_journaalposten_in_period(
             burger_ids, start, end)
         transaction_ids = []
         afspraken_info = afspraken_info[0].get('afspraken', [])
@@ -35,8 +35,9 @@ class OverviewController():
 
         transactions_info = self._banktransactionservice_repository.get_transacties_in_range(
             start, end, transaction_ids)
-        
-        rekeningen = {rekening["iban"]: rekening["rekeninghouder"] for rekening in self._hhb_repository.get_rekeningen()}
+
+        rekeningen = {rekening["iban"]: rekening["rekeninghouder"]
+                      for rekening in self._hhb_repository.get_rekeningen()}
 
         for transaction in transactions_info:
             transaction.update({"rekening": {

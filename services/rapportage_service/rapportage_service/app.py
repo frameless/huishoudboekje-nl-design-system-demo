@@ -8,6 +8,8 @@ from rapportage_service.dependencies import configure
 from rapportage_service.views.RapportageView import BurgerRapportageView
 from rapportage_service.views.SaldoView import SaldoView
 from rapportage_service.views.OverviewView import OverviewView
+from rapportage_service.views.TransactionView import TransactionView
+from rapportage_service.views.CitizenView import CitizenView
 from core_service.statsd_metrics import add_statsd_metrics
 
 
@@ -45,7 +47,11 @@ def create_app(config_name='rapportage_service.config.Config', dependency_inject
         {"path": "/saldo", "view": SaldoView,
             "name": "saldo"},
         {"path": "/overzicht", "view": OverviewView,
-            "name": "overzicht"}
+            "name": "overzicht"},
+        {"path": "/transactions", "view": TransactionView,
+            "name": "transactions"},
+        {"path": "/citizens", "view": CitizenView,
+            "name": "citizens"}
     ]
     for route in routes:
         app.add_url_rule(

@@ -2,7 +2,7 @@ import React from "react";
 import {useTranslation} from "react-i18next";
 import {useParams} from "react-router-dom";
 import {AppRoutes} from "../../config/routes";
-import {GebruikersActiviteit, useGetBurgerGebeurtenissenQuery} from "../../generated/graphql";
+import {UserActivityData, useGetBurgerUserActivitiesQueryQuery} from "../../generated/graphql";
 import Queryable from "../../utils/Queryable";
 import {formatBurgerName} from "../../utils/things";
 import usePagination from "../../utils/usePagination";
@@ -17,25 +17,34 @@ const BurgerAuditLogPage = () => {
 	const {id = ""} = useParams<{id: string}>();
 	const {t} = useTranslation();
 	const {setTotal, pageSize, offset, PaginationButtons} = usePagination();
-	const $burgerGebeurtenissen = useGetBurgerGebeurtenissenQuery({
+	const $burgerUserActivities = useGetBurgerUserActivitiesQueryQuery({
 		variables: {
 			ids: [parseInt(id)],
-			limit: pageSize,
-			offset: offset,
+			input: {
+				page: {
+					skip: offset <= 1 ? 0 : offset,
+					take: pageSize
+				}, Filter: {
+					entityFilter: [{
+						entityType: "burger",
+						entityIds: [id]
+					}]
+				}
+			}
 		},
-		onCompleted: data => setTotal(data.gebruikersactiviteitenPaged?.pageInfo?.count),
+		onCompleted: data => setTotal(data.UserActivities_GetUserActivitiesPaged?.PageInfo?.total_count),
 	});
 
 	return (
-		<Queryable query={$burgerGebeurtenissen} children={data => {
+		<Queryable query={$burgerUserActivities} children={data => {
 			const burger = data.burgers?.[0];
-			const gs: GebruikersActiviteit[] = data.gebruikersactiviteitenPaged?.gebruikersactiviteiten || [];
+			const userActivities: UserActivityData[] = data.UserActivities_GetUserActivitiesPaged?.data || [];
 			return (
 				<Page title={t("pages.burgerGebeurtenissen.title", {name: formatBurgerName(burger)})} backButton={<BackButton to={AppRoutes.ViewBurger(id)} />}>
 					<BurgerContextContainer burger={burger}/>
 					<SectionContainer>
 						<Section title={t("pages.gebeurtenissen.title")} helperText={t("pages.gebeurtenissen.helperTextBurger")} right={<PaginationButtons />}>
-							<GebeurtenissenTableView gebeurtenissen={gs} />
+							<GebeurtenissenTableView gebeurtenissen={userActivities} />
 						</Section>
 					</SectionContainer>
 				</Page>

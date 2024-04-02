@@ -20,7 +20,7 @@ const resolvers: Resolvers = {
 
         try {
             await connection.connect();
-            await connection.query(`TRUNCATE TABLE public."${tableName}"`);
+            await connection.query(`DELETE FROM public."${tableName}"`);
             result = true;
         } catch (error) {
             console.error('Error truncating table:', error);

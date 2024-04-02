@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <LangVersion>12</LangVersion>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\AlarmService.Domain\AlarmService.Domain.csproj" />
+        <ProjectReference Include="..\Core.CommunicationModels\Core.CommunicationModels.csproj" />
+        <ProjectReference Include="..\Core.ErrorHandling\Core.ErrorHandling.csproj" />
+        <ProjectReference Include="..\Core.Utils\Core.Utils.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.0" />
+    </ItemGroup>
+
+</Project>

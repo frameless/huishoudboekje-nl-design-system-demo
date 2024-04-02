@@ -1,0 +1,12 @@
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: hhb-rabbitmq
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: StatefulSet
+    name: hhb-rabbitmq
+  minReplicas: 1
+  maxReplicas: 1
+  targetCPUUtilizationPercentage: 80

@@ -3,12 +3,12 @@ import React from "react";
 import {useTranslation} from "react-i18next";
 import {FiActivity} from "react-icons/fi";
 import UAParser from "ua-parser-js";
-import {GebruikersActiviteit} from "../../generated/graphql";
+import {UserActivityData} from "../../generated/graphql";
 import d from "../../utils/dayjs";
 import RoundIcon from "../shared/RoundIcon";
 import AuditLogText from "./AuditLogText";
 
-const GebeurtenisTableRow: React.FC<{gebeurtenis: GebruikersActiviteit}> = ({gebeurtenis: g}) => {
+const GebeurtenisTableRow: React.FC<{gebeurtenis: UserActivityData}> = ({gebeurtenis: g}) => {
 	const {t} = useTranslation();
 	const browser = new UAParser(g.meta?.userAgent).getBrowser();
 	const os = new UAParser(g.meta?.userAgent).getOS();
@@ -29,7 +29,7 @@ const GebeurtenisTableRow: React.FC<{gebeurtenis: GebruikersActiviteit}> = ({geb
 					<Stack spacing={1}>
 						<AuditLogText g={g} />
 						<Text fontSize={"sm"} color={"gray.500"}>
-							{["#" + g.id, d(g.timestamp).format("LL LT"), osLabel, browserLabel].join(" - ")}
+							{["#" + g.id, d.unix(g.timestamp).format("LL LT"), osLabel, browserLabel].join(" - ")}
 						</Text>
 					</Stack>
 				</HStack>

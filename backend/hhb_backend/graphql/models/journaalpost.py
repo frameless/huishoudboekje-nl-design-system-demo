@@ -11,6 +11,7 @@ from hhb_backend.graphql.dataloaders import hhb_dataloader
 class Journaalpost(graphene.ObjectType):
     """Model van een afgeletterde banktransactie."""
     id = graphene.Int()
+    uuid = graphene.String()
     afspraak = graphene.Field(lambda: afspraak.Afspraak)
     transaction = graphene.Field(lambda: bank_transaction.BankTransaction)
     grootboekrekening = graphene.Field(lambda: grootboekrekening.Grootboekrekening)

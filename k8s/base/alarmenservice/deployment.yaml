@@ -53,43 +53,34 @@ spec:
               psql -h $POSTGRESQL_HOSTNAME -U $POSTGRESQL_USERNAME -c "CREATE DATABASE $POSTGRESQL_DATABASE_NAME_ALMSVC" || true &&
               psql -h $POSTGRESQL_HOSTNAME -U $POSTGRESQL_USERNAME -c "GRANT ALL PRIVILEGES ON DATABASE $POSTGRESQL_DATABASE_NAME_ALMSVC TO $POSTGRESQL_USERNAME_ALMSVC" || true &&
               psql -h $POSTGRESQL_HOSTNAME -U $POSTGRESQL_USERNAME -c "ALTER USER $POSTGRESQL_USERNAME_ALMSVC WITH PASSWORD '$POSTGRESQL_PASSWORD_ALMSVC'" || true;
-        - name: init3-migrate-db
+      containers:
+        - name: hhb-alarmenservice
           image: alarmenservice
           imagePullPolicy: Always
           envFrom:
             - configMapRef:
                 name: postgres-config
-          env:
-            - name: DATABASE_URL
-              valueFrom:
-                secretKeyRef:
-                  name: hhb-database-secrets
-                  key: ALARMENSERVICE_DATABASE_URL
-          command: [ "npm" ]
-          args: [ "run", "db:deploy" ]
-      containers:
-        - name: hhb-alarmenservice
-          image: alarmenservice
-          imagePullPolicy: Always
+            - configMapRef:
+                name: backend-auth-config
           ports:
-            - name: http
-              containerPort: 8080
+            - name: grpc
+              containerPort: 8000
+              protocol: TCP
+            - name: metrics
+              containerPort: 9000
               protocol: TCP
           startupProbe:
-            httpGet:
-              path: /health
-              port: http
+            grpc:
+              port: 8000
             periodSeconds: 10
             failureThreshold: 60
           livenessProbe:
-            httpGet:
-              path: /health
-              port: http
+            grpc:
+              port: 8000
             periodSeconds: 10
           readinessProbe:
-            httpGet:
-              path: /health
-              port: http
+            grpc:
+              port: 8000
             periodSeconds: 10
           resources:
             limits:
@@ -99,10 +90,28 @@ spec:
               cpu: 100m
               memory: 128Mi
           env:
-            - name: DATABASE_URL
+            - name: HHB_DATABASE_URL
               valueFrom:
                 secretKeyRef:
                   name: hhb-database-secrets
                   key: ALARMENSERVICE_DATABASE_URL
             - name: LOG_LEVEL
               value: INFO
+            - name: HHB_RABBITMQ_HOST
+              value: hhb-rabbitmq
+            - name: HHB_RABBITMQ_PORT
+              value: "5672"
+            - name: HHB_HUISHOUDBOEKJE_SERVICE
+              value: "http://hhb-huishoudboekjeservice"
+            - name: HHB_RAPPORTAGE_SERVICE
+              value: "http://hhb-rapportageservice"
+            - name: HHB_RABBITMQ_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: rabbitmq-config
+                  key: RABBITMQ_DEFAULT_USER
+            - name: HHB_RABBITMQ_PASS
+              valueFrom:
+                configMapKeyRef:
+                  name: rabbitmq-config
+                  key: RABBITMQ_DEFAULT_PASS

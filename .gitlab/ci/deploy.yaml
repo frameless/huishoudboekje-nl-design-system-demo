@@ -22,7 +22,6 @@ deploy-deployment-test:
   variables:
     APP_HOST: "test.hhb-development.nl"
     NAMESPACE: "hhb-test"
-    UNLEASH_OTAP: test
     OIDC_BASE_URL: "https://test.hhb-development.nl"
     JWT_SECRET: $OIDC_CLIENT_SECRET
     JWT_ALGORITHMS: HS256,RS256
@@ -49,7 +48,6 @@ deploy-deployment-review:
   variables:
     APP_HOST: "hhb-$CI_COMMIT_REF_SLUG.review.hhb-development.nl"
     NAMESPACE: "hhb-$CI_COMMIT_REF_SLUG"
-    UNLEASH_OTAP: development
     OIDC_BASE_URL: "https://hhb-$CI_COMMIT_REF_SLUG.review.hhb-development.nl"
     JWT_SECRET: $OIDC_CLIENT_SECRET
     JWT_ALGORITHMS: HS256,RS256

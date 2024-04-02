@@ -1,18 +1,15 @@
 version: "3.8"
 
+##################################################
+# Extensions
+##################################################
+
 x-backend: &x-backend
   build:
     dockerfile: ./backend/dev.Dockerfile
     context: .
   volumes:
     - ./backend:/app
-
-x-backend-burgers: &x-backend-burgers
-  build:
-    dockerfile: ./dev.Dockerfile
-    context: ./backend-burgers
-  volumes:
-    - ./backend-burgers:/app
 
 x-huishoudboekjeservice: &x-huishoudboekjeservice
   build:
@@ -54,16 +51,6 @@ x-banktransactieservice: &x-banktransactieservice
   environment:
     DATABASE_URL: "postgresql://hhb:hhb@db/banktransactieservice"
 
-x-logservice: &x-logservice
-  build:
-    dockerfile: ./log_service/dev.Dockerfile
-    context: ./services
-  volumes:
-    - ./services/log_service:/app
-    - ./services/core_service/core_service:/app/core_service
-  environment:
-    DATABASE_URL: "postgresql://hhb:hhb@db/logservice"
-
 x-postadressenservice: &x-postadressenservice
   build:
     context: ./services/postadressenservice
@@ -72,31 +59,6 @@ x-postadressenservice: &x-postadressenservice
     - ./services/postadressenservice:/app
   environment:
     DATABASE_URL: "postgresql://hhb:hhb@db/postadressenservice"
-
-x-alarmenservice: &x-alarmenservice
-  build:
-    context: ./services/alarmenservice
-    dockerfile: ./dev.Dockerfile
-  volumes:
-    - ./services/alarmenservice:/app
-  environment:
-    DATABASE_URL: "postgresql://hhb:hhb@db/alarmenservice"
-
-x-signalenservice: &x-signalenservice
-  build:
-    context: ./services/signalenservice
-    dockerfile: ./dev.Dockerfile
-  volumes:
-    - ./services/signalenservice:/app
-  environment:
-    DATABASE_URL: "postgresql://hhb:hhb@db/signalenservice"
-
-x-unleashservice: &x-unleashservice
-  build:
-    context: ./services/unleashservice
-    dockerfile: ./dev.Dockerfile
-  volumes:
-    - ./services/unleashservice:/app
 
 x-rapportageservice: &x-rapportageservice
   build:
@@ -128,7 +90,6 @@ x-js-tests: &x-js-tests
     - npm test
 
 services:
-  # Database
   db:
     container_name: database
     image: postgres:13-alpine
@@ -140,43 +101,103 @@ services:
       - 5432:5432
     command: [ "postgres", "-c", "log_statement=all" ]
     restart: unless-stopped
-
-  # Database preparations
-  db-init:
-    container_name: database_init
-    image: postgres:13-alpine
-    command:
-      - /bin/sh
-      - -c
-      - >-
-        export PGPASSWORD=postgres &&
-        psql -h db -U postgres -c "CREATE USER hhb WITH PASSWORD 'hhb'" || true &&
-        psql -h db -U postgres -c "ALTER USER hhb WITH SUPERUSER" || true &&
-        psql -h db -U postgres -c "CREATE DATABASE huishoudboekjeservice" || true &&
-        psql -h db -U postgres -c "CREATE DATABASE organisatieservice" || true &&
-        psql -h db -U postgres -c "CREATE DATABASE banktransactieservice" || true &&
-        psql -h db -U postgres -c "CREATE DATABASE grootboekservice" || true &&
-        psql -h db -U postgres -c "CREATE DATABASE logservice" || true &&
-        psql -h db -U postgres -c "CREATE DATABASE postadressenservice" || true &&
-        psql -h db -U postgres -c "CREATE DATABASE alarmenservice" || true &&
-        psql -h db -U postgres -c "CREATE DATABASE signalenservice" || true
-    profiles:
-      - db
-    depends_on:
-      - db
-
-  sampledata:
-    image: registry.gitlab.com/commonground/huishoudboekje/data-importer/data-importer:1.5.4
-    container_name: sampledata
-    environment:
-      GRAPHQL_API_URL: http://backend:8000/graphql
-      LOG_LEVEL: INFO
-    command: ["importer", "import"]
     volumes:
-      - ./sampleData:/app/data
-    profiles:
-      - sampledata
+      - ./docker-compose/database:/docker-entrypoint-initdb.d  
+    healthcheck:
+      test: pg_isready -U postgres -d alarmenservice
+      interval: 30s
+      timeout: 5s
+      retries: 5
 
+  rabbitmq:
+    image: rabbitmq:3.12-rc-management-alpine
+    container_name: rabbitmq
+    ports:
+      - 5672:5672
+      - 15672:15672
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:15672"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  graphql-mesh:
+    build:
+      context: ./mesh
+      dockerfile: ./dev.Dockerfile
+    container_name: graphql-mesh
+    ports:
+      - 4000:4000
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      LOG_LEVEL: DEBUG
+    env_file:
+      - ./docker-compose/mesh/docker-csharp-urls.env
+
+
+##################################################
+# Databse Mesh For Testing
+##################################################
+  database-mesh:
+    build:
+      context: ./database-mesh
+      dockerfile: ./dev.Dockerfile
+    ports:
+      - 4200:4000  
+    depends_on:
+      db:
+        condition: service_healthy
+
+##################################################
+# Csharp services
+################################################## 
+  alarmenservice: 
+    image: ${DOCKER_REGISTRY-}alarmservice
+    container_name: alarmenservice
+    build:
+      context: ./huishoudboekje_services
+      dockerfile: ./AlarmService.Application/dev.Dockerfile
+    volumes: 
+      - ./huishoudboekje_services/:/src/app
+      - /src/app/AlarmService.Application/bin
+      - /src/app/AlarmService.Application/obj
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Development"
+      DATABASE_URL: "postgresql://hhb:hhb@db/alarmenservice"
+      LOG_LEVEL: DEBUG
+    ports:
+      - 8008:8000
+      - 8108:9000
+    depends_on:
+      db:
+        condition: service_healthy
+
+  logservice:
+    image: ${DOCKER_REGISTRY-}logservice
+    container_name: logservice
+    build:
+      context: ./huishoudboekje_services
+      dockerfile: ./LogService.Application/dev.Dockerfile
+    volumes: 
+      - ./huishoudboekje_services/:/src/app
+      - /src/app/LogService.Application/bin
+      - /src/app/LogService.Application/obj
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Development"
+      DATABASE_URL: "postgresql://hhb:hhb@db/logservice"
+      LOG_LEVEL: DEBUG
+    ports:
+      - 8012:8000
+      - 8112:9000
+    depends_on:
+      db:
+        condition: service_healthy
+
+##################################################
+# Auth ?
+##################################################
   authservice:
     build:
       dockerfile: ./dev.Dockerfile
@@ -201,6 +222,35 @@ services:
     profiles:
       - authservice
 
+##################################################
+# Extra Commands
+##################################################
+  evaluate-alarms:
+    build:
+      context: ./rabbitmq-message-publisher
+      dockerfile: ./Dockerfile
+    environment:
+      EXCHANGE: check-alarms-timed
+      ROUTING_KEY: check-alarms-timed
+      MESSAGE: "{}"
+    profiles:
+      - evaluate-alarms
+
+  sampledata:
+    image: registry.gitlab.com/commonground/huishoudboekje/data-importer/data-importer:1.5.4
+    container_name: sampledata
+    environment:
+      GRAPHQL_API_URL: http://backend:8000/graphql
+      LOG_LEVEL: INFO
+    command: ["importer", "import"]
+    volumes:
+      - ./sampleData:/app/data
+    profiles:
+      - sampledata
+
+##################################################
+# To be replaced services
+##################################################
   backend:
     <<: *x-backend
     container_name: backend
@@ -220,35 +270,16 @@ services:
       POSTADRESSENSERVICE_URL: "http://postadressenservice:8080"
       ALARMENSERVICE_URL: "http://alarmenservice:8080"
       SIGNALENSERVICE_URL: "http://signalenservice:8080"
-      UNLEASHSERVICE_URL: "http://unleashservice:8080"
       USE_GRAPHIQL: 1
       ALLOW_INTROSPECTION: 1
     ports:
       - 5000:8000
+    depends_on:
+      db:
+        condition: service_healthy 
 
   backend-test:
     <<: [ *x-py-tests, *x-backend ]
-
-  backend-burgers:
-    <<: *x-backend-burgers
-    container_name: backend-burgers
-    environment:
-      HUISHOUDBOEKJESERVICE_URL: "http://huishoudboekjeservice:8000"
-      ORGANISATIESERVICE_URL: "http://organisatieserviceservice:8000"
-      BANKTRANSACTIESERVICE_URL: "http://banktransactieserviceservice:8000"
-    ports:
-      - 5001:8080
-    profiles:
-      - burgers
-
-  backend-burgers-test:
-    <<: *x-backend-burgers
-    profiles:
-      - tests
-    entrypoint:
-      - /bin/sh
-      - -c
-      - npm run test
 
   huishoudboekjeservice:
     <<: *x-huishoudboekjeservice
@@ -260,7 +291,8 @@ services:
     ports:
       - 8001:8000
     depends_on:
-      - db
+      db:
+        condition: service_healthy
 
   huishoudboekjeservice-test:
     <<: [ *x-py-tests, *x-huishoudboekjeservice ]
@@ -275,7 +307,8 @@ services:
     ports:
       - 8002:8000
     depends_on:
-      - db
+      db:
+        condition: service_healthy
 
   organisatieservice-test:
     <<: [ *x-py-tests, *x-organisatieservice ]
@@ -289,7 +322,8 @@ services:
     ports:
       - 8003:8000
     depends_on:
-      - db
+      db:
+        condition: service_healthy
 
   banktransactieservice-test:
     <<: [ *x-py-tests, *x-banktransactieservice ]
@@ -303,24 +337,8 @@ services:
     ports:
       - 8004:8000
     depends_on:
-      - db
-
-  grootboekservice-test:
-    <<: [ *x-py-tests, *x-grootboekservice ]
-
-  logservice:
-    <<: *x-logservice
-    container_name: logservice
-    environment:
-      DATABASE_URL: "postgresql://hhb:hhb@db/logservice"
-      LOG_LEVEL: DEBUG
-    ports:
-      - 8012:8000
-    depends_on:
-      - db
-
-  logservice-test:
-    <<: [ *x-py-tests, *x-logservice ]
+      db:
+        condition: service_healthy
 
   # Trail of history: port 8006 used to be in use by the contactcatalogus, but we deprecated this service in favor of the postadressenservice.
 
@@ -334,46 +352,11 @@ services:
     ports:
       - 8007:8080
     depends_on:
-      - db
+      db:
+        condition: service_healthy
 
   postadressenservice-test:
     <<: [ *x-js-tests, *x-postadressenservice ]
-
-  alarmenservice:
-    <<: *x-alarmenservice
-    container_name: alarmenservice
-    environment:
-      DATABASE_URL: "postgresql://hhb:hhb@db/alarmenservice?connect_timeout=300"
-      LOG_LEVEL: DEBUG
-    ports:
-      - 8008:8080
-    depends_on:
-      - db
-
-  alarmenservice-test:
-    <<: [ *x-js-tests, *x-alarmenservice ]
-
-  signalenservice:
-    <<: *x-signalenservice
-    container_name: signalenservice 
-    environment:
-      DATABASE_URL: "postgresql://hhb:hhb@db/signalenservice?connect_timeout=300"
-      LOG_LEVEL: DEBUG
-    ports:
-      - 8009:8080
-    depends_on:
-      - db
-
-  signalenservice-test:
-    <<: [ *x-js-tests, *x-signalenservice ]
-
-  unleashservice:
-    <<: *x-unleashservice
-    container_name: unleashservice
-    environment:
-      LOG_LEVEL: DEBUG
-    ports:
-      - 8010:8080
 
   rapportageservice:
     <<: *x-rapportageservice
@@ -385,11 +368,3 @@ services:
 
   rapportageservice-test:
     <<: [ *x-py-tests, *x-rapportageservice ]
-
-  database-mesh:
-    build:
-      context: ./database-mesh
-      dockerfile: ./dev.Dockerfile
-    ports:
-      - 4200:4000
-

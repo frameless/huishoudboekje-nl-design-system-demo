@@ -36,31 +36,41 @@ class CreateAfdeling(graphene.Mutation):
     def mutate(root, info, **kwargs):
         """ Create the new Afdeling """
         logging.info("Creating afdeling")
-        
+
         validation_schema = {
             "type": "object",
             "properties": {
                 "naam": {"type": "string", "minLength": 1},
-                "rekeningen": {"type": "array", "items": {
-                    "type": "object",
-                    "properties": {
-                        "rekeninghouder": {"type": "string","minLength": 1,"maxLength": 100}
+                "rekeningen": {
+                    "oneOf": [
+                        {"type": "array", "items": {
+                            "type": "object",
+                            "properties": {
+                                "rekeninghouder": {"type": "string","minLength": 1,"maxLength": 100}
+                            },
+                        }
                     },
-                }},
-                "postadressen": {"type": "array", "items": {
-                    "type": "object",
-                    "properties": {
-                        "straatnaam": {"type": "string", "minLength": 1},
-                        "huisnummer": {"type": "string", "minLength": 1},
-                        "postcode": {"type": "string","pattern": "^[1-9][0-9]{3}[A-Za-z]{2}$"}, #ZipcodeNL
-                        "plaatsnaam": {"type": "string", "minLength": 1},
+                    { "type": "null" }
+                ]},
+                "postadressen":  {
+                    "oneOf": [
+                        {"type": "array", "items": {
+                            "type": "object",
+                            "properties": {
+                                "straatnaam": {"type": "string", "minLength": 1},
+                                "huisnummer": {"type": "string", "minLength": 1},
+                                "postcode": {"type": "string","pattern": "^[1-9][0-9]{3}[A-Za-z]{2}$"}, #ZipcodeNL
+                                "plaatsnaam": {"type": "string", "minLength": 1},
+                            },
+                        }
                     },
-                }},
+                    { "type": "null" }
+                ]},
             },
             "required": []
         }
 
-        input = kwargs.pop("input")
+        input = kwargs.pop("input")        
         JsonInputValidator(validation_schema).validate(input)
 
         rekeningen = input.pop("rekeningen", None)

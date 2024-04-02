@@ -61,8 +61,6 @@ export POSTGRESQL_PASSWORD_PADSVC="padsvc"
 export POSTGRESQL_PASSWORD_ALMSVC="almsvc"
 export POSTGRESQL_PASSWORD_SIGSVC="sigsvc"
 
-# Unleash OTAP stage
-export UNLEASH_OTAP=${UNLEASH_OTAP:-"production"}
 
 # OIDC Settings
 export OIDC_ISSUER_URL=${OIDC_ISSUER_URL:-"this should be a issuer url"}
@@ -74,11 +72,15 @@ export JWT_AUDIENCE=${JWT_AUDIENCE:-$HHB_APP_HOST}
 export JWT_EXPIRES_IN=${JWT_EXPIRES_IN:-"30d"}
 export JWT_SECRET=${JWT_SECRET:-"this should come from a secret envvar"}
 export JWT_ALGORITHMS=${JWT_ALGORITHMS:-"HS256"}
+export JWT_JWKS_URI=${JWT_JWKS_URI}
 export OIDC_SCOPES=${OIDC_SCOPES}
 
 # redis
 export REDIS_PASSWORD=${REDIS_PASSWORD:-"averyinsecurebutstillalongpasswordbecausethedocssayithastobealongpaswordtobesecuresoihopethisislongenough"}
 export REDIS_AUTH_PASSWORD=${REDIS_AUTH_PASSWORD:-"authservicepasswordforredis12345"}
+# rabbitmq Settings
+export RABBITMQ_DEFAULT_USER=${RABBITMQ_DEFAULT_USER:-"guest-user"} #default value is unsafe
+export RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS:-"guest-pass"} #default value is unsafe
 
 cd k8s/overlay/hhb-development-cluster
 

@@ -29,3 +29,5 @@ class AfspraakLoader(DataLoader[Afspraak]):
             'valid_through': valid_through
         })
     
+    def by_uuids(self, uuid: List[str]) -> List[Afspraak]:
+        return self.load(uuid, filter_item="filter_uuid")

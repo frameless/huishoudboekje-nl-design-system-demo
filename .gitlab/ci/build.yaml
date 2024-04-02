@@ -7,7 +7,7 @@
   <<: *retry
   stage: build
   image: docker:24.0.2-git
-  needs: [ ]
+  needs: []
   services:
     - docker:24.0.2-dind
   variables:
@@ -16,6 +16,7 @@
     DOCKER_TLS_CERTDIR: "/certs"
     CYPRESS_INSTALL_BINARY: "0"
   script:
+    - if [ "$NAME" == "mesh" ]; then cd mesh; sh copy-protos.sh; cd -;fi;
     - export DOCKER_CONFIG=/tmp/docker-config-$CI_JOB_ID
     - mkdir -p $DOCKER_CONFIG && echo $DOCKER_AUTH_CONFIG > $DOCKER_CONFIG/config.json
     - echo "$CI_REGISTRY_PASSWORD" | docker login $CI_REGISTRY --username $CI_REGISTRY_USER --password-stdin
@@ -24,18 +25,16 @@
     - docker push $CI_REGISTRY_IMAGE/$NAME:$IMAGE_TAG
   parallel:
     matrix:
+      - NAME: mesh
+        DOCKERATTRIBUTES: "--file=./mesh/Dockerfile ./mesh"
       - NAME: frontend
         DOCKERATTRIBUTES: "./frontend"
       - NAME: backend
         DOCKERATTRIBUTES: "./backend"
-      - NAME: unleashservice
-        DOCKERATTRIBUTES: "./services/unleashservice"
       - NAME: postadressenservice
         DOCKERATTRIBUTES: "./services/postadressenservice"
       - NAME: alarmenservice
-        DOCKERATTRIBUTES: "./services/alarmenservice"
-      - NAME: signalenservice
-        DOCKERATTRIBUTES: "./services/signalenservice"
+        DOCKERATTRIBUTES: "--file=./huishoudboekje_services/AlarmService.Application/Dockerfile ./huishoudboekje_services"
       - NAME: authservice
         DOCKERATTRIBUTES: "./services/authservice"
       - NAME: banktransactieservice
@@ -45,11 +44,13 @@
       - NAME: huishoudboekjeservice
         DOCKERATTRIBUTES: "--file=./services/huishoudboekje_service/Dockerfile services"
       - NAME: logservice
-        DOCKERATTRIBUTES: "--file=./services/log_service/Dockerfile services"
+        DOCKERATTRIBUTES: "--file=./huishoudboekje_services/LogService.Application/Dockerfile ./huishoudboekje_services"
       - NAME: organisatieservice
         DOCKERATTRIBUTES: "--file=./services/organisatie_service/Dockerfile services"
       - NAME: rapportageservice
         DOCKERATTRIBUTES: "--file=./services/rapportage_service/Dockerfile services"
+      - NAME: rabbitmq-message-publisher
+        DOCKERATTRIBUTES: "./rabbitmq-message-publisher"
 
 build-databasemesh-image:
   stage: build
@@ -63,6 +64,7 @@ build-databasemesh-image:
     DOCKER_TLS_CERTDIR: "/certs"
     CYPRESS_INSTALL_BINARY: "0"
   script:
+    - if [ "$NAME" == "mesh" ]; then cd mesh; sh copy-protos.sh; cd -;fi;
     - export DOCKER_CONFIG=/tmp/docker-config-$CI_JOB_ID
     - mkdir -p $DOCKER_CONFIG && echo $DOCKER_AUTH_CONFIG > $DOCKER_CONFIG/config.json
     - echo "$CI_REGISTRY_PASSWORD" | docker login $CI_REGISTRY --username $CI_REGISTRY_USER --password-stdin
@@ -71,6 +73,8 @@ build-databasemesh-image:
     - docker push $CI_REGISTRY_IMAGE/databasemesh:$IMAGE_TAG
   rules:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+
+
 
 # Build docker images with default tag ("branchName-commitSha").
 build-images-dev:

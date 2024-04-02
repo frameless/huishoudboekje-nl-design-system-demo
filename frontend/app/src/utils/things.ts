@@ -7,7 +7,7 @@ import {friendlyFormatIBAN} from "ibantools";
 import {createContext} from "react";
 import {defaultBanktransactieFilters} from "../components/Bankzaken/Transacties/defaultBanktransactieFilters";
 import {Granularity, periodFormatForGranularity} from "../components/Rapportage/Aggregator";
-import {Afspraak, BankTransaction, Burger, GebruikersActiviteit, Huishouden, Organisatie, Rubriek} from "../generated/graphql";
+import {Afspraak, BankTransaction, Burger, UserActivityData, Huishouden, Organisatie, Rubriek} from "../generated/graphql";
 import {BanktransactieFilters} from "../models/models";
 import d from "./dayjs";
 
@@ -36,6 +36,7 @@ export const Regex = {
 };
 
 export const Months = ["jan", "feb", "mrt", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"];
+export const WeekDays = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
 
 export enum MathOperation {
 	Plus,
@@ -59,6 +60,17 @@ export const DrawerContext = createContext<DrawerContextProps>({
  * Parse from EUR (user input): 	currencyFormat("12.999,23").toString() // "12999.23"
  */
 export const currencyFormat = value => currency(value, {separator: "", decimal: ",", symbol: ""});
+
+
+export function getUnixTimestapFromDate(date:Date | undefined){
+	if(date == undefined){
+		return undefined
+	}
+	const checkDate = new Date(date)
+	const offset = checkDate.getTimezoneOffset()/60;
+	checkDate.setHours(checkDate.getHours()-offset)
+	return Math.floor(checkDate.getTime() / 1000);
+}
 
 /* Todo: move to currencyFormat (03-12-2020) */
 export const currencyFormat2 = (showCurrency = true) => {
@@ -172,7 +184,7 @@ export const prepareChartData = (startDate: d.Dayjs, endDate: d.Dayjs, granulari
 
 export const sanitizeIBAN = (iban: string) => iban.replace(/\s/g, "").toUpperCase();
 
-export const sortAuditTrailByTime = (a: GebruikersActiviteit, b: GebruikersActiviteit) => d(a.timestamp).isBefore(b.timestamp) ? 1 : -1;
+export const sortAuditTrailByTime = (a: UserActivityData, b: UserActivityData) => d(a.timestamp).isBefore(b.timestamp) ? 1 : -1;
 
 export const truncateText = (str: string, maxLength = 50) => {
 	const padding = Math.floor((maxLength - 10) / 2);

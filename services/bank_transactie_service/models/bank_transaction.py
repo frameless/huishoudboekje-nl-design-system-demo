@@ -16,9 +16,10 @@ class BankTransaction(db.Model):
         ForeignKey('customer_statement_messages.id'), 
         nullable=False
     )
+
     # customer_statement_message_uuid = Column(
-    #     UUID, 
-    #     ForeignKey('customer_statement_messages.uuid'), 
+    #     UUID,
+    #     ForeignKey('customer_statement_messages.uuid'),
     #     nullable=False
     # )
     customer_statement_message = relationship("CustomerStatementMessage", back_populates="bank_transactions")

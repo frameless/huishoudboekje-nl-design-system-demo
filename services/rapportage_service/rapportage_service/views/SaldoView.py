@@ -14,15 +14,27 @@ class SaldoView(MethodView):
     _saldo_controller: SaldoController
 
     BURGER_IDS_LIST_NAME = "burger_ids"
+    CITIZEN_UUIDS_LIST_NAME = "citizen_uuids"
     
     validation_data = {
-        BURGER_IDS_LIST_NAME:{
-            "type": "array",
-            "items": {
-                "type": "number"
-            }
+        "oneOf": [{
+            BURGER_IDS_LIST_NAME: {
+                "type": "array",
+                "items": {
+                    "type": "number"
+                }
+            },
+            "required": [BURGER_IDS_LIST_NAME]
         },
-        "required": [BURGER_IDS_LIST_NAME]
+            {
+            CITIZEN_UUIDS_LIST_NAME: {
+                "type": "array",
+                "items": {
+                    "type": "string"
+                }
+            },
+            "required": [CITIZEN_UUIDS_LIST_NAME]
+        }]
     }
 
     @inject
@@ -38,12 +50,15 @@ class SaldoView(MethodView):
             GET saldo?date=<date>
         """
         self.input_validate()
-        burger_ids = request.json.get(self.BURGER_IDS_LIST_NAME)
+        burger_ids = request.json.get(self.BURGER_IDS_LIST_NAME, None)
+        citizen_uuids = request.json.get(self.CITIZEN_UUIDS_LIST_NAME, None)
         date = request.args.get('date')
         if not valid_date(date):
             abort(make_response({"errors": "invalid date"}, 400))
+        if citizen_uuids != None:
+            return {"data": self._saldo_controller.get_saldos_per_citizen(citizen_uuids, date)}, 200
 
-        return {"data": self._saldo_controller.get_saldos(burger_ids,date)}, 200
+        return {"data": self._saldo_controller.get_saldos(burger_ids, date)}, 200
 
     def post(self, **kwargs):
         """ Not allowed """
