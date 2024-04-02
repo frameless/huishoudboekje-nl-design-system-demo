@@ -1,5 +1,12 @@
 # Huishoudboekje Changelog
 
+## 1.12.6
+
+### Patch Changes
+
+- 84f0ba0: added bank account tests
+- 8f153a1: Retry after refreshing login token when 401 is received
+
 ## 1.12.5
 
 Deze versie omvat meerdere oplossingen voor gemelde problemen. Er is een verbetering gemaakt voor de communicatie tussen applicatie en hostingomgeving waardoor gebruikers minder foutmeldingen ervaren. Daarnaast zijn er aanpassingen gedaan voor het uitvoeren van geautomatiseerde testen.
