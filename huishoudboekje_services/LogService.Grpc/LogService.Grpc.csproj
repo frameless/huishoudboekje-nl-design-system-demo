@@ -1,0 +1,35 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <LangVersion>12</LangVersion>
+    </PropertyGroup>
+
+<!--    <ItemGroup>-->
+<!--      <Protobuf Include="Protos\UserActivity.proto"  GrpcServices="Server" />-->
+<!--    </ItemGroup>-->
+
+    <ItemGroup>
+        <Protobuf Include="Protos\UserActivity.proto" GrpcServices="Server">
+            <Generator>MSBuild:Compile</Generator>
+        </Protobuf>
+    </ItemGroup>
+
+
+    <ItemGroup>
+      <ProjectReference Include="..\Core.Grpc\Core.Grpc.csproj" />
+      <ProjectReference Include="..\Core.Utils\Core.Utils.csproj" />
+      <ProjectReference Include="..\LogService.Logic\LogService.Logic.csproj" />
+    </ItemGroup>
+
+
+    <ItemGroup>
+      <PackageReference Include="Grpc.Tools" Version="2.60.0">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      </PackageReference>
+    </ItemGroup>
+
+</Project>

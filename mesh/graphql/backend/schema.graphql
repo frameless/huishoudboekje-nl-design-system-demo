@@ -1,0 +1,814 @@
+schema {
+  query: RootQuery
+  mutation: RootMutation
+}
+"""
+Leverages the internal Python implementation of UUID (uuid.UUID) to provide native UUID objects
+in fields, resolvers and input.
+"""
+scalar UUID
+"""
+The `Date` scalar type represents a Date
+value as specified by
+[iso8601](https://en.wikipedia.org/wiki/ISO_8601).
+"""
+scalar Date
+"Bedrag (bijvoorbeeld: 99.99) n"
+scalar Bedrag
+"""
+The `DateTime` scalar type represents a DateTime
+value as specified by
+[iso8601](https://en.wikipedia.org/wiki/ISO_8601).
+"""
+scalar DateTime
+"""
+Allows use of a JSON String for input / output from the GraphQL schema.
+
+Use of this type is *not recommended* as you lose the benefits of having a defined, static
+schema (one of the key benefits of GraphQL).
+"""
+scalar JSONString
+"Accepteert datum, datum en tijd, ints en strings en wordt gebruikt bij ComplexFilterType."
+scalar DynamicType
+"The `Decimal` scalar type represents a python Decimal."
+scalar Decimal
+"""
+Create scalar that ignores normal serialization/deserialization, since
+that will be handled by the multipart request spec
+"""
+scalar Upload
+"The root of all queries "
+type RootQuery {
+  afdeling(id: Int!): Afdeling
+  afdelingen(ids: [Int], isLogRequest: Boolean): [Afdeling]
+  afdelingenByIban(iban: String): [Afdeling]
+  afspraak(id: Int!): Afspraak
+  afsprakenUuid(uuids: [String]): [Afspraak]
+  afspraken(ids: [Int], isLogRequest: Boolean): [Afspraak]
+  searchAfspraken(offset: Int, limit: Int, afspraakIds: [Int], burgerIds: [Int], afdelingIds: [Int], tegenRekeningIds: [Int], onlyValid: Boolean, minBedrag: Int, maxBedrag: Int, zoektermen: [String]): AfsprakenPaged
+  bankTransaction(id: Int!): BankTransaction
+  bankTransactions(filters: BankTransactionFilter): [BankTransaction]
+  bankTransactionsPaged(start: Int, limit: Int, filters: BankTransactionFilter): BankTransactionsPaged
+  searchTransacties(offset: Int, limit: Int, filters: BankTransactionSearchFilter): BankTransactionsPaged
+  burger(id: Int!): Burger
+  burgersUuid(uuids: [String]): [Burger]
+  burgers(search: String, ids: [Int], isLogRequest: Boolean): [Burger]
+  burgersPaged(start: Int, limit: Int): BurgersPaged
+  configuratie(id: String!): Configuratie
+  configuraties(ids: [String], isLogRequest: Boolean): [Configuratie]
+  customerStatementMessage(id: Int!): CustomerStatementMessage
+  customerStatementMessages(ids: [Int], isLogRequest: Boolean): [CustomerStatementMessage]
+  export(id: Int!): Export
+  exports(ids: [Int] = null, startDatum: Date, eindDatum: Date, isLogRequest: Boolean): [Export]
+  grootboekrekening(id: String!): Grootboekrekening
+  grootboekrekeningen(ids: [String]): [Grootboekrekening]
+  huishouden(id: Int!): Huishouden
+  huishoudens(ids: [Int], filters: BurgerFilter, isLogRequest: Boolean): [Huishouden]
+  huishoudensPaged(start: Int, limit: Int, filters: BurgerFilter): HuishoudensPaged
+  journaalpost(id: Int!): Journaalpost
+  journaalpostenUuid(uuids: [String]): [Journaalpost]
+  journaalposten(ids: [Int]): [Journaalpost]
+  journaalpostenTransactieRubriek(transactionIds: [Int]): [JournaalpostTransactieRubriek]
+  organisatie(id: Int!): Organisatie
+  organisaties(ids: [Int], isLogRequest: Boolean): [Organisatie]
+  postadres(id: String!): Postadres
+  postadressen(ids: [String], isLogRequest: Boolean): [Postadres]
+  rekening(id: Int!): Rekening
+  rekeningen(ids: [Int], isLogRequest: Boolean): [Rekening]
+  rekeningenByIbans(ibans: [String]): [Rekening]
+  rubriek(id: Int!): Rubriek
+  rubrieken(ids: [String], isLogRequest: Boolean): [Rubriek]
+  saldo(date: Date!, burgerIds: [Int]): Saldo
+  burgerRapportages(burgerIds: [Int]!, startDate: String!, endDate: String!, rubriekenIds: [Int]): [BurgerRapportage]
+  overzicht(burgerIds: [Int]!, startDate: String!, endDate: String!): Overzicht
+}
+type Afdeling {
+  id: Int
+  naam: String
+  organisatieId: Int
+  organisatie: Organisatie
+  rekeningen: [Rekening]
+  postadressen: [Postadres]
+  afspraken: [Afspraak]
+}
+type Organisatie {
+  id: Int
+  naam: String
+  kvknummer: String
+  vestigingsnummer: String
+  afdelingen: [Afdeling]
+}
+type Rekening {
+  id: Int
+  iban: String
+  rekeninghouder: String
+  burgers: [Burger]
+  afdelingen: [Afdeling]
+  afspraken: [Afspraak]
+}
+type Burger {
+  id: Int
+  uuid: UUID
+  bsn: Int
+  voorletters: String
+  voornamen: String
+  achternaam: String
+  geboortedatum: Date
+  telefoonnummer: String
+  email: String
+  straatnaam: String
+  huisnummer: String
+  postcode: String
+  plaatsnaam: String
+  rekeningen: [Rekening]
+  afspraken: [Afspraak]
+  huishoudenId: Int
+  huishouden: Huishouden
+  gebruikersactiviteiten: [GebruikersActiviteit]
+}
+type Afspraak {
+  id: Int
+  uuid: UUID
+  omschrijving: String
+  bedrag: Bedrag
+  credit: Boolean
+  validFrom: Date
+  validThrough: Date
+  rubriek: Rubriek
+  zoektermen: [String]
+  burgerId: Int
+  burger: Burger
+  afdeling: Afdeling
+  postadres: Postadres
+  alarmId: UUID
+  tegenRekening: Rekening
+  betaalinstructie: Betaalinstructie
+  journaalposten: [Journaalpost]
+  overschrijvingen(startDatum: Date, eindDatum: Date): [Overschrijving]
+  matchingAfspraken: [Afspraak]
+  similarAfspraken: [Afspraak]
+}
+type Rubriek {
+  id: Int
+  naam: String
+  grootboekrekening: Grootboekrekening
+}
+type Grootboekrekening {
+  id: String!
+  naam: String
+  referentie: String
+  omschrijving: String
+  credit: Boolean
+  parent: Grootboekrekening
+  children: [Grootboekrekening]
+  rubriek: Rubriek
+}
+type Postadres {
+  id: String
+  straatnaam: String
+  huisnummer: String
+  postcode: String
+  plaatsnaam: String
+}
+"Implementatie op basis van http://schema.org/Schedule"
+type Betaalinstructie {
+  byDay: [DayOfWeek]
+  byMonth: [Int]
+  byMonthDay: [Int]
+  repeatFrequency: String
+  exceptDates: [String]
+  startDate: String
+  endDate: String
+}
+"Model van een afgeletterde banktransactie."
+type Journaalpost {
+  id: Int
+  uuid: String
+  afspraak: Afspraak
+  transaction: BankTransaction
+  grootboekrekening: Grootboekrekening
+  rubriek: Rubriek
+  isAutomatischGeboekt: Boolean
+}
+type BankTransaction {
+  id: Int
+  bedrag: Bedrag
+  isCredit: Boolean
+  isGeboekt: Boolean
+  transactieDatum: Date
+  customerStatementMessage: CustomerStatementMessage
+  statementLine: String
+  informationToAccountOwner: String
+  tegenRekeningIban: String
+  tegenRekening: Rekening
+  journaalpost: Journaalpost
+  suggesties: [Afspraak]
+}
+"Model van een bankafschrift."
+type CustomerStatementMessage {
+  id: Int
+  uploadDate: DateTime
+  filename: String
+  transactionReferenceNumber: String
+  relatedReference: String
+  accountIdentification: String
+  sequenceNumber: String
+  openingBalance: Int
+  closingBalance: Int
+  closingAvailableFunds: Int
+  forwardAvailableBalance: Int
+  bankTransactions: [BankTransaction]
+}
+type Overschrijving {
+  id: Int
+  bedrag: Bedrag
+  datum: Date
+  status: OverschrijvingStatus
+  afspraak: Afspraak
+  export: Export
+  bankTransaction: BankTransaction
+  afspraken: [Afspraak]
+}
+type Export {
+  id: Int
+  naam: String
+  timestamp: DateTime
+  startDatum: Date
+  eindDatum: Date
+  sha256: String
+  xmldata: String
+  verwerkingDatum: Date
+  overschrijvingen: [Overschrijving]
+}
+type Huishouden {
+  id: Int
+  burgers: [Burger]
+}
+"Model dat een actie van een gebruiker beschrijft."
+type GebruikersActiviteit {
+  id: Int
+  timestamp: DateTime
+  gebruikerId: String
+  action: String
+  entities: [GebruikersActiviteitEntity]
+  snapshotBefore: GebruikersActiviteitSnapshot
+  snapshotAfter: GebruikersActiviteitSnapshot
+  meta: GebruikersActiviteitMeta
+}
+"Dit model beschrijft de wijzingen die een gebruiker heeft gedaan."
+type GebruikersActiviteitEntity {
+  entityType: String
+  entityId: String
+  afdeling: Afdeling
+  postadres: Postadres
+  afspraak: Afspraak
+  burger: Burger
+  configuratie: Configuratie
+  customerStatementMessage: CustomerStatementMessage
+  export: Export
+  grootboekrekening: Grootboekrekening
+  journaalpost: Journaalpost
+  organisatie: Organisatie
+  rekening: Rekening
+  rubriek: Rubriek
+  transaction: BankTransaction
+  huishouden: Huishouden
+}
+type Configuratie {
+  id: String
+  waarde: String
+}
+type GebruikersActiviteitSnapshot {
+  json: JSONString
+  afdeling: Afdeling
+  afspraak: Afspraak
+  burger: Burger
+  configuratie: Configuratie
+  customerStatementMessage: CustomerStatementMessage
+  export: Export
+  grootboekrekening: Grootboekrekening
+  huishouden: Huishouden
+  journaalpost: Journaalpost
+  organisatie: Organisatie
+  postadres: Postadres
+  rubriek: Rubriek
+  transaction: BankTransaction
+}
+type GebruikersActiviteitMeta {
+  userAgent: String
+  ip: [String]
+  applicationVersion: String
+}
+type AfsprakenPaged {
+  afspraken: [Afspraak]
+  pageInfo: PageInfo
+}
+type PageInfo {
+  count: Int
+  start: Int
+  limit: Int
+}
+type BankTransactionsPaged {
+  banktransactions: [BankTransaction]
+  pageInfo: PageInfo
+}
+type BurgersPaged {
+  burgers: [Burger]
+  pageInfo: PageInfo
+}
+type HuishoudensPaged {
+  huishoudens: [Huishouden]
+  pageInfo: PageInfo
+}
+"Model van een afgeletterde banktransactie. (minimale data om eenvoudig de rubriek van een banktransactie te kunnen vinden) "
+type JournaalpostTransactieRubriek {
+  id: Int
+  transactionId: Int
+  isAutomatischGeboekt: Boolean
+  afspraakRubriekNaam: String
+  grootboekrekeningRubriekNaam: String
+}
+type Saldo {
+  saldo: Bedrag
+}
+type BurgerRapportage {
+  burger: Burger
+  startDatum: String
+  eindDatum: String
+  totaal: Decimal
+  totaalInkomsten: Decimal
+  totaalUitgaven: Decimal
+  inkomsten: [RapportageRubriek]
+  uitgaven: [RapportageRubriek]
+}
+type RapportageRubriek {
+  rubriek: String
+  transacties: [RapportageTransactie]
+}
+type RapportageTransactie {
+  bedrag: Decimal
+  rekeninghouder: String
+  transactieDatum: String
+}
+type Overzicht {
+  afspraken: [OverzichtAfspraak]
+  saldos: [OverzichtSaldo]
+}
+type OverzichtAfspraak {
+  id: Int
+  burgerId: Int
+  organisatieId: Int
+  omschrijving: String
+  rekeninghouder: String
+  tegenRekeningId: Int
+  validFrom: String
+  validThrough: String
+  transactions: [BankTransaction]
+}
+type OverzichtSaldo {
+  maandnummer: Int
+  startSaldo: Decimal
+  eindSaldo: Decimal
+  mutatie: Decimal
+}
+"The root of all mutations "
+type RootMutation {
+  createBurger(input: CreateBurgerInput): CreateBurger
+  deleteBurger(id: Int!): DeleteBurger
+  updateBurger(achternaam: String, bsn: Int, email: String, geboortedatum: String, huishouden: HuishoudenInput, huisnummer: String, id: Int!, plaatsnaam: String, postcode: String, straatnaam: String, telefoonnummer: String, voorletters: String, voornamen: String): UpdateBurger
+  createAfspraak(input: CreateAfspraakInput!): CreateAfspraak
+  updateAfspraak(id: Int!, input: UpdateAfspraakInput!): UpdateAfspraak
+  deleteAfspraak(id: Int!): DeleteAfspraak
+  "Mutatie voor het instellen van een nieuwe betaalinstructie voor een afspraak."
+  updateAfspraakBetaalinstructie(afspraakId: Int!, betaalinstructie: BetaalinstructieInput!): UpdateAfspraakBetaalinstructie
+  "Mutatie om een zoekterm aan een afspraak toe te voegen."
+  addAfspraakZoekterm(afspraakId: Int!, zoekterm: String!): AddAfspraakZoekterm
+  "Mutatie om een zoekterm bij een afspraak te verwijderen."
+  deleteAfspraakZoekterm(afspraakId: Int!, zoekterm: String!): DeleteAfspraakZoekterm
+  "Mutatie om een betaalinstructie bij een afspraak te verwijderen."
+  deleteAfspraakBetaalinstructie(afspraakId: Int!): DeleteAfspraakBetaalinstructie
+  createOrganisatie(input: CreateOrganisatieInput): CreateOrganisatie
+  updateOrganisatie(id: Int!, kvknummer: String, naam: String, vestigingsnummer: String): UpdateOrganisatie
+  deleteOrganisatie(id: Int!): DeleteOrganisatie
+  "Mutatie om een rekening aan een burger toe te voegen."
+  createBurgerRekening(burgerId: Int!, rekening: RekeningInput!): CreateBurgerRekening
+  "Mutatie om een rekening bij een burger te verwijderen."
+  deleteBurgerRekening(burgerId: Int!, rekeningId: Int!): DeleteBurgerRekening
+  "Mutatie om een rekening aan een afdeling toe te voegen."
+  createAfdelingRekening(afdelingId: Int!, rekening: RekeningInput!): CreateAfdelingRekening
+  "Mutatie om een rekening van een afdeling te verwijderen."
+  deleteAfdelingRekening(afdelingId: Int!, rekeningId: Int!): DeleteAfdelingRekening
+  updateRekening(id: Int!, rekening: RekeningInput!): UpdateRekening
+  deleteCustomerStatementMessage(id: Int!): DeleteCustomerStatementMessage
+  createCustomerStatementMessage(file: Upload!): CreateCustomerStatementMessage
+  createJournaalpostAfspraak(input: [CreateJournaalpostAfspraakInput]!): CreateJournaalpostAfspraak
+  "Mutatie om een banktransactie af te letteren op een grootboekrekening."
+  createJournaalpostGrootboekrekening(input: CreateJournaalpostGrootboekrekeningInput): CreateJournaalpostGrootboekrekening
+  deleteJournaalpost(id: Int!): DeleteJournaalpost
+  createRubriek(grootboekrekeningId: String, naam: String): CreateRubriek
+  updateRubriek(grootboekrekeningId: String, id: Int!, naam: String): UpdateRubriek
+  deleteRubriek(id: Int!): DeleteRubriek
+  createConfiguratie(input: ConfiguratieInput): CreateConfiguratie
+  updateConfiguratie(input: ConfiguratieInput): UpdateConfiguratie
+  deleteConfiguratie(id: String!): DeleteConfiguratie
+  "Mutatie om een betaalinstructie te genereren."
+  createExportOverschrijvingen(eindDatum: String, startDatum: String, verwerkingDatum: String): CreateExportOverschrijvingen
+  "Mutatie om niet afgeletterde banktransacties af te letteren."
+  startAutomatischBoeken: StartAutomatischBoeken
+  createHuishouden(input: CreateHuishoudenInput): CreateHuishouden
+  deleteHuishouden(id: Int!): DeleteHuishouden
+  "Mutatie om een burger aan een huishouden toe te voegen."
+  addHuishoudenBurger(burgerIds: [Int]!, huishoudenId: Int!): AddHuishoudenBurger
+  "Mutatie om een burger uit een huishouden te verwijderen."
+  deleteHuishoudenBurger(burgerIds: [Int]!, huishoudenId: Int!): DeleteHuishoudenBurger
+  "Mutatie om een afdeling aan een organisatie toe te voegen."
+  createAfdeling(input: CreateAfdelingInput): CreateAfdeling
+  updateAfdeling(id: Int!, naam: String, organisatieId: Int): UpdateAfdeling
+  "Mutatie om een afdeling van een organisatie te verwijderen."
+  deleteAfdeling(id: Int!): DeleteAfdeling
+  createPostadres(input: CreatePostadresInput): CreatePostadres
+  updatePostadres(huisnummer: String, id: String!, plaatsnaam: String, postcode: String, straatnaam: String): UpdatePostadres
+  deletePostadres(afdelingId: Int!, id: String!): DeletePostadres
+}
+type CreateBurger {
+  ok: Boolean
+  burger: Burger
+}
+type DeleteBurger {
+  ok: Boolean
+  previous: Burger
+}
+type UpdateBurger {
+  ok: Boolean
+  burger: Burger
+  previous: Burger
+}
+type CreateAfspraak {
+  ok: Boolean
+  afspraak: Afspraak
+}
+type UpdateAfspraak {
+  ok: Boolean
+  afspraak: Afspraak
+  previous: Afspraak
+}
+type DeleteAfspraak {
+  ok: Boolean
+  previous: Afspraak
+}
+"Mutatie voor het instellen van een nieuwe betaalinstructie voor een afspraak."
+type UpdateAfspraakBetaalinstructie {
+  ok: Boolean
+  afspraak: Afspraak
+  previous: Afspraak
+}
+"Mutatie om een zoekterm aan een afspraak toe te voegen."
+type AddAfspraakZoekterm {
+  ok: Boolean
+  afspraak: Afspraak
+  previous: Afspraak
+  matchingAfspraken: [Afspraak]
+}
+"Mutatie om een zoekterm bij een afspraak te verwijderen."
+type DeleteAfspraakZoekterm {
+  ok: Boolean
+  afspraak: Afspraak
+  previous: Afspraak
+  matchingAfspraken: [Afspraak]
+}
+"Mutatie om een betaalinstructie bij een afspraak te verwijderen."
+type DeleteAfspraakBetaalinstructie {
+  ok: Boolean
+  afspraak: Afspraak
+  previous: Afspraak
+}
+type CreateOrganisatie {
+  ok: Boolean
+  organisatie: Organisatie
+}
+type UpdateOrganisatie {
+  ok: Boolean
+  organisatie: Organisatie
+  previous: Organisatie
+}
+type DeleteOrganisatie {
+  ok: Boolean
+  previous: Organisatie
+}
+"Mutatie om een rekening aan een burger toe te voegen."
+type CreateBurgerRekening {
+  ok: Boolean
+  rekening: Rekening
+}
+"Mutatie om een rekening bij een burger te verwijderen."
+type DeleteBurgerRekening {
+  ok: Boolean
+  previous: Rekening
+}
+"Mutatie om een rekening aan een afdeling toe te voegen."
+type CreateAfdelingRekening {
+  ok: Boolean
+  rekening: Rekening
+}
+"Mutatie om een rekening van een afdeling te verwijderen."
+type DeleteAfdelingRekening {
+  ok: Boolean
+  previous: Rekening
+}
+type UpdateRekening {
+  ok: Boolean
+  rekening: Rekening
+  previous: Rekening
+}
+type DeleteCustomerStatementMessage {
+  ok: Boolean
+  previous: CustomerStatementMessage
+}
+type CreateCustomerStatementMessage {
+  ok: Boolean
+  customerStatementMessage: [CustomerStatementMessage]
+  journaalposten: [Journaalpost]
+}
+type CreateJournaalpostAfspraak {
+  ok: Boolean
+  journaalposten: [Journaalpost]
+}
+"Mutatie om een banktransactie af te letteren op een grootboekrekening."
+type CreateJournaalpostGrootboekrekening {
+  ok: Boolean
+  journaalpost: Journaalpost
+}
+type DeleteJournaalpost {
+  ok: Boolean
+  previous: Journaalpost
+}
+type CreateRubriek {
+  ok: Boolean
+  rubriek: Rubriek
+}
+type UpdateRubriek {
+  ok: Boolean
+  rubriek: Rubriek
+  previous: Rubriek
+}
+type DeleteRubriek {
+  ok: Boolean
+  previous: Rubriek
+}
+type CreateConfiguratie {
+  ok: Boolean
+  configuratie: Configuratie
+}
+type UpdateConfiguratie {
+  ok: Boolean
+  configuratie: Configuratie
+  previous: Configuratie
+}
+type DeleteConfiguratie {
+  ok: Boolean
+  previous: Configuratie
+}
+"Mutatie om een betaalinstructie te genereren."
+type CreateExportOverschrijvingen {
+  ok: Boolean
+  export: Export
+}
+"Mutatie om niet afgeletterde banktransacties af te letteren."
+type StartAutomatischBoeken {
+  ok: Boolean
+  journaalposten: [Journaalpost]
+}
+type CreateHuishouden {
+  ok: Boolean
+  huishouden: Huishouden
+}
+type DeleteHuishouden {
+  ok: Boolean
+  previous: Huishouden
+}
+"Mutatie om een burger aan een huishouden toe te voegen."
+type AddHuishoudenBurger {
+  ok: Boolean
+  huishouden: Huishouden
+  previous: Huishouden
+}
+"Mutatie om een burger uit een huishouden te verwijderen."
+type DeleteHuishoudenBurger {
+  ok: Boolean
+  huishouden: [Huishouden]
+  previous: Huishouden
+  burgerIds: [Burger]
+}
+"Mutatie om een afdeling aan een organisatie toe te voegen."
+type CreateAfdeling {
+  ok: Boolean
+  afdeling: Afdeling
+}
+type UpdateAfdeling {
+  ok: Boolean
+  afdeling: Afdeling
+  previous: Afdeling
+}
+"Mutatie om een afdeling van een organisatie te verwijderen."
+type DeleteAfdeling {
+  ok: Boolean
+  previous: Afdeling
+}
+type CreatePostadres {
+  ok: Boolean
+  postadres: Postadres
+  afdeling: Afdeling
+}
+type UpdatePostadres {
+  ok: Boolean
+  postadres: Postadres
+  previous: Postadres
+}
+type DeletePostadres {
+  ok: Boolean
+  previous: Postadres
+  afdeling: Afdeling
+}
+"http://schema.org/DayOfWeek implementation"
+enum DayOfWeek {
+  Monday
+  Tuesday
+  Wednesday
+  Thursday
+  Friday
+  Saturday
+  Sunday
+}
+enum OverschrijvingStatus {
+  GEREED
+  IN_BEHANDELING
+  VERWACHTING
+}
+input BankTransactionFilter {
+  OR: BankTransactionFilter
+  AND: BankTransactionFilter
+  isGeboekt: Boolean
+  isCredit: Boolean
+  id: ComplexFilterType
+  bedrag: ComplexBedragFilterType
+  tegenRekening: ComplexFilterType
+  statementLine: ComplexFilterType
+  transactieDatum: ComplexFilterType
+}
+input ComplexFilterType {
+  EQ: DynamicType
+  NEQ: DynamicType
+  GT: DynamicType
+  GTE: DynamicType
+  LT: DynamicType
+  LTE: DynamicType
+  IN: [DynamicType]
+  NOTIN: [DynamicType]
+  BETWEEN: [DynamicType]
+}
+input ComplexBedragFilterType {
+  EQ: Bedrag
+  NEQ: Bedrag
+  GT: Bedrag
+  GTE: Bedrag
+  LT: Bedrag
+  LTE: Bedrag
+  IN: [Bedrag]
+  NOTIN: [Bedrag]
+  BETWEEN: [Bedrag]
+}
+input BankTransactionSearchFilter {
+  burgerIds: [Int]
+  automatischGeboekt: Boolean
+  minBedrag: Int
+  maxBedrag: Int
+  startDate: String
+  endDate: String
+  ibans: [String]
+  onlyBooked: Boolean
+  onlyCredit: Boolean
+  zoektermen: [String]
+  organisatieIds: [Int]
+}
+input BurgerFilter {
+  OR: BurgerFilter
+  AND: BurgerFilter
+  id: ComplexFilterType
+  telefoonnummer: ComplexFilterType
+  email: ComplexFilterType
+  geboortedatum: ComplexFilterType
+  achternaam: ComplexFilterType
+  huisnummer: ComplexFilterType
+  postcode: ComplexFilterType
+  straatnaam: ComplexFilterType
+  voorletters: ComplexFilterType
+  voornamen: ComplexFilterType
+  plaatsnaam: ComplexFilterType
+  huishoudenId: ComplexFilterType
+  bedrag: ComplexBedragFilterType
+  tegenRekeningId: ComplexFilterType
+  zoektermen: ComplexFilterType
+  iban: ComplexFilterType
+  rekeninghouder: ComplexFilterType
+}
+input CreateBurgerInput {
+  bsn: Int
+  voorletters: String
+  voornamen: String
+  achternaam: String
+  geboortedatum: Date
+  telefoonnummer: String
+  email: String
+  straatnaam: String
+  huisnummer: String
+  postcode: String
+  plaatsnaam: String
+  rekeningen: [RekeningInput]
+  huishouden: HuishoudenInput
+  saldo: Int
+}
+input RekeningInput {
+  iban: String
+  rekeninghouder: String
+}
+input HuishoudenInput {
+  id: Int
+}
+input CreateAfspraakInput {
+  burgerId: Int!
+  tegenRekeningId: Int!
+  rubriekId: Int!
+  omschrijving: String!
+  bedrag: Bedrag!
+  credit: Boolean!
+  afdelingId: Int
+  postadresId: String
+  validFrom: String
+  validThrough: String
+  zoektermen: [String]
+  betaalinstructie: BetaalinstructieInput
+}
+"Implementatie op basis van http://schema.org/Schedule"
+input BetaalinstructieInput {
+  byDay: [DayOfWeek]
+  byMonth: [Int]
+  byMonthDay: [Int]
+  repeatFrequency: String
+  exceptDates: [String]
+  startDate: String!
+  endDate: String
+}
+input UpdateAfspraakInput {
+  burgerId: Int
+  afdelingId: Int
+  postadresId: String
+  tegenRekeningId: Int
+  rubriekId: Int
+  omschrijving: String
+  credit: Boolean
+  bedrag: Bedrag
+  validFrom: String
+  validThrough: String
+  zoektermen: [String]
+}
+input CreateOrganisatieInput {
+  naam: String
+  kvknummer: String!
+  vestigingsnummer: String
+}
+input CreateJournaalpostAfspraakInput {
+  transactionId: Int!
+  afspraakId: Int!
+  isAutomatischGeboekt: Boolean!
+}
+input CreateJournaalpostGrootboekrekeningInput {
+  transactionId: Int!
+  grootboekrekeningId: String!
+  isAutomatischGeboekt: Boolean!
+}
+input ConfiguratieInput {
+  id: String!
+  waarde: String
+}
+input CreateHuishoudenInput {
+  burgerIds: [Int]
+}
+input CreateAfdelingInput {
+  organisatieId: Int!
+  naam: String!
+  rekeningen: [RekeningInput]
+  postadressen: [CreatePostadresInput]
+}
+input CreatePostadresInput {
+  straatnaam: String!
+  huisnummer: String!
+  postcode: String!
+  plaatsnaam: String!
+  afdelingId: Int
+}
+"Exposes a URL that specifies the behaviour of this scalar."
+directive @specifiedBy(
+    "The URL that specifies the behaviour of this scalar."
+    url: String!
+  ) on SCALAR
+

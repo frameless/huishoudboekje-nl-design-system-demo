@@ -88,6 +88,7 @@ class Auth():
     def _get_token_from_cookie(self):
         return request.cookies.get('app-token', None)
 
+        return None
     def _get_token_from_header(self):
         if 'authorization' in request.headers:
             token_search = re.search(

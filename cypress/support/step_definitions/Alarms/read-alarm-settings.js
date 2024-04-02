@@ -55,8 +55,8 @@ Then('the alarm allowed deviation in days is displayed', () => {
 Then('the alarm next date is displayed', () => {
 
   // Check if next date is displayed
-  cy.contains('Eerstvolgende datum')
-  cy.contains('01-01-2099')
+  cy.contains('Volgende periodieke check')
+  cy.contains('03-01-2099')
 
 });
 

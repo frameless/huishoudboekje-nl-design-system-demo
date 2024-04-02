@@ -1,7 +1,6 @@
 import logging
 from flask import Blueprint
 
-from hhb_backend.feature_flags import Unleash
 from hhb_backend.graphql.mutations.alarmen.evaluate_alarm import evaluate_alarms
 
 """ CLI for actions on alarms in Huishoudboekje """
@@ -15,9 +14,6 @@ def command():
 
 def evaluate():
     """Evaluates all current active alarms"""
-    if Unleash().is_enabled("signalen"):
-        logging.info("Evaluating all alarms")
-        evaluate_alarms()
-        logging.debug("Evaluated all alarms!")
-    else:
-        logging.info("Skipping alarm evaluation. Signalen is disabled")
+    logging.info("Evaluating all alarms")
+    evaluate_alarms()
+    logging.debug("Evaluated all alarms!")

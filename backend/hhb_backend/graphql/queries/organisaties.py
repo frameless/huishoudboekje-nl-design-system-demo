@@ -25,18 +25,20 @@ class OrganisatieQuery:
 
 class OrganisatiesQuery:
     return_type = graphene.List(
-        Organisatie, ids=graphene.List(graphene.Int)
+        Organisatie, ids=graphene.List(graphene.Int),
+        isLogRequest=graphene.Boolean(required=False),
     )
 
     @classmethod
-    def resolver(cls, root, info, ids=None):
+    def resolver(cls, root, info, ids=None, isLogRequest=False):
         logging.info(f"Get organisaties")
         if ids:
             result = hhb_dataloader().organisaties.load(ids)
         else:
             result = hhb_dataloader().organisaties.load_all()
-
+        
         AuditLogging().create(
+            logRequest=isLogRequest,
             action=info.field_name,
             entities=[
                 GebruikersActiviteitEntity(entityType="organisatie", entityId=id)
@@ -44,4 +46,4 @@ class OrganisatiesQuery:
             ] if ids else []
         )
 
-        return result
+        return result if not isLogRequest or isLogRequest and len(result) > 0 else None

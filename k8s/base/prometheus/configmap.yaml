@@ -10,3 +10,9 @@ data:
       - job_name: 'hhb-statsd-exporter'
         static_configs:
           - targets: ['hhb-statsd-exporter:9102']
+      - job_name: 'hhb-rabbitmq'
+        static_configs:
+          - targets: ['hhb-rabbitmq:15692']
+      - job_name: 'hhb-logservice'
+        static_configs:
+          - targets: ['hhb-logservice:9000']

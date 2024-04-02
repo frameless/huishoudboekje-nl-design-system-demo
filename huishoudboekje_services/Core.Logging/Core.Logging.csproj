@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <RootNamespace>Core.Logging</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Grpc.AspNetCore.HealthChecks" Version="2.60.0" />
+      <PackageReference Include="Grpc.Core.Api" Version="2.60.0" />
+      <PackageReference Include="MassTransit" Version="8.1.3" />
+      <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.0" />
+      <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="7.0.3" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Core.CommunicationModels\Core.CommunicationModels.csproj" />
+      <ProjectReference Include="..\Core.ErrorHandling\Core.ErrorHandling.csproj" />
+      <ProjectReference Include="..\Core.Utils\Core.Utils.csproj" />
+    </ItemGroup>
+
+</Project>

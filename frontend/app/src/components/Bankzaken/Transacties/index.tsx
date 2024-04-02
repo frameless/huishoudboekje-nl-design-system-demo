@@ -17,6 +17,7 @@ import DatePicker from "react-datepicker";
 import d from "../../../utils/dayjs";
 import ZoektermenList from "../../shared/ZoektermenList";
 import {TriangleUpIcon, TriangleDownIcon, WarningTwoIcon, RepeatIcon} from "@chakra-ui/icons";
+import ListInformationRow from "../../shared/ListInformationRow";
 
 
 const Transactions = () => {
@@ -500,28 +501,17 @@ const Transactions = () => {
 							</Stack>
 							<Stack paddingTop={15}>
 								<Stack>
-									<HStack justify={"space-between"}>
-										{transacties.length > 0 ? (
-											<HStack>
-												<Text>{t("transactionsPage.filters.count")}: </Text>
-												<Box width={50}> {$transactions.loading ? <Spinner size={"xs"} /> : total}</Box>
-											</HStack>
-										) : (
-											<Text />
-										)}
-										<HStack>
-											<Text>{t("transactionsPage.timeUpdated")}: {d(timeLastUpdate).format("HH:mm:ss")}</Text>
-											<IconButton
-												icon={<RepeatIcon />}
-												size={"xs"}
-												onClick={() => {
-													$transactions.refetch();
-												}} aria-label={"reload"}
-											>
-												reload
-											</IconButton>
-										</HStack>
-									</HStack>
+									<ListInformationRow
+										onUpdate={() => {
+											$transactions.refetch();
+										}}
+										message={t("transactionsPage.filters.count")}
+										noItemsMessage={""}
+										total={total}
+										timeLastUpdate={timeLastUpdate}
+										query={$transactions}
+										loading={$transactions.loading}>
+									</ListInformationRow>
 								</Stack>
 								{$transactions.loading ? <Spinner/> : <Stack>
 									{transacties.length > 0 ? (

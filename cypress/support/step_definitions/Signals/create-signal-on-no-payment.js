@@ -8,14 +8,6 @@ const header = {
 };
 
 // Set database query
-const queryTruncateAlarm = `mutation Truncate {
-  truncateTable(databaseName: "alarmenservice", tableName: "Alarm")
-}`
-
-const queryTruncateSignal = `mutation Truncate {
-  truncateTable(databaseName: "signalenservice", tableName: "Signal")
-}`
-
 const queryAddAlarm = `mutation CreateAlarm {
   createAlarm(input: {alarm:{
     afspraakId: 1,

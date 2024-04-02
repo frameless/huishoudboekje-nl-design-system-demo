@@ -5,8 +5,8 @@ import {createUploadLink} from "apollo-upload-client";
 import {onError} from "@apollo/client/link/error";
 import {AuthRoutes} from "../utils/useAuth";
 
-const GraphqlApiUrl = "/api/graphql";
-const GraphqlApiUrlUpload = "/api/graphql";
+const GraphqlApiUrl = "/apiV2/graphql";
+const GraphqlApiUrlUpload = "/apiV2/graphql";
 
 const defaultLink = new BatchHttpLink({
 	uri: GraphqlApiUrl,
@@ -21,20 +21,10 @@ const uploadLink = createUploadLink({
 
 
 const authErrorLink = onError(({graphQLErrors, networkError, operation, forward}) => {
-	if (graphQLErrors) {
-
-		for (const error of graphQLErrors) {
-			if (error.extensions.code == "UNAUTHENTICATED") {
-				// This might not be fast enough, in which case it needs to somehow be retried after the fetch finishes. 
-				// Problem here is that .then() returns a promise, which is not expected by apollo and this wont compile.
-				// No fix as of now
-				fetch(AuthRoutes.check)
-				return forward(operation)
-			}
-		}
-	}
 	if (networkError?.message.includes("401")) {
-		// Same issue here
+	// This might not be fast enough, in which case it needs to somehow be retried after the fetch finishes. 
+	// Problem here is that .then() returns a promise, which is not expected by apollo and this wont compile.
+	// No fix as of now
 		fetch(AuthRoutes.check)
 		return forward(operation)
 	}

@@ -8,14 +8,6 @@ const header = {
 };
 
 // Set database query
-const queryTruncateAlarm = `mutation Truncate {
-  truncateTable(databaseName: "alarmenservice", tableName: "Alarm")
-}`
-
-const queryTruncateSignal = `mutation Truncate {
-  truncateTable(databaseName: "signalenservice", tableName: "Signal")
-}`
-
 const queryAddAlarm = `mutation CreateAlarm {
   createAlarm(input: {alarm:{
     afspraakId: 1,
@@ -59,22 +51,10 @@ Then('a "Multiple payments" signal is created', () => {
 
   // Clean up
     // Truncate alarms
-    cy.request({
-      method: "post",
-      url: Cypress.env().graphqlUrl + '/graphql',
-      body: { query: queryTruncateAlarm },
-    }).then((res) => {
-      console.log(res.body);
-    });
+    Step(this, 'I clean up "Alarms" table');
 
     // Truncate signals
-    cy.request({
-      method: "post",
-      url: Cypress.env().graphqlUrl + '/graphql',
-      body: { query: queryTruncateSignal },
-    }).then((res) => {
-      console.log(res.body);
-    });
+    Step(this, 'I clean up "Signals" table');
  
 });
 

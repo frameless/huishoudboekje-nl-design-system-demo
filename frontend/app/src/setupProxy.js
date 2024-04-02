@@ -18,17 +18,21 @@ const getGitUser = async () => {
 
 module.exports = (app) => {
 	const apiTarget = process.env.PROXY || "https://test.huishoudboekje.demoground.nl";
-
-	app.use("/api/unleash", (req, res) => {
-		res.json({
-			features: [
-				{name: "signalen", enabled: true},
-			],
-		});
-	});
+	const apiv2Target = process.env.PROXYTWO || "https://test.huishoudboekje.demoground.nl";
 
 	app.use("/api", createProxyMiddleware({
 		target: apiTarget,
+		changeOrigin: true,
+		xfwd: true,
+		headers: {
+			...process.env.AUTH_TOKEN && {
+				Authorization: `Bearer ${process.env.AUTH_TOKEN}`,
+			},
+		},
+	}));
+
+	app.use("/apiV2", createProxyMiddleware({
+		target: apiv2Target,
 		changeOrigin: true,
 		xfwd: true,
 		headers: {

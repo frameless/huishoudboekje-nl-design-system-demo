@@ -1,0 +1,80 @@
+syntax = "proto3";
+
+option csharp_namespace = "LogService_RPC";
+
+package GrpcServices;
+
+service UserActivities {
+  /*
+    Get a UserActivity by ID.
+    returns the created UserActivity.
+  */
+  rpc GetUserActivity(UserActivityId) returns (UserActivityData);
+
+  rpc GetUserActivities(UserActivitiesRequest) returns (UserActivitiesResponse);
+
+  rpc GetUserActivitiesPaged(UserActivitiesPagedRequest) returns (UserActivitiesPagedResponse);
+}
+
+// ID of a UserActivity
+message UserActivityId {
+  string id = 1;
+}
+
+message UserActivitiesRequest {
+  optional Filter Filter = 1;
+}
+
+message UserActivitiesPagedRequest{
+  PaginationRequest page = 1;
+  optional Filter Filter = 2;
+}
+
+message UserActivitiesResponse {
+  repeated UserActivityData UserActivities = 1;
+}
+
+message UserActivitiesPagedResponse {
+  repeated UserActivityData data = 1;
+  optional PaginationResponse PageInfo = 2;
+}
+
+message PaginationResponse {
+  int32 total_count = 1;
+  int32 skip = 2;
+  int32 take = 3;
+}
+
+message PaginationRequest {
+  int32 take = 1;
+  int32 skip = 2;
+}
+
+message UserActivityData {
+  string id = 1;
+  string action = 2;
+  repeated Entity entities = 3;
+  optional string user = 4;
+  int64 timestamp = 5;
+  Meta meta = 6;
+}
+
+message Filter {
+  repeated EntityFilter entityFilter = 1;
+}
+
+message EntityFilter {
+  repeated string entityIds = 1;
+  string entityType = 2;
+}
+
+message Entity {
+  string entityType = 1;
+  string entityId = 2;
+}
+
+message Meta {
+  string userAgent = 1;
+  string ip = 2;
+  string applicationVersion = 3;
+}

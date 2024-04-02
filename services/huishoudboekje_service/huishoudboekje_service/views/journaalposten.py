@@ -53,6 +53,7 @@ class JournaalpostView(HHBView):
         self.add_filter_transactions()
         self.add_filter_afspraken()
         self.add_filter_grootboekrekeningen()
+        self.add_filter_filter_uuids()
 
     def add_filter_transactions(self):
         def add_filter(ids):
@@ -78,3 +79,13 @@ class JournaalpostView(HHBView):
 
         JournaalpostView.filter_in_string(
             'filter_grootboekrekeningen', add_filter)
+        
+    def add_filter_filter_uuids(self):
+        """ Add filter_uuid filter based on the uuid of journaalpost """
+
+        def add_filter(uuids):
+            self.hhb_query.query = self.hhb_query.query.filter(
+                Journaalpost.uuid.in_(uuids)
+            )
+
+        JournaalpostView.filter_in_string('filter_uuid', add_filter)

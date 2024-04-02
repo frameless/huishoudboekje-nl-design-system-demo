@@ -29,11 +29,12 @@ class HuishoudensQuery:
     return_type = graphene.List(
         huishouden.Huishouden,
         ids=graphene.List(graphene.Int),
-        filters=BurgerFilter(),
+        filters=BurgerFilter(), 
+        isLogRequest=graphene.Boolean(required=False),
     )
 
     @classmethod
-    def resolver(cls, _root, info, ids=None, **kwargs):
+    def resolver(cls, _root, info, ids=None, isLogRequest=False, **kwargs):
         logging.info(f"Get huishoudens")
         if ids:
             result = hhb_dataloader().huishoudens.load(ids)
@@ -46,11 +47,12 @@ class HuishoudensQuery:
             entities = None
 
         AuditLogging().create(
+            logRequest=isLogRequest,
             action=info.field_name,
             entities=entities
         )
 
-        return result
+        return result if not isLogRequest or isLogRequest and len(result) > 0 else None
 
 
 class HuishoudensPagedQuery:

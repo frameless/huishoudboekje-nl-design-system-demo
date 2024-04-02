@@ -7,10 +7,6 @@ sources:
     handler:
       postgraphile:
         connectionString: postgres://{env.DB_USER}:{env.DB_PASSWORD}@{env.DB_HOST}:{env.DB_PORT}/alarmenservice
-  - name: signalDatabase
-    handler:
-      postgraphile:
-        connectionString: postgres://{env.DB_USER}:{env.DB_PASSWORD}@{env.DB_HOST}:{env.DB_PORT}/signalenservice
 additionalTypeDefs: |
   extend type Mutation {
     truncateTable(databaseName: String!, tableName: String!): Boolean!

@@ -13,6 +13,7 @@ from hhb_backend.graphql.utils.dates import to_date
 
 class Burger(graphene.ObjectType):
     id = graphene.Int()
+    uuid = graphene.UUID()
     bsn = graphene.Int()
     voorletters = graphene.String()
     voornamen = graphene.String()

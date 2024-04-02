@@ -44,4 +44,4 @@ class Afspraak(db.Model):
     postadres_id = Column(String)
     alarm_id = Column(String)
     # postadres_uuid = Column(UUID, nullable=True)
-    # alarm_uuid = Column(UUID, nullable=True)
+    alarm_uuid = Column(UUID, nullable=True)

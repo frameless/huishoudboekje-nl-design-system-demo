@@ -15,6 +15,9 @@ class BurgerLoader(DataLoader[Burger]):
 
     def by_huishouden(self, huishouden_id: int) -> List[Burger]:
         return self.load(huishouden_id, filter_item="filter_huishoudens")
+    
+    def by_uuids(self, uuid: List[str]) -> List[Burger]:
+        return self.load(uuid, filter_item="filter_uuid")
 
     def get_burger_search(self, search_value):
         try:

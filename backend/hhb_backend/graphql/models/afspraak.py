@@ -3,7 +3,6 @@ from hhb_backend.graphql.models.pageinfo import PageInfo
 import graphene
 
 import hhb_backend.graphql.models.afdeling as afdeling
-import hhb_backend.graphql.models.alarm as alarm
 import hhb_backend.graphql.models.burger as burger
 import hhb_backend.graphql.models.journaalpost as journaalpost
 import hhb_backend.graphql.models.overschrijving as overschrijving
@@ -47,6 +46,7 @@ class Betaalinstructie(graphene.ObjectType):
 
 class Afspraak(graphene.ObjectType):
     id = graphene.Int()
+    uuid = graphene.UUID()
     omschrijving = graphene.String()
     bedrag = graphene.Field(Bedrag)
     credit = graphene.Boolean()
@@ -58,7 +58,7 @@ class Afspraak(graphene.ObjectType):
     burger = graphene.Field(lambda: burger.Burger)
     afdeling = graphene.Field(lambda: afdeling.Afdeling)
     postadres = graphene.Field(lambda: postadres.Postadres)
-    alarm = graphene.Field(lambda: alarm.Alarm)
+    alarm_id = graphene.UUID()
     tegen_rekening = graphene.Field(lambda: rekening.Rekening)
     betaalinstructie = graphene.Field(lambda: Betaalinstructie)
     journaalposten = graphene.List(lambda: journaalpost.Journaalpost)
@@ -116,12 +116,6 @@ class Afspraak(graphene.ObjectType):
         if postadres_id:
             postadres = hhb_dataloader().postadressen.load_one(postadres_id)
             return postadres
-
-    def resolve_alarm(self, _info):
-        """ Get alarm when requested """
-        alarm_id = self.get("alarm_id")
-        if alarm_id:
-            return hhb_dataloader().alarms.load_one(alarm_id)
 
     def resolve_afdeling(root, info):
         """ Get afdeling when requested """

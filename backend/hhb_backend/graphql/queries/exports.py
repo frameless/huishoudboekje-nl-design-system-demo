@@ -31,11 +31,12 @@ class ExportsQuery:
         Export,
         ids=graphene.List(graphene.Int, default_value=None),
         start_datum=graphene.Date(),
-        eind_datum=graphene.Date()
+        eind_datum=graphene.Date(), 
+        isLogRequest=graphene.Boolean(required=False)
     )
 
     @classmethod
-    def resolver(cls, _root, info, ids=None, start_datum=None, eind_datum=None):
+    def resolver(cls, _root, info, ids=None, start_datum=None, eind_datum=None, isLogRequest=False):
         logging.info(f"Get exports")
         if ids:
             result = hhb_dataloader().exports.load(ids)
@@ -44,7 +45,8 @@ class ExportsQuery:
         else:
             result = hhb_dataloader().exports.load_all()
 
-        AuditLogging.create(
+        AuditLogging().create(
+            logRequest=isLogRequest,
             action=info.field_name,
             entities=[
                 GebruikersActiviteitEntity(
@@ -53,4 +55,4 @@ class ExportsQuery:
             ] if ids or (start_datum and eind_datum) else []
         )
 
-        return result
+        return result if not isLogRequest or isLogRequest and len(result) > 0 else None

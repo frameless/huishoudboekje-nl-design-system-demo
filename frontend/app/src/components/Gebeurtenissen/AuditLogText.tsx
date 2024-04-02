@@ -2,19 +2,20 @@ import {Box, Divider, HStack, Stack, Text, TextProps, useDisclosure} from "@chak
 import React from "react";
 import {useTranslation} from "react-i18next";
 import {AppRoutes} from "../../config/routes";
-import {Burger, GebruikersActiviteit} from "../../generated/graphql";
+import {Burger, UserActivityData} from "../../generated/graphql";
 import {formatBurgerName, formatHuishoudenName, humanJoin} from "../../utils/things";
 import DataItem from "../shared/DataItem";
 import Modal from "../shared/Modal";
 import AuditLogLink from "./AuditLogLink";
 import {auditLogTexts} from "./texts";
 
-const AuditLogText: React.FC<TextProps & {g: GebruikersActiviteit}> = ({g, ...props}) => {
+const AuditLogText: React.FC<TextProps & {g: UserActivityData}> = ({g, ...props}) => {
 	const {t} = useTranslation();
-	const {action, entities = []} = g;
+	const action = g.action
+	const entities = g.entities !== undefined && g.entities !== null ? g.entities : []
 	const modal = useDisclosure();
 
-	const gebruiker = g.gebruikerId || t("unknownGebruiker");
+	const gebruiker = g.user || t("unknownGebruiker");
 	const burger = entities.find(e => e.entityType === "burger")?.burger;
 	const burgers = entities.filter(e => e.entityType === "burger")?.map(b => b.burger as Burger);
 	const huishouden = entities.find(e => e.entityType === "huishouden")?.huishouden;
@@ -77,7 +78,7 @@ const AuditLogText: React.FC<TextProps & {g: GebruikersActiviteit}> = ({g, ...pr
 
 	const context = {
 		action,
-		gebruiker: g.gebruikerId,
+		gebruiker: g.user,
 		entities: entities.reduce<string[]>((result, e) => [
 			...result,
 			`${e.entityType} (${e.entityId})`,

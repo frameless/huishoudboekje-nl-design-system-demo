@@ -1,6 +1,6 @@
 {
   "name": "huishoudboekje",
-  "version": "1.12.5",
+  "version": "1.12.6",
   "author": {
     "name": "Koen Brouwer",
     "email": "contact@kbrouwer.nl",
@@ -28,7 +28,7 @@
     "eject": "react-scripts eject",
     "theme": "./setTheme.sh",
     "lint": "eslint src",
-    "get-schema": "rover graph introspect http://localhost:3000/api/graphql > schema.graphql",
+    "get-schema": "rover graph introspect http://localhost:3000/apiV2/graphql > schema.graphql",
     "pregen-types": "npm run get-schema",
     "gen-types": "graphql-codegen --config graphql-codegen.yaml",
     "i18n-migrate": "i18next 'src/**/*.{ts,tsx}' [-oc]"

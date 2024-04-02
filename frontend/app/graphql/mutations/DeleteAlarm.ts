@@ -1,9 +1,9 @@
 import {gql} from "@apollo/client";
 
 export const DeleteAlarmMutation = gql`
-    mutation deleteAlarm($id: String!){
-        deleteAlarm(id: $id){
-            ok
+    mutation deleteAlarm($input: AlarmId!){
+        Alarms_Delete(input: $input){
+            deleted
         }
     }
 `;

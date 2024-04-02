@@ -4,3 +4,4 @@ resources:
   - deployment.yaml
   - service.yaml
   - horizontalpodautoscaler.yaml
+  - evaluate-alarms-cron-job.yaml

@@ -86,6 +86,7 @@ class BurgerView(HHBView):
         """ Extend the get function with extra filter """
         self.add_filter_filter_huishouden()
         self.add_filter_filter_bsn()
+        self.add_filter_filter_uuids()
 
     def add_filter_filter_huishouden(self):
         """ Add filter_huishouden filter based on the id of huishouden """
@@ -104,6 +105,15 @@ class BurgerView(HHBView):
                 self.hhb_model.bsn.in_(bsn))
 
         BurgerView.filter_in_string('filter_bsn', add_filter)
+        
+    def add_filter_filter_uuids(self):
+        """ Add filter_uuids filter based on the uuid of a burger """
+
+        def add_filter(uuids):
+            self.hhb_query.query = self.hhb_query.query.filter(
+                self.hhb_model.uuid.in_(uuids))
+
+        BurgerView.filter_in_string('filter_uuid', add_filter)
 
     def search_for_burgers(self, searchable_value):
         search_value = '%'+searchable_value+'%'
