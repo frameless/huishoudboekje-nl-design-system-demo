@@ -1,0 +1,237 @@
+﻿//This file is not automaticallly updated!
+//It is a generated file, however it is generated when running the app locally.
+//
+//Copy the json below in https://editor.swagger.io/ to see a swagger interface when not running the app
+
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Huishoudboekje User API",
+    "description": "This is a concept for an users api. This api can be used to collect data for one specific citizen in Huishoudboekje."
+  },
+  "paths": {
+    "/citizen": {
+      "get": {
+        "tags": [
+          "Citizen"
+        ],
+        "description": "Get basic info of a Citizen",
+        "operationId": "GetCitizenData",
+        "parameters": [
+          {
+            "name": "X-User-Bsn",
+            "in": "header",
+            "description": "Bsn of the logged in user",
+            "required": true,
+            "style": "simple"
+          },
+          {
+            "name": "X-Saml-Token",
+            "in": "header",
+            "description": "Saml authentication token",
+            "required": true,
+            "style": "simple"
+          }
+        ],
+        "requestBody": {
+          "content": {}
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IMinimalCitizenData"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/reports/monthly": {
+      "get": {
+        "tags": [
+          "Reports"
+        ],
+        "description": "Get a income and expenses report for the given time period",
+        "operationId": "GetTransactionsReport",
+        "parameters": [
+          {
+            "name": "startDate",
+            "in": "query",
+            "description": "Start date of the report as a unix timestamp",
+            "required": true,
+            "style": "form",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "endDate",
+            "in": "query",
+            "description": "End date of the report as a unix timestamp",
+            "required": true,
+            "style": "form",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-User-Bsn",
+            "in": "header",
+            "description": "Bsn of the logged in user",
+            "required": true,
+            "style": "simple"
+          },
+          {
+            "name": "X-Saml-Token",
+            "in": "header",
+            "description": "Saml authentication token",
+            "required": true,
+            "style": "simple"
+          }
+        ],
+        "requestBody": {
+          "content": {}
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IMonthlyReport"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "IMinimalCitizenData": {
+        "type": "object",
+        "properties": {
+          "bsn": {
+            "type": "integer",
+            "format": "int32",
+            "readOnly": true
+          },
+          "firstNames": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          },
+          "lastName": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "IMonthlyReport": {
+        "type": "object",
+        "properties": {
+          "startDate": {
+            "type": "integer",
+            "format": "int64",
+            "readOnly": true
+          },
+          "endDate": {
+            "type": "integer",
+            "format": "int64",
+            "readOnly": true
+          },
+          "total": {
+            "type": "integer",
+            "format": "int32",
+            "readOnly": true
+          },
+          "totalExpenses": {
+            "type": "integer",
+            "format": "int32",
+            "readOnly": true
+          },
+          "totalIncomes": {
+            "type": "integer",
+            "format": "int32",
+            "readOnly": true
+          },
+          "incomes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/IStatementSection"
+            },
+            "nullable": true,
+            "readOnly": true
+          },
+          "expenses": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/IStatementSection"
+            },
+            "nullable": true,
+            "readOnly": true
+          },
+          "balance": {
+            "type": "integer",
+            "format": "int32",
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "IReportTransaction": {
+        "type": "object",
+        "properties": {
+          "amount": {
+            "type": "integer",
+            "format": "int32",
+            "readOnly": true
+          },
+          "transactionDate": {
+            "type": "integer",
+            "format": "int64",
+            "readOnly": true
+          },
+          "accountHolder": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "IStatementSection": {
+        "type": "object",
+        "properties": {
+          "statementName": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          },
+          "transactions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/IReportTransaction"
+            },
+            "nullable": true,
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  }
+}
