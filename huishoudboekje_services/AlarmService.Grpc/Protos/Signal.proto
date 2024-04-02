@@ -1,0 +1,84 @@
+syntax = "proto3";
+
+
+option csharp_namespace = "AlarmService_RPC";
+
+package GrpcServices;
+
+service Signals {
+
+  rpc GetPaged(SignalsPagedRequest) returns (SignalsPagedResponse);
+
+  rpc SetIsActive(SetIsActiveRequest) returns (SignalData);
+
+  rpc GetAll(SignalsRequest) returns (SignalsResponse);
+
+  rpc GetActiveSignalsCount(SignalsRequest) returns (GetActiveSignalsCountResponse);
+
+}
+
+message SignalsRequest {
+
+}
+
+message SignalsResponse {
+  repeated SignalData data = 1;
+}
+
+message GetActiveSignalsCountResponse {
+  int32 count = 1;
+}
+
+message SignalsPagedRequest {
+    PaginationRequest page = 1;
+    optional SignalFilter filter = 2;
+}
+
+message SignalsPagedResponse {
+    repeated SignalData data = 1;
+    optional PaginationResponse PageInfo = 2;
+}
+
+message SignalFilter {
+    repeated string alarmIds = 1;
+    repeated string citizenIds = 2;
+    repeated string agreementIds = 3;
+    optional bool isActive = 4;
+}
+message CitizenIdList {
+  repeated string ids = 1;
+}
+
+message AlarmIdList {
+    repeated string ids = 1;
+}
+
+message SignalData {
+    string id = 1;
+    bool isActive = 2;
+    int32 signalType = 3;
+    int32 offByAmount = 4;
+    optional int64 updatedAt = 5;
+    int64 createdAt = 6;
+    repeated string journalEntryIds = 7;
+    string alarmId = 8;
+    string citizenId = 9;
+    string agreementId = 10;
+}
+
+message SetIsActiveRequest {
+    string id = 1;
+    bool isActive = 2;
+}
+
+// TODO See if we can move these in the Core since it is also used in LogService
+message PaginationResponse {
+    int32 total_count = 1;
+    int32 skip = 2;
+    int32 take = 3;
+}
+
+message PaginationRequest {
+    int32 take = 1;
+    int32 skip = 2;
+}

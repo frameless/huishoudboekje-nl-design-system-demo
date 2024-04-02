@@ -23,3 +23,6 @@ class JournaalpostLoader(DataLoader[Journaalpost]):
 
     def by_afspraak(self, afspraak_id: int) -> List[Journaalpost]:
         return self.load(afspraak_id, filter_item="filter_afspraken")
+    
+    def by_uuids(self, uuid: List[str]) -> List[Journaalpost]:
+        return self.load(uuid, filter_item="filter_uuid")

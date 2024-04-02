@@ -107,6 +107,7 @@ class AfspraakView(HHBView):
         self.add_filter_filter_alarmen()
         self.add_filter_filter_rekening()
         self.add_filter_filter_zoektermen()
+        self.add_filter_filter_uuids()
         self.hhb_query.expose_many_relation("journaalposten", "id")
         self.hhb_query.expose_many_relation("overschrijvingen", "id")
         
@@ -182,3 +183,11 @@ class AfspraakView(HHBView):
             self.hhb_query.query = self.hhb_query.query.filter(self.hhb_model.alarm_id.in_(ids))
 
         AfspraakView.filter_in_string('filter_alarmen', add_filter)
+
+    def add_filter_filter_uuids(self):
+        """ Add filter_uuid filter based on the uuid of afspraak """
+
+        def add_filter(uuids):
+            self.hhb_query.query = self.hhb_query.query.filter(self.hhb_model.uuid.in_(uuids))
+
+        AfspraakView.filter_in_string('filter_uuid', add_filter)

@@ -26,11 +26,26 @@ class SaldoController():
             return self.__generate_saldo_json(0)
         
         return self.__get_saldo(date, transaction_ids)
-        
+
+    def get_saldos_per_citizen(self, citizen_uuids, date):
+        transactions_per_citizen = self._hhb_repository.get_transaction_ids_citizens(
+            citizen_uuids)
+
+        if len(transactions_per_citizen) == 0:
+            return self.__generate_saldo_json(0)
+
+        result = []
+        for transactionInfo in transactions_per_citizen:
+            if len(transactionInfo["transactions"]) > 0:
+                result.append({"uuid": transactionInfo["uuid"], "saldo": self._banktransactionservice_repository.get_saldo(
+                    date, transactionInfo["transactions"])})
+            else:
+                result.append({"uuid": transactionInfo["uuid"], "saldo": 0})
+        return result
+
 
     def __get_saldo(self, date, transaction_ids=None):
         return self.__generate_saldo_json(self._banktransactionservice_repository.get_saldo(date, transactions=transaction_ids))
     
     def __generate_saldo_json(self, saldo):
         return {self.SALDO: saldo}
-    

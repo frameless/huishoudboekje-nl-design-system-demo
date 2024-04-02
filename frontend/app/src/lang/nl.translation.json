@@ -449,8 +449,11 @@
     "byMonthDay": "Dag van de maand (1-28)",
     "invalidByMonthDayError": "Vul de dag van de maand in.",
     "everyMonth": "Elke maand",
-    "fromThrough": "Van {{from}} t/m {{through}}",
+    "from": "Vanaf {{from}}",
+    "through": "t/m {{through}}",
+    "fromThrough": "Vanaf {{from}} t/m {{through}}",
     "nextExpected": "Eerstvolgende datum",
+    "nextExpectedCheck": "Volgende periodieke check op",
     "monday": "maandag",
     "tuesday": "dinsdag",
     "wednesday": "woensdag",
@@ -465,7 +468,8 @@
     "onDates": "op de {{dates}}",
     "everyYear": "Elk jaar",
     "inMonths": "in {{months}}",
-    "onceOnDate": "Eenmalig, op {{date}}"
+    "onceOnDate": "Eenmalig, op {{date}}",
+    "once": "Eenmalig"
   },
   "afspraakBetaalinstructie": {
     "title": "Betaalinstructie instellen",
@@ -500,13 +504,14 @@
       "invalidDatumMarginError": "Vul een aantal dagen in.",
       "invalidMonthDayError": "Vul een dag van de maand in vanaf de 1ste tot en met 28ste",
       "invalidBedragError": "Vul een bedrag in.",
-      "invalidBedragMarginError": "Vul een bedrag in."
+      "invalidBedragMarginError": "Vul een bedrag in.",
+      "invalidEnddate": "Einddatum afspraak kan niet voor de startdatum alarm zijn."
     },
     "datumMargin": "Toegestane afwijking (in dagen)",
     "startDate": "Startdatum (kan niet in het verleden zijn)",
     "byMonthDay": "Dag in de maand",
     "bedrag": "Bedrag verwachte betaling",
-    "bedragMargin": "Toegestane afwijking bedrag (in euro's)"
+    "bedragMargin": "Toegestane afwijking bedrag"
   },
   "deleteAfspraak": {
     "confirmModalTitle": "Afspraak verwijderen",
@@ -716,19 +721,23 @@
     },
     "burgers": "Burgers"
   },
-  "signalen": {
+  "signals": {
     "showActive": "Ingeschakelde signalen",
     "showInActive": "Uitgeschakelde signalen",
-    "signalen": "Signalen",
+    "signals": "Signalen",
     "title": "Signalen",
     "helperText": "Alle signalen van alle burgers.",
     "filterByStatus": "Filter op status",
     "filterByBurger": "Filter op burger",
-    "selectNoOptionsMessage": "Geen opties",
-    "bedragDifferenceMessage": "Er is een afwijking van <strong>{{bedragDifference}}</strong> gevonden bij <linkAfspraak>{{afspraakOmschrijving}}</linkAfspraak> van <linkBurger>{{burgerNaam}}</linkBurger> met een transactie van <linkTransactie>{{transactieBedrag}}</linkTransactie>.",
-    "noTransactionMessage": "Er is een afwijking van <strong>{{bedragDifference}}</strong> gevonden bij <linkAfspraak>{{afspraakOmschrijving}}</linkAfspraak> van <linkBurger>{{burgerNaam}}</linkBurger>. Er is geen transactie gevonden.",
-    "genericSignaal": "Onbekend signaal",
-    "noResults": "Er zijn geen signalen gevonden."
+    "selectNoOptionsMessage": "Geen opties", 
+    "amountSignalMessage": "Er is een afwijking van <strong>{{amountDifference}}</strong> gevonden bij <agreementLink>{{agreementDescription}}</agreementLink> van <citizenLink>{{citizenName}}</citizenLink> met een transactie van <transctionLink>{{transactionAmount}}</transctionLink>.",
+    "dateSignalMessage": "Er is geen transactie gevonden voor <agreementLink>{{agreementDescription}}</agreementLink> van <citizenLink>{{citizenName}}</citizenLink>.",
+    "multipleTransactionsSignalMessage": "Er zijn meerdere transacties gevonden bij <agreementLink>{{agreementDescription}}</agreementLink> van <citizenLink>{{citizenName}}</citizenLink> met een transactie van <transctions></transctions>",
+    "negativeSaldoeSignalMessage": "Er is een negatief saldo geconstateerd bij <citizenLink>{{citizenName}}</citizenLink>.",
+    "genericSignal": "Onbekend signaal",
+    "noResults": "Er zijn geen signalen gevonden.",
+    "amountUnknown": "Onbekend bedrag",
+    "count": "Aantal gevonden signalen"
   },
   "backToBurgersList": "Terug naar alle burgers",
   "configuratie": "Configuratie",

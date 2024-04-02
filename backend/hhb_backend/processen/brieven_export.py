@@ -1,17 +1,13 @@
 import csv
 import io
-import logging
 import pandas as pd
-import requests
 from _csv import QUOTE_MINIMAL
 from datetime import datetime
-from dateutil import tz
-from flask import request, g
 from typing import List
 
-from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
-from hhb_backend.version import load_version
+from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
+from hhb_backend.audit_logging import AuditLogging
 
 
 class HHBCsvDialect(csv.Dialect):
@@ -112,33 +108,13 @@ def create_brieven_export(burger_id):
     output_excel.seek(0)
     data_excel = output_excel.read()
 
-    gebruikers_activiteit = {
-        "action": "exportBrieven",
-        "entities": [{"entityType": "burger", "entityId": int(burger_id)}]
-    }
-
-    json = {
-        "timestamp": datetime.now(tz=tz.tzlocal())
-            .replace(microsecond=0)
-            .isoformat(),
-        "meta": {
-            "userAgent": str(request.user_agent) if request else None,
-            "ip": ",".join(request.access_route) if request else None,
-            "applicationVersion": load_version().version,  # Read version.json
-        },
-        "gebruiker_id": g.current_user.name
-        if g and "current_user" in g and g.current_user is not None
-        else None,
-        **(gebruikers_activiteit),
-    }
     # TODO use a Queue and asyncio.run_task
-    logging.debug(
-        f"logging gebruikersactiviteit {json}"
-    )
-    requests.post(
-        f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/",
-        json=json,
-    )
+    AuditLogging.create(
+            action="exportBrieven",
+            entities=[
+                GebruikersActiviteitEntity(entityType="burger", entityId=(burger_id)),
+            ]
+        )
 
     return iowriter.getvalue(), csv_filename, data_excel, xlsx_filename
 

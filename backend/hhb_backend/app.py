@@ -35,6 +35,8 @@ def create_app(
     # This can also cause parameters that are normally hidden to be logged
     # Default warning because there is only one endpoint
     logging.getLogger('werkzeug').setLevel("WARNING")
+    #Pika logs very much so default only warning so the logs stay readable
+    logging.getLogger("pika").setLevel(logging.WARNING)
 
     if app.config["PREFIX"]:
         app.wsgi_app = ReverseProxied(

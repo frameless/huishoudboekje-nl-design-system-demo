@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <RootNamespace>LogService.Controllers</RootNamespace>
+        <LangVersion>12</LangVersion>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Core.CommunicationModels\Core.CommunicationModels.csproj" />
+      <ProjectReference Include="..\LogService.Domain\LogService.Domain.csproj" />
+    </ItemGroup>
+
+</Project>

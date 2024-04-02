@@ -1,6 +1,6 @@
 import React from "react";
 import {useTranslation} from "react-i18next";
-import {GebruikersActiviteit, useGetGebeurtenissenQuery} from "../../generated/graphql";
+import {UserActivityData, useGetUserActivitiesQuery} from "../../generated/graphql";
 import Queryable, { Loading } from "../../utils/Queryable";
 import usePagination from "../../utils/usePagination";
 import Page from "../shared/Page";
@@ -14,19 +14,23 @@ const Gebeurtenissen = () => {
 		pageSize: 25,
 	});
 
-	const $gebeurtenissen = useGetGebeurtenissenQuery({
+	const $gebeurtenissen = useGetUserActivitiesQuery({
 		fetchPolicy: "cache-and-network",
 		variables: {
-			limit: pageSize,
-			offset,
+			input: {
+				page: {
+					skip: offset,
+					take: pageSize
+				}
+			}
 		},
-		onCompleted: data => setTotal(data.gebruikersactiviteitenPaged?.pageInfo?.count || 0),
+		onCompleted: data => setTotal(data.UserActivities_GetUserActivitiesPaged?.PageInfo?.total_count || 0),
 	});
 
 	return (
 		<Page title={t("pages.gebeurtenissen.title")}>
 			<Queryable query={$gebeurtenissen} children={data => {
-				const gs: GebruikersActiviteit[] = data.gebruikersactiviteitenPaged?.gebruikersactiviteiten || [];
+				const gs: UserActivityData[] = data.UserActivities_GetUserActivitiesPaged?.data || [];
 				return (
 					<SectionContainer>
 						<Section title={t("pages.gebeurtenissen.title")} helperText={t("pages.gebeurtenissen.helperText")} right={<PaginationButtons />}>

@@ -6,7 +6,6 @@ import graphene
 
 import hhb_backend.graphql.models.afdeling as afdeling
 import hhb_backend.graphql.models.afspraak as afspraak
-import hhb_backend.graphql.models.alarm as alarm
 import hhb_backend.graphql.models.bank_transaction as bank_transaction
 import hhb_backend.graphql.models.burger as burger
 import hhb_backend.graphql.models.configuratie as configuratie
@@ -19,7 +18,6 @@ import hhb_backend.graphql.models.organisatie as organisatie
 import hhb_backend.graphql.models.postadres as postadres
 import hhb_backend.graphql.models.rekening as rekening
 import hhb_backend.graphql.models.rubriek as rubriek
-import hhb_backend.graphql.models.signaal as signaal
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.models.pageinfo import PageInfo
 
@@ -51,8 +49,6 @@ class GebruikersActiviteitSnapshot(graphene.ObjectType):
     postadres = graphene.Field(lambda: postadres.Postadres)
     rubriek = graphene.Field(lambda: rubriek.Rubriek)
     transaction = graphene.Field(lambda: bank_transaction.BankTransaction)
-    alarm = graphene.Field(lambda: alarm.Alarm)
-    signaal = graphene.Field(lambda: signaal.Signaal)
 
     @classmethod
     def _resolve_snapshot(cls, root, entity_type: str, Model):
@@ -125,15 +121,6 @@ class GebruikersActiviteitSnapshot(graphene.ObjectType):
     def resolve_huishouden(cls, root, _info):
         return cls._resolve_snapshot(root, "huishouden", huishouden.Huishouden)
 
-    @classmethod
-    def resolve_alarm(cls, root, _info):
-        return cls._resolve_snapshot(root, "alarm", alarm.Alarm)
-
-    @classmethod
-    def resolve_signaal(cls, root, _info):
-        return cls._resolve_snapshot(root, "signaal", signaal.Signaal)
-
-
 class GebruikersActiviteitEntity(graphene.ObjectType):
     """Dit model beschrijft de wijzingen die een gebruiker heeft gedaan."""
     entityType = graphene.String()
@@ -153,8 +140,6 @@ class GebruikersActiviteitEntity(graphene.ObjectType):
     rubriek = graphene.Field(lambda: rubriek.Rubriek)
     transaction = graphene.Field(lambda: bank_transaction.BankTransaction)
     huishouden = graphene.Field(lambda: huishouden.Huishouden)
-    alarm = graphene.Field(lambda: alarm.Alarm)
-    signaal = graphene.Field(lambda: signaal.Signaal)
 
     @classmethod
     def _resolve_entity(cls, root, entity_type: str, dataloader_name: str):
@@ -248,19 +233,6 @@ class GebruikersActiviteitEntity(graphene.ObjectType):
         return cls._resolve_entity(
             root, entity_type="huishouden", dataloader_name="huishoudens"
         )
-
-    @classmethod
-    def resolve_alarm(cls, root, _info):
-        return cls._resolve_entity(
-            root, entity_type="alarm", dataloader_name="alarms"
-        )
-
-    @classmethod
-    def resolve_signaal(cls, root, _info):
-        return cls._resolve_entity(
-            root, entity_type="signaal", dataloader_name="signalen"
-        )
-
 
 class GebruikersActiviteit(graphene.ObjectType):
     """Model dat een actie van een gebruiker beschrijft."""

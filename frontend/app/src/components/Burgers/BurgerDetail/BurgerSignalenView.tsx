@@ -1,10 +1,10 @@
 import {Checkbox, CheckboxGroup, FormControl, FormLabel, Stack} from "@chakra-ui/react";
 import React, {useState} from "react";
 import {useTranslation} from "react-i18next";
-import {Burger, Signaal} from "../../../generated/graphql";
+import {Burger} from "../../../generated/graphql";
 import Section from "../../shared/Section";
 import SectionContainer from "../../shared/SectionContainer";
-import SignalenListView from "../../Signalen/SignalenListView";
+// import SignalenListView from "../../Signalen/SignalenListView";
 
 export type ActiveSwitch = {
 	active: boolean,
@@ -15,15 +15,15 @@ const BurgerSignalenView: React.FC<{burger: Burger}> = ({burger}) => {
 	const {t} = useTranslation();
 	const [filter, setFilter] = useState<ActiveSwitch>({active: true, inactive: false});
 
-	const signalen: Signaal[] = (burger.afspraken || []).filter(afspraak => afspraak.alarm?.signaal) as Signaal[];
-	const filteredSignalen: Signaal[] = [
-		...signalen.filter(a => filter.active && a.isActive),
-		...signalen.filter(a => filter.inactive && !a.isActive),
-	];
+	// const signalen: Signaal[] = (burger.afspraken || []).filter(afspraak => afspraak.alarm?.signaal) as Signaal[];
+	// const filteredSignalen: Signaal[] = [
+	// 	...signalen.filter(a => filter.active && a.isActive),
+	// 	...signalen.filter(a => filter.inactive && !a.isActive),
+	// ];
 
 	return (
 		<SectionContainer>
-			<Section title={t("forms.burgers.sections.signalen.title")} helperText={t("forms.burgers.sections.signalen.detailText")} left={signalen.length > 0 && (
+			{/* <Section title={t("forms.burgers.sections.signalen.title")} helperText={t("forms.burgers.sections.signalen.detailText")} left={signalen.length > 0 && (
 				<FormControl>
 					<FormLabel>{t("global.actions.filter")}</FormLabel>
 					<CheckboxGroup defaultValue={["active"]} onChange={(val) => {
@@ -40,7 +40,7 @@ const BurgerSignalenView: React.FC<{burger: Burger}> = ({burger}) => {
 				</FormControl>
 			)}>
 				<SignalenListView signalen={filteredSignalen} />
-			</Section>
+			</Section> */}
 		</SectionContainer>
 	);
 };

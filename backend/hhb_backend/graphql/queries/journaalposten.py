@@ -23,6 +23,28 @@ class JournaalpostQuery:
         )
         return result
 
+class JournaalpostenByUuidsQuery:
+    return_type = graphene.List(
+        Journaalpost,
+        uuids=graphene.List(graphene.String),
+    )
+
+    @classmethod
+    def resolver(cls, _, info, uuids=None):
+        logging.info(f"Get journaalposten by uuid")
+        if(uuids is None or len(uuids) == 0):
+            return None
+        
+        journaalposten = hhb_dataloader().journaalposten.by_uuids(uuids)
+        AuditLogging.create(
+            action=info.field_name,
+                entities=[
+                    GebruikersActiviteitEntity(
+                        entityType="journaalpost", entityId=journaalpost.id)
+                    for journaalpost in journaalposten
+                ]
+            )
+        return sorted(journaalposten, key=lambda i: uuids.index(i.uuid))
 
 class JournaalpostenQuery:
     return_type = graphene.List(

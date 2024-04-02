@@ -7,15 +7,6 @@ const header = {
   'Accept-Encoding': 'gzip, deflate, br',
 };
 
-// Set database query
-const queryTruncateAlarm = `mutation Truncate {
-  truncateTable(databaseName: "alarmenservice", tableName: "Alarm")
-}`
-
-const queryTruncateSignal = `mutation Truncate {
-  truncateTable(databaseName: "signalenservice", tableName: "Signal")
-}`
-
 //#region Scenario: view create alarm form with default options
 
 When('I view the "Add alarm" modal', () => {

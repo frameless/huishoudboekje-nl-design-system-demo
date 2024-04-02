@@ -33,12 +33,11 @@ import TwoColumns from "./components/shared/TwoColumns";
 import UserStatus from "./components/shared/UserStatus";
 import Sidebar from "./components/Sidebar";
 import SidebarContainer from "./components/Sidebar/SidebarContainer";
-import SignalenList from "./components/Signalen/SignalenList";
 import StatusErrorPage from "./components/Status/StatusErrorPage";
 import {RouteNames} from "./config/routes";
-import {useFeatureFlag, useInitializeFeatureFlags} from "./utils/features";
 import useAuth from "./utils/useAuth";
 import HuishoudenOverzichtIndex from "./components/Huishoudens/HuishoudenOverzicht/HuishoudenOverzichtIndex";
+import SignalsView from "./components/Signals/SignalsView";
 
 const App = () => {
 	const {t} = useTranslation();
@@ -49,9 +48,6 @@ const App = () => {
 	// Todo: enable this once Matomo is available again.
 	// const dataLayer = useDataLayer(dataLayerOptions);
 	// dataLayer.addHook(onPathChanged("PathChanged"));
-
-	useInitializeFeatureFlags();
-	const isSignalenEnabled = useFeatureFlag("signalen");
 
 	if (error) {
 		return (
@@ -143,9 +139,7 @@ const App = () => {
 								<Route path={RouteNames.bankafschriften} element={<CustomerStatementMessages />} />
 								<Route path={RouteNames.betaalinstructies} element={<Betaalinstructies />} />
 							</Route>
-							{isSignalenEnabled && (
-								<Route path={RouteNames.signalen} element={<SignalenList />} />
-							)}
+							<Route path={RouteNames.signalen} element={<SignalsView />} />
 							<Route path={RouteNames.rapportage} element={<Rapportage />} />
 							<Route path={RouteNames.gebeurtenissen} element={<Gebeurtenissen />} />
 							<Route path={RouteNames.configuratie} element={<Configuratie />} />

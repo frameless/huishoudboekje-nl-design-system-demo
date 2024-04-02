@@ -46,7 +46,6 @@ import {
 	GetBurgerDetailsDocument
 } from "../../../generated/graphql";
 import d from "../../../utils/dayjs";
-import {useFeatureFlag} from "../../../utils/features";
 import {currencyFormat2, formatBurgerName, getBurgerHhbId, isAfspraakActive} from "../../../utils/things";
 import useScheduleHelper from "../../../utils/useScheduleHelper";
 import useToaster from "../../../utils/useToaster";
@@ -65,6 +64,7 @@ import AddAlarmModal from "./AddAlarmModal";
 import AfspraakDetailMenu from "./AfspraakDetailMenu";
 import AfspraakEndModal from "./AfspraakEndModal";
 import BurgerContextContainer from "../../Burgers/BurgerContextContainer";
+import { getAlarmScheduleString } from "../../../utils/alarmSchedule";
 
 const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 	const validator = useZoektermValidator();
@@ -72,12 +72,11 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 	const {t} = useTranslation();
 	const toast = useToaster();
 	const navigate = useNavigate();
-	const isSignalenEnabled = useFeatureFlag("signalen");
 	const addAlarmModal = useDisclosure();
 	const [zoekterm, setZoekterm] = useState<string>();
 	const [zoektermTouched, setZoektermTouched] = useState<boolean>(false);
 	const betaalinstructieSchedule = useScheduleHelper(afspraak.betaalinstructie);
-	const alarmSchedule = useScheduleHelper(afspraak.alarm);
+	const alarmSchedule = getAlarmScheduleString(afspraak.alarm);
 	const endModal = useDisclosure();
 	const [addAfspraakZoekterm] = useAddAfspraakZoektermMutation({
 		refetchQueries: [
@@ -141,10 +140,6 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 	};
 
 	const toggleAlarmActive = () => {
-		if (!isSignalenEnabled) {
-			return;
-		}
-
 		if (!afspraak || !afspraak.alarm?.id) {
 			return;
 		}
@@ -153,13 +148,15 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 
 		updateAlarm({
 			variables: {
-				id: afspraak.alarm.id,
 				input: {
-					isActive,
+					alarm: {
+						id: afspraak.alarm.id,
+						isActive : isActive
+					}
 				},
 			},
 		}).then((result) => {
-			const isActive = result.data?.updateAlarm?.alarm?.isActive;
+			const isActive = result.data?.Alarms_Update?.isActive
 			if (isActive) {
 				toast({success: t("messages.enableAlarmSuccess")});
 			}
@@ -190,17 +187,15 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 	};
 
 	const onDeleteAlarm = () => {
-		if (!isSignalenEnabled) {
-			return;
-		}
-
 		if (!afspraak?.alarm?.id) {
 			return;
 		}
 
 		deleteAlarm({
 			variables: {
-				id: afspraak.alarm.id,
+				input: {
+					id: afspraak.alarm.id,
+				}
 			},
 		}).then(() => {
 			toast({success: t("messages.deleteAlarmSuccess")});
@@ -263,10 +258,6 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 	};
 
 	const onCreateAlarm = (data) => {
-		if (!isSignalenEnabled) {
-			return;
-		}
-
 		createAlarm({
 			variables: {
 				input: {
@@ -274,14 +265,13 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 				},
 			},
 		}).then(result => {
-			if (result.data?.createAlarm?.ok) {
-				toast({
-					success: t("messages.addAfspraakAlarmSuccess"),
-				});
-				addAlarmModal.onClose();
-			}
+			toast({
+				success: t("messages.addAfspraakAlarmSuccess"),
+			});
+			addAlarmModal.onClose();
 		}).catch(err => {
 			toast.closeAll();
+			console.log(err)
 			toast({
 				error: err.message,
 			});
@@ -320,7 +310,7 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 		<Page title={t("afspraakDetailView.title")} backButton={<BackButton to={AppRoutes.ViewBurger(String(afspraak.burger?.id))} />} menu={(
 			<AfspraakDetailMenu afspraak={afspraak} />
 		)}>
-			{isSignalenEnabled && addAlarmModal.isOpen && <AddAlarmModal afspraak={afspraak} onClose={addAlarmModal.onClose} onSubmit={data => onCreateAlarm(data)} />}
+			{addAlarmModal.isOpen && <AddAlarmModal afspraak={afspraak} onClose={addAlarmModal.onClose} onSubmit={data => onCreateAlarm(data)} />}
 
 			{afspraak.validThrough && (
 				<Alert status={"info"} colorScheme={"skyblue"}>
@@ -530,69 +520,77 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 					</Section>
 				</SectionContainer>
 			)}
-
-			{isSignalenEnabled && (
-				<SectionContainer>
-					<Section title={t("afspraakDetailView.alarm.title")} helperText={t("afspraakDetailView.alarm.helperText")}>
-						{afspraak.alarm ? (
-							<Stack>
-								<Stack direction={["column", "row"]}>
+			<SectionContainer>
+				<Section title={t("afspraakDetailView.alarm.title")} helperText={t("afspraakDetailView.alarm.helperText")}>
+					{afspraak.alarm ? (
+						<Stack>
+							<Stack direction={["column", "row"]}>
 									<DataItem label={t("periodiekSelector.periodiek")}>
 										<HStack>
-											<Text>{alarmSchedule.toString()}</Text>
-											{afspraak.alarm?.datumMargin && (
+											<Text>{alarmSchedule}</Text>
+											{afspraak.alarm?.dateMargin && (
 												<Text color={"gray.500"} fontSize={"sm"}>+
-													{t("afspraak.alarm.datumMargin", {count: afspraak.alarm?.datumMargin})}
+													{t("afspraak.alarm.datumMargin", {count: afspraak.alarm?.dateMargin})}
 												</Text>
 											)}
 										</HStack>
 									</DataItem>
-									{afspraak.alarm?.endDate && afspraak.alarm?.startDate !== afspraak.alarm?.endDate && (
-										<DataItem label={t("global.period")}>
+									
+							</Stack>
+							<Stack direction={["column", null, null, "row"]}>
+								<DataItem label={t("global.period")}>
+									{afspraak.alarm?.AlarmType !== 3 ? (
 											<HStack>
-												<Text>{t("schedule.fromThrough", {
-													from: d(afspraak.alarm?.startDate, "YYYY-MM-DD").format("L"),
-													through: d(afspraak.alarm?.endDate, "YYYY-MM-DD").format("L"),
+												<Text>{t("schedule.from", {
+													from: d.unix(afspraak.alarm?.startDate).format("L"),
 												})}</Text>
+												{afspraak.alarm?.endDate && (
+													<Text>{t("schedule.through", {
+														through: d.unix(afspraak.alarm?.endDate).format("L"),
+													})}</Text>
+												)}
+											</HStack>
+										) :
+											<HStack>
+												<Text>{d.unix(afspraak.alarm?.startDate).format("L")}</Text>
+											</HStack>
+										}
+								</DataItem>
+								{afspraak.alarm?.checkOnDate && (
+										<DataItem label={t("schedule.nextExpectedCheck")}>
+											<HStack>
+												<Text>{d.unix(afspraak.alarm.checkOnDate).format("L")}</Text>
 											</HStack>
 										</DataItem>
 									)}
-								</Stack>
-								{!afspraak.alarm?.endDate && afspraak.alarm?.startDate && (
-									<Stack>
-										<DataItem label={t("schedule.nextExpected")}>
-											<HStack>
-												<Text>{d(afspraak.alarm.startDate).format("L")}</Text>
-											</HStack>
-										</DataItem>
-									</Stack>
-								)}
-								<Stack direction={["column", null, null, "row"]}>
-									<DataItem label={t("bedrag")}>
-										<HStack>
-											<Text>{currencyFormat2().format(afspraak.alarm?.bedrag)}</Text>
-											<Text color={"gray.500"} fontSize={"sm"}>+/- {currencyFormat2().format(afspraak.alarm?.bedragMargin)}</Text>
-										</HStack>
-									</DataItem>
-									<DataItem label={t("afspraak.alarm.options")}>
-										<HStack>
-											<Switch size={"sm"} isChecked={!!afspraak.alarm?.isActive} onChange={() => toggleAlarmActive()} />
-											<DeleteConfirmButton onConfirm={() => onDeleteAlarm()} />
-										</HStack>
-									</DataItem>
-								</Stack>
 							</Stack>
-						) : (
-							<Stack>
-								<Text>{t("afspraakDetailView.noAlarm")}</Text>
-								<Box>
-									<AddButton onClick={() => addAlarmModal.onOpen()} />
-								</Box>
+							<Stack direction={["column", null, null, "row"]}>
+								<DataItem label={t("bedrag")}>
+									<HStack>
+										<Text>{ currencyFormat2().format(afspraak.alarm?.amount ? afspraak.alarm?.amount / 100 : 0)}</Text>
+										{ afspraak.alarm?.amountMargin && afspraak.alarm?.amountMargin > 0 && (
+											<Text color={"gray.500"} fontSize={"sm"}>+/- {currencyFormat2().format(afspraak.alarm?.amountMargin ? afspraak.alarm?.amountMargin / 100 : 0)}</Text>
+										)}
+									</HStack>
+								</DataItem>
+								<DataItem label={t("afspraak.alarm.options")}>
+									<HStack>
+										<Switch size={"sm"} isChecked={!!afspraak.alarm?.isActive} onChange={() => toggleAlarmActive()} />
+										<DeleteConfirmButton onConfirm={() => onDeleteAlarm()} />
+									</HStack>
+								</DataItem>
 							</Stack>
-						)}
-					</Section>
-				</SectionContainer>
-			)}
+						</Stack>
+					) : (
+						<Stack>
+							<Text>{t("afspraakDetailView.noAlarm")}</Text>
+							<Box>
+								<AddButton onClick={() => addAlarmModal.onOpen()} />
+							</Box>
+						</Stack>
+					)}
+				</Section>
+			</SectionContainer>
 		</Page>
 	);
 };

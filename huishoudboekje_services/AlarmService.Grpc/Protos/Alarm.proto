@@ -1,0 +1,80 @@
+syntax = "proto3";
+
+option csharp_namespace = "AlarmService_RPC";
+
+package GrpcServices;
+
+service Alarms {
+
+  rpc GetById(AlarmId) returns (AlarmData);
+
+  rpc GetByIds(GetByIdsRequest) returns (GetByIdsResponse);
+
+  rpc Create(CreateAlarmRequest) returns (AlarmData);
+
+  rpc Update(UpdateAlarmRequest) returns (AlarmData);
+
+  rpc Delete(AlarmId) returns (DeleteResponse);
+
+}
+
+message AlarmId {
+    string id = 1;
+}
+
+message GetByIdsRequest {
+  repeated string ids = 1;
+}
+
+message GetByIdsResponse {
+  repeated AlarmData data = 1;
+}
+
+
+message CreateAlarmRequest {
+  AlarmData alarm = 1;
+  string agreementUuid = 2;
+}
+
+message UpdateAlarmRequest {
+  AlarmUpdateData alarm = 1;
+}
+
+message AlarmData {
+    string id = 1;
+    bool isActive = 2;
+    int32 dateMargin = 3;
+    int32 amount = 4;
+    int32 amountMargin = 5;
+    repeated int32 recurringMonths = 6;
+    repeated int32 recurringDayOfMonth = 7;
+    repeated int32 recurringDay = 8;
+    int64 startDate = 9;
+    optional int64 endDate = 10;
+    int32 AlarmType = 11;
+    optional int64 checkOnDate = 12;
+}
+
+message AlarmUpdateData {
+  string id = 1;
+  optional bool isActive = 2;
+  optional int32 dateMargin = 3;
+  optional int32 amount = 4;
+  optional int32 amountMargin = 5;
+  optional AlarmUpdateRecurring recurring = 6;
+  optional int64 startDate = 7;
+  optional int64 endDate = 8;
+  optional int32 AlarmType = 11;
+}
+
+message AlarmUpdateRecurring {
+  repeated int32 recurringMonths = 6;
+  repeated int32 recurringDayOfMonth = 7;
+  repeated int32 recurringDay = 8;
+}
+
+
+message DeleteResponse {
+  bool deleted = 1;
+  string id = 2;
+}

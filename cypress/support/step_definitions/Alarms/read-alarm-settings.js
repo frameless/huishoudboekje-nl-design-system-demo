@@ -224,8 +224,8 @@ Then('the alarm next date is displayed', () => {
   cy.contains('Het alarm is opgeslagen')
 
   // Check if next date is displayed
-  cy.contains('Eerstvolgende datum')
-  cy.contains('01-01-2099')
+  cy.contains('Volgende periodieke check')
+  cy.contains('03-01-2099')
 
   // Clean up alarm
   cy.get('button[aria-label="Verwijderen"]')

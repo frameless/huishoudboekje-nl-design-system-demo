@@ -1,0 +1,18 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: hhb-mesh-ingress
+  labels:
+    name: hhb-mesh-ingress
+spec:
+  rules:
+    - host: huishoudboekje.example.com
+      http:
+        paths:
+          - path: /apiV2
+            pathType: Prefix
+            backend:
+              service:
+                name: hhb-mesh
+                port:
+                  number: 80

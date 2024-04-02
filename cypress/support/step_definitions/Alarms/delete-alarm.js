@@ -7,15 +7,6 @@ const header = {
   'Accept-Encoding': 'gzip, deflate, br',
 };
 
-// Set database query
-const queryTruncateAlarm = `mutation Truncate {
-  truncateTable(databaseName: "alarmenservice", tableName: "Alarm")
-}`
-
-const queryTruncateSignal = `mutation Truncate {
-  truncateTable(databaseName: "signalenservice", tableName: "Signal")
-}`
-
 //#region Scenario: view delete alarm form
 
 // When('I view the "Agreement" page')
@@ -37,22 +28,10 @@ When('I click the "Delete alarm" button', () => {
 
   // Clean up
     // Truncate alarms
-    cy.request({
-      method: "post",
-      url: Cypress.env().graphqlUrl + '/graphql',
-      body: { query: queryTruncateAlarm },
-    }).then((res) => {
-      console.log(res.body);
-    });
+    Step(this, 'I clean up "Alarms" table');
 
     // Truncate signals
-    cy.request({
-      method: "post",
-      url: Cypress.env().graphqlUrl + '/graphql',
-      body: { query: queryTruncateSignal },
-    }).then((res) => {
-      console.log(res.body);
-    });
+    Step(this, 'I clean up "Signals" table');
   
 });
 
@@ -74,22 +53,10 @@ Then('the "Cancel delete alarm" button is displayed', () => {
 
   // Clean up
     // Truncate alarms
-    cy.request({
-      method: "post",
-      url: Cypress.env().graphqlUrl + '/graphql',
-      body: { query: queryTruncateAlarm },
-    }).then((res) => {
-      console.log(res.body);
-    });
+    Step(this, 'I clean up "Alarms" table');
 
     // Truncate signals
-    cy.request({
-      method: "post",
-      url: Cypress.env().graphqlUrl + '/graphql',
-      body: { query: queryTruncateSignal },
-    }).then((res) => {
-      console.log(res.body);
-    });
+    Step(this, 'I clean up "Signals" table');
   
 });
 
@@ -105,22 +72,10 @@ Then('the "Confirm delete alarm" button is displayed', () => {
   
   // Clean up
     // Truncate alarms
-    cy.request({
-      method: "post",
-      url: Cypress.env().graphqlUrl + '/graphql',
-      body: { query: queryTruncateAlarm },
-    }).then((res) => {
-      console.log(res.body);
-    });
+    Step(this, 'I clean up "Alarms" table');
 
     // Truncate signals
-    cy.request({
-      method: "post",
-      url: Cypress.env().graphqlUrl + '/graphql',
-      body: { query: queryTruncateSignal },
-    }).then((res) => {
-      console.log(res.body);
-    });
+    Step(this, 'I clean up "Signals" table');
   
 });
 
@@ -146,22 +101,10 @@ When('I click the "Cancel delete alarm" button', () => {
 
   // Clean up
     // Truncate alarms
-    cy.request({
-      method: "post",
-      url: Cypress.env().graphqlUrl + '/graphql',
-      body: { query: queryTruncateAlarm },
-    }).then((res) => {
-      console.log(res.body);
-    });
+    Step(this, 'I clean up "Alarms" table');
 
     // Truncate signals
-    cy.request({
-      method: "post",
-      url: Cypress.env().graphqlUrl + '/graphql',
-      body: { query: queryTruncateSignal },
-    }).then((res) => {
-      console.log(res.body);
-    });
+    Step(this, 'I clean up "Signals" table');
   
 });
 
@@ -187,22 +130,10 @@ Then('the "Delete alarm" button is displayed', () => {
 
   // Clean up
     // Truncate alarms
-    cy.request({
-      method: "post",
-      url: Cypress.env().graphqlUrl + '/graphql',
-      body: { query: queryTruncateAlarm },
-    }).then((res) => {
-      console.log(res.body);
-    });
+    Step(this, 'I clean up "Alarms" table');
 
     // Truncate signals
-    cy.request({
-      method: "post",
-      url: Cypress.env().graphqlUrl + '/graphql',
-      body: { query: queryTruncateSignal },
-    }).then((res) => {
-      console.log(res.body);
-    });
+    Step(this, 'I clean up "Signals" table');
 
 });
 
@@ -231,22 +162,10 @@ When('I click the "Confirm delete alarm" button', () => {
 
   // Clean up
     // Truncate alarms
-    cy.request({
-      method: "post",
-      url: Cypress.env().graphqlUrl + '/graphql',
-      body: { query: queryTruncateAlarm },
-    }).then((res) => {
-      console.log(res.body);
-    });
+    Step(this, 'I clean up "Alarms" table');
 
     // Truncate signals
-    cy.request({
-      method: "post",
-      url: Cypress.env().graphqlUrl + '/graphql',
-      body: { query: queryTruncateSignal },
-    }).then((res) => {
-      console.log(res.body);
-    });
+    Step(this, 'I clean up "Signals" table');
 
 });
 

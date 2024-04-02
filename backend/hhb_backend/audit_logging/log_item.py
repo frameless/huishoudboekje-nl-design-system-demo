@@ -1,4 +1,4 @@
-import json
+import time
 from dataclasses import dataclass, field, asdict, is_dataclass
 from datetime import datetime, timezone
 
@@ -9,8 +9,7 @@ from hhb_backend.graphql.utils.dates import to_date
 class LogItem:
     action: str
     entities: list[dict] = field(default_factory=lambda: [])
-    timestamp: datetime = field(default=datetime.now(
-        timezone.utc).replace(microsecond=0).isoformat())
+    timestamp: int = field(default=int(time.time()))
     before: dict = field(default=None)
     after: dict = field(default=None)
     user: str = field(default=None)

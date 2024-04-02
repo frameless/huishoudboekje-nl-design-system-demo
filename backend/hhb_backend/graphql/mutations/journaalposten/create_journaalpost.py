@@ -3,16 +3,16 @@
 import logging
 from typing import List, Dict
 
+
 import graphene
 
 import hhb_backend.graphql.models.afspraak as graphene_afspraak
 from graphql import GraphQLError
 from hhb_backend.audit_logging import AuditLogging
-from hhb_backend.feature_flags import Unleash
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.datawriters import hhb_datawriter
+from hhb_backend.alarm_evaluation import AlarmEvaluation
 from hhb_backend.graphql.models.journaalpost import Journaalpost
-from hhb_backend.graphql.mutations.alarmen.evaluate_alarm import evaluate_alarms
 from hhb_backend.graphql.mutations.journaalposten import update_transaction_service_is_geboekt
 from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
 from hhb_backend.service.model import journaalpost
@@ -117,22 +117,45 @@ def create_journaalposten(input, afspraken, transactions):
 
     journaalposten = hhb_datawriter().journaalposten.post(input)
 
-    alarm_ids = []
-    for post in journaalposten:
-        afspraak = afspraken[journaalpost.Journaalpost(post).afspraak_id]
-        post["afspraak"] = afspraak
-        if afspraak.alarm_id:
-            alarm_ids.append(afspraak.alarm_id)
-
     update_transaction_service_is_geboekt(transactions, is_geboekt=True)
 
-    # Feature flag: signalen
-    logging.info("Evaluating alarms...")
-    if Unleash().is_enabled("signalen"):
-        if alarm_ids:
-            evaluate_alarms(alarm_ids, journaalposten)
-    else:
-        logging.info("Skipping alarm evaluation. Signalen is disabled")
+    transactionDict = {obj['id']: obj for obj in transactions}
+
+    agreementToAlarm = {}
+    alarmToCitizen = {}
+    journalEntryToTransaction = []
+    affectedCitizens = []
+    csm_ids = []
+    csmIdToUuid = {}
+
+    for post in journaalposten:
+        afspraak = afspraken[journaalpost.Journaalpost(post).afspraak_id]
+        transaction = transactionDict[post['transaction_id']]
+        post["afspraak"] = afspraak
+        affectedCitizens.append(afspraak.burger_id)
+        if afspraak.alarm_id != None:
+            agreementToAlarm[afspraak.uuid] = afspraak.alarm_id
+            alarmToCitizen[afspraak.alarm_id] = afspraak.burger_id
+            journalEntryToTransaction.append(
+                (post,  transaction))
+            csm_ids.append(transaction.customer_statement_message_id)
+
+    affectedCitizens = list(set(affectedCitizens))
+    citizens = hhb_dataloader().burgers.load(affectedCitizens)
+    citizenLookup = {citizen["id"]: citizen["uuid"] for citizen in citizens}
+    affectedCitizens = [citizen["uuid"] for citizen in citizens]
+
+    if len(agreementToAlarm) != 0:
+        for key, value in alarmToCitizen.items():
+            alarmToCitizen[key] = citizenLookup[value]
+
+        csm_ids = list(set(csm_ids))
+
+        csmIdToUuid = {csm["id"]: csm["uuid"]
+                       for csm in hhb_dataloader().csms.load(csm_ids)}
+
+    AlarmEvaluation.create(
+        agreementToAlarm, journalEntryToTransaction, affectedCitizens, alarmToCitizen, csmIdToUuid)
 
     return journaalposten
 

@@ -10,7 +10,11 @@ spec:
   selector:
     name: hhb-logservice
   ports:
-    - name: http
+    - name: grpc
       protocol: TCP
       port: 80
-      targetPort: http
+      targetPort: grpc
+    - name: metrics
+      protocol: TCP
+      port: 9000
+      targetPort: metrics

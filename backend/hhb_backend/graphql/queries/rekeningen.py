@@ -24,17 +24,19 @@ class RekeningQuery:
 
 
 class RekeningenQuery:
-    return_type = graphene.List(Rekening, ids=graphene.List(graphene.Int))
+    return_type = graphene.List(Rekening, ids=graphene.List(graphene.Int),
+        isLogRequest=graphene.Boolean(required=False))
 
     @classmethod
-    def resolver(cls, _root, info, ids=None):
+    def resolver(cls, _root, info, ids=None, isLogRequest=False):
         logging.info(f"Get rekeningen")
         if ids:
             result = hhb_dataloader().rekeningen.load(ids)
         else:
             result = hhb_dataloader().rekeningen.load_all()
-
-        AuditLogging.create(
+        
+        AuditLogging().create(
+            logRequest=isLogRequest,
             action=info.field_name,
             entities=[
                 GebruikersActiviteitEntity(entityType="rekening", entityId=id)
@@ -42,7 +44,7 @@ class RekeningenQuery:
             ] if ids else []
         )
 
-        return result
+        return result if not isLogRequest or isLogRequest and len(result) > 0 else None
 
 
 class RekeningenByIbansQuery:

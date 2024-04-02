@@ -8,6 +8,13 @@ max_line_length = 120
 tab_width = 4
 trim_trailing_whitespace = true
 
+[*.{cs,vb}]
+# this. preferences
+dotnet_style_qualification_for_field = false:silent
+dotnet_style_qualification_for_property = false:silent
+dotnet_style_qualification_for_method = false:silent
+dotnet_style_qualification_for_event = false:silent
+
 [*.py]
 indent_size = 4
 tab_width = 4

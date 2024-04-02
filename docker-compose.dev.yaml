@@ -1,0 +1,325 @@
+version: "3.8"
+
+##################################################
+# Extensions
+##################################################
+
+x-backend: &x-backend
+  build:
+    dockerfile: ./backend/dev.Dockerfile
+    context: .
+  volumes:
+    - ./backend:/app
+
+x-huishoudboekjeservice: &x-huishoudboekjeservice
+  build:
+    dockerfile: ./huishoudboekje_service/dev.Dockerfile
+    context: ./services
+  volumes:
+    - ./services/huishoudboekje_service:/app
+    - ./services/core_service/core_service:/app/core_service
+  environment:
+    DATABASE_URL: "postgresql://hhb:hhb@db/huishoudboekjeservice"
+
+x-organisatieservice: &x-organisatieservice
+  build:
+    dockerfile: ./organisatie_service/dev.Dockerfile
+    context: ./services
+  volumes:
+    - ./services/organisatie_service:/app
+    - ./services/core_service/core_service:/app/core_service
+  environment:
+    DATABASE_URL: "postgresql://hhb:hhb@db/organisatieservice"
+
+x-grootboekservice: &x-grootboekservice
+  build:
+    dockerfile: ./grootboek_service/dev.Dockerfile
+    context: ./services
+  volumes:
+    - ./services/grootboek_service:/app
+    - ./services/core_service/core_service:/app/core_service
+  environment:
+    DATABASE_URL: "postgresql://hhb:hhb@db/grootboekservice"
+
+x-banktransactieservice: &x-banktransactieservice
+  build:
+    dockerfile: ./bank_transactie_service/dev.Dockerfile
+    context: ./services
+  volumes:
+    - ./services/bank_transactie_service:/app
+    - ./services/core_service/core_service:/app/core_service
+  environment:
+    DATABASE_URL: "postgresql://hhb:hhb@db/banktransactieservice"
+
+x-postadressenservice: &x-postadressenservice
+  build:
+    context: ./services/postadressenservice
+    dockerfile: ./dev.Dockerfile
+  volumes:
+    - ./services/postadressenservice:/app
+  environment:
+    DATABASE_URL: "postgresql://hhb:hhb@db/postadressenservice"
+
+x-rapportageservice: &x-rapportageservice
+  build:
+    dockerfile: ./rapportage_service/dev.Dockerfile
+    context: ./services
+  volumes:
+    - ./services/rapportage_service:/app
+    - ./services/core_service/core_service:/app/core_service
+
+x-py-tests: &x-py-tests
+  profiles:
+    - tests
+  command:
+    - /bin/sh
+    - -c
+    - pytest tests --disable-pytest-warnings
+  environment:
+    JWT_AUDIENCE: pytest
+    JWT_ISSUER: pytest
+    JWT_ALGORITHMS: HS256
+    JWT_SECRET: pytestsecret
+
+x-js-tests: &x-js-tests
+  profiles:
+    - tests
+  entrypoint:
+    - /bin/sh
+    - -c
+    - npm test
+
+services:
+  db:
+    container_name: database
+    image: postgres:13-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      PGDATA: /data/postgres
+    ports:
+      - 5432:5432
+    command: [ "postgres", "-c", "log_statement=all" ]
+    restart: unless-stopped
+    volumes:
+      - ./docker-compose/database:/docker-entrypoint-initdb.d  
+    healthcheck:
+      test: pg_isready -U postgres -d alarmenservice
+      interval: 30s
+      timeout: 5s
+      retries: 5
+
+  rabbitmq:
+    image: rabbitmq:3.12-rc-management-alpine
+    container_name: rabbitmq
+    ports:
+      - 5672:5672
+      - 15672:15672
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:15672"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  graphql-mesh:
+    build:
+      context: ./mesh
+      dockerfile: ./dev.Dockerfile
+    container_name: graphql-mesh
+    ports:
+      - 4000:4000
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      LOG_LEVEL: DEBUG
+    env_file:
+      - ./docker-compose/mesh/local-csharp-urls.env
+
+
+##################################################
+# Databse Mesh For Testing
+##################################################
+  database-mesh:
+    build:
+      context: ./database-mesh
+      dockerfile: ./dev.Dockerfile
+    ports:
+      - 4200:4000  
+    depends_on:
+      db:
+        condition: service_healthy
+
+##################################################
+# Auth ?
+##################################################
+  authservice:
+    build:
+      dockerfile: ./dev.Dockerfile
+      context: ./services/authservice
+    container_name: authservice
+    volumes:
+      - ./services/authservice:/app
+    environment:
+      NODE_ENV: development
+      LOG_LEVEL: DEBUG
+      OIDC_ISSUER_URL: https://keycloak.huishoudboekje.demoground.nl/realms/huishoudboekje/
+      OIDC_CLIENT_ID: huishoudboekje-medewerkers
+      OIDC_CLIENT_SECRET: fc36d31f-f720-4914-a750-b83c7b0dd61c
+      OIDC_BASE_URL: http://localhost:3000
+      JWT_ISSUER: huishoudboekje-localhost
+      JWT_AUDIENCE: huishoudboekje-medewerkers
+      JWT_EXPIRES_IN: 30d
+      OIDC_SCOPES: null
+      JWT_SECRET: testtest
+    ports:
+      - 4000:8080
+    profiles:
+      - authservice
+
+##################################################
+# Extra Commands
+##################################################
+  evaluate-alarms:
+    build:
+      context: ./rabbitmq-message-publisher
+      dockerfile: ./Dockerfile
+    environment:
+      EXCHANGE: check-alarms-timed
+      ROUTING_KEY: check-alarms-timed
+      MESSAGE: "{}"
+    profiles:
+      - evaluate-alarms
+
+  sampledata:
+    image: registry.gitlab.com/commonground/huishoudboekje/data-importer/data-importer:1.5.4
+    container_name: sampledata
+    environment:
+      GRAPHQL_API_URL: http://backend:8000/graphql
+      LOG_LEVEL: INFO
+    command: ["importer", "import"]
+    volumes:
+      - ./sampleData:/app/data
+    profiles:
+      - sampledata
+
+##################################################
+# To be replaced services
+##################################################
+  backend:
+    <<: *x-backend
+    container_name: backend
+    environment:
+      PREFIX: /api
+      LOG_LEVEL: DEBUG
+      REQUIRE_AUTH: 0
+      JWT_AUDIENCE: Account
+      JWT_SECRET: testtest
+      JWT_ISSUER: localhost
+      JWT_ALGORITHMS: HS256
+      HHB_SERVICE_URL: "http://huishoudboekjeservice:8000"
+      ORGANISATIE_SERVICE_URL: "http://organisatieservice:8000"
+      TRANSACTIE_SERVICE_URL: "http://banktransactieservice:8000"
+      GROOTBOEK_SERVICE_URL: "http://grootboekservice:8000"
+      LOG_SERVICE_URL: "http://logservice:8000"
+      POSTADRESSENSERVICE_URL: "http://postadressenservice:8080"
+      ALARMENSERVICE_URL: "http://alarmenservice:8080"
+      SIGNALENSERVICE_URL: "http://signalenservice:8080"
+      USE_GRAPHIQL: 1
+      ALLOW_INTROSPECTION: 1
+    ports:
+      - 5000:8000
+    depends_on:
+      db:
+        condition: service_healthy
+
+  backend-test:
+    <<: [ *x-py-tests, *x-backend ]
+
+  huishoudboekjeservice:
+    <<: *x-huishoudboekjeservice
+    container_name: huishoudboekjeservice
+    environment:
+      DATABASE_URL: "postgresql://hhb:hhb@db/huishoudboekjeservice"
+      LOG_LEVEL: DEBUG
+      SEED_TESTDATA: "true"
+    ports:
+      - 8001:8000
+    depends_on:
+      db:
+        condition: service_healthy
+
+  huishoudboekjeservice-test:
+    <<: [ *x-py-tests, *x-huishoudboekjeservice ]
+
+  organisatieservice:
+    <<: *x-organisatieservice
+    container_name: organisatieservice
+    environment:
+      DATABASE_URL: "postgresql://hhb:hhb@db/organisatieservice"
+      LOG_LEVEL: DEBUG
+      SEED_TESTDATA: "true"
+    ports:
+      - 8002:8000
+    depends_on:
+      db:
+        condition: service_healthy
+
+  organisatieservice-test:
+    <<: [ *x-py-tests, *x-organisatieservice ]
+
+  banktransactieservice:
+    <<: *x-banktransactieservice
+    container_name: banktransactieservice
+    environment:
+      DATABASE_URL: "postgresql://hhb:hhb@db/banktransactieservice"
+      LOG_LEVEL: DEBUG
+    ports:
+      - 8003:8000
+    depends_on:
+      db:
+        condition: service_healthy
+
+  banktransactieservice-test:
+    <<: [ *x-py-tests, *x-banktransactieservice ]
+
+  grootboekservice:
+    <<: *x-grootboekservice
+    container_name: grootboekservice
+    environment:
+      DATABASE_URL: "postgresql://hhb:hhb@db/grootboekservice"
+      LOG_LEVEL: DEBUG
+    ports:
+      - 8004:8000
+    depends_on:
+      db:
+        condition: service_healthy
+
+  # Trail of history: port 8006 used to be in use by the contactcatalogus, but we deprecated this service in favor of the postadressenservice.
+
+  postadressenservice:
+    <<: *x-postadressenservice
+    container_name: postadressenservice
+    environment:
+      DATABASE_URL: "postgresql://hhb:hhb@db/postadressenservice?connect_timeout=300"
+      LOG_LEVEL: DEBUG
+      SEED_TESTDATA: "true"
+    ports:
+      - 8007:8080
+    depends_on:
+      db:
+        condition: service_healthy
+
+  postadressenservice-test:
+    <<: [ *x-js-tests, *x-postadressenservice ]
+
+  rapportageservice:
+    <<: *x-rapportageservice
+    container_name: rapportageservice
+    environment:
+      LOG_LEVEL: DEBUG
+    ports:
+      - 8011:8000
+
+  rapportageservice-test:
+    <<: [ *x-py-tests, *x-rapportageservice ]

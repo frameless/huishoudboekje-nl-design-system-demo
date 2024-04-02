@@ -78,24 +78,6 @@ export const UpdateBurgerMutation = gql`
                             rekeninghouder
                         }
                     }
-                    alarm {
-                        id
-                        isActive
-                        bedrag
-                        bedragMargin
-                        startDate
-                        endDate
-                        datumMargin
-                        byDay
-                        byMonth
-                        byMonthDay
-                        afspraak {
-                            id
-                        }
-                        signaal {
-                            id
-                        }
-                    }
                     afdeling {
                         id
                         naam
