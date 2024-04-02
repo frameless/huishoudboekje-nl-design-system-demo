@@ -135,7 +135,7 @@ public class MonthlyReportHttpProducer(IConfiguration config) : IMonthlyReportPr
 
   private int DecimalStringToInt(string decimalString)
   {
-    return (int)decimal.Parse(decimalString) * 100;
+    return (int)(decimal.Parse(decimalString) * 100);
   }
 
   private long DateStringToUnix(string dateString)
