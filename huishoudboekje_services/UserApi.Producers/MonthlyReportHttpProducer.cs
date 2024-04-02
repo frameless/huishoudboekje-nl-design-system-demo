@@ -1,8 +1,8 @@
-﻿using System.Collections;
-using System.Net.Http.Json;
+﻿using System.Net.Http.Json;
 using System.Text.Json;
 using Core.CommunicationModels.ReportModels;
 using Core.CommunicationModels.ReportModels.Interfaces;
+using Core.ErrorHandling.Exceptions;
 using Microsoft.Extensions.Configuration;
 using UserApi.Producers.HttpModels;
 using UserApi.Producers.Interfaces;
@@ -33,8 +33,8 @@ public class MonthlyReportHttpProducer(IConfiguration config) : IMonthlyReportPr
   private async Task<string> GetCitizenId(string bsn)
   {
     string id = "";
-    using var client = new HttpClient();
-    var request = new HttpRequestMessage
+    using HttpClient client = new();
+    HttpRequestMessage request = new()
     {
       Method = HttpMethod.Get,
       RequestUri = new Uri(config["HHB_HUISHOUDBOEKJE_SERVICE_URL"] + $"/burgers?filter_bsn={bsn}&columns=id"),
@@ -43,16 +43,25 @@ public class MonthlyReportHttpProducer(IConfiguration config) : IMonthlyReportPr
     {
       string response = await client.SendAsync(request).Result.Content.ReadAsStringAsync();
       HttpProducerResponse<IList<GetIdHttpItem>>? responseObject = JsonSerializer.Deserialize<HttpProducerResponse<IList<GetIdHttpItem>>>(response);
-      id = responseObject.data[0].id.ToString();
+      id = responseObject!.data[0].id.ToString();
     }
-    catch (Exception ex)
+    catch (HttpRequestException ex)
     {
-      // TODO: Logging
-      Console.Write(ex);
+      throw new HHBConnectionException(
+        "Error during REST call to huishoudboekje service",
+        "Something went wrong while getting data");
+    }
+    catch (JsonException ex)
+    {
+      throw new HHBDataException(
+        "JSON Exception occured while parsing data",
+        "Incorrect data received from huishoudboekjeservice");
     }
     if (string.IsNullOrEmpty(id))
     {
-      throw new Exception("Could not get id");
+      throw new HHBDataException(
+        "Executed request correctly but did not receive id",
+        "No data received from huishoudboekjeservice");
     }
     return id;
   }
@@ -71,16 +80,25 @@ public class MonthlyReportHttpProducer(IConfiguration config) : IMonthlyReportPr
     {
       string response = await client.SendAsync(request).Result.Content.ReadAsStringAsync();
       HttpProducerResponse<IList<MonthlyReportHttpItem>>? responseObject = JsonSerializer.Deserialize<HttpProducerResponse<IList<MonthlyReportHttpItem>>>(response);
-      result = responseObject.data[0];
+      result = responseObject!.data[0];
     }
-    catch (Exception ex)
+    catch (HttpRequestException ex)
     {
-      // TODO: Logging
-      Console.Write(ex);
+      throw new HHBConnectionException(
+        "Error during REST call to rapportage service",
+        "Something went wrong while getting data");
+    }
+    catch (JsonException ex)
+    {
+      throw new HHBDataException(
+        "JSON Exception occured while parsing data",
+        "Incorrect data received from rapportageservice");
     }
     if (result == null)
     {
-      throw new Exception("Could not get report");
+      throw new HHBDataException(
+        "Executed request correctly but did not receive any data",
+        "No report received from rapportageservice");
     }
     return result;
   }
@@ -101,11 +119,17 @@ public class MonthlyReportHttpProducer(IConfiguration config) : IMonthlyReportPr
       HttpProducerResponse<BalanceHttpItem> responseObject = JsonSerializer.Deserialize<HttpProducerResponse<BalanceHttpItem>>(response);
       return responseObject.data.saldo;
     }
-    catch (Exception ex)
+    catch (HttpRequestException ex)
     {
-      // TODO: Logging
-      Console.Write(ex);
-      throw new Exception("Could not get balance");
+      throw new HHBConnectionException(
+        "Error during REST call to rapportage service",
+        "Something went wrong while getting data");
+    }
+    catch (JsonException ex)
+    {
+      throw new HHBDataException(
+        "JSON Exception occured while parsing data",
+        "Incorrect data received from rapportageservice");
     }
   }
 
@@ -122,23 +146,24 @@ public class MonthlyReportHttpProducer(IConfiguration config) : IMonthlyReportPr
 
   private long DateTimeStringToUnix(string dateTimeString)
   {
-    DateTime date  = DateTime.Parse(dateTimeString);
+    DateTime date = DateTime.Parse(dateTimeString);
     return new DateTimeOffset(date).ToUnixTimeSeconds();
   }
 
   private List<IStatementSection> ConvertStatementSections(IList<StatementSectionHttpItem> list)
   {
-    List<IStatementSection> result = new List<IStatementSection>();
-    foreach (var row in list)
+    List<IStatementSection> result = [];
+    foreach (StatementSectionHttpItem row in list)
     {
-      StatementSection section = new StatementSection
+      StatementSection section = new()
       {
         StatementName = row.rubriek,
         Transactions = new List<IReportTransaction>()
       };
-      foreach (var transaction in row.transacties)
+      foreach (ReportTransactionHttpItem transaction in row.transacties)
       {
-        section.Transactions.Add(new ReportTransaction
+        section.Transactions.Add(
+          new ReportTransaction
         {
           TransactionDate = DateTimeStringToUnix(transaction.transactie_datum),
           AccountHolder = transaction.rekeninghouder,

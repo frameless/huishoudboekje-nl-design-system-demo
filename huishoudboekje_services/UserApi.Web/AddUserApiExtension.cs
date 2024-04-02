@@ -1,4 +1,5 @@
-﻿using Microsoft.OpenApi.Models;
+﻿using Core.ErrorHandling.ExceptionInterceptors;
+using Microsoft.OpenApi.Models;
 using UserApi.Middleware;
 using UserApi.Web.Endpoints;
 using UserApi.Web.OpenApiParameters;
@@ -37,6 +38,7 @@ public static class AddUserApiExtension
 
     app.UseExceptionHandler("/Error");
 
+    app.UseMiddleware<MinimalRestApiExceptionInterceptor>();
     app.UseMiddleware<SamlAuthMiddleware>();
     app.UseMiddleware<BsnValidationMiddleware>();
 

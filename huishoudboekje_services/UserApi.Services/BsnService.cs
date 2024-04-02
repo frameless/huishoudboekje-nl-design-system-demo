@@ -1,4 +1,5 @@
-﻿using UserApi.Producers.Interfaces;
+﻿using Core.ErrorHandling.Exceptions;
+using UserApi.Producers.Interfaces;
 using UserApi.Services.Interfaces;
 
 namespace UserApi.Services;
@@ -47,10 +48,12 @@ public class BsnService(ICheckBsnProducer checkBsnProducer) : IBsnService
 
   private int CharToInt(char digit)
   {
-    if (!char.IsDigit(digit))
+    if (char.IsDigit(digit))
     {
-      throw new Exception("Incorrect input");
+      return digit - '0';
     }
-    return digit - '0';
+    throw new HHBDataException(
+      "Can't convert char to int",
+      "Incorrect input");
   }
 }

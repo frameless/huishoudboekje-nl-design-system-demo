@@ -8,6 +8,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Core.CommunicationModels\Core.CommunicationModels.csproj" />
+      <ProjectReference Include="..\Core.ErrorHandling\Core.ErrorHandling.csproj" />
     </ItemGroup>
 
     <ItemGroup>

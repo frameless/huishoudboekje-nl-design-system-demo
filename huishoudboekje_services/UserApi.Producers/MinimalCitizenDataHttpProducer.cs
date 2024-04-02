@@ -1,5 +1,6 @@
 ﻿using System.Text.Json;
 using Core.CommunicationModels.Citizen;
+using Core.ErrorHandling.Exceptions;
 using Microsoft.Extensions.Configuration;
 using UserApi.Producers.HttpModels;
 using UserApi.Producers.Interfaces;
@@ -23,14 +24,23 @@ public class MinimalCitizenDataHttpProducer(IConfiguration config) : IMinimalCit
       HttpProducerResponse<IList<BasicCitizenDataHttpItem>>? responseObject = JsonSerializer.Deserialize<HttpProducerResponse<IList<BasicCitizenDataHttpItem>>>(response);
       data = responseObject.data[0];
     }
-    catch (Exception ex)
+    catch (HttpRequestException ex)
     {
-      // TODO: Logging
-      Console.Write(ex);
+      throw new HHBConnectionException(
+        "Error during REST call to huishoudboekje service",
+        "Something went wrong while getting data");
+    }
+    catch (JsonException ex)
+    {
+      throw new HHBDataException(
+        "JSON Exception occured while parsing data",
+        "Incorrect data received from huishoudboekjeservice");
     }
     if (data == null)
     {
-      throw new Exception("Could not get citizen data");
+      throw new HHBDataException(
+        "Executed request correctly but did not receive any data",
+        "No data received from huishoudboekjeservice");
     }
     return new MinimalCitizenData
     {

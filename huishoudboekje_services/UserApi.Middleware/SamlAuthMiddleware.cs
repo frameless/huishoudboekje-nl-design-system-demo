@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Core.ErrorHandling.Exceptions;
+using Microsoft.AspNetCore.Http;
 
 namespace UserApi.Middleware;
 
@@ -8,7 +9,7 @@ public class SamlAuthMiddleware(RequestDelegate next)
   {
     if (!context.Request.Headers.TryGetValue("X-Saml-Token", out var samlToken))
     {
-      throw new Exception("No Saml token provided");
+      throw new HHBInvalidInputException($"No Saml token provided", "Incorrect request");
     }
     //TODO check if valid saml token
     //TODO check if i can use core.auth + SamlKeyChecker

@@ -9,11 +9,7 @@ public class CustomExceptionHandler(ILogger<CustomExceptionHandler> logger) : IE
     Exception exception,
     CancellationToken cancellationToken)
   {
-    var exceptionMessage = exception.Message;
-    logger.LogError(
-      "Error Message: {exceptionMessage},Time of occurrence {time}",
-      exceptionMessage,
-      DateTime.UtcNow);
+    //No need to log exception because the exception middleware does that already.
     httpContext.Response.StatusCode = 404;
     return ValueTask.FromResult(true);
   }

@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using Core.ErrorHandling.Exceptions;
 using Microsoft.Extensions.Configuration;
 using UserApi.Producers.HttpModels;
 using UserApi.Producers.Interfaces;
@@ -21,10 +22,17 @@ public class CheckBsnHttpProducer(IConfiguration config) : ICheckBsnProducer
       string response = await client.SendAsync(request).Result.Content.ReadAsStringAsync();
       result = ValidResponseData(response, bsn);
     }
-    catch (Exception ex)
+    catch (HttpRequestException ex)
     {
-      // TODO: Logging
-      Console.Write(ex);
+      throw new HHBConnectionException(
+        "Error during REST call to huishoudboekje service",
+        "Something went wrong while getting data");
+    }
+    catch (JsonException ex)
+    {
+      throw new HHBDataException(
+        "JSON Exception occured while parsing data",
+        "Incorrect data received from huishoudboekjeservice");
     }
     return result;
   }

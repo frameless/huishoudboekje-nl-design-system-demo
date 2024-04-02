@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Core.ErrorHandling.Exceptions;
+using Microsoft.AspNetCore.Http;
 using UserApi.Services.Interfaces;
 
 namespace UserApi.Middleware;
@@ -9,11 +10,11 @@ public class BsnValidationMiddleware(RequestDelegate next)
     {
       if (!context.Request.Headers.TryGetValue("X-User-Bsn", out var bsn))
       {
-        throw new Exception("Bsn parameter not provided");
+        throw new HHBInvalidInputException($"Bsn parameter not provided", "Incorrect request");
       }
       if (!(bsnService.Validate(bsn) && bsnService.IsAllowed(bsn).Result))
       {
-        throw new Exception("Incorrect Bsn parameter provided");
+        throw new HHBInvalidInputException($"Incorrect Bsn parameter provided", "Incorrect request");
       }
       return next(context);
     }

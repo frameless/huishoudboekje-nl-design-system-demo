@@ -18,6 +18,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Core.ErrorHandling\Core.ErrorHandling.csproj" />
       <ProjectReference Include="..\UserApi.Services\UserApi.Services.csproj" />
       <ProjectReference Include="..\UserApi.Middleware\UserApi.Middleware.csproj" />
     </ItemGroup>
