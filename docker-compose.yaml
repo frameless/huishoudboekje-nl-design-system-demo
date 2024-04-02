@@ -195,6 +195,26 @@ services:
       db:
         condition: service_healthy
 
+  userapi:
+    image: ${DOCKER_REGISTRY-}userapi
+    container_name: userapi
+    build:
+      context: ./huishoudboekje_services
+      dockerfile: ./UserApi.Application/dev.Dockerfile
+    volumes: 
+      - ./huishoudboekje_services/:/src/app
+      - /src/app/UserApi.Application/bin
+      - /src/app/UserApi.Application/obj
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Development"
+      LOG_LEVEL: DEBUG
+    ports:
+      - 8013:8000
+      - 8113:9000
+    depends_on:
+      db:
+        condition: service_healthy
+
 ##################################################
 # Auth ?
 ##################################################

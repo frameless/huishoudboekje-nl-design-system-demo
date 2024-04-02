@@ -1,25 +1,25 @@
 ﻿FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 USER $APP_UID
 WORKDIR /app
-ENV HHB_HUISHOUDBOEKJE_SERVICE_URL = "huishoudboekjeservice:8000"
+ENV HHB_USE_AUTH "1"
 
-EXPOSE 8080
-EXPOSE 8081
+EXPOSE 8000
+EXPOSE 9000
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["UserService.Application/UserService.Application.csproj", "UserService.Application/"]
-RUN dotnet restore "UserService.Application/UserService.Application.csproj"
+COPY ["UserApi.Application/UserApi.Application.csproj", "UserApi.Application/"]
+RUN dotnet restore "UserApi.Application/UserApi.Application.csproj"
 COPY . .
-WORKDIR "/src/UserService.Application"
-RUN dotnet build "UserService.Application.csproj" -c $BUILD_CONFIGURATION -o /app/build
+WORKDIR "/src/UserApi.Application"
+RUN dotnet build "UserApi.Application.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "UserService.Application.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "UserApi.Application.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "UserService.Application.dll"]
+ENTRYPOINT ["dotnet", "UserApi.Application.dll", "--launch-profile production"]

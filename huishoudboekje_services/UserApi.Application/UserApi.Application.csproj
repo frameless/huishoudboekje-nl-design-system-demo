@@ -6,11 +6,12 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <InvariantGlobalization>true</InvariantGlobalization>
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
-        <RootNamespace>UserService.Application</RootNamespace>
+        <RootNamespace>UserApi.Application</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.0"/>
+        <PackageReference Include="prometheus-net.AspNetCore" Version="8.2.1" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
     </ItemGroup>
 
@@ -21,14 +22,9 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Core.MessageQueue\Core.MessageQueue.csproj" />
       <ProjectReference Include="..\UserApi.Producers\UserApi.Producers.csproj" />
       <ProjectReference Include="..\UserApi.Web\UserApi.Web.csproj" />
     </ItemGroup>
-
-<!--  This doesnt include the paths for some reason, it generates only the title part-->
-<!--  -->
-<!--    <Target Name="GenerateSwaggerJsonOnBuild" AfterTargets="Run">-->
-<!--      <Exec Command="swagger tofile &#45;&#45;output swagger/swagger.json $(OutputPath)$(AssemblyName).dll v1"/>-->
-<!--    </Target>-->
 
 </Project>

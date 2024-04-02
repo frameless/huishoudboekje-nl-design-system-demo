@@ -7,9 +7,9 @@ using Microsoft.Extensions.Logging;
 
 namespace Core.ErrorHandling.ExceptionInterceptors;
 
-public class MinimalRestApiExceptionInterceptor(ILogger<MinimalRestApiExceptionInterceptor> logger, IRequestClient<ExceptionLogMessage> requestClient, RequestDelegate next)
+public class MinimalRestApiExceptionInterceptor(RequestDelegate next)
 {
-  public Task InvokeAsync(HttpContext context)
+  public Task InvokeAsync(HttpContext context, ILogger<MinimalRestApiExceptionInterceptor> logger, IRequestClient<ExceptionLogMessage> requestClient)
   {
     try
     {
@@ -18,14 +18,13 @@ public class MinimalRestApiExceptionInterceptor(ILogger<MinimalRestApiExceptionI
     catch (HHBException exception)
     {
       logger.LogError(ExceptionFormatter.DeveloperMessage(exception));
-      throw exception;
     }
     catch (Exception exception)
     {
       HHBUnexpectedException hhbException = new(exception);
       ExceptionLogResult result = ExceptionProducer.Send(hhbException, requestClient).Result;
       logger.LogError(ExceptionFormatter.UnexpectedMessage(result));
-      throw hhbException;
     }
+    throw new Exception("An exception occured, see previous log");
   }
 }

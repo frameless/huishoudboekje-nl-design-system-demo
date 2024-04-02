@@ -16,7 +16,7 @@ public class MinimalCitizenDataHttpProducer(IConfiguration config) : IMinimalCit
     var request = new HttpRequestMessage
     {
       Method = HttpMethod.Get,
-      RequestUri = new Uri(config["HHB_HUISHOUDBOEKJE_SERVICE_URL"] + $"/burgers?filter_bsn={bsn}&columns=bsn,voornamen,achternaam"),
+      RequestUri = new Uri(config["HHB_HUISHOUDBOEKJE_SERVICE"] + $"/burgers?filter_bsn={bsn}&columns=bsn,voornamen,achternaam"),
     };
     try
     {

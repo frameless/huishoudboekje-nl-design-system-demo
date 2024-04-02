@@ -37,7 +37,7 @@ public class MonthlyReportHttpProducer(IConfiguration config) : IMonthlyReportPr
     HttpRequestMessage request = new()
     {
       Method = HttpMethod.Get,
-      RequestUri = new Uri(config["HHB_HUISHOUDBOEKJE_SERVICE_URL"] + $"/burgers?filter_bsn={bsn}&columns=id"),
+      RequestUri = new Uri(config["HHB_HUISHOUDBOEKJE_SERVICE"] + $"/burgers?filter_bsn={bsn}&columns=id"),
     };
     try
     {
@@ -74,7 +74,7 @@ public class MonthlyReportHttpProducer(IConfiguration config) : IMonthlyReportPr
     {
       Method = HttpMethod.Get,
       Content = JsonContent.Create(new { burger_ids = new List<int> { int.Parse(id) } }),
-      RequestUri = new Uri(config["HHB_RAPPORTAGE_SERVICE_URL"] + $"/rapportage?startDate={startDate}&endDate={endDate}"),
+      RequestUri = new Uri(config["HHB_RAPPORTAGE_SERVICE"] + $"/rapportage?startDate={startDate}&endDate={endDate}"),
     };
     try
     {
@@ -111,7 +111,7 @@ public class MonthlyReportHttpProducer(IConfiguration config) : IMonthlyReportPr
     {
       Method = HttpMethod.Get,
       Content = JsonContent.Create(new { burger_ids = new List<string> { id } }),
-      RequestUri = new Uri(config["HHB_RAPPORTAGE_SERVICE_URL"] + $"//saldo?date={endDate}"),
+      RequestUri = new Uri(config["HHB_RAPPORTAGE_SERVICE"] + $"//saldo?date={endDate}"),
     };
     try
     {

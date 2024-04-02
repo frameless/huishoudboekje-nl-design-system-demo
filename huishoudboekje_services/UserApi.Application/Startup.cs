@@ -1,3 +1,6 @@
+using Core.MessageQueue;
+using MassTransit;
+using Prometheus;
 using UserApi.Producers;
 using UserApi.Producers.Interfaces;
 using UserApi.Services;
@@ -12,13 +15,21 @@ public class Startup(IConfiguration configuration)
 
     public void ConfigureServices(IServiceCollection services)
     {
+      services.AddMetricServer(options => { options.Port = (ushort)Configuration.GetValue("HHB_METRICS_PORT", 9000); });
+      services.AddMassTransitService(Configuration, AddConsumers);
       services.AddUserApi(Configuration);
       AddDependencyInjectionServices(services);
     }
 
     public void Configure(WebApplication app, IWebHostEnvironment env)
     {
+      app.UseMetricServer();
+      app.UseHttpMetrics();
       app.AddUserApi(env);
+    }
+    private IBusRegistrationConfigurator AddConsumers(IBusRegistrationConfigurator massTransit)
+    {
+      return massTransit;
     }
 
     private void AddDependencyInjectionServices(IServiceCollection services)
