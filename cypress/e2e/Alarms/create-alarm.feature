@@ -1,6 +1,5 @@
 # cypress/e2e/Alarms/create-alarm.feature
 
-@alarmservice
 Feature: create alarm
   
   # Set an alarm on an expected payment and timeframe. Get a notification on missing or unexpected payment.

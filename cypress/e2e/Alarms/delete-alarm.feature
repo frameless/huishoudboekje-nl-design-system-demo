@@ -1,6 +1,5 @@
 # cypress/e2e/Alarms/delete-alarm.feature
 
-@alarmservice
 Feature: delete alarm
 
   # Delete an alarm and its properties.
