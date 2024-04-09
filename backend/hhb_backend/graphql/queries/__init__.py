@@ -8,7 +8,7 @@ from .bank_transactions import BankTransactionQuery, BankTransactionsQuery, Bank
 from .burgers import BurgersQuery, BurgerQuery, BurgersPagedQuery
 from .configuraties import ConfiguratieQuery, ConfiguratiesQuery
 from .customer_statement_messages import CustomerStatementMessageQuery, CustomerStatementMessagesQuery
-from .exports import ExportQuery, ExportsQuery
+from .exports import ExportQuery, ExportsPagedQuery, ExportsQuery
 from .gebruikersactiviteiten import GebruikersActiviteitQuery, GebruikersActiviteitenQuery, \
     GebruikersActiviteitenPagedQuery
 from .grootboekrekeningen import GrootboekrekeningQuery, GrootboekrekeningenQuery
@@ -52,6 +52,7 @@ class RootQuery(graphene.ObjectType):
     configuraties = ConfiguratiesQuery.return_type
     export = ExportQuery.return_type
     exports = ExportsQuery.return_type
+    exports_paged = ExportsPagedQuery.return_type
     gebruikersactiviteit = GebruikersActiviteitQuery.return_type
     gebruikersactiviteiten = GebruikersActiviteitenQuery.return_type
     gebruikersactiviteiten_paged = GebruikersActiviteitenPagedQuery.return_type
@@ -153,6 +154,9 @@ class RootQuery(graphene.ObjectType):
 
     def resolve_exports(root, info, **kwargs):
         return ExportsQuery.resolver(root, info, **kwargs)
+    
+    def resolve_exports_paged(root, info, **kwargs):
+        return ExportsPagedQuery.resolver(root, info, **kwargs)
 
     def resolve_gebruikersactiviteit(root, info, **kwargs):
         return GebruikersActiviteitQuery.resolver(root, info, **kwargs)
