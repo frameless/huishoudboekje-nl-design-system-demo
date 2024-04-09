@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: hhb-userapi
+  labels:
+    name: hhb-userapi
+spec:
+  type: ClusterIP
+  selector:
+    name: hhb-userapi
+  ports:
+    - name: http
+      protocol: TCP
+      port: 80
+      targetPort: http
+    - name: metrics
+      protocol: TCP
+      port: 9000
+      targetPort: metrics
