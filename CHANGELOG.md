@@ -1,5 +1,13 @@
 # Huishoudboekje Changelog
 
+## 1.12.7
+
+Deze versie omvat paginering bij het overzicht met bestanden van betaalinstructies.
+
+### Patch Changes
+
+- 08a56e9: Added pagination payment instructions page
+
 ## 1.12.6
 
 ### Patch Changes
