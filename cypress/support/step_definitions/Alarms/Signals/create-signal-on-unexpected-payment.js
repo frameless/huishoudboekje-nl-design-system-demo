@@ -98,18 +98,18 @@ Given('an alarm exists for scenario "payment amount too high"', () => {
 
         // 'Toegestane afwijking (in dagen)'
         cy.get('[data-test="alarmForm.dateMargin"]')
-        .type('0')
-        .should('have.value', '0')
+          .type('0')
+          .should('have.value', '1')
 
         // 'Bedrag verwachte betaling'
         cy.get('[data-test="alarmForm.amount"]')
-        .type('{selectAll}10')
-        .should('have.value', '10') 
+          .type('{selectAll}10')
+          .should('have.value', '10') 
 
         // 'Toegestane afwijking bedrag'
         cy.get('[data-test="alarmForm.amountMargin"]')
-        .type('{selectAll}0')
-        .should('have.value', '0')
+          .type('{selectAll}0')
+          .should('have.value', '0')
 
     // Click 'Opslaan' button
     cy.waitForReact()
@@ -437,18 +437,18 @@ Given('an alarm exists for scenario "payment amount too low"', () => {
 
       // 'Toegestane afwijking (in dagen)'
       cy.get('[data-test="alarmForm.dateMargin"]')
-      .type('0')
-      .should('have.value', '0')
+        .type('0')
+        .should('have.value', '1')
 
       // 'Bedrag verwachte betaling'
       cy.get('[data-test="alarmForm.amount"]')
-      .type('{selectAll}10')
-      .should('have.value', '10') 
+        .type('{selectAll}10')
+        .should('have.value', '10') 
 
       // 'Toegestane afwijking bedrag'
       cy.get('[data-test="alarmForm.amountMargin"]')
-      .type('{selectAll}0')
-      .should('have.value', '0')
+        .type('{selectAll}0')
+        .should('have.value', '0')
 
   // Click 'Opslaan' button
   cy.waitForReact()
@@ -770,18 +770,18 @@ Given('an alarm exists for scenario "expected payment amount"', () => {
 
       // 'Toegestane afwijking (in dagen)'
       cy.get('[data-test="alarmForm.dateMargin"]')
-      .type('0')
-      .should('have.value', '0')
+        .type('0')
+        .should('have.value', '1')
 
       // 'Bedrag verwachte betaling'
       cy.get('[data-test="alarmForm.amount"]')
-      .type('{selectAll}10')
-      .should('have.value', '10') 
+        .type('{selectAll}10')
+        .should('have.value', '10') 
 
       // 'Toegestane afwijking bedrag'
       cy.get('[data-test="alarmForm.amountMargin"]')
-      .type('{selectAll}0.99{enter}')
-      .should('have.value', '0.99')
+        .type('{selectAll}0.99{enter}')
+        .should('have.value', '0.99')
 
   // Click 'Opslaan' button
   cy.waitForReact()
