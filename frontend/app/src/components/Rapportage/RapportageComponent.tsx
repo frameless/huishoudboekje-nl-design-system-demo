@@ -29,7 +29,7 @@ const RapportageComponent: React.FC<RapportageComponentParams> = ({burgerIds, st
 			burgers: burgerIds,
 			start: d(startDate).format("YYYY-MM-DD"),
 			end: d(endDate).format("YYYY-MM-DD"),
-			saldoDate: d(startDate).subtract(1, "month").endOf("month").format("YYYY-MM-DD"),
+			saldoDate: d(startDate).subtract(1, "day").format("YYYY-MM-DD"),
 			rubrieken: rubrieken
 		},
 		fetchPolicy: "no-cache"
