@@ -30,7 +30,7 @@ After({ tags: "@cleanupAgreement" }, function ()  {
     .click();
   cy.get('[data-test="agreement.menuDelete"]')
     .click();
-  cy.get('[data-test="button.Delete"]')
+  cy.get('[data-test="button.AlertDelete"]')
     .click();
   
   // Check success message

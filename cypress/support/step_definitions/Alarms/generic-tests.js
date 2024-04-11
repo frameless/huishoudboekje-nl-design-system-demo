@@ -12,6 +12,10 @@ const queryTruncateAlarm = `mutation Truncate {
   truncateTable(databaseName: "alarmenservice", tableName: "Alarm")
 }`
 
+const queryTruncateSignal = `mutation Truncate {
+  truncateTable(databaseName: "alarmenservice", tableName: "signals")
+}`
+
 // Before *all* tests, run this (so this runs once at the start)
 After({ tags: "@cleanupAlarm" }, function (){
 

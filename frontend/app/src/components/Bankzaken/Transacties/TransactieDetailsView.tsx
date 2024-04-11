@@ -63,7 +63,7 @@ const TransactieDetailsView: React.FC<StackProps & {transaction: BankTransaction
 				<Box flex={1}>
 					<FormLabel>{t("transactions.amount")}</FormLabel>
 					<Box>
-						<Text>{currencyFormat2().format(bt.bedrag)}</Text>
+						<Text data-test="transaction.amount">{currencyFormat2().format(bt.bedrag)}</Text>
 					</Box>
 				</Box>
 			</Stack>
