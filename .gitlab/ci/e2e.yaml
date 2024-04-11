@@ -12,7 +12,6 @@ e2e-tests:
   script:
     - kubectl config use-context commonground/huishoudboekje/app-new:hhb-development
     - kubectl wait pod --all --for=condition=Ready --namespace=$NAMESPACE --timeout=5m --selector='!job-name' --field-selector=status.phase!=Failed,status.phase!=Succeeded
-    - kubectl wait pod --all --for=condition=Ready --namespace=$NAMESPACE --timeout=5m
     - sh cypress/pipeline/pipeline-execution.sh
   rules:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event' && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == 'main'
