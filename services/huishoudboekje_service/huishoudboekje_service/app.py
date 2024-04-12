@@ -31,6 +31,7 @@ from huishoudboekje_service.views import (
 )
 from core_service import database
 from core_service.seed import seed_database_with_test_data
+from huishoudboekje_service.views.exports_paged import ExportsFilterView
 
 db = database.db
 
@@ -109,6 +110,7 @@ def create_app(config_name='huishoudboekje_service.config.Config'):
         {"path": "/overschrijvingen/<object_id>", "view": OverschrijvingView,
             "name": "overschrijving_detail_view"},
         {"path": "/export", "view": ExportView, "name": "export_view"},
+        {"path": "/export/paged", "view": ExportsFilterView, "name": "export_filter_view"}, 
         {"path": "/export/<object_id>", "view": ExportView,
             "name": "export_detail_view"},
         {"path": "/huishoudens", "view": HuishoudenView, "name": "huishouden_view"},

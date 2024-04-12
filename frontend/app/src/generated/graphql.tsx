@@ -639,6 +639,11 @@ export type Export = {
   xmldata?: Maybe<Scalars['String']>;
 };
 
+export type ExportsPaged = {
+  exports?: Maybe<Array<Maybe<Export>>>;
+  pageInfo?: Maybe<PageInfo>;
+};
+
 export type Filter = {
   entityFilter?: InputMaybe<Array<InputMaybe<EntityFilter>>>;
 };
@@ -1193,6 +1198,7 @@ export type Query = {
   customerStatementMessages?: Maybe<Array<Maybe<CustomerStatementMessage>>>;
   export?: Maybe<Export>;
   exports?: Maybe<Array<Maybe<Export>>>;
+  exportsPaged?: Maybe<ExportsPaged>;
   grootboekrekening?: Maybe<Grootboekrekening>;
   grootboekrekeningen?: Maybe<Array<Maybe<Grootboekrekening>>>;
   huishouden?: Maybe<Huishouden>;
@@ -1379,6 +1385,12 @@ export type QueryExportsArgs = {
   eindDatum?: InputMaybe<Scalars['Date']>;
   ids?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
   startDatum?: InputMaybe<Scalars['Date']>;
+};
+
+
+export type QueryExportsPagedArgs = {
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
 };
 
 
@@ -2174,10 +2186,13 @@ export type GetCsmsQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetCsmsQuery = { customerStatementMessages?: Array<{ id?: number, filename?: string, uploadDate?: any, accountIdentification?: string, closingAvailableFunds?: number, closingBalance?: number, forwardAvailableBalance?: number, openingBalance?: number, relatedReference?: string, sequenceNumber?: string, transactionReferenceNumber?: string }> };
 
-export type GetExportsQueryVariables = Exact<{ [key: string]: never; }>;
+export type GetExportsPagedQueryVariables = Exact<{
+  offset: Scalars['Int'];
+  limit: Scalars['Int'];
+}>;
 
 
-export type GetExportsQuery = { exports?: Array<{ id?: number, naam?: string, timestamp?: any, startDatum?: any, eindDatum?: any, verwerkingDatum?: any, sha256?: string, overschrijvingen?: Array<{ id?: number, bedrag?: any }> }> };
+export type GetExportsPagedQuery = { exportsPaged?: { exports?: Array<{ id?: number, naam?: string, timestamp?: any, startDatum?: any, eindDatum?: any, verwerkingDatum?: any, sha256?: string, overschrijvingen?: Array<{ id?: number, bedrag?: any }> }>, pageInfo?: { count?: number, limit?: number, start?: number } } };
 
 export type GetHuishoudenQueryVariables = Exact<{
   id: Scalars['Int'];
@@ -5863,50 +5878,59 @@ export function useGetCsmsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Ge
 export type GetCsmsQueryHookResult = ReturnType<typeof useGetCsmsQuery>;
 export type GetCsmsLazyQueryHookResult = ReturnType<typeof useGetCsmsLazyQuery>;
 export type GetCsmsQueryResult = Apollo.QueryResult<GetCsmsQuery, GetCsmsQueryVariables>;
-export const GetExportsDocument = gql`
-    query getExports {
-  exports {
-    id
-    naam
-    timestamp
-    startDatum
-    eindDatum
-    verwerkingDatum
-    sha256
-    overschrijvingen {
+export const GetExportsPagedDocument = gql`
+    query getExportsPaged($offset: Int!, $limit: Int!) {
+  exportsPaged(offset: $offset, limit: $limit) {
+    exports {
       id
-      bedrag
+      naam
+      timestamp
+      startDatum
+      eindDatum
+      verwerkingDatum
+      sha256
+      overschrijvingen {
+        id
+        bedrag
+      }
+    }
+    pageInfo {
+      count
+      limit
+      start
     }
   }
 }
     `;
 
 /**
- * __useGetExportsQuery__
+ * __useGetExportsPagedQuery__
  *
- * To run a query within a React component, call `useGetExportsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetExportsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetExportsPagedQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetExportsPagedQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetExportsQuery({
+ * const { data, loading, error } = useGetExportsPagedQuery({
  *   variables: {
+ *      offset: // value for 'offset'
+ *      limit: // value for 'limit'
  *   },
  * });
  */
-export function useGetExportsQuery(baseOptions?: Apollo.QueryHookOptions<GetExportsQuery, GetExportsQueryVariables>) {
+export function useGetExportsPagedQuery(baseOptions: Apollo.QueryHookOptions<GetExportsPagedQuery, GetExportsPagedQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetExportsQuery, GetExportsQueryVariables>(GetExportsDocument, options);
+        return Apollo.useQuery<GetExportsPagedQuery, GetExportsPagedQueryVariables>(GetExportsPagedDocument, options);
       }
-export function useGetExportsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetExportsQuery, GetExportsQueryVariables>) {
+export function useGetExportsPagedLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetExportsPagedQuery, GetExportsPagedQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetExportsQuery, GetExportsQueryVariables>(GetExportsDocument, options);
+          return Apollo.useLazyQuery<GetExportsPagedQuery, GetExportsPagedQueryVariables>(GetExportsPagedDocument, options);
         }
-export type GetExportsQueryHookResult = ReturnType<typeof useGetExportsQuery>;
-export type GetExportsLazyQueryHookResult = ReturnType<typeof useGetExportsLazyQuery>;
-export type GetExportsQueryResult = Apollo.QueryResult<GetExportsQuery, GetExportsQueryVariables>;
+export type GetExportsPagedQueryHookResult = ReturnType<typeof useGetExportsPagedQuery>;
+export type GetExportsPagedLazyQueryHookResult = ReturnType<typeof useGetExportsPagedLazyQuery>;
+export type GetExportsPagedQueryResult = Apollo.QueryResult<GetExportsPagedQuery, GetExportsPagedQueryVariables>;
 export const GetHuishoudenDocument = gql`
     query getHuishouden($id: Int!) {
   huishouden(id: $id) {

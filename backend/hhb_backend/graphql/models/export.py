@@ -5,6 +5,7 @@ import graphene
 
 import hhb_backend.graphql.models.overschrijving as overschrijving
 from hhb_backend.graphql.dataloaders import hhb_dataloader
+from hhb_backend.graphql.models.pageinfo import PageInfo
 from hhb_backend.graphql.utils.dates import to_date
 
 
@@ -26,8 +27,8 @@ class Export(graphene.ObjectType):
 
     def resolve_overschrijvingen(self, _info):
         """ Get overschrijvingen when requested """
-        if self.get('overschrijvingen'):
-            return hhb_dataloader().overschrijvingen.load(self.get('overschrijvingen')) or []
+        if not self.get('overschrijvingen'):
+            return hhb_dataloader().overschrijvingen.by_exports([self.get('id')]) or []
 
     def resolve_start_datum(self, _info):
         if value := self.get('start_datum'):
@@ -40,3 +41,9 @@ class Export(graphene.ObjectType):
     def resolve_verwerking_datum(self, _info):
         if value := self.get('verwerking_datum'):
             return to_date(value)
+
+class ExportsPaged(graphene.ObjectType):
+    exports = graphene.List(
+        Export
+    )
+    page_info = graphene.Field(lambda: PageInfo)
