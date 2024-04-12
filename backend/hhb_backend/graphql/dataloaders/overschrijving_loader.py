@@ -14,3 +14,7 @@ class OverschrijvingLoader(DataLoader[Overschrijving]):
 
     def by_afspraken(self, afspraak_ids: List[int]) -> List[Overschrijving]:
         return self.load(afspraak_ids, filter_item="filter_afspraken")
+    
+    
+    def by_exports(self, export_ids: List[int]) -> List[Overschrijving]:
+        return self.load(export_ids, filter_item="filter_exports")

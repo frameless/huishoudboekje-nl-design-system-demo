@@ -21,7 +21,15 @@
 		"@graphql-mesh/transform-hoist-field": "^0.97.0",
 		"@graphql-mesh/transform-prefix": "^0.97.0",
 		"@graphql-mesh/transform-rename": "^0.97.0",
-		"graphql": "^16.8.1"
+		"graphql": "^16.8.1",
+		"graphql-subscriptions": "^2.0.0"
+	},
+	"overrides": {
+		"@graphql-mesh/cli": {
+			"@graphql-mesh/http": {
+				"@whatwg-node/server": "^0.9.7"
+			}
+		}
 	},
 	"devDependencies": {
 		"@apollo/rover": "^0.22.0"

@@ -2,19 +2,14 @@ schema {
   query: RootQuery
   mutation: RootMutation
 }
-"""
-Leverages the internal Python implementation of UUID (uuid.UUID) to provide native UUID objects
-in fields, resolvers and input.
-"""
-scalar UUID
+"Bedrag (bijvoorbeeld: 99.99) n"
+scalar Bedrag
 """
 The `Date` scalar type represents a Date
 value as specified by
 [iso8601](https://en.wikipedia.org/wiki/ISO_8601).
 """
 scalar Date
-"Bedrag (bijvoorbeeld: 99.99) n"
-scalar Bedrag
 """
 The `DateTime` scalar type represents a DateTime
 value as specified by
@@ -22,16 +17,21 @@ value as specified by
 """
 scalar DateTime
 """
+Leverages the internal Python implementation of UUID (uuid.UUID) to provide native UUID objects
+in fields, resolvers and input.
+"""
+scalar UUID
+"""
 Allows use of a JSON String for input / output from the GraphQL schema.
 
 Use of this type is *not recommended* as you lose the benefits of having a defined, static
 schema (one of the key benefits of GraphQL).
 """
 scalar JSONString
-"Accepteert datum, datum en tijd, ints en strings en wordt gebruikt bij ComplexFilterType."
-scalar DynamicType
 "The `Decimal` scalar type represents a python Decimal."
 scalar Decimal
+"Accepteert datum, datum en tijd, ints en strings en wordt gebruikt bij ComplexFilterType."
+scalar DynamicType
 """
 Create scalar that ignores normal serialization/deserialization, since
 that will be handled by the multipart request spec
@@ -39,6 +39,30 @@ that will be handled by the multipart request spec
 scalar Upload
 "The root of all queries "
 type RootQuery {
+  overzicht(burgerIds: [Int]!, startDate: String!, endDate: String!): Overzicht
+  burgerRapportages(burgerIds: [Int]!, startDate: String!, endDate: String!, rubriekenIds: [Int]): [BurgerRapportage]
+  saldo(date: Date!, burgerIds: [Int]): Saldo
+  rubriek(id: Int!): Rubriek
+  rubrieken(ids: [String], isLogRequest: Boolean): [Rubriek]
+  rekening(id: Int!): Rekening
+  rekeningen(ids: [Int], isLogRequest: Boolean): [Rekening]
+  rekeningenByIbans(ibans: [String]): [Rekening]
+  postadres(id: String!): Postadres
+  postadressen(ids: [String], isLogRequest: Boolean): [Postadres]
+  organisatie(id: Int!): Organisatie
+  organisaties(ids: [Int], isLogRequest: Boolean): [Organisatie]
+  journaalpost(id: Int!): Journaalpost
+  journaalpostenUuid(uuids: [String]): [Journaalpost]
+  journaalposten(ids: [Int]): [Journaalpost]
+  journaalpostenTransactieRubriek(transactionIds: [Int]): [JournaalpostTransactieRubriek]
+  huishouden(id: Int!): Huishouden
+  huishoudens(ids: [Int], filters: BurgerFilter, isLogRequest: Boolean): [Huishouden]
+  huishoudensPaged(start: Int, limit: Int, filters: BurgerFilter): HuishoudensPaged
+  grootboekrekening(id: String!): Grootboekrekening
+  grootboekrekeningen(ids: [String]): [Grootboekrekening]
+  export(id: Int!): Export
+  exports(ids: [Int] = null, startDatum: Date, eindDatum: Date, isLogRequest: Boolean): [Export]
+  exportsPaged(offset: Int, limit: Int, isLogRequest: Boolean): ExportsPaged
   afdeling(id: Int!): Afdeling
   afdelingen(ids: [Int], isLogRequest: Boolean): [Afdeling]
   afdelingenByIban(iban: String): [Afdeling]
@@ -58,45 +82,50 @@ type RootQuery {
   configuraties(ids: [String], isLogRequest: Boolean): [Configuratie]
   customerStatementMessage(id: Int!): CustomerStatementMessage
   customerStatementMessages(ids: [Int], isLogRequest: Boolean): [CustomerStatementMessage]
-  export(id: Int!): Export
-  exports(ids: [Int] = null, startDatum: Date, eindDatum: Date, isLogRequest: Boolean): [Export]
-  grootboekrekening(id: String!): Grootboekrekening
-  grootboekrekeningen(ids: [String]): [Grootboekrekening]
-  huishouden(id: Int!): Huishouden
-  huishoudens(ids: [Int], filters: BurgerFilter, isLogRequest: Boolean): [Huishouden]
-  huishoudensPaged(start: Int, limit: Int, filters: BurgerFilter): HuishoudensPaged
-  journaalpost(id: Int!): Journaalpost
-  journaalpostenUuid(uuids: [String]): [Journaalpost]
-  journaalposten(ids: [Int]): [Journaalpost]
-  journaalpostenTransactieRubriek(transactionIds: [Int]): [JournaalpostTransactieRubriek]
-  organisatie(id: Int!): Organisatie
-  organisaties(ids: [Int], isLogRequest: Boolean): [Organisatie]
-  postadres(id: String!): Postadres
-  postadressen(ids: [String], isLogRequest: Boolean): [Postadres]
-  rekening(id: Int!): Rekening
-  rekeningen(ids: [Int], isLogRequest: Boolean): [Rekening]
-  rekeningenByIbans(ibans: [String]): [Rekening]
-  rubriek(id: Int!): Rubriek
-  rubrieken(ids: [String], isLogRequest: Boolean): [Rubriek]
-  saldo(date: Date!, burgerIds: [Int]): Saldo
-  burgerRapportages(burgerIds: [Int]!, startDate: String!, endDate: String!, rubriekenIds: [Int]): [BurgerRapportage]
-  overzicht(burgerIds: [Int]!, startDate: String!, endDate: String!): Overzicht
 }
-type Afdeling {
+type Overzicht {
+  afspraken: [OverzichtAfspraak]
+  saldos: [OverzichtSaldo]
+}
+type OverzichtAfspraak {
   id: Int
-  naam: String
+  burgerId: Int
   organisatieId: Int
-  organisatie: Organisatie
-  rekeningen: [Rekening]
-  postadressen: [Postadres]
-  afspraken: [Afspraak]
+  omschrijving: String
+  rekeninghouder: String
+  tegenRekeningId: Int
+  validFrom: String
+  validThrough: String
+  transactions: [BankTransaction]
 }
-type Organisatie {
+type BankTransaction {
   id: Int
-  naam: String
-  kvknummer: String
-  vestigingsnummer: String
-  afdelingen: [Afdeling]
+  bedrag: Bedrag
+  isCredit: Boolean
+  isGeboekt: Boolean
+  transactieDatum: Date
+  customerStatementMessage: CustomerStatementMessage
+  statementLine: String
+  informationToAccountOwner: String
+  tegenRekeningIban: String
+  tegenRekening: Rekening
+  journaalpost: Journaalpost
+  suggesties: [Afspraak]
+}
+"Model van een bankafschrift."
+type CustomerStatementMessage {
+  id: Int
+  uploadDate: DateTime
+  filename: String
+  transactionReferenceNumber: String
+  relatedReference: String
+  accountIdentification: String
+  sequenceNumber: String
+  openingBalance: Int
+  closingBalance: Int
+  closingAvailableFunds: Int
+  forwardAvailableBalance: Int
+  bankTransactions: [BankTransaction]
 }
 type Rekening {
   id: Int
@@ -163,6 +192,22 @@ type Grootboekrekening {
   children: [Grootboekrekening]
   rubriek: Rubriek
 }
+type Afdeling {
+  id: Int
+  naam: String
+  organisatieId: Int
+  organisatie: Organisatie
+  rekeningen: [Rekening]
+  postadressen: [Postadres]
+  afspraken: [Afspraak]
+}
+type Organisatie {
+  id: Int
+  naam: String
+  kvknummer: String
+  vestigingsnummer: String
+  afdelingen: [Afdeling]
+}
 type Postadres {
   id: String
   straatnaam: String
@@ -189,35 +234,6 @@ type Journaalpost {
   grootboekrekening: Grootboekrekening
   rubriek: Rubriek
   isAutomatischGeboekt: Boolean
-}
-type BankTransaction {
-  id: Int
-  bedrag: Bedrag
-  isCredit: Boolean
-  isGeboekt: Boolean
-  transactieDatum: Date
-  customerStatementMessage: CustomerStatementMessage
-  statementLine: String
-  informationToAccountOwner: String
-  tegenRekeningIban: String
-  tegenRekening: Rekening
-  journaalpost: Journaalpost
-  suggesties: [Afspraak]
-}
-"Model van een bankafschrift."
-type CustomerStatementMessage {
-  id: Int
-  uploadDate: DateTime
-  filename: String
-  transactionReferenceNumber: String
-  relatedReference: String
-  accountIdentification: String
-  sequenceNumber: String
-  openingBalance: Int
-  closingBalance: Int
-  closingAvailableFunds: Int
-  forwardAvailableBalance: Int
-  bankTransactions: [BankTransaction]
 }
 type Overschrijving {
   id: Int
@@ -299,37 +315,11 @@ type GebruikersActiviteitMeta {
   ip: [String]
   applicationVersion: String
 }
-type AfsprakenPaged {
-  afspraken: [Afspraak]
-  pageInfo: PageInfo
-}
-type PageInfo {
-  count: Int
-  start: Int
-  limit: Int
-}
-type BankTransactionsPaged {
-  banktransactions: [BankTransaction]
-  pageInfo: PageInfo
-}
-type BurgersPaged {
-  burgers: [Burger]
-  pageInfo: PageInfo
-}
-type HuishoudensPaged {
-  huishoudens: [Huishouden]
-  pageInfo: PageInfo
-}
-"Model van een afgeletterde banktransactie. (minimale data om eenvoudig de rubriek van een banktransactie te kunnen vinden) "
-type JournaalpostTransactieRubriek {
-  id: Int
-  transactionId: Int
-  isAutomatischGeboekt: Boolean
-  afspraakRubriekNaam: String
-  grootboekrekeningRubriekNaam: String
-}
-type Saldo {
-  saldo: Bedrag
+type OverzichtSaldo {
+  maandnummer: Int
+  startSaldo: Decimal
+  eindSaldo: Decimal
+  mutatie: Decimal
 }
 type BurgerRapportage {
   burger: Burger
@@ -350,26 +340,41 @@ type RapportageTransactie {
   rekeninghouder: String
   transactieDatum: String
 }
-type Overzicht {
-  afspraken: [OverzichtAfspraak]
-  saldos: [OverzichtSaldo]
+type Saldo {
+  saldo: Bedrag
 }
-type OverzichtAfspraak {
+"Model van een afgeletterde banktransactie. (minimale data om eenvoudig de rubriek van een banktransactie te kunnen vinden) "
+type JournaalpostTransactieRubriek {
   id: Int
-  burgerId: Int
-  organisatieId: Int
-  omschrijving: String
-  rekeninghouder: String
-  tegenRekeningId: Int
-  validFrom: String
-  validThrough: String
-  transactions: [BankTransaction]
+  transactionId: Int
+  isAutomatischGeboekt: Boolean
+  afspraakRubriekNaam: String
+  grootboekrekeningRubriekNaam: String
 }
-type OverzichtSaldo {
-  maandnummer: Int
-  startSaldo: Decimal
-  eindSaldo: Decimal
-  mutatie: Decimal
+type HuishoudensPaged {
+  huishoudens: [Huishouden]
+  pageInfo: PageInfo
+}
+type PageInfo {
+  count: Int
+  start: Int
+  limit: Int
+}
+type ExportsPaged {
+  exports: [Export]
+  pageInfo: PageInfo
+}
+type AfsprakenPaged {
+  afspraken: [Afspraak]
+  pageInfo: PageInfo
+}
+type BankTransactionsPaged {
+  banktransactions: [BankTransaction]
+  pageInfo: PageInfo
+}
+type BurgersPaged {
+  burgers: [Burger]
+  pageInfo: PageInfo
 }
 "The root of all mutations "
 type RootMutation {
@@ -644,16 +649,26 @@ enum OverschrijvingStatus {
   IN_BEHANDELING
   VERWACHTING
 }
-input BankTransactionFilter {
-  OR: BankTransactionFilter
-  AND: BankTransactionFilter
-  isGeboekt: Boolean
-  isCredit: Boolean
+input BurgerFilter {
+  OR: BurgerFilter
+  AND: BurgerFilter
   id: ComplexFilterType
+  telefoonnummer: ComplexFilterType
+  email: ComplexFilterType
+  geboortedatum: ComplexFilterType
+  achternaam: ComplexFilterType
+  huisnummer: ComplexFilterType
+  postcode: ComplexFilterType
+  straatnaam: ComplexFilterType
+  voorletters: ComplexFilterType
+  voornamen: ComplexFilterType
+  plaatsnaam: ComplexFilterType
+  huishoudenId: ComplexFilterType
   bedrag: ComplexBedragFilterType
-  tegenRekening: ComplexFilterType
-  statementLine: ComplexFilterType
-  transactieDatum: ComplexFilterType
+  tegenRekeningId: ComplexFilterType
+  zoektermen: ComplexFilterType
+  iban: ComplexFilterType
+  rekeninghouder: ComplexFilterType
 }
 input ComplexFilterType {
   EQ: DynamicType
@@ -677,6 +692,17 @@ input ComplexBedragFilterType {
   NOTIN: [Bedrag]
   BETWEEN: [Bedrag]
 }
+input BankTransactionFilter {
+  OR: BankTransactionFilter
+  AND: BankTransactionFilter
+  isGeboekt: Boolean
+  isCredit: Boolean
+  id: ComplexFilterType
+  bedrag: ComplexBedragFilterType
+  tegenRekening: ComplexFilterType
+  statementLine: ComplexFilterType
+  transactieDatum: ComplexFilterType
+}
 input BankTransactionSearchFilter {
   burgerIds: [Int]
   automatischGeboekt: Boolean
@@ -689,27 +715,6 @@ input BankTransactionSearchFilter {
   onlyCredit: Boolean
   zoektermen: [String]
   organisatieIds: [Int]
-}
-input BurgerFilter {
-  OR: BurgerFilter
-  AND: BurgerFilter
-  id: ComplexFilterType
-  telefoonnummer: ComplexFilterType
-  email: ComplexFilterType
-  geboortedatum: ComplexFilterType
-  achternaam: ComplexFilterType
-  huisnummer: ComplexFilterType
-  postcode: ComplexFilterType
-  straatnaam: ComplexFilterType
-  voorletters: ComplexFilterType
-  voornamen: ComplexFilterType
-  plaatsnaam: ComplexFilterType
-  huishoudenId: ComplexFilterType
-  bedrag: ComplexBedragFilterType
-  tegenRekeningId: ComplexFilterType
-  zoektermen: ComplexFilterType
-  iban: ComplexFilterType
-  rekeninghouder: ComplexFilterType
 }
 input CreateBurgerInput {
   bsn: Int
