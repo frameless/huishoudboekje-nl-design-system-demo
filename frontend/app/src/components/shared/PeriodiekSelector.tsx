@@ -24,8 +24,8 @@ const PeriodiekSelector: React.FC<PeriodiekSelectorProps> = ({value, isRequired 
 				onChange(e);
 			}} value={value}>
 				<Stack>
-					<Radio value={Periodiek.Eenmalig}>{t("schedule.eenmalig")}</Radio>
-					<Radio value={Periodiek.Periodiek}>{t("schedule.periodiek")}</Radio>
+					<Radio data-test="alarmForm.once" value={Periodiek.Eenmalig}>{t("schedule.eenmalig")}</Radio>
+					<Radio data-test="alarmForm.periodically" value={Periodiek.Periodiek}>{t("schedule.periodiek")}</Radio>
 				</Stack>
 			</RadioGroup>
 			<FormErrorMessage>{t("periodiekSelector.invalidPeriodiekError")}</FormErrorMessage>

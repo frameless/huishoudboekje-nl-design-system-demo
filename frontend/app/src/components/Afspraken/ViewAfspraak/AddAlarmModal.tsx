@@ -221,6 +221,7 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 									<DatePicker
 									 	autoComplete="no"
 										aria-autocomplete="none"
+										data-test="alarmForm.expectedDate"
 										selected={form.date}
 										dateFormat={"dd-MM-yyyy"}
 										onChange={(value: Date) => {
@@ -228,7 +229,7 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 												const date = d(value).startOf("day");
 												updateForm("date", date.toDate());
 											}
-										}} customInput={<Input type={"text"} autoComplete="no" aria-autocomplete="none" />} />
+										}} customInput={<Input type={"text"} data-test="alarmForm.expectedDate" autoComplete="no" aria-autocomplete="none" />} />
 									<FormErrorMessage>{t("alarmForm.errors.invalidDateError")}</FormErrorMessage>
 								</FormControl>
 
@@ -239,6 +240,7 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 										aria-autocomplete="none"
 										type={"number"}
 										value={form.datumMargin ?? ""}
+										data-test="alarmForm.dateMargin"
 										onChange={
 											e => setForm(x => ({
 												...x,

@@ -70,7 +70,7 @@ const BookingDetailsView: React.FC<BookingDetailsViewProps> = ({transactie}) => 
 					<Box flex={1}>
 						<FormLabel>{t("bedrag")}</FormLabel>
 						<Box color={journaalpostAfspraak.bedrag < 0 ? "red.500" : undefined}>
-							<Text>{currencyFormat2().format(journaalpostAfspraak.bedrag * (journaalpostAfspraak.credit ? 1 : -1))}</Text>
+							<Text data-test="agreement.amount">{currencyFormat2().format(journaalpostAfspraak.bedrag * (journaalpostAfspraak.credit ? 1 : -1))}</Text>
 						</Box>
 					</Box>
 				</Stack>

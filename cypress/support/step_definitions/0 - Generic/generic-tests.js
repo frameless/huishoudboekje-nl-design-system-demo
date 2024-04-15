@@ -7,25 +7,6 @@ const header = {
   'Accept-Encoding': 'gzip, deflate, br',
 };
 
-// Set database query
-const queryTruncateSignal = `mutation Truncate {
-  truncateTable(databaseName: "signalenservice", tableName: "Signal")
-}`
-
-Before({ tags: "@signalservice" }, function () {
-
-  // Clean up
-    // Truncate signals
-    cy.request({
-      method: "post",
-      url: Cypress.env().graphqlUrl + '/graphql',
-      body: { query: queryTruncateSignal },
-    }).then((res) => {
-      console.log(res.body);
-    });
-  
-  });
-
 // Before *each* test, run this (so this runs equal to the amount of tests)
 Before(function () {
   cy.visit('/');
