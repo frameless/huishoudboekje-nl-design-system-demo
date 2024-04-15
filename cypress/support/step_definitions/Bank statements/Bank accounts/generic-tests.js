@@ -76,7 +76,7 @@ Before({ tags: "@cleanupDepartment" }, function ()  {
 });
 
 // Clean-up testdata
-After({ tags: "@cleanupOrganizationDepartment" }, function ()  {
+Before({ tags: "@cleanupOrganizationDepartment" }, function ()  {
 
   cy.visit('/organisaties');
   cy.waitForReact();
