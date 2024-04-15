@@ -36,6 +36,9 @@
     "cypress-postgres-10v-compatibility": "^1.0.0",
     "express-session": "^1.17.3"
   },
+  "overrides": {
+    "semver": "^7.5.2"
+  },
   "devDependencies": {
     "cypress": "^13.7.2",
     "cypress-react-selector": "^3.0.0",
