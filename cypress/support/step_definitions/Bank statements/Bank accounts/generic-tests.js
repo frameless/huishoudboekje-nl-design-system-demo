@@ -40,19 +40,37 @@ After({ tags: "@cleanupAgreement" }, function ()  {
 
 });
 
-After({ tags: "@cleanupDepartment" }, function ()  {
+Before({ tags: "@cleanupDepartment" }, function ()  {
+
+  cy.visit('/organisaties')
+  cy.waitForReact()
+  cy.url().should('eq', Cypress.config().baseUrl + '/organisaties')
+
+  // Type into search bar
+  cy.get('input[placeholder="Zoeken"]')
+    .type('UWV Utrecht')  
+  cy.get('p[title="UWV Utrecht"]')
+    .should('be.visible')
+    .click();
+
+  cy.contains('Meervoudig gebruik IBAN')
+    .click();
+  cy.url().should('include', '/afdelingen/')
 
   cy.get('[data-test="menuDepartment"]')
+    .scrollIntoView()
     .click();
   cy.get('[data-test="menuDepartment.delete"]')
     .click();
+  cy.wait(500)
   cy.get('[data-test="modalDepartment.delete"]')
     .click();
   cy.waitForReact();
 
   // Check success message
   cy.get('[data-status="success"]')
-    .contains('Bankrekening is verwijderd.')
+    .contains('Afdeling')
+    .contains('verwijderd')
     .should('be.visible')
 
 });
