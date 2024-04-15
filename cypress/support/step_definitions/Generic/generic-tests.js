@@ -65,21 +65,3 @@ Before(function () {
   })
 
 });
-
-// Clean-up testdata after Scenario 'organisation and bank account are not used for reconciliation'
-After({ tags: "@cleanupDepartment" }, function ()  {
-
-  cy.get('[data-test="menuDepartment"]')
-    .click();
-  cy.get('[data-test="menuDepartment.delete"]')
-    .click();
-  cy.get('[data-test="modalDepartment.delete"]')
-    .click();
-  cy.waitForReact();
-
-  // Check success message
-  cy.get('[data-status="success"]')
-    .contains('Bankrekening is verwijderd.')
-    .should('be.visible')
-
-});
