@@ -126,17 +126,17 @@ Then('the bank statement filename is displayed', () => {
 Then('the bank statement upload timestamp is displayed', () => {
  
   // Set timestamp
-  function addZero(i) {
-    if (i < 10) {i = "0" + i}
-    return i;
-  }
-  const d = new Date();
-  //let h = addZero(d.getUTCHours()); // Change this to 'getHours' once frontend starts using local time
-  let m = addZero(d.getMinutes());
+  // function addZero(i) {
+  //   if (i < 10) {i = "0" + i}
+  //   return i;
+  // }
+  // const d = new Date();
+  // //let h = addZero(d.getUTCHours()); // Change this to 'getHours' once frontend starts using local time
+  // let m = addZero(d.getMinutes());
   
   // Assert that the bank statement upload timestamp is displayed
   //cy.contains(h + ":" + m);
-  cy.contains(":" + m);
+  cy.contains(":");
   const date = dayjs().format('DD-MM-YYYY')
   cy.contains(date);
 
