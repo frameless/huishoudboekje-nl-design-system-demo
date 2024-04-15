@@ -8,7 +8,6 @@ Feature: delete a bank account
   Background:
     # Given I am logged in as an authorised site user
 
-  @cleanupDepartment
   Scenario: organisation and bank account are not used for reconciliation
     Given the "Belastingdienst Toeslagen Kantoor Utrecht" organisation exists
     Given the "Belastingdienst Toeslagen Kantoor Utrecht" department exists
@@ -30,8 +29,9 @@ Feature: delete a bank account
     When I click the "Delete bank account" button
     Then the "Delete bank account" modal is displayed
     When I click the "Delete" button
-    Then a notification of success is displayed
+    Then a notification of successful bank account deletion is displayed
 
+  @cleanupDepartment
   Scenario: organisation and bank account are used for reconciliation
     Given the "Belastingdienst Toeslagen Kantoor Utrecht" organisation exists
     Given the "Belastingdienst Toeslagen Kantoor Utrecht" department exists

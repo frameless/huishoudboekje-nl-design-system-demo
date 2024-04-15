@@ -30,8 +30,6 @@ Given('the "Belastingdienst Toeslagen Kantoor Utrecht" organisation exists', () 
 
 Given('the "Belastingdienst Toeslagen Kantoor Utrecht" department exists', () => {
 
-  Step(this, 'the "Belastingdienst Toeslagen Kantoor Utrecht" organisation exists');
-
   cy.get('p[title="Belastingdienst Toeslagen Kantoor Utrecht"]')
     .click();
   cy.url().should('include', Cypress.config().baseUrl + '/organisaties/')
@@ -44,8 +42,6 @@ Given('the "Belastingdienst Toeslagen Kantoor Utrecht" department exists', () =>
 
 Given('the "NL86INGB0002445588" bank account exists', () => {
 
-  Step(this, 'the "Belastingdienst Toeslagen Kantoor Utrecht" department exists');
-  
   cy.get('p[title="Belastingdienst Toeslagen Kantoor Utrecht"]')
     .click();
   cy.url().should('include', '/afdelingen/')
@@ -102,9 +98,7 @@ Given('the "UWV Utrecht" organisation exists', () => {
 });
 
 Given('I view the "UWV Utrecht" organisation', () => {
-
-  Step(this, 'the "UWV Utrecht" organisation exists');
-    
+  
   cy.get('p[title="UWV Utrecht"]')
     .click();
 
@@ -117,8 +111,6 @@ Given('I view the "UWV Utrecht" organisation', () => {
 });
 
 When('I click the "Add department" button', () => {
-
-  Step(this, 'I view the "UWV Utrecht" organisation');
     
   cy.get('[data-test="button.addDepartment"]')
     .click()
@@ -127,8 +119,6 @@ When('I click the "Add department" button', () => {
 });
 
 Then('the "Add department" modal is displayed', () => {
-
-  Step(this, 'I click the "Add department" button');
    
   // Assertion
   cy.get('header[id^="chakra-modal"]')
@@ -137,9 +127,7 @@ Then('the "Add department" modal is displayed', () => {
 });
 
 When('I input the name "Meervoudig gebruik IBAN"', () => {
-
-  Step(this, 'the "Add department" modal is displayed');
-   
+  
   // Assertion
   cy.get('input')
     .type('Meervoudig gebruik IBAN');
@@ -205,8 +193,19 @@ When('I click the "Delete" button', () => {
 
   cy.get('[data-test="button.Delete"]')
     .click();
+  cy.wait(500);
 
 });
+
+Then('a notification of successful bank account deletion is displayed', () => {
+
+  // Assertion
+  cy.get('[data-status="success"]')
+    .contains('Bankrekening is verwijderd')
+    .should('be.visible');
+
+});
+
 
 //endregion
 
@@ -228,9 +227,7 @@ Given('I view the "Belastingdienst Toeslagen Kantoor Utrecht" organisation', () 
 });
 
 When('I click the "Belastingdienst Toeslagen Kantoor Utrecht" department', () => {
-
-  Step(this, 'I view the "Belastingdienst Toeslagen Kantoor Utrecht" organisation');
-    
+  
   cy.get('p[title="Belastingdienst Toeslagen Kantoor Utrecht"]')
     .click();
 
@@ -243,8 +240,6 @@ When('I click the "Belastingdienst Toeslagen Kantoor Utrecht" department', () =>
 });
 
 When('I click the "Delete bank account" button of IBAN "NL86INGB0002445588"', () => {
-
-  Step(this, 'I click the "Belastingdienst Toeslagen Kantoor Utrecht" department');
 
   // Find and click the 'Delete' button
   cy.get('span').contains('NL86 INGB 0002 4455 88')

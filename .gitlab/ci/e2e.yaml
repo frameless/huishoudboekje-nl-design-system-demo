@@ -11,7 +11,7 @@ e2e-tests:
     DATABASE_HOST: "https://database.hhb-$CI_COMMIT_REF_SLUG.review.hhb-development.nl"
   script:
     - kubectl config use-context commonground/huishoudboekje/app-new:hhb-development
-    - kubectl wait pod --all --for=condition=Ready --namespace=$NAMESPACE --timeout=5m
+    - kubectl wait pod --all --for=condition=Ready --namespace=$NAMESPACE --timeout=5m --selector='!job-name' --field-selector=status.phase!=Failed,status.phase!=Succeeded
     - sh cypress/pipeline/pipeline-execution.sh
   rules:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event' && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == 'main'

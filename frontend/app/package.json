@@ -78,7 +78,7 @@
     "zustand": "^4.1.5"
   },
   "devDependencies": {
-    "@apollo/rover": "^0.18.0",
+    "@apollo/rover": "^0.23.0",
     "@chakra-ui/storybook-addon": "^4.0.14",
     "@clarketm/jwt-cli": "^1.2.0",
     "@graphql-codegen/cli": "^2.16.1",
@@ -98,13 +98,14 @@
     "babel-eslint": "^10.1.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-storybook": "^0.6.14",
-    "i18next-parser": "^7.0.3",
+    "i18next-parser": "^8.13.0",
     "jest-junit": "^16.0.0",
     "nwsapi": "2.2.2",
     "webpack": "^5.82.0"
   },
   "overrides": {
-    "loader-utils@^2.0.0 <2.0.3": "^2.0.3"
+    "loader-utils@^2.0.0 <2.0.3": "^2.0.3",
+    "nth-check": "^2.0.1"
   },
   "browserslist": [
     "> 0.5%",

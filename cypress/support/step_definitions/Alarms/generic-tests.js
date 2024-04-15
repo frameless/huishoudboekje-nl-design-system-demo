@@ -13,6 +13,9 @@ const queryTruncateAlarm = `mutation Truncate {
 }`
 
 // Before *all* tests, run this (so this runs once at the start)
+Before({ tags: "@alarmservice" }, function (){
+});
+
 After({ tags: "@cleanupAlarm" }, function (){
 
   // Clean up alarm

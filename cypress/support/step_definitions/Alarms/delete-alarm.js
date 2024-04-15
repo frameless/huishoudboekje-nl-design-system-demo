@@ -1,6 +1,6 @@
 // cypress/support/step_definitions/Alarms/delete-alarm.js
 
-import { Given, When, Then, Step } from "@badeball/cypress-cucumber-preprocessor";
+import { Before, Given, When, Then, Step } from "@badeball/cypress-cucumber-preprocessor";
 
 const header = {
   'content-type': 'application/json',
