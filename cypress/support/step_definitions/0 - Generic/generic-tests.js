@@ -7,6 +7,24 @@ const header = {
   'Accept-Encoding': 'gzip, deflate, br',
 };
 
+// Before *all* tests, run this (so this runs once at the start)
+Before({ tags: "@alarmservice" }, function () {
+
+  // Wipe signals clean
+  Step(this, 'I clean up "Signals" table');
+  
+  // Wipe alarms clean
+  Step(this, 'I clean up "Alarms" table');
+
+});
+
+Before({ tags: "@signalservice" }, function () {
+
+  // Wipe signals clean
+  Step(this, 'I clean up "Signals" table');
+  
+  });
+
 // Before *each* test, run this (so this runs equal to the amount of tests)
 Before(function () {
   cy.visit('/');

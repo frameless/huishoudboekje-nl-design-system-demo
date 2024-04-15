@@ -98,7 +98,7 @@ Given('an alarm exists for scenario "payment amount too high"', () => {
 
         // 'Toegestane afwijking (in dagen)'
         cy.get('[data-test="alarmForm.dateMargin"]')
-          .type('0')
+          .type('1')
           .should('have.value', '1')
 
         // 'Bedrag verwachte betaling'
@@ -437,7 +437,7 @@ Given('an alarm exists for scenario "payment amount too low"', () => {
 
       // 'Toegestane afwijking (in dagen)'
       cy.get('[data-test="alarmForm.dateMargin"]')
-        .type('0')
+        .type('1')
         .should('have.value', '1')
 
       // 'Bedrag verwachte betaling'
@@ -770,7 +770,7 @@ Given('an alarm exists for scenario "expected payment amount"', () => {
 
       // 'Toegestane afwijking (in dagen)'
       cy.get('[data-test="alarmForm.dateMargin"]')
-        .type('0')
+        .type('1')
         .should('have.value', '1')
 
       // 'Bedrag verwachte betaling'
