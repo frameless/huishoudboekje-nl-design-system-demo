@@ -103,24 +103,6 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 		return -1
 	}
 
-	const dayOfWeekToNumber: { [key in DayOfWeek]: number } = {
-		Monday: 1,
-		Tuesday: 2,
-		Wednesday: 3,
-		Thursday: 4,
-		Friday: 5,
-		Saturday: 6,
-		Sunday: 0
-	};
-
-	const convertByDay = (byDay) => {
-		if(byDay === undefined){
-			return undefined
-		}
-		return byDay.map(day => dayOfWeekToNumber[day])
-	}
-
-
 	const onClickSubmit = (e) => {
 		e.preventDefault();
 		toggleSubmitted(true);
@@ -150,7 +132,13 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 					break;
 				}
 				case 2: {
-					alarm.recurringDay = convertByDay(byDay)
+					if (byDay?.includes(7)) {
+						alarm.recurringDay = byDay.filter(val => val !== 7)
+						alarm.recurringDay.push(0);
+					}
+					else {
+						alarm.recurringDay = byDay
+					}
 					break;
 				}
 				case 3: {
@@ -280,7 +268,9 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 								{form.repeatType === RepeatType.Week && (<>
 									<WeekDaySelector
 										value={form.byDay || []}
-										onChange={(value => updateForm("byDay", value))}
+										onChange={(value) => {
+											updateForm("byDay", value)
+										}}
 										isInvalid={!isFieldValid("byDay")}
 										isRequired={true}
 									/>
