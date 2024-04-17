@@ -1,8 +1,9 @@
 import {Periodiek} from "../components/shared/PeriodiekSelector";
-import {DayOfWeek} from "../generated/graphql";
 import {RepeatType} from "../models/models";
 import d from "../utils/dayjs";
 import zod from "../utils/zod";
+
+
 
 const useAlarmValidator = () => {
 	return zod.object({
@@ -13,7 +14,7 @@ const useAlarmValidator = () => {
 		date: zod.date().optional(),
 		startDate: zod.date().refine(date => d(date).isSameOrAfter(d(), "date")).optional(),
 		datumMargin: zod.number().min(0).optional(),
-		byDay: zod.array(zod.nativeEnum(DayOfWeek)).min(1).optional(),
+		byDay: zod.array(zod.number().min(1).max(7)).min(0).max(7).optional(),
 		byMonth: zod.array(zod.number().min(1).max(12)).min(1).max(12).optional(),
 		byMonthDay: zod.number().min(1).max(28).optional(),
 	}).superRefine((data, ctx) => {
@@ -23,8 +24,14 @@ const useAlarmValidator = () => {
 				parsed.error.issues.map(ctx.addIssue);
 			}
 		}
-		if (data.isPeriodiek === Periodiek.Periodiek) {
-			const parsed = periodiekValidator.safeParse(data);
+		if (data.isPeriodiek === Periodiek.Periodiek && data.byMonth != undefined) {
+			const parsed = periodiekValidatorMonthly.safeParse(data);
+			if (!parsed.success) {
+				parsed.error.issues.map(ctx.addIssue);
+			}
+		}
+		if (data.isPeriodiek === Periodiek.Periodiek && data.byMonth === undefined) {
+			const parsed = periodiekValidatorWeekly.safeParse(data);
 			if (!parsed.success) {
 				parsed.error.issues.map(ctx.addIssue);
 			}
@@ -32,8 +39,12 @@ const useAlarmValidator = () => {
 	});
 };
 
-const periodiekValidator = zod.object({
-	byMonthDay: zod.number().min(1).max(28),
+const periodiekValidatorMonthly = zod.object({
+	byMonthDay: zod.number().min(1).max(28)
+});
+
+const periodiekValidatorWeekly = zod.object({
+	byDay: zod.array(zod.number().min(1).max(7)).min(1).max(7),
 });
 
 const eenmaligValidator = zod.object({
