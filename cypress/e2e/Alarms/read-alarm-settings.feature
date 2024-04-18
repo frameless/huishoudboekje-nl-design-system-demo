@@ -8,6 +8,7 @@ Feature: read alarm
     # Given I am logged in as an authorised site user
     # Given 1 or more agreements exists
 
+  @beforecleanupAlarm
   Scenario: no alarm exists
     When I view the "Agreement" page
     Then the "Er is geen alarm ingesteld." text is displayed
@@ -16,7 +17,7 @@ Feature: read alarm
   # Scenario: one-time alarm exists
     # TODO
     
-  @cleanupAlarm
+  @afterCleanupAlarm
   Scenario: monthly recurring alarm exists
     When I view the "Agreement" page
     Given a monthly recurring alarm exists

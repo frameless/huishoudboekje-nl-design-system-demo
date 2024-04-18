@@ -64,6 +64,17 @@ class HuishoudboekjeserviceRepository:
 
         return response.json()
     
+    def get_citizen_ids_for_alarms(self, alarm_ids):
+        json = {
+            "alarm_ids": alarm_ids
+        }
+
+        response = requests.get(
+            f"{self.HHB_SERVICES_URL}/citizens", json=json
+        )
+
+        return response.json()
+
     def get_rekeningen(self):
         response = requests.get(
             f"{self.HHB_SERVICES_URL}/rekeningen")

@@ -9,7 +9,7 @@ const header = {
 
 // Set database query
 const queryTruncateAlarm = `mutation Truncate {
-  truncateTable(databaseName: "alarmenservice", tableName: "Alarm")
+  truncateTable(databaseName: "alarmenservice", tableName: "alarms")
 }`
 
 const queryTruncateSignal = `mutation Truncate {
@@ -20,7 +20,7 @@ const queryTruncateSignal = `mutation Truncate {
 Before({ tags: "@alarmservice" }, function (){
 });
 
-After({ tags: "@cleanupAlarm" }, function (){
+After({ tags: "@afterCleanupAlarm" }, function (){
 
   // Clean up alarm
   cy.get('button[aria-label="Verwijderen"]')
@@ -39,6 +39,29 @@ After({ tags: "@cleanupAlarm" }, function (){
       method: "post",
       url: Cypress.env().graphqlUrl + '/graphql',
       body: { query: queryTruncateAlarm },
+    }).then((res) => {
+      console.log(res.body);
+    });
+
+});
+
+Before({ tags: "@beforeCleanupAlarm" }, function (){
+
+  // Clean up
+    // Truncate alarms
+    cy.request({
+      method: "post",
+      url: Cypress.env().graphqlUrl + '/graphql',
+      body: { query: queryTruncateAlarm },
+    }).then((res) => {
+      console.log(res.body);
+    });
+
+    // Truncate signals
+    cy.request({
+      method: "post",
+      url: Cypress.env().graphqlUrl + '/graphql',
+      body: { query: queryTruncateSignal },
     }).then((res) => {
       console.log(res.body);
     });
