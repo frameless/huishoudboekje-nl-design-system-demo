@@ -6,9 +6,52 @@ Deze versie omvat herziene functionaliteit voor gebeurtenissen, alarmen en signa
 
 Met de nieuwe User API kan een koppeling gemaakt worden vanuit een klantportaal. Gegevens van een enkele, deelnemende inwoner kunnen daar weergegeven worden.
 
+### Migration
+
+The grapql-mesh container has the following env variables required:
+- **HHB_ALARM_SERVICE_URL**
+- **HHB_LOG_SERVICE_URL**
+- **HHB_BACKEND_URL**
+
+
+To get the AlarmService up and running these env variables need to be set.
+- **HHB_DATABASE_URL**
+- **HHB_RABBITMQ_HOST**
+- **HHB_RABBITMQ_PORT**
+- **HHB_RABBITMQ_USER**
+- **HHB_RABBITMQ_PASS**
+- **HHB_USE_AUTH**
+- **HHB_JWT_ISSUER**
+- **HHB_JWT_AUDIENCE**
+- **HHB_JWT_SECRET**
+- **HHB_JWT_ALLOWED_ALGORITHMS**
+- **HHB_JWT_JWKS_URI**
+
+
+To get the Log Service up and running these env variables need to be set.
+- **HHB_DATABASE_URL**
+- **HHB_RABBITMQ_HOST**
+- **HHB_RABBITMQ_PORT**
+- **HHB_RABBITMQ_USER**
+- **HHB_RABBITMQ_PASS**
+- **HHB_USE_AUTH**
+- **HHB_JWT_ISSUER**
+- **HHB_JWT_AUDIENCE**
+- **HHB_JWT_SECRET**
+- **HHB_JWT_ALLOWED_ALGORITHMS**
+- **HHB_JWT_JWKS_URI**
+
+
+To get the UserApi up and running these env variables need to be set.
+- **HHB_RABBITMQ_HOST**
+- **HHB_RABBITMQ_PORT**
+- **HHB_RABBITMQ_USER**
+- **HHB_RABBITMQ_PASS**
+- **HHB_USE_AUTH**
+
 ### Major Changes
 
-- e317713: Implemented new Logservice and ALarmenservice, removed unleash service"
+- e317713: Implemented new Logservice and Alarmenservice, removed unleash service"
 
 ### Minor Changes
 
