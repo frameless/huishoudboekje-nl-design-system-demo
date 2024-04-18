@@ -21,4 +21,4 @@ WORKDIR /app
 COPY ./LogService.Domain/Migrations/Scripts/ ./LogService.Application/Migrations/Scripts/
 COPY . .
 #RUN dotnet restore ./LogService*/*.csproj
-ENTRYPOINT dotnet watch run --urls=http://+:8000 --project LogService*/*.csproj --verbose
+ENTRYPOINT dotnet run --urls=http://+:8000 --project LogService*/*.csproj --verbose --launch-profile dev-docker

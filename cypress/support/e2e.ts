@@ -76,6 +76,12 @@ function loginViaAAD(username: string, password: string) {
   
     cy.waitForReact();
 
+    // Wait for redirect
+    cy.url({ timeout: 10000 }).should('contain', Cypress.config().baseUrl);
+
+    // Wait for elements to load in
+    cy.wait(1000);
+
     // Either log in again or do not log in again
     cy.get('body').then(($body) => {
       const buttonLogin = $body.find('button[type="submit"]')

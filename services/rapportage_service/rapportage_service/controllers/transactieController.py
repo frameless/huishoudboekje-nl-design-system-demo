@@ -47,7 +47,6 @@ class TransactieController():
                     transaction = transactie_id_to_transactie_dict.get(
                         int(transaction_id), None)
                     if transaction is not None:
-                        logging.warning(transaction)
                         transaction["journalentry_uuid"] = journalentry_uuid
                         entry["transactions"].append(transaction)
 

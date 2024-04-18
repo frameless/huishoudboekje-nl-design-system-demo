@@ -9,177 +9,243 @@ const header = {
 
 // Set database query
 const queryTruncateAlarm = `mutation Truncate {
-  truncateTable(databaseName: "alarmenservice", tableName: "Alarm")
+  truncateTable(databaseName: "alarmenservice", tableName: "alarms")
 }`
 
 const queryTruncateSignal = `mutation Truncate {
-  truncateTable(databaseName: "signalenservice", tableName: "Signal")
+  truncateTable(databaseName: "alarmenservice", tableName: "signals")
 }`
 
 const queryAddAlarm = `mutation CreateAlarm {
   createAlarm(input: {alarm:{
-    afspraakId: 1,
-    id: "test",
+    uuid: "1d4eb9dc-7d20-4f8a-9e6d-68dd5bd0a4a9",
     isActive: true,
-    datumMargin: 0,
-    bedrag: 1000,
-    bedragMargin: 0,
-    byDay: [MONDAY,FRIDAY,TUESDAY,SATURDAY,SUNDAY,WEDNESDAY,THURSDAY],
-    startDate: "2024-01-01"
+    dateMargin: 1,
+    amount: 1000,
+    amountMargin: 0,
+    startDate: "1704106800",
+    checkOnDate: "1704193200",
+    type: 3,
+    recurringMonths: [],
+    recurringDayOfMonth: [],
+    recurringDay: []
   }})
   {
     alarm{
-      id
+      uuid
     }
    }
   
   updateAfsprakenById(input: {
     id: 1,
     afsprakenPatch: {
-      alarmId: "test"
+      alarmId: "1d4eb9dc-7d20-4f8a-9e6d-68dd5bd0a4a9"
     }
   }){
     afspraken{
-      id
+      alarmUuid
     }
   }
 }`
 
+const evaluateAlarms = "sh cypress/pipeline/evaluate-alarms.sh"
+
 //#region Scenario: no transaction within timeframe
 
-Given('I create a test alarm with expired timeframe', () => {
+Given('an agreement exists for scenario "no transaction within timeframe"', () => {
+  
+  // Truncate signals
+  cy.request({
+    method: "post",
+    url: Cypress.env().graphqlUrl + '/graphql',
+    body: { query: queryTruncateSignal },
+  }).then((res) => {
+    console.log(res.body);
+  });
 
-  // Add alarm to database
-    // Run query
-    cy.request({
-      method: "post",
-      url: Cypress.env().graphqlUrl + '/graphql',
-      body: { query: queryAddAlarm },
-    }).then((res) => {
-      console.log(res.body);
-    });
+  // cy.wait(500);
 
-  // Wait
-  cy.wait(500)
+  // // Navigate to citizen
+  // cy.visit('/burgers');
+  // cy.url().should('eq', Cypress.config().baseUrl + '/burgers')
+  // cy.get('input[placeholder="Zoeken"]')
+  // .type('Mcpherson');
+  // cy.waitForReact();
+  // cy.contains('Patterson')
+  //   .click();
+  // cy.url().should('include', Cypress.config().baseUrl + '/burgers/')
+  // cy.contains('Loon');
+  // cy.contains('Albert Heijn B.V.');
 
-});
-
-Given('I undo reconciliation of a transaction', () => {
-
-// Reconciliate transaction to trigger signal refresh
-    // Create transaction
-    cy.visit('/bankzaken/bankafschriften');
+    // Navigate to citizen
+    cy.visit('/burgers');
+    cy.url().should('eq', Cypress.config().baseUrl + '/burgers')
+    cy.get('input[placeholder="Zoeken"]')
+    .type('Mcpherson');
     cy.waitForReact();
-    cy.url().should('eq', Cypress.config().baseUrl + '/bankzaken/bankafschriften')
-    cy.contains("Er zijn geen bankafschriften gevonden.")
-    cy.get('input[type="file"]')
-      .selectFile('voorbeeldbankafschriften/Banktransacties persona 1 zorgtoeslag.txt', { force: true })
-    cy.wait(5000)
-    cy.get('[aria-label="Close"]')
-      .should('be.visible')
-      .click()
-    
-    // Undo reconciliation of the first transaction
-    cy.visit('/bankzaken/transacties');
-    cy.waitForReact();
-    cy.url().should('eq', Cypress.config().baseUrl + '/bankzaken/transacties');
-    cy.get('[data-test="transactionsPage.filters.reconciliated"]')
+    cy.contains('Patterson')
       .click();
-    cy.get('[data-test="transactions.expandFilter"]')
-      .click();
-    cy.waitForReact();
-    cy.get('input[id="zoektermen"]')
-      .type("MAAND JAN. NR. 999999990T000013 VOORSCHOT ZORGTOESLAG 2024");
-    cy.get('[data-test="transactions.submitSearch"]')
-      .click();
-    cy.contains('Toeslagen')
-      .click();
-    cy.url().should('contains', Cypress.config().baseUrl + '/bankzaken/transacties/');
-    cy.contains('Afletteren ongedaan maken')
-      .click();
-
-});
-
-Given('I redo reconciliation of a transaction to trigger signal refresh', () => {
-
-  // Reconciliate transaction to trigger signal refresh
-    cy.visit('/bankzaken/transacties');
-    cy.waitForReact();
-    cy.url().should('eq', Cypress.config().baseUrl + '/bankzaken/transacties');
-    cy.get('[data-test="transactionsPage.filters.notReconciliated"]')
-      .click();
-    cy.get('[data-test="transactions.expandFilter"]')
-      .click();
-    cy.waitForReact();
-    cy.get('input[id="zoektermen"]')
-      .type("MAAND JAN. NR. 999999990T000013 VOORSCHOT ZORGTOESLAG 2024");
-    cy.get('[data-test="transactions.submitSearch"]')
-      .click();
-    cy.contains('Toeslagen')
-      .click();
-    cy.url().should('contains', Cypress.config().baseUrl + '/bankzaken/transacties/');
-    cy.contains('Afletteren ongedaan maken')
+    cy.url().should('include', Cypress.config().baseUrl + '/burgers/')
+    cy.get('[data-test="button.Add"]')
       .click();
   
+    // Add agreement with test department
+    cy.url().should('contains', '/afspraken/toevoegen'); 
+    cy.get('[data-test="radio.agreementOrganization"]')
+      .click();
+    cy.get('#organisatie')
+      .type('Belast');
+    cy.contains('ingdienst')
+      .click();
+    // Check auto-fill
+    cy.contains('Graadt van Roggenweg');
+    // Fill in IBAN
+    cy.get('#tegenrekening')
+      .type('NL86');
+    cy.contains('0002')
+      .click();
+  
+    // Payment direction: Toeslagen
+    cy.get('[data-test="radio.agreementIncome"]')
+      .click();
+    cy.get('#rubriek')
+      .click()
+      .contains('Toeslagen')
+      .click();
+    cy.get('[data-test="select.agreementIncomeDescription"]')
+      .type('Zorgtoeslag 2099');
+    cy.get('[data-test="select.agreementIncomeAmount"]')
+      .type('10');
+    cy.get('[data-test="button.Submit"]')
+      .click();
+  
+    // Check success message
+    cy.get('[data-status="success"]')
+    .contains('afspraak')
+    .should('be.visible');
+
+});
+
+Given('an alarm exists for scenario "no transaction within timeframe"', () => {
+
+  // Truncate alarms
+  cy.request({
+    method: "post",
+    url: Cypress.env().graphqlUrl + '/graphql',
+    body: { query: queryTruncateAlarm },
+  }).then((res) => {
+    console.log(res.body);
   });
+
+  cy.wait(500);
+
+  cy.waitForReact();
+  cy.url().should('include', Cypress.config().baseUrl + '/afspraken/')
+  cy.get('h2').contains('Alarm').should('be.visible')
+    .scrollIntoView() // Scrolls 'Alarm' into view
+  cy.get('button')
+    .contains('Toevoegen')
+    .click();
+
+  cy.waitForReact(); // Wait for modal opening
+
+  // Check whether modal is opened and visible
+  cy.get('section[aria-modal="true"]')
+    .scrollIntoView()
+    .should('exist');
+
+  // Set alarm to 'eenmalig'
+  cy.contains('Meer opties')
+    .click();
+  cy.get('[data-test="alarmForm.once"]')
+    .click();
+
+  // Fill in all required fields
+      // 'Datum verwachte betaling'
+
+      cy.get('[data-test="alarmForm.expectedDate"]')
+        .type('{selectAll}01-01-2024{enter}')
+        .should('have.value', '01-01-2024')
+
+      // 'Toegestane afwijking (in dagen)'
+      cy.get('[data-test="alarmForm.dateMargin"]')
+        .type('1')
+        .should('have.value', '1')
+
+      // 'Bedrag verwachte betaling'
+      cy.get('[data-test="alarmForm.amount"]')
+        .type('{selectAll}10')
+        .should('have.value', '10') 
+
+      // 'Toegestane afwijking bedrag'
+      cy.get('[data-test="alarmForm.amountMargin"]')
+        .type('{selectAll}0')
+        .should('have.value', '0')
+
+  // Click 'Opslaan' button
+  cy.waitForReact()
+  cy.get('[data-test="buttonModal.submit"]')
+    .click()
+
+  // Wait for modal to close
+  cy.waitForReact();
+
+  // Check whether modal is closed
+  cy.contains('Alarm toevoegen')
+    .should('not.exist');
+  cy.get('section[aria-modal="true"]')
+    .should('not.exist');
+
+  // // Set alarm
+  // cy.request({
+  //   method: "post",
+  //   url: Cypress.env().graphqlUrl + '/graphql',
+  //   body: { query: queryAddAlarm },
+  // }).then((res) => {
+  //   console.log(res.body);
+  // });
+
+  // cy.wait(500);
+ 
+});
 
 When('the alarm timeframe expires', () => {
 
-  // Given an alarm is enabled
-  Step(this, 'I create a test alarm with expired timeframe');
+  // If local
+  cy.visit('/');
+  cy.getCookie('appSession').then((c) => {
+    const cookie = c
+    if(c) {
+      // If there is a cookie, do this
+      cy.exec(evaluateAlarms).then((result) => {
+        cy.log(result.stdout);
+        cy.log(result.stderr);
+      })
+    }
+    else {
+      // If no cookie, refresh alarms to trigger timeframe expiration evaluation
+      cy.exec('docker-compose run evaluate-alarms').then((result) => {
+        cy.log(result.stderr);
+      })
+    }
 
-  // Undo reconciliation
-  Step(this, 'I undo reconciliation of a transaction');
+  cy.wait(5000);
 
-  // Add Agreement to Civilian 1
-  
+  })
 
-  // Reconciliate the first transaction
-  Step(this, 'I redo reconciliation of a transaction to trigger signal refresh');
- 
 });
- 
+
 Then('a "Payment missing" signal is created', () => {
-  
-  // Check whether notification is set
-  cy.visit('/signalen');
-  cy.waitForReact();
+
+  // Refresh alarms to trigger timeframe expiration evaluation
+  cy.visit('/signalen')
+  cy.waitForReact()
   cy.url().should('eq', Cypress.config().baseUrl + '/signalen')
 
-  cy.pause();
-
-  // Clean up
-    // Transactions
-    cy.visit('/bankzaken/bankafschriften');
-    cy.waitForReact();
-    cy.url().should('eq', Cypress.config().baseUrl + '/bankzaken/bankafschriften')
-    cy.get('[aria-label="Verwijderen"]')
-      .should('be.visible')
-      .click();
-    cy.get('[aria-label="Verwijderen"]')
-      .should('be.visible')
-      .click();
-    cy.waitForReact();
-    cy.get('[data-status="success"]')
-      .should('be.visible');
-
-    // Alarms
-    cy.request({
-      method: "post",
-      url: Cypress.env().graphqlUrl + '/graphql',
-      body: { query: queryTruncateAlarm },
-    }).then((res) => {
-      console.log(res.body);
-    });
-
-    // Signals
-    cy.request({
-      method: "post",
-      url: Cypress.env().graphqlUrl + '/graphql',
-      body: { query: queryTruncateSignal },
-    }).then((res) => {
-      console.log(res.body);
-    });
+  // Assertion
+  cy.contains('geen transactie gevonden');
+  cy.contains('Zorgtoeslag 2099');
+  cy.contains('Mcpherson Patterson');
  
 });
 

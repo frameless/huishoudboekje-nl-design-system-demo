@@ -8,6 +8,7 @@ Feature: create alarm
     # Given I am logged in as an authorised site user
     # Given 1 or more agreements exists
 
+  @beforeCleanupAlarm
   Scenario: view create alarm form with default options
     When I view the "Add alarm" modal
     Then the "Create alarm form" is displayed
@@ -22,7 +23,7 @@ Feature: create alarm
     Then the "Submit form" button is displayed
     Then the "Close modal" button is displayed
 
-  @cleanupAlarm
+  @afterCleanupAlarm
   Scenario: save monthly alarm with basic options
     When I view the "Agreement" page
     When I click the "Add alarm" button
@@ -33,6 +34,25 @@ Feature: create alarm
     Then I fill in the expected payment amount
     Then I fill in the alarm allowed deviation in payment amount
     Then I click the "Submit form" button
+    Then the "Create alarm form" modal is closed
+    Then a notification of success is displayed
+    Then the current status of the alarm on the agreements page is displayed
+
+@skip @afterCleanupAlarm
+  Scenario: save weekly alarm with basic options
+    When I view the "Agreement" page
+    When I click the "Add alarm" button
+    Then the "Create alarm form" is displayed
+    When I click the "Meer opties" link
+    Then the recurrency is recurring
+    Then the frequency is monthly
+    When I set the frequency to weekly
+    When I fill in the alarm day of the week
+    When I fill in the current date for alarm start date
+    When I fill in the alarm allowed deviation in days
+    When I fill in the expected payment amount
+    When I fill in the alarm allowed deviation in payment amount
+    When I click the "Submit form" button
     Then the "Create alarm form" modal is closed
     Then a notification of success is displayed
     Then the current status of the alarm on the agreements page is displayed
