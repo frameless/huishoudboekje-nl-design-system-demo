@@ -8,6 +8,7 @@ Feature: create bank account for organisation
   Background:
     # Given I am logged in as an authorised site user
 
+  @cleanupOrganizationDepartment
   Scenario: view create bank account form
     When I view the "Organisation department" page
     When I click the "Add bank account" button

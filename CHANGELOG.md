@@ -22,6 +22,7 @@
 - 9e71caa: updated npm packages to resolve certain vulnerabilities
 - e317713: Upgraded i18 packages
 
+
 ## 1.12.7
 
 Deze versie omvat paginering bij het overzicht met bestanden van betaalinstructies.

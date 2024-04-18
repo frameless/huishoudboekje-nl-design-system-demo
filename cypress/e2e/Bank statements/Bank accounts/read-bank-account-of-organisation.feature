@@ -22,3 +22,4 @@ Feature: read bank account of organisation
     Then the "IBAN" is displayed
     Then the "Edit bank account" button is displayed
     Then the "Add bank account" button is displayed
+

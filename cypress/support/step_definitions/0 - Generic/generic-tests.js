@@ -1,6 +1,6 @@
 // cypress/support/step_definitions/Generic/generic-tests.js
 
-import { Before, After } from "@badeball/cypress-cucumber-preprocessor";
+import {Before, After} from "@badeball/cypress-cucumber-preprocessor";
 
 const header = {
   'content-type': 'application/json',
@@ -12,11 +12,11 @@ Before(function () {
   cy.visit('/');
   cy.getCookie('appSession').then((c) => {
     const cookie = c
-    if(c) {
-    // If there is a cookie, do this
+    if (c) {
+      // If there is a cookie, do this
     }
     else {
-    // If no cookie, log in
+      // If no cookie, log in
       // Log in
       cy.wait(500);
       cy.get('body').then(($body) => {
