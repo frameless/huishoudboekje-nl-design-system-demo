@@ -8,14 +8,13 @@ Feature: read bank account of organisation
   Background:
     # Given I am logged in as an authorised site user
 
-  @cleanupOrganizationDepartment
   Scenario: no bank account
     When I view the "Organisation department" page
     Given no bank account exists
     Then no bank account is displayed
     Then the "Add bank account" button is displayed
 
-  @cleanupOrganizationDepartmentBankaccount
+  @cleanupOrganizationDepartment @cleanupOrganizationDepartmentBankaccount
   Scenario: bank account exists
     When I view the "Organisation department" page
     Given 1 or more bank accounts exist
@@ -23,3 +22,4 @@ Feature: read bank account of organisation
     Then the "IBAN" is displayed
     Then the "Edit bank account" button is displayed
     Then the "Add bank account" button is displayed
+

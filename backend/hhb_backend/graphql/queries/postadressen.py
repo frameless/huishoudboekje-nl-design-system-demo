@@ -23,17 +23,19 @@ class PostadresQuery:
 
 
 class PostadressenQuery:
-    return_type = graphene.List(Postadres, ids=graphene.List(graphene.String))
+    return_type = graphene.List(Postadres, ids=graphene.List(graphene.String), 
+        isLogRequest=graphene.Boolean(required=False))
 
     @classmethod
-    def resolver(cls, _root, info, ids=None):
+    def resolver(cls, _root, info, ids=None, isLogRequest=False):
         logging.info(f"Get postadressen")
         if ids:
             result = hhb_dataloader().postadressen.load(ids)
         else:
             result = hhb_dataloader().postadressen.load_all()
 
-        AuditLogging.create(
+        AuditLogging().create(
+            logRequest=isLogRequest,
             action=info.field_name,
             entities=[
                 GebruikersActiviteitEntity(entityType="postadres", entityId=id)
@@ -41,4 +43,4 @@ class PostadressenQuery:
             ] if ids else []
         )
 
-        return result
+        return result if not isLogRequest or isLogRequest and len(result) > 0 else None

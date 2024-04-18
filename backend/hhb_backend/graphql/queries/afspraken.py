@@ -25,25 +25,50 @@ class AfspraakQuery:
         return hhb_dataloader().afspraken.load_one(id)
 
 
-class AfsprakenQuery:
-    return_type = graphene.List(afspraak.Afspraak, ids=graphene.List(graphene.Int))
+
+class AfsprakenByUuidsQuery:
+    return_type = graphene.List(
+        afspraak.Afspraak,
+        uuids=graphene.List(graphene.String),
+    )
 
     @classmethod
-    def resolver(cls, _, info, ids=None):
+    def resolver(cls, _, info, uuids=None):
+        logging.info(f"Get afspraken by uuid")
+        if(uuids is None or len(uuids) == 0):
+            return None
+        afspraken = hhb_dataloader().afspraken.by_uuids(uuids)
+        AuditLogging.create(
+            action=info.field_name,
+                entities=[
+                    GebruikersActiviteitEntity(
+                        entityType="afspraak", entityId=afspraak.id)
+                    for afspraak in afspraken
+                ]
+            )
+        return sorted(afspraken, key=lambda i: uuids.index(i.uuid))
+
+class AfsprakenQuery:
+    return_type = graphene.List(afspraak.Afspraak, ids=graphene.List(graphene.Int),
+        isLogRequest=graphene.Boolean(required=False))
+
+    @classmethod
+    def resolver(cls, _, info, ids=None, isLogRequest=False):
         logging.info(f"Get afspraken")
         if ids:
             result = hhb_dataloader().afspraken.load(ids)
         else:
             result = hhb_dataloader().afspraken.load_all()
-
-        AuditLogging.create(
+        
+        AuditLogging().create(
+            logRequest=isLogRequest,
             action=info.field_name,
             entities=[
                 GebruikersActiviteitEntity(entityType="afspraak", entityId=id)
                 for id in ids
             ] if ids else []
         )
-        return result
+        return result if not isLogRequest or isLogRequest and len(result) > 0 else None
     
 
 class SearchAfsprakenQuery:

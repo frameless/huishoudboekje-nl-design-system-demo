@@ -123,6 +123,4 @@ def delete_rekening(rekening_id: int):
 
 def rekening_used_check(rekening_id) -> (list, list, list):
     rekening = hhb_dataloader().rekeningen.load_one(rekening_id)
-    logging.error("test")
-    logging.error(rekening)
     return rekening.afdelingen or [], rekening.afspraken or [], rekening.burgers or []

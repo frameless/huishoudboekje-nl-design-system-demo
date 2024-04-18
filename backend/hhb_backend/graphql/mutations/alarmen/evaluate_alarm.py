@@ -8,7 +8,6 @@ import requests
 
 from graphql import GraphQLError
 from hhb_backend.audit_logging import AuditLogging
-from hhb_backend.feature_flags import Unleash
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.models import alarm, signaal
@@ -38,8 +37,6 @@ class EvaluateAlarms(graphene.Mutation):
     @staticmethod
     def mutate(self, info, ids=[]):
         """ Mutatie voor de evaluatie van een alarm wat kan resulteren in een signaal en/of een nieuw alarm in de reeks. """
-        if not Unleash().is_enabled("signalen"):
-            raise GraphQLError("Feature signalen is disabled")
 
         triggered_alarms = evaluate_alarms(ids=ids)
 
@@ -63,8 +60,6 @@ class EvaluateAlarm(graphene.Mutation):
     @staticmethod
     def mutate(self, info, id):
         """ Mutatie voor de evaluatie van een alarm wat kan resulteren in een signaal en/of een nieuw alarm in de reeks. """
-        if not Unleash().is_enabled("signalen"):
-            raise GraphQLError("Feature signalen is disabled")
 
         evaluated_alarm = evaluate_one_alarm(id)
         AuditLogging.create(

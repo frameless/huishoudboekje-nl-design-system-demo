@@ -187,40 +187,6 @@ signalenservice-test:
       junit: services/signalenservice/junit.xml
   when: on_success
 
-unleashservice-test:
-  <<: *rules-tests
-  stage: test
-  needs: []
-  image:
-    name: ${DOCKER_PROXY}node:20-alpine
-  variables:
-    NPM_CACHE_DIR: "${CI_PROJECT_DIR}/.cache/npm"
-    CYPRESS_INSTALL_BINARY: "0"
-  cache:
-    key: "${CI_COMMIT_REF_SLUG}__${CI_JOB_NAME}"
-    paths:
-      - ${NPM_CACHE_DIR}
-  before_script:
-    - cd ./services/unleashservice
-    - npm ci --cache ${NPM_CACHE_DIR} --prefer-offline --no-progress --color=false --quiet
-  retry:
-    max: 2
-    when: script_failure
-  script:
-    - npm run test:coverage
-  coverage: /All\sfiles.*?\s+(\d+.\d+)/
-  artifacts:
-    when: always
-    expire_in: 1 month
-    paths:
-      - services/unleashservice/coverage
-    reports:
-      coverage_report:
-        coverage_format: cobertura
-        path: "services/unleashservice/coverage/cobertura-coverage.xml"
-      junit: services/unleashservice/junit.xml
-  when: on_success
-
 backend-test:
   <<: *rules-tests
   extends: .Service Test
@@ -258,3 +224,33 @@ changeset:
     - npm run check-changeset
   rules:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event' && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == 'develop'
+
+
+##unit tests
+asp-services-tests:
+  <<: *rules-tests
+  stage: test
+  tags:
+    - docker
+  needs: []
+  retry:
+    max: 2
+    when: script_failure
+  image:
+    name: mcr.microsoft.com/dotnet/sdk:8.0
+  script:
+    - cd huishoudboekje_services
+    - dotnet test huishoudboekje_services.sln --test-adapter-path:. --logger:"junit;LogFilePath=..\artifacts\{assembly}-test-result.xml;MethodFormat=Class;FailureBodyFormat=Verbose" --collect:"XPlat Code Coverage" 
+  coverage: /Total\s*\|\s*(\d+(?:\.\d+)?)/
+  artifacts:
+    expire_in: 1 week
+    when: always
+    paths:
+      - huishoudboekje_services/**/*test-result.xml
+      - huishoudboekje_services/**/TestResults/**/coverage.cobertura.xml
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: huishoudboekje_services/**/TestResults/**/coverage.cobertura.xml
+      junit: huishoudboekje_services/**/*test-result.xml
+  when: on_success

@@ -240,24 +240,6 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: hhb-signalenservice
-  labels:
-    name: hhb-signalenservice
-spec:
-  template:
-    spec:
-      containers:
-        - name: hhb-signalenservice
-          resources:
-            limits:
-              memory: 400Mi
-            requests:
-              cpu: 50m
-              memory: 400Mi
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
   name: hhb-statsd-exporter
   labels:
     name: hhb-statsd-exporter
@@ -269,24 +251,6 @@ spec:
           resources:
             limits:
               memory: 128Mi
-            requests:
-              cpu: 50m
-              memory: 128Mi
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: hhb-unleashservice
-  labels:
-    name: hhb-unleashservice
-spec:
-  template:
-    spec:
-      containers:
-        - name: hhb-unleashservice
-          resources:
-            limits:
-              memory: 256Mi
             requests:
               cpu: 50m
               memory: 128Mi

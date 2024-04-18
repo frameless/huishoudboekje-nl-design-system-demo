@@ -1,38 +1,39 @@
 """ GraphQL schema queries module """
+from .overzicht import OverzichtQuery
+from .rapportages import BurgerRapportagesQuery
+from .saldo import SaldoQuery
+from .rubrieken import RubriekQuery, RubriekenQuery
+from .rekeningen import RekeningQuery, RekeningenByIbansQuery, RekeningenQuery
+from .postadressen import PostadressenQuery, PostadresQuery
+from .organisaties import OrganisatieQuery, OrganisatiesQuery
+from .journaalposten import JournaalpostQuery, JournaalpostenByUuidsQuery, JournaalpostenTransactionRubriekQuery, JournaalpostenQuery
+from .huishoudens import HuishoudenQuery, HuishoudensQuery, HuishoudensPagedQuery
+from .grootboekrekeningen import GrootboekrekeningQuery, GrootboekrekeningenQuery
+from .exports import ExportQuery, ExportsQuery
+from .gebruikersactiviteiten import GebruikersActiviteitQuery, GebruikersActiviteitenQuery, \
+    GebruikersActiviteitenPagedQuery
+from .exports import ExportQuery, ExportsPagedQuery, ExportsQuery
 import graphene
 
 from .afdelingen import AfdelingQuery, AfdelingenByIbanQuery, AfdelingenQuery
-from .afspraken import AfspraakQuery, SearchAfsprakenQuery, AfsprakenQuery
-from .alarmen import AlarmenQuery, AlarmQuery
+from .afspraken import AfspraakQuery, AfsprakenByUuidsQuery, SearchAfsprakenQuery, AfsprakenQuery
 from .bank_transactions import BankTransactionQuery, BankTransactionsQuery, BankTransactionsPagedQuery, BankTransactionsSearchQuery
-from .burgers import BurgersQuery, BurgerQuery, BurgersPagedQuery
+from .burgers import BurgersByUuidsQuery, BurgersQuery, BurgerQuery, BurgersPagedQuery
 from .configuraties import ConfiguratieQuery, ConfiguratiesQuery
 from .customer_statement_messages import CustomerStatementMessageQuery, CustomerStatementMessagesQuery
-from .exports import ExportQuery, ExportsPagedQuery, ExportsQuery
-from .gebruikersactiviteiten import GebruikersActiviteitQuery, GebruikersActiviteitenQuery, \
-    GebruikersActiviteitenPagedQuery
-from .grootboekrekeningen import GrootboekrekeningQuery, GrootboekrekeningenQuery
-from .huishoudens import HuishoudenQuery, HuishoudensQuery, HuishoudensPagedQuery
-from .journaalposten import JournaalpostQuery, JournaalpostenTransactionRubriekQuery, JournaalpostenQuery
-from .organisaties import OrganisatieQuery, OrganisatiesQuery
-from .postadressen import PostadressenQuery, PostadresQuery
-from .rekeningen import RekeningQuery, RekeningenByIbansQuery, RekeningenQuery
-from .rubrieken import RubriekQuery, RubriekenQuery
-from .saldo import SaldoQuery
-from .signalen import SignaalQuery, SignalenQuery
-from .rapportages import BurgerRapportagesQuery
-from .overzicht import OverzichtQuery
 
 
 class RootQuery(graphene.ObjectType):
     """ The root of all queries """
     burger = BurgerQuery.return_type
     burgers = BurgersQuery.return_type
+    burgers_uuid = BurgersByUuidsQuery.return_type
     burgers_paged = BurgersPagedQuery.return_type
     organisatie = OrganisatieQuery.return_type
     organisaties = OrganisatiesQuery.return_type
     afspraak = AfspraakQuery.return_type
     afspraken = AfsprakenQuery.return_type
+    afspraken_uuid = AfsprakenByUuidsQuery.return_type
     rekening = RekeningQuery.return_type
     rekeningen = RekeningenQuery.return_type
     rekeningen_by_ibans = RekeningenByIbansQuery.return_type
@@ -45,6 +46,7 @@ class RootQuery(graphene.ObjectType):
     grootboekrekeningen = GrootboekrekeningenQuery.return_type
     journaalpost = JournaalpostQuery.return_type
     journaalposten = JournaalpostenQuery.return_type
+    journaalposten_uuid = JournaalpostenByUuidsQuery.return_type
     journaalposten_transactie_rubriek = JournaalpostenTransactionRubriekQuery.return_type
     rubriek = RubriekQuery.return_type
     rubrieken = RubriekenQuery.return_type
@@ -53,9 +55,6 @@ class RootQuery(graphene.ObjectType):
     export = ExportQuery.return_type
     exports = ExportsQuery.return_type
     exports_paged = ExportsPagedQuery.return_type
-    gebruikersactiviteit = GebruikersActiviteitQuery.return_type
-    gebruikersactiviteiten = GebruikersActiviteitenQuery.return_type
-    gebruikersactiviteiten_paged = GebruikersActiviteitenPagedQuery.return_type
     huishouden = HuishoudenQuery.return_type
     huishoudens = HuishoudensQuery.return_type
     huishoudens_paged = HuishoudensPagedQuery.return_type
@@ -65,10 +64,6 @@ class RootQuery(graphene.ObjectType):
     postadres = PostadresQuery.return_type
     postadressen = PostadressenQuery.return_type
     saldo = SaldoQuery.return_type
-    alarm = AlarmQuery.return_type
-    alarmen = AlarmenQuery.return_type
-    signaal = SignaalQuery.return_type
-    signalen = SignalenQuery.return_type
     burger_rapportages = BurgerRapportagesQuery.return_type
     search_afspraken = SearchAfsprakenQuery.return_type
     search_transacties = BankTransactionsSearchQuery.return_type
@@ -79,6 +74,9 @@ class RootQuery(graphene.ObjectType):
 
     def resolve_burgers(root, info, **kwargs):
         return BurgersQuery.resolver(root, info, **kwargs)
+
+    def resolve_burgers_uuid(root, info, **kwargs):
+        return BurgersByUuidsQuery.resolver(root, info, **kwargs)
 
     def resolve_burgers_paged(root, info, **kwargs):
         return BurgersPagedQuery.resolver(root, info, **kwargs)
@@ -94,6 +92,9 @@ class RootQuery(graphene.ObjectType):
 
     def resolve_afspraken(root, info, **kwargs):
         return AfsprakenQuery.resolver(root, info, **kwargs)
+
+    def resolve_afspraken_uuid(root, info, **kwargs):
+        return AfsprakenByUuidsQuery.resolver(root, info, **kwargs)
 
     def resolve_rekening(root, info, **kwargs):
         return RekeningQuery.resolver(root, info, **kwargs)
@@ -131,6 +132,9 @@ class RootQuery(graphene.ObjectType):
     def resolve_journaalposten(root, info, **kwargs):
         return JournaalpostenQuery.resolver(root, info, **kwargs)
 
+    def resolve_journaalposten_uuid(root, info, **kwargs):
+        return JournaalpostenByUuidsQuery.resolver(root, info, **kwargs)
+
     def resolve_journaalposten_transactie_rubriek(root, info, **kwargs):
         return JournaalpostenTransactionRubriekQuery.resolver(root, info, **kwargs)
 
@@ -154,18 +158,12 @@ class RootQuery(graphene.ObjectType):
 
     def resolve_exports(root, info, **kwargs):
         return ExportsQuery.resolver(root, info, **kwargs)
-    
+
     def resolve_exports_paged(root, info, **kwargs):
         return ExportsPagedQuery.resolver(root, info, **kwargs)
 
-    def resolve_gebruikersactiviteit(root, info, **kwargs):
-        return GebruikersActiviteitQuery.resolver(root, info, **kwargs)
-
-    def resolve_gebruikersactiviteiten(root, info, **kwargs):
-        return GebruikersActiviteitenQuery.resolver(root, info, **kwargs)
-
-    def resolve_gebruikersactiviteiten_paged(root, info, **kwargs):
-        return GebruikersActiviteitenPagedQuery.resolver(root, info, **kwargs)
+    def resolve_exports_paged(root, info, **kwargs):
+        return ExportsPagedQuery.resolver(root, info, **kwargs)
 
     def resolve_huishouden(root, info, **kwargs):
         return HuishoudenQuery.resolver(root, info, **kwargs)
@@ -190,18 +188,6 @@ class RootQuery(graphene.ObjectType):
 
     def resolve_postadressen(root, info, **kwargs):
         return PostadressenQuery.resolver(root, info, **kwargs)
-
-    def resolve_alarm(root, info, **kwargs):
-        return AlarmQuery.resolver(root, info, **kwargs)
-
-    def resolve_alarmen(root, info, **kwargs):
-        return AlarmenQuery.resolver(root, info, **kwargs)
-
-    def resolve_signaal(root, info, **kwargs):
-        return SignaalQuery.resolver(root, info, **kwargs)
-
-    def resolve_signalen(root, info, **kwargs):
-        return SignalenQuery.resolver(root, info, **kwargs)
 
     def resolve_saldo(root, info, **kwargs):
         return SaldoQuery.resolver(root, info, **kwargs)

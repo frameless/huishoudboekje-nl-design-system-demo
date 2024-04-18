@@ -1,0 +1,110 @@
+sources:
+  - name: Backend
+    handler:
+      graphql:
+        endpoint: "{env.HHB_BACKEND_URL}"
+        source: ./graphql/backend/schema.graphql
+        batch: true
+        operationHeaders:
+          cookie: "{context.headers['cookie']}"
+          User-Agent: "{context.headers['user-agent']}"
+  - name: UserActivity
+    handler:
+      grpc:
+        endpoint: "{env.HHB_LOG_SERVICE_URL}"
+        source: ./protos/logservice/*.proto
+        metaData:
+          "cookies": "{context.headers['cookie']}"
+  - name: AlarmService
+    handler:
+      grpc:
+        endpoint: "{env.HHB_ALARM_SERVICE_URL}"
+        source: ./protos/alarmservice/*.proto
+        metaData:
+          "cookies": "{context.headers['cookie']}"
+          "client-user-agent": "{context.headers['user-agent']}"
+transforms:
+  - rename:
+      renames:
+        - from:
+            type: GrpcServices__(.*)
+          to:
+            type: $1
+          useRegExpForTypes: true
+        - from:
+            type: (.*)_Input
+          to:
+            type: $1
+          useRegExpForTypes: true
+          useRegExpForFields: true
+        - from:
+            type: GrpcServices__(.*)
+          to:
+            type: $1
+          useRegExpForTypes: true
+        - from:
+            type: Query
+            field: GrpcServices_(.*)
+          to:
+            type: Query
+            field: $1
+          useRegExpForFields: true
+        - from:
+            type: Mutation
+            field: GrpcServices_(.*)
+          to:
+            type: Mutation
+            field: $1
+          useRegExpForFields: true
+  - filterSchema:
+      mode: bare
+      filters:
+        - Query.*.!{isLogRequest}
+additionalTypeDefs: |
+  extend type Afspraak {
+    alarm: GrpcServices__AlarmData
+  }
+    
+  extend type GrpcServices__SignalData {
+    citizen: Burger @resolveTo(
+      sourceName: "Backend",
+      sourceTypeName: "RootQuery",
+      sourceFieldName: "burgersUuid",
+      keyField: "citizenId",
+      keysArg: "uuids"
+    )
+    agreement: Afspraak @resolveTo(
+      sourceName: "Backend",
+      sourceTypeName: "RootQuery",
+      sourceFieldName: "afsprakenUuid",
+      keyField: "agreementId",
+      keysArg: "uuids"
+    )
+    journalEntries: [Journaalpost] @resolveTo(
+      sourceName: "Backend",
+      sourceTypeName: "RootQuery",
+      sourceFieldName: "journaalpostenUuid",
+      keyField: "journalEntryIds",
+      keysArg: "uuids"
+    )
+  }
+
+  extend type GrpcServices__Entity {
+    huishouden: Huishouden 
+    burger: Burger 
+    organisatie: Organisatie
+    afspraak: Afspraak
+    rekening: Rekening
+    customerStatementMessage: CustomerStatementMessage
+    configuratie: Configuratie
+    rubriek: Rubriek
+    afdeling: Afdeling
+    postadres: Postadres
+    export: Export
+  }
+additionalResolvers:
+  - './resolvers'
+serve:
+  hostname: 0.0.0.0
+  endpoint: "/apiV2/graphql"
+  batchingLimit: 10

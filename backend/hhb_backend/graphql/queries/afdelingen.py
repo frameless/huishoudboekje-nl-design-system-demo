@@ -25,10 +25,10 @@ class AfdelingQuery:
 
 
 class AfdelingenQuery:
-    return_type = graphene.List(Afdeling, ids=graphene.List(graphene.Int))
+    return_type = graphene.List(Afdeling, ids=graphene.List(graphene.Int), isLogRequest=graphene.Boolean(required=False))
 
     @classmethod
-    def resolver(cls, _, info, ids=None):
+    def resolver(cls, _, info, ids=None, isLogRequest=False):
         logging.info(f"Get afdelingen")
         if ids:
             result = hhb_dataloader().afdelingen.load(ids)
@@ -36,13 +36,14 @@ class AfdelingenQuery:
             result = hhb_dataloader().afdelingen.load_all()
 
         AuditLogging.create(
+            logRequest=isLogRequest,
             action=info.field_name,
             entities=[
                 GebruikersActiviteitEntity(entityType="afdeling", entityId=id)
                 for id in ids
             ] if ids else []
         )
-        return result
+        return result if not isLogRequest or isLogRequest and len(result) > 0 else None
 
 class AfdelingenByIbanQuery:
     return_type = graphene.List(

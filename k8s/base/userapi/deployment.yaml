@@ -1,0 +1,73 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hhb-userapi
+  labels:
+    name: hhb-userapi
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: hhb-userapi
+  template:
+    metadata:
+      labels:
+        name: hhb-userapi
+    spec:
+      containers:
+        - name: hhb-userapi
+          image: userapi
+          imagePullPolicy: Always
+          ports:
+            - name: http
+              containerPort: 8000
+              protocol: TCP
+            - name: metrics
+              containerPort: 9000
+              protocol: TCP
+          startupProbe:
+            httpGet:
+              path: /healthz
+              port: http
+            periodSeconds: 10
+            failureThreshold: 60
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+            periodSeconds: 10
+          resources:
+            limits:
+              cpu: "300m"
+              memory: 256Mi
+            requests:
+              cpu: 100m
+              memory: 128Mi
+          env:
+            - name: LOG_LEVEL
+              value: INFO
+            - name: USE_AUTH #For testing purposes this is now disabled
+              value: "0"
+            - name: HHB_RABBITMQ_HOST
+              value: hhb-rabbitmq
+            - name: HHB_RABBITMQ_PORT
+              value: "5672"
+            - name: HHB_HUISHOUDBOEKJE_SERVICE
+              value: "http://hhb-huishoudboekjeservice"
+            - name: HHB_RAPPORTAGE_SERVICE
+              value: "http://hhb-rapportageservice"
+            - name: HHB_RABBITMQ_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: rabbitmq-config
+                  key: RABBITMQ_DEFAULT_USER
+            - name: HHB_RABBITMQ_PASS
+              valueFrom:
+                configMapKeyRef:
+                  name: rabbitmq-config
+                  key: RABBITMQ_DEFAULT_PASS

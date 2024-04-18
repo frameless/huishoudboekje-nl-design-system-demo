@@ -2,10 +2,10 @@
 
 import logging
 import graphene
+from hhb_backend.update_end_date_alarm import UpdateEndDateAlarm
 import requests
 
 import hhb_backend.graphql.models.afspraak as graphene_afspraak
-import hhb_backend.graphql.models.alarm as graphene_alarm
 from graphql import GraphQLError
 from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql import settings
@@ -20,7 +20,6 @@ class UpdateAfspraakInput(graphene.InputObjectType):
     burger_id = graphene.Int()
     afdeling_id = graphene.Int()
     postadres_id = graphene.String()
-    alarm_id = graphene.String()
     tegen_rekening_id = graphene.Int()
     rubriek_id = graphene.Int()
     omschrijving = graphene.String()
@@ -52,7 +51,6 @@ class UpdateAfspraak(graphene.Mutation):
                     "properties": {
                         "omschrijving": {"type": "string","minLength": 1},
                         "bedrag": {"type": "integer", "minimum": 0},
-                        "alarm_id": {"type": "string","format": "uuid"},
                         "valid_from": {"type": "string", "format": "date"},
                         "valid_through": {"type": "string", "format": "date"},
                         "zoektermen": {  "type": "array", "items": {"type": "string", "minLength": 1 } },
@@ -65,7 +63,6 @@ class UpdateAfspraak(graphene.Mutation):
                     "properties": {
                         "omschrijving": {"type": "string","minLength": 1},
                         "bedrag": {"type": "integer", "minimum": 0},
-                        "alarm_id": {"type": "string","format": "uuid"},
                         "valid_from": {"type": "string", "format": "date"},
                         "valid_through": {"type": "string", "format": "date"},
                         "zoektermen": {  "type": "array", "items": {"type": "string", "minLength": 1 } },
@@ -78,7 +75,6 @@ class UpdateAfspraak(graphene.Mutation):
                     "properties": {
                         "omschrijving": {"type": "string","minLength": 1},
                         "bedrag": {"type": "integer", "minimum": 0},
-                        "alarm_id": {"type": "string","format": "uuid"},
                         "valid_from": {"type": "string", "format": "date"},
                         "valid_through": {"type": "string", "format": "date"},
                         "zoektermen": {  "type": "array", "items": {"type": "string", "minLength": 1 } }
@@ -128,19 +124,17 @@ class UpdateAfspraak(graphene.Mutation):
             if not postadres:
                 raise GraphQLError("postadres not found")
 
-        # check alarm_id - optional
-        alarm_id = input.get("alarm_id")
-        if alarm_id is not None:
-            alarm_result: graphene_alarm.Alarm = hhb_dataloader().alarms.load_one(alarm_id)
-            if not alarm_result:
-                raise GraphQLError("alarm not found")
-
         # final update call
         response = requests.post(f"{settings.HHB_SERVICES_URL}/afspraken/{id}", json=input)
         if not response.ok:
             raise UpstreamError(response, "updating afspraak failed")
 
         afspraak = response.json()["data"]
+
+        if afspraak["alarm_id"]:
+            updated_end_date = input.get("valid_through")
+            if updated_end_date is not None and updated_end_date is not "":
+                UpdateEndDateAlarm.create(alarmUuid=afspraak["alarm_id"], newEndDate=updated_end_date)
 
         AuditLogging.create(
             action=info.field_name,

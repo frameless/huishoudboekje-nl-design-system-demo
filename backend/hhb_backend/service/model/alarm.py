@@ -8,6 +8,8 @@ class Alarm(BaseModel):
     id: str
     afspraakId: int
     signaalId: Optional[str]
+    alarmId: int
+    alarmUuid: str
     isActive: bool
     datumMargin: int
     bedrag: int
@@ -17,3 +19,4 @@ class Alarm(BaseModel):
     byMonthDay: List[int]
     startDate: str
     endDate: Optional[str]
+

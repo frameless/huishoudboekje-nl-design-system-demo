@@ -1,10 +1,10 @@
-import { gql } from '@apollo/client';
+import {gql} from '@apollo/client';
 import * as Apollo from '@apollo/client';
 export type Maybe<T> = T;
 export type InputMaybe<T> = T;
-export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
-export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
-export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
+export type Exact<T extends {[key: string]: unknown}> = {[K in keyof T]: T[K]};
+export type MakeOptional<T, K extends keyof T> = Omit<T, K> & {[SubKey in K]?: Maybe<T[SubKey]>};
+export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & {[SubKey in K]: Maybe<T[SubKey]>};
 const defaultOptions = {} as const;
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
@@ -15,6 +15,8 @@ export type Scalars = {
   Float: number;
   /** Bedrag (bijvoorbeeld: 99.99) n */
   Bedrag: any;
+  /** The `BigInt` scalar type represents non-fractional signed whole numeric values. */
+  BigInt: any;
   /**
    * The `Date` scalar type represents a Date
    * value as specified by
@@ -38,6 +40,14 @@ export type Scalars = {
    * schema (one of the key benefits of GraphQL).
    */
   JSONString: any;
+  ObjMap: any;
+  ResolveToSourceArgs: any;
+  SignalsRequest: any;
+  /**
+   * Leverages the internal Python implementation of UUID (uuid.UUID) to provide native UUID objects
+   * in fields, resolvers and input.
+   */
+  UUID: any;
   /**
    * Create scalar that ignores normal serialization/deserialization, since
    * that will be handled by the multipart request spec
@@ -72,7 +82,8 @@ export type Afdeling = {
 
 export type Afspraak = {
   afdeling?: Maybe<Afdeling>;
-  alarm?: Maybe<Alarm>;
+  alarm?: Maybe<AlarmData>;
+  alarmId?: Maybe<Scalars['UUID']>;
   bedrag?: Maybe<Scalars['Bedrag']>;
   betaalinstructie?: Maybe<Betaalinstructie>;
   burger?: Maybe<Burger>;
@@ -87,6 +98,7 @@ export type Afspraak = {
   rubriek?: Maybe<Rubriek>;
   similarAfspraken?: Maybe<Array<Maybe<Afspraak>>>;
   tegenRekening?: Maybe<Rekening>;
+  uuid?: Maybe<Scalars['UUID']>;
   validFrom?: Maybe<Scalars['Date']>;
   validThrough?: Maybe<Scalars['Date']>;
   zoektermen?: Maybe<Array<Maybe<Scalars['String']>>>;
@@ -103,26 +115,56 @@ export type AfsprakenPaged = {
   pageInfo?: Maybe<PageInfo>;
 };
 
-/** Model om vast te stellen op basis van welke regels een signaal aangemaakt moet worden  */
-export type Alarm = {
-  afspraak?: Maybe<Afspraak>;
-  bedrag?: Maybe<Scalars['Bedrag']>;
-  bedragMargin?: Maybe<Scalars['Bedrag']>;
-  byDay?: Maybe<Array<Maybe<DayOfWeek>>>;
-  byMonth?: Maybe<Array<Maybe<Scalars['Int']>>>;
-  byMonthDay?: Maybe<Array<Maybe<Scalars['Int']>>>;
-  datumMargin?: Maybe<Scalars['Int']>;
-  endDate?: Maybe<Scalars['String']>;
+export type AlarmData = {
+  AlarmType?: Maybe<Scalars['Int']>;
+  amount?: Maybe<Scalars['Int']>;
+  amountMargin?: Maybe<Scalars['Int']>;
+  checkOnDate?: Maybe<Scalars['BigInt']>;
+  dateMargin?: Maybe<Scalars['Int']>;
+  endDate?: Maybe<Scalars['BigInt']>;
   id?: Maybe<Scalars['String']>;
   isActive?: Maybe<Scalars['Boolean']>;
-  signaal?: Maybe<Signaal>;
-  startDate?: Maybe<Scalars['String']>;
+  recurringDay?: Maybe<Array<Maybe<Scalars['Int']>>>;
+  recurringDayOfMonth?: Maybe<Array<Maybe<Scalars['Int']>>>;
+  recurringMonths?: Maybe<Array<Maybe<Scalars['Int']>>>;
+  startDate?: Maybe<Scalars['BigInt']>;
 };
 
-export type AlarmTriggerResult = {
-  alarm?: Maybe<Alarm>;
-  nextAlarm?: Maybe<Alarm>;
-  signaal?: Maybe<Signaal>;
+export type AlarmData_Input = {
+  AlarmType?: InputMaybe<Scalars['Int']>;
+  amount?: InputMaybe<Scalars['Int']>;
+  amountMargin?: InputMaybe<Scalars['Int']>;
+  checkOnDate?: InputMaybe<Scalars['BigInt']>;
+  dateMargin?: InputMaybe<Scalars['Int']>;
+  endDate?: InputMaybe<Scalars['BigInt']>;
+  id?: InputMaybe<Scalars['String']>;
+  isActive?: InputMaybe<Scalars['Boolean']>;
+  recurringDay?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
+  recurringDayOfMonth?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
+  recurringMonths?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
+  startDate?: InputMaybe<Scalars['BigInt']>;
+};
+
+export type AlarmId = {
+  id?: InputMaybe<Scalars['String']>;
+};
+
+export type AlarmUpdateData = {
+  AlarmType?: InputMaybe<Scalars['Int']>;
+  amount?: InputMaybe<Scalars['Int']>;
+  amountMargin?: InputMaybe<Scalars['Int']>;
+  dateMargin?: InputMaybe<Scalars['Int']>;
+  endDate?: InputMaybe<Scalars['BigInt']>;
+  id?: InputMaybe<Scalars['String']>;
+  isActive?: InputMaybe<Scalars['Boolean']>;
+  recurring?: InputMaybe<AlarmUpdateRecurring>;
+  startDate?: InputMaybe<Scalars['BigInt']>;
+};
+
+export type AlarmUpdateRecurring = {
+  recurringDay?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
+  recurringDayOfMonth?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
+  recurringMonths?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
 };
 
 export type BankTransaction = {
@@ -209,6 +251,7 @@ export type Burger = {
   rekeningen?: Maybe<Array<Maybe<Rekening>>>;
   straatnaam?: Maybe<Scalars['String']>;
   telefoonnummer?: Maybe<Scalars['String']>;
+  uuid?: Maybe<Scalars['UUID']>;
   voorletters?: Maybe<Scalars['String']>;
   voornamen?: Maybe<Scalars['String']>;
 };
@@ -285,6 +328,14 @@ export type ConfiguratieInput = {
   waarde?: InputMaybe<Scalars['String']>;
 };
 
+export enum ConnectivityState {
+  Connecting = 'CONNECTING',
+  Idle = 'IDLE',
+  Ready = 'READY',
+  Shutdown = 'SHUTDOWN',
+  TransientFailure = 'TRANSIENT_FAILURE'
+}
+
 /** Mutatie om een afdeling aan een organisatie toe te voegen. */
 export type CreateAfdeling = {
   afdeling?: Maybe<Afdeling>;
@@ -311,7 +362,6 @@ export type CreateAfspraak = {
 
 export type CreateAfspraakInput = {
   afdelingId?: InputMaybe<Scalars['Int']>;
-  alarmId?: InputMaybe<Scalars['String']>;
   bedrag: Scalars['Bedrag'];
   betaalinstructie?: InputMaybe<BetaalinstructieInput>;
   burgerId: Scalars['Int'];
@@ -325,23 +375,9 @@ export type CreateAfspraakInput = {
   zoektermen?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
-export type CreateAlarm = {
-  alarm?: Maybe<Alarm>;
-  burgerId?: Maybe<Scalars['String']>;
-  ok?: Maybe<Scalars['Boolean']>;
-};
-
-export type CreateAlarmInput = {
-  afspraakId?: InputMaybe<Scalars['Int']>;
-  bedrag?: InputMaybe<Scalars['Bedrag']>;
-  bedragMargin?: InputMaybe<Scalars['Bedrag']>;
-  byDay?: InputMaybe<Array<InputMaybe<DayOfWeek>>>;
-  byMonth?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
-  byMonthDay?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
-  datumMargin?: InputMaybe<Scalars['Int']>;
-  endDate?: InputMaybe<Scalars['String']>;
-  isActive?: InputMaybe<Scalars['Boolean']>;
-  startDate?: InputMaybe<Scalars['String']>;
+export type CreateAlarmRequest = {
+  agreementUuid?: InputMaybe<Scalars['String']>;
+  alarm?: InputMaybe<AlarmData_Input>;
 };
 
 export type CreateBurger = {
@@ -451,20 +487,6 @@ export type CreateRubriek = {
   rubriek?: Maybe<Rubriek>;
 };
 
-export type CreateSignaal = {
-  ok?: Maybe<Scalars['Boolean']>;
-  signaal?: Maybe<Signaal>;
-};
-
-export type CreateSignaalInput = {
-  actions?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-  alarmId?: InputMaybe<Scalars['String']>;
-  banktransactieIds?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
-  context?: InputMaybe<Scalars['String']>;
-  isActive?: InputMaybe<Scalars['Boolean']>;
-  type?: InputMaybe<Scalars['String']>;
-};
-
 /** Model van een bankafschrift. */
 export type CustomerStatementMessage = {
   accountIdentification?: Maybe<Scalars['String']>;
@@ -524,12 +546,6 @@ export type DeleteAfspraakZoekterm = {
   previous?: Maybe<Afspraak>;
 };
 
-export type DeleteAlarm = {
-  burgerId?: Maybe<Scalars['String']>;
-  ok?: Maybe<Scalars['Boolean']>;
-  previous?: Maybe<Alarm>;
-};
-
 export type DeleteBurger = {
   ok?: Maybe<Scalars['Boolean']>;
   previous?: Maybe<Burger>;
@@ -580,22 +596,35 @@ export type DeletePostadres = {
   previous?: Maybe<Postadres>;
 };
 
+export type DeleteResponse = {
+  deleted?: Maybe<Scalars['Boolean']>;
+  id?: Maybe<Scalars['String']>;
+};
+
 export type DeleteRubriek = {
   ok?: Maybe<Scalars['Boolean']>;
   previous?: Maybe<Rubriek>;
 };
 
-export type DeleteSignaal = {
-  ok?: Maybe<Scalars['Boolean']>;
-  previous?: Maybe<Signaal>;
+export type Entity = {
+  afdeling?: Maybe<Afdeling>;
+  afspraak?: Maybe<Afspraak>;
+  burger?: Maybe<Burger>;
+  configuratie?: Maybe<Configuratie>;
+  customerStatementMessage?: Maybe<CustomerStatementMessage>;
+  entityId?: Maybe<Scalars['String']>;
+  entityType?: Maybe<Scalars['String']>;
+  export?: Maybe<Export>;
+  huishouden?: Maybe<Huishouden>;
+  organisatie?: Maybe<Organisatie>;
+  postadres?: Maybe<Postadres>;
+  rekening?: Maybe<Rekening>;
+  rubriek?: Maybe<Rubriek>;
 };
 
-export type EvaluateAlarm = {
-  alarmTriggerResult?: Maybe<Array<Maybe<AlarmTriggerResult>>>;
-};
-
-export type EvaluateAlarms = {
-  alarmTriggerResult?: Maybe<Array<Maybe<AlarmTriggerResult>>>;
+export type EntityFilter = {
+  entityIds?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  entityType?: InputMaybe<Scalars['String']>;
 };
 
 export type Export = {
@@ -615,6 +644,10 @@ export type ExportsPaged = {
   pageInfo?: Maybe<PageInfo>;
 };
 
+export type Filter = {
+  entityFilter?: InputMaybe<Array<InputMaybe<EntityFilter>>>;
+};
+
 /** Model dat een actie van een gebruiker beschrijft. */
 export type GebruikersActiviteit = {
   action?: Maybe<Scalars['String']>;
@@ -631,7 +664,6 @@ export type GebruikersActiviteit = {
 export type GebruikersActiviteitEntity = {
   afdeling?: Maybe<Afdeling>;
   afspraak?: Maybe<Afspraak>;
-  alarm?: Maybe<Alarm>;
   burger?: Maybe<Burger>;
   configuratie?: Maybe<Configuratie>;
   customerStatementMessage?: Maybe<CustomerStatementMessage>;
@@ -645,7 +677,6 @@ export type GebruikersActiviteitEntity = {
   postadres?: Maybe<Postadres>;
   rekening?: Maybe<Rekening>;
   rubriek?: Maybe<Rubriek>;
-  signaal?: Maybe<Signaal>;
   transaction?: Maybe<BankTransaction>;
 };
 
@@ -658,7 +689,6 @@ export type GebruikersActiviteitMeta = {
 export type GebruikersActiviteitSnapshot = {
   afdeling?: Maybe<Afdeling>;
   afspraak?: Maybe<Afspraak>;
-  alarm?: Maybe<Alarm>;
   burger?: Maybe<Burger>;
   configuratie?: Maybe<Configuratie>;
   customerStatementMessage?: Maybe<CustomerStatementMessage>;
@@ -670,13 +700,19 @@ export type GebruikersActiviteitSnapshot = {
   organisatie?: Maybe<Organisatie>;
   postadres?: Maybe<Postadres>;
   rubriek?: Maybe<Rubriek>;
-  signaal?: Maybe<Signaal>;
   transaction?: Maybe<BankTransaction>;
 };
 
-export type GebruikersActiviteitenPaged = {
-  gebruikersactiviteiten?: Maybe<Array<Maybe<GebruikersActiviteit>>>;
-  pageInfo?: Maybe<PageInfo>;
+export type GetActiveSignalsCountResponse = {
+  count?: Maybe<Scalars['Int']>;
+};
+
+export type GetByIdsRequest = {
+  ids?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+};
+
+export type GetByIdsResponse = {
+  data?: Maybe<Array<Maybe<AlarmData>>>;
 };
 
 export type Grootboekrekening = {
@@ -712,6 +748,7 @@ export type Journaalpost = {
   isAutomatischGeboekt?: Maybe<Scalars['Boolean']>;
   rubriek?: Maybe<Rubriek>;
   transaction?: Maybe<BankTransaction>;
+  uuid?: Maybe<Scalars['String']>;
 };
 
 /** Model van een afgeletterde banktransactie. (minimale data om eenvoudig de rubriek van een banktransactie te kunnen vinden)  */
@@ -721,6 +758,333 @@ export type JournaalpostTransactieRubriek = {
   id?: Maybe<Scalars['Int']>;
   isAutomatischGeboekt?: Maybe<Scalars['Boolean']>;
   transactionId?: Maybe<Scalars['Int']>;
+};
+
+export type Meta = {
+  applicationVersion?: Maybe<Scalars['String']>;
+  ip?: Maybe<Scalars['String']>;
+  userAgent?: Maybe<Scalars['String']>;
+};
+
+export type Mutation = {
+  Alarms_Create?: Maybe<AlarmData>;
+  Alarms_Delete?: Maybe<DeleteResponse>;
+  Alarms_Update?: Maybe<AlarmData>;
+  Signals_SetIsActive?: Maybe<SignalData>;
+  /** Mutatie om een zoekterm aan een afspraak toe te voegen. */
+  addAfspraakZoekterm?: Maybe<AddAfspraakZoekterm>;
+  /** Mutatie om een burger aan een huishouden toe te voegen. */
+  addHuishoudenBurger?: Maybe<AddHuishoudenBurger>;
+  /** Mutatie om een afdeling aan een organisatie toe te voegen. */
+  createAfdeling?: Maybe<CreateAfdeling>;
+  /** Mutatie om een rekening aan een afdeling toe te voegen. */
+  createAfdelingRekening?: Maybe<CreateAfdelingRekening>;
+  createAfspraak?: Maybe<CreateAfspraak>;
+  createBurger?: Maybe<CreateBurger>;
+  /** Mutatie om een rekening aan een burger toe te voegen. */
+  createBurgerRekening?: Maybe<CreateBurgerRekening>;
+  createConfiguratie?: Maybe<CreateConfiguratie>;
+  createCustomerStatementMessage?: Maybe<CreateCustomerStatementMessage>;
+  /** Mutatie om een betaalinstructie te genereren. */
+  createExportOverschrijvingen?: Maybe<CreateExportOverschrijvingen>;
+  createHuishouden?: Maybe<CreateHuishouden>;
+  createJournaalpostAfspraak?: Maybe<CreateJournaalpostAfspraak>;
+  /** Mutatie om een banktransactie af te letteren op een grootboekrekening. */
+  createJournaalpostGrootboekrekening?: Maybe<CreateJournaalpostGrootboekrekening>;
+  createOrganisatie?: Maybe<CreateOrganisatie>;
+  createPostadres?: Maybe<CreatePostadres>;
+  createRubriek?: Maybe<CreateRubriek>;
+  /** Mutatie om een afdeling van een organisatie te verwijderen. */
+  deleteAfdeling?: Maybe<DeleteAfdeling>;
+  /** Mutatie om een rekening van een afdeling te verwijderen. */
+  deleteAfdelingRekening?: Maybe<DeleteAfdelingRekening>;
+  deleteAfspraak?: Maybe<DeleteAfspraak>;
+  /** Mutatie om een betaalinstructie bij een afspraak te verwijderen. */
+  deleteAfspraakBetaalinstructie?: Maybe<DeleteAfspraakBetaalinstructie>;
+  /** Mutatie om een zoekterm bij een afspraak te verwijderen. */
+  deleteAfspraakZoekterm?: Maybe<DeleteAfspraakZoekterm>;
+  deleteBurger?: Maybe<DeleteBurger>;
+  /** Mutatie om een rekening bij een burger te verwijderen. */
+  deleteBurgerRekening?: Maybe<DeleteBurgerRekening>;
+  deleteConfiguratie?: Maybe<DeleteConfiguratie>;
+  deleteCustomerStatementMessage?: Maybe<DeleteCustomerStatementMessage>;
+  deleteHuishouden?: Maybe<DeleteHuishouden>;
+  /** Mutatie om een burger uit een huishouden te verwijderen. */
+  deleteHuishoudenBurger?: Maybe<DeleteHuishoudenBurger>;
+  deleteJournaalpost?: Maybe<DeleteJournaalpost>;
+  deleteOrganisatie?: Maybe<DeleteOrganisatie>;
+  deletePostadres?: Maybe<DeletePostadres>;
+  deleteRubriek?: Maybe<DeleteRubriek>;
+  /** Mutatie om niet afgeletterde banktransacties af te letteren. */
+  startAutomatischBoeken?: Maybe<StartAutomatischBoeken>;
+  updateAfdeling?: Maybe<UpdateAfdeling>;
+  updateAfspraak?: Maybe<UpdateAfspraak>;
+  /** Mutatie voor het instellen van een nieuwe betaalinstructie voor een afspraak. */
+  updateAfspraakBetaalinstructie?: Maybe<UpdateAfspraakBetaalinstructie>;
+  updateBurger?: Maybe<UpdateBurger>;
+  updateConfiguratie?: Maybe<UpdateConfiguratie>;
+  updateOrganisatie?: Maybe<UpdateOrganisatie>;
+  updatePostadres?: Maybe<UpdatePostadres>;
+  updateRekening?: Maybe<UpdateRekening>;
+  updateRubriek?: Maybe<UpdateRubriek>;
+};
+
+
+export type MutationAlarms_CreateArgs = {
+  input?: InputMaybe<CreateAlarmRequest>;
+};
+
+
+export type MutationAlarms_DeleteArgs = {
+  input?: InputMaybe<AlarmId>;
+};
+
+
+export type MutationAlarms_UpdateArgs = {
+  input?: InputMaybe<UpdateAlarmRequest>;
+};
+
+
+export type MutationSignals_SetIsActiveArgs = {
+  input?: InputMaybe<SetIsActiveRequest>;
+};
+
+
+export type MutationAddAfspraakZoektermArgs = {
+  afspraakId: Scalars['Int'];
+  zoekterm: Scalars['String'];
+};
+
+
+export type MutationAddHuishoudenBurgerArgs = {
+  burgerIds: Array<InputMaybe<Scalars['Int']>>;
+  huishoudenId: Scalars['Int'];
+};
+
+
+export type MutationCreateAfdelingArgs = {
+  input?: InputMaybe<CreateAfdelingInput>;
+};
+
+
+export type MutationCreateAfdelingRekeningArgs = {
+  afdelingId: Scalars['Int'];
+  rekening: RekeningInput;
+};
+
+
+export type MutationCreateAfspraakArgs = {
+  input: CreateAfspraakInput;
+};
+
+
+export type MutationCreateBurgerArgs = {
+  input?: InputMaybe<CreateBurgerInput>;
+};
+
+
+export type MutationCreateBurgerRekeningArgs = {
+  burgerId: Scalars['Int'];
+  rekening: RekeningInput;
+};
+
+
+export type MutationCreateConfiguratieArgs = {
+  input?: InputMaybe<ConfiguratieInput>;
+};
+
+
+export type MutationCreateCustomerStatementMessageArgs = {
+  file: Scalars['Upload'];
+};
+
+
+export type MutationCreateExportOverschrijvingenArgs = {
+  eindDatum?: InputMaybe<Scalars['String']>;
+  startDatum?: InputMaybe<Scalars['String']>;
+  verwerkingDatum?: InputMaybe<Scalars['String']>;
+};
+
+
+export type MutationCreateHuishoudenArgs = {
+  input?: InputMaybe<CreateHuishoudenInput>;
+};
+
+
+export type MutationCreateJournaalpostAfspraakArgs = {
+  input: Array<InputMaybe<CreateJournaalpostAfspraakInput>>;
+};
+
+
+export type MutationCreateJournaalpostGrootboekrekeningArgs = {
+  input?: InputMaybe<CreateJournaalpostGrootboekrekeningInput>;
+};
+
+
+export type MutationCreateOrganisatieArgs = {
+  input?: InputMaybe<CreateOrganisatieInput>;
+};
+
+
+export type MutationCreatePostadresArgs = {
+  input?: InputMaybe<CreatePostadresInput>;
+};
+
+
+export type MutationCreateRubriekArgs = {
+  grootboekrekeningId?: InputMaybe<Scalars['String']>;
+  naam?: InputMaybe<Scalars['String']>;
+};
+
+
+export type MutationDeleteAfdelingArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type MutationDeleteAfdelingRekeningArgs = {
+  afdelingId: Scalars['Int'];
+  rekeningId: Scalars['Int'];
+};
+
+
+export type MutationDeleteAfspraakArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type MutationDeleteAfspraakBetaalinstructieArgs = {
+  afspraakId: Scalars['Int'];
+};
+
+
+export type MutationDeleteAfspraakZoektermArgs = {
+  afspraakId: Scalars['Int'];
+  zoekterm: Scalars['String'];
+};
+
+
+export type MutationDeleteBurgerArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type MutationDeleteBurgerRekeningArgs = {
+  burgerId: Scalars['Int'];
+  rekeningId: Scalars['Int'];
+};
+
+
+export type MutationDeleteConfiguratieArgs = {
+  id: Scalars['String'];
+};
+
+
+export type MutationDeleteCustomerStatementMessageArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type MutationDeleteHuishoudenArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type MutationDeleteHuishoudenBurgerArgs = {
+  burgerIds: Array<InputMaybe<Scalars['Int']>>;
+  huishoudenId: Scalars['Int'];
+};
+
+
+export type MutationDeleteJournaalpostArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type MutationDeleteOrganisatieArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type MutationDeletePostadresArgs = {
+  afdelingId: Scalars['Int'];
+  id: Scalars['String'];
+};
+
+
+export type MutationDeleteRubriekArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type MutationUpdateAfdelingArgs = {
+  id: Scalars['Int'];
+  naam?: InputMaybe<Scalars['String']>;
+  organisatieId?: InputMaybe<Scalars['Int']>;
+};
+
+
+export type MutationUpdateAfspraakArgs = {
+  id: Scalars['Int'];
+  input: UpdateAfspraakInput;
+};
+
+
+export type MutationUpdateAfspraakBetaalinstructieArgs = {
+  afspraakId: Scalars['Int'];
+  betaalinstructie: BetaalinstructieInput;
+};
+
+
+export type MutationUpdateBurgerArgs = {
+  achternaam?: InputMaybe<Scalars['String']>;
+  bsn?: InputMaybe<Scalars['Int']>;
+  email?: InputMaybe<Scalars['String']>;
+  geboortedatum?: InputMaybe<Scalars['String']>;
+  huishouden?: InputMaybe<HuishoudenInput>;
+  huisnummer?: InputMaybe<Scalars['String']>;
+  id: Scalars['Int'];
+  plaatsnaam?: InputMaybe<Scalars['String']>;
+  postcode?: InputMaybe<Scalars['String']>;
+  straatnaam?: InputMaybe<Scalars['String']>;
+  telefoonnummer?: InputMaybe<Scalars['String']>;
+  voorletters?: InputMaybe<Scalars['String']>;
+  voornamen?: InputMaybe<Scalars['String']>;
+};
+
+
+export type MutationUpdateConfiguratieArgs = {
+  input?: InputMaybe<ConfiguratieInput>;
+};
+
+
+export type MutationUpdateOrganisatieArgs = {
+  id: Scalars['Int'];
+  kvknummer?: InputMaybe<Scalars['String']>;
+  naam?: InputMaybe<Scalars['String']>;
+  vestigingsnummer?: InputMaybe<Scalars['String']>;
+};
+
+
+export type MutationUpdatePostadresArgs = {
+  huisnummer?: InputMaybe<Scalars['String']>;
+  id: Scalars['String'];
+  plaatsnaam?: InputMaybe<Scalars['String']>;
+  postcode?: InputMaybe<Scalars['String']>;
+  straatnaam?: InputMaybe<Scalars['String']>;
+};
+
+
+export type MutationUpdateRekeningArgs = {
+  id: Scalars['Int'];
+  rekening: RekeningInput;
+};
+
+
+export type MutationUpdateRubriekArgs = {
+  grootboekrekeningId?: InputMaybe<Scalars['String']>;
+  id: Scalars['Int'];
+  naam?: InputMaybe<Scalars['String']>;
 };
 
 export type Organisatie = {
@@ -778,12 +1142,382 @@ export type PageInfo = {
   start?: Maybe<Scalars['Int']>;
 };
 
+export type PaginationRequest = {
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+};
+
+/** TODO See if we can move these in the Core since it is also used in LogService */
+export type PaginationResponse = {
+  skip?: Maybe<Scalars['Int']>;
+  take?: Maybe<Scalars['Int']>;
+  total_count?: Maybe<Scalars['Int']>;
+};
+
 export type Postadres = {
   huisnummer?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['String']>;
   plaatsnaam?: Maybe<Scalars['String']>;
   postcode?: Maybe<Scalars['String']>;
   straatnaam?: Maybe<Scalars['String']>;
+};
+
+export type Query = {
+  Alarms_GetById?: Maybe<AlarmData>;
+  Alarms_GetByIds?: Maybe<GetByIdsResponse>;
+  Alarms_connectivityState?: Maybe<ConnectivityState>;
+  Signals_GetActiveSignalsCount?: Maybe<GetActiveSignalsCountResponse>;
+  Signals_GetAll?: Maybe<SignalsResponse>;
+  Signals_GetPaged?: Maybe<SignalsPagedResponse>;
+  Signals_connectivityState?: Maybe<ConnectivityState>;
+  UserActivities_GetUserActivities?: Maybe<UserActivitiesResponse>;
+  UserActivities_GetUserActivitiesPaged?: Maybe<UserActivitiesPagedResponse>;
+  /**
+   * Get a UserActivity by ID.
+   * returns the created UserActivity.
+   */
+  UserActivities_GetUserActivity?: Maybe<UserActivityData>;
+  UserActivities_connectivityState?: Maybe<ConnectivityState>;
+  afdeling?: Maybe<Afdeling>;
+  afdelingen?: Maybe<Array<Maybe<Afdeling>>>;
+  afdelingenByIban?: Maybe<Array<Maybe<Afdeling>>>;
+  afspraak?: Maybe<Afspraak>;
+  afspraken?: Maybe<Array<Maybe<Afspraak>>>;
+  afsprakenUuid?: Maybe<Array<Maybe<Afspraak>>>;
+  bankTransaction?: Maybe<BankTransaction>;
+  bankTransactions?: Maybe<Array<Maybe<BankTransaction>>>;
+  bankTransactionsPaged?: Maybe<BankTransactionsPaged>;
+  burger?: Maybe<Burger>;
+  burgerRapportages?: Maybe<Array<Maybe<BurgerRapportage>>>;
+  burgers?: Maybe<Array<Maybe<Burger>>>;
+  burgersPaged?: Maybe<BurgersPaged>;
+  burgersUuid?: Maybe<Array<Maybe<Burger>>>;
+  configuratie?: Maybe<Configuratie>;
+  configuraties?: Maybe<Array<Maybe<Configuratie>>>;
+  customerStatementMessage?: Maybe<CustomerStatementMessage>;
+  customerStatementMessages?: Maybe<Array<Maybe<CustomerStatementMessage>>>;
+  export?: Maybe<Export>;
+  exports?: Maybe<Array<Maybe<Export>>>;
+  exportsPaged?: Maybe<ExportsPaged>;
+  grootboekrekening?: Maybe<Grootboekrekening>;
+  grootboekrekeningen?: Maybe<Array<Maybe<Grootboekrekening>>>;
+  huishouden?: Maybe<Huishouden>;
+  huishoudens?: Maybe<Array<Maybe<Huishouden>>>;
+  huishoudensPaged?: Maybe<HuishoudensPaged>;
+  journaalpost?: Maybe<Journaalpost>;
+  journaalposten?: Maybe<Array<Maybe<Journaalpost>>>;
+  journaalpostenTransactieRubriek?: Maybe<Array<Maybe<JournaalpostTransactieRubriek>>>;
+  journaalpostenUuid?: Maybe<Array<Maybe<Journaalpost>>>;
+  organisatie?: Maybe<Organisatie>;
+  organisaties?: Maybe<Array<Maybe<Organisatie>>>;
+  overzicht?: Maybe<Overzicht>;
+  postadres?: Maybe<Postadres>;
+  postadressen?: Maybe<Array<Maybe<Postadres>>>;
+  rekening?: Maybe<Rekening>;
+  rekeningen?: Maybe<Array<Maybe<Rekening>>>;
+  rekeningenByIbans?: Maybe<Array<Maybe<Rekening>>>;
+  rubriek?: Maybe<Rubriek>;
+  rubrieken?: Maybe<Array<Maybe<Rubriek>>>;
+  saldo?: Maybe<Saldo>;
+  searchAfspraken?: Maybe<AfsprakenPaged>;
+  searchTransacties?: Maybe<BankTransactionsPaged>;
+};
+
+
+export type QueryAlarms_GetByIdArgs = {
+  input?: InputMaybe<AlarmId>;
+};
+
+
+export type QueryAlarms_GetByIdsArgs = {
+  input?: InputMaybe<GetByIdsRequest>;
+};
+
+
+export type QueryAlarms_ConnectivityStateArgs = {
+  tryToConnect?: InputMaybe<Scalars['Boolean']>;
+};
+
+
+export type QuerySignals_GetActiveSignalsCountArgs = {
+  input?: InputMaybe<Scalars['SignalsRequest']>;
+};
+
+
+export type QuerySignals_GetAllArgs = {
+  input?: InputMaybe<Scalars['SignalsRequest']>;
+};
+
+
+export type QuerySignals_GetPagedArgs = {
+  input?: InputMaybe<SignalsPagedRequest>;
+};
+
+
+export type QuerySignals_ConnectivityStateArgs = {
+  tryToConnect?: InputMaybe<Scalars['Boolean']>;
+};
+
+
+export type QueryUserActivities_GetUserActivitiesArgs = {
+  input?: InputMaybe<UserActivitiesRequest>;
+};
+
+
+export type QueryUserActivities_GetUserActivitiesPagedArgs = {
+  input?: InputMaybe<UserActivitiesPagedRequest>;
+};
+
+
+export type QueryUserActivities_GetUserActivityArgs = {
+  input?: InputMaybe<UserActivityId>;
+};
+
+
+export type QueryUserActivities_ConnectivityStateArgs = {
+  tryToConnect?: InputMaybe<Scalars['Boolean']>;
+};
+
+
+export type QueryAfdelingArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type QueryAfdelingenArgs = {
+  ids?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
+};
+
+
+export type QueryAfdelingenByIbanArgs = {
+  iban?: InputMaybe<Scalars['String']>;
+};
+
+
+export type QueryAfspraakArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type QueryAfsprakenArgs = {
+  ids?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
+};
+
+
+export type QueryAfsprakenUuidArgs = {
+  uuids?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+};
+
+
+export type QueryBankTransactionArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type QueryBankTransactionsArgs = {
+  filters?: InputMaybe<BankTransactionFilter>;
+};
+
+
+export type QueryBankTransactionsPagedArgs = {
+  filters?: InputMaybe<BankTransactionFilter>;
+  limit?: InputMaybe<Scalars['Int']>;
+  start?: InputMaybe<Scalars['Int']>;
+};
+
+
+export type QueryBurgerArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type QueryBurgerRapportagesArgs = {
+  burgerIds: Array<InputMaybe<Scalars['Int']>>;
+  endDate: Scalars['String'];
+  rubriekenIds?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
+  startDate: Scalars['String'];
+};
+
+
+export type QueryBurgersArgs = {
+  ids?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
+  search?: InputMaybe<Scalars['String']>;
+};
+
+
+export type QueryBurgersPagedArgs = {
+  limit?: InputMaybe<Scalars['Int']>;
+  start?: InputMaybe<Scalars['Int']>;
+};
+
+
+export type QueryBurgersUuidArgs = {
+  uuids?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+};
+
+
+export type QueryConfiguratieArgs = {
+  id: Scalars['String'];
+};
+
+
+export type QueryConfiguratiesArgs = {
+  ids?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+};
+
+
+export type QueryCustomerStatementMessageArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type QueryCustomerStatementMessagesArgs = {
+  ids?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
+};
+
+
+export type QueryExportArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type QueryExportsArgs = {
+  eindDatum?: InputMaybe<Scalars['Date']>;
+  ids?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
+  startDatum?: InputMaybe<Scalars['Date']>;
+};
+
+
+export type QueryExportsPagedArgs = {
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+};
+
+
+export type QueryGrootboekrekeningArgs = {
+  id: Scalars['String'];
+};
+
+
+export type QueryGrootboekrekeningenArgs = {
+  ids?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+};
+
+
+export type QueryHuishoudenArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type QueryHuishoudensArgs = {
+  filters?: InputMaybe<BurgerFilter>;
+  ids?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
+};
+
+
+export type QueryHuishoudensPagedArgs = {
+  filters?: InputMaybe<BurgerFilter>;
+  limit?: InputMaybe<Scalars['Int']>;
+  start?: InputMaybe<Scalars['Int']>;
+};
+
+
+export type QueryJournaalpostArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type QueryJournaalpostenArgs = {
+  ids?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
+};
+
+
+export type QueryJournaalpostenTransactieRubriekArgs = {
+  transactionIds?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
+};
+
+
+export type QueryJournaalpostenUuidArgs = {
+  uuids?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+};
+
+
+export type QueryOrganisatieArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type QueryOrganisatiesArgs = {
+  ids?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
+};
+
+
+export type QueryOverzichtArgs = {
+  burgerIds: Array<InputMaybe<Scalars['Int']>>;
+  endDate: Scalars['String'];
+  startDate: Scalars['String'];
+};
+
+
+export type QueryPostadresArgs = {
+  id: Scalars['String'];
+};
+
+
+export type QueryPostadressenArgs = {
+  ids?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+};
+
+
+export type QueryRekeningArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type QueryRekeningenArgs = {
+  ids?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
+};
+
+
+export type QueryRekeningenByIbansArgs = {
+  ibans?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+};
+
+
+export type QueryRubriekArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type QueryRubriekenArgs = {
+  ids?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+};
+
+
+export type QuerySaldoArgs = {
+  burgerIds?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
+  date: Scalars['Date'];
+};
+
+
+export type QuerySearchAfsprakenArgs = {
+  afdelingIds?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
+  afspraakIds?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
+  burgerIds?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  maxBedrag?: InputMaybe<Scalars['Int']>;
+  minBedrag?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  onlyValid?: InputMaybe<Scalars['Boolean']>;
+  tegenRekeningIds?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
+  zoektermen?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+};
+
+
+export type QuerySearchTransactiesArgs = {
+  filters?: InputMaybe<BankTransactionSearchFilter>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
 };
 
 export type RapportageRubriek = {
@@ -811,769 +1545,6 @@ export type RekeningInput = {
   rekeninghouder?: InputMaybe<Scalars['String']>;
 };
 
-/** The root of all mutations  */
-export type RootMutation = {
-  /** Mutatie om een zoekterm aan een afspraak toe te voegen. */
-  addAfspraakZoekterm?: Maybe<AddAfspraakZoekterm>;
-  /** Mutatie om een burger aan een huishouden toe te voegen. */
-  addHuishoudenBurger?: Maybe<AddHuishoudenBurger>;
-  /** Mutatie om een afdeling aan een organisatie toe te voegen. */
-  createAfdeling?: Maybe<CreateAfdeling>;
-  /** Mutatie om een rekening aan een afdeling toe te voegen. */
-  createAfdelingRekening?: Maybe<CreateAfdelingRekening>;
-  createAfspraak?: Maybe<CreateAfspraak>;
-  createAlarm?: Maybe<CreateAlarm>;
-  createBurger?: Maybe<CreateBurger>;
-  /** Mutatie om een rekening aan een burger toe te voegen. */
-  createBurgerRekening?: Maybe<CreateBurgerRekening>;
-  createConfiguratie?: Maybe<CreateConfiguratie>;
-  createCustomerStatementMessage?: Maybe<CreateCustomerStatementMessage>;
-  /** Mutatie om een betaalinstructie te genereren. */
-  createExportOverschrijvingen?: Maybe<CreateExportOverschrijvingen>;
-  createHuishouden?: Maybe<CreateHuishouden>;
-  createJournaalpostAfspraak?: Maybe<CreateJournaalpostAfspraak>;
-  /** Mutatie om een banktransactie af te letteren op een grootboekrekening. */
-  createJournaalpostGrootboekrekening?: Maybe<CreateJournaalpostGrootboekrekening>;
-  createOrganisatie?: Maybe<CreateOrganisatie>;
-  createPostadres?: Maybe<CreatePostadres>;
-  createRubriek?: Maybe<CreateRubriek>;
-  createSignaal?: Maybe<CreateSignaal>;
-  /** Mutatie om een afdeling van een organisatie te verwijderen. */
-  deleteAfdeling?: Maybe<DeleteAfdeling>;
-  /** Mutatie om een rekening van een afdeling te verwijderen. */
-  deleteAfdelingRekening?: Maybe<DeleteAfdelingRekening>;
-  deleteAfspraak?: Maybe<DeleteAfspraak>;
-  /** Mutatie om een betaalinstructie bij een afspraak te verwijderen. */
-  deleteAfspraakBetaalinstructie?: Maybe<DeleteAfspraakBetaalinstructie>;
-  /** Mutatie om een zoekterm bij een afspraak te verwijderen. */
-  deleteAfspraakZoekterm?: Maybe<DeleteAfspraakZoekterm>;
-  deleteAlarm?: Maybe<DeleteAlarm>;
-  deleteBurger?: Maybe<DeleteBurger>;
-  /** Mutatie om een rekening bij een burger te verwijderen. */
-  deleteBurgerRekening?: Maybe<DeleteBurgerRekening>;
-  deleteConfiguratie?: Maybe<DeleteConfiguratie>;
-  deleteCustomerStatementMessage?: Maybe<DeleteCustomerStatementMessage>;
-  deleteHuishouden?: Maybe<DeleteHuishouden>;
-  /** Mutatie om een burger uit een huishouden te verwijderen. */
-  deleteHuishoudenBurger?: Maybe<DeleteHuishoudenBurger>;
-  deleteJournaalpost?: Maybe<DeleteJournaalpost>;
-  deleteOrganisatie?: Maybe<DeleteOrganisatie>;
-  deletePostadres?: Maybe<DeletePostadres>;
-  deleteRubriek?: Maybe<DeleteRubriek>;
-  deleteSignaal?: Maybe<DeleteSignaal>;
-  evaluateAlarm?: Maybe<EvaluateAlarm>;
-  evaluateAlarms?: Maybe<EvaluateAlarms>;
-  /** Mutatie om niet afgeletterde banktransacties af te letteren. */
-  startAutomatischBoeken?: Maybe<StartAutomatischBoeken>;
-  updateAfdeling?: Maybe<UpdateAfdeling>;
-  updateAfspraak?: Maybe<UpdateAfspraak>;
-  /** Mutatie voor het instellen van een nieuwe betaalinstructie voor een afspraak. */
-  updateAfspraakBetaalinstructie?: Maybe<UpdateAfspraakBetaalinstructie>;
-  updateAlarm?: Maybe<UpdateAlarm>;
-  updateBurger?: Maybe<UpdateBurger>;
-  updateConfiguratie?: Maybe<UpdateConfiguratie>;
-  updateOrganisatie?: Maybe<UpdateOrganisatie>;
-  updatePostadres?: Maybe<UpdatePostadres>;
-  updateRekening?: Maybe<UpdateRekening>;
-  updateRubriek?: Maybe<UpdateRubriek>;
-  updateSignaal?: Maybe<UpdateSignaal>;
-};
-
-
-/** The root of all mutations  */
-export type RootMutationAddAfspraakZoektermArgs = {
-  afspraakId: Scalars['Int'];
-  zoekterm: Scalars['String'];
-};
-
-
-/** The root of all mutations  */
-export type RootMutationAddHuishoudenBurgerArgs = {
-  burgerIds: Array<InputMaybe<Scalars['Int']>>;
-  huishoudenId: Scalars['Int'];
-};
-
-
-/** The root of all mutations  */
-export type RootMutationCreateAfdelingArgs = {
-  input?: InputMaybe<CreateAfdelingInput>;
-};
-
-
-/** The root of all mutations  */
-export type RootMutationCreateAfdelingRekeningArgs = {
-  afdelingId: Scalars['Int'];
-  rekening: RekeningInput;
-};
-
-
-/** The root of all mutations  */
-export type RootMutationCreateAfspraakArgs = {
-  input: CreateAfspraakInput;
-};
-
-
-/** The root of all mutations  */
-export type RootMutationCreateAlarmArgs = {
-  input: CreateAlarmInput;
-};
-
-
-/** The root of all mutations  */
-export type RootMutationCreateBurgerArgs = {
-  input?: InputMaybe<CreateBurgerInput>;
-};
-
-
-/** The root of all mutations  */
-export type RootMutationCreateBurgerRekeningArgs = {
-  burgerId: Scalars['Int'];
-  rekening: RekeningInput;
-};
-
-
-/** The root of all mutations  */
-export type RootMutationCreateConfiguratieArgs = {
-  input?: InputMaybe<ConfiguratieInput>;
-};
-
-
-/** The root of all mutations  */
-export type RootMutationCreateCustomerStatementMessageArgs = {
-  file: Scalars['Upload'];
-};
-
-
-/** The root of all mutations  */
-export type RootMutationCreateExportOverschrijvingenArgs = {
-  eindDatum?: InputMaybe<Scalars['String']>;
-  startDatum?: InputMaybe<Scalars['String']>;
-  verwerkingDatum?: InputMaybe<Scalars['String']>;
-};
-
-
-/** The root of all mutations  */
-export type RootMutationCreateHuishoudenArgs = {
-  input?: InputMaybe<CreateHuishoudenInput>;
-};
-
-
-/** The root of all mutations  */
-export type RootMutationCreateJournaalpostAfspraakArgs = {
-  input: Array<InputMaybe<CreateJournaalpostAfspraakInput>>;
-};
-
-
-/** The root of all mutations  */
-export type RootMutationCreateJournaalpostGrootboekrekeningArgs = {
-  input?: InputMaybe<CreateJournaalpostGrootboekrekeningInput>;
-};
-
-
-/** The root of all mutations  */
-export type RootMutationCreateOrganisatieArgs = {
-  input?: InputMaybe<CreateOrganisatieInput>;
-};
-
-
-/** The root of all mutations  */
-export type RootMutationCreatePostadresArgs = {
-  input?: InputMaybe<CreatePostadresInput>;
-};
-
-
-/** The root of all mutations  */
-export type RootMutationCreateRubriekArgs = {
-  grootboekrekeningId?: InputMaybe<Scalars['String']>;
-  naam?: InputMaybe<Scalars['String']>;
-};
-
-
-/** The root of all mutations  */
-export type RootMutationCreateSignaalArgs = {
-  input: CreateSignaalInput;
-};
-
-
-/** The root of all mutations  */
-export type RootMutationDeleteAfdelingArgs = {
-  id: Scalars['Int'];
-};
-
-
-/** The root of all mutations  */
-export type RootMutationDeleteAfdelingRekeningArgs = {
-  afdelingId: Scalars['Int'];
-  rekeningId: Scalars['Int'];
-};
-
-
-/** The root of all mutations  */
-export type RootMutationDeleteAfspraakArgs = {
-  id: Scalars['Int'];
-};
-
-
-/** The root of all mutations  */
-export type RootMutationDeleteAfspraakBetaalinstructieArgs = {
-  afspraakId: Scalars['Int'];
-};
-
-
-/** The root of all mutations  */
-export type RootMutationDeleteAfspraakZoektermArgs = {
-  afspraakId: Scalars['Int'];
-  zoekterm: Scalars['String'];
-};
-
-
-/** The root of all mutations  */
-export type RootMutationDeleteAlarmArgs = {
-  id: Scalars['String'];
-};
-
-
-/** The root of all mutations  */
-export type RootMutationDeleteBurgerArgs = {
-  id: Scalars['Int'];
-};
-
-
-/** The root of all mutations  */
-export type RootMutationDeleteBurgerRekeningArgs = {
-  burgerId: Scalars['Int'];
-  rekeningId: Scalars['Int'];
-};
-
-
-/** The root of all mutations  */
-export type RootMutationDeleteConfiguratieArgs = {
-  id: Scalars['String'];
-};
-
-
-/** The root of all mutations  */
-export type RootMutationDeleteCustomerStatementMessageArgs = {
-  id: Scalars['Int'];
-};
-
-
-/** The root of all mutations  */
-export type RootMutationDeleteHuishoudenArgs = {
-  id: Scalars['Int'];
-};
-
-
-/** The root of all mutations  */
-export type RootMutationDeleteHuishoudenBurgerArgs = {
-  burgerIds: Array<InputMaybe<Scalars['Int']>>;
-  huishoudenId: Scalars['Int'];
-};
-
-
-/** The root of all mutations  */
-export type RootMutationDeleteJournaalpostArgs = {
-  id: Scalars['Int'];
-};
-
-
-/** The root of all mutations  */
-export type RootMutationDeleteOrganisatieArgs = {
-  id: Scalars['Int'];
-};
-
-
-/** The root of all mutations  */
-export type RootMutationDeletePostadresArgs = {
-  afdelingId: Scalars['Int'];
-  id: Scalars['String'];
-};
-
-
-/** The root of all mutations  */
-export type RootMutationDeleteRubriekArgs = {
-  id: Scalars['Int'];
-};
-
-
-/** The root of all mutations  */
-export type RootMutationDeleteSignaalArgs = {
-  id: Scalars['String'];
-};
-
-
-/** The root of all mutations  */
-export type RootMutationEvaluateAlarmArgs = {
-  id: Scalars['String'];
-};
-
-
-/** The root of all mutations  */
-export type RootMutationEvaluateAlarmsArgs = {
-  ids?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-};
-
-
-/** The root of all mutations  */
-export type RootMutationUpdateAfdelingArgs = {
-  id: Scalars['Int'];
-  naam?: InputMaybe<Scalars['String']>;
-  organisatieId?: InputMaybe<Scalars['Int']>;
-};
-
-
-/** The root of all mutations  */
-export type RootMutationUpdateAfspraakArgs = {
-  id: Scalars['Int'];
-  input: UpdateAfspraakInput;
-};
-
-
-/** The root of all mutations  */
-export type RootMutationUpdateAfspraakBetaalinstructieArgs = {
-  afspraakId: Scalars['Int'];
-  betaalinstructie: BetaalinstructieInput;
-};
-
-
-/** The root of all mutations  */
-export type RootMutationUpdateAlarmArgs = {
-  id: Scalars['String'];
-  input: UpdateAlarmInput;
-};
-
-
-/** The root of all mutations  */
-export type RootMutationUpdateBurgerArgs = {
-  achternaam?: InputMaybe<Scalars['String']>;
-  bsn?: InputMaybe<Scalars['Int']>;
-  email?: InputMaybe<Scalars['String']>;
-  geboortedatum?: InputMaybe<Scalars['String']>;
-  huishouden?: InputMaybe<HuishoudenInput>;
-  huisnummer?: InputMaybe<Scalars['String']>;
-  id: Scalars['Int'];
-  plaatsnaam?: InputMaybe<Scalars['String']>;
-  postcode?: InputMaybe<Scalars['String']>;
-  straatnaam?: InputMaybe<Scalars['String']>;
-  telefoonnummer?: InputMaybe<Scalars['String']>;
-  voorletters?: InputMaybe<Scalars['String']>;
-  voornamen?: InputMaybe<Scalars['String']>;
-};
-
-
-/** The root of all mutations  */
-export type RootMutationUpdateConfiguratieArgs = {
-  input?: InputMaybe<ConfiguratieInput>;
-};
-
-
-/** The root of all mutations  */
-export type RootMutationUpdateOrganisatieArgs = {
-  id: Scalars['Int'];
-  kvknummer?: InputMaybe<Scalars['String']>;
-  naam?: InputMaybe<Scalars['String']>;
-  vestigingsnummer?: InputMaybe<Scalars['String']>;
-};
-
-
-/** The root of all mutations  */
-export type RootMutationUpdatePostadresArgs = {
-  huisnummer?: InputMaybe<Scalars['String']>;
-  id: Scalars['String'];
-  plaatsnaam?: InputMaybe<Scalars['String']>;
-  postcode?: InputMaybe<Scalars['String']>;
-  straatnaam?: InputMaybe<Scalars['String']>;
-};
-
-
-/** The root of all mutations  */
-export type RootMutationUpdateRekeningArgs = {
-  id: Scalars['Int'];
-  rekening: RekeningInput;
-};
-
-
-/** The root of all mutations  */
-export type RootMutationUpdateRubriekArgs = {
-  grootboekrekeningId?: InputMaybe<Scalars['String']>;
-  id: Scalars['Int'];
-  naam?: InputMaybe<Scalars['String']>;
-};
-
-
-/** The root of all mutations  */
-export type RootMutationUpdateSignaalArgs = {
-  id: Scalars['String'];
-  input: UpdateSignaalInput;
-};
-
-/** The root of all queries  */
-export type RootQuery = {
-  afdeling?: Maybe<Afdeling>;
-  afdelingen?: Maybe<Array<Maybe<Afdeling>>>;
-  afdelingenByIban?: Maybe<Array<Maybe<Afdeling>>>;
-  afspraak?: Maybe<Afspraak>;
-  afspraken?: Maybe<Array<Maybe<Afspraak>>>;
-  alarm?: Maybe<Alarm>;
-  alarmen?: Maybe<Array<Maybe<Alarm>>>;
-  bankTransaction?: Maybe<BankTransaction>;
-  bankTransactions?: Maybe<Array<Maybe<BankTransaction>>>;
-  bankTransactionsPaged?: Maybe<BankTransactionsPaged>;
-  burger?: Maybe<Burger>;
-  burgerRapportages?: Maybe<Array<Maybe<BurgerRapportage>>>;
-  burgers?: Maybe<Array<Maybe<Burger>>>;
-  burgersPaged?: Maybe<BurgersPaged>;
-  configuratie?: Maybe<Configuratie>;
-  configuraties?: Maybe<Array<Maybe<Configuratie>>>;
-  customerStatementMessage?: Maybe<CustomerStatementMessage>;
-  customerStatementMessages?: Maybe<Array<Maybe<CustomerStatementMessage>>>;
-  export?: Maybe<Export>;
-  exports?: Maybe<Export>;
-  exportsPaged?: Maybe<Array<Maybe<ExportsPaged>>>;
-  gebruikersactiviteit?: Maybe<GebruikersActiviteit>;
-  gebruikersactiviteiten?: Maybe<Array<Maybe<GebruikersActiviteit>>>;
-  gebruikersactiviteitenPaged?: Maybe<GebruikersActiviteitenPaged>;
-  grootboekrekening?: Maybe<Grootboekrekening>;
-  grootboekrekeningen?: Maybe<Array<Maybe<Grootboekrekening>>>;
-  huishouden?: Maybe<Huishouden>;
-  huishoudens?: Maybe<Array<Maybe<Huishouden>>>;
-  huishoudensPaged?: Maybe<HuishoudensPaged>;
-  journaalpost?: Maybe<Journaalpost>;
-  journaalposten?: Maybe<Array<Maybe<Journaalpost>>>;
-  journaalpostenTransactieRubriek?: Maybe<Array<Maybe<JournaalpostTransactieRubriek>>>;
-  organisatie?: Maybe<Organisatie>;
-  organisaties?: Maybe<Array<Maybe<Organisatie>>>;
-  overzicht?: Maybe<Overzicht>;
-  postadres?: Maybe<Postadres>;
-  postadressen?: Maybe<Array<Maybe<Postadres>>>;
-  rekening?: Maybe<Rekening>;
-  rekeningen?: Maybe<Array<Maybe<Rekening>>>;
-  rekeningenByIbans?: Maybe<Array<Maybe<Rekening>>>;
-  rubriek?: Maybe<Rubriek>;
-  rubrieken?: Maybe<Array<Maybe<Rubriek>>>;
-  saldo?: Maybe<Saldo>;
-  searchAfspraken?: Maybe<AfsprakenPaged>;
-  searchTransacties?: Maybe<BankTransactionsPaged>;
-  signaal?: Maybe<Signaal>;
-  signalen?: Maybe<Array<Maybe<Signaal>>>;
-};
-
-
-/** The root of all queries  */
-export type RootQueryAfdelingArgs = {
-  id: Scalars['Int'];
-};
-
-
-/** The root of all queries  */
-export type RootQueryAfdelingenArgs = {
-  ids?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
-};
-
-
-/** The root of all queries  */
-export type RootQueryAfdelingenByIbanArgs = {
-  iban?: InputMaybe<Scalars['String']>;
-};
-
-
-/** The root of all queries  */
-export type RootQueryAfspraakArgs = {
-  id: Scalars['Int'];
-};
-
-
-/** The root of all queries  */
-export type RootQueryAfsprakenArgs = {
-  ids?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
-};
-
-
-/** The root of all queries  */
-export type RootQueryAlarmArgs = {
-  id: Scalars['String'];
-};
-
-
-/** The root of all queries  */
-export type RootQueryAlarmenArgs = {
-  ids?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-};
-
-
-/** The root of all queries  */
-export type RootQueryBankTransactionArgs = {
-  id: Scalars['Int'];
-};
-
-
-/** The root of all queries  */
-export type RootQueryBankTransactionsArgs = {
-  filters?: InputMaybe<BankTransactionFilter>;
-};
-
-
-/** The root of all queries  */
-export type RootQueryBankTransactionsPagedArgs = {
-  filters?: InputMaybe<BankTransactionFilter>;
-  limit?: InputMaybe<Scalars['Int']>;
-  start?: InputMaybe<Scalars['Int']>;
-};
-
-
-/** The root of all queries  */
-export type RootQueryBurgerArgs = {
-  id: Scalars['Int'];
-};
-
-
-/** The root of all queries  */
-export type RootQueryBurgerRapportagesArgs = {
-  burgerIds: Array<InputMaybe<Scalars['Int']>>;
-  endDate: Scalars['String'];
-  rubriekenIds?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
-  startDate: Scalars['String'];
-};
-
-
-/** The root of all queries  */
-export type RootQueryBurgersArgs = {
-  ids?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
-  search?: InputMaybe<Scalars['String']>;
-};
-
-
-/** The root of all queries  */
-export type RootQueryBurgersPagedArgs = {
-  limit?: InputMaybe<Scalars['Int']>;
-  start?: InputMaybe<Scalars['Int']>;
-};
-
-
-/** The root of all queries  */
-export type RootQueryConfiguratieArgs = {
-  id: Scalars['String'];
-};
-
-
-/** The root of all queries  */
-export type RootQueryConfiguratiesArgs = {
-  ids?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-};
-
-
-/** The root of all queries  */
-export type RootQueryCustomerStatementMessageArgs = {
-  id: Scalars['Int'];
-};
-
-
-/** The root of all queries  */
-export type RootQueryCustomerStatementMessagesArgs = {
-  ids?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
-};
-
-
-/** The root of all queries  */
-export type RootQueryExportArgs = {
-  id: Scalars['Int'];
-};
-
-
-/** The root of all queries  */
-export type RootQueryExportsArgs = {
-  eindDatum?: InputMaybe<Scalars['Date']>;
-  ids?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
-  startDatum?: InputMaybe<Scalars['Date']>;
-};
-
-
-/** The root of all queries  */
-export type RootQueryExportsPagedArgs = {
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-};
-
-
-/** The root of all queries  */
-export type RootQueryGebruikersactiviteitArgs = {
-  id: Scalars['Int'];
-};
-
-
-/** The root of all queries  */
-export type RootQueryGebruikersactiviteitenArgs = {
-  afsprakenIds?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
-  burgerIds?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
-  huishoudenIds?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
-  ids?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
-};
-
-
-/** The root of all queries  */
-export type RootQueryGebruikersactiviteitenPagedArgs = {
-  afsprakenIds?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
-  burgerIds?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
-  huishoudenIds?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  start?: InputMaybe<Scalars['Int']>;
-};
-
-
-/** The root of all queries  */
-export type RootQueryGrootboekrekeningArgs = {
-  id: Scalars['String'];
-};
-
-
-/** The root of all queries  */
-export type RootQueryGrootboekrekeningenArgs = {
-  ids?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-};
-
-
-/** The root of all queries  */
-export type RootQueryHuishoudenArgs = {
-  id: Scalars['Int'];
-};
-
-
-/** The root of all queries  */
-export type RootQueryHuishoudensArgs = {
-  filters?: InputMaybe<BurgerFilter>;
-  ids?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
-};
-
-
-/** The root of all queries  */
-export type RootQueryHuishoudensPagedArgs = {
-  filters?: InputMaybe<BurgerFilter>;
-  limit?: InputMaybe<Scalars['Int']>;
-  start?: InputMaybe<Scalars['Int']>;
-};
-
-
-/** The root of all queries  */
-export type RootQueryJournaalpostArgs = {
-  id: Scalars['Int'];
-};
-
-
-/** The root of all queries  */
-export type RootQueryJournaalpostenArgs = {
-  ids?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
-};
-
-
-/** The root of all queries  */
-export type RootQueryJournaalpostenTransactieRubriekArgs = {
-  transactionIds?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
-};
-
-
-/** The root of all queries  */
-export type RootQueryOrganisatieArgs = {
-  id: Scalars['Int'];
-};
-
-
-/** The root of all queries  */
-export type RootQueryOrganisatiesArgs = {
-  ids?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
-};
-
-
-/** The root of all queries  */
-export type RootQueryOverzichtArgs = {
-  burgerIds: Array<InputMaybe<Scalars['Int']>>;
-  endDate: Scalars['String'];
-  startDate: Scalars['String'];
-};
-
-
-/** The root of all queries  */
-export type RootQueryPostadresArgs = {
-  id: Scalars['String'];
-};
-
-
-/** The root of all queries  */
-export type RootQueryPostadressenArgs = {
-  ids?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-};
-
-
-/** The root of all queries  */
-export type RootQueryRekeningArgs = {
-  id: Scalars['Int'];
-};
-
-
-/** The root of all queries  */
-export type RootQueryRekeningenArgs = {
-  ids?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
-};
-
-
-/** The root of all queries  */
-export type RootQueryRekeningenByIbansArgs = {
-  ibans?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-};
-
-
-/** The root of all queries  */
-export type RootQueryRubriekArgs = {
-  id: Scalars['Int'];
-};
-
-
-/** The root of all queries  */
-export type RootQueryRubriekenArgs = {
-  ids?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-};
-
-
-/** The root of all queries  */
-export type RootQuerySaldoArgs = {
-  burgerIds?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
-  date: Scalars['Date'];
-};
-
-
-/** The root of all queries  */
-export type RootQuerySearchAfsprakenArgs = {
-  afdelingIds?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
-  afspraakIds?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
-  burgerIds?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  maxBedrag?: InputMaybe<Scalars['Int']>;
-  minBedrag?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-  onlyValid?: InputMaybe<Scalars['Boolean']>;
-  tegenRekeningIds?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
-  zoektermen?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-};
-
-
-/** The root of all queries  */
-export type RootQuerySearchTransactiesArgs = {
-  filters?: InputMaybe<BankTransactionSearchFilter>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-};
-
-
-/** The root of all queries  */
-export type RootQuerySignaalArgs = {
-  id: Scalars['String'];
-};
-
-
-/** The root of all queries  */
-export type RootQuerySignalenArgs = {
-  ids?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-};
-
 export type Rubriek = {
   grootboekrekening?: Maybe<Grootboekrekening>;
   id?: Maybe<Scalars['Int']>;
@@ -1584,16 +1555,46 @@ export type Saldo = {
   saldo?: Maybe<Scalars['Bedrag']>;
 };
 
-export type Signaal = {
-  actions?: Maybe<Array<Maybe<Scalars['String']>>>;
-  alarm?: Maybe<Alarm>;
-  bankTransactions?: Maybe<Array<Maybe<BankTransaction>>>;
-  bedragDifference?: Maybe<Scalars['String']>;
-  context?: Maybe<Scalars['String']>;
+export type SetIsActiveRequest = {
+  id?: InputMaybe<Scalars['String']>;
+  isActive?: InputMaybe<Scalars['Boolean']>;
+};
+
+export type SignalData = {
+  agreement?: Maybe<Afspraak>;
+  agreementId?: Maybe<Scalars['String']>;
+  alarmId?: Maybe<Scalars['String']>;
+  citizen?: Maybe<Burger>;
+  citizenId?: Maybe<Scalars['String']>;
+  createdAt?: Maybe<Scalars['BigInt']>;
   id?: Maybe<Scalars['String']>;
   isActive?: Maybe<Scalars['Boolean']>;
-  timeUpdated?: Maybe<Scalars['String']>;
-  type?: Maybe<Scalars['String']>;
+  journalEntries?: Maybe<Array<Maybe<Journaalpost>>>;
+  journalEntryIds?: Maybe<Array<Maybe<Scalars['String']>>>;
+  offByAmount?: Maybe<Scalars['Int']>;
+  signalType?: Maybe<Scalars['Int']>;
+  updatedAt?: Maybe<Scalars['BigInt']>;
+};
+
+export type SignalFilter = {
+  agreementIds?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  alarmIds?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  citizenIds?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  isActive?: InputMaybe<Scalars['Boolean']>;
+};
+
+export type SignalsPagedRequest = {
+  filter?: InputMaybe<SignalFilter>;
+  page?: InputMaybe<PaginationRequest>;
+};
+
+export type SignalsPagedResponse = {
+  PageInfo?: Maybe<PaginationResponse>;
+  data?: Maybe<Array<Maybe<SignalData>>>;
+};
+
+export type SignalsResponse = {
+  data?: Maybe<Array<Maybe<SignalData>>>;
 };
 
 /** Mutatie om niet afgeletterde banktransacties af te letteren. */
@@ -1623,7 +1624,6 @@ export type UpdateAfspraakBetaalinstructie = {
 
 export type UpdateAfspraakInput = {
   afdelingId?: InputMaybe<Scalars['Int']>;
-  alarmId?: InputMaybe<Scalars['String']>;
   bedrag?: InputMaybe<Scalars['Bedrag']>;
   burgerId?: InputMaybe<Scalars['Int']>;
   credit?: InputMaybe<Scalars['Boolean']>;
@@ -1636,24 +1636,8 @@ export type UpdateAfspraakInput = {
   zoektermen?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
-export type UpdateAlarm = {
-  alarm?: Maybe<Alarm>;
-  burgerId?: Maybe<Scalars['String']>;
-  ok?: Maybe<Scalars['Boolean']>;
-  previous?: Maybe<Alarm>;
-};
-
-export type UpdateAlarmInput = {
-  afspraakId?: InputMaybe<Scalars['Int']>;
-  bedrag?: InputMaybe<Scalars['Bedrag']>;
-  bedragMargin?: InputMaybe<Scalars['Bedrag']>;
-  byDay?: InputMaybe<Array<InputMaybe<DayOfWeek>>>;
-  byMonth?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
-  byMonthDay?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
-  datumMargin?: InputMaybe<Scalars['Int']>;
-  endDate?: InputMaybe<Scalars['String']>;
-  isActive?: InputMaybe<Scalars['Boolean']>;
-  startDate?: InputMaybe<Scalars['String']>;
+export type UpdateAlarmRequest = {
+  alarm?: InputMaybe<AlarmUpdateData>;
 };
 
 export type UpdateBurger = {
@@ -1692,19 +1676,36 @@ export type UpdateRubriek = {
   rubriek?: Maybe<Rubriek>;
 };
 
-export type UpdateSignaal = {
-  ok?: Maybe<Scalars['Boolean']>;
-  previous?: Maybe<Signaal>;
-  signaal?: Maybe<Signaal>;
+export type UserActivitiesPagedRequest = {
+  Filter?: InputMaybe<Filter>;
+  page?: InputMaybe<PaginationRequest>;
 };
 
-export type UpdateSignaalInput = {
-  actions?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-  alarmId?: InputMaybe<Scalars['String']>;
-  banktransactieIds?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
-  context?: InputMaybe<Scalars['String']>;
-  isActive?: InputMaybe<Scalars['Boolean']>;
-  type?: InputMaybe<Scalars['String']>;
+export type UserActivitiesPagedResponse = {
+  PageInfo?: Maybe<PaginationResponse>;
+  data?: Maybe<Array<Maybe<UserActivityData>>>;
+};
+
+export type UserActivitiesRequest = {
+  Filter?: InputMaybe<Filter>;
+};
+
+export type UserActivitiesResponse = {
+  UserActivities?: Maybe<Array<Maybe<UserActivityData>>>;
+};
+
+export type UserActivityData = {
+  action?: Maybe<Scalars['String']>;
+  entities?: Maybe<Array<Maybe<Entity>>>;
+  id?: Maybe<Scalars['String']>;
+  meta?: Maybe<Meta>;
+  timestamp?: Maybe<Scalars['BigInt']>;
+  user?: Maybe<Scalars['String']>;
+};
+
+/** ID of a UserActivity */
+export type UserActivityId = {
+  id?: InputMaybe<Scalars['String']>;
 };
 
 export type AddAfspraakZoektermMutationVariables = Exact<{
@@ -1713,7 +1714,7 @@ export type AddAfspraakZoektermMutationVariables = Exact<{
 }>;
 
 
-export type AddAfspraakZoektermMutation = { addAfspraakZoekterm?: { ok?: boolean, matchingAfspraken?: Array<{ id?: number, zoektermen?: Array<string>, bedrag?: any, burger?: { id?: number, voorletters?: string, voornamen?: string, achternaam?: string }, tegenRekening?: { rekeninghouder?: string, iban?: string } }> } };
+export type AddAfspraakZoektermMutation = {addAfspraakZoekterm?: {ok?: boolean, matchingAfspraken?: Array<{id?: number, zoektermen?: Array<string>, bedrag?: any, burger?: {id?: number, voorletters?: string, voornamen?: string, achternaam?: string}, tegenRekening?: {rekeninghouder?: string, iban?: string}}>}};
 
 export type AddHuishoudenBurgerMutationVariables = Exact<{
   huishoudenId: Scalars['Int'];
@@ -1721,7 +1722,7 @@ export type AddHuishoudenBurgerMutationVariables = Exact<{
 }>;
 
 
-export type AddHuishoudenBurgerMutation = { addHuishoudenBurger?: { ok?: boolean } };
+export type AddHuishoudenBurgerMutation = {addHuishoudenBurger?: {ok?: boolean}};
 
 export type CreateAfdelingMutationVariables = Exact<{
   naam: Scalars['String'];
@@ -1731,28 +1732,28 @@ export type CreateAfdelingMutationVariables = Exact<{
 }>;
 
 
-export type CreateAfdelingMutation = { createAfdeling?: { ok?: boolean, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> } } };
+export type CreateAfdelingMutation = {createAfdeling?: {ok?: boolean, afdeling?: {id?: number, naam?: string, organisatie?: {id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string}, postadressen?: Array<{id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string}>, rekeningen?: Array<{id?: number, iban?: string, rekeninghouder?: string}>}}};
 
 export type CreateAfspraakMutationVariables = Exact<{
   input: CreateAfspraakInput;
 }>;
 
 
-export type CreateAfspraakMutation = { createAfspraak?: { ok?: boolean, afspraak?: { id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, validFrom?: any, validThrough?: any, betaalinstructie?: { byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string }, burger?: { id?: number, bsn?: number, voornamen?: string, voorletters?: string, achternaam?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, alarm?: { id?: string, isActive?: boolean, bedrag?: any, bedragMargin?: any, startDate?: string, endDate?: string, datumMargin?: number, byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, afspraak?: { id?: number }, signaal?: { id?: string } }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, postadres?: { id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string }, rubriek?: { id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } }, matchingAfspraken?: Array<{ id?: number, credit?: boolean, zoektermen?: Array<string>, bedrag?: any, omschrijving?: string, burger?: { voorletters?: string, voornamen?: string, achternaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string } }> } } };
+export type CreateAfspraakMutation = {createAfspraak?: {ok?: boolean, afspraak?: {id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, validFrom?: any, validThrough?: any, betaalinstructie?: {byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string}, burger?: {id?: number, bsn?: number, voornamen?: string, voorletters?: string, achternaam?: string, plaatsnaam?: string, rekeningen?: Array<{id?: number, iban?: string, rekeninghouder?: string}>}, afdeling?: {id?: number, naam?: string, organisatie?: {id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string}, postadressen?: Array<{id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string}>, rekeningen?: Array<{id?: number, iban?: string, rekeninghouder?: string}>}, postadres?: {id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string}, tegenRekening?: {id?: number, iban?: string, rekeninghouder?: string}, rubriek?: {id?: number, naam?: string, grootboekrekening?: {id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: {id?: number, naam?: string}}}, matchingAfspraken?: Array<{id?: number, credit?: boolean, zoektermen?: Array<string>, bedrag?: any, omschrijving?: string, burger?: {voorletters?: string, voornamen?: string, achternaam?: string}, tegenRekening?: {id?: number, iban?: string, rekeninghouder?: string}}>}}};
 
 export type CreateAlarmMutationVariables = Exact<{
-  input: CreateAlarmInput;
+  input: CreateAlarmRequest;
 }>;
 
 
-export type CreateAlarmMutation = { createAlarm?: { ok?: boolean, alarm?: { id?: string, isActive?: boolean, bedrag?: any, bedragMargin?: any, startDate?: string, endDate?: string, datumMargin?: number, byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, afspraak?: { id?: number }, signaal?: { id?: string } } } };
+export type CreateAlarmMutation = {Alarms_Create?: {id?: string}};
 
 export type CreateBurgerMutationVariables = Exact<{
   input?: InputMaybe<CreateBurgerInput>;
 }>;
 
 
-export type CreateBurgerMutation = { createBurger?: { ok?: boolean, burger?: { id?: number, bsn?: number, email?: string, telefoonnummer?: string, voorletters?: string, voornamen?: string, achternaam?: string, geboortedatum?: any, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }>, afspraken?: Array<{ id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, validFrom?: any, validThrough?: any, betaalinstructie?: { byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string }, burger?: { id?: number, bsn?: number, voornamen?: string, voorletters?: string, achternaam?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, alarm?: { id?: string, isActive?: boolean, bedrag?: any, bedragMargin?: any, startDate?: string, endDate?: string, datumMargin?: number, byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, afspraak?: { id?: number }, signaal?: { id?: string } }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, postadres?: { id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string }, rubriek?: { id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } }, matchingAfspraken?: Array<{ id?: number, credit?: boolean, zoektermen?: Array<string>, bedrag?: any, omschrijving?: string, burger?: { voorletters?: string, voornamen?: string, achternaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string } }> }>, huishouden?: { id?: number, burgers?: Array<{ id?: number }> } } } };
+export type CreateBurgerMutation = {createBurger?: {ok?: boolean, burger?: {id?: number, bsn?: number, email?: string, telefoonnummer?: string, voorletters?: string, voornamen?: string, achternaam?: string, geboortedatum?: any, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string, rekeningen?: Array<{id?: number, iban?: string, rekeninghouder?: string}>, afspraken?: Array<{id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, validFrom?: any, validThrough?: any, betaalinstructie?: {byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string}, burger?: {id?: number, bsn?: number, voornamen?: string, voorletters?: string, achternaam?: string, plaatsnaam?: string, rekeningen?: Array<{id?: number, iban?: string, rekeninghouder?: string}>}, afdeling?: {id?: number, naam?: string, organisatie?: {id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string}, postadressen?: Array<{id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string}>, rekeningen?: Array<{id?: number, iban?: string, rekeninghouder?: string}>}, postadres?: {id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string}, tegenRekening?: {id?: number, iban?: string, rekeninghouder?: string}, rubriek?: {id?: number, naam?: string, grootboekrekening?: {id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: {id?: number, naam?: string}}}, matchingAfspraken?: Array<{id?: number, credit?: boolean, zoektermen?: Array<string>, bedrag?: any, omschrijving?: string, burger?: {voorletters?: string, voornamen?: string, achternaam?: string}, tegenRekening?: {id?: number, iban?: string, rekeninghouder?: string}}>}>, huishouden?: {id?: number, burgers?: Array<{id?: number}>}}}};
 
 export type CreateBurgerRekeningMutationVariables = Exact<{
   burgerId: Scalars['Int'];
@@ -1760,7 +1761,7 @@ export type CreateBurgerRekeningMutationVariables = Exact<{
 }>;
 
 
-export type CreateBurgerRekeningMutation = { createBurgerRekening?: { ok?: boolean, rekening?: { id?: number, iban?: string, rekeninghouder?: string } } };
+export type CreateBurgerRekeningMutation = {createBurgerRekening?: {ok?: boolean, rekening?: {id?: number, iban?: string, rekeninghouder?: string}}};
 
 export type CreateConfiguratieMutationVariables = Exact<{
   id: Scalars['String'];
@@ -1768,14 +1769,14 @@ export type CreateConfiguratieMutationVariables = Exact<{
 }>;
 
 
-export type CreateConfiguratieMutation = { createConfiguratie?: { ok?: boolean, configuratie?: { id?: string, waarde?: string } } };
+export type CreateConfiguratieMutation = {createConfiguratie?: {ok?: boolean, configuratie?: {id?: string, waarde?: string}}};
 
 export type CreateCustomerStatementMessageMutationVariables = Exact<{
   file: Scalars['Upload'];
 }>;
 
 
-export type CreateCustomerStatementMessageMutation = { createCustomerStatementMessage?: { ok?: boolean } };
+export type CreateCustomerStatementMessageMutation = {createCustomerStatementMessage?: {ok?: boolean}};
 
 export type CreateExportOverschrijvingenMutationVariables = Exact<{
   startDatum: Scalars['String'];
@@ -1784,14 +1785,14 @@ export type CreateExportOverschrijvingenMutationVariables = Exact<{
 }>;
 
 
-export type CreateExportOverschrijvingenMutation = { createExportOverschrijvingen?: { ok?: boolean, export?: { id?: number } } };
+export type CreateExportOverschrijvingenMutation = {createExportOverschrijvingen?: {ok?: boolean, export?: {id?: number}}};
 
 export type CreateHuishoudenMutationVariables = Exact<{
   burgerIds?: InputMaybe<Array<InputMaybe<Scalars['Int']>> | InputMaybe<Scalars['Int']>>;
 }>;
 
 
-export type CreateHuishoudenMutation = { createHuishouden?: { ok?: boolean, huishouden?: { id?: number, burgers?: Array<{ id?: number, bsn?: number, email?: string, telefoonnummer?: string, voorletters?: string, voornamen?: string, achternaam?: string, geboortedatum?: any, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }>, afspraken?: Array<{ id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, validFrom?: any, validThrough?: any, betaalinstructie?: { byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string }, burger?: { id?: number, bsn?: number, voornamen?: string, voorletters?: string, achternaam?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, alarm?: { id?: string, isActive?: boolean, bedrag?: any, bedragMargin?: any, startDate?: string, endDate?: string, datumMargin?: number, byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, afspraak?: { id?: number }, signaal?: { id?: string } }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, postadres?: { id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string }, rubriek?: { id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } }, matchingAfspraken?: Array<{ id?: number, credit?: boolean, zoektermen?: Array<string>, bedrag?: any, omschrijving?: string, burger?: { voorletters?: string, voornamen?: string, achternaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string } }> }>, huishouden?: { id?: number, burgers?: Array<{ id?: number }> } }> } } };
+export type CreateHuishoudenMutation = {createHuishouden?: {ok?: boolean, huishouden?: {id?: number, burgers?: Array<{id?: number, bsn?: number, email?: string, telefoonnummer?: string, voorletters?: string, voornamen?: string, achternaam?: string, geboortedatum?: any, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string, rekeningen?: Array<{id?: number, iban?: string, rekeninghouder?: string}>, afspraken?: Array<{id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, validFrom?: any, validThrough?: any, betaalinstructie?: {byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string}, burger?: {id?: number, bsn?: number, voornamen?: string, voorletters?: string, achternaam?: string, plaatsnaam?: string, rekeningen?: Array<{id?: number, iban?: string, rekeninghouder?: string}>}, afdeling?: {id?: number, naam?: string, organisatie?: {id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string}, postadressen?: Array<{id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string}>, rekeningen?: Array<{id?: number, iban?: string, rekeninghouder?: string}>}, postadres?: {id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string}, tegenRekening?: {id?: number, iban?: string, rekeninghouder?: string}, rubriek?: {id?: number, naam?: string, grootboekrekening?: {id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: {id?: number, naam?: string}}}, matchingAfspraken?: Array<{id?: number, credit?: boolean, zoektermen?: Array<string>, bedrag?: any, omschrijving?: string, burger?: {voorletters?: string, voornamen?: string, achternaam?: string}, tegenRekening?: {id?: number, iban?: string, rekeninghouder?: string}}>}>, huishouden?: {id?: number, burgers?: Array<{id?: number}>}}>}}};
 
 export type CreateJournaalpostAfspraakMutationVariables = Exact<{
   transactionId: Scalars['Int'];
@@ -1800,7 +1801,7 @@ export type CreateJournaalpostAfspraakMutationVariables = Exact<{
 }>;
 
 
-export type CreateJournaalpostAfspraakMutation = { createJournaalpostAfspraak?: { ok?: boolean, journaalposten?: Array<{ id?: number, afspraak?: { id?: number, alarm?: { id?: string } } }> } };
+export type CreateJournaalpostAfspraakMutation = {createJournaalpostAfspraak?: {ok?: boolean, journaalposten?: Array<{id?: number, afspraak?: {id?: number}}>}};
 
 export type CreateJournaalpostGrootboekrekeningMutationVariables = Exact<{
   transactionId: Scalars['Int'];
@@ -1808,7 +1809,7 @@ export type CreateJournaalpostGrootboekrekeningMutationVariables = Exact<{
 }>;
 
 
-export type CreateJournaalpostGrootboekrekeningMutation = { createJournaalpostGrootboekrekening?: { ok?: boolean, journaalpost?: { id?: number } } };
+export type CreateJournaalpostGrootboekrekeningMutation = {createJournaalpostGrootboekrekening?: {ok?: boolean, journaalpost?: {id?: number}}};
 
 export type CreateOrganisatieMutationVariables = Exact<{
   kvknummer: Scalars['String'];
@@ -1817,7 +1818,7 @@ export type CreateOrganisatieMutationVariables = Exact<{
 }>;
 
 
-export type CreateOrganisatieMutation = { createOrganisatie?: { ok?: boolean, organisatie?: { id?: number, naam?: string, kvknummer?: string, vestigingsnummer?: string, afdelingen?: Array<{ id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }> } } };
+export type CreateOrganisatieMutation = {createOrganisatie?: {ok?: boolean, organisatie?: {id?: number, naam?: string, kvknummer?: string, vestigingsnummer?: string, afdelingen?: Array<{id?: number, naam?: string, organisatie?: {id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string}, postadressen?: Array<{id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string}>, rekeningen?: Array<{id?: number, iban?: string, rekeninghouder?: string}>}>}}};
 
 export type CreateAfdelingRekeningMutationVariables = Exact<{
   afdelingId: Scalars['Int'];
@@ -1825,7 +1826,7 @@ export type CreateAfdelingRekeningMutationVariables = Exact<{
 }>;
 
 
-export type CreateAfdelingRekeningMutation = { createAfdelingRekening?: { ok?: boolean, rekening?: { id?: number, iban?: string, rekeninghouder?: string } } };
+export type CreateAfdelingRekeningMutation = {createAfdelingRekening?: {ok?: boolean, rekening?: {id?: number, iban?: string, rekeninghouder?: string}}};
 
 export type CreateAfdelingPostadresMutationVariables = Exact<{
   afdelingId: Scalars['Int'];
@@ -1836,7 +1837,7 @@ export type CreateAfdelingPostadresMutationVariables = Exact<{
 }>;
 
 
-export type CreateAfdelingPostadresMutation = { createPostadres?: { ok?: boolean, postadres?: { id?: string } } };
+export type CreateAfdelingPostadresMutation = {createPostadres?: {ok?: boolean, postadres?: {id?: string}}};
 
 export type CreateRubriekMutationVariables = Exact<{
   naam?: InputMaybe<Scalars['String']>;
@@ -1844,21 +1845,21 @@ export type CreateRubriekMutationVariables = Exact<{
 }>;
 
 
-export type CreateRubriekMutation = { createRubriek?: { ok?: boolean, rubriek?: { id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } } } };
+export type CreateRubriekMutation = {createRubriek?: {ok?: boolean, rubriek?: {id?: number, naam?: string, grootboekrekening?: {id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: {id?: number, naam?: string}}}}};
 
 export type DeleteOrganisatieMutationVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type DeleteOrganisatieMutation = { deleteOrganisatie?: { ok?: boolean } };
+export type DeleteOrganisatieMutation = {deleteOrganisatie?: {ok?: boolean}};
 
 export type DeleteAfdelingMutationVariables = Exact<{
   afdelingId: Scalars['Int'];
 }>;
 
 
-export type DeleteAfdelingMutation = { deleteAfdeling?: { ok?: boolean } };
+export type DeleteAfdelingMutation = {deleteAfdeling?: {ok?: boolean}};
 
 export type DeleteAfdelingPostadresMutationVariables = Exact<{
   id: Scalars['String'];
@@ -1866,21 +1867,21 @@ export type DeleteAfdelingPostadresMutationVariables = Exact<{
 }>;
 
 
-export type DeleteAfdelingPostadresMutation = { deletePostadres?: { ok?: boolean } };
+export type DeleteAfdelingPostadresMutation = {deletePostadres?: {ok?: boolean}};
 
 export type DeleteAfspraakMutationVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type DeleteAfspraakMutation = { deleteAfspraak?: { ok?: boolean } };
+export type DeleteAfspraakMutation = {deleteAfspraak?: {ok?: boolean}};
 
 export type DeleteAfspraakBetaalinstructieMutationVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type DeleteAfspraakBetaalinstructieMutation = { deleteAfspraakBetaalinstructie?: { ok?: boolean } };
+export type DeleteAfspraakBetaalinstructieMutation = {deleteAfspraakBetaalinstructie?: {ok?: boolean}};
 
 export type DeleteAfspraakZoektermMutationVariables = Exact<{
   afspraakId: Scalars['Int'];
@@ -1888,21 +1889,21 @@ export type DeleteAfspraakZoektermMutationVariables = Exact<{
 }>;
 
 
-export type DeleteAfspraakZoektermMutation = { deleteAfspraakZoekterm?: { ok?: boolean, matchingAfspraken?: Array<{ id?: number, zoektermen?: Array<string>, bedrag?: any, burger?: { id?: number, voorletters?: string, voornamen?: string, achternaam?: string }, tegenRekening?: { rekeninghouder?: string, iban?: string } }> } };
+export type DeleteAfspraakZoektermMutation = {deleteAfspraakZoekterm?: {ok?: boolean, matchingAfspraken?: Array<{id?: number, zoektermen?: Array<string>, bedrag?: any, burger?: {id?: number, voorletters?: string, voornamen?: string, achternaam?: string}, tegenRekening?: {rekeninghouder?: string, iban?: string}}>}};
 
 export type DeleteAlarmMutationVariables = Exact<{
-  id: Scalars['String'];
+  input: AlarmId;
 }>;
 
 
-export type DeleteAlarmMutation = { deleteAlarm?: { ok?: boolean } };
+export type DeleteAlarmMutation = {Alarms_Delete?: {deleted?: boolean}};
 
 export type DeleteBurgerMutationVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type DeleteBurgerMutation = { deleteBurger?: { ok?: boolean } };
+export type DeleteBurgerMutation = {deleteBurger?: {ok?: boolean}};
 
 export type DeleteBurgerRekeningMutationVariables = Exact<{
   rekeningId: Scalars['Int'];
@@ -1910,21 +1911,21 @@ export type DeleteBurgerRekeningMutationVariables = Exact<{
 }>;
 
 
-export type DeleteBurgerRekeningMutation = { deleteBurgerRekening?: { ok?: boolean } };
+export type DeleteBurgerRekeningMutation = {deleteBurgerRekening?: {ok?: boolean}};
 
 export type DeleteConfiguratieMutationVariables = Exact<{
   key: Scalars['String'];
 }>;
 
 
-export type DeleteConfiguratieMutation = { deleteConfiguratie?: { ok?: boolean } };
+export type DeleteConfiguratieMutation = {deleteConfiguratie?: {ok?: boolean}};
 
 export type DeleteCustomerStatementMessageMutationVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type DeleteCustomerStatementMessageMutation = { deleteCustomerStatementMessage?: { ok?: boolean } };
+export type DeleteCustomerStatementMessageMutation = {deleteCustomerStatementMessage?: {ok?: boolean}};
 
 export type DeleteHuishoudenBurgerMutationVariables = Exact<{
   huishoudenId: Scalars['Int'];
@@ -1932,14 +1933,14 @@ export type DeleteHuishoudenBurgerMutationVariables = Exact<{
 }>;
 
 
-export type DeleteHuishoudenBurgerMutation = { deleteHuishoudenBurger?: { ok?: boolean } };
+export type DeleteHuishoudenBurgerMutation = {deleteHuishoudenBurger?: {ok?: boolean}};
 
 export type DeleteJournaalpostMutationVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type DeleteJournaalpostMutation = { deleteJournaalpost?: { ok?: boolean } };
+export type DeleteJournaalpostMutation = {deleteJournaalpost?: {ok?: boolean}};
 
 export type DeleteAfdelingRekeningMutationVariables = Exact<{
   id: Scalars['Int'];
@@ -1947,14 +1948,14 @@ export type DeleteAfdelingRekeningMutationVariables = Exact<{
 }>;
 
 
-export type DeleteAfdelingRekeningMutation = { deleteAfdelingRekening?: { ok?: boolean } };
+export type DeleteAfdelingRekeningMutation = {deleteAfdelingRekening?: {ok?: boolean}};
 
 export type DeleteRubriekMutationVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type DeleteRubriekMutation = { deleteRubriek?: { ok?: boolean } };
+export type DeleteRubriekMutation = {deleteRubriek?: {ok?: boolean}};
 
 export type EndAfspraakMutationVariables = Exact<{
   id: Scalars['Int'];
@@ -1962,24 +1963,19 @@ export type EndAfspraakMutationVariables = Exact<{
 }>;
 
 
-export type EndAfspraakMutation = { updateAfspraak?: { ok?: boolean, afspraak?: { id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, validFrom?: any, validThrough?: any, betaalinstructie?: { byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string }, burger?: { id?: number, bsn?: number, voornamen?: string, voorletters?: string, achternaam?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, alarm?: { id?: string, isActive?: boolean, bedrag?: any, bedragMargin?: any, startDate?: string, endDate?: string, datumMargin?: number, byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, afspraak?: { id?: number }, signaal?: { id?: string } }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, postadres?: { id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string }, rubriek?: { id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } }, matchingAfspraken?: Array<{ id?: number, credit?: boolean, zoektermen?: Array<string>, bedrag?: any, omschrijving?: string, burger?: { voorletters?: string, voornamen?: string, achternaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string } }> } } };
+export type EndAfspraakMutation = {updateAfspraak?: {ok?: boolean, afspraak?: {id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, validFrom?: any, validThrough?: any, betaalinstructie?: {byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string}, burger?: {id?: number, bsn?: number, voornamen?: string, voorletters?: string, achternaam?: string, plaatsnaam?: string, rekeningen?: Array<{id?: number, iban?: string, rekeninghouder?: string}>}, afdeling?: {id?: number, naam?: string, organisatie?: {id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string}, postadressen?: Array<{id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string}>, rekeningen?: Array<{id?: number, iban?: string, rekeninghouder?: string}>}, postadres?: {id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string}, tegenRekening?: {id?: number, iban?: string, rekeninghouder?: string}, rubriek?: {id?: number, naam?: string, grootboekrekening?: {id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: {id?: number, naam?: string}}}, matchingAfspraken?: Array<{id?: number, credit?: boolean, zoektermen?: Array<string>, bedrag?: any, omschrijving?: string, burger?: {voorletters?: string, voornamen?: string, achternaam?: string}, tegenRekening?: {id?: number, iban?: string, rekeninghouder?: string}}>}}};
 
-export type EvaluateAlarmMutationVariables = Exact<{
-  id: Scalars['String'];
+export type SignalSetIsActiveMutationVariables = Exact<{
+  input: SetIsActiveRequest;
 }>;
 
 
-export type EvaluateAlarmMutation = { evaluateAlarm?: { alarmTriggerResult?: Array<{ alarm?: { id?: string } }> } };
+export type SignalSetIsActiveMutation = {Signals_SetIsActive?: {id?: string, isActive?: boolean}};
 
-export type EvaluateAlarmsMutationVariables = Exact<{ [key: string]: never; }>;
-
-
-export type EvaluateAlarmsMutation = { evaluateAlarms?: { alarmTriggerResult?: Array<{ alarm?: { id?: string } }> } };
-
-export type StartAutomatischBoekenMutationVariables = Exact<{ [key: string]: never; }>;
+export type StartAutomatischBoekenMutationVariables = Exact<{[key: string]: never;}>;
 
 
-export type StartAutomatischBoekenMutation = { startAutomatischBoeken?: { ok?: boolean, journaalposten?: Array<{ id?: number }> } };
+export type StartAutomatischBoekenMutation = {startAutomatischBoeken?: {ok?: boolean, journaalposten?: Array<{id?: number}>}};
 
 export type UpdateAfdelingMutationVariables = Exact<{
   id: Scalars['Int'];
@@ -1988,7 +1984,7 @@ export type UpdateAfdelingMutationVariables = Exact<{
 }>;
 
 
-export type UpdateAfdelingMutation = { updateAfdeling?: { ok?: boolean, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> } } };
+export type UpdateAfdelingMutation = {updateAfdeling?: {ok?: boolean, afdeling?: {id?: number, naam?: string, organisatie?: {id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string}, postadressen?: Array<{id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string}>, rekeningen?: Array<{id?: number, iban?: string, rekeninghouder?: string}>}}};
 
 export type UpdateAfspraakMutationVariables = Exact<{
   id: Scalars['Int'];
@@ -1996,7 +1992,7 @@ export type UpdateAfspraakMutationVariables = Exact<{
 }>;
 
 
-export type UpdateAfspraakMutation = { updateAfspraak?: { ok?: boolean, afspraak?: { id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, validFrom?: any, validThrough?: any, betaalinstructie?: { byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string }, burger?: { id?: number, bsn?: number, voornamen?: string, voorletters?: string, achternaam?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, alarm?: { id?: string, isActive?: boolean, bedrag?: any, bedragMargin?: any, startDate?: string, endDate?: string, datumMargin?: number, byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, afspraak?: { id?: number }, signaal?: { id?: string } }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, postadres?: { id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string }, rubriek?: { id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } }, matchingAfspraken?: Array<{ id?: number, credit?: boolean, zoektermen?: Array<string>, bedrag?: any, omschrijving?: string, burger?: { voorletters?: string, voornamen?: string, achternaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string } }> } } };
+export type UpdateAfspraakMutation = {updateAfspraak?: {ok?: boolean, afspraak?: {id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, validFrom?: any, validThrough?: any, betaalinstructie?: {byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string}, burger?: {id?: number, bsn?: number, voornamen?: string, voorletters?: string, achternaam?: string, plaatsnaam?: string, rekeningen?: Array<{id?: number, iban?: string, rekeninghouder?: string}>}, afdeling?: {id?: number, naam?: string, organisatie?: {id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string}, postadressen?: Array<{id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string}>, rekeningen?: Array<{id?: number, iban?: string, rekeninghouder?: string}>}, postadres?: {id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string}, tegenRekening?: {id?: number, iban?: string, rekeninghouder?: string}, rubriek?: {id?: number, naam?: string, grootboekrekening?: {id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: {id?: number, naam?: string}}}, matchingAfspraken?: Array<{id?: number, credit?: boolean, zoektermen?: Array<string>, bedrag?: any, omschrijving?: string, burger?: {voorletters?: string, voornamen?: string, achternaam?: string}, tegenRekening?: {id?: number, iban?: string, rekeninghouder?: string}}>}}};
 
 export type UpdateAfspraakBetaalinstructieMutationVariables = Exact<{
   id: Scalars['Int'];
@@ -2004,15 +2000,14 @@ export type UpdateAfspraakBetaalinstructieMutationVariables = Exact<{
 }>;
 
 
-export type UpdateAfspraakBetaalinstructieMutation = { updateAfspraakBetaalinstructie?: { ok?: boolean } };
+export type UpdateAfspraakBetaalinstructieMutation = {updateAfspraakBetaalinstructie?: {ok?: boolean}};
 
 export type UpdateAlarmMutationVariables = Exact<{
-  id: Scalars['String'];
-  input: UpdateAlarmInput;
+  input: UpdateAlarmRequest;
 }>;
 
 
-export type UpdateAlarmMutation = { updateAlarm?: { ok?: boolean, alarm?: { id?: string, isActive?: boolean, bedrag?: any, bedragMargin?: any, startDate?: string, endDate?: string, datumMargin?: number, byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, afspraak?: { id?: number }, signaal?: { id?: string } } } };
+export type UpdateAlarmMutation = {Alarms_Update?: {id?: string, isActive?: boolean, amount?: number, amountMargin?: number, startDate?: any, endDate?: any, dateMargin?: number, recurringDay?: Array<number>, recurringMonths?: Array<number>, recurringDayOfMonth?: Array<number>, AlarmType?: number}};
 
 export type UpdateBurgerMutationVariables = Exact<{
   id: Scalars['Int'];
@@ -2030,7 +2025,7 @@ export type UpdateBurgerMutationVariables = Exact<{
 }>;
 
 
-export type UpdateBurgerMutation = { updateBurger?: { ok?: boolean, burger?: { id?: number, bsn?: number, email?: string, telefoonnummer?: string, voorletters?: string, voornamen?: string, achternaam?: string, geboortedatum?: any, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }>, afspraken?: Array<{ id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, validFrom?: any, validThrough?: any, betaalinstructie?: { byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string }, burger?: { id?: number, bsn?: number, voornamen?: string, voorletters?: string, achternaam?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, alarm?: { id?: string, isActive?: boolean, bedrag?: any, bedragMargin?: any, startDate?: string, endDate?: string, datumMargin?: number, byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, afspraak?: { id?: number }, signaal?: { id?: string } }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, postadres?: { id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string }, rubriek?: { id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } }, matchingAfspraken?: Array<{ id?: number, credit?: boolean, zoektermen?: Array<string>, bedrag?: any, omschrijving?: string, burger?: { voorletters?: string, voornamen?: string, achternaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string } }> }>, huishouden?: { id?: number, burgers?: Array<{ id?: number }> } } } };
+export type UpdateBurgerMutation = {updateBurger?: {ok?: boolean, burger?: {id?: number, bsn?: number, email?: string, telefoonnummer?: string, voorletters?: string, voornamen?: string, achternaam?: string, geboortedatum?: any, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string, rekeningen?: Array<{id?: number, iban?: string, rekeninghouder?: string}>, afspraken?: Array<{id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, validFrom?: any, validThrough?: any, betaalinstructie?: {byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string}, burger?: {id?: number, bsn?: number, voornamen?: string, voorletters?: string, achternaam?: string, plaatsnaam?: string, rekeningen?: Array<{id?: number, iban?: string, rekeninghouder?: string}>}, afdeling?: {id?: number, naam?: string, organisatie?: {id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string}, postadressen?: Array<{id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string}>, rekeningen?: Array<{id?: number, iban?: string, rekeninghouder?: string}>}, postadres?: {id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string}, tegenRekening?: {id?: number, iban?: string, rekeninghouder?: string}, rubriek?: {id?: number, naam?: string, grootboekrekening?: {id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: {id?: number, naam?: string}}}, matchingAfspraken?: Array<{id?: number, credit?: boolean, zoektermen?: Array<string>, bedrag?: any, omschrijving?: string, burger?: {voorletters?: string, voornamen?: string, achternaam?: string}, tegenRekening?: {id?: number, iban?: string, rekeninghouder?: string}}>}>, huishouden?: {id?: number, burgers?: Array<{id?: number}>}}}};
 
 export type UpdateConfiguratieMutationVariables = Exact<{
   id: Scalars['String'];
@@ -2038,7 +2033,7 @@ export type UpdateConfiguratieMutationVariables = Exact<{
 }>;
 
 
-export type UpdateConfiguratieMutation = { updateConfiguratie?: { ok?: boolean, configuratie?: { id?: string, waarde?: string } } };
+export type UpdateConfiguratieMutation = {updateConfiguratie?: {ok?: boolean, configuratie?: {id?: string, waarde?: string}}};
 
 export type UpdateOrganisatieMutationVariables = Exact<{
   id: Scalars['Int'];
@@ -2048,7 +2043,7 @@ export type UpdateOrganisatieMutationVariables = Exact<{
 }>;
 
 
-export type UpdateOrganisatieMutation = { updateOrganisatie?: { ok?: boolean, organisatie?: { id?: number, naam?: string, kvknummer?: string, vestigingsnummer?: string, afdelingen?: Array<{ id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }> } } };
+export type UpdateOrganisatieMutation = {updateOrganisatie?: {ok?: boolean, organisatie?: {id?: number, naam?: string, kvknummer?: string, vestigingsnummer?: string, afdelingen?: Array<{id?: number, naam?: string, organisatie?: {id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string}, postadressen?: Array<{id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string}>, rekeningen?: Array<{id?: number, iban?: string, rekeninghouder?: string}>}>}}};
 
 export type UpdatePostadresMutationVariables = Exact<{
   id: Scalars['String'];
@@ -2059,7 +2054,7 @@ export type UpdatePostadresMutationVariables = Exact<{
 }>;
 
 
-export type UpdatePostadresMutation = { updatePostadres?: { ok?: boolean } };
+export type UpdatePostadresMutation = {updatePostadres?: {ok?: boolean}};
 
 export type UpdateRekeningMutationVariables = Exact<{
   id: Scalars['Int'];
@@ -2068,7 +2063,7 @@ export type UpdateRekeningMutationVariables = Exact<{
 }>;
 
 
-export type UpdateRekeningMutation = { updateRekening?: { ok?: boolean } };
+export type UpdateRekeningMutation = {updateRekening?: {ok?: boolean}};
 
 export type UpdateRubriekMutationVariables = Exact<{
   id: Scalars['Int'];
@@ -2077,15 +2072,7 @@ export type UpdateRubriekMutationVariables = Exact<{
 }>;
 
 
-export type UpdateRubriekMutation = { updateRubriek?: { ok?: boolean } };
-
-export type UpdateSignaalMutationVariables = Exact<{
-  id: Scalars['String'];
-  input: UpdateSignaalInput;
-}>;
-
-
-export type UpdateSignaalMutation = { updateSignaal?: { ok?: boolean, signaal?: { id?: string, isActive?: boolean, type?: string, actions?: Array<string>, bedragDifference?: string, timeUpdated?: string, alarm?: { id?: string, afspraak?: { id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, validFrom?: any, validThrough?: any, betaalinstructie?: { byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string }, burger?: { id?: number, bsn?: number, voornamen?: string, voorletters?: string, achternaam?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, alarm?: { id?: string, isActive?: boolean, bedrag?: any, bedragMargin?: any, startDate?: string, endDate?: string, datumMargin?: number, byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, afspraak?: { id?: number }, signaal?: { id?: string } }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, postadres?: { id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string }, rubriek?: { id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } } } }, bankTransactions?: Array<{ id?: number, bedrag?: any, isCredit?: boolean }> } } };
+export type UpdateRubriekMutation = {updateRubriek?: {ok?: boolean}};
 
 export type GetAdditionalTransactionDataQueryVariables = Exact<{
   ibans?: InputMaybe<Array<Scalars['String']> | Scalars['String']>;
@@ -2093,70 +2080,56 @@ export type GetAdditionalTransactionDataQueryVariables = Exact<{
 }>;
 
 
-export type GetAdditionalTransactionDataQuery = { rekeningenByIbans?: Array<{ iban?: string, rekeninghouder?: string }>, journaalpostenTransactieRubriek?: Array<{ id?: number, transactionId?: number, isAutomatischGeboekt?: boolean, afspraakRubriekNaam?: string, grootboekrekeningRubriekNaam?: string }> };
+export type GetAdditionalTransactionDataQuery = {rekeningenByIbans?: Array<{iban?: string, rekeninghouder?: string}>, journaalpostenTransactieRubriek?: Array<{id?: number, transactionId?: number, isAutomatischGeboekt?: boolean, afspraakRubriekNaam?: string, grootboekrekeningRubriekNaam?: string}>};
 
 export type GetAfdelingQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type GetAfdelingQuery = { afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> } };
+export type GetAfdelingQuery = {afdeling?: {id?: number, naam?: string, organisatie?: {id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string}, postadressen?: Array<{id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string}>, rekeningen?: Array<{id?: number, iban?: string, rekeninghouder?: string}>}};
 
 export type GetAfspraakQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type GetAfspraakQuery = { afspraak?: { id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, validFrom?: any, validThrough?: any, betaalinstructie?: { byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string }, burger?: { id?: number, bsn?: number, voornamen?: string, voorletters?: string, achternaam?: string, plaatsnaam?: string }, alarm?: { id?: string, isActive?: boolean, bedrag?: any, bedragMargin?: any, startDate?: string, endDate?: string, datumMargin?: number, byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number> }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number } }, postadres?: { id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string }, rubriek?: { id?: number, naam?: string }, matchingAfspraken?: Array<{ id?: number, credit?: boolean, zoektermen?: Array<string>, bedrag?: any, omschrijving?: string, burger?: { voorletters?: string, voornamen?: string, achternaam?: string } }> } };
+export type GetAfspraakQuery = {afspraak?: {id?: number, uuid?: any, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, validFrom?: any, validThrough?: any, alarmId?: any, betaalinstructie?: {byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string}, burger?: {id?: number, bsn?: number, voornamen?: string, voorletters?: string, achternaam?: string, plaatsnaam?: string}, alarm?: {id?: string, isActive?: boolean, amount?: number, amountMargin?: number, startDate?: any, endDate?: any, dateMargin?: number, checkOnDate?: any, recurringDay?: Array<number>, recurringMonths?: Array<number>, recurringDayOfMonth?: Array<number>, AlarmType?: number}, afdeling?: {id?: number, naam?: string, organisatie?: {id?: number}}, postadres?: {id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string}, tegenRekening?: {id?: number, iban?: string, rekeninghouder?: string}, rubriek?: {id?: number, naam?: string}, matchingAfspraken?: Array<{id?: number, credit?: boolean, zoektermen?: Array<string>, bedrag?: any, omschrijving?: string, burger?: {voorletters?: string, voornamen?: string, achternaam?: string}}>}};
 
 export type GetAfspraakFormDataQueryVariables = Exact<{
   afspraakId: Scalars['Int'];
 }>;
 
 
-export type GetAfspraakFormDataQuery = { afspraak?: { id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, validFrom?: any, validThrough?: any, burger?: { id?: number, bsn?: number, voornamen?: string, voorletters?: string, achternaam?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, afdeling?: { id?: number, organisatie?: { id?: number, naam?: string, kvknummer?: string, vestigingsnummer?: string, afdelingen?: Array<{ id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }> } }, postadres?: { id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string }, rubriek?: { id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, credit?: boolean } } }, rubrieken?: Array<{ id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, credit?: boolean } }>, organisaties?: Array<{ id?: number, naam?: string, kvknummer?: string, vestigingsnummer?: string }> };
+export type GetAfspraakFormDataQuery = {afspraak?: {id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, validFrom?: any, validThrough?: any, burger?: {id?: number, bsn?: number, voornamen?: string, voorletters?: string, achternaam?: string, plaatsnaam?: string, rekeningen?: Array<{id?: number, iban?: string, rekeninghouder?: string}>}, afdeling?: {id?: number, organisatie?: {id?: number, naam?: string, kvknummer?: string, vestigingsnummer?: string, afdelingen?: Array<{id?: number, naam?: string, organisatie?: {id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string}, postadressen?: Array<{id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string}>, rekeningen?: Array<{id?: number, iban?: string, rekeninghouder?: string}>}>}}, postadres?: {id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string}, tegenRekening?: {id?: number, iban?: string, rekeninghouder?: string}, rubriek?: {id?: number, naam?: string, grootboekrekening?: {id: string, naam?: string, credit?: boolean}}}, rubrieken?: Array<{id?: number, naam?: string, grootboekrekening?: {id: string, naam?: string, credit?: boolean}}>, organisaties?: Array<{id?: number, naam?: string, kvknummer?: string, vestigingsnummer?: string}>};
 
 export type GetAlarmQueryVariables = Exact<{
-  id: Scalars['String'];
+  input?: InputMaybe<AlarmId>;
 }>;
 
 
-export type GetAlarmQuery = { alarm?: { id?: string, isActive?: boolean, bedrag?: any, bedragMargin?: any, startDate?: string, endDate?: string, datumMargin?: number, byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, afspraak?: { id?: number }, signaal?: { id?: string } } };
-
-export type GetAlarmenQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type GetAlarmenQuery = { alarmen?: Array<{ id?: string, isActive?: boolean, bedrag?: any, bedragMargin?: any, startDate?: string, endDate?: string, datumMargin?: number, byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, afspraak?: { id?: number }, signaal?: { id?: string } }> };
+export type GetAlarmQuery = {Alarms_GetById?: {id?: string, isActive?: boolean, amount?: number, amountMargin?: number, startDate?: any, endDate?: any, dateMargin?: number, recurringDay?: Array<number>, recurringMonths?: Array<number>, recurringDayOfMonth?: Array<number>, AlarmType?: number}};
 
 export type GetBurgerDetailsQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type GetBurgerDetailsQuery = { burger?: { id?: number, voorletters?: string, voornamen?: string, achternaam?: string, huishouden?: { id?: number }, afspraken?: Array<{ id?: number, bedrag?: any, credit?: boolean, omschrijving?: string, validFrom?: any, validThrough?: any, betaalinstructie?: { byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string }, afdeling?: { naam?: string, organisatie?: { naam?: string } } }> } };
+export type GetBurgerDetailsQuery = {burger?: {id?: number, voorletters?: string, voornamen?: string, achternaam?: string, huishouden?: {id?: number}, afspraken?: Array<{id?: number, bedrag?: any, credit?: boolean, omschrijving?: string, validFrom?: any, validThrough?: any, betaalinstructie?: {byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string}, tegenRekening?: {id?: number, iban?: string, rekeninghouder?: string}, afdeling?: {naam?: string, organisatie?: {naam?: string}}}>}};
 
 export type GetBurgerPersonalDetailsQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type GetBurgerPersonalDetailsQuery = { burger?: { id?: number, bsn?: number, voorletters?: string, voornamen?: string, achternaam?: string, geboortedatum?: any, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string, telefoonnummer?: string, email?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> } };
+export type GetBurgerPersonalDetailsQuery = {burger?: {id?: number, bsn?: number, voorletters?: string, voornamen?: string, achternaam?: string, geboortedatum?: any, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string, telefoonnummer?: string, email?: string, rekeningen?: Array<{id?: number, iban?: string, rekeninghouder?: string}>}};
 
 export type GetBurgerAfsprakenQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type GetBurgerAfsprakenQuery = { burger?: { afspraken?: Array<{ id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, validFrom?: any, validThrough?: any, betaalinstructie?: { byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string }, burger?: { id?: number, bsn?: number, voornamen?: string, voorletters?: string, achternaam?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, alarm?: { id?: string, isActive?: boolean, bedrag?: any, bedragMargin?: any, startDate?: string, endDate?: string, datumMargin?: number, byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, afspraak?: { id?: number }, signaal?: { id?: string } }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, postadres?: { id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string }, rubriek?: { id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } }, matchingAfspraken?: Array<{ id?: number, credit?: boolean, zoektermen?: Array<string>, bedrag?: any, omschrijving?: string, burger?: { voorletters?: string, voornamen?: string, achternaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string } }> }> } };
-
-export type GetBurgerGebeurtenissenQueryVariables = Exact<{
-  ids: Array<Scalars['Int']> | Scalars['Int'];
-  limit: Scalars['Int'];
-  offset: Scalars['Int'];
-}>;
-
-
-export type GetBurgerGebeurtenissenQuery = { burgers?: Array<{ id?: number, voornamen?: string, voorletters?: string, achternaam?: string }>, gebruikersactiviteitenPaged?: { gebruikersactiviteiten?: Array<{ id?: number, timestamp?: any, gebruikerId?: string, action?: string, entities?: Array<{ entityType?: string, entityId?: string, huishouden?: { id?: number, burgers?: Array<{ id?: number, voorletters?: string, voornamen?: string, achternaam?: string }> }, burger?: { id?: number, voorletters?: string, voornamen?: string, achternaam?: string }, organisatie?: { id?: number, naam?: string, kvknummer?: string, vestigingsnummer?: string }, afspraak?: { id?: number, burger?: { id?: number, voornamen?: string, voorletters?: string, achternaam?: string }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string } } }, rekening?: { id?: number, iban?: string, rekeninghouder?: string }, customerStatementMessage?: { id?: number, filename?: string, bankTransactions?: Array<{ id?: number }> }, configuratie?: { id?: string, waarde?: string }, rubriek?: { id?: number, naam?: string }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, naam?: string } }, postadres?: { id?: string }, export?: { id?: number, naam?: string } }>, meta?: { userAgent?: string, ip?: Array<string>, applicationVersion?: string } }>, pageInfo?: { count?: number } } };
+export type GetBurgerAfsprakenQuery = {burger?: {afspraken?: Array<{id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, validFrom?: any, validThrough?: any, betaalinstructie?: {byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string}, burger?: {id?: number, bsn?: number, voornamen?: string, voorletters?: string, achternaam?: string, plaatsnaam?: string, rekeningen?: Array<{id?: number, iban?: string, rekeninghouder?: string}>}, afdeling?: {id?: number, naam?: string, organisatie?: {id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string}, postadressen?: Array<{id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string}>, rekeningen?: Array<{id?: number, iban?: string, rekeninghouder?: string}>}, postadres?: {id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string}, tegenRekening?: {id?: number, iban?: string, rekeninghouder?: string}, rubriek?: {id?: number, naam?: string, grootboekrekening?: {id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: {id?: number, naam?: string}}}, matchingAfspraken?: Array<{id?: number, credit?: boolean, zoektermen?: Array<string>, bedrag?: any, omschrijving?: string, burger?: {voorletters?: string, voornamen?: string, achternaam?: string}, tegenRekening?: {id?: number, iban?: string, rekeninghouder?: string}}>}>}};
 
 export type GetBurgerRapportagesQueryVariables = Exact<{
   burgers: Array<Scalars['Int']> | Scalars['Int'];
@@ -2167,43 +2140,51 @@ export type GetBurgerRapportagesQueryVariables = Exact<{
 }>;
 
 
-export type GetBurgerRapportagesQuery = { burgerRapportages?: Array<{ startDatum?: string, eindDatum?: string, totaal?: any, totaalUitgaven?: any, totaalInkomsten?: any, burger?: { voornamen?: string }, inkomsten?: Array<{ rubriek?: string, transacties?: Array<{ bedrag?: any, transactieDatum?: string, rekeninghouder?: string }> }>, uitgaven?: Array<{ rubriek?: string, transacties?: Array<{ bedrag?: any, transactieDatum?: string, rekeninghouder?: string }> }> }>, saldo?: { saldo?: any } };
+export type GetBurgerRapportagesQuery = {burgerRapportages?: Array<{startDatum?: string, eindDatum?: string, totaal?: any, totaalUitgaven?: any, totaalInkomsten?: any, burger?: {voornamen?: string}, inkomsten?: Array<{rubriek?: string, transacties?: Array<{bedrag?: any, transactieDatum?: string, rekeninghouder?: string}>}>, uitgaven?: Array<{rubriek?: string, transacties?: Array<{bedrag?: any, transactieDatum?: string, rekeninghouder?: string}>}>}>, saldo?: {saldo?: any}};
 
-export type GetBurgersQueryVariables = Exact<{ [key: string]: never; }>;
+export type GetBurgerUserActivitiesQueryQueryVariables = Exact<{
+  ids: Array<Scalars['Int']> | Scalars['Int'];
+  input?: InputMaybe<UserActivitiesPagedRequest>;
+}>;
 
 
-export type GetBurgersQuery = { burgers?: Array<{ id?: number, voornamen?: string, achternaam?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }> };
+export type GetBurgerUserActivitiesQueryQuery = {burgers?: Array<{id?: number, voornamen?: string, voorletters?: string, achternaam?: string}>, UserActivities_GetUserActivitiesPaged?: {data?: Array<{id?: string, timestamp?: any, user?: string, action?: string, entities?: Array<{entityType?: string, entityId?: string, huishouden?: {id?: number, burgers?: Array<{id?: number, voorletters?: string, voornamen?: string, achternaam?: string}>}, burger?: {id?: number, voorletters?: string, voornamen?: string, achternaam?: string}, organisatie?: {id?: number, naam?: string, kvknummer?: string, vestigingsnummer?: string}, afspraak?: {id?: number, burger?: {id?: number, voornamen?: string, voorletters?: string, achternaam?: string}, afdeling?: {id?: number, naam?: string, organisatie?: {id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string}}}, rekening?: {id?: number, iban?: string, rekeninghouder?: string}, customerStatementMessage?: {id?: number, filename?: string, bankTransactions?: Array<{id?: number}>}, configuratie?: {id?: string, waarde?: string}, rubriek?: {id?: number, naam?: string}, afdeling?: {id?: number, naam?: string, organisatie?: {id?: number, naam?: string}}, postadres?: {id?: string}, export?: {id?: number, naam?: string}}>, meta?: {userAgent?: string, ip?: string, applicationVersion?: string}}>, PageInfo?: {total_count?: number}}};
+
+export type GetBurgersQueryVariables = Exact<{[key: string]: never;}>;
+
+
+export type GetBurgersQuery = {burgers?: Array<{id?: number, voornamen?: string, achternaam?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string}>};
 
 export type GetBurgersAndOrganisatiesAndRekeningenQueryVariables = Exact<{
   iban?: InputMaybe<Scalars['String']>;
 }>;
 
 
-export type GetBurgersAndOrganisatiesAndRekeningenQuery = { organisaties?: Array<{ id?: number, naam?: string, afdelingen?: Array<{ id?: number }> }>, burgers?: Array<{ id?: number, voornamen?: string, voorletters?: string, achternaam?: string }>, rekeningen?: Array<{ iban?: string, rekeninghouder?: string, id?: number }>, afdelingenByIban?: Array<{ organisatieId?: number }> };
+export type GetBurgersAndOrganisatiesAndRekeningenQuery = {organisaties?: Array<{id?: number, naam?: string, afdelingen?: Array<{id?: number}>}>, burgers?: Array<{id?: number, voornamen?: string, voorletters?: string, achternaam?: string}>, rekeningen?: Array<{iban?: string, rekeninghouder?: string, id?: number}>, afdelingenByIban?: Array<{organisatieId?: number}>};
 
 export type GetBurgersSearchQueryVariables = Exact<{
   search?: InputMaybe<Scalars['String']>;
 }>;
 
 
-export type GetBurgersSearchQuery = { burgers?: Array<{ id?: number, voornamen?: string, achternaam?: string }> };
+export type GetBurgersSearchQuery = {burgers?: Array<{id?: number, voornamen?: string, achternaam?: string}>};
 
-export type GetConfiguratieQueryVariables = Exact<{ [key: string]: never; }>;
+export type GetConfiguratieQueryVariables = Exact<{[key: string]: never;}>;
 
 
-export type GetConfiguratieQuery = { configuraties?: Array<{ id?: string, waarde?: string }> };
+export type GetConfiguratieQuery = {configuraties?: Array<{id?: string, waarde?: string}>};
 
 export type GetCreateAfspraakFormDataQueryVariables = Exact<{
   burgerId: Scalars['Int'];
 }>;
 
 
-export type GetCreateAfspraakFormDataQuery = { burger?: { id?: number, voorletters?: string, voornamen?: string, achternaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, rubrieken?: Array<{ id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, credit?: boolean } }>, organisaties?: Array<{ id?: number, naam?: string, kvknummer?: string, vestigingsnummer?: string }> };
+export type GetCreateAfspraakFormDataQuery = {burger?: {id?: number, voorletters?: string, voornamen?: string, achternaam?: string, rekeningen?: Array<{id?: number, iban?: string, rekeninghouder?: string}>}, rubrieken?: Array<{id?: number, naam?: string, grootboekrekening?: {id: string, naam?: string, credit?: boolean}}>, organisaties?: Array<{id?: number, naam?: string, kvknummer?: string, vestigingsnummer?: string}>};
 
-export type GetCsmsQueryVariables = Exact<{ [key: string]: never; }>;
+export type GetCsmsQueryVariables = Exact<{[key: string]: never;}>;
 
 
-export type GetCsmsQuery = { customerStatementMessages?: Array<{ id?: number, filename?: string, uploadDate?: any, accountIdentification?: string, closingAvailableFunds?: number, closingBalance?: number, forwardAvailableBalance?: number, openingBalance?: number, relatedReference?: string, sequenceNumber?: string, transactionReferenceNumber?: string }> };
+export type GetCsmsQuery = {customerStatementMessages?: Array<{id?: number, filename?: string, uploadDate?: any, accountIdentification?: string, closingAvailableFunds?: number, closingBalance?: number, forwardAvailableBalance?: number, openingBalance?: number, relatedReference?: string, sequenceNumber?: string, transactionReferenceNumber?: string}>};
 
 export type GetExportsPagedQueryVariables = Exact<{
   offset: Scalars['Int'];
@@ -2211,22 +2192,14 @@ export type GetExportsPagedQueryVariables = Exact<{
 }>;
 
 
-export type GetExportsPagedQuery = { exportsPaged?: Array<{ exports?: Array<{ id?: number, naam?: string, timestamp?: any, startDatum?: any, eindDatum?: any, verwerkingDatum?: any, sha256?: string, overschrijvingen?: Array<{ id?: number, bedrag?: any }> }>, pageInfo?: { count?: number, limit?: number, start?: number } }> };
-
-export type GetGebeurtenissenQueryVariables = Exact<{
-  limit: Scalars['Int'];
-  offset: Scalars['Int'];
-}>;
-
-
-export type GetGebeurtenissenQuery = { gebruikersactiviteitenPaged?: { gebruikersactiviteiten?: Array<{ id?: number, timestamp?: any, gebruikerId?: string, action?: string, entities?: Array<{ entityType?: string, entityId?: string, huishouden?: { id?: number, burgers?: Array<{ id?: number, voorletters?: string, voornamen?: string, achternaam?: string }> }, burger?: { id?: number, voorletters?: string, voornamen?: string, achternaam?: string }, organisatie?: { id?: number, naam?: string, kvknummer?: string, vestigingsnummer?: string }, afspraak?: { id?: number, burger?: { id?: number, voornamen?: string, voorletters?: string, achternaam?: string }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string } } }, rekening?: { id?: number, iban?: string, rekeninghouder?: string }, customerStatementMessage?: { id?: number, filename?: string, bankTransactions?: Array<{ id?: number }> }, configuratie?: { id?: string, waarde?: string }, rubriek?: { id?: number, naam?: string }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, naam?: string } }, postadres?: { id?: string }, export?: { id?: number, naam?: string } }>, meta?: { userAgent?: string, ip?: Array<string>, applicationVersion?: string } }>, pageInfo?: { count?: number } } };
+export type GetExportsPagedQuery = {exportsPaged?: {exports?: Array<{id?: number, naam?: string, timestamp?: any, startDatum?: any, eindDatum?: any, verwerkingDatum?: any, sha256?: string, overschrijvingen?: Array<{id?: number, bedrag?: any}>}>, pageInfo?: {count?: number, limit?: number, start?: number}}};
 
 export type GetHuishoudenQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type GetHuishoudenQuery = { huishouden?: { id?: number, burgers?: Array<{ id?: number, voorletters?: string, voornamen?: string, achternaam?: string }> } };
+export type GetHuishoudenQuery = {huishouden?: {id?: number, burgers?: Array<{id?: number, voorletters?: string, voornamen?: string, achternaam?: string}>}};
 
 export type GetHuishoudenOverzichtQueryVariables = Exact<{
   burgers: Array<Scalars['Int']> | Scalars['Int'];
@@ -2235,56 +2208,56 @@ export type GetHuishoudenOverzichtQueryVariables = Exact<{
 }>;
 
 
-export type GetHuishoudenOverzichtQuery = { overzicht?: { afspraken?: Array<{ id?: number, burgerId?: number, omschrijving?: string, rekeninghouder?: string, validFrom?: string, validThrough?: string, transactions?: Array<{ id?: number, informationToAccountOwner?: string, statementLine?: string, bedrag?: any, isCredit?: boolean, tegenRekeningIban?: string, transactieDatum?: any, tegenRekening?: { rekeninghouder?: string } }> }>, saldos?: Array<{ maandnummer?: number, startSaldo?: any, eindSaldo?: any, mutatie?: any }> } };
+export type GetHuishoudenOverzichtQuery = {overzicht?: {afspraken?: Array<{id?: number, burgerId?: number, omschrijving?: string, rekeninghouder?: string, validFrom?: string, validThrough?: string, transactions?: Array<{id?: number, informationToAccountOwner?: string, statementLine?: string, bedrag?: any, isCredit?: boolean, tegenRekeningIban?: string, transactieDatum?: any, tegenRekening?: {rekeninghouder?: string}}>}>, saldos?: Array<{maandnummer?: number, startSaldo?: any, eindSaldo?: any, mutatie?: any}>}};
 
-export type GetHuishoudensQueryVariables = Exact<{ [key: string]: never; }>;
+export type GetHuishoudensQueryVariables = Exact<{[key: string]: never;}>;
 
 
-export type GetHuishoudensQuery = { burgers?: Array<{ id?: number, voorletters?: string, voornamen?: string, achternaam?: string, huishoudenId?: number }> };
+export type GetHuishoudensQuery = {burgers?: Array<{id?: number, voorletters?: string, voornamen?: string, achternaam?: string, huishoudenId?: number}>};
 
 export type GetOrganisatieQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type GetOrganisatieQuery = { organisatie?: { id?: number, naam?: string, kvknummer?: string, vestigingsnummer?: string, afdelingen?: Array<{ id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }> } };
+export type GetOrganisatieQuery = {organisatie?: {id?: number, naam?: string, kvknummer?: string, vestigingsnummer?: string, afdelingen?: Array<{id?: number, naam?: string, organisatie?: {id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string}, postadressen?: Array<{id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string}>, rekeningen?: Array<{id?: number, iban?: string, rekeninghouder?: string}>}>}};
 
-export type GetOrganisatiesQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type GetOrganisatiesQuery = { organisaties?: Array<{ id?: number, naam?: string, kvknummer?: string, vestigingsnummer?: string, afdelingen?: Array<{ id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }> }> };
-
-export type GetSimpleOrganisatiesQueryVariables = Exact<{ [key: string]: never; }>;
+export type GetOrganisatiesQueryVariables = Exact<{[key: string]: never;}>;
 
 
-export type GetSimpleOrganisatiesQuery = { organisaties?: Array<{ id?: number, naam?: string }> };
+export type GetOrganisatiesQuery = {organisaties?: Array<{id?: number, naam?: string, kvknummer?: string, vestigingsnummer?: string, afdelingen?: Array<{id?: number, naam?: string, organisatie?: {id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string}, postadressen?: Array<{id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string}>, rekeningen?: Array<{id?: number, iban?: string, rekeninghouder?: string}>}>}>};
+
+export type GetSimpleOrganisatiesQueryVariables = Exact<{[key: string]: never;}>;
+
+
+export type GetSimpleOrganisatiesQuery = {organisaties?: Array<{id?: number, naam?: string}>};
 
 export type GetRekeningQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type GetRekeningQuery = { rekening?: { id?: number, iban?: string, rekeninghouder?: string } };
+export type GetRekeningQuery = {rekening?: {id?: number, iban?: string, rekeninghouder?: string}};
 
-export type GetRekeningenQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type GetRekeningenQuery = { rekeningen?: Array<{ id?: number, rekeninghouder?: string, iban?: string }> };
-
-export type GetReportingDataQueryVariables = Exact<{ [key: string]: never; }>;
+export type GetRekeningenQueryVariables = Exact<{[key: string]: never;}>;
 
 
-export type GetReportingDataQuery = { burgers?: Array<{ id?: number, voornamen?: string, achternaam?: string, voorletters?: string }>, bankTransactions?: Array<{ id?: number, informationToAccountOwner?: string, statementLine?: string, bedrag?: any, isCredit?: boolean, tegenRekeningIban?: string, transactieDatum?: any, tegenRekening?: { iban?: string, rekeninghouder?: string }, journaalpost?: { id?: number, isAutomatischGeboekt?: boolean, afspraak?: { id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, validFrom?: any, validThrough?: any, burger?: { id?: number }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string } } }, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } } }>, rubrieken?: Array<{ id?: number, naam?: string }> };
+export type GetRekeningenQuery = {rekeningen?: Array<{id?: number, rekeninghouder?: string, iban?: string}>};
 
-export type GetRubriekenQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type GetRubriekenQuery = { rubrieken?: Array<{ id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string } }> };
-
-export type GetRubriekenConfiguratieQueryVariables = Exact<{ [key: string]: never; }>;
+export type GetReportingDataQueryVariables = Exact<{[key: string]: never;}>;
 
 
-export type GetRubriekenConfiguratieQuery = { rubrieken?: Array<{ id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, omschrijving?: string } }>, grootboekrekeningen?: Array<{ id: string, naam?: string, omschrijving?: string }> };
+export type GetReportingDataQuery = {burgers?: Array<{id?: number, voornamen?: string, achternaam?: string, voorletters?: string}>, bankTransactions?: Array<{id?: number, informationToAccountOwner?: string, statementLine?: string, bedrag?: any, isCredit?: boolean, tegenRekeningIban?: string, transactieDatum?: any, tegenRekening?: {iban?: string, rekeninghouder?: string}, journaalpost?: {id?: number, isAutomatischGeboekt?: boolean, afspraak?: {id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, validFrom?: any, validThrough?: any, burger?: {id?: number}, afdeling?: {id?: number, naam?: string, organisatie?: {id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string}}}, grootboekrekening?: {id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: {id?: number, naam?: string}}}}>, rubrieken?: Array<{id?: number, naam?: string}>};
+
+export type GetRubriekenQueryVariables = Exact<{[key: string]: never;}>;
+
+
+export type GetRubriekenQuery = {rubrieken?: Array<{id?: number, naam?: string, grootboekrekening?: {id: string, naam?: string}}>};
+
+export type GetRubriekenConfiguratieQueryVariables = Exact<{[key: string]: never;}>;
+
+
+export type GetRubriekenConfiguratieQuery = {rubrieken?: Array<{id?: number, naam?: string, grootboekrekening?: {id: string, naam?: string, omschrijving?: string}}>, grootboekrekeningen?: Array<{id: string, naam?: string, omschrijving?: string}>};
 
 export type GetSaldoQueryVariables = Exact<{
   burgers: Array<Scalars['Int']> | Scalars['Int'];
@@ -2292,7 +2265,7 @@ export type GetSaldoQueryVariables = Exact<{
 }>;
 
 
-export type GetSaldoQuery = { saldo?: { saldo?: any } };
+export type GetSaldoQuery = {saldo?: {saldo?: any}};
 
 export type GetSearchAfsprakenQueryVariables = Exact<{
   offset?: InputMaybe<Scalars['Int']>;
@@ -2308,41 +2281,48 @@ export type GetSearchAfsprakenQueryVariables = Exact<{
 }>;
 
 
-export type GetSearchAfsprakenQuery = { searchAfspraken?: { afspraken?: Array<{ id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, validFrom?: any, validThrough?: any, burger?: { id?: number, voornamen?: string, voorletters?: string, achternaam?: string } }>, pageInfo?: { count?: number, limit?: number, start?: number } } };
+export type GetSearchAfsprakenQuery = {searchAfspraken?: {afspraken?: Array<{id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, validFrom?: any, validThrough?: any, burger?: {id?: number, voornamen?: string, voorletters?: string, achternaam?: string}}>, pageInfo?: {count?: number, limit?: number, start?: number}}};
 
-export type GetSignalenAndBurgersQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type GetSignalenAndBurgersQuery = { signalen?: Array<{ id?: string, isActive?: boolean, type?: string, actions?: Array<string>, bedragDifference?: string, timeUpdated?: string, alarm?: { id?: string, afspraak?: { id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, burgerId?: number } }, bankTransactions?: Array<{ id?: number, bedrag?: any, isCredit?: boolean }> }>, burgers?: Array<{ id?: number, voorletters?: string, voornamen?: string, achternaam?: string }> };
-
-export type GetSignalenQueryVariables = Exact<{ [key: string]: never; }>;
+export type GetSignalsPagedQueryVariables = Exact<{
+  input?: InputMaybe<SignalsPagedRequest>;
+}>;
 
 
-export type GetSignalenQuery = { signalen?: Array<{ id?: string, isActive?: boolean }> };
+export type GetSignalsPagedQuery = {Signals_GetPaged?: {data?: Array<{alarmId?: string, createdAt?: any, id?: string, isActive?: boolean, journalEntryIds?: Array<string>, offByAmount?: number, signalType?: number, updatedAt?: any, agreement?: {id?: number, omschrijving?: string}, citizen?: {id?: number, voornamen?: string, achternaam?: string, voorletters?: string}, journalEntries?: Array<{id?: number, transaction?: {id?: number, bedrag?: any}}>}>, PageInfo?: {skip?: number, take?: number, total_count?: number}}};
+
+export type GetCitizensSignalsFilterQueryVariables = Exact<{[key: string]: never;}>;
+
+
+export type GetCitizensSignalsFilterQuery = {burgers?: Array<{id?: number, uuid?: any, voornamen?: string, achternaam?: string}>};
+
+export type GetSignalsCountQueryVariables = Exact<{[key: string]: never;}>;
+
+
+export type GetSignalsCountQuery = {Signals_GetActiveSignalsCount?: {count?: number}};
 
 export type GetSimilarAfsprakenQueryVariables = Exact<{
   ids?: InputMaybe<Array<InputMaybe<Scalars['Int']>> | InputMaybe<Scalars['Int']>>;
 }>;
 
 
-export type GetSimilarAfsprakenQuery = { afspraken?: Array<{ id?: number, similarAfspraken?: Array<{ id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, validThrough?: any, validFrom?: any, burger?: { voorletters?: string, voornamen?: string, achternaam?: string } }> }> };
+export type GetSimilarAfsprakenQuery = {afspraken?: Array<{id?: number, similarAfspraken?: Array<{id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, validThrough?: any, validFrom?: any, burger?: {voorletters?: string, voornamen?: string, achternaam?: string}}>}>};
 
-export type GetSimpleBurgersQueryVariables = Exact<{ [key: string]: never; }>;
+export type GetSimpleBurgersQueryVariables = Exact<{[key: string]: never;}>;
 
 
-export type GetSimpleBurgersQuery = { burgers?: Array<{ id?: number, bsn?: number, voorletters?: string, achternaam?: string }> };
+export type GetSimpleBurgersQuery = {burgers?: Array<{id?: number, bsn?: number, voorletters?: string, achternaam?: string}>};
 
 export type GetTransactieQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type GetTransactieQuery = { bankTransaction?: { id?: number, informationToAccountOwner?: string, statementLine?: string, bedrag?: any, isCredit?: boolean, tegenRekeningIban?: string, transactieDatum?: any, tegenRekening?: { iban?: string, rekeninghouder?: string }, journaalpost?: { id?: number, isAutomatischGeboekt?: boolean, afspraak?: { id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, burger?: { voornamen?: string, voorletters?: string, achternaam?: string, id?: number }, rubriek?: { id?: number, naam?: string } }, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } } } };
+export type GetTransactieQuery = {bankTransaction?: {id?: number, informationToAccountOwner?: string, statementLine?: string, bedrag?: any, isCredit?: boolean, tegenRekeningIban?: string, transactieDatum?: any, tegenRekening?: {iban?: string, rekeninghouder?: string}, journaalpost?: {id?: number, isAutomatischGeboekt?: boolean, afspraak?: {id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, burger?: {voornamen?: string, voorletters?: string, achternaam?: string, id?: number}, rubriek?: {id?: number, naam?: string}}, grootboekrekening?: {id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: {id?: number, naam?: string}}}}};
 
-export type GetTransactionItemFormDataQueryVariables = Exact<{ [key: string]: never; }>;
+export type GetTransactionItemFormDataQueryVariables = Exact<{[key: string]: never;}>;
 
 
-export type GetTransactionItemFormDataQuery = { rubrieken?: Array<{ id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string } }>, afspraken?: Array<{ id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, validFrom?: any, validThrough?: any, betaalinstructie?: { byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string }, burger?: { id?: number, bsn?: number, voornamen?: string, voorletters?: string, achternaam?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, alarm?: { id?: string, isActive?: boolean, bedrag?: any, bedragMargin?: any, startDate?: string, endDate?: string, datumMargin?: number, byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, afspraak?: { id?: number }, signaal?: { id?: string } }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, postadres?: { id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string }, rubriek?: { id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } }, matchingAfspraken?: Array<{ id?: number, credit?: boolean, zoektermen?: Array<string>, bedrag?: any, omschrijving?: string, burger?: { voorletters?: string, voornamen?: string, achternaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string } }> }> };
+export type GetTransactionItemFormDataQuery = {rubrieken?: Array<{id?: number, naam?: string, grootboekrekening?: {id: string, naam?: string}}>, afspraken?: Array<{id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, validFrom?: any, validThrough?: any, betaalinstructie?: {byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string}, burger?: {id?: number, bsn?: number, voornamen?: string, voorletters?: string, achternaam?: string, plaatsnaam?: string, rekeningen?: Array<{id?: number, iban?: string, rekeninghouder?: string}>}, afdeling?: {id?: number, naam?: string, organisatie?: {id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string}, postadressen?: Array<{id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string}>, rekeningen?: Array<{id?: number, iban?: string, rekeninghouder?: string}>}, postadres?: {id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string}, tegenRekening?: {id?: number, iban?: string, rekeninghouder?: string}, rubriek?: {id?: number, naam?: string, grootboekrekening?: {id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: {id?: number, naam?: string}}}, matchingAfspraken?: Array<{id?: number, credit?: boolean, zoektermen?: Array<string>, bedrag?: any, omschrijving?: string, burger?: {voorletters?: string, voornamen?: string, achternaam?: string}, tegenRekening?: {id?: number, iban?: string, rekeninghouder?: string}}>}>};
 
 export type GetTransactiesQueryVariables = Exact<{
   offset: Scalars['Int'];
@@ -2351,7 +2331,7 @@ export type GetTransactiesQueryVariables = Exact<{
 }>;
 
 
-export type GetTransactiesQuery = { bankTransactionsPaged?: { banktransactions?: Array<{ id?: number, informationToAccountOwner?: string, statementLine?: string, bedrag?: any, isCredit?: boolean, tegenRekeningIban?: string, transactieDatum?: any }>, pageInfo?: { count?: number, limit?: number, start?: number } } };
+export type GetTransactiesQuery = {bankTransactionsPaged?: {banktransactions?: Array<{id?: number, informationToAccountOwner?: string, statementLine?: string, bedrag?: any, isCredit?: boolean, tegenRekeningIban?: string, transactieDatum?: any}>, pageInfo?: {count?: number, limit?: number, start?: number}}};
 
 export type SearchTransactiesQueryVariables = Exact<{
   offset: Scalars['Int'];
@@ -2360,7 +2340,14 @@ export type SearchTransactiesQueryVariables = Exact<{
 }>;
 
 
-export type SearchTransactiesQuery = { searchTransacties?: { banktransactions?: Array<{ id?: number, informationToAccountOwner?: string, statementLine?: string, bedrag?: any, isCredit?: boolean, isGeboekt?: boolean, transactieDatum?: any, journaalpost?: { id?: number, rubriek?: { naam?: string } }, tegenRekening?: { iban?: string, rekeninghouder?: string } }>, pageInfo?: { count?: number, limit?: number, start?: number } } };
+export type SearchTransactiesQuery = {searchTransacties?: {banktransactions?: Array<{id?: number, informationToAccountOwner?: string, statementLine?: string, bedrag?: any, isCredit?: boolean, isGeboekt?: boolean, transactieDatum?: any, journaalpost?: {id?: number, rubriek?: {naam?: string}}, tegenRekening?: {iban?: string, rekeninghouder?: string}}>, pageInfo?: {count?: number, limit?: number, start?: number}}};
+
+export type GetUserActivitiesQueryVariables = Exact<{
+  input?: InputMaybe<UserActivitiesPagedRequest>;
+}>;
+
+
+export type GetUserActivitiesQuery = {UserActivities_GetUserActivitiesPaged?: {data?: Array<{id?: string, timestamp?: any, user?: string, action?: string, entities?: Array<{entityType?: string, entityId?: string, huishouden?: {id?: number, burgers?: Array<{id?: number, voorletters?: string, voornamen?: string, achternaam?: string}>}, burger?: {id?: number, voorletters?: string, voornamen?: string, achternaam?: string}, organisatie?: {id?: number, naam?: string, kvknummer?: string, vestigingsnummer?: string}, afspraak?: {id?: number, burger?: {id?: number, voornamen?: string, voorletters?: string, achternaam?: string}, afdeling?: {id?: number, naam?: string, organisatie?: {id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string}}}, rekening?: {id?: number, iban?: string, rekeninghouder?: string}, customerStatementMessage?: {id?: number, filename?: string, bankTransactions?: Array<{id?: number}>}, configuratie?: {id?: string, waarde?: string}, rubriek?: {id?: number, naam?: string}, afdeling?: {id?: number, naam?: string, organisatie?: {id?: number, naam?: string}}, postadres?: {id?: string}, export?: {id?: number, naam?: string}}>, meta?: {userAgent?: string, ip?: string, applicationVersion?: string}}>, PageInfo?: {total_count?: number}}};
 
 
 export const AddAfspraakZoektermDocument = gql`
@@ -2406,9 +2393,9 @@ export type AddAfspraakZoektermMutationFn = Apollo.MutationFunction<AddAfspraakZ
  * });
  */
 export function useAddAfspraakZoektermMutation(baseOptions?: Apollo.MutationHookOptions<AddAfspraakZoektermMutation, AddAfspraakZoektermMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<AddAfspraakZoektermMutation, AddAfspraakZoektermMutationVariables>(AddAfspraakZoektermDocument, options);
-      }
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useMutation<AddAfspraakZoektermMutation, AddAfspraakZoektermMutationVariables>(AddAfspraakZoektermDocument, options);
+}
 export type AddAfspraakZoektermMutationHookResult = ReturnType<typeof useAddAfspraakZoektermMutation>;
 export type AddAfspraakZoektermMutationResult = Apollo.MutationResult<AddAfspraakZoektermMutation>;
 export type AddAfspraakZoektermMutationOptions = Apollo.BaseMutationOptions<AddAfspraakZoektermMutation, AddAfspraakZoektermMutationVariables>;
@@ -2440,9 +2427,9 @@ export type AddHuishoudenBurgerMutationFn = Apollo.MutationFunction<AddHuishoude
  * });
  */
 export function useAddHuishoudenBurgerMutation(baseOptions?: Apollo.MutationHookOptions<AddHuishoudenBurgerMutation, AddHuishoudenBurgerMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<AddHuishoudenBurgerMutation, AddHuishoudenBurgerMutationVariables>(AddHuishoudenBurgerDocument, options);
-      }
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useMutation<AddHuishoudenBurgerMutation, AddHuishoudenBurgerMutationVariables>(AddHuishoudenBurgerDocument, options);
+}
 export type AddHuishoudenBurgerMutationHookResult = ReturnType<typeof useAddHuishoudenBurgerMutation>;
 export type AddHuishoudenBurgerMutationResult = Apollo.MutationResult<AddHuishoudenBurgerMutation>;
 export type AddHuishoudenBurgerMutationOptions = Apollo.BaseMutationOptions<AddHuishoudenBurgerMutation, AddHuishoudenBurgerMutationVariables>;
@@ -2500,9 +2487,9 @@ export type CreateAfdelingMutationFn = Apollo.MutationFunction<CreateAfdelingMut
  * });
  */
 export function useCreateAfdelingMutation(baseOptions?: Apollo.MutationHookOptions<CreateAfdelingMutation, CreateAfdelingMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<CreateAfdelingMutation, CreateAfdelingMutationVariables>(CreateAfdelingDocument, options);
-      }
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useMutation<CreateAfdelingMutation, CreateAfdelingMutationVariables>(CreateAfdelingDocument, options);
+}
 export type CreateAfdelingMutationHookResult = ReturnType<typeof useCreateAfdelingMutation>;
 export type CreateAfdelingMutationResult = Apollo.MutationResult<CreateAfdelingMutation>;
 export type CreateAfdelingMutationOptions = Apollo.BaseMutationOptions<CreateAfdelingMutation, CreateAfdelingMutationVariables>;
@@ -2538,24 +2525,6 @@ export const CreateAfspraakDocument = gql`
           id
           iban
           rekeninghouder
-        }
-      }
-      alarm {
-        id
-        isActive
-        bedrag
-        bedragMargin
-        startDate
-        endDate
-        datumMargin
-        byDay
-        byMonth
-        byMonthDay
-        afspraak {
-          id
-        }
-        signaal {
-          id
         }
       }
       afdeling {
@@ -2648,34 +2617,16 @@ export type CreateAfspraakMutationFn = Apollo.MutationFunction<CreateAfspraakMut
  * });
  */
 export function useCreateAfspraakMutation(baseOptions?: Apollo.MutationHookOptions<CreateAfspraakMutation, CreateAfspraakMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<CreateAfspraakMutation, CreateAfspraakMutationVariables>(CreateAfspraakDocument, options);
-      }
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useMutation<CreateAfspraakMutation, CreateAfspraakMutationVariables>(CreateAfspraakDocument, options);
+}
 export type CreateAfspraakMutationHookResult = ReturnType<typeof useCreateAfspraakMutation>;
 export type CreateAfspraakMutationResult = Apollo.MutationResult<CreateAfspraakMutation>;
 export type CreateAfspraakMutationOptions = Apollo.BaseMutationOptions<CreateAfspraakMutation, CreateAfspraakMutationVariables>;
 export const CreateAlarmDocument = gql`
-    mutation createAlarm($input: CreateAlarmInput!) {
-  createAlarm(input: $input) {
-    ok
-    alarm {
-      id
-      isActive
-      bedrag
-      bedragMargin
-      startDate
-      endDate
-      datumMargin
-      byDay
-      byMonth
-      byMonthDay
-      afspraak {
-        id
-      }
-      signaal {
-        id
-      }
-    }
+    mutation createAlarm($input: CreateAlarmRequest!) {
+  Alarms_Create(input: $input) {
+    id
   }
 }
     `;
@@ -2699,9 +2650,9 @@ export type CreateAlarmMutationFn = Apollo.MutationFunction<CreateAlarmMutation,
  * });
  */
 export function useCreateAlarmMutation(baseOptions?: Apollo.MutationHookOptions<CreateAlarmMutation, CreateAlarmMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<CreateAlarmMutation, CreateAlarmMutationVariables>(CreateAlarmDocument, options);
-      }
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useMutation<CreateAlarmMutation, CreateAlarmMutationVariables>(CreateAlarmDocument, options);
+}
 export type CreateAlarmMutationHookResult = ReturnType<typeof useCreateAlarmMutation>;
 export type CreateAlarmMutationResult = Apollo.MutationResult<CreateAlarmMutation>;
 export type CreateAlarmMutationOptions = Apollo.BaseMutationOptions<CreateAlarmMutation, CreateAlarmMutationVariables>;
@@ -2755,24 +2706,6 @@ export const CreateBurgerDocument = gql`
             id
             iban
             rekeninghouder
-          }
-        }
-        alarm {
-          id
-          isActive
-          bedrag
-          bedragMargin
-          startDate
-          endDate
-          datumMargin
-          byDay
-          byMonth
-          byMonthDay
-          afspraak {
-            id
-          }
-          signaal {
-            id
           }
         }
         afdeling {
@@ -2872,9 +2805,9 @@ export type CreateBurgerMutationFn = Apollo.MutationFunction<CreateBurgerMutatio
  * });
  */
 export function useCreateBurgerMutation(baseOptions?: Apollo.MutationHookOptions<CreateBurgerMutation, CreateBurgerMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<CreateBurgerMutation, CreateBurgerMutationVariables>(CreateBurgerDocument, options);
-      }
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useMutation<CreateBurgerMutation, CreateBurgerMutationVariables>(CreateBurgerDocument, options);
+}
 export type CreateBurgerMutationHookResult = ReturnType<typeof useCreateBurgerMutation>;
 export type CreateBurgerMutationResult = Apollo.MutationResult<CreateBurgerMutation>;
 export type CreateBurgerMutationOptions = Apollo.BaseMutationOptions<CreateBurgerMutation, CreateBurgerMutationVariables>;
@@ -2911,9 +2844,9 @@ export type CreateBurgerRekeningMutationFn = Apollo.MutationFunction<CreateBurge
  * });
  */
 export function useCreateBurgerRekeningMutation(baseOptions?: Apollo.MutationHookOptions<CreateBurgerRekeningMutation, CreateBurgerRekeningMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<CreateBurgerRekeningMutation, CreateBurgerRekeningMutationVariables>(CreateBurgerRekeningDocument, options);
-      }
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useMutation<CreateBurgerRekeningMutation, CreateBurgerRekeningMutationVariables>(CreateBurgerRekeningDocument, options);
+}
 export type CreateBurgerRekeningMutationHookResult = ReturnType<typeof useCreateBurgerRekeningMutation>;
 export type CreateBurgerRekeningMutationResult = Apollo.MutationResult<CreateBurgerRekeningMutation>;
 export type CreateBurgerRekeningMutationOptions = Apollo.BaseMutationOptions<CreateBurgerRekeningMutation, CreateBurgerRekeningMutationVariables>;
@@ -2949,9 +2882,9 @@ export type CreateConfiguratieMutationFn = Apollo.MutationFunction<CreateConfigu
  * });
  */
 export function useCreateConfiguratieMutation(baseOptions?: Apollo.MutationHookOptions<CreateConfiguratieMutation, CreateConfiguratieMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<CreateConfiguratieMutation, CreateConfiguratieMutationVariables>(CreateConfiguratieDocument, options);
-      }
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useMutation<CreateConfiguratieMutation, CreateConfiguratieMutationVariables>(CreateConfiguratieDocument, options);
+}
 export type CreateConfiguratieMutationHookResult = ReturnType<typeof useCreateConfiguratieMutation>;
 export type CreateConfiguratieMutationResult = Apollo.MutationResult<CreateConfiguratieMutation>;
 export type CreateConfiguratieMutationOptions = Apollo.BaseMutationOptions<CreateConfiguratieMutation, CreateConfiguratieMutationVariables>;
@@ -2982,9 +2915,9 @@ export type CreateCustomerStatementMessageMutationFn = Apollo.MutationFunction<C
  * });
  */
 export function useCreateCustomerStatementMessageMutation(baseOptions?: Apollo.MutationHookOptions<CreateCustomerStatementMessageMutation, CreateCustomerStatementMessageMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<CreateCustomerStatementMessageMutation, CreateCustomerStatementMessageMutationVariables>(CreateCustomerStatementMessageDocument, options);
-      }
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useMutation<CreateCustomerStatementMessageMutation, CreateCustomerStatementMessageMutationVariables>(CreateCustomerStatementMessageDocument, options);
+}
 export type CreateCustomerStatementMessageMutationHookResult = ReturnType<typeof useCreateCustomerStatementMessageMutation>;
 export type CreateCustomerStatementMessageMutationResult = Apollo.MutationResult<CreateCustomerStatementMessageMutation>;
 export type CreateCustomerStatementMessageMutationOptions = Apollo.BaseMutationOptions<CreateCustomerStatementMessageMutation, CreateCustomerStatementMessageMutationVariables>;
@@ -3024,9 +2957,9 @@ export type CreateExportOverschrijvingenMutationFn = Apollo.MutationFunction<Cre
  * });
  */
 export function useCreateExportOverschrijvingenMutation(baseOptions?: Apollo.MutationHookOptions<CreateExportOverschrijvingenMutation, CreateExportOverschrijvingenMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<CreateExportOverschrijvingenMutation, CreateExportOverschrijvingenMutationVariables>(CreateExportOverschrijvingenDocument, options);
-      }
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useMutation<CreateExportOverschrijvingenMutation, CreateExportOverschrijvingenMutationVariables>(CreateExportOverschrijvingenDocument, options);
+}
 export type CreateExportOverschrijvingenMutationHookResult = ReturnType<typeof useCreateExportOverschrijvingenMutation>;
 export type CreateExportOverschrijvingenMutationResult = Apollo.MutationResult<CreateExportOverschrijvingenMutation>;
 export type CreateExportOverschrijvingenMutationOptions = Apollo.BaseMutationOptions<CreateExportOverschrijvingenMutation, CreateExportOverschrijvingenMutationVariables>;
@@ -3082,24 +3015,6 @@ export const CreateHuishoudenDocument = gql`
               id
               iban
               rekeninghouder
-            }
-          }
-          alarm {
-            id
-            isActive
-            bedrag
-            bedragMargin
-            startDate
-            endDate
-            datumMargin
-            byDay
-            byMonth
-            byMonthDay
-            afspraak {
-              id
-            }
-            signaal {
-              id
             }
           }
           afdeling {
@@ -3200,9 +3115,9 @@ export type CreateHuishoudenMutationFn = Apollo.MutationFunction<CreateHuishoude
  * });
  */
 export function useCreateHuishoudenMutation(baseOptions?: Apollo.MutationHookOptions<CreateHuishoudenMutation, CreateHuishoudenMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<CreateHuishoudenMutation, CreateHuishoudenMutationVariables>(CreateHuishoudenDocument, options);
-      }
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useMutation<CreateHuishoudenMutation, CreateHuishoudenMutationVariables>(CreateHuishoudenDocument, options);
+}
 export type CreateHuishoudenMutationHookResult = ReturnType<typeof useCreateHuishoudenMutation>;
 export type CreateHuishoudenMutationResult = Apollo.MutationResult<CreateHuishoudenMutation>;
 export type CreateHuishoudenMutationOptions = Apollo.BaseMutationOptions<CreateHuishoudenMutation, CreateHuishoudenMutationVariables>;
@@ -3216,9 +3131,6 @@ export const CreateJournaalpostAfspraakDocument = gql`
       id
       afspraak {
         id
-        alarm {
-          id
-        }
       }
     }
   }
@@ -3246,9 +3158,9 @@ export type CreateJournaalpostAfspraakMutationFn = Apollo.MutationFunction<Creat
  * });
  */
 export function useCreateJournaalpostAfspraakMutation(baseOptions?: Apollo.MutationHookOptions<CreateJournaalpostAfspraakMutation, CreateJournaalpostAfspraakMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<CreateJournaalpostAfspraakMutation, CreateJournaalpostAfspraakMutationVariables>(CreateJournaalpostAfspraakDocument, options);
-      }
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useMutation<CreateJournaalpostAfspraakMutation, CreateJournaalpostAfspraakMutationVariables>(CreateJournaalpostAfspraakDocument, options);
+}
 export type CreateJournaalpostAfspraakMutationHookResult = ReturnType<typeof useCreateJournaalpostAfspraakMutation>;
 export type CreateJournaalpostAfspraakMutationResult = Apollo.MutationResult<CreateJournaalpostAfspraakMutation>;
 export type CreateJournaalpostAfspraakMutationOptions = Apollo.BaseMutationOptions<CreateJournaalpostAfspraakMutation, CreateJournaalpostAfspraakMutationVariables>;
@@ -3285,9 +3197,9 @@ export type CreateJournaalpostGrootboekrekeningMutationFn = Apollo.MutationFunct
  * });
  */
 export function useCreateJournaalpostGrootboekrekeningMutation(baseOptions?: Apollo.MutationHookOptions<CreateJournaalpostGrootboekrekeningMutation, CreateJournaalpostGrootboekrekeningMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<CreateJournaalpostGrootboekrekeningMutation, CreateJournaalpostGrootboekrekeningMutationVariables>(CreateJournaalpostGrootboekrekeningDocument, options);
-      }
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useMutation<CreateJournaalpostGrootboekrekeningMutation, CreateJournaalpostGrootboekrekeningMutationVariables>(CreateJournaalpostGrootboekrekeningDocument, options);
+}
 export type CreateJournaalpostGrootboekrekeningMutationHookResult = ReturnType<typeof useCreateJournaalpostGrootboekrekeningMutation>;
 export type CreateJournaalpostGrootboekrekeningMutationResult = Apollo.MutationResult<CreateJournaalpostGrootboekrekeningMutation>;
 export type CreateJournaalpostGrootboekrekeningMutationOptions = Apollo.BaseMutationOptions<CreateJournaalpostGrootboekrekeningMutation, CreateJournaalpostGrootboekrekeningMutationVariables>;
@@ -3350,9 +3262,9 @@ export type CreateOrganisatieMutationFn = Apollo.MutationFunction<CreateOrganisa
  * });
  */
 export function useCreateOrganisatieMutation(baseOptions?: Apollo.MutationHookOptions<CreateOrganisatieMutation, CreateOrganisatieMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<CreateOrganisatieMutation, CreateOrganisatieMutationVariables>(CreateOrganisatieDocument, options);
-      }
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useMutation<CreateOrganisatieMutation, CreateOrganisatieMutationVariables>(CreateOrganisatieDocument, options);
+}
 export type CreateOrganisatieMutationHookResult = ReturnType<typeof useCreateOrganisatieMutation>;
 export type CreateOrganisatieMutationResult = Apollo.MutationResult<CreateOrganisatieMutation>;
 export type CreateOrganisatieMutationOptions = Apollo.BaseMutationOptions<CreateOrganisatieMutation, CreateOrganisatieMutationVariables>;
@@ -3389,9 +3301,9 @@ export type CreateAfdelingRekeningMutationFn = Apollo.MutationFunction<CreateAfd
  * });
  */
 export function useCreateAfdelingRekeningMutation(baseOptions?: Apollo.MutationHookOptions<CreateAfdelingRekeningMutation, CreateAfdelingRekeningMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<CreateAfdelingRekeningMutation, CreateAfdelingRekeningMutationVariables>(CreateAfdelingRekeningDocument, options);
-      }
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useMutation<CreateAfdelingRekeningMutation, CreateAfdelingRekeningMutationVariables>(CreateAfdelingRekeningDocument, options);
+}
 export type CreateAfdelingRekeningMutationHookResult = ReturnType<typeof useCreateAfdelingRekeningMutation>;
 export type CreateAfdelingRekeningMutationResult = Apollo.MutationResult<CreateAfdelingRekeningMutation>;
 export type CreateAfdelingRekeningMutationOptions = Apollo.BaseMutationOptions<CreateAfdelingRekeningMutation, CreateAfdelingRekeningMutationVariables>;
@@ -3431,9 +3343,9 @@ export type CreateAfdelingPostadresMutationFn = Apollo.MutationFunction<CreateAf
  * });
  */
 export function useCreateAfdelingPostadresMutation(baseOptions?: Apollo.MutationHookOptions<CreateAfdelingPostadresMutation, CreateAfdelingPostadresMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<CreateAfdelingPostadresMutation, CreateAfdelingPostadresMutationVariables>(CreateAfdelingPostadresDocument, options);
-      }
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useMutation<CreateAfdelingPostadresMutation, CreateAfdelingPostadresMutationVariables>(CreateAfdelingPostadresDocument, options);
+}
 export type CreateAfdelingPostadresMutationHookResult = ReturnType<typeof useCreateAfdelingPostadresMutation>;
 export type CreateAfdelingPostadresMutationResult = Apollo.MutationResult<CreateAfdelingPostadresMutation>;
 export type CreateAfdelingPostadresMutationOptions = Apollo.BaseMutationOptions<CreateAfdelingPostadresMutation, CreateAfdelingPostadresMutationVariables>;
@@ -3480,9 +3392,9 @@ export type CreateRubriekMutationFn = Apollo.MutationFunction<CreateRubriekMutat
  * });
  */
 export function useCreateRubriekMutation(baseOptions?: Apollo.MutationHookOptions<CreateRubriekMutation, CreateRubriekMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<CreateRubriekMutation, CreateRubriekMutationVariables>(CreateRubriekDocument, options);
-      }
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useMutation<CreateRubriekMutation, CreateRubriekMutationVariables>(CreateRubriekDocument, options);
+}
 export type CreateRubriekMutationHookResult = ReturnType<typeof useCreateRubriekMutation>;
 export type CreateRubriekMutationResult = Apollo.MutationResult<CreateRubriekMutation>;
 export type CreateRubriekMutationOptions = Apollo.BaseMutationOptions<CreateRubriekMutation, CreateRubriekMutationVariables>;
@@ -3513,9 +3425,9 @@ export type DeleteOrganisatieMutationFn = Apollo.MutationFunction<DeleteOrganisa
  * });
  */
 export function useDeleteOrganisatieMutation(baseOptions?: Apollo.MutationHookOptions<DeleteOrganisatieMutation, DeleteOrganisatieMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<DeleteOrganisatieMutation, DeleteOrganisatieMutationVariables>(DeleteOrganisatieDocument, options);
-      }
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useMutation<DeleteOrganisatieMutation, DeleteOrganisatieMutationVariables>(DeleteOrganisatieDocument, options);
+}
 export type DeleteOrganisatieMutationHookResult = ReturnType<typeof useDeleteOrganisatieMutation>;
 export type DeleteOrganisatieMutationResult = Apollo.MutationResult<DeleteOrganisatieMutation>;
 export type DeleteOrganisatieMutationOptions = Apollo.BaseMutationOptions<DeleteOrganisatieMutation, DeleteOrganisatieMutationVariables>;
@@ -3546,9 +3458,9 @@ export type DeleteAfdelingMutationFn = Apollo.MutationFunction<DeleteAfdelingMut
  * });
  */
 export function useDeleteAfdelingMutation(baseOptions?: Apollo.MutationHookOptions<DeleteAfdelingMutation, DeleteAfdelingMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<DeleteAfdelingMutation, DeleteAfdelingMutationVariables>(DeleteAfdelingDocument, options);
-      }
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useMutation<DeleteAfdelingMutation, DeleteAfdelingMutationVariables>(DeleteAfdelingDocument, options);
+}
 export type DeleteAfdelingMutationHookResult = ReturnType<typeof useDeleteAfdelingMutation>;
 export type DeleteAfdelingMutationResult = Apollo.MutationResult<DeleteAfdelingMutation>;
 export type DeleteAfdelingMutationOptions = Apollo.BaseMutationOptions<DeleteAfdelingMutation, DeleteAfdelingMutationVariables>;
@@ -3580,9 +3492,9 @@ export type DeleteAfdelingPostadresMutationFn = Apollo.MutationFunction<DeleteAf
  * });
  */
 export function useDeleteAfdelingPostadresMutation(baseOptions?: Apollo.MutationHookOptions<DeleteAfdelingPostadresMutation, DeleteAfdelingPostadresMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<DeleteAfdelingPostadresMutation, DeleteAfdelingPostadresMutationVariables>(DeleteAfdelingPostadresDocument, options);
-      }
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useMutation<DeleteAfdelingPostadresMutation, DeleteAfdelingPostadresMutationVariables>(DeleteAfdelingPostadresDocument, options);
+}
 export type DeleteAfdelingPostadresMutationHookResult = ReturnType<typeof useDeleteAfdelingPostadresMutation>;
 export type DeleteAfdelingPostadresMutationResult = Apollo.MutationResult<DeleteAfdelingPostadresMutation>;
 export type DeleteAfdelingPostadresMutationOptions = Apollo.BaseMutationOptions<DeleteAfdelingPostadresMutation, DeleteAfdelingPostadresMutationVariables>;
@@ -3613,9 +3525,9 @@ export type DeleteAfspraakMutationFn = Apollo.MutationFunction<DeleteAfspraakMut
  * });
  */
 export function useDeleteAfspraakMutation(baseOptions?: Apollo.MutationHookOptions<DeleteAfspraakMutation, DeleteAfspraakMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<DeleteAfspraakMutation, DeleteAfspraakMutationVariables>(DeleteAfspraakDocument, options);
-      }
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useMutation<DeleteAfspraakMutation, DeleteAfspraakMutationVariables>(DeleteAfspraakDocument, options);
+}
 export type DeleteAfspraakMutationHookResult = ReturnType<typeof useDeleteAfspraakMutation>;
 export type DeleteAfspraakMutationResult = Apollo.MutationResult<DeleteAfspraakMutation>;
 export type DeleteAfspraakMutationOptions = Apollo.BaseMutationOptions<DeleteAfspraakMutation, DeleteAfspraakMutationVariables>;
@@ -3646,9 +3558,9 @@ export type DeleteAfspraakBetaalinstructieMutationFn = Apollo.MutationFunction<D
  * });
  */
 export function useDeleteAfspraakBetaalinstructieMutation(baseOptions?: Apollo.MutationHookOptions<DeleteAfspraakBetaalinstructieMutation, DeleteAfspraakBetaalinstructieMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<DeleteAfspraakBetaalinstructieMutation, DeleteAfspraakBetaalinstructieMutationVariables>(DeleteAfspraakBetaalinstructieDocument, options);
-      }
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useMutation<DeleteAfspraakBetaalinstructieMutation, DeleteAfspraakBetaalinstructieMutationVariables>(DeleteAfspraakBetaalinstructieDocument, options);
+}
 export type DeleteAfspraakBetaalinstructieMutationHookResult = ReturnType<typeof useDeleteAfspraakBetaalinstructieMutation>;
 export type DeleteAfspraakBetaalinstructieMutationResult = Apollo.MutationResult<DeleteAfspraakBetaalinstructieMutation>;
 export type DeleteAfspraakBetaalinstructieMutationOptions = Apollo.BaseMutationOptions<DeleteAfspraakBetaalinstructieMutation, DeleteAfspraakBetaalinstructieMutationVariables>;
@@ -3695,16 +3607,16 @@ export type DeleteAfspraakZoektermMutationFn = Apollo.MutationFunction<DeleteAfs
  * });
  */
 export function useDeleteAfspraakZoektermMutation(baseOptions?: Apollo.MutationHookOptions<DeleteAfspraakZoektermMutation, DeleteAfspraakZoektermMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<DeleteAfspraakZoektermMutation, DeleteAfspraakZoektermMutationVariables>(DeleteAfspraakZoektermDocument, options);
-      }
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useMutation<DeleteAfspraakZoektermMutation, DeleteAfspraakZoektermMutationVariables>(DeleteAfspraakZoektermDocument, options);
+}
 export type DeleteAfspraakZoektermMutationHookResult = ReturnType<typeof useDeleteAfspraakZoektermMutation>;
 export type DeleteAfspraakZoektermMutationResult = Apollo.MutationResult<DeleteAfspraakZoektermMutation>;
 export type DeleteAfspraakZoektermMutationOptions = Apollo.BaseMutationOptions<DeleteAfspraakZoektermMutation, DeleteAfspraakZoektermMutationVariables>;
 export const DeleteAlarmDocument = gql`
-    mutation deleteAlarm($id: String!) {
-  deleteAlarm(id: $id) {
-    ok
+    mutation deleteAlarm($input: AlarmId!) {
+  Alarms_Delete(input: $input) {
+    deleted
   }
 }
     `;
@@ -3723,14 +3635,14 @@ export type DeleteAlarmMutationFn = Apollo.MutationFunction<DeleteAlarmMutation,
  * @example
  * const [deleteAlarmMutation, { data, loading, error }] = useDeleteAlarmMutation({
  *   variables: {
- *      id: // value for 'id'
+ *      input: // value for 'input'
  *   },
  * });
  */
 export function useDeleteAlarmMutation(baseOptions?: Apollo.MutationHookOptions<DeleteAlarmMutation, DeleteAlarmMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<DeleteAlarmMutation, DeleteAlarmMutationVariables>(DeleteAlarmDocument, options);
-      }
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useMutation<DeleteAlarmMutation, DeleteAlarmMutationVariables>(DeleteAlarmDocument, options);
+}
 export type DeleteAlarmMutationHookResult = ReturnType<typeof useDeleteAlarmMutation>;
 export type DeleteAlarmMutationResult = Apollo.MutationResult<DeleteAlarmMutation>;
 export type DeleteAlarmMutationOptions = Apollo.BaseMutationOptions<DeleteAlarmMutation, DeleteAlarmMutationVariables>;
@@ -3761,9 +3673,9 @@ export type DeleteBurgerMutationFn = Apollo.MutationFunction<DeleteBurgerMutatio
  * });
  */
 export function useDeleteBurgerMutation(baseOptions?: Apollo.MutationHookOptions<DeleteBurgerMutation, DeleteBurgerMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<DeleteBurgerMutation, DeleteBurgerMutationVariables>(DeleteBurgerDocument, options);
-      }
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useMutation<DeleteBurgerMutation, DeleteBurgerMutationVariables>(DeleteBurgerDocument, options);
+}
 export type DeleteBurgerMutationHookResult = ReturnType<typeof useDeleteBurgerMutation>;
 export type DeleteBurgerMutationResult = Apollo.MutationResult<DeleteBurgerMutation>;
 export type DeleteBurgerMutationOptions = Apollo.BaseMutationOptions<DeleteBurgerMutation, DeleteBurgerMutationVariables>;
@@ -3795,9 +3707,9 @@ export type DeleteBurgerRekeningMutationFn = Apollo.MutationFunction<DeleteBurge
  * });
  */
 export function useDeleteBurgerRekeningMutation(baseOptions?: Apollo.MutationHookOptions<DeleteBurgerRekeningMutation, DeleteBurgerRekeningMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<DeleteBurgerRekeningMutation, DeleteBurgerRekeningMutationVariables>(DeleteBurgerRekeningDocument, options);
-      }
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useMutation<DeleteBurgerRekeningMutation, DeleteBurgerRekeningMutationVariables>(DeleteBurgerRekeningDocument, options);
+}
 export type DeleteBurgerRekeningMutationHookResult = ReturnType<typeof useDeleteBurgerRekeningMutation>;
 export type DeleteBurgerRekeningMutationResult = Apollo.MutationResult<DeleteBurgerRekeningMutation>;
 export type DeleteBurgerRekeningMutationOptions = Apollo.BaseMutationOptions<DeleteBurgerRekeningMutation, DeleteBurgerRekeningMutationVariables>;
@@ -3828,9 +3740,9 @@ export type DeleteConfiguratieMutationFn = Apollo.MutationFunction<DeleteConfigu
  * });
  */
 export function useDeleteConfiguratieMutation(baseOptions?: Apollo.MutationHookOptions<DeleteConfiguratieMutation, DeleteConfiguratieMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<DeleteConfiguratieMutation, DeleteConfiguratieMutationVariables>(DeleteConfiguratieDocument, options);
-      }
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useMutation<DeleteConfiguratieMutation, DeleteConfiguratieMutationVariables>(DeleteConfiguratieDocument, options);
+}
 export type DeleteConfiguratieMutationHookResult = ReturnType<typeof useDeleteConfiguratieMutation>;
 export type DeleteConfiguratieMutationResult = Apollo.MutationResult<DeleteConfiguratieMutation>;
 export type DeleteConfiguratieMutationOptions = Apollo.BaseMutationOptions<DeleteConfiguratieMutation, DeleteConfiguratieMutationVariables>;
@@ -3861,9 +3773,9 @@ export type DeleteCustomerStatementMessageMutationFn = Apollo.MutationFunction<D
  * });
  */
 export function useDeleteCustomerStatementMessageMutation(baseOptions?: Apollo.MutationHookOptions<DeleteCustomerStatementMessageMutation, DeleteCustomerStatementMessageMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<DeleteCustomerStatementMessageMutation, DeleteCustomerStatementMessageMutationVariables>(DeleteCustomerStatementMessageDocument, options);
-      }
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useMutation<DeleteCustomerStatementMessageMutation, DeleteCustomerStatementMessageMutationVariables>(DeleteCustomerStatementMessageDocument, options);
+}
 export type DeleteCustomerStatementMessageMutationHookResult = ReturnType<typeof useDeleteCustomerStatementMessageMutation>;
 export type DeleteCustomerStatementMessageMutationResult = Apollo.MutationResult<DeleteCustomerStatementMessageMutation>;
 export type DeleteCustomerStatementMessageMutationOptions = Apollo.BaseMutationOptions<DeleteCustomerStatementMessageMutation, DeleteCustomerStatementMessageMutationVariables>;
@@ -3895,9 +3807,9 @@ export type DeleteHuishoudenBurgerMutationFn = Apollo.MutationFunction<DeleteHui
  * });
  */
 export function useDeleteHuishoudenBurgerMutation(baseOptions?: Apollo.MutationHookOptions<DeleteHuishoudenBurgerMutation, DeleteHuishoudenBurgerMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<DeleteHuishoudenBurgerMutation, DeleteHuishoudenBurgerMutationVariables>(DeleteHuishoudenBurgerDocument, options);
-      }
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useMutation<DeleteHuishoudenBurgerMutation, DeleteHuishoudenBurgerMutationVariables>(DeleteHuishoudenBurgerDocument, options);
+}
 export type DeleteHuishoudenBurgerMutationHookResult = ReturnType<typeof useDeleteHuishoudenBurgerMutation>;
 export type DeleteHuishoudenBurgerMutationResult = Apollo.MutationResult<DeleteHuishoudenBurgerMutation>;
 export type DeleteHuishoudenBurgerMutationOptions = Apollo.BaseMutationOptions<DeleteHuishoudenBurgerMutation, DeleteHuishoudenBurgerMutationVariables>;
@@ -3928,9 +3840,9 @@ export type DeleteJournaalpostMutationFn = Apollo.MutationFunction<DeleteJournaa
  * });
  */
 export function useDeleteJournaalpostMutation(baseOptions?: Apollo.MutationHookOptions<DeleteJournaalpostMutation, DeleteJournaalpostMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<DeleteJournaalpostMutation, DeleteJournaalpostMutationVariables>(DeleteJournaalpostDocument, options);
-      }
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useMutation<DeleteJournaalpostMutation, DeleteJournaalpostMutationVariables>(DeleteJournaalpostDocument, options);
+}
 export type DeleteJournaalpostMutationHookResult = ReturnType<typeof useDeleteJournaalpostMutation>;
 export type DeleteJournaalpostMutationResult = Apollo.MutationResult<DeleteJournaalpostMutation>;
 export type DeleteJournaalpostMutationOptions = Apollo.BaseMutationOptions<DeleteJournaalpostMutation, DeleteJournaalpostMutationVariables>;
@@ -3962,9 +3874,9 @@ export type DeleteAfdelingRekeningMutationFn = Apollo.MutationFunction<DeleteAfd
  * });
  */
 export function useDeleteAfdelingRekeningMutation(baseOptions?: Apollo.MutationHookOptions<DeleteAfdelingRekeningMutation, DeleteAfdelingRekeningMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<DeleteAfdelingRekeningMutation, DeleteAfdelingRekeningMutationVariables>(DeleteAfdelingRekeningDocument, options);
-      }
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useMutation<DeleteAfdelingRekeningMutation, DeleteAfdelingRekeningMutationVariables>(DeleteAfdelingRekeningDocument, options);
+}
 export type DeleteAfdelingRekeningMutationHookResult = ReturnType<typeof useDeleteAfdelingRekeningMutation>;
 export type DeleteAfdelingRekeningMutationResult = Apollo.MutationResult<DeleteAfdelingRekeningMutation>;
 export type DeleteAfdelingRekeningMutationOptions = Apollo.BaseMutationOptions<DeleteAfdelingRekeningMutation, DeleteAfdelingRekeningMutationVariables>;
@@ -3995,9 +3907,9 @@ export type DeleteRubriekMutationFn = Apollo.MutationFunction<DeleteRubriekMutat
  * });
  */
 export function useDeleteRubriekMutation(baseOptions?: Apollo.MutationHookOptions<DeleteRubriekMutation, DeleteRubriekMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<DeleteRubriekMutation, DeleteRubriekMutationVariables>(DeleteRubriekDocument, options);
-      }
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useMutation<DeleteRubriekMutation, DeleteRubriekMutationVariables>(DeleteRubriekDocument, options);
+}
 export type DeleteRubriekMutationHookResult = ReturnType<typeof useDeleteRubriekMutation>;
 export type DeleteRubriekMutationResult = Apollo.MutationResult<DeleteRubriekMutation>;
 export type DeleteRubriekMutationOptions = Apollo.BaseMutationOptions<DeleteRubriekMutation, DeleteRubriekMutationVariables>;
@@ -4033,24 +3945,6 @@ export const EndAfspraakDocument = gql`
           id
           iban
           rekeninghouder
-        }
-      }
-      alarm {
-        id
-        isActive
-        bedrag
-        bedragMargin
-        startDate
-        endDate
-        datumMargin
-        byDay
-        byMonth
-        byMonthDay
-        afspraak {
-          id
-        }
-        signaal {
-          id
         }
       }
       afdeling {
@@ -4144,85 +4038,46 @@ export type EndAfspraakMutationFn = Apollo.MutationFunction<EndAfspraakMutation,
  * });
  */
 export function useEndAfspraakMutation(baseOptions?: Apollo.MutationHookOptions<EndAfspraakMutation, EndAfspraakMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<EndAfspraakMutation, EndAfspraakMutationVariables>(EndAfspraakDocument, options);
-      }
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useMutation<EndAfspraakMutation, EndAfspraakMutationVariables>(EndAfspraakDocument, options);
+}
 export type EndAfspraakMutationHookResult = ReturnType<typeof useEndAfspraakMutation>;
 export type EndAfspraakMutationResult = Apollo.MutationResult<EndAfspraakMutation>;
 export type EndAfspraakMutationOptions = Apollo.BaseMutationOptions<EndAfspraakMutation, EndAfspraakMutationVariables>;
-export const EvaluateAlarmDocument = gql`
-    mutation evaluateAlarm($id: String!) {
-  evaluateAlarm(id: $id) {
-    alarmTriggerResult {
-      alarm {
-        id
-      }
-    }
+export const SignalSetIsActiveDocument = gql`
+    mutation signalSetIsActive($input: SetIsActiveRequest!) {
+  Signals_SetIsActive(input: $input) {
+    id
+    isActive
   }
 }
     `;
-export type EvaluateAlarmMutationFn = Apollo.MutationFunction<EvaluateAlarmMutation, EvaluateAlarmMutationVariables>;
+export type SignalSetIsActiveMutationFn = Apollo.MutationFunction<SignalSetIsActiveMutation, SignalSetIsActiveMutationVariables>;
 
 /**
- * __useEvaluateAlarmMutation__
+ * __useSignalSetIsActiveMutation__
  *
- * To run a mutation, you first call `useEvaluateAlarmMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useEvaluateAlarmMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useSignalSetIsActiveMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSignalSetIsActiveMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [evaluateAlarmMutation, { data, loading, error }] = useEvaluateAlarmMutation({
+ * const [signalSetIsActiveMutation, { data, loading, error }] = useSignalSetIsActiveMutation({
  *   variables: {
- *      id: // value for 'id'
+ *      input: // value for 'input'
  *   },
  * });
  */
-export function useEvaluateAlarmMutation(baseOptions?: Apollo.MutationHookOptions<EvaluateAlarmMutation, EvaluateAlarmMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<EvaluateAlarmMutation, EvaluateAlarmMutationVariables>(EvaluateAlarmDocument, options);
-      }
-export type EvaluateAlarmMutationHookResult = ReturnType<typeof useEvaluateAlarmMutation>;
-export type EvaluateAlarmMutationResult = Apollo.MutationResult<EvaluateAlarmMutation>;
-export type EvaluateAlarmMutationOptions = Apollo.BaseMutationOptions<EvaluateAlarmMutation, EvaluateAlarmMutationVariables>;
-export const EvaluateAlarmsDocument = gql`
-    mutation evaluateAlarms {
-  evaluateAlarms {
-    alarmTriggerResult {
-      alarm {
-        id
-      }
-    }
-  }
+export function useSignalSetIsActiveMutation(baseOptions?: Apollo.MutationHookOptions<SignalSetIsActiveMutation, SignalSetIsActiveMutationVariables>) {
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useMutation<SignalSetIsActiveMutation, SignalSetIsActiveMutationVariables>(SignalSetIsActiveDocument, options);
 }
-    `;
-export type EvaluateAlarmsMutationFn = Apollo.MutationFunction<EvaluateAlarmsMutation, EvaluateAlarmsMutationVariables>;
-
-/**
- * __useEvaluateAlarmsMutation__
- *
- * To run a mutation, you first call `useEvaluateAlarmsMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useEvaluateAlarmsMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [evaluateAlarmsMutation, { data, loading, error }] = useEvaluateAlarmsMutation({
- *   variables: {
- *   },
- * });
- */
-export function useEvaluateAlarmsMutation(baseOptions?: Apollo.MutationHookOptions<EvaluateAlarmsMutation, EvaluateAlarmsMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<EvaluateAlarmsMutation, EvaluateAlarmsMutationVariables>(EvaluateAlarmsDocument, options);
-      }
-export type EvaluateAlarmsMutationHookResult = ReturnType<typeof useEvaluateAlarmsMutation>;
-export type EvaluateAlarmsMutationResult = Apollo.MutationResult<EvaluateAlarmsMutation>;
-export type EvaluateAlarmsMutationOptions = Apollo.BaseMutationOptions<EvaluateAlarmsMutation, EvaluateAlarmsMutationVariables>;
+export type SignalSetIsActiveMutationHookResult = ReturnType<typeof useSignalSetIsActiveMutation>;
+export type SignalSetIsActiveMutationResult = Apollo.MutationResult<SignalSetIsActiveMutation>;
+export type SignalSetIsActiveMutationOptions = Apollo.BaseMutationOptions<SignalSetIsActiveMutation, SignalSetIsActiveMutationVariables>;
 export const StartAutomatischBoekenDocument = gql`
     mutation startAutomatischBoeken {
   startAutomatischBoeken {
@@ -4252,9 +4107,9 @@ export type StartAutomatischBoekenMutationFn = Apollo.MutationFunction<StartAuto
  * });
  */
 export function useStartAutomatischBoekenMutation(baseOptions?: Apollo.MutationHookOptions<StartAutomatischBoekenMutation, StartAutomatischBoekenMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<StartAutomatischBoekenMutation, StartAutomatischBoekenMutationVariables>(StartAutomatischBoekenDocument, options);
-      }
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useMutation<StartAutomatischBoekenMutation, StartAutomatischBoekenMutationVariables>(StartAutomatischBoekenDocument, options);
+}
 export type StartAutomatischBoekenMutationHookResult = ReturnType<typeof useStartAutomatischBoekenMutation>;
 export type StartAutomatischBoekenMutationResult = Apollo.MutationResult<StartAutomatischBoekenMutation>;
 export type StartAutomatischBoekenMutationOptions = Apollo.BaseMutationOptions<StartAutomatischBoekenMutation, StartAutomatischBoekenMutationVariables>;
@@ -4309,9 +4164,9 @@ export type UpdateAfdelingMutationFn = Apollo.MutationFunction<UpdateAfdelingMut
  * });
  */
 export function useUpdateAfdelingMutation(baseOptions?: Apollo.MutationHookOptions<UpdateAfdelingMutation, UpdateAfdelingMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<UpdateAfdelingMutation, UpdateAfdelingMutationVariables>(UpdateAfdelingDocument, options);
-      }
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useMutation<UpdateAfdelingMutation, UpdateAfdelingMutationVariables>(UpdateAfdelingDocument, options);
+}
 export type UpdateAfdelingMutationHookResult = ReturnType<typeof useUpdateAfdelingMutation>;
 export type UpdateAfdelingMutationResult = Apollo.MutationResult<UpdateAfdelingMutation>;
 export type UpdateAfdelingMutationOptions = Apollo.BaseMutationOptions<UpdateAfdelingMutation, UpdateAfdelingMutationVariables>;
@@ -4347,24 +4202,6 @@ export const UpdateAfspraakDocument = gql`
           id
           iban
           rekeninghouder
-        }
-      }
-      alarm {
-        id
-        isActive
-        bedrag
-        bedragMargin
-        startDate
-        endDate
-        datumMargin
-        byDay
-        byMonth
-        byMonthDay
-        afspraak {
-          id
-        }
-        signaal {
-          id
         }
       }
       afdeling {
@@ -4458,9 +4295,9 @@ export type UpdateAfspraakMutationFn = Apollo.MutationFunction<UpdateAfspraakMut
  * });
  */
 export function useUpdateAfspraakMutation(baseOptions?: Apollo.MutationHookOptions<UpdateAfspraakMutation, UpdateAfspraakMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<UpdateAfspraakMutation, UpdateAfspraakMutationVariables>(UpdateAfspraakDocument, options);
-      }
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useMutation<UpdateAfspraakMutation, UpdateAfspraakMutationVariables>(UpdateAfspraakDocument, options);
+}
 export type UpdateAfspraakMutationHookResult = ReturnType<typeof useUpdateAfspraakMutation>;
 export type UpdateAfspraakMutationResult = Apollo.MutationResult<UpdateAfspraakMutation>;
 export type UpdateAfspraakMutationOptions = Apollo.BaseMutationOptions<UpdateAfspraakMutation, UpdateAfspraakMutationVariables>;
@@ -4495,34 +4332,26 @@ export type UpdateAfspraakBetaalinstructieMutationFn = Apollo.MutationFunction<U
  * });
  */
 export function useUpdateAfspraakBetaalinstructieMutation(baseOptions?: Apollo.MutationHookOptions<UpdateAfspraakBetaalinstructieMutation, UpdateAfspraakBetaalinstructieMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<UpdateAfspraakBetaalinstructieMutation, UpdateAfspraakBetaalinstructieMutationVariables>(UpdateAfspraakBetaalinstructieDocument, options);
-      }
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useMutation<UpdateAfspraakBetaalinstructieMutation, UpdateAfspraakBetaalinstructieMutationVariables>(UpdateAfspraakBetaalinstructieDocument, options);
+}
 export type UpdateAfspraakBetaalinstructieMutationHookResult = ReturnType<typeof useUpdateAfspraakBetaalinstructieMutation>;
 export type UpdateAfspraakBetaalinstructieMutationResult = Apollo.MutationResult<UpdateAfspraakBetaalinstructieMutation>;
 export type UpdateAfspraakBetaalinstructieMutationOptions = Apollo.BaseMutationOptions<UpdateAfspraakBetaalinstructieMutation, UpdateAfspraakBetaalinstructieMutationVariables>;
 export const UpdateAlarmDocument = gql`
-    mutation updateAlarm($id: String!, $input: UpdateAlarmInput!) {
-  updateAlarm(id: $id, input: $input) {
-    ok
-    alarm {
-      id
-      isActive
-      bedrag
-      bedragMargin
-      startDate
-      endDate
-      datumMargin
-      byDay
-      byMonth
-      byMonthDay
-      afspraak {
-        id
-      }
-      signaal {
-        id
-      }
-    }
+    mutation updateAlarm($input: UpdateAlarmRequest!) {
+  Alarms_Update(input: $input) {
+    id
+    isActive
+    amount
+    amountMargin
+    startDate
+    endDate
+    dateMargin
+    recurringDay
+    recurringMonths
+    recurringDayOfMonth
+    AlarmType
   }
 }
     `;
@@ -4541,15 +4370,14 @@ export type UpdateAlarmMutationFn = Apollo.MutationFunction<UpdateAlarmMutation,
  * @example
  * const [updateAlarmMutation, { data, loading, error }] = useUpdateAlarmMutation({
  *   variables: {
- *      id: // value for 'id'
  *      input: // value for 'input'
  *   },
  * });
  */
 export function useUpdateAlarmMutation(baseOptions?: Apollo.MutationHookOptions<UpdateAlarmMutation, UpdateAlarmMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<UpdateAlarmMutation, UpdateAlarmMutationVariables>(UpdateAlarmDocument, options);
-      }
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useMutation<UpdateAlarmMutation, UpdateAlarmMutationVariables>(UpdateAlarmDocument, options);
+}
 export type UpdateAlarmMutationHookResult = ReturnType<typeof useUpdateAlarmMutation>;
 export type UpdateAlarmMutationResult = Apollo.MutationResult<UpdateAlarmMutation>;
 export type UpdateAlarmMutationOptions = Apollo.BaseMutationOptions<UpdateAlarmMutation, UpdateAlarmMutationVariables>;
@@ -4616,24 +4444,6 @@ export const UpdateBurgerDocument = gql`
             id
             iban
             rekeninghouder
-          }
-        }
-        alarm {
-          id
-          isActive
-          bedrag
-          bedragMargin
-          startDate
-          endDate
-          datumMargin
-          byDay
-          byMonth
-          byMonthDay
-          afspraak {
-            id
-          }
-          signaal {
-            id
           }
         }
         afdeling {
@@ -4744,9 +4554,9 @@ export type UpdateBurgerMutationFn = Apollo.MutationFunction<UpdateBurgerMutatio
  * });
  */
 export function useUpdateBurgerMutation(baseOptions?: Apollo.MutationHookOptions<UpdateBurgerMutation, UpdateBurgerMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<UpdateBurgerMutation, UpdateBurgerMutationVariables>(UpdateBurgerDocument, options);
-      }
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useMutation<UpdateBurgerMutation, UpdateBurgerMutationVariables>(UpdateBurgerDocument, options);
+}
 export type UpdateBurgerMutationHookResult = ReturnType<typeof useUpdateBurgerMutation>;
 export type UpdateBurgerMutationResult = Apollo.MutationResult<UpdateBurgerMutation>;
 export type UpdateBurgerMutationOptions = Apollo.BaseMutationOptions<UpdateBurgerMutation, UpdateBurgerMutationVariables>;
@@ -4782,9 +4592,9 @@ export type UpdateConfiguratieMutationFn = Apollo.MutationFunction<UpdateConfigu
  * });
  */
 export function useUpdateConfiguratieMutation(baseOptions?: Apollo.MutationHookOptions<UpdateConfiguratieMutation, UpdateConfiguratieMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<UpdateConfiguratieMutation, UpdateConfiguratieMutationVariables>(UpdateConfiguratieDocument, options);
-      }
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useMutation<UpdateConfiguratieMutation, UpdateConfiguratieMutationVariables>(UpdateConfiguratieDocument, options);
+}
 export type UpdateConfiguratieMutationHookResult = ReturnType<typeof useUpdateConfiguratieMutation>;
 export type UpdateConfiguratieMutationResult = Apollo.MutationResult<UpdateConfiguratieMutation>;
 export type UpdateConfiguratieMutationOptions = Apollo.BaseMutationOptions<UpdateConfiguratieMutation, UpdateConfiguratieMutationVariables>;
@@ -4851,9 +4661,9 @@ export type UpdateOrganisatieMutationFn = Apollo.MutationFunction<UpdateOrganisa
  * });
  */
 export function useUpdateOrganisatieMutation(baseOptions?: Apollo.MutationHookOptions<UpdateOrganisatieMutation, UpdateOrganisatieMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<UpdateOrganisatieMutation, UpdateOrganisatieMutationVariables>(UpdateOrganisatieDocument, options);
-      }
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useMutation<UpdateOrganisatieMutation, UpdateOrganisatieMutationVariables>(UpdateOrganisatieDocument, options);
+}
 export type UpdateOrganisatieMutationHookResult = ReturnType<typeof useUpdateOrganisatieMutation>;
 export type UpdateOrganisatieMutationResult = Apollo.MutationResult<UpdateOrganisatieMutation>;
 export type UpdateOrganisatieMutationOptions = Apollo.BaseMutationOptions<UpdateOrganisatieMutation, UpdateOrganisatieMutationVariables>;
@@ -4894,9 +4704,9 @@ export type UpdatePostadresMutationFn = Apollo.MutationFunction<UpdatePostadresM
  * });
  */
 export function useUpdatePostadresMutation(baseOptions?: Apollo.MutationHookOptions<UpdatePostadresMutation, UpdatePostadresMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<UpdatePostadresMutation, UpdatePostadresMutationVariables>(UpdatePostadresDocument, options);
-      }
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useMutation<UpdatePostadresMutation, UpdatePostadresMutationVariables>(UpdatePostadresDocument, options);
+}
 export type UpdatePostadresMutationHookResult = ReturnType<typeof useUpdatePostadresMutation>;
 export type UpdatePostadresMutationResult = Apollo.MutationResult<UpdatePostadresMutation>;
 export type UpdatePostadresMutationOptions = Apollo.BaseMutationOptions<UpdatePostadresMutation, UpdatePostadresMutationVariables>;
@@ -4932,9 +4742,9 @@ export type UpdateRekeningMutationFn = Apollo.MutationFunction<UpdateRekeningMut
  * });
  */
 export function useUpdateRekeningMutation(baseOptions?: Apollo.MutationHookOptions<UpdateRekeningMutation, UpdateRekeningMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<UpdateRekeningMutation, UpdateRekeningMutationVariables>(UpdateRekeningDocument, options);
-      }
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useMutation<UpdateRekeningMutation, UpdateRekeningMutationVariables>(UpdateRekeningDocument, options);
+}
 export type UpdateRekeningMutationHookResult = ReturnType<typeof useUpdateRekeningMutation>;
 export type UpdateRekeningMutationResult = Apollo.MutationResult<UpdateRekeningMutation>;
 export type UpdateRekeningMutationOptions = Apollo.BaseMutationOptions<UpdateRekeningMutation, UpdateRekeningMutationVariables>;
@@ -4967,160 +4777,12 @@ export type UpdateRubriekMutationFn = Apollo.MutationFunction<UpdateRubriekMutat
  * });
  */
 export function useUpdateRubriekMutation(baseOptions?: Apollo.MutationHookOptions<UpdateRubriekMutation, UpdateRubriekMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<UpdateRubriekMutation, UpdateRubriekMutationVariables>(UpdateRubriekDocument, options);
-      }
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useMutation<UpdateRubriekMutation, UpdateRubriekMutationVariables>(UpdateRubriekDocument, options);
+}
 export type UpdateRubriekMutationHookResult = ReturnType<typeof useUpdateRubriekMutation>;
 export type UpdateRubriekMutationResult = Apollo.MutationResult<UpdateRubriekMutation>;
 export type UpdateRubriekMutationOptions = Apollo.BaseMutationOptions<UpdateRubriekMutation, UpdateRubriekMutationVariables>;
-export const UpdateSignaalDocument = gql`
-    mutation updateSignaal($id: String!, $input: UpdateSignaalInput!) {
-  updateSignaal(id: $id, input: $input) {
-    ok
-    signaal {
-      id
-      isActive
-      type
-      actions
-      bedragDifference
-      timeUpdated
-      alarm {
-        id
-        afspraak {
-          id
-          omschrijving
-          bedrag
-          credit
-          betaalinstructie {
-            byDay
-            byMonth
-            byMonthDay
-            exceptDates
-            repeatFrequency
-            startDate
-            endDate
-          }
-          zoektermen
-          validFrom
-          validThrough
-          burger {
-            id
-            bsn
-            voornamen
-            voorletters
-            achternaam
-            plaatsnaam
-            rekeningen {
-              id
-              iban
-              rekeninghouder
-            }
-          }
-          alarm {
-            id
-            isActive
-            bedrag
-            bedragMargin
-            startDate
-            endDate
-            datumMargin
-            byDay
-            byMonth
-            byMonthDay
-            afspraak {
-              id
-            }
-            signaal {
-              id
-            }
-          }
-          afdeling {
-            id
-            naam
-            organisatie {
-              id
-              kvknummer
-              vestigingsnummer
-              naam
-            }
-            postadressen {
-              id
-              straatnaam
-              huisnummer
-              postcode
-              plaatsnaam
-            }
-            rekeningen {
-              id
-              iban
-              rekeninghouder
-            }
-          }
-          postadres {
-            id
-            straatnaam
-            huisnummer
-            postcode
-            plaatsnaam
-          }
-          tegenRekening {
-            id
-            iban
-            rekeninghouder
-          }
-          rubriek {
-            id
-            naam
-            grootboekrekening {
-              id
-              naam
-              credit
-              omschrijving
-              referentie
-              rubriek {
-                id
-                naam
-              }
-            }
-          }
-        }
-      }
-      bankTransactions {
-        id
-        bedrag
-        isCredit
-      }
-    }
-  }
-}
-    `;
-export type UpdateSignaalMutationFn = Apollo.MutationFunction<UpdateSignaalMutation, UpdateSignaalMutationVariables>;
-
-/**
- * __useUpdateSignaalMutation__
- *
- * To run a mutation, you first call `useUpdateSignaalMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateSignaalMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [updateSignaalMutation, { data, loading, error }] = useUpdateSignaalMutation({
- *   variables: {
- *      id: // value for 'id'
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useUpdateSignaalMutation(baseOptions?: Apollo.MutationHookOptions<UpdateSignaalMutation, UpdateSignaalMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<UpdateSignaalMutation, UpdateSignaalMutationVariables>(UpdateSignaalDocument, options);
-      }
-export type UpdateSignaalMutationHookResult = ReturnType<typeof useUpdateSignaalMutation>;
-export type UpdateSignaalMutationResult = Apollo.MutationResult<UpdateSignaalMutation>;
-export type UpdateSignaalMutationOptions = Apollo.BaseMutationOptions<UpdateSignaalMutation, UpdateSignaalMutationVariables>;
 export const GetAdditionalTransactionDataDocument = gql`
     query getAdditionalTransactionData($ibans: [String!], $transaction_ids: [Int!]) {
   rekeningenByIbans(ibans: $ibans) {
@@ -5155,13 +4817,13 @@ export const GetAdditionalTransactionDataDocument = gql`
  * });
  */
 export function useGetAdditionalTransactionDataQuery(baseOptions?: Apollo.QueryHookOptions<GetAdditionalTransactionDataQuery, GetAdditionalTransactionDataQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetAdditionalTransactionDataQuery, GetAdditionalTransactionDataQueryVariables>(GetAdditionalTransactionDataDocument, options);
-      }
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useQuery<GetAdditionalTransactionDataQuery, GetAdditionalTransactionDataQueryVariables>(GetAdditionalTransactionDataDocument, options);
+}
 export function useGetAdditionalTransactionDataLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAdditionalTransactionDataQuery, GetAdditionalTransactionDataQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetAdditionalTransactionDataQuery, GetAdditionalTransactionDataQueryVariables>(GetAdditionalTransactionDataDocument, options);
-        }
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useLazyQuery<GetAdditionalTransactionDataQuery, GetAdditionalTransactionDataQueryVariables>(GetAdditionalTransactionDataDocument, options);
+}
 export type GetAdditionalTransactionDataQueryHookResult = ReturnType<typeof useGetAdditionalTransactionDataQuery>;
 export type GetAdditionalTransactionDataLazyQueryHookResult = ReturnType<typeof useGetAdditionalTransactionDataLazyQuery>;
 export type GetAdditionalTransactionDataQueryResult = Apollo.QueryResult<GetAdditionalTransactionDataQuery, GetAdditionalTransactionDataQueryVariables>;
@@ -5209,13 +4871,13 @@ export const GetAfdelingDocument = gql`
  * });
  */
 export function useGetAfdelingQuery(baseOptions: Apollo.QueryHookOptions<GetAfdelingQuery, GetAfdelingQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetAfdelingQuery, GetAfdelingQueryVariables>(GetAfdelingDocument, options);
-      }
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useQuery<GetAfdelingQuery, GetAfdelingQueryVariables>(GetAfdelingDocument, options);
+}
 export function useGetAfdelingLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAfdelingQuery, GetAfdelingQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetAfdelingQuery, GetAfdelingQueryVariables>(GetAfdelingDocument, options);
-        }
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useLazyQuery<GetAfdelingQuery, GetAfdelingQueryVariables>(GetAfdelingDocument, options);
+}
 export type GetAfdelingQueryHookResult = ReturnType<typeof useGetAfdelingQuery>;
 export type GetAfdelingLazyQueryHookResult = ReturnType<typeof useGetAfdelingLazyQuery>;
 export type GetAfdelingQueryResult = Apollo.QueryResult<GetAfdelingQuery, GetAfdelingQueryVariables>;
@@ -5223,6 +4885,7 @@ export const GetAfspraakDocument = gql`
     query getAfspraak($id: Int!) {
   afspraak(id: $id) {
     id
+    uuid
     omschrijving
     bedrag
     credit
@@ -5246,17 +4909,20 @@ export const GetAfspraakDocument = gql`
       achternaam
       plaatsnaam
     }
+    alarmId
     alarm {
       id
       isActive
-      bedrag
-      bedragMargin
+      amount
+      amountMargin
       startDate
       endDate
-      datumMargin
-      byDay
-      byMonth
-      byMonthDay
+      dateMargin
+      checkOnDate
+      recurringDay
+      recurringMonths
+      recurringDayOfMonth
+      AlarmType
     }
     afdeling {
       id
@@ -5314,13 +4980,13 @@ export const GetAfspraakDocument = gql`
  * });
  */
 export function useGetAfspraakQuery(baseOptions: Apollo.QueryHookOptions<GetAfspraakQuery, GetAfspraakQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetAfspraakQuery, GetAfspraakQueryVariables>(GetAfspraakDocument, options);
-      }
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useQuery<GetAfspraakQuery, GetAfspraakQueryVariables>(GetAfspraakDocument, options);
+}
 export function useGetAfspraakLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAfspraakQuery, GetAfspraakQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetAfspraakQuery, GetAfspraakQueryVariables>(GetAfspraakDocument, options);
-        }
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useLazyQuery<GetAfspraakQuery, GetAfspraakQueryVariables>(GetAfspraakDocument, options);
+}
 export type GetAfspraakQueryHookResult = ReturnType<typeof useGetAfspraakQuery>;
 export type GetAfspraakLazyQueryHookResult = ReturnType<typeof useGetAfspraakLazyQuery>;
 export type GetAfspraakQueryResult = Apollo.QueryResult<GetAfspraakQuery, GetAfspraakQueryVariables>;
@@ -5435,35 +5101,30 @@ export const GetAfspraakFormDataDocument = gql`
  * });
  */
 export function useGetAfspraakFormDataQuery(baseOptions: Apollo.QueryHookOptions<GetAfspraakFormDataQuery, GetAfspraakFormDataQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetAfspraakFormDataQuery, GetAfspraakFormDataQueryVariables>(GetAfspraakFormDataDocument, options);
-      }
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useQuery<GetAfspraakFormDataQuery, GetAfspraakFormDataQueryVariables>(GetAfspraakFormDataDocument, options);
+}
 export function useGetAfspraakFormDataLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAfspraakFormDataQuery, GetAfspraakFormDataQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetAfspraakFormDataQuery, GetAfspraakFormDataQueryVariables>(GetAfspraakFormDataDocument, options);
-        }
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useLazyQuery<GetAfspraakFormDataQuery, GetAfspraakFormDataQueryVariables>(GetAfspraakFormDataDocument, options);
+}
 export type GetAfspraakFormDataQueryHookResult = ReturnType<typeof useGetAfspraakFormDataQuery>;
 export type GetAfspraakFormDataLazyQueryHookResult = ReturnType<typeof useGetAfspraakFormDataLazyQuery>;
 export type GetAfspraakFormDataQueryResult = Apollo.QueryResult<GetAfspraakFormDataQuery, GetAfspraakFormDataQueryVariables>;
 export const GetAlarmDocument = gql`
-    query getAlarm($id: String!) {
-  alarm(id: $id) {
+    query getAlarm($input: AlarmId) {
+  Alarms_GetById(input: $input) {
     id
     isActive
-    bedrag
-    bedragMargin
+    amount
+    amountMargin
     startDate
     endDate
-    datumMargin
-    byDay
-    byMonth
-    byMonthDay
-    afspraak {
-      id
-    }
-    signaal {
-      id
-    }
+    dateMargin
+    recurringDay
+    recurringMonths
+    recurringDayOfMonth
+    AlarmType
   }
 }
     `;
@@ -5480,70 +5141,21 @@ export const GetAlarmDocument = gql`
  * @example
  * const { data, loading, error } = useGetAlarmQuery({
  *   variables: {
- *      id: // value for 'id'
+ *      input: // value for 'input'
  *   },
  * });
  */
-export function useGetAlarmQuery(baseOptions: Apollo.QueryHookOptions<GetAlarmQuery, GetAlarmQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetAlarmQuery, GetAlarmQueryVariables>(GetAlarmDocument, options);
-      }
+export function useGetAlarmQuery(baseOptions?: Apollo.QueryHookOptions<GetAlarmQuery, GetAlarmQueryVariables>) {
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useQuery<GetAlarmQuery, GetAlarmQueryVariables>(GetAlarmDocument, options);
+}
 export function useGetAlarmLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAlarmQuery, GetAlarmQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetAlarmQuery, GetAlarmQueryVariables>(GetAlarmDocument, options);
-        }
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useLazyQuery<GetAlarmQuery, GetAlarmQueryVariables>(GetAlarmDocument, options);
+}
 export type GetAlarmQueryHookResult = ReturnType<typeof useGetAlarmQuery>;
 export type GetAlarmLazyQueryHookResult = ReturnType<typeof useGetAlarmLazyQuery>;
 export type GetAlarmQueryResult = Apollo.QueryResult<GetAlarmQuery, GetAlarmQueryVariables>;
-export const GetAlarmenDocument = gql`
-    query getAlarmen {
-  alarmen {
-    id
-    isActive
-    bedrag
-    bedragMargin
-    startDate
-    endDate
-    datumMargin
-    byDay
-    byMonth
-    byMonthDay
-    afspraak {
-      id
-    }
-    signaal {
-      id
-    }
-  }
-}
-    `;
-
-/**
- * __useGetAlarmenQuery__
- *
- * To run a query within a React component, call `useGetAlarmenQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetAlarmenQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetAlarmenQuery({
- *   variables: {
- *   },
- * });
- */
-export function useGetAlarmenQuery(baseOptions?: Apollo.QueryHookOptions<GetAlarmenQuery, GetAlarmenQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetAlarmenQuery, GetAlarmenQueryVariables>(GetAlarmenDocument, options);
-      }
-export function useGetAlarmenLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAlarmenQuery, GetAlarmenQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetAlarmenQuery, GetAlarmenQueryVariables>(GetAlarmenDocument, options);
-        }
-export type GetAlarmenQueryHookResult = ReturnType<typeof useGetAlarmenQuery>;
-export type GetAlarmenLazyQueryHookResult = ReturnType<typeof useGetAlarmenLazyQuery>;
-export type GetAlarmenQueryResult = Apollo.QueryResult<GetAlarmenQuery, GetAlarmenQueryVariables>;
 export const GetBurgerDetailsDocument = gql`
     query getBurgerDetails($id: Int!) {
   burger(id: $id) {
@@ -5603,13 +5215,13 @@ export const GetBurgerDetailsDocument = gql`
  * });
  */
 export function useGetBurgerDetailsQuery(baseOptions: Apollo.QueryHookOptions<GetBurgerDetailsQuery, GetBurgerDetailsQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetBurgerDetailsQuery, GetBurgerDetailsQueryVariables>(GetBurgerDetailsDocument, options);
-      }
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useQuery<GetBurgerDetailsQuery, GetBurgerDetailsQueryVariables>(GetBurgerDetailsDocument, options);
+}
 export function useGetBurgerDetailsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetBurgerDetailsQuery, GetBurgerDetailsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetBurgerDetailsQuery, GetBurgerDetailsQueryVariables>(GetBurgerDetailsDocument, options);
-        }
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useLazyQuery<GetBurgerDetailsQuery, GetBurgerDetailsQueryVariables>(GetBurgerDetailsDocument, options);
+}
 export type GetBurgerDetailsQueryHookResult = ReturnType<typeof useGetBurgerDetailsQuery>;
 export type GetBurgerDetailsLazyQueryHookResult = ReturnType<typeof useGetBurgerDetailsLazyQuery>;
 export type GetBurgerDetailsQueryResult = Apollo.QueryResult<GetBurgerDetailsQuery, GetBurgerDetailsQueryVariables>;
@@ -5654,13 +5266,13 @@ export const GetBurgerPersonalDetailsDocument = gql`
  * });
  */
 export function useGetBurgerPersonalDetailsQuery(baseOptions: Apollo.QueryHookOptions<GetBurgerPersonalDetailsQuery, GetBurgerPersonalDetailsQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetBurgerPersonalDetailsQuery, GetBurgerPersonalDetailsQueryVariables>(GetBurgerPersonalDetailsDocument, options);
-      }
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useQuery<GetBurgerPersonalDetailsQuery, GetBurgerPersonalDetailsQueryVariables>(GetBurgerPersonalDetailsDocument, options);
+}
 export function useGetBurgerPersonalDetailsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetBurgerPersonalDetailsQuery, GetBurgerPersonalDetailsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetBurgerPersonalDetailsQuery, GetBurgerPersonalDetailsQueryVariables>(GetBurgerPersonalDetailsDocument, options);
-        }
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useLazyQuery<GetBurgerPersonalDetailsQuery, GetBurgerPersonalDetailsQueryVariables>(GetBurgerPersonalDetailsDocument, options);
+}
 export type GetBurgerPersonalDetailsQueryHookResult = ReturnType<typeof useGetBurgerPersonalDetailsQuery>;
 export type GetBurgerPersonalDetailsLazyQueryHookResult = ReturnType<typeof useGetBurgerPersonalDetailsLazyQuery>;
 export type GetBurgerPersonalDetailsQueryResult = Apollo.QueryResult<GetBurgerPersonalDetailsQuery, GetBurgerPersonalDetailsQueryVariables>;
@@ -5695,24 +5307,6 @@ export const GetBurgerAfsprakenDocument = gql`
           id
           iban
           rekeninghouder
-        }
-      }
-      alarm {
-        id
-        isActive
-        bedrag
-        bedragMargin
-        startDate
-        endDate
-        datumMargin
-        byDay
-        byMonth
-        byMonthDay
-        afspraak {
-          id
-        }
-        signaal {
-          id
         }
       }
       afdeling {
@@ -5803,151 +5397,16 @@ export const GetBurgerAfsprakenDocument = gql`
  * });
  */
 export function useGetBurgerAfsprakenQuery(baseOptions: Apollo.QueryHookOptions<GetBurgerAfsprakenQuery, GetBurgerAfsprakenQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetBurgerAfsprakenQuery, GetBurgerAfsprakenQueryVariables>(GetBurgerAfsprakenDocument, options);
-      }
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useQuery<GetBurgerAfsprakenQuery, GetBurgerAfsprakenQueryVariables>(GetBurgerAfsprakenDocument, options);
+}
 export function useGetBurgerAfsprakenLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetBurgerAfsprakenQuery, GetBurgerAfsprakenQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetBurgerAfsprakenQuery, GetBurgerAfsprakenQueryVariables>(GetBurgerAfsprakenDocument, options);
-        }
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useLazyQuery<GetBurgerAfsprakenQuery, GetBurgerAfsprakenQueryVariables>(GetBurgerAfsprakenDocument, options);
+}
 export type GetBurgerAfsprakenQueryHookResult = ReturnType<typeof useGetBurgerAfsprakenQuery>;
 export type GetBurgerAfsprakenLazyQueryHookResult = ReturnType<typeof useGetBurgerAfsprakenLazyQuery>;
 export type GetBurgerAfsprakenQueryResult = Apollo.QueryResult<GetBurgerAfsprakenQuery, GetBurgerAfsprakenQueryVariables>;
-export const GetBurgerGebeurtenissenDocument = gql`
-    query GetBurgerGebeurtenissen($ids: [Int!]!, $limit: Int!, $offset: Int!) {
-  burgers(ids: $ids) {
-    id
-    voornamen
-    voorletters
-    achternaam
-  }
-  gebruikersactiviteitenPaged(burgerIds: $ids, start: $offset, limit: $limit) {
-    gebruikersactiviteiten {
-      id
-      timestamp
-      gebruikerId
-      action
-      entities {
-        entityType
-        entityId
-        huishouden {
-          id
-          burgers {
-            id
-            voorletters
-            voornamen
-            achternaam
-          }
-        }
-        burger {
-          id
-          voorletters
-          voornamen
-          achternaam
-        }
-        organisatie {
-          id
-          naam
-          kvknummer
-          vestigingsnummer
-        }
-        afspraak {
-          id
-          burger {
-            id
-            voornamen
-            voorletters
-            achternaam
-          }
-          afdeling {
-            id
-            naam
-            organisatie {
-              id
-              kvknummer
-              vestigingsnummer
-              naam
-            }
-          }
-        }
-        rekening {
-          id
-          iban
-          rekeninghouder
-        }
-        customerStatementMessage {
-          id
-          filename
-          bankTransactions {
-            id
-          }
-        }
-        configuratie {
-          id
-          waarde
-        }
-        rubriek {
-          id
-          naam
-        }
-        afdeling {
-          id
-          naam
-          organisatie {
-            id
-            naam
-          }
-        }
-        postadres {
-          id
-        }
-        export {
-          id
-          naam
-        }
-      }
-      meta {
-        userAgent
-        ip
-        applicationVersion
-      }
-    }
-    pageInfo {
-      count
-    }
-  }
-}
-    `;
-
-/**
- * __useGetBurgerGebeurtenissenQuery__
- *
- * To run a query within a React component, call `useGetBurgerGebeurtenissenQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetBurgerGebeurtenissenQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetBurgerGebeurtenissenQuery({
- *   variables: {
- *      ids: // value for 'ids'
- *      limit: // value for 'limit'
- *      offset: // value for 'offset'
- *   },
- * });
- */
-export function useGetBurgerGebeurtenissenQuery(baseOptions: Apollo.QueryHookOptions<GetBurgerGebeurtenissenQuery, GetBurgerGebeurtenissenQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetBurgerGebeurtenissenQuery, GetBurgerGebeurtenissenQueryVariables>(GetBurgerGebeurtenissenDocument, options);
-      }
-export function useGetBurgerGebeurtenissenLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetBurgerGebeurtenissenQuery, GetBurgerGebeurtenissenQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetBurgerGebeurtenissenQuery, GetBurgerGebeurtenissenQueryVariables>(GetBurgerGebeurtenissenDocument, options);
-        }
-export type GetBurgerGebeurtenissenQueryHookResult = ReturnType<typeof useGetBurgerGebeurtenissenQuery>;
-export type GetBurgerGebeurtenissenLazyQueryHookResult = ReturnType<typeof useGetBurgerGebeurtenissenLazyQuery>;
-export type GetBurgerGebeurtenissenQueryResult = Apollo.QueryResult<GetBurgerGebeurtenissenQuery, GetBurgerGebeurtenissenQueryVariables>;
 export const GetBurgerRapportagesDocument = gql`
     query getBurgerRapportages($burgers: [Int!]!, $start: String!, $end: String!, $rubrieken: [Int!]!, $saldoDate: Date!) {
   burgerRapportages(
@@ -6008,343 +5467,29 @@ export const GetBurgerRapportagesDocument = gql`
  * });
  */
 export function useGetBurgerRapportagesQuery(baseOptions: Apollo.QueryHookOptions<GetBurgerRapportagesQuery, GetBurgerRapportagesQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetBurgerRapportagesQuery, GetBurgerRapportagesQueryVariables>(GetBurgerRapportagesDocument, options);
-      }
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useQuery<GetBurgerRapportagesQuery, GetBurgerRapportagesQueryVariables>(GetBurgerRapportagesDocument, options);
+}
 export function useGetBurgerRapportagesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetBurgerRapportagesQuery, GetBurgerRapportagesQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetBurgerRapportagesQuery, GetBurgerRapportagesQueryVariables>(GetBurgerRapportagesDocument, options);
-        }
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useLazyQuery<GetBurgerRapportagesQuery, GetBurgerRapportagesQueryVariables>(GetBurgerRapportagesDocument, options);
+}
 export type GetBurgerRapportagesQueryHookResult = ReturnType<typeof useGetBurgerRapportagesQuery>;
 export type GetBurgerRapportagesLazyQueryHookResult = ReturnType<typeof useGetBurgerRapportagesLazyQuery>;
 export type GetBurgerRapportagesQueryResult = Apollo.QueryResult<GetBurgerRapportagesQuery, GetBurgerRapportagesQueryVariables>;
-export const GetBurgersDocument = gql`
-    query getBurgers {
-  burgers {
-    id
-    voornamen
-    achternaam
-    straatnaam
-    huisnummer
-    postcode
-    plaatsnaam
-  }
-}
-    `;
-
-/**
- * __useGetBurgersQuery__
- *
- * To run a query within a React component, call `useGetBurgersQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetBurgersQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetBurgersQuery({
- *   variables: {
- *   },
- * });
- */
-export function useGetBurgersQuery(baseOptions?: Apollo.QueryHookOptions<GetBurgersQuery, GetBurgersQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetBurgersQuery, GetBurgersQueryVariables>(GetBurgersDocument, options);
-      }
-export function useGetBurgersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetBurgersQuery, GetBurgersQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetBurgersQuery, GetBurgersQueryVariables>(GetBurgersDocument, options);
-        }
-export type GetBurgersQueryHookResult = ReturnType<typeof useGetBurgersQuery>;
-export type GetBurgersLazyQueryHookResult = ReturnType<typeof useGetBurgersLazyQuery>;
-export type GetBurgersQueryResult = Apollo.QueryResult<GetBurgersQuery, GetBurgersQueryVariables>;
-export const GetBurgersAndOrganisatiesAndRekeningenDocument = gql`
-    query getBurgersAndOrganisatiesAndRekeningen($iban: String) {
-  organisaties {
-    id
-    naam
-    afdelingen {
-      id
-    }
-  }
-  burgers {
+export const GetBurgerUserActivitiesQueryDocument = gql`
+    query GetBurgerUserActivitiesQuery($ids: [Int!]!, $input: UserActivitiesPagedRequest) {
+  burgers(ids: $ids) {
     id
     voornamen
     voorletters
     achternaam
   }
-  rekeningen {
-    iban
-    rekeninghouder
-    id
-  }
-  afdelingenByIban(iban: $iban) {
-    organisatieId
-  }
-}
-    `;
-
-/**
- * __useGetBurgersAndOrganisatiesAndRekeningenQuery__
- *
- * To run a query within a React component, call `useGetBurgersAndOrganisatiesAndRekeningenQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetBurgersAndOrganisatiesAndRekeningenQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetBurgersAndOrganisatiesAndRekeningenQuery({
- *   variables: {
- *      iban: // value for 'iban'
- *   },
- * });
- */
-export function useGetBurgersAndOrganisatiesAndRekeningenQuery(baseOptions?: Apollo.QueryHookOptions<GetBurgersAndOrganisatiesAndRekeningenQuery, GetBurgersAndOrganisatiesAndRekeningenQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetBurgersAndOrganisatiesAndRekeningenQuery, GetBurgersAndOrganisatiesAndRekeningenQueryVariables>(GetBurgersAndOrganisatiesAndRekeningenDocument, options);
-      }
-export function useGetBurgersAndOrganisatiesAndRekeningenLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetBurgersAndOrganisatiesAndRekeningenQuery, GetBurgersAndOrganisatiesAndRekeningenQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetBurgersAndOrganisatiesAndRekeningenQuery, GetBurgersAndOrganisatiesAndRekeningenQueryVariables>(GetBurgersAndOrganisatiesAndRekeningenDocument, options);
-        }
-export type GetBurgersAndOrganisatiesAndRekeningenQueryHookResult = ReturnType<typeof useGetBurgersAndOrganisatiesAndRekeningenQuery>;
-export type GetBurgersAndOrganisatiesAndRekeningenLazyQueryHookResult = ReturnType<typeof useGetBurgersAndOrganisatiesAndRekeningenLazyQuery>;
-export type GetBurgersAndOrganisatiesAndRekeningenQueryResult = Apollo.QueryResult<GetBurgersAndOrganisatiesAndRekeningenQuery, GetBurgersAndOrganisatiesAndRekeningenQueryVariables>;
-export const GetBurgersSearchDocument = gql`
-    query getBurgersSearch($search: String) {
-  burgers(search: $search) {
-    id
-    voornamen
-    achternaam
-  }
-}
-    `;
-
-/**
- * __useGetBurgersSearchQuery__
- *
- * To run a query within a React component, call `useGetBurgersSearchQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetBurgersSearchQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetBurgersSearchQuery({
- *   variables: {
- *      search: // value for 'search'
- *   },
- * });
- */
-export function useGetBurgersSearchQuery(baseOptions?: Apollo.QueryHookOptions<GetBurgersSearchQuery, GetBurgersSearchQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetBurgersSearchQuery, GetBurgersSearchQueryVariables>(GetBurgersSearchDocument, options);
-      }
-export function useGetBurgersSearchLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetBurgersSearchQuery, GetBurgersSearchQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetBurgersSearchQuery, GetBurgersSearchQueryVariables>(GetBurgersSearchDocument, options);
-        }
-export type GetBurgersSearchQueryHookResult = ReturnType<typeof useGetBurgersSearchQuery>;
-export type GetBurgersSearchLazyQueryHookResult = ReturnType<typeof useGetBurgersSearchLazyQuery>;
-export type GetBurgersSearchQueryResult = Apollo.QueryResult<GetBurgersSearchQuery, GetBurgersSearchQueryVariables>;
-export const GetConfiguratieDocument = gql`
-    query getConfiguratie {
-  configuraties {
-    id
-    waarde
-  }
-}
-    `;
-
-/**
- * __useGetConfiguratieQuery__
- *
- * To run a query within a React component, call `useGetConfiguratieQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetConfiguratieQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetConfiguratieQuery({
- *   variables: {
- *   },
- * });
- */
-export function useGetConfiguratieQuery(baseOptions?: Apollo.QueryHookOptions<GetConfiguratieQuery, GetConfiguratieQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetConfiguratieQuery, GetConfiguratieQueryVariables>(GetConfiguratieDocument, options);
-      }
-export function useGetConfiguratieLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetConfiguratieQuery, GetConfiguratieQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetConfiguratieQuery, GetConfiguratieQueryVariables>(GetConfiguratieDocument, options);
-        }
-export type GetConfiguratieQueryHookResult = ReturnType<typeof useGetConfiguratieQuery>;
-export type GetConfiguratieLazyQueryHookResult = ReturnType<typeof useGetConfiguratieLazyQuery>;
-export type GetConfiguratieQueryResult = Apollo.QueryResult<GetConfiguratieQuery, GetConfiguratieQueryVariables>;
-export const GetCreateAfspraakFormDataDocument = gql`
-    query getCreateAfspraakFormData($burgerId: Int!) {
-  burger(id: $burgerId) {
-    id
-    voorletters
-    voornamen
-    achternaam
-    rekeningen {
-      id
-      iban
-      rekeninghouder
-    }
-  }
-  rubrieken {
-    id
-    naam
-    grootboekrekening {
-      id
-      naam
-      credit
-    }
-  }
-  organisaties {
-    id
-    naam
-    kvknummer
-    vestigingsnummer
-  }
-}
-    `;
-
-/**
- * __useGetCreateAfspraakFormDataQuery__
- *
- * To run a query within a React component, call `useGetCreateAfspraakFormDataQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetCreateAfspraakFormDataQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetCreateAfspraakFormDataQuery({
- *   variables: {
- *      burgerId: // value for 'burgerId'
- *   },
- * });
- */
-export function useGetCreateAfspraakFormDataQuery(baseOptions: Apollo.QueryHookOptions<GetCreateAfspraakFormDataQuery, GetCreateAfspraakFormDataQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetCreateAfspraakFormDataQuery, GetCreateAfspraakFormDataQueryVariables>(GetCreateAfspraakFormDataDocument, options);
-      }
-export function useGetCreateAfspraakFormDataLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetCreateAfspraakFormDataQuery, GetCreateAfspraakFormDataQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetCreateAfspraakFormDataQuery, GetCreateAfspraakFormDataQueryVariables>(GetCreateAfspraakFormDataDocument, options);
-        }
-export type GetCreateAfspraakFormDataQueryHookResult = ReturnType<typeof useGetCreateAfspraakFormDataQuery>;
-export type GetCreateAfspraakFormDataLazyQueryHookResult = ReturnType<typeof useGetCreateAfspraakFormDataLazyQuery>;
-export type GetCreateAfspraakFormDataQueryResult = Apollo.QueryResult<GetCreateAfspraakFormDataQuery, GetCreateAfspraakFormDataQueryVariables>;
-export const GetCsmsDocument = gql`
-    query getCsms {
-  customerStatementMessages {
-    id
-    filename
-    uploadDate
-    accountIdentification
-    closingAvailableFunds
-    closingBalance
-    forwardAvailableBalance
-    openingBalance
-    relatedReference
-    sequenceNumber
-    transactionReferenceNumber
-  }
-}
-    `;
-
-/**
- * __useGetCsmsQuery__
- *
- * To run a query within a React component, call `useGetCsmsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetCsmsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetCsmsQuery({
- *   variables: {
- *   },
- * });
- */
-export function useGetCsmsQuery(baseOptions?: Apollo.QueryHookOptions<GetCsmsQuery, GetCsmsQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetCsmsQuery, GetCsmsQueryVariables>(GetCsmsDocument, options);
-      }
-export function useGetCsmsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetCsmsQuery, GetCsmsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetCsmsQuery, GetCsmsQueryVariables>(GetCsmsDocument, options);
-        }
-export type GetCsmsQueryHookResult = ReturnType<typeof useGetCsmsQuery>;
-export type GetCsmsLazyQueryHookResult = ReturnType<typeof useGetCsmsLazyQuery>;
-export type GetCsmsQueryResult = Apollo.QueryResult<GetCsmsQuery, GetCsmsQueryVariables>;
-export const GetExportsPagedDocument = gql`
-    query getExportsPaged($offset: Int!, $limit: Int!) {
-  exportsPaged(offset: $offset, limit: $limit) {
-    exports {
-      id
-      naam
-      timestamp
-      startDatum
-      eindDatum
-      verwerkingDatum
-      sha256
-      overschrijvingen {
-        id
-        bedrag
-      }
-    }
-    pageInfo {
-      count
-      limit
-      start
-    }
-  }
-}
-    `;
-
-/**
- * __useGetExportsPagedQuery__
- *
- * To run a query within a React component, call `useGetExportsPagedQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetExportsPagedQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetExportsPagedQuery({
- *   variables: {
- *      offset: // value for 'offset'
- *      limit: // value for 'limit'
- *   },
- * });
- */
-export function useGetExportsPagedQuery(baseOptions: Apollo.QueryHookOptions<GetExportsPagedQuery, GetExportsPagedQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetExportsPagedQuery, GetExportsPagedQueryVariables>(GetExportsPagedDocument, options);
-      }
-export function useGetExportsPagedLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetExportsPagedQuery, GetExportsPagedQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetExportsPagedQuery, GetExportsPagedQueryVariables>(GetExportsPagedDocument, options);
-        }
-export type GetExportsPagedQueryHookResult = ReturnType<typeof useGetExportsPagedQuery>;
-export type GetExportsPagedLazyQueryHookResult = ReturnType<typeof useGetExportsPagedLazyQuery>;
-export type GetExportsPagedQueryResult = Apollo.QueryResult<GetExportsPagedQuery, GetExportsPagedQueryVariables>;
-export const GetGebeurtenissenDocument = gql`
-    query GetGebeurtenissen($limit: Int!, $offset: Int!) {
-  gebruikersactiviteitenPaged(start: $offset, limit: $limit) {
-    gebruikersactiviteiten {
+  UserActivities_GetUserActivitiesPaged(input: $input) {
+    data {
       id
       timestamp
-      gebruikerId
+      user
       action
       entities {
         entityType
@@ -6431,41 +5576,361 @@ export const GetGebeurtenissenDocument = gql`
         applicationVersion
       }
     }
-    pageInfo {
-      count
+    PageInfo {
+      total_count
     }
   }
 }
     `;
 
 /**
- * __useGetGebeurtenissenQuery__
+ * __useGetBurgerUserActivitiesQueryQuery__
  *
- * To run a query within a React component, call `useGetGebeurtenissenQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetGebeurtenissenQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetBurgerUserActivitiesQueryQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetBurgerUserActivitiesQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetGebeurtenissenQuery({
+ * const { data, loading, error } = useGetBurgerUserActivitiesQueryQuery({
  *   variables: {
- *      limit: // value for 'limit'
- *      offset: // value for 'offset'
+ *      ids: // value for 'ids'
+ *      input: // value for 'input'
  *   },
  * });
  */
-export function useGetGebeurtenissenQuery(baseOptions: Apollo.QueryHookOptions<GetGebeurtenissenQuery, GetGebeurtenissenQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetGebeurtenissenQuery, GetGebeurtenissenQueryVariables>(GetGebeurtenissenDocument, options);
+export function useGetBurgerUserActivitiesQueryQuery(baseOptions: Apollo.QueryHookOptions<GetBurgerUserActivitiesQueryQuery, GetBurgerUserActivitiesQueryQueryVariables>) {
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useQuery<GetBurgerUserActivitiesQueryQuery, GetBurgerUserActivitiesQueryQueryVariables>(GetBurgerUserActivitiesQueryDocument, options);
+}
+export function useGetBurgerUserActivitiesQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetBurgerUserActivitiesQueryQuery, GetBurgerUserActivitiesQueryQueryVariables>) {
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useLazyQuery<GetBurgerUserActivitiesQueryQuery, GetBurgerUserActivitiesQueryQueryVariables>(GetBurgerUserActivitiesQueryDocument, options);
+}
+export type GetBurgerUserActivitiesQueryQueryHookResult = ReturnType<typeof useGetBurgerUserActivitiesQueryQuery>;
+export type GetBurgerUserActivitiesQueryLazyQueryHookResult = ReturnType<typeof useGetBurgerUserActivitiesQueryLazyQuery>;
+export type GetBurgerUserActivitiesQueryQueryResult = Apollo.QueryResult<GetBurgerUserActivitiesQueryQuery, GetBurgerUserActivitiesQueryQueryVariables>;
+export const GetBurgersDocument = gql`
+    query getBurgers {
+  burgers {
+    id
+    voornamen
+    achternaam
+    straatnaam
+    huisnummer
+    postcode
+    plaatsnaam
+  }
+}
+    `;
+
+/**
+ * __useGetBurgersQuery__
+ *
+ * To run a query within a React component, call `useGetBurgersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetBurgersQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetBurgersQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetBurgersQuery(baseOptions?: Apollo.QueryHookOptions<GetBurgersQuery, GetBurgersQueryVariables>) {
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useQuery<GetBurgersQuery, GetBurgersQueryVariables>(GetBurgersDocument, options);
+}
+export function useGetBurgersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetBurgersQuery, GetBurgersQueryVariables>) {
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useLazyQuery<GetBurgersQuery, GetBurgersQueryVariables>(GetBurgersDocument, options);
+}
+export type GetBurgersQueryHookResult = ReturnType<typeof useGetBurgersQuery>;
+export type GetBurgersLazyQueryHookResult = ReturnType<typeof useGetBurgersLazyQuery>;
+export type GetBurgersQueryResult = Apollo.QueryResult<GetBurgersQuery, GetBurgersQueryVariables>;
+export const GetBurgersAndOrganisatiesAndRekeningenDocument = gql`
+    query getBurgersAndOrganisatiesAndRekeningen($iban: String) {
+  organisaties {
+    id
+    naam
+    afdelingen {
+      id
+    }
+  }
+  burgers {
+    id
+    voornamen
+    voorletters
+    achternaam
+  }
+  rekeningen {
+    iban
+    rekeninghouder
+    id
+  }
+  afdelingenByIban(iban: $iban) {
+    organisatieId
+  }
+}
+    `;
+
+/**
+ * __useGetBurgersAndOrganisatiesAndRekeningenQuery__
+ *
+ * To run a query within a React component, call `useGetBurgersAndOrganisatiesAndRekeningenQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetBurgersAndOrganisatiesAndRekeningenQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetBurgersAndOrganisatiesAndRekeningenQuery({
+ *   variables: {
+ *      iban: // value for 'iban'
+ *   },
+ * });
+ */
+export function useGetBurgersAndOrganisatiesAndRekeningenQuery(baseOptions?: Apollo.QueryHookOptions<GetBurgersAndOrganisatiesAndRekeningenQuery, GetBurgersAndOrganisatiesAndRekeningenQueryVariables>) {
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useQuery<GetBurgersAndOrganisatiesAndRekeningenQuery, GetBurgersAndOrganisatiesAndRekeningenQueryVariables>(GetBurgersAndOrganisatiesAndRekeningenDocument, options);
+}
+export function useGetBurgersAndOrganisatiesAndRekeningenLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetBurgersAndOrganisatiesAndRekeningenQuery, GetBurgersAndOrganisatiesAndRekeningenQueryVariables>) {
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useLazyQuery<GetBurgersAndOrganisatiesAndRekeningenQuery, GetBurgersAndOrganisatiesAndRekeningenQueryVariables>(GetBurgersAndOrganisatiesAndRekeningenDocument, options);
+}
+export type GetBurgersAndOrganisatiesAndRekeningenQueryHookResult = ReturnType<typeof useGetBurgersAndOrganisatiesAndRekeningenQuery>;
+export type GetBurgersAndOrganisatiesAndRekeningenLazyQueryHookResult = ReturnType<typeof useGetBurgersAndOrganisatiesAndRekeningenLazyQuery>;
+export type GetBurgersAndOrganisatiesAndRekeningenQueryResult = Apollo.QueryResult<GetBurgersAndOrganisatiesAndRekeningenQuery, GetBurgersAndOrganisatiesAndRekeningenQueryVariables>;
+export const GetBurgersSearchDocument = gql`
+    query getBurgersSearch($search: String) {
+  burgers(search: $search) {
+    id
+    voornamen
+    achternaam
+  }
+}
+    `;
+
+/**
+ * __useGetBurgersSearchQuery__
+ *
+ * To run a query within a React component, call `useGetBurgersSearchQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetBurgersSearchQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetBurgersSearchQuery({
+ *   variables: {
+ *      search: // value for 'search'
+ *   },
+ * });
+ */
+export function useGetBurgersSearchQuery(baseOptions?: Apollo.QueryHookOptions<GetBurgersSearchQuery, GetBurgersSearchQueryVariables>) {
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useQuery<GetBurgersSearchQuery, GetBurgersSearchQueryVariables>(GetBurgersSearchDocument, options);
+}
+export function useGetBurgersSearchLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetBurgersSearchQuery, GetBurgersSearchQueryVariables>) {
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useLazyQuery<GetBurgersSearchQuery, GetBurgersSearchQueryVariables>(GetBurgersSearchDocument, options);
+}
+export type GetBurgersSearchQueryHookResult = ReturnType<typeof useGetBurgersSearchQuery>;
+export type GetBurgersSearchLazyQueryHookResult = ReturnType<typeof useGetBurgersSearchLazyQuery>;
+export type GetBurgersSearchQueryResult = Apollo.QueryResult<GetBurgersSearchQuery, GetBurgersSearchQueryVariables>;
+export const GetConfiguratieDocument = gql`
+    query getConfiguratie {
+  configuraties {
+    id
+    waarde
+  }
+}
+    `;
+
+/**
+ * __useGetConfiguratieQuery__
+ *
+ * To run a query within a React component, call `useGetConfiguratieQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetConfiguratieQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetConfiguratieQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetConfiguratieQuery(baseOptions?: Apollo.QueryHookOptions<GetConfiguratieQuery, GetConfiguratieQueryVariables>) {
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useQuery<GetConfiguratieQuery, GetConfiguratieQueryVariables>(GetConfiguratieDocument, options);
+}
+export function useGetConfiguratieLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetConfiguratieQuery, GetConfiguratieQueryVariables>) {
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useLazyQuery<GetConfiguratieQuery, GetConfiguratieQueryVariables>(GetConfiguratieDocument, options);
+}
+export type GetConfiguratieQueryHookResult = ReturnType<typeof useGetConfiguratieQuery>;
+export type GetConfiguratieLazyQueryHookResult = ReturnType<typeof useGetConfiguratieLazyQuery>;
+export type GetConfiguratieQueryResult = Apollo.QueryResult<GetConfiguratieQuery, GetConfiguratieQueryVariables>;
+export const GetCreateAfspraakFormDataDocument = gql`
+    query getCreateAfspraakFormData($burgerId: Int!) {
+  burger(id: $burgerId) {
+    id
+    voorletters
+    voornamen
+    achternaam
+    rekeningen {
+      id
+      iban
+      rekeninghouder
+    }
+  }
+  rubrieken {
+    id
+    naam
+    grootboekrekening {
+      id
+      naam
+      credit
+    }
+  }
+  organisaties {
+    id
+    naam
+    kvknummer
+    vestigingsnummer
+  }
+}
+    `;
+
+/**
+ * __useGetCreateAfspraakFormDataQuery__
+ *
+ * To run a query within a React component, call `useGetCreateAfspraakFormDataQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCreateAfspraakFormDataQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCreateAfspraakFormDataQuery({
+ *   variables: {
+ *      burgerId: // value for 'burgerId'
+ *   },
+ * });
+ */
+export function useGetCreateAfspraakFormDataQuery(baseOptions: Apollo.QueryHookOptions<GetCreateAfspraakFormDataQuery, GetCreateAfspraakFormDataQueryVariables>) {
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useQuery<GetCreateAfspraakFormDataQuery, GetCreateAfspraakFormDataQueryVariables>(GetCreateAfspraakFormDataDocument, options);
+}
+export function useGetCreateAfspraakFormDataLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetCreateAfspraakFormDataQuery, GetCreateAfspraakFormDataQueryVariables>) {
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useLazyQuery<GetCreateAfspraakFormDataQuery, GetCreateAfspraakFormDataQueryVariables>(GetCreateAfspraakFormDataDocument, options);
+}
+export type GetCreateAfspraakFormDataQueryHookResult = ReturnType<typeof useGetCreateAfspraakFormDataQuery>;
+export type GetCreateAfspraakFormDataLazyQueryHookResult = ReturnType<typeof useGetCreateAfspraakFormDataLazyQuery>;
+export type GetCreateAfspraakFormDataQueryResult = Apollo.QueryResult<GetCreateAfspraakFormDataQuery, GetCreateAfspraakFormDataQueryVariables>;
+export const GetCsmsDocument = gql`
+    query getCsms {
+  customerStatementMessages {
+    id
+    filename
+    uploadDate
+    accountIdentification
+    closingAvailableFunds
+    closingBalance
+    forwardAvailableBalance
+    openingBalance
+    relatedReference
+    sequenceNumber
+    transactionReferenceNumber
+  }
+}
+    `;
+
+/**
+ * __useGetCsmsQuery__
+ *
+ * To run a query within a React component, call `useGetCsmsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCsmsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCsmsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetCsmsQuery(baseOptions?: Apollo.QueryHookOptions<GetCsmsQuery, GetCsmsQueryVariables>) {
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useQuery<GetCsmsQuery, GetCsmsQueryVariables>(GetCsmsDocument, options);
+}
+export function useGetCsmsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetCsmsQuery, GetCsmsQueryVariables>) {
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useLazyQuery<GetCsmsQuery, GetCsmsQueryVariables>(GetCsmsDocument, options);
+}
+export type GetCsmsQueryHookResult = ReturnType<typeof useGetCsmsQuery>;
+export type GetCsmsLazyQueryHookResult = ReturnType<typeof useGetCsmsLazyQuery>;
+export type GetCsmsQueryResult = Apollo.QueryResult<GetCsmsQuery, GetCsmsQueryVariables>;
+export const GetExportsPagedDocument = gql`
+    query getExportsPaged($offset: Int!, $limit: Int!) {
+  exportsPaged(offset: $offset, limit: $limit) {
+    exports {
+      id
+      naam
+      timestamp
+      startDatum
+      eindDatum
+      verwerkingDatum
+      sha256
+      overschrijvingen {
+        id
+        bedrag
       }
-export function useGetGebeurtenissenLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetGebeurtenissenQuery, GetGebeurtenissenQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetGebeurtenissenQuery, GetGebeurtenissenQueryVariables>(GetGebeurtenissenDocument, options);
-        }
-export type GetGebeurtenissenQueryHookResult = ReturnType<typeof useGetGebeurtenissenQuery>;
-export type GetGebeurtenissenLazyQueryHookResult = ReturnType<typeof useGetGebeurtenissenLazyQuery>;
-export type GetGebeurtenissenQueryResult = Apollo.QueryResult<GetGebeurtenissenQuery, GetGebeurtenissenQueryVariables>;
+    }
+    pageInfo {
+      count
+      limit
+      start
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetExportsPagedQuery__
+ *
+ * To run a query within a React component, call `useGetExportsPagedQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetExportsPagedQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetExportsPagedQuery({
+ *   variables: {
+ *      offset: // value for 'offset'
+ *      limit: // value for 'limit'
+ *   },
+ * });
+ */
+export function useGetExportsPagedQuery(baseOptions: Apollo.QueryHookOptions<GetExportsPagedQuery, GetExportsPagedQueryVariables>) {
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useQuery<GetExportsPagedQuery, GetExportsPagedQueryVariables>(GetExportsPagedDocument, options);
+}
+export function useGetExportsPagedLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetExportsPagedQuery, GetExportsPagedQueryVariables>) {
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useLazyQuery<GetExportsPagedQuery, GetExportsPagedQueryVariables>(GetExportsPagedDocument, options);
+}
+export type GetExportsPagedQueryHookResult = ReturnType<typeof useGetExportsPagedQuery>;
+export type GetExportsPagedLazyQueryHookResult = ReturnType<typeof useGetExportsPagedLazyQuery>;
+export type GetExportsPagedQueryResult = Apollo.QueryResult<GetExportsPagedQuery, GetExportsPagedQueryVariables>;
 export const GetHuishoudenDocument = gql`
     query getHuishouden($id: Int!) {
   huishouden(id: $id) {
@@ -6497,13 +5962,13 @@ export const GetHuishoudenDocument = gql`
  * });
  */
 export function useGetHuishoudenQuery(baseOptions: Apollo.QueryHookOptions<GetHuishoudenQuery, GetHuishoudenQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetHuishoudenQuery, GetHuishoudenQueryVariables>(GetHuishoudenDocument, options);
-      }
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useQuery<GetHuishoudenQuery, GetHuishoudenQueryVariables>(GetHuishoudenDocument, options);
+}
 export function useGetHuishoudenLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetHuishoudenQuery, GetHuishoudenQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetHuishoudenQuery, GetHuishoudenQueryVariables>(GetHuishoudenDocument, options);
-        }
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useLazyQuery<GetHuishoudenQuery, GetHuishoudenQueryVariables>(GetHuishoudenDocument, options);
+}
 export type GetHuishoudenQueryHookResult = ReturnType<typeof useGetHuishoudenQuery>;
 export type GetHuishoudenLazyQueryHookResult = ReturnType<typeof useGetHuishoudenLazyQuery>;
 export type GetHuishoudenQueryResult = Apollo.QueryResult<GetHuishoudenQuery, GetHuishoudenQueryVariables>;
@@ -6559,13 +6024,13 @@ export const GetHuishoudenOverzichtDocument = gql`
  * });
  */
 export function useGetHuishoudenOverzichtQuery(baseOptions: Apollo.QueryHookOptions<GetHuishoudenOverzichtQuery, GetHuishoudenOverzichtQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetHuishoudenOverzichtQuery, GetHuishoudenOverzichtQueryVariables>(GetHuishoudenOverzichtDocument, options);
-      }
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useQuery<GetHuishoudenOverzichtQuery, GetHuishoudenOverzichtQueryVariables>(GetHuishoudenOverzichtDocument, options);
+}
 export function useGetHuishoudenOverzichtLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetHuishoudenOverzichtQuery, GetHuishoudenOverzichtQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetHuishoudenOverzichtQuery, GetHuishoudenOverzichtQueryVariables>(GetHuishoudenOverzichtDocument, options);
-        }
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useLazyQuery<GetHuishoudenOverzichtQuery, GetHuishoudenOverzichtQueryVariables>(GetHuishoudenOverzichtDocument, options);
+}
 export type GetHuishoudenOverzichtQueryHookResult = ReturnType<typeof useGetHuishoudenOverzichtQuery>;
 export type GetHuishoudenOverzichtLazyQueryHookResult = ReturnType<typeof useGetHuishoudenOverzichtLazyQuery>;
 export type GetHuishoudenOverzichtQueryResult = Apollo.QueryResult<GetHuishoudenOverzichtQuery, GetHuishoudenOverzichtQueryVariables>;
@@ -6597,13 +6062,13 @@ export const GetHuishoudensDocument = gql`
  * });
  */
 export function useGetHuishoudensQuery(baseOptions?: Apollo.QueryHookOptions<GetHuishoudensQuery, GetHuishoudensQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetHuishoudensQuery, GetHuishoudensQueryVariables>(GetHuishoudensDocument, options);
-      }
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useQuery<GetHuishoudensQuery, GetHuishoudensQueryVariables>(GetHuishoudensDocument, options);
+}
 export function useGetHuishoudensLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetHuishoudensQuery, GetHuishoudensQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetHuishoudensQuery, GetHuishoudensQueryVariables>(GetHuishoudensDocument, options);
-        }
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useLazyQuery<GetHuishoudensQuery, GetHuishoudensQueryVariables>(GetHuishoudensDocument, options);
+}
 export type GetHuishoudensQueryHookResult = ReturnType<typeof useGetHuishoudensQuery>;
 export type GetHuishoudensLazyQueryHookResult = ReturnType<typeof useGetHuishoudensLazyQuery>;
 export type GetHuishoudensQueryResult = Apollo.QueryResult<GetHuishoudensQuery, GetHuishoudensQueryVariables>;
@@ -6657,13 +6122,13 @@ export const GetOrganisatieDocument = gql`
  * });
  */
 export function useGetOrganisatieQuery(baseOptions: Apollo.QueryHookOptions<GetOrganisatieQuery, GetOrganisatieQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetOrganisatieQuery, GetOrganisatieQueryVariables>(GetOrganisatieDocument, options);
-      }
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useQuery<GetOrganisatieQuery, GetOrganisatieQueryVariables>(GetOrganisatieDocument, options);
+}
 export function useGetOrganisatieLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetOrganisatieQuery, GetOrganisatieQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetOrganisatieQuery, GetOrganisatieQueryVariables>(GetOrganisatieDocument, options);
-        }
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useLazyQuery<GetOrganisatieQuery, GetOrganisatieQueryVariables>(GetOrganisatieDocument, options);
+}
 export type GetOrganisatieQueryHookResult = ReturnType<typeof useGetOrganisatieQuery>;
 export type GetOrganisatieLazyQueryHookResult = ReturnType<typeof useGetOrganisatieLazyQuery>;
 export type GetOrganisatieQueryResult = Apollo.QueryResult<GetOrganisatieQuery, GetOrganisatieQueryVariables>;
@@ -6716,13 +6181,13 @@ export const GetOrganisatiesDocument = gql`
  * });
  */
 export function useGetOrganisatiesQuery(baseOptions?: Apollo.QueryHookOptions<GetOrganisatiesQuery, GetOrganisatiesQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetOrganisatiesQuery, GetOrganisatiesQueryVariables>(GetOrganisatiesDocument, options);
-      }
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useQuery<GetOrganisatiesQuery, GetOrganisatiesQueryVariables>(GetOrganisatiesDocument, options);
+}
 export function useGetOrganisatiesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetOrganisatiesQuery, GetOrganisatiesQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetOrganisatiesQuery, GetOrganisatiesQueryVariables>(GetOrganisatiesDocument, options);
-        }
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useLazyQuery<GetOrganisatiesQuery, GetOrganisatiesQueryVariables>(GetOrganisatiesDocument, options);
+}
 export type GetOrganisatiesQueryHookResult = ReturnType<typeof useGetOrganisatiesQuery>;
 export type GetOrganisatiesLazyQueryHookResult = ReturnType<typeof useGetOrganisatiesLazyQuery>;
 export type GetOrganisatiesQueryResult = Apollo.QueryResult<GetOrganisatiesQuery, GetOrganisatiesQueryVariables>;
@@ -6751,13 +6216,13 @@ export const GetSimpleOrganisatiesDocument = gql`
  * });
  */
 export function useGetSimpleOrganisatiesQuery(baseOptions?: Apollo.QueryHookOptions<GetSimpleOrganisatiesQuery, GetSimpleOrganisatiesQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetSimpleOrganisatiesQuery, GetSimpleOrganisatiesQueryVariables>(GetSimpleOrganisatiesDocument, options);
-      }
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useQuery<GetSimpleOrganisatiesQuery, GetSimpleOrganisatiesQueryVariables>(GetSimpleOrganisatiesDocument, options);
+}
 export function useGetSimpleOrganisatiesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetSimpleOrganisatiesQuery, GetSimpleOrganisatiesQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetSimpleOrganisatiesQuery, GetSimpleOrganisatiesQueryVariables>(GetSimpleOrganisatiesDocument, options);
-        }
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useLazyQuery<GetSimpleOrganisatiesQuery, GetSimpleOrganisatiesQueryVariables>(GetSimpleOrganisatiesDocument, options);
+}
 export type GetSimpleOrganisatiesQueryHookResult = ReturnType<typeof useGetSimpleOrganisatiesQuery>;
 export type GetSimpleOrganisatiesLazyQueryHookResult = ReturnType<typeof useGetSimpleOrganisatiesLazyQuery>;
 export type GetSimpleOrganisatiesQueryResult = Apollo.QueryResult<GetSimpleOrganisatiesQuery, GetSimpleOrganisatiesQueryVariables>;
@@ -6788,13 +6253,13 @@ export const GetRekeningDocument = gql`
  * });
  */
 export function useGetRekeningQuery(baseOptions: Apollo.QueryHookOptions<GetRekeningQuery, GetRekeningQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetRekeningQuery, GetRekeningQueryVariables>(GetRekeningDocument, options);
-      }
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useQuery<GetRekeningQuery, GetRekeningQueryVariables>(GetRekeningDocument, options);
+}
 export function useGetRekeningLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetRekeningQuery, GetRekeningQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetRekeningQuery, GetRekeningQueryVariables>(GetRekeningDocument, options);
-        }
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useLazyQuery<GetRekeningQuery, GetRekeningQueryVariables>(GetRekeningDocument, options);
+}
 export type GetRekeningQueryHookResult = ReturnType<typeof useGetRekeningQuery>;
 export type GetRekeningLazyQueryHookResult = ReturnType<typeof useGetRekeningLazyQuery>;
 export type GetRekeningQueryResult = Apollo.QueryResult<GetRekeningQuery, GetRekeningQueryVariables>;
@@ -6824,13 +6289,13 @@ export const GetRekeningenDocument = gql`
  * });
  */
 export function useGetRekeningenQuery(baseOptions?: Apollo.QueryHookOptions<GetRekeningenQuery, GetRekeningenQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetRekeningenQuery, GetRekeningenQueryVariables>(GetRekeningenDocument, options);
-      }
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useQuery<GetRekeningenQuery, GetRekeningenQueryVariables>(GetRekeningenDocument, options);
+}
 export function useGetRekeningenLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetRekeningenQuery, GetRekeningenQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetRekeningenQuery, GetRekeningenQueryVariables>(GetRekeningenDocument, options);
-        }
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useLazyQuery<GetRekeningenQuery, GetRekeningenQueryVariables>(GetRekeningenDocument, options);
+}
 export type GetRekeningenQueryHookResult = ReturnType<typeof useGetRekeningenQuery>;
 export type GetRekeningenLazyQueryHookResult = ReturnType<typeof useGetRekeningenLazyQuery>;
 export type GetRekeningenQueryResult = Apollo.QueryResult<GetRekeningenQuery, GetRekeningenQueryVariables>;
@@ -6915,13 +6380,13 @@ export const GetReportingDataDocument = gql`
  * });
  */
 export function useGetReportingDataQuery(baseOptions?: Apollo.QueryHookOptions<GetReportingDataQuery, GetReportingDataQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetReportingDataQuery, GetReportingDataQueryVariables>(GetReportingDataDocument, options);
-      }
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useQuery<GetReportingDataQuery, GetReportingDataQueryVariables>(GetReportingDataDocument, options);
+}
 export function useGetReportingDataLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetReportingDataQuery, GetReportingDataQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetReportingDataQuery, GetReportingDataQueryVariables>(GetReportingDataDocument, options);
-        }
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useLazyQuery<GetReportingDataQuery, GetReportingDataQueryVariables>(GetReportingDataDocument, options);
+}
 export type GetReportingDataQueryHookResult = ReturnType<typeof useGetReportingDataQuery>;
 export type GetReportingDataLazyQueryHookResult = ReturnType<typeof useGetReportingDataLazyQuery>;
 export type GetReportingDataQueryResult = Apollo.QueryResult<GetReportingDataQuery, GetReportingDataQueryVariables>;
@@ -6954,13 +6419,13 @@ export const GetRubriekenDocument = gql`
  * });
  */
 export function useGetRubriekenQuery(baseOptions?: Apollo.QueryHookOptions<GetRubriekenQuery, GetRubriekenQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetRubriekenQuery, GetRubriekenQueryVariables>(GetRubriekenDocument, options);
-      }
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useQuery<GetRubriekenQuery, GetRubriekenQueryVariables>(GetRubriekenDocument, options);
+}
 export function useGetRubriekenLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetRubriekenQuery, GetRubriekenQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetRubriekenQuery, GetRubriekenQueryVariables>(GetRubriekenDocument, options);
-        }
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useLazyQuery<GetRubriekenQuery, GetRubriekenQueryVariables>(GetRubriekenDocument, options);
+}
 export type GetRubriekenQueryHookResult = ReturnType<typeof useGetRubriekenQuery>;
 export type GetRubriekenLazyQueryHookResult = ReturnType<typeof useGetRubriekenLazyQuery>;
 export type GetRubriekenQueryResult = Apollo.QueryResult<GetRubriekenQuery, GetRubriekenQueryVariables>;
@@ -6999,13 +6464,13 @@ export const GetRubriekenConfiguratieDocument = gql`
  * });
  */
 export function useGetRubriekenConfiguratieQuery(baseOptions?: Apollo.QueryHookOptions<GetRubriekenConfiguratieQuery, GetRubriekenConfiguratieQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetRubriekenConfiguratieQuery, GetRubriekenConfiguratieQueryVariables>(GetRubriekenConfiguratieDocument, options);
-      }
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useQuery<GetRubriekenConfiguratieQuery, GetRubriekenConfiguratieQueryVariables>(GetRubriekenConfiguratieDocument, options);
+}
 export function useGetRubriekenConfiguratieLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetRubriekenConfiguratieQuery, GetRubriekenConfiguratieQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetRubriekenConfiguratieQuery, GetRubriekenConfiguratieQueryVariables>(GetRubriekenConfiguratieDocument, options);
-        }
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useLazyQuery<GetRubriekenConfiguratieQuery, GetRubriekenConfiguratieQueryVariables>(GetRubriekenConfiguratieDocument, options);
+}
 export type GetRubriekenConfiguratieQueryHookResult = ReturnType<typeof useGetRubriekenConfiguratieQuery>;
 export type GetRubriekenConfiguratieLazyQueryHookResult = ReturnType<typeof useGetRubriekenConfiguratieLazyQuery>;
 export type GetRubriekenConfiguratieQueryResult = Apollo.QueryResult<GetRubriekenConfiguratieQuery, GetRubriekenConfiguratieQueryVariables>;
@@ -7035,13 +6500,13 @@ export const GetSaldoDocument = gql`
  * });
  */
 export function useGetSaldoQuery(baseOptions: Apollo.QueryHookOptions<GetSaldoQuery, GetSaldoQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetSaldoQuery, GetSaldoQueryVariables>(GetSaldoDocument, options);
-      }
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useQuery<GetSaldoQuery, GetSaldoQueryVariables>(GetSaldoDocument, options);
+}
 export function useGetSaldoLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetSaldoQuery, GetSaldoQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetSaldoQuery, GetSaldoQueryVariables>(GetSaldoDocument, options);
-        }
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useLazyQuery<GetSaldoQuery, GetSaldoQueryVariables>(GetSaldoDocument, options);
+}
 export type GetSaldoQueryHookResult = ReturnType<typeof useGetSaldoQuery>;
 export type GetSaldoLazyQueryHookResult = ReturnType<typeof useGetSaldoLazyQuery>;
 export type GetSaldoQueryResult = Apollo.QueryResult<GetSaldoQuery, GetSaldoQueryVariables>;
@@ -7109,44 +6574,87 @@ export const GetSearchAfsprakenDocument = gql`
  * });
  */
 export function useGetSearchAfsprakenQuery(baseOptions?: Apollo.QueryHookOptions<GetSearchAfsprakenQuery, GetSearchAfsprakenQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetSearchAfsprakenQuery, GetSearchAfsprakenQueryVariables>(GetSearchAfsprakenDocument, options);
-      }
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useQuery<GetSearchAfsprakenQuery, GetSearchAfsprakenQueryVariables>(GetSearchAfsprakenDocument, options);
+}
 export function useGetSearchAfsprakenLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetSearchAfsprakenQuery, GetSearchAfsprakenQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetSearchAfsprakenQuery, GetSearchAfsprakenQueryVariables>(GetSearchAfsprakenDocument, options);
-        }
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useLazyQuery<GetSearchAfsprakenQuery, GetSearchAfsprakenQueryVariables>(GetSearchAfsprakenDocument, options);
+}
 export type GetSearchAfsprakenQueryHookResult = ReturnType<typeof useGetSearchAfsprakenQuery>;
 export type GetSearchAfsprakenLazyQueryHookResult = ReturnType<typeof useGetSearchAfsprakenLazyQuery>;
 export type GetSearchAfsprakenQueryResult = Apollo.QueryResult<GetSearchAfsprakenQuery, GetSearchAfsprakenQueryVariables>;
-export const GetSignalenAndBurgersDocument = gql`
-    query getSignalenAndBurgers {
-  signalen {
-    id
-    isActive
-    type
-    actions
-    bedragDifference
-    timeUpdated
-    alarm {
+export const GetSignalsPagedDocument = gql`
+    query GetSignalsPaged($input: SignalsPagedRequest) {
+  Signals_GetPaged(input: $input) {
+    data {
+      alarmId
+      createdAt
       id
-      afspraak {
+      isActive
+      journalEntryIds
+      agreement {
         id
         omschrijving
-        bedrag
-        credit
-        burgerId
       }
+      citizen {
+        id
+        voornamen
+        achternaam
+        voorletters
+      }
+      journalEntries {
+        id
+        transaction {
+          id
+          bedrag
+        }
+      }
+      offByAmount
+      signalType
+      updatedAt
     }
-    bankTransactions {
-      id
-      bedrag
-      isCredit
+    PageInfo {
+      skip
+      take
+      total_count
     }
   }
+}
+    `;
+
+/**
+ * __useGetSignalsPagedQuery__
+ *
+ * To run a query within a React component, call `useGetSignalsPagedQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetSignalsPagedQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetSignalsPagedQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useGetSignalsPagedQuery(baseOptions?: Apollo.QueryHookOptions<GetSignalsPagedQuery, GetSignalsPagedQueryVariables>) {
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useQuery<GetSignalsPagedQuery, GetSignalsPagedQueryVariables>(GetSignalsPagedDocument, options);
+}
+export function useGetSignalsPagedLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetSignalsPagedQuery, GetSignalsPagedQueryVariables>) {
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useLazyQuery<GetSignalsPagedQuery, GetSignalsPagedQueryVariables>(GetSignalsPagedDocument, options);
+}
+export type GetSignalsPagedQueryHookResult = ReturnType<typeof useGetSignalsPagedQuery>;
+export type GetSignalsPagedLazyQueryHookResult = ReturnType<typeof useGetSignalsPagedLazyQuery>;
+export type GetSignalsPagedQueryResult = Apollo.QueryResult<GetSignalsPagedQuery, GetSignalsPagedQueryVariables>;
+export const GetCitizensSignalsFilterDocument = gql`
+    query GetCitizensSignalsFilter {
   burgers {
     id
-    voorletters
+    uuid
     voornamen
     achternaam
   }
@@ -7154,66 +6662,65 @@ export const GetSignalenAndBurgersDocument = gql`
     `;
 
 /**
- * __useGetSignalenAndBurgersQuery__
+ * __useGetCitizensSignalsFilterQuery__
  *
- * To run a query within a React component, call `useGetSignalenAndBurgersQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetSignalenAndBurgersQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetCitizensSignalsFilterQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCitizensSignalsFilterQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetSignalenAndBurgersQuery({
+ * const { data, loading, error } = useGetCitizensSignalsFilterQuery({
  *   variables: {
  *   },
  * });
  */
-export function useGetSignalenAndBurgersQuery(baseOptions?: Apollo.QueryHookOptions<GetSignalenAndBurgersQuery, GetSignalenAndBurgersQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetSignalenAndBurgersQuery, GetSignalenAndBurgersQueryVariables>(GetSignalenAndBurgersDocument, options);
-      }
-export function useGetSignalenAndBurgersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetSignalenAndBurgersQuery, GetSignalenAndBurgersQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetSignalenAndBurgersQuery, GetSignalenAndBurgersQueryVariables>(GetSignalenAndBurgersDocument, options);
-        }
-export type GetSignalenAndBurgersQueryHookResult = ReturnType<typeof useGetSignalenAndBurgersQuery>;
-export type GetSignalenAndBurgersLazyQueryHookResult = ReturnType<typeof useGetSignalenAndBurgersLazyQuery>;
-export type GetSignalenAndBurgersQueryResult = Apollo.QueryResult<GetSignalenAndBurgersQuery, GetSignalenAndBurgersQueryVariables>;
-export const GetSignalenDocument = gql`
-    query getSignalen {
-  signalen {
-    id
-    isActive
+export function useGetCitizensSignalsFilterQuery(baseOptions?: Apollo.QueryHookOptions<GetCitizensSignalsFilterQuery, GetCitizensSignalsFilterQueryVariables>) {
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useQuery<GetCitizensSignalsFilterQuery, GetCitizensSignalsFilterQueryVariables>(GetCitizensSignalsFilterDocument, options);
+}
+export function useGetCitizensSignalsFilterLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetCitizensSignalsFilterQuery, GetCitizensSignalsFilterQueryVariables>) {
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useLazyQuery<GetCitizensSignalsFilterQuery, GetCitizensSignalsFilterQueryVariables>(GetCitizensSignalsFilterDocument, options);
+}
+export type GetCitizensSignalsFilterQueryHookResult = ReturnType<typeof useGetCitizensSignalsFilterQuery>;
+export type GetCitizensSignalsFilterLazyQueryHookResult = ReturnType<typeof useGetCitizensSignalsFilterLazyQuery>;
+export type GetCitizensSignalsFilterQueryResult = Apollo.QueryResult<GetCitizensSignalsFilterQuery, GetCitizensSignalsFilterQueryVariables>;
+export const GetSignalsCountDocument = gql`
+    query GetSignalsCount {
+  Signals_GetActiveSignalsCount {
+    count
   }
 }
     `;
 
 /**
- * __useGetSignalenQuery__
+ * __useGetSignalsCountQuery__
  *
- * To run a query within a React component, call `useGetSignalenQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetSignalenQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetSignalsCountQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetSignalsCountQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetSignalenQuery({
+ * const { data, loading, error } = useGetSignalsCountQuery({
  *   variables: {
  *   },
  * });
  */
-export function useGetSignalenQuery(baseOptions?: Apollo.QueryHookOptions<GetSignalenQuery, GetSignalenQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetSignalenQuery, GetSignalenQueryVariables>(GetSignalenDocument, options);
-      }
-export function useGetSignalenLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetSignalenQuery, GetSignalenQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetSignalenQuery, GetSignalenQueryVariables>(GetSignalenDocument, options);
-        }
-export type GetSignalenQueryHookResult = ReturnType<typeof useGetSignalenQuery>;
-export type GetSignalenLazyQueryHookResult = ReturnType<typeof useGetSignalenLazyQuery>;
-export type GetSignalenQueryResult = Apollo.QueryResult<GetSignalenQuery, GetSignalenQueryVariables>;
+export function useGetSignalsCountQuery(baseOptions?: Apollo.QueryHookOptions<GetSignalsCountQuery, GetSignalsCountQueryVariables>) {
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useQuery<GetSignalsCountQuery, GetSignalsCountQueryVariables>(GetSignalsCountDocument, options);
+}
+export function useGetSignalsCountLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetSignalsCountQuery, GetSignalsCountQueryVariables>) {
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useLazyQuery<GetSignalsCountQuery, GetSignalsCountQueryVariables>(GetSignalsCountDocument, options);
+}
+export type GetSignalsCountQueryHookResult = ReturnType<typeof useGetSignalsCountQuery>;
+export type GetSignalsCountLazyQueryHookResult = ReturnType<typeof useGetSignalsCountLazyQuery>;
+export type GetSignalsCountQueryResult = Apollo.QueryResult<GetSignalsCountQuery, GetSignalsCountQueryVariables>;
 export const GetSimilarAfsprakenDocument = gql`
     query getSimilarAfspraken($ids: [Int]) {
   afspraken(ids: $ids) {
@@ -7253,13 +6760,13 @@ export const GetSimilarAfsprakenDocument = gql`
  * });
  */
 export function useGetSimilarAfsprakenQuery(baseOptions?: Apollo.QueryHookOptions<GetSimilarAfsprakenQuery, GetSimilarAfsprakenQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetSimilarAfsprakenQuery, GetSimilarAfsprakenQueryVariables>(GetSimilarAfsprakenDocument, options);
-      }
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useQuery<GetSimilarAfsprakenQuery, GetSimilarAfsprakenQueryVariables>(GetSimilarAfsprakenDocument, options);
+}
 export function useGetSimilarAfsprakenLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetSimilarAfsprakenQuery, GetSimilarAfsprakenQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetSimilarAfsprakenQuery, GetSimilarAfsprakenQueryVariables>(GetSimilarAfsprakenDocument, options);
-        }
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useLazyQuery<GetSimilarAfsprakenQuery, GetSimilarAfsprakenQueryVariables>(GetSimilarAfsprakenDocument, options);
+}
 export type GetSimilarAfsprakenQueryHookResult = ReturnType<typeof useGetSimilarAfsprakenQuery>;
 export type GetSimilarAfsprakenLazyQueryHookResult = ReturnType<typeof useGetSimilarAfsprakenLazyQuery>;
 export type GetSimilarAfsprakenQueryResult = Apollo.QueryResult<GetSimilarAfsprakenQuery, GetSimilarAfsprakenQueryVariables>;
@@ -7290,13 +6797,13 @@ export const GetSimpleBurgersDocument = gql`
  * });
  */
 export function useGetSimpleBurgersQuery(baseOptions?: Apollo.QueryHookOptions<GetSimpleBurgersQuery, GetSimpleBurgersQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetSimpleBurgersQuery, GetSimpleBurgersQueryVariables>(GetSimpleBurgersDocument, options);
-      }
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useQuery<GetSimpleBurgersQuery, GetSimpleBurgersQueryVariables>(GetSimpleBurgersDocument, options);
+}
 export function useGetSimpleBurgersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetSimpleBurgersQuery, GetSimpleBurgersQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetSimpleBurgersQuery, GetSimpleBurgersQueryVariables>(GetSimpleBurgersDocument, options);
-        }
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useLazyQuery<GetSimpleBurgersQuery, GetSimpleBurgersQueryVariables>(GetSimpleBurgersDocument, options);
+}
 export type GetSimpleBurgersQueryHookResult = ReturnType<typeof useGetSimpleBurgersQuery>;
 export type GetSimpleBurgersLazyQueryHookResult = ReturnType<typeof useGetSimpleBurgersLazyQuery>;
 export type GetSimpleBurgersQueryResult = Apollo.QueryResult<GetSimpleBurgersQuery, GetSimpleBurgersQueryVariables>;
@@ -7367,13 +6874,13 @@ export const GetTransactieDocument = gql`
  * });
  */
 export function useGetTransactieQuery(baseOptions: Apollo.QueryHookOptions<GetTransactieQuery, GetTransactieQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetTransactieQuery, GetTransactieQueryVariables>(GetTransactieDocument, options);
-      }
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useQuery<GetTransactieQuery, GetTransactieQueryVariables>(GetTransactieDocument, options);
+}
 export function useGetTransactieLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetTransactieQuery, GetTransactieQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetTransactieQuery, GetTransactieQueryVariables>(GetTransactieDocument, options);
-        }
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useLazyQuery<GetTransactieQuery, GetTransactieQueryVariables>(GetTransactieDocument, options);
+}
 export type GetTransactieQueryHookResult = ReturnType<typeof useGetTransactieQuery>;
 export type GetTransactieLazyQueryHookResult = ReturnType<typeof useGetTransactieLazyQuery>;
 export type GetTransactieQueryResult = Apollo.QueryResult<GetTransactieQuery, GetTransactieQueryVariables>;
@@ -7415,24 +6922,6 @@ export const GetTransactionItemFormDataDocument = gql`
         id
         iban
         rekeninghouder
-      }
-    }
-    alarm {
-      id
-      isActive
-      bedrag
-      bedragMargin
-      startDate
-      endDate
-      datumMargin
-      byDay
-      byMonth
-      byMonthDay
-      afspraak {
-        id
-      }
-      signaal {
-        id
       }
     }
     afdeling {
@@ -7521,13 +7010,13 @@ export const GetTransactionItemFormDataDocument = gql`
  * });
  */
 export function useGetTransactionItemFormDataQuery(baseOptions?: Apollo.QueryHookOptions<GetTransactionItemFormDataQuery, GetTransactionItemFormDataQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetTransactionItemFormDataQuery, GetTransactionItemFormDataQueryVariables>(GetTransactionItemFormDataDocument, options);
-      }
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useQuery<GetTransactionItemFormDataQuery, GetTransactionItemFormDataQueryVariables>(GetTransactionItemFormDataDocument, options);
+}
 export function useGetTransactionItemFormDataLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetTransactionItemFormDataQuery, GetTransactionItemFormDataQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetTransactionItemFormDataQuery, GetTransactionItemFormDataQueryVariables>(GetTransactionItemFormDataDocument, options);
-        }
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useLazyQuery<GetTransactionItemFormDataQuery, GetTransactionItemFormDataQueryVariables>(GetTransactionItemFormDataDocument, options);
+}
 export type GetTransactionItemFormDataQueryHookResult = ReturnType<typeof useGetTransactionItemFormDataQuery>;
 export type GetTransactionItemFormDataLazyQueryHookResult = ReturnType<typeof useGetTransactionItemFormDataLazyQuery>;
 export type GetTransactionItemFormDataQueryResult = Apollo.QueryResult<GetTransactionItemFormDataQuery, GetTransactionItemFormDataQueryVariables>;
@@ -7571,13 +7060,13 @@ export const GetTransactiesDocument = gql`
  * });
  */
 export function useGetTransactiesQuery(baseOptions: Apollo.QueryHookOptions<GetTransactiesQuery, GetTransactiesQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetTransactiesQuery, GetTransactiesQueryVariables>(GetTransactiesDocument, options);
-      }
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useQuery<GetTransactiesQuery, GetTransactiesQueryVariables>(GetTransactiesDocument, options);
+}
 export function useGetTransactiesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetTransactiesQuery, GetTransactiesQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetTransactiesQuery, GetTransactiesQueryVariables>(GetTransactiesDocument, options);
-        }
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useLazyQuery<GetTransactiesQuery, GetTransactiesQueryVariables>(GetTransactiesDocument, options);
+}
 export type GetTransactiesQueryHookResult = ReturnType<typeof useGetTransactiesQuery>;
 export type GetTransactiesLazyQueryHookResult = ReturnType<typeof useGetTransactiesLazyQuery>;
 export type GetTransactiesQueryResult = Apollo.QueryResult<GetTransactiesQuery, GetTransactiesQueryVariables>;
@@ -7631,13 +7120,140 @@ export const SearchTransactiesDocument = gql`
  * });
  */
 export function useSearchTransactiesQuery(baseOptions: Apollo.QueryHookOptions<SearchTransactiesQuery, SearchTransactiesQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<SearchTransactiesQuery, SearchTransactiesQueryVariables>(SearchTransactiesDocument, options);
-      }
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useQuery<SearchTransactiesQuery, SearchTransactiesQueryVariables>(SearchTransactiesDocument, options);
+}
 export function useSearchTransactiesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SearchTransactiesQuery, SearchTransactiesQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<SearchTransactiesQuery, SearchTransactiesQueryVariables>(SearchTransactiesDocument, options);
-        }
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useLazyQuery<SearchTransactiesQuery, SearchTransactiesQueryVariables>(SearchTransactiesDocument, options);
+}
 export type SearchTransactiesQueryHookResult = ReturnType<typeof useSearchTransactiesQuery>;
 export type SearchTransactiesLazyQueryHookResult = ReturnType<typeof useSearchTransactiesLazyQuery>;
 export type SearchTransactiesQueryResult = Apollo.QueryResult<SearchTransactiesQuery, SearchTransactiesQueryVariables>;
+export const GetUserActivitiesDocument = gql`
+    query GetUserActivities($input: UserActivitiesPagedRequest) {
+  UserActivities_GetUserActivitiesPaged(input: $input) {
+    data {
+      id
+      timestamp
+      user
+      action
+      entities {
+        entityType
+        entityId
+        huishouden {
+          id
+          burgers {
+            id
+            voorletters
+            voornamen
+            achternaam
+          }
+        }
+        burger {
+          id
+          voorletters
+          voornamen
+          achternaam
+        }
+        organisatie {
+          id
+          naam
+          kvknummer
+          vestigingsnummer
+        }
+        afspraak {
+          id
+          burger {
+            id
+            voornamen
+            voorletters
+            achternaam
+          }
+          afdeling {
+            id
+            naam
+            organisatie {
+              id
+              kvknummer
+              vestigingsnummer
+              naam
+            }
+          }
+        }
+        rekening {
+          id
+          iban
+          rekeninghouder
+        }
+        customerStatementMessage {
+          id
+          filename
+          bankTransactions {
+            id
+          }
+        }
+        configuratie {
+          id
+          waarde
+        }
+        rubriek {
+          id
+          naam
+        }
+        afdeling {
+          id
+          naam
+          organisatie {
+            id
+            naam
+          }
+        }
+        postadres {
+          id
+        }
+        export {
+          id
+          naam
+        }
+      }
+      meta {
+        userAgent
+        ip
+        applicationVersion
+      }
+    }
+    PageInfo {
+      total_count
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetUserActivitiesQuery__
+ *
+ * To run a query within a React component, call `useGetUserActivitiesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUserActivitiesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetUserActivitiesQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useGetUserActivitiesQuery(baseOptions?: Apollo.QueryHookOptions<GetUserActivitiesQuery, GetUserActivitiesQueryVariables>) {
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useQuery<GetUserActivitiesQuery, GetUserActivitiesQueryVariables>(GetUserActivitiesDocument, options);
+}
+export function useGetUserActivitiesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetUserActivitiesQuery, GetUserActivitiesQueryVariables>) {
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useLazyQuery<GetUserActivitiesQuery, GetUserActivitiesQueryVariables>(GetUserActivitiesDocument, options);
+}
+export type GetUserActivitiesQueryHookResult = ReturnType<typeof useGetUserActivitiesQuery>;
+export type GetUserActivitiesLazyQueryHookResult = ReturnType<typeof useGetUserActivitiesLazyQuery>;
+export type GetUserActivitiesQueryResult = Apollo.QueryResult<GetUserActivitiesQuery, GetUserActivitiesQueryVariables>;

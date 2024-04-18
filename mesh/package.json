@@ -1,0 +1,37 @@
+{
+	"name": "mesh",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"get-backend-schema": "rover graph introspect http://localhost:3000/api/graphql > graphql/backend/schema.graphql",
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"dev": "mesh dev",
+		"build": "mesh build",
+		"start": "mesh start",
+		"validate": "mesh validate"
+	},
+	"author": "",
+	"license": "ISC",
+	"dependencies": {
+		"@graphql-mesh/cli": "^0.89.0",
+		"@graphql-mesh/graphql": "^0.97.0",
+		"@graphql-mesh/grpc": "^0.98.0",
+		"@graphql-mesh/transform-filter-schema": "^0.97.0",
+		"@graphql-mesh/transform-hoist-field": "^0.97.0",
+		"@graphql-mesh/transform-prefix": "^0.97.0",
+		"@graphql-mesh/transform-rename": "^0.97.0",
+		"graphql": "^16.8.1",
+		"graphql-subscriptions": "^2.0.0"
+	},
+	"overrides": {
+		"@graphql-mesh/cli": {
+			"@graphql-mesh/http": {
+				"@whatwg-node/server": "^0.9.7"
+			}
+		}
+	},
+	"devDependencies": {
+		"@apollo/rover": "^0.22.0"
+	}
+}

@@ -1,24 +1,19 @@
 import {gql} from "@apollo/client";
 
 export const GetAlarmQuery = gql`
-    query getAlarm($id: String!) {
-        alarm(id: $id) {
+    query getAlarm($input: AlarmId) {
+        Alarms_GetById(input: $input) {
             id
             isActive
-            bedrag
-            bedragMargin
+            amount
+            amountMargin
             startDate
             endDate
-            datumMargin
-            byDay
-            byMonth
-            byMonthDay
-            afspraak {
-                id
-            }
-            signaal {
-                id
-            }
+            dateMargin
+            recurringDay
+            recurringMonths
+            recurringDayOfMonth
+            AlarmType
         }
     }
 `;

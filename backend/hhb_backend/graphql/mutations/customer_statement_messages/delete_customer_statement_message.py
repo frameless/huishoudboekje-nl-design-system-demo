@@ -1,5 +1,6 @@
 """ GraphQL mutation for deleting a Organisatie """
 import logging
+from hhb_backend.remove_journalentry_from_signals import RemoveJournalEntryFromSignals
 import graphene
 import requests
 
@@ -34,13 +35,17 @@ class DeleteCustomerStatementMessage(graphene.Mutation):
         transaction_ids = [t.id for t in transactions]
 
         journaalposten = hhb_dataloader().journaalposten.by_transactions(transaction_ids)
+        uuids = []
         for journaalpost in journaalposten:
             if journaalpost is not None:
+                uuids.append(journaalpost["uuid"])
                 response = requests.delete(
                     f"{settings.HHB_SERVICES_URL}/journaalposten/{journaalpost['id']}")
                 if not response.ok:
                     raise GraphQLError(
                         f"Upstream API responded: {response.text}")
+
+        RemoveJournalEntryFromSignals.create(uuids)
 
         for transaction in transaction_ids:
             response = requests.delete(

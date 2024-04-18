@@ -21,6 +21,10 @@ These are:
 - [Medewerker Backend](backend/)
 - [Huishoudboekje Services](services/)
 
+The architecture is currently undergoing improvements. 
+New components:
+- [Huishoudboekje Services](huishoudboekje_services/)
+
 ### Database
 
 All data for our own services is stored in a single PostgreSQL server.
@@ -52,14 +56,16 @@ environment:
 
 - Please make sure you have `docker-compose` installed. It comes
   with [Docker Desktop](https://docs.docker.com/compose/install/).
-- Run `docker-compose up -d db` to start the database.
-- Run `docker-compose run db-init` to initialize the databases for all services.
-- Run `docker-compose up` to launch all the services and the backend. This might take a few moments as the services
+
+- Run `docker-compose up -d` to launch all the services and the backend. This might take a few moments as the services
   execute some migrations on the database.
+- Run `docker-compose -f docker-compose.dev.yaml up -d` to launch all the services except the csharp services. For local development its easier to debug when these are run locally.
+- Add the --build tag when you want all the containers to rebuild
 - It's best to run the frontend application natively on your system using [NodeJS](https://nodejs.org/nl/).
   For instructions see [frontend/app/README.md](./frontend/app/README.md)
 - Run `docker-compose up sampledata` to insert a small dataset into your system. Make sure you have all your services, a
   database and the backend running.
+- Run `docker-compose up evaluate-alarms` to run the timed alarm evaluation.
 
 #### Testing
 

@@ -84,8 +84,6 @@ spec:
               value: "http://hhb-alarmenservice"
             - name: SIGNALENSERVICE_URL
               value: "http://hhb-signalenservice"
-            - name: UNLEASHSERVICE_URL
-              value: "http://hhb-unleashservice"
             - name: RAPPORTAGE_SERVICE_URL
               value: "http://hhb-rapportageservice"
             - name: USE_GRAPHIQL
@@ -94,3 +92,17 @@ spec:
               value: INFO
             - name: STATSD_HOST
               value: "hhb-statsd-exporter:9125"
+            - name: RABBITMQ_HOST
+              value: hhb-rabbitmq
+            - name: RABBITMQ_PORT
+              value: "5672"
+            - name: RABBITMQ_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: rabbitmq-config
+                  key: RABBITMQ_DEFAULT_USER
+            - name: RABBITMQ_PASS
+              valueFrom:
+                configMapKeyRef:
+                  name: rabbitmq-config
+                  key: RABBITMQ_DEFAULT_PASS

@@ -26,20 +26,47 @@ class BurgerQuery:
         return result
 
 
+
+class BurgersByUuidsQuery:
+    return_type = graphene.List(
+        burger.Burger,
+        uuids=graphene.List(graphene.String),
+    )
+
+    @classmethod
+    def resolver(cls, _, info, uuids=None):
+        logging.info(f"Get burgers by uuid")
+        if(uuids is None or len(uuids) == 0):
+            return None
+        
+        burgers = hhb_dataloader().burgers.by_uuids(uuids)
+        AuditLogging.create(
+            action=info.field_name,
+                entities=[
+                    GebruikersActiviteitEntity(
+                        entityType="burger", entityId=burger.id)
+                    for burger in burgers
+                ]
+            )
+        return sorted(burgers, key=lambda i: uuids.index(i.uuid))
+
 class BurgersQuery:
     return_type = graphene.List(
         burger.Burger,
         search=graphene.String(),
-        ids=graphene.List(graphene.Int)
+        ids=graphene.List(graphene.Int),
+        isLogRequest=graphene.Boolean(required=False),
     )
 
     @classmethod
-    def resolver(cls, _, info, **kwargs):
+    def resolver(cls, _, info, isLogRequest=False, **kwargs):
         logging.info(f"Get burgers")
+
         if "ids" in kwargs:
             burgers = hhb_dataloader().burgers.load(kwargs["ids"])
             AuditLogging.create(
-                action=info.field_name,
+            logRequest=isLogRequest,
+            action=info.field_name,
                 entities=[
                     GebruikersActiviteitEntity(
                         entityType="burger", entityId=id)
@@ -64,7 +91,9 @@ class BurgersQuery:
                 return burgers
 
         burgers = hhb_dataloader().burgers.load_all(filters=kwargs.get("filters", None))
+        
         AuditLogging.create(
+            logRequest=isLogRequest,
             action=info.field_name,
             entities=[
                 GebruikersActiviteitEntity(
@@ -72,7 +101,7 @@ class BurgersQuery:
                 for burger in burgers
             ] if "filters" in kwargs else []
         )
-        return burgers
+        return burgers if not isLogRequest or isLogRequest and len(burgers) > 0 else None
 
 
 class BurgersPagedQuery:

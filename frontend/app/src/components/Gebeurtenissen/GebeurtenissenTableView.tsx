@@ -1,11 +1,11 @@
 import {Table, TableProps, Tbody, Th, Thead, Tr} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
-import {GebruikersActiviteit} from "../../generated/graphql";
+import {UserActivityData} from "../../generated/graphql";
 import {sortAuditTrailByTime} from "../../utils/things";
 import GebeurtenisTableRow from "./GebeurtenisTableRow";
 
-const GebeurtenissenTableView: React.FC<TableProps & {gebeurtenissen: GebruikersActiviteit[]}> = ({gebeurtenissen: gs, ...props}) => {
+const GebeurtenissenTableView: React.FC<TableProps & {gebeurtenissen: UserActivityData[]}> = ({gebeurtenissen: gs, ...props}) => {
 	const {t} = useTranslation();
 
 	return (

@@ -10,7 +10,6 @@ from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 import hhb_backend.graphql.models.afdeling as graphene_afdeling
 import hhb_backend.graphql.models.afspraak as graphene_afspraak
-import hhb_backend.graphql.models.alarm as graphene_alarm
 from hhb_backend.graphql.models.postadres import Postadres
 from hhb_backend.graphql.mutations.afspraken.update_afspraak_betaalinstructie import BetaalinstructieInput
 from hhb_backend.graphql.mutations.afspraken.update_afspraak_betaalinstructie import validate_afspraak_betaalinstructie
@@ -28,7 +27,6 @@ class CreateAfspraakInput(graphene.InputObjectType):
     credit = graphene.Boolean(required=True)
     afdeling_id = graphene.Int()
     postadres_id = graphene.String()
-    alarm_id = graphene.String()
     valid_from = graphene.String()
     valid_through = graphene.String()
     zoektermen = graphene.List(graphene.String)
@@ -54,7 +52,6 @@ class CreateAfspraak(graphene.Mutation):
                     "properties": {
                         "omschrijving": {"type": "string","minLength": 1},
                         "bedrag": {"type": "integer", "minimum": 0},
-                        "alarm_id": {"type": "string","format": "uuid"},
                         "valid_from": {"type": "string", "format": "date"},
                         "valid_through": {"type": "string", "format": "date"},
                         "zoektermen": {  "type": "array", "items": {"type": "string", "minLength": 1 } },
@@ -67,7 +64,6 @@ class CreateAfspraak(graphene.Mutation):
                     "properties": {
                         "omschrijving": {"type": "string","minLength": 1},
                         "bedrag": {"type": "integer", "minimum": 0},
-                        "alarm_id": {"type": "string","format": "uuid"},
                         "valid_from": {"type": "string", "format": "date"},
                         "valid_through": {"type": "string", "format": "date"},
                         "zoektermen": {  "type": "array", "items": {"type": "string", "minLength": 1 } },
@@ -111,13 +107,6 @@ class CreateAfspraak(graphene.Mutation):
             postadres: Postadres = hhb_dataloader().postadressen.load_one(postadres_id)
             if not postadres:
                 raise GraphQLError("postadres not found")
-
-        # Check alarm_id - optional
-        alarm_id = input.get("alarm_id")
-        if alarm_id is not None:
-            alarm_result: graphene_alarm.Alarm = hhb_dataloader().alarms.load_one(alarm_id)
-            if not alarm_result:
-                raise GraphQLError("alarm not found")
 
         # Check betaalinstructie - optional
         betaalinstructie = input.get("betaalinstructie")
