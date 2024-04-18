@@ -2,6 +2,10 @@
 
 ## 2.0.0
 
+Deze versie omvat herziene functionaliteit voor gebeurtenissen, alarmen en signalen. Met name snelheid en stabiliteit zijn verbeterd. Diverse kwetsbaarheden zijn opgelost.
+
+Met de nieuwe User API kan een koppeling gemaakt worden vanuit een klantportaal. Gegevens van een enkele, deelnemende inwoner kunnen daar weergegeven worden.
+
 ### Major Changes
 
 - e317713: Implemented new Logservice and ALarmenservice, removed unleash service"
