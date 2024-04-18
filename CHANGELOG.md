@@ -1,5 +1,27 @@
 # Huishoudboekje Changelog
 
+## 2.0.0
+
+### Major Changes
+
+- e317713: Implemented new Logservice and ALarmenservice, removed unleash service"
+
+### Minor Changes
+
+- 47d178c: Added first version new user api
+- e317713: Removed unleash service
+
+### Patch Changes
+
+- 833bd37: added multiple-payment and no-payment tests
+- 705ecc8: Fixed bug rapportage wrong saldo when not 1st of month as start date
+- 4286fb8: qa added modularity
+- d1cec69: added signal tests
+- d5891da: Fixed weekly alarms being uncreatable due to incorrect validation
+- f8dffb5: cleaned up code, added waits
+- 9e71caa: updated npm packages to resolve certain vulnerabilities
+- e317713: Upgraded i18 packages
+
 ## 1.12.7
 
 Deze versie omvat paginering bij het overzicht met bestanden van betaalinstructies.
