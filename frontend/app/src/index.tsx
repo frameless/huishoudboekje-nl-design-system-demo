@@ -13,6 +13,9 @@ import "./config/i18n";
 import theme from "./config/theme";
 import "./global.scss";
 import apolloClient from "./services/graphql-client";
+import {useNotifications} from "./components/Notificaties";
+
+
 
 dayjs.locale("nl-nl");
 registerLocale("nl", nl);

@@ -1,0 +1,11 @@
+{
+    "default": {
+        "title": "Notificatie"
+    },
+    "messages": {
+        "csm": {
+            "uploaded": "bankafschrift {{name}} is geüpload",
+            "evaluated": "{{transactions}} transacties toegevoegd, waarvan {{reconciled}} automatisch afgeletterd"
+        }
+    }
+}

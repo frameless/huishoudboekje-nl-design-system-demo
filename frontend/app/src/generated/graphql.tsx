@@ -760,6 +760,11 @@ export type JournaalpostTransactieRubriek = {
   transactionId?: Maybe<Scalars['Int']>;
 };
 
+export type KeyValuePairOfStringAndString = {
+  key: Scalars['String'];
+  value: Scalars['String'];
+};
+
 export type Meta = {
   applicationVersion?: Maybe<Scalars['String']>;
   ip?: Maybe<Scalars['String']>;
@@ -1087,6 +1092,12 @@ export type MutationUpdateRubriekArgs = {
   naam?: InputMaybe<Scalars['String']>;
 };
 
+export type Notification = {
+  additionalProperties?: Maybe<Array<KeyValuePairOfStringAndString>>;
+  message: Scalars['String'];
+  title?: Maybe<Scalars['String']>;
+};
+
 export type Organisatie = {
   afdelingen?: Maybe<Array<Maybe<Afdeling>>>;
   id?: Maybe<Scalars['Int']>;
@@ -1201,6 +1212,7 @@ export type Query = {
   exportsPaged?: Maybe<ExportsPaged>;
   grootboekrekening?: Maybe<Grootboekrekening>;
   grootboekrekeningen?: Maybe<Array<Maybe<Grootboekrekening>>>;
+  helloWorld: Scalars['String'];
   huishouden?: Maybe<Huishouden>;
   huishoudens?: Maybe<Array<Maybe<Huishouden>>>;
   huishoudensPaged?: Maybe<HuishoudensPaged>;
@@ -1601,6 +1613,10 @@ export type SignalsResponse = {
 export type StartAutomatischBoeken = {
   journaalposten?: Maybe<Array<Maybe<Journaalpost>>>;
   ok?: Maybe<Scalars['Boolean']>;
+};
+
+export type Subscription = {
+  notification: Notification;
 };
 
 export type UpdateAfdeling = {

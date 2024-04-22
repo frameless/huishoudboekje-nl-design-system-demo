@@ -1,0 +1,18 @@
+﻿type Query {
+  helloWorld: String!
+}
+
+type Subscription {
+  notification: Notification!
+}
+
+type Notification {
+  message: String!
+  additionalProperties: [KeyValuePairOfStringAndString!]
+  title: String
+}
+
+type KeyValuePairOfStringAndString {
+  key: String!
+  value: String!
+}

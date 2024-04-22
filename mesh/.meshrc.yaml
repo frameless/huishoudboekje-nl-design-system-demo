@@ -1,4 +1,15 @@
 sources:
+  - name: NotificationService
+    handler:
+      graphql:
+        endpoint: "{env.HHB_NOTIFICATION_SERVICE_URL}"
+        operationHeaders:
+          cookie: "{context.headers['cookie']}"
+          test : "test"
+          User-Agent: "{context.headers['user-agent']}"
+        source: ./graphql/notificationservice/schema.graphql
+        subscriptionsProtocol: SSE
+        method: POST
   - name: Backend
     handler:
       graphql:
@@ -102,9 +113,11 @@ additionalTypeDefs: |
     postadres: Postadres
     export: Export
   }
+
 additionalResolvers:
   - './resolvers'
 serve:
   hostname: 0.0.0.0
   endpoint: "/apiV2/graphql"
   batchingLimit: 10
+
