@@ -38,12 +38,20 @@ import {RouteNames} from "./config/routes";
 import useAuth from "./utils/useAuth";
 import HuishoudenOverzichtIndex from "./components/Huishoudens/HuishoudenOverzicht/HuishoudenOverzichtIndex";
 import SignalsView from "./components/Signals/SignalsView";
+import {useNotifications} from "./components/Notificaties";
+
+
 
 const App = () => {
 	const {t} = useTranslation();
 	const {user, error, loading, reset, login} = useAuth();
 	const theme = useTheme();
 	const location = useLocation();
+	const subscriptions = useNotifications()
+
+
+
+
 
 	// Todo: enable this once Matomo is available again.
 	// const dataLayer = useDataLayer(dataLayerOptions);
@@ -79,7 +87,6 @@ const App = () => {
 			return null;
 		}
 	}
-
 	return (
 		<VStack h={"auto"} minHeight={"100vh"} minWidth={"100%"} w={"auto"} bg={"gray.100"}>
 			<HStack width={"100%"} maxWidth={"1600px"} alignItems={"flex-start"} spacing={0}>

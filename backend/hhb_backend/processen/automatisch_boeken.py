@@ -10,6 +10,7 @@ from hhb_backend.service.model.afspraak import Afspraak
 from hhb_backend.service.model.rekening import Rekening
 from hhb_backend.service.model.bank_transaction import BankTransaction
 from hhb_backend.graphql.mutations.journaalposten.create_journaalpost import create_journaalposten
+from hhb_backend.notifications import Notificator
 
 def automatisch_boeken(customer_statement_message_id: int = None):
     logging.info(f"Start automatisch boeken")
@@ -57,6 +58,10 @@ def automatisch_boeken(customer_statement_message_id: int = None):
         json, _afspraken, _matching_transactions)
 
     logging.info(f"automatisch boeken completed with {len(journaalposten_)}")
+
+    Notificator.create("messages.csm.evaluated", None, {
+                       "transactions": f"{len(journaalposten_)}", "reconciled": f"{len(_automatische_transacties)}"})
+
     return journaalposten_
 
 

@@ -142,10 +142,28 @@ spec:
         - name: hhb-logservice
           resources:
             limits:
-              memory: 128Mi
+              memory: 256Mi
             requests:
               cpu: 50m
-              memory: 128Mi
+              memory: 256Mi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hhb-notificationservice
+  labels:
+    name: hhb-notificationservice
+spec:
+  template:
+    spec:
+      containers:
+        - name: hhb-notificationservice
+          resources:
+            limits:
+              memory: 256Mi
+            requests:
+              cpu: 50m
+              memory: 256Mi
 ---
 apiVersion: apps/v1
 kind: Deployment

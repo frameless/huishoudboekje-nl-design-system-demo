@@ -1,0 +1,41 @@
+﻿{
+  "profiles": {
+    "local": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "launchBrowser": false,
+      "applicationUrl": "http://localhost:8013",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "HHB_USE_AUTH": "0",
+        "HHB_JWT_ISSUER": "local",
+        "HHB_JWT_AUDIENCE": "local",
+        "HHB_JWT_SECRET": "local",
+        "HHB_RABBITMQ_HOST": "localhost",
+        "HHB_RABBITMQ_PORT": "5672",
+        "HHB_RABBITMQ_USER": "guest",
+        "HHB_RABBITMQ_PASS": "guest",
+        "HHB_METRICS_PORT" : "9013",
+        "Kestrel__EndPoints__Http__Url": "http://+:8013"
+      }
+    },
+    "dev-docker": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "launchBrowser": false,
+      "applicationUrl": "http://0.0.0.0:8000",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    },
+    "production": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "launchBrowser": false,
+      "applicationUrl": "http://0.0.0.0:8000",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Production"
+      }
+    }
+  }
+}

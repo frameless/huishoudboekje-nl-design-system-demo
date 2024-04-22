@@ -14,7 +14,7 @@
       "dotnetRunMessages": true,
       "launchBrowser": true,
       "launchUrl": "swagger",
-      "applicationUrl": "http://localhost:8013",
+      "applicationUrl": "http://localhost:8014",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
         "HHB_HUISHOUDBOEKJE_SERVICE" : "http://localhost:8001/",
@@ -24,8 +24,8 @@
         "HHB_RABBITMQ_PORT": "5672",
         "HHB_RABBITMQ_USER": "guest",
         "HHB_RABBITMQ_PASS": "guest",
-        "HHB_METRICS_PORT" : "9013",
-        "Kestrel__EndPoints__Http__Url": "http://+:8013"
+        "HHB_METRICS_PORT" : "9014",
+        "Kestrel__EndPoints__Http__Url": "http://+:8014"
       }
     },
     "dev-docker": {

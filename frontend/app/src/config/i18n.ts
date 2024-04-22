@@ -2,11 +2,13 @@ import i18Next from "i18next";
 import {initReactI18next} from "react-i18next";
 
 const defaultNamespace = "translation";
+const notifationNamespace = "notifications"
 
 /* Add languages here */
 const resources = {
 	nl: {
 		translation: require("../lang/nl.translation.json"),
+		notifications: require("../lang/nl.notifications.json")
 	},
 };
 
