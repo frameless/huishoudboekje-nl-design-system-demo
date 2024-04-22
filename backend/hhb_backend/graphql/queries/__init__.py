@@ -158,7 +158,7 @@ class RootQuery(graphene.ObjectType):
 
     def resolve_exports(root, info, **kwargs):
         return ExportsQuery.resolver(root, info, **kwargs)
-    
+
     def resolve_exports_paged(root, info, **kwargs):
         return ExportsPagedQuery.resolver(root, info, **kwargs)
 

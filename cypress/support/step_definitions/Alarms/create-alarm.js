@@ -1,6 +1,6 @@
 // cypress/support/step_definitions/Alarms/create-alarm.js
 
-import { Given, When, Then, Step } from "@badeball/cypress-cucumber-preprocessor";
+import {Given, When, Then, Step} from "@badeball/cypress-cucumber-preprocessor";
 
 const header = {
   'content-type': 'application/json',
@@ -10,7 +10,7 @@ const header = {
 //#region Scenario: view create alarm form with default options
 
 When('I view the "Add alarm" modal', () => {
-  
+
   // Click button element
   cy.visit('/burgers/1');
   cy.waitForReact();
@@ -34,35 +34,35 @@ When('I view the "Add alarm" modal', () => {
     .click();
 
   cy.waitForReact(); // Wait for modal opening
-  
+
 });
 
 Then('the "Create alarm form" is displayed', () => {
- 
+
   // Check whether modal is opened and visible
   cy.get('section[aria-modal="true"]')
     .scrollIntoView()
     .should('exist');
-  
+
 });
 
 Then('the recurrency is monthly', () => {
-   
+
   // Check recurrency
   cy.contains('Elke maand')
-  
+
 });
 
 Then('the link "Meer opties" is displayed', () => {
- 
+
   // Check link 'Meer opties'
   cy.get('button')
     .contains('Meer opties')
-  
+
 });
 
 Then('the start date is today', () => {
- 
+
   // Set date constants for comparison
   const dateNow = new Date().toLocaleDateString('nl-NL', {
     year: "numeric",
@@ -85,7 +85,7 @@ Then('the day of the month is empty', () => {
 });
 
 Then('the allowed deviation in days is empty', () => {
- 
+
   // Check 'Toegestane afwijking (in dagen)' field  
   cy.get('[data-test="alarmForm.dateMargin"]')
     .should('have.value', '')
@@ -93,7 +93,7 @@ Then('the allowed deviation in days is empty', () => {
 });
 
 Then('the expected amount is equal to the amount of the agreement', () => {
-  
+
   let agreementValue;
 
   cy.get('label[class^="chakra-form__label"]').contains('Bedrag')
@@ -103,18 +103,18 @@ Then('the expected amount is equal to the amount of the agreement', () => {
       const newValue1 = agreementValue.slice(2) // Remove the valuta symbol from string
       const newValue2 = newValue1.replace(",", ".") // Replace the comma with a full stop
 
-  // Check 'Bedrag verwachte betaling' field  
-  cy.get('[data-test="alarmForm.amount"]')
-    .invoke('val')
-    .should((val2) => {
-      expect(val2).to.eq(newValue2)
+      // Check 'Bedrag verwachte betaling' field  
+      cy.get('[data-test="alarmForm.amount"]')
+        .invoke('val')
+        .should((val2) => {
+          expect(val2).to.eq(newValue2)
+        })
     })
-  })
 
 });
 
 Then('the allowed deviation in amount is empty', () => {
- 
+
   // Check 'Toegestane afwijking bedrag (in euro's)' field  
   cy.get('[data-test="alarmForm.amountMargin"]')
     .should('have.value', '')
@@ -130,7 +130,7 @@ Then('the "Cancel" button is displayed', () => {
 });
 
 Then('the "Submit form" button is displayed', () => {
- 
+
   // Check whether 'Opslaan' button exists
   cy.get('[data-test="buttonModal.submit"]')
     .click()
@@ -141,7 +141,7 @@ Then('the "Close modal" button is displayed', () => {
 
   // Check whether the 'X' button exists in the top right
   cy.get('button[aria-label="Close"]')
-  .should('be.visible');
+    .should('be.visible');
 
 });
 
@@ -150,7 +150,7 @@ Then('the "Close modal" button is displayed', () => {
 //#region Scenario: save monthly alarm with basic options
 
 When('I view the "Agreement" page', () => {
- 
+
   // Navigate to /burgers
   cy.visit('/');
   cy.waitForReact();
@@ -175,11 +175,11 @@ When('I view the "Agreement" page', () => {
   cy.url().should('contains', Cypress.config().baseUrl + '/afspraken/')
   cy.get('h2').contains('Alarm').should('be.visible')
     .scrollIntoView() // Scrolls 'Alarm' into view
-  
+
 });
 
 When('I click the "Add alarm" button', () => {
- 
+
   cy.get('button')
     .contains('Toevoegen')
     .click();
@@ -187,7 +187,7 @@ When('I click the "Add alarm" button', () => {
 });
 
 Then('I fill in the current date for alarm start date', () => {
- 
+
   // Set date constants for comparison
   const dateNow = new Date().toLocaleDateString('nl-NL', {
     year: "numeric",
@@ -208,7 +208,7 @@ Then('I fill in the current date for alarm start date', () => {
 });
 
 Then('I fill in the alarm day of the month', () => {
- 
+
   // Check 'Dag in de maand' field  
   cy.get('[data-test="alarmForm.byMonthDay"]')
     .should('have.value', '')
@@ -221,7 +221,7 @@ Then('I fill in the alarm day of the month', () => {
 });
 
 Then('I fill in the alarm allowed deviation in days', () => {
- 
+
   // Check 'Toegestane afwijking (in dagen)' field  
   cy.get('[data-test="alarmForm.dateMargin"]')
     .should('have.value', '')
@@ -234,32 +234,32 @@ Then('I fill in the alarm allowed deviation in days', () => {
 });
 
 Then('I fill in the expected payment amount', () => {
- 
+
   let agreementValue;
-  
+
   cy.get('label[class^="chakra-form__label"]').contains('Bedrag')
     .siblings()
     .then(($value) => {
       agreementValue = $value.text() // Store the agreement amount in a variable
       const newValue1 = agreementValue.slice(2) // Remove the valuta symbol from string
       const newValue2 = newValue1.replace(",", ".") // Replace the comma with a full stop
-    
-    // Check 'Bedrag verwachte betaling' field   
-    cy.get('[data-test="alarmForm.amount"]')
-      .invoke('val')
-      .then((val2) => {
-        expect(val2).to.eq(newValue2)
 
-      // Clear and refill 'Bedrag verwachte betaling' field   
+      // Check 'Bedrag verwachte betaling' field   
       cy.get('[data-test="alarmForm.amount"]')
-        .type('{selectAll}' + newValue2) // Done via 'selectAll', as a clear() will automatically leave a zero
-        .should('have.value', newValue2)
+        .invoke('val')
+        .then((val2) => {
+          expect(val2).to.eq(newValue2)
+
+          // Clear and refill 'Bedrag verwachte betaling' field   
+          cy.get('[data-test="alarmForm.amount"]')
+            .type('{selectAll}' + newValue2) // Done via 'selectAll', as a clear() will automatically leave a zero
+            .should('have.value', newValue2)
         })
     })
 });
 
 Then('I fill in the alarm allowed deviation in payment amount', () => {
- 
+
   // Check 'Toegestane afwijking bedrag (in euro's)' field  
   cy.get('[data-test="alarmForm.amountMargin"]')
     .should('have.value', '')
@@ -272,7 +272,7 @@ Then('I fill in the alarm allowed deviation in payment amount', () => {
 });
 
 Then('I click the "Submit form" button', () => {
- 
+
   // Click 'Opslaan' button
   cy.waitForReact()
   cy.get('[data-test="buttonModal.submit"]')
@@ -280,7 +280,7 @@ Then('I click the "Submit form" button', () => {
 
   // Wait for modal to close
   cy.waitForReact();
-  
+
 });
 
 Then('the "Create alarm form" modal is closed', () => {
@@ -294,7 +294,7 @@ Then('the "Create alarm form" modal is closed', () => {
 });
 
 Then('a notification of success is displayed', () => {
- 
+
   // Check success message
   cy.get('[data-status="success"]')
     .should('be.visible')
@@ -302,7 +302,7 @@ Then('a notification of success is displayed', () => {
 });
 
 Then('the current status of the alarm on the agreements page is displayed', () => {
- 
+
   // Check current status of alarm
   cy.get('.chakra-switch__track')
   cy.get('.chakra-switch__thumb')

@@ -22,141 +22,142 @@ import './commands'
 import 'cypress-react-selector';
 
 function loginViaAAD(username: string, password: string) {
-    //cy.visit('/')
-    //cy.get('[data-test="button.Login"]').click()
-    //cy.get('button').contains('Inloggen').click()
-  
-    // Login to the AAD tenant.
-    cy.origin(
-      'login.microsoftonline.com',
-      {
-        args: {
-          username,
-        },
+  //cy.visit('/')
+  //cy.get('[data-test="button.Login"]').click()
+  //cy.get('button').contains('Inloggen').click()
+
+  // Login to the AAD tenant.
+  cy.origin(
+    'login.microsoftonline.com',
+    {
+      args: {
+        username,
       },
-      ({ username }) => {
-        cy.get('input[type="email"]').type(username, {
-          log: false,
-        })
-        cy.get('input[type="submit"]').click()
-      }
-    )
-  
+    },
+    ({username}) => {
+      cy.get('input[type="email"]').type(username, {
+        log: false,
+      })
+      cy.get('input[type="submit"]').click()
+    }
+  )
 
-    cy.origin(
-      'login.microsoftonline.com',
-      {
-        args: {
-          password,
-        },
+
+  cy.origin(
+    'login.microsoftonline.com',
+    {
+      args: {
+        password,
       },
-      ({ password }) => {
-        cy.get('input[type="password"]').type(password, {
-          log: false,
-        })
-        cy.get('input[type="submit"]').click()
+    },
+    ({password}) => {
+      cy.get('input[type="password"]').type(password, {
+        log: false,
+      })
+      cy.get('input[type="submit"]').click()
 
-        cy.wait(1000)
+      cy.wait(1000)
 
-        // In case of 2FA warning message
-        cy.get('body').then(($body) => {
-          const buttonLogin = $body.find('#btnAskLater')
-          if (buttonLogin.length) {
-            cy.get('#btnAskLater').click()
-          }
-          else {
-            // no 2FA warning message, so do nothing
-          }
-        })
+      // In case of 2FA warning message
+      cy.get('body').then(($body) => {
+        const buttonLogin = $body.find('#btnAskLater')
+        if (buttonLogin.length) {
+          cy.get('#btnAskLater').click()
+        }
+        else {
+          // no 2FA warning message, so do nothing
+        }
+      })
 
-        cy.wait(3000);
-        cy.get('#idBtn_Back').click();
-      }
-    )
-  
-    cy.waitForReact();
+      cy.wait(3000);
+      cy.get('#idBtn_Back').click();
+    }
+  )
 
-    // Wait for redirect
-    cy.url({ timeout: 10000 }).should('contain', Cypress.config().baseUrl);
+  cy.waitForReact();
 
-    // Wait for elements to load in
-    cy.wait(1000);
+  // Wait for redirect
+  cy.url({timeout: 10000}).should('contain', Cypress.config().baseUrl);
 
-    // Either log in again or do not log in again
-    cy.get('body').then(($body) => {
-      const buttonLogin = $body.find('button[type="submit"]')
-      if (buttonLogin.length) {
-        cy.get('[data-test="button.Login"]').click()
-        
-        // Login to the AAD tenant.
-        cy.origin(
-          'login.microsoftonline.com',
-          {
-            args: {
-              username,
-            },
+  // Wait for elements to load in
+  cy.wait(1000);
+
+  // Either log in again or do not log in again
+  cy.get('body').then(($body) => {
+    const buttonLogin = $body.find('button[type="submit"]')
+    if (buttonLogin.length) {
+      cy.get('[data-test="button.Login"]').click()
+
+      // Login to the AAD tenant.
+      cy.origin(
+        'login.microsoftonline.com',
+        {
+          args: {
+            username,
           },
-          ({ username }) => {
-            cy.get('input[type="email"]').type(username, {
-              log: false,
-            })
-            cy.get('input[type="submit"]').click()
-          }
-        )
+        },
+        ({username}) => {
+          cy.get('input[type="email"]').type(username, {
+            log: false,
+          })
+          cy.get('input[type="submit"]').click()
+        }
+      )
 
-        cy.origin(
-          'login.microsoftonline.com',
-          {
-            args: {
-              password,
-            },
+      cy.origin(
+        'login.microsoftonline.com',
+        {
+          args: {
+            password,
           },
-          ({ password }) => {
-            cy.get('input[type="password"]').type(password, {
-              log: false,
-            })
-            cy.get('input[type="submit"]').click()
+        },
+        ({password}) => {
+          cy.get('input[type="password"]').type(password, {
+            log: false,
+          })
+          cy.get('input[type="submit"]').click()
 
-            cy.wait(1000)
+          cy.wait(1000)
 
-            // In case of 2FA warning message
-            cy.get('body').then(($body) => {
-              const buttonLogin = $body.find('#btnAskLater')
-              if (buttonLogin.length) {
-                cy.get('#btnAskLater').click()
-              }
-              else {
-                // no 2FA warning message, so do nothing
-              }
-            })
+          // In case of 2FA warning message
+          cy.get('body').then(($body) => {
+            const buttonLogin = $body.find('#btnAskLater')
+            if (buttonLogin.length) {
+              cy.get('#btnAskLater').click()
+            }
+            else {
+              // no 2FA warning message, so do nothing
+            }
+          })
 
-            cy.wait(3000);
-            cy.get('#idBtn_Back').click();
-          }
-        )
-      }
-      else {
-        // Already logged in; check for username
-        cy.contains(`${Cypress.env('aad_username')}`, { timeout: 10000 });
-      }
+          cy.wait(3000);
+          cy.get('#idBtn_Back').click();
+        }
+      )
+    }
+    else {
+      // Already logged in; check for username
+      cy.contains(`${Cypress.env('aad_username')}`, {timeout: 10000});
+    }
 
-      // Ensure Microsoft has redirected us back to the sample app with our logged in user.
-      cy.url({ timeout: 10000 }).should('contain', Cypress.config().baseUrl + '/huishoudens');
+    // Ensure Microsoft has redirected us back to the sample app with our logged in user.
+    cy.url({timeout: 10000}).should('contain', Cypress.config().baseUrl + '/huishoudens');
 
-    })
-    
-  }
-  
-  Cypress.Commands.add('loginToAAD', (username: string, password: string) => {
-    const log = Cypress.log({
-      displayName: 'Azure Active Directory Login',
-      message: [`🔐 Authenticating | ${username}`],
-      autoEnd: false,
-    })
-    log.snapshot('before')
-  
-    loginViaAAD(username, password)
-  
-    log.snapshot('after')
-    log.end()
   })
+
+}
+
+Cypress.Commands.add('loginToAAD', (username: string, password: string) => {
+  const log = Cypress.log({
+    displayName: 'Azure Active Directory Login',
+    message: [`🔐 Authenticating | ${username}`],
+    autoEnd: false,
+  })
+  log.snapshot('before')
+
+  loginViaAAD(username, password)
+
+  log.snapshot('after')
+  log.end()
+})
+

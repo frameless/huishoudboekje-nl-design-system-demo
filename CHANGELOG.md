@@ -1,5 +1,71 @@
 # Huishoudboekje Changelog
 
+## 2.0.0
+
+Deze versie omvat herziene functionaliteit voor gebeurtenissen, alarmen en signalen. Met name snelheid en stabiliteit zijn verbeterd. Diverse kwetsbaarheden zijn opgelost.
+
+Met de nieuwe User API kan een koppeling gemaakt worden vanuit een klantportaal. Gegevens van een enkele, deelnemende inwoner kunnen daar weergegeven worden.
+
+### Major Changes
+
+- e317713: Implemented new Logservice and Alarmenservice, removed unleash service"
+
+### Minor Changes
+
+- 47d178c: Added first version new user api
+- e317713: Removed unleash service
+
+### Patch Changes
+
+- 833bd37: added multiple-payment and no-payment tests
+- 705ecc8: Fixed bug rapportage wrong saldo when not 1st of month as start date
+- 4286fb8: qa added modularity
+- d1cec69: added signal tests
+- d5891da: Fixed weekly alarms being uncreatable due to incorrect validation
+- f8dffb5: cleaned up code, added waits
+- 9e71caa: updated npm packages to resolve certain vulnerabilities
+- e317713: Upgraded i18 packages
+
+## Migration Guide
+
+The grapql-mesh container has the following env variables required:
+- **HHB_ALARM_SERVICE_URL**
+- **HHB_LOG_SERVICE_URL**
+- **HHB_BACKEND_URL**
+
+To get the AlarmService up and running these env variables need to be set.
+- **HHB_DATABASE_URL**
+- **HHB_RABBITMQ_HOST**
+- **HHB_RABBITMQ_PORT**
+- **HHB_RABBITMQ_USER**
+- **HHB_RABBITMQ_PASS**
+- **HHB_USE_AUTH**
+- **HHB_JWT_ISSUER**
+- **HHB_JWT_AUDIENCE**
+- **HHB_JWT_SECRET**
+- **HHB_JWT_ALLOWED_ALGORITHMS**
+- **HHB_JWT_JWKS_URI**
+
+To get the Log Service up and running these env variables need to be set.
+- **HHB_DATABASE_URL**
+- **HHB_RABBITMQ_HOST**
+- **HHB_RABBITMQ_PORT**
+- **HHB_RABBITMQ_USER**
+- **HHB_RABBITMQ_PASS**
+- **HHB_USE_AUTH**
+- **HHB_JWT_ISSUER**
+- **HHB_JWT_AUDIENCE**
+- **HHB_JWT_SECRET**
+- **HHB_JWT_ALLOWED_ALGORITHMS**
+- **HHB_JWT_JWKS_URI**
+
+To get the UserApi up and running these env variables need to be set.
+- **HHB_RABBITMQ_HOST**
+- **HHB_RABBITMQ_PORT**
+- **HHB_RABBITMQ_USER**
+- **HHB_RABBITMQ_PASS**
+- **HHB_USE_AUTH**
+
 ## 1.12.7
 
 Deze versie omvat paginering bij het overzicht met bestanden van betaalinstructies.

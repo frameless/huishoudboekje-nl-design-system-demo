@@ -1,6 +1,6 @@
 // cypress/support/step_definitions/Alarms/read-alarm-settings.js
 
-import { Given, When, Then, Step } from "@badeball/cypress-cucumber-preprocessor";
+import {Given, When, Then, Step} from "@badeball/cypress-cucumber-preprocessor";
 
 const header = {
   'content-type': 'application/json',
@@ -9,21 +9,21 @@ const header = {
 
 //#region Scenario: no alarm exists
 
-  //When('I view the "Agreement" page', () => {});
-  // Is already defined in other test
+//When('I view the "Agreement" page', () => {});
+// Is already defined in other test
 
-  //Then('the "Er is geen alarm ingesteld." text is displayed', () => {
-  // Is already defined in other test
+//Then('the "Er is geen alarm ingesteld." text is displayed', () => {
+// Is already defined in other test
 
-  //Then('the "Add alarm" button is displayed', () => {
-  // Is already defined in other test
+//Then('the "Add alarm" button is displayed', () => {
+// Is already defined in other test
 
 //#endregion
 
 //#region Scenario: monthly recurring alarm exists
 
-  //When('I view the "Agreement" page', () => {});
-  // Is already defined in other test
+//When('I view the "Agreement" page', () => {});
+// Is already defined in other test
 
 Given('a monthly recurring alarm exists', () => {
 
@@ -32,10 +32,10 @@ Given('a monthly recurring alarm exists', () => {
 });
 
 Then('the alarm recurrency is displayed', () => {
- 
+
   // Check if recurrency is displayed
   cy.contains('Periodiek');
-  
+
 });
 
 Then('the alarm day of the month is displayed', () => {
