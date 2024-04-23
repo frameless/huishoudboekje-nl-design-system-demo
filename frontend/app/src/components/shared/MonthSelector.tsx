@@ -17,18 +17,18 @@ const MonthSelector: React.FC<MonthSelectorProps> = ({isInvalid = false, isRequi
 			<FormLabel>{t("schedule.byMonth")}</FormLabel>
 			<CheckboxGroup colorScheme={"primary"} defaultValue={[]} value={(value || [])?.map(x => String(x)) || []} onChange={(val: string[]) => onChange(val.map(x => parseInt(x)))}>
 				<SimpleGrid columns={2}>
-					<Checkbox value={String(1)}>{t("months.jan")}</Checkbox>
-					<Checkbox value={String(7)}>{t("months.jul")}</Checkbox>
-					<Checkbox value={String(2)}>{t("months.feb")}</Checkbox>
-					<Checkbox value={String(8)}>{t("months.aug")}</Checkbox>
-					<Checkbox value={String(3)}>{t("months.mrt")}</Checkbox>
-					<Checkbox value={String(9)}>{t("months.sep")}</Checkbox>
-					<Checkbox value={String(4)}>{t("months.apr")}</Checkbox>
-					<Checkbox value={String(10)}>{t("months.oct")}</Checkbox>
-					<Checkbox value={String(5)}>{t("months.may")}</Checkbox>
-					<Checkbox value={String(11)}>{t("months.nov")}</Checkbox>
-					<Checkbox value={String(6)}>{t("months.jun")}</Checkbox>
-					<Checkbox value={String(12)}>{t("months.dec")}</Checkbox>
+					<Checkbox data-test="checkbox.Jan" value={String(1)}>{t("months.jan")}</Checkbox>
+					<Checkbox data-test="checkbox.Jul" value={String(7)}>{t("months.jul")}</Checkbox>
+					<Checkbox data-test="checkbox.Feb" value={String(2)}>{t("months.feb")}</Checkbox>
+					<Checkbox data-test="checkbox.Aug" value={String(8)}>{t("months.aug")}</Checkbox>
+					<Checkbox data-test="checkbox.Mrt" value={String(3)}>{t("months.mrt")}</Checkbox>
+					<Checkbox data-test="checkbox.Sep" value={String(9)}>{t("months.sep")}</Checkbox>
+					<Checkbox data-test="checkbox.Apr" value={String(4)}>{t("months.apr")}</Checkbox>
+					<Checkbox data-test="checkbox.Oct" value={String(10)}>{t("months.oct")}</Checkbox>
+					<Checkbox data-test="checkbox.May" value={String(5)}>{t("months.may")}</Checkbox>
+					<Checkbox data-test="checkbox.Nov" value={String(11)}>{t("months.nov")}</Checkbox>
+					<Checkbox data-test="checkbox.Jun" value={String(6)}>{t("months.jun")}</Checkbox>
+					<Checkbox data-test="checkbox.Dec" value={String(12)}>{t("months.dec")}</Checkbox>
 				</SimpleGrid>
 			</CheckboxGroup>
 			<FormErrorMessage>{t("schedule.invalidByMonthError")}</FormErrorMessage>

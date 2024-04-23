@@ -17,29 +17,31 @@ const header = {
 
 Then('I enable the active signals filter', () => {
 
-  // Skip unfinished test
-  return "pending";
+  cy.get('[data-test="checkbox.signalActive"]')
+    .should('have.attr', 'data-checked');
 
 });
 
 Then('I disable the suppressed signals filter', () => {
 
-  // Skip unfinished test
-  return "pending";
+  cy.get('[data-test="checkbox.signalInactive"]')
+    .should('not.have.attr', 'data-checked');
 
 });
 
 Then('I click the "Suppress signal" button of a signal', () => {
 
-  // Skip unfinished test
-  return "pending";
+  // Suppress active signal from previous test
+  cy.get('[data-test="signal.switchActive"]')
+    .click();
 
 });
 
 Then('that signal is closed', () => {
 
-  // Skip unfinished test
-  return "pending";
+  // Make sure signal has disappeared
+  cy.get('[data-test="signal.badgeActive"]')
+    .should('not.exist')
 
 });
 

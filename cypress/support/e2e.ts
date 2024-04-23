@@ -82,58 +82,58 @@ function loginViaAAD(username: string, password: string) {
   // Wait for elements to load in
   cy.wait(1000);
 
-  // Either log in again or do not log in again
+  // Click login button again if necessary
   cy.get('body').then(($body) => {
     const buttonLogin = $body.find('button[type="submit"]')
     if (buttonLogin.length) {
       cy.get('[data-test="button.Login"]').click()
 
-      // Login to the AAD tenant.
-      cy.origin(
-        'login.microsoftonline.com',
-        {
-          args: {
-            username,
-          },
-        },
-        ({username}) => {
-          cy.get('input[type="email"]').type(username, {
-            log: false,
-          })
-          cy.get('input[type="submit"]').click()
-        }
-      )
+      // // Login to the AAD tenant.
+      // cy.origin(
+      //   'login.microsoftonline.com',
+      //   {
+      //     args: {
+      //       username,
+      //     },
+      //   },
+      //   ({username}) => {
+      //     cy.get('input[type="email"]').type(username, {
+      //       log: false,
+      //     })
+      //     cy.get('input[type="submit"]').click()
+      //   }
+      // )
 
-      cy.origin(
-        'login.microsoftonline.com',
-        {
-          args: {
-            password,
-          },
-        },
-        ({password}) => {
-          cy.get('input[type="password"]').type(password, {
-            log: false,
-          })
-          cy.get('input[type="submit"]').click()
+      // cy.origin(
+      //   'login.microsoftonline.com',
+      //   {
+      //     args: {
+      //       password,
+      //     },
+      //   },
+      //   ({password}) => {
+      //     cy.get('input[type="password"]').type(password, {
+      //       log: false,
+      //     })
+      //     cy.get('input[type="submit"]').click()
 
-          cy.wait(1000)
+      //     cy.wait(1000)
 
-          // In case of 2FA warning message
-          cy.get('body').then(($body) => {
-            const buttonLogin = $body.find('#btnAskLater')
-            if (buttonLogin.length) {
-              cy.get('#btnAskLater').click()
-            }
-            else {
-              // no 2FA warning message, so do nothing
-            }
-          })
+      //     // In case of 2FA warning message
+      //     cy.get('body').then(($body) => {
+      //       const buttonLogin = $body.find('#btnAskLater')
+      //       if (buttonLogin.length) {
+      //         cy.get('#btnAskLater').click()
+      //       }
+      //       else {
+      //         // no 2FA warning message, so do nothing
+      //       }
+      //     })
 
-          cy.wait(3000);
-          cy.get('#idBtn_Back').click();
-        }
-      )
+      //     cy.wait(3000);
+      //     cy.get('#idBtn_Back').click();
+      //   }
+      // )
     }
     else {
       // Already logged in; check for username

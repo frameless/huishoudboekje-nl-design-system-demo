@@ -1,11 +1,15 @@
 // cypress/support/step_definitions/Signals/update-list-signals.js
 
-import { Given, When, Then } from "@badeball/cypress-cucumber-preprocessor";
+import { Given, When, Then, Step } from "@badeball/cypress-cucumber-preprocessor";
 
 const header = {
   'content-type': 'application/json',
   'Accept-Encoding': 'gzip, deflate, br',
 };
+
+let timestamp = 0;
+let timestampLater1 = 0;
+let timestampLater2 = 0;
 
 //#region Scenario: view signals refresh timestamp
 
@@ -14,15 +18,22 @@ const header = {
 
 Then('the signals refresh timestamp is displayed', () => {
 
-  // Skip unfinished test
-  return "pending";
+  cy.contains('Laatste update:')
+    .eq(0)
+    .invoke('text')
+    .then((text) => {
+      timestamp = text.split(':')[1] + ":" + text.split(':')[2];
+      timestampLater1 = timestamp;
+      timestampLater2 = timestamp;
+      cy.log(timestamp);
+    })
 
 });
 
 Then('the "Refresh signals" button is displayed', () => {
 
-  // Skip unfinished test
-  return "pending";
+  cy.get('[data-test="button.reload"]')
+    .should('be.visible');
 
 });
 
@@ -35,20 +46,25 @@ Then('the "Refresh signals" button is displayed', () => {
 
   Then('5 minutes pass', () => {
 
-    //cy.wait(300000)
-    return "pending";
+    cy.wait(300000)
   
   });
   
-  Then('the "Signals" page is refreshed', () => {
+  Then('the "Signals" page is automatically refreshed', () => {
   
-    // Skip unfinished test
-    return "pending";
-  
-  });
+    cy.contains('Laatste update:')
+      .eq(0)
+      .invoke('text')
+      .then((text) => {
+        timestampLater2 = text.split(':')[1] + ":" + text.split(':')[2];
+        cy.log(timestampLater2);
+      })
+    
+    cy.wait(500);
 
-  //Then('the signals refresh timestamp is displayed', () => {});
-    // Part of previous scenario
+    expect(timestampLater2).not.to.equal(timestamp);
+  
+  });
   
   //#endregion
 
@@ -59,13 +75,22 @@ Then('the "Refresh signals" button is displayed', () => {
 
   Then('I click the "Refresh signals" button', () => {
 
-    // Skip unfinished test
-    return "pending";
+    cy.get('[data-test="button.reload"]')
+      .click();
   
   });
   
-  //Then('the "Signals" page is refreshed', () => {});
-    // Part of previous scenario
+  Then('the "Signals" page is refreshed', () => {
+  
+    cy.contains('Laatste update:')
+    .eq(0)
+    .invoke('text')
+    .then((text) => {
+      timestampLater1 = text.split(':')[1] + ":" + text.split(':')[2];
+      cy.log(timestampLater1);
+    })
+  
+  });
 
   //Then('the signals refresh timestamp is displayed', () => {});
     // Part of previous scenario
