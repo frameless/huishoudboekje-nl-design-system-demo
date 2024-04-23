@@ -32,6 +32,7 @@ const ListInformationRow: React.FC<ListInformationRowProps> = ({onUpdate, messag
                 <IconButton
                     icon={<RepeatIcon />}
                     size={"xs"}
+                    data-test="button.reload"
                     onClick={() => {
                         onUpdate();
                     }} aria-label={"reload"}

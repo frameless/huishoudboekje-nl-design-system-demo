@@ -60,10 +60,10 @@ const SignalsListItem: React.FC<SignalsListItemProps> = ({signal, onUpdate}) => 
 				</Text>
 			</Stack>
 			<Flex justify={"center"}>
-				<Badge colorScheme={signal.isActive ? "green" : "gray"}>{signal.isActive ? t("enabled") : t("disabled")}</Badge>
+				<Badge data-test="signal.badgeActive" colorScheme={signal.isActive ? "green" : "gray"}>{signal.isActive ? t("enabled") : t("disabled")}</Badge>
 			</Flex>
 			<Flex justify={"center"}>
-				<Switch size={"sm"} isChecked={signal.isActive} onChange={() => toggleSignalActive(signal)} />
+				<Switch data-test="signal.switchActive" size={"sm"} isChecked={signal.isActive} onChange={() => toggleSignalActive(signal)} />
 			</Flex>
 		</HStack>
 	);

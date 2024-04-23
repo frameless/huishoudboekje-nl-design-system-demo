@@ -46,8 +46,8 @@ const SignalsFilters: React.FC<AfspraakFormProps>  = ({goFirst, filterByCitizens
                     <FormLabel>{t("signals.filterByStatus")}</FormLabel>
                     <CheckboxGroup defaultValue={["active"]} onChange={onSetActive}>
                         <Stack>
-                            <Checkbox value={"active"}>{t("signals.showActive")}</Checkbox>
-                            <Checkbox value={"inactive"}>{t("signals.showInActive")}</Checkbox>
+                            <Checkbox data-test="checkbox.signalActive" value={"active"}>{t("signals.showActive")}</Checkbox>
+                            <Checkbox data-test="checkbox.signalInactive" value={"inactive"}>{t("signals.showInActive")}</Checkbox>
                         </Stack>
                     </CheckboxGroup>
                 </FormControl>
@@ -56,6 +56,7 @@ const SignalsFilters: React.FC<AfspraakFormProps>  = ({goFirst, filterByCitizens
                     <FormLabel>{t("signals.filterByBurger")}</FormLabel>
                     <Select 
                         id={"citizenFilter"}
+                        data-test="signal.citizenFilter"
                         onChange={onSelectBurger} 
                         options={citizens.map(b => ({
                             key: b.uuid,
