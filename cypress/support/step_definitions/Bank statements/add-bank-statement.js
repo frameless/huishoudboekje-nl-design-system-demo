@@ -10,23 +10,108 @@ const dayjs = require('dayjs');
 
 const modalWait = 4000;
 
-Then('Clean up bank statement', () => {
+//#region Scenario: invalid format
 
-  // Clean up bank statement
-  cy.visit('/bankzaken/bankafschriften');
-  cy.waitForReact();
-  cy.url().should('eq', Cypress.config().baseUrl + '/bankzaken/bankafschriften')
-  cy.waitForReact();
-  cy.get('[aria-label="Verwijderen"]')
-    .click();
-  cy.waitForReact();
-  cy.get('[aria-label="Verwijderen"]')
-    .click();
-  cy.waitForReact();
-  cy.get('[data-status="success"]')
+When('I select "Wrong_format_CAMT.053_v1.xml"', () => {
+
+  cy.get('input[type="file"]')
+    .selectFile('voorbeeldbankafschriften/Wrong_format_CAMT.053_v1.xml', { force: true })
+
+});
+
+Then('the "Wrong_format_CAMT.053_v1.xml" filename is displayed', () => {
+
+  cy.contains('Wrong_format_CAMT.053_v1.xml') // Assert selected filename is displayed
+
+});
+
+Then('the file upload error status icon is displayed', () => {
+
+  cy.contains('camt053-kosten-betalingsverkeer-20231130.xml') // Assert selected filename is displayed
+
+});
+
+
+//#endregion
+
+//#region Scenario: other bank account iban
+
+// Then('Clean up bank statement', () => {
+
+// });
+
+//#endregion
+
+//#region Scenario: no transactions in file
+
+When('I select "Empty_customer_statement_message_CAMT.053_v2.xml"', () => {
+
+  Step(this, 'I click the "Add bank statement" button');
+  
+  cy.get('input[type="file"]')
+    .selectFile('voorbeeldbankafschriften/Empty_customer_statement_message_CAMT.053_v2.xml', { force: true });
+  cy.wait(modalWait)
+
+});
+
+Then('the "Empty_customer_statement_message_CAMT.053_v2.xml" filename is displayed', () => {
+
+  cy.contains('Empty_customer_statement_message_CAMT.053_v2.xml');
+
+});
+
+Then('the file upload warning status icon is displayed', () => {
+
+  cy.get('[data-test="bankstatement.warningIcon"]')
     .should('be.visible');
 
 });
+
+Then('the "No transactions in file" text is displayed', () => {
+
+  cy.contains('No transactions in file');
+
+});
+
+When('I click the "Close modal" button', () => {
+
+  cy.get('button[aria-label="Close"]')
+    .click();
+  cy.wait(500);
+
+});
+
+Then('the "Empty_customer_statement_message_CAMT.053_v2.xml" file is displayed', () => {
+
+  cy.contains('Empty_customer_statement_message_CAMT.053_v2.xml');
+
+});
+
+Then('0 transactions were added', () => {
+
+  cy.visit('/bankzaken/transacties');
+  cy.url().should('eq', Cypress.config().baseUrl + '/bankzaken/transacties');
+  cy.waitForReact();
+
+  cy.get('[data-test="transactionsPage.filters.allReconciliated"]')
+    .click();
+  cy.waitForReact();
+  cy.contains('Er zijn geen banktransacties gevonden');
+
+});
+
+
+//#endregion
+
+//#region Scenario: duplicate file
+
+// Given('Clean up bank statement', () => {
+
+// });
+
+//#endregion
+
+//#region Scenario: add bank transaction without iban
 
 Then('Add bank statement without cleaning up', () => {
 
@@ -57,7 +142,6 @@ When('I view the "Bank statement" page', () => {
 When('I click the "Add bank statement" button', () => {
 
   cy.get('input[type="file"]')
-    .should('exist')
     .click({ force: true })
  
 });
@@ -85,13 +169,13 @@ Then('the close "Add bank statement" modal button is displayed', () => {
 
 });
 
-Then('the selected filename is displayed', () => {
+Then('the "camt053-kosten-betalingsverkeer-20231130.xml" filename is displayed', () => {
 
   cy.contains('camt053-kosten-betalingsverkeer-20231130.xml') // Assert selected filename is displayed
 
 });
 
-Then('the file upload status icon is displayed', () => {
+Then('the file upload success status icon is displayed', () => {
 
   cy.get('[data-test="uploadItem.check"]') // Assert file upload status icon is displayed
     .should('be.visible')
@@ -126,16 +210,6 @@ Then('the bank statement filename is displayed', () => {
 Then('the bank statement upload timestamp is displayed', () => {
  
   // Set timestamp
-  // function addZero(i) {
-  //   if (i < 10) {i = "0" + i}
-  //   return i;
-  // }
-  // const d = new Date();
-  // //let h = addZero(d.getUTCHours()); // Change this to 'getHours' once frontend starts using local time
-  // let m = addZero(d.getMinutes());
-  
-  // Assert that the bank statement upload timestamp is displayed
-  //cy.contains(h + ":" + m);
   cy.contains(":");
   const date = dayjs().format('DD-MM-YYYY')
   cy.contains(date);
@@ -206,7 +280,7 @@ Then('the bank transaction amount is "-281,94"', () => {
 
 });
 
-When('I click the bank transaction', () => {
+When('I click the "-281,94" bank transaction', () => {
 
   // Click the bank transaction
   cy.waitForReact();
@@ -276,7 +350,199 @@ Then('the "Afletteren ongedaan maken" button is displayed', () => {
   cy.get('[data-test="button.undoReconciliation"]')
     .should('be.visible');
       
-  // Clean up
-  Step(this, 'Clean up bank statement');
+});
+
+//#endregion
+
+//#region Scenario: add bank transaction with payment mandate
+
+Given('the "Gemeente Utrecht" organisation exists', () => {
+
+  cy.visit('/organisaties');
+  cy.waitForReact();
+  cy.url().should('eq', Cypress.config().baseUrl + '/organisaties');
+  cy.get('input[placeholder="Zoeken"]')
+    .type('Gemeente');
+  cy.contains('Utrecht');
 
 });
+
+Given('the "Gemeente Utrecht" organisation has a department "GEMEENTE UTRECHT" with the "NL71ABNA0411065785" bank account', () => {
+
+  cy.contains('Utrecht')
+    .click();
+  cy.url().should('include', Cypress.config().baseUrl + '/organisaties/');
+  
+  // Assert that department is available
+  cy.get('p[title="Gemeente Utrecht"]')
+    .click();
+  cy.url().should('include', '/afdelingen/');  
+
+  // Assert that bank account is available
+  cy.contains('NL71 ABNA 0411 0657 85');
+
+});
+
+When('I select "Payment_mandate_CAMT.053_v1.xml"', () => {
+
+  cy.get('input[type="file"]')
+    .selectFile('voorbeeldbankafschriften/Payment_mandate_CAMT.053_v1.xml', { force: true })
+
+});
+
+Then('the "Payment_mandate_CAMT.053_v1.xml" filename is displayed', () => {
+
+  cy.contains('Payment_mandate_CAMT.053_v1.xml');
+
+});
+
+When('I set the "Date from" filter to "15-2-2024"', () => {
+
+  cy.wait(1000);
+  cy.get('[data-test="transactionsPage.filters.from"]')
+    .type('15-2-2024{enter}');
+
+});
+
+When('I set the "Date to" filter to "15-2-2024"', () => {
+
+  cy.wait(1000);
+  cy.get('[data-test="transactionsPage.filters.to"]')
+    .type('15-2-2024{enter}');
+
+});
+
+Then('a bank transaction with "GEMEENTE UTRECHT" name is displayed', () => {
+
+  // Assert transaction name
+  cy.wait(1000);
+  cy.contains('GEMEENTE UTRECHT')
+
+});
+
+Then('the bank transaction amount is "-654,32"', () => {
+
+  // Assert bank transaction amount
+  cy.waitForReact();
+  cy.contains('-654,32');
+
+});
+
+When('I click the "-654,32" bank transaction', () => {
+
+  // Click the bank transaction
+  cy.waitForReact();
+  cy.contains('-654,32')
+    .click();
+  cy.url().should('include', Cypress.config().baseUrl + '/bankzaken/transacties/')
+
+});
+
+Then('the bank transaction description contains the "123456789" end-to-end id', () => {
+
+  cy.contains('123456789');
+
+});
+
+Then('the bank transaction description contains the "5784272" mandate id', () => {
+
+  cy.contains('5784272');
+
+});
+
+//#endregion
+
+//#region Scenario: add basic bank transaction
+
+Given('the "Gemeente Utrecht" organisation has a department "GEM UTRECHT WENI" with the "NL76BNGH0285178598" bank account', () => {
+
+  cy.contains('Utrecht')
+    .click();
+  cy.url().should('include', Cypress.config().baseUrl + '/organisaties/');
+  
+  // Assert that department is available
+  cy.get('p[title="Gemeente Utrecht"]')
+    .click();
+  cy.url().should('include', '/afdelingen/');  
+
+  // Assert that bank account is available
+  cy.contains('NL76 BNGH 0285 1785 98');
+
+});
+
+When('I select "Basic_bank_transaction_CAMT.053_v1.xml"', () => {
+
+  cy.get('input[type="file"]')
+    .selectFile('voorbeeldbankafschriften/Basic_bank_transaction_CAMT.053_v1.xml', { force: true })
+
+});
+
+Then('the "Basic_bank_transaction_CAMT.053_v1.xml" filename is displayed', () => {
+
+  cy.contains('Basic_bank_transaction_CAMT.053_v1.xml') // Assert selected filename is displayed
+
+});
+
+When('I set the "Date from" filter to "27-10-2023"', () => {
+
+  cy.wait(1000);
+  cy.get('[data-test="transactionsPage.filters.from"]')
+    .type('27-10-2023{enter}');
+
+});
+
+When('I set the "Date to" filter to "27-10-2023"', () => {
+
+  cy.wait(1000);
+  cy.get('[data-test="transactionsPage.filters.to"]')
+    .type('27-10-2023{enter}');
+
+});
+
+Then('a bank transaction with "GEM UTRECHT WENI" name is displayed', () => {
+
+  // Assert that transaction name is displayed
+  cy.wait(1000);
+  cy.contains('GEM UTRECHT WENI')
+
+});
+
+Then('the bank transaction amount is "1251,26"', () => {
+
+  // Assert bank transaction amount
+  cy.waitForReact();
+  cy.contains('1.251,26');
+
+});
+
+When('I click the "1251,26" bank transaction', () => {
+
+  // Click the bank transaction
+  cy.waitForReact();
+  cy.contains('1.251,26')
+    .click();
+  cy.url().should('include', Cypress.config().baseUrl + '/bankzaken/transacties/')
+
+});
+
+Then('the bank transaction description contains "Normale bijschrijving"', () => {
+
+  cy.contains('/TRTP/SEPA betaalbatch via BNG BTV/REMI/Normale bijschrijving');
+
+});
+
+Then('the bank transaction description contains the "000000013289682" end-to-end id', () => {
+
+  cy.contains('000000013289682');
+
+});
+
+//#endregion
+
+//#region Scenario: add bank transaction with negative amount
+
+// Then('Clean up bank statement', () => {
+
+// });
+
+//#endregion

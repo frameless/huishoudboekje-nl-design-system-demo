@@ -18,7 +18,7 @@ const CsmUploadItem = ({upload}) => {
 				<CheckIcon data-test="uploadItem.check" color={"green.500"} />
 			)}
 			{upload.state === UploadState.DONE && upload.error && (
-				<WarningIcon color={"red.500"} />
+				<WarningIcon data-test="bankstatement.warningIcon" color={"red.500"} />
 			)}
 			{upload.state === UploadState.QUEUED && (
 				<IoMdHourglass />

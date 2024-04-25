@@ -1,0 +1,47 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Document xmlns="urn:iso:std:iso:20022:tech:xsd:camt.053.001.02" xmlns_xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <BkToCstmrStmt>
+        <GrpHdr>
+            <MsgId>588d0a9f-439d-4410-8a3e-1354c2a9c55e</MsgId>
+            <CreDtTm>2024-04-03T13:58:31.802216</CreDtTm>
+            <MsgPgntn>
+                <PgNb>1</PgNb>
+                <LastPgInd>true</LastPgInd>
+            </MsgPgntn>
+        </GrpHdr>
+        <Stmt>
+            <Id>1</Id>
+            <ElctrncSeqNb>1</ElctrncSeqNb>
+            <CreDtTm>2024-04-03T13:58:31.802216</CreDtTm>
+            <Acct>
+                <Id>
+                    <IBAN>NL36ABNA5632579034</IBAN>
+                </Id>
+                <Ccy>EUR</Ccy>
+                <Svcr>
+                    <FinInstnId>
+                        <BIC>ABNANL2A</BIC>
+                    </FinInstnId>
+                </Svcr>
+            </Acct>
+            <Bal>
+                <Tp>
+                    <CdOrPrtry>
+                        <Cd>OPBD</Cd>
+                    </CdOrPrtry>
+                </Tp>
+                <Amt Ccy="EUR">0.00</Amt>
+                <CdtDbtInd>CRDT</CdtDbtInd>
+            </Bal>
+            <Bal>
+                <Tp>
+                    <CdOrPrtry>
+                        <Cd>CRDT</Cd>
+                    </CdOrPrtry>
+                </Tp>
+                <Amt Ccy="EUR">0.00</Amt>
+                <CdtDbtInd>CRDT</CdtDbtInd>
+            </Bal>
+        </Stmt>
+    </BkToCstmrStmt>
+</Document>
