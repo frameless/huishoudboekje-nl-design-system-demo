@@ -252,3 +252,64 @@ After({ tags: "@cleanupOrganizationDepartmentPostaddressBankaccount", order: 999
     .should('be.visible');
 
 });
+
+After({ tags: "@cleanupStatements" }, function ()  {
+
+  // Move to correct url
+  cy.visit('/bankzaken/bankafschriften');
+  cy.waitForReact();
+  cy.url().should('eq', Cypress.config().baseUrl + '/bankzaken/bankafschriften');
+  
+  // Clean up bank statement 1
+  cy.get('[data-test="button.Delete"]')
+    .first()
+    .click();
+  cy.waitForReact();
+  cy.get('[data-test="button.Delete"]')
+    .first()
+    .click();
+  cy.waitForReact();
+  cy.get('[data-status="success"]')
+    .should('be.visible');
+  cy.wait(6000);
+  cy.get('[data-status="success"]')
+    .should('not.exist');
+
+  // Clean up bank statement 2
+  cy.get('[data-test="button.Delete"]')
+    .click();
+  cy.waitForReact();
+  cy.get('[data-test="button.Delete"]')
+    .click();
+  cy.waitForReact();
+  cy.get('[data-status="success"]')
+    .should('be.visible');
+  cy.wait(6000);
+  cy.get('[data-status="success"]')
+    .should('not.exist');
+  
+});
+
+After({ tags: "@cleanupStatement" }, function ()  {
+
+  // Move to correct url
+  cy.visit('/bankzaken/bankafschriften');
+  cy.waitForReact();
+  cy.url().should('eq', Cypress.config().baseUrl + '/bankzaken/bankafschriften');
+
+  // Clean up bank statement
+  cy.get('[data-test="button.Delete"]')
+    .first()
+    .click();
+  cy.waitForReact();
+  cy.get('[data-test="button.Delete"]')
+    .first()
+    .click();
+  cy.waitForReact();
+  cy.get('[data-status="success"]')
+    .should('be.visible');
+  cy.wait(6000);
+  cy.get('[data-status="success"]')
+    .should('not.exist');
+  
+});
