@@ -13,8 +13,9 @@ We don't really have one yet. Just be clear about what you're changing.
 We use Git for version management. We try to maintain a [semi-linear history](https://stackoverflow.com/questions/20348629/what-are-advantages-of-keeping-linear-history-in-git):
 
 - Every merge creates a merge commit.
-- Fast-forward merges only.
+- Fast-Forward merge where possible.
 - When there is a merge conflict, the user is given the option to rebase.
+- Squash merge features to develop preferably to make rebasing easier
 
 ![Example of a semi-linear merge](https://i.stack.imgur.com/yJpjE.gif "Example of a semi-linear merge")
 Example of a semi-linear merge.
