@@ -31,14 +31,35 @@ Then('the file upload error status icon is displayed', () => {
 
 });
 
+Then('the "Format is not CAMT.053.001.02" text is displayed', () => {
+
+  cy.contains('Format is not CAMT.053.001.02') // Assert error message
+
+});
+
 
 //#endregion
 
 //#region Scenario: other bank account iban
 
-// Then('Clean up bank statement', () => {
+When('I select "Wrong_bank_account_iban_CAMT.053_v1.xml"', () => {
 
-// });
+  cy.get('input[type="file"]')
+    .selectFile('voorbeeldbankafschriften/Wrong_bank_account_iban_CAMT.053_v1.xml', { force: true })
+
+});
+
+Then('the "Wrong_bank_account_iban_CAMT.053_v1.xml" filename is displayed', () => {
+
+  cy.contains('Wrong_bank_account_iban_CAMT.053_v1.xml') // Assert selected filename is displayed
+
+});
+
+Then('the "Bank account in file does not match bank account in application" text is displayed', () => {
+
+  cy.contains('Bank account in file does not match bank account in application') // Assert error message
+
+});
 
 //#endregion
 
@@ -105,9 +126,79 @@ Then('0 transactions were added', () => {
 
 //#region Scenario: duplicate file
 
-// Given('Clean up bank statement', () => {
+When('I select "Duplicate_bank_transaction_1_CAMT.053_v1.xml"', () => {
 
-// });
+  cy.get('input[type="file"]')
+    .selectFile('voorbeeldbankafschriften/Duplicate_bank_transaction_1_CAMT.053_v1.xml', { force: true })
+
+});
+
+Then('the "Duplicate_bank_transaction_1_CAMT.053_v1.xml" filename is displayed', () => {
+
+  cy.contains('Duplicate_bank_transaction_1_CAMT.053_v1.xml') // Assert selected filename is displayed
+
+});
+
+When('I select "Duplicate_bank_transaction_2_CAMT.053_v1.xml"', () => {
+
+  cy.get('input[type="file"]')
+    .selectFile('voorbeeldbankafschriften/Duplicate_bank_transaction_2_CAMT.053_v1.xml', { force: true })
+
+});
+
+Then('the "Duplicate_bank_transaction_2_CAMT.053_v1.xml" filename is displayed', () => {
+
+  cy.contains('Duplicate_bank_transaction_2_CAMT.053_v1.xml') // Assert selected filename is displayed
+
+});
+
+Then('the "Duplicate file" text is displayed', () => {
+
+  cy.contains('Duplicate file') // Assert error message is displayed
+
+});
+
+
+Then('the "Duplicate_bank_transaction_2_CAMT.053_v1.xml" file is not displayed', () => {
+
+  cy.get('body')
+    .should('not.contain', 'Duplicate_bank_transaction_2_CAMT.053_v1.xml'); // Assert selected filename is not displayed
+
+});
+
+When('I set the "Date from" filter to "3-4-2023"', () => {
+
+  cy.wait(1000);
+  cy.get('[data-test="transactionsPage.filters.from"]')
+    .type('3-4-2023{enter}');
+
+});
+
+When('I set the "Date to" filter to "3-4-2023"', () => {
+
+  cy.wait(1000);
+  cy.get('[data-test="transactionsPage.filters.to"]')
+    .type('3-4-2023{enter}');
+
+});
+
+Then('the bank transaction amount is "-234,56"', () => {
+
+  // Assert bank transaction amount
+  cy.waitForReact();
+  cy.contains('-234,56');
+
+});
+
+Then('1 bank transaction with "GEMEENTE UTRECHT" name is displayed', () => {
+
+  // Assert only one transaction
+  cy.waitForReact();
+  cy.find('contains("GEMEENTE UTRECHT")')
+    .should('have.length', 1);
+
+});
+
 
 //#endregion
 
@@ -541,8 +632,23 @@ Then('the bank transaction description contains the "000000013289682" end-to-end
 
 //#region Scenario: add bank transaction with negative amount
 
-// Then('Clean up bank statement', () => {
+When('I select "Negative_amount_CAMT.053_v1.xml"', () => {
 
-// });
+  cy.get('input[type="file"]')
+    .selectFile('voorbeeldbankafschriften/Negative_amount_CAMT.053_v1.xml', { force: true })
+
+});
+
+Then('the "Negative_amount_CAMT.053_v1.xml" filename is displayed', () => {
+
+  cy.contains('Negative_amount_CAMT.053_v1.xml') // Assert selected filename is displayed
+
+});
+
+Then('the "Customer statement message contains entry with negative amount" notification is displayed', () => {
+
+  cy.contains('Customer statement message contains entry with negative amount') // Assert error message
+
+});
 
 //#endregion
