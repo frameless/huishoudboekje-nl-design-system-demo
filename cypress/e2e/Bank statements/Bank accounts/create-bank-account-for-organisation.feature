@@ -28,4 +28,4 @@ Feature: create bank account for organisation
     When I click the "Save" button
     Then the "Add bank account" modal is closed
     Then a notification of success is displayed
-    Then the bank account is displayed
+    Then the text 'NL79 KOEX 0830 6420 05' is displayed

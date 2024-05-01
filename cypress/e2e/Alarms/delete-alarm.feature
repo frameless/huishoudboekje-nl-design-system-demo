@@ -24,5 +24,5 @@ Feature: delete alarm
     Given I view the "Agreement" page
     When I click the "Confirm delete alarm" button
     Then a notification of success is displayed
-    Then the "Er is geen alarm ingesteld." text is displayed
-    Then the "Add alarm" button is displayed
+    Then the text 'Er is geen alarm ingesteld.' is displayed
+    Then the button 'Toevoegen' is displayed

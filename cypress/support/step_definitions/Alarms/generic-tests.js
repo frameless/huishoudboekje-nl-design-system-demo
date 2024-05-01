@@ -133,8 +133,8 @@ When('I create a test alarm', () => {
 
     // 'Toegestane afwijking bedrag'
     cy.get('[data-test="alarmForm.amountMargin"]')
-      .type('{selectAll}37')
-      .should('have.value', '37')
+      .type('{selectAll}13.37')
+      .should('have.value', '13.37')
 
   // Click 'Opslaan' button
   cy.waitForReact()

@@ -29,7 +29,7 @@ Feature: delete a bank account
     When I click the "Delete bank account" button
     Then the "Delete bank account" modal is displayed
     When I click the "Delete" button
-    Then a notification of successful bank account deletion is displayed
+    Then a success notification containing 'Bankrekening is verwijderd' is displayed
 
   @cleanupDepartment
   Scenario: organisation and bank account are used for reconciliation
@@ -42,4 +42,4 @@ Feature: delete a bank account
     When I click the "Delete bank account" button of IBAN "NL86INGB0002445588"
     Then the "Delete bank account" modal is displayed
     When I click the "Delete" button
-    Then a notification of failure is displayed
+    Then an error notification containing 'Er is een fout opgetreden' is displayed

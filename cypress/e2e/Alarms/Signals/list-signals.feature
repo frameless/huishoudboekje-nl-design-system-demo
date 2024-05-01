@@ -10,12 +10,12 @@ Feature: list signals
 
   Scenario: no signal exists
     Given 0 active signals exist
-    When I view the "Signals" page
-    Then the "Er zijn geen signalen gevonden" text is displayed
+    When I navigate to the page '/signalen'
+    Then the text 'Er zijn geen signalen gevonden' is displayed
 
   Scenario: active signals exist
     Given 1 or more active signals exist
-    When I view the "Signals" page
+    When I navigate to the page '/signalen'
     Then the signal description is displayed
     Then the signal date is displayed
     Then the "Suppress signal" button is displayed
@@ -24,6 +24,6 @@ Feature: list signals
   @cleanupSignal
   Scenario: suppressed signals exist
     Given 1 or more suppressed signals exist
-    When I view the "Signals" page
+    When I navigate to the page '/signalen'
     Then I enable the suppressed signals filter
     Then all suppressed signals are displayed

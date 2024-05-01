@@ -11,8 +11,8 @@ Feature: read alarm
   @beforecleanupAlarm
   Scenario: no alarm exists
     When I view the "Agreement" page
-    Then the "Er is geen alarm ingesteld." text is displayed
-    Then the "Add alarm" button is displayed
+    Then the text 'Er is geen alarm ingesteld.' is displayed
+    Then the button 'Toevoegen' is displayed
 
   # Scenario: one-time alarm exists
     # TODO
