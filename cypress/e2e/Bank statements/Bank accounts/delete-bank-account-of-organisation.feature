@@ -23,5 +23,5 @@ Feature: delete bank account of organisation
     Given the bank account is applied to a journal entry
     When I click the "Delete bank account" button
     When I confirm by clicking the "Delete" button
-    Then a notification of failure is displayed
+    Then an error notification containing 'Er is een fout opgetreden' is displayed
     Then the bank account "NL79KOEX0830642005" is displayed

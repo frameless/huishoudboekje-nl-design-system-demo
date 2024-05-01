@@ -84,21 +84,12 @@ When('I click the "Confirm delete alarm" button', () => {
 // Then('a notification of success is displayed', () => {}
   // This test can be found in /Alarms/create-alarm
 
-Then('the "Er is geen alarm ingesteld." text is displayed', () => {
+// Then('the "Add alarm" button is displayed', () => {
  
-  // Check assertion
-  cy.get('h2').contains('Alarm').should('be.visible')
-    .scrollIntoView() // Scrolls 'Alarm' into view
-  cy.contains('Er is geen alarm ingesteld.')
+//   // Check assertion
+//   cy.get('button')
+//     .contains('Toevoegen');
   
-});
-
-Then('the "Add alarm" button is displayed', () => {
- 
-  // Check assertion
-  cy.get('button')
-    .contains('Toevoegen');
-  
-});
+// });
 
 //#endregion

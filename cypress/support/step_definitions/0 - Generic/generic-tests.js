@@ -1,6 +1,6 @@
 // cypress/support/step_definitions/Generic/generic-tests.js
 
-import {Before, After} from "@badeball/cypress-cucumber-preprocessor";
+import {When, Then, Given, Before, After} from "@badeball/cypress-cucumber-preprocessor";
 
 const header = {
   'content-type': 'application/json',
@@ -35,5 +35,58 @@ Before(function () {
     }
 
   })
+
+});
+
+// Navigate to a page
+When('I navigate to the page {string}', (url) => {
+
+  cy.visit(url)
+  cy.wait(500);
+  cy.url().should('eq', Cypress.config().baseUrl + url)
+
+});
+
+// Find a button
+Then('the button {string} is displayed', (buttonName) => {
+
+  cy.get('button')
+    .contains(buttonName)
+
+});
+
+// Click a button
+When('I click the button {string}', (buttonName) => {
+
+  cy.get('button')
+    .contains(buttonName)
+    .click();
+
+});
+
+// Find text
+Then('the text {string} is displayed', (text) => {
+
+  cy.contains(text);
+
+});
+
+// Find a specific success message
+Then('a success notification containing {string} is displayed', (notificationText) => {
+
+  // Assertion
+  cy.get('[data-status="success"]')
+    .contains(notificationText)
+    .should('be.visible');
+
+});
+
+// Find a specific error message
+Then('an error notification containing {string} is displayed', (notificationText) => {
+
+  // Assertion
+  cy.get('[data-status="error"]')
+    .contains(notificationText)
+    .should('be.visible')
 
 });

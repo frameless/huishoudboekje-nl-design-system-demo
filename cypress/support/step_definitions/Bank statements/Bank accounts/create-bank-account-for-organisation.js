@@ -164,10 +164,4 @@ Then('the "Add bank account" modal is closed', () => {
 
 });
 
-Then('the bank account is displayed', () => {
-
-  cy.contains('NL79 KOEX 0830 6420 05');
-
-});
-
 //#endregion

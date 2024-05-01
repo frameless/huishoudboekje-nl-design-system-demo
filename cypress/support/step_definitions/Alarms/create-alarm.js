@@ -53,14 +53,6 @@ Then('the recurrency is monthly', () => {
 
 });
 
-Then('the link "Meer opties" is displayed', () => {
-
-  // Check link 'Meer opties'
-  cy.get('button')
-    .contains('Meer opties')
-
-});
-
 Then('the start date is today', () => {
 
   // Set date constants for comparison
@@ -121,14 +113,6 @@ Then('the allowed deviation in amount is empty', () => {
 
 });
 
-Then('the "Cancel" button is displayed', () => {
-
-  // Check whether 'Annuleren' button exists
-  cy.get('button')
-    .contains('Annuleren')
-
-});
-
 Then('the "Submit form" button is displayed', () => {
 
   // Check whether 'Opslaan' button exists
@@ -178,14 +162,6 @@ When('I view the "Agreement" page', () => {
 
 });
 
-When('I click the "Add alarm" button', () => {
-
-  cy.get('button')
-    .contains('Toevoegen')
-    .click();
-
-});
-
 Then('I fill in the current date for alarm start date', () => {
 
   // Set date constants for comparison
@@ -207,7 +183,7 @@ Then('I fill in the current date for alarm start date', () => {
 
 });
 
-Then('I fill in the alarm day of the month', () => {
+Then('I fill {string} into the alarm day of the month field', (alarmDay) => {
 
   // Check 'Dag in de maand' field  
   cy.get('[data-test="alarmForm.byMonthDay"]')
@@ -215,12 +191,12 @@ Then('I fill in the alarm day of the month', () => {
 
   // Fill in 'Dag in de maand' field
   cy.get('[data-test="alarmForm.byMonthDay"]')
-    .type('1')
-    .should('have.value', '1')
+    .type(alarmDay)
+    .should('have.value', alarmDay)
 
 });
 
-Then('I fill in the alarm allowed deviation in days', () => {
+Then('I fill {string} into the alarm allowed deviation in days field', (deviationDay) => {
 
   // Check 'Toegestane afwijking (in dagen)' field  
   cy.get('[data-test="alarmForm.dateMargin"]')
@@ -228,8 +204,8 @@ Then('I fill in the alarm allowed deviation in days', () => {
 
   // Fill in 'Toegestane afwijking (in dagen)' field  
   cy.get('[data-test="alarmForm.dateMargin"]')
-    .type('1')
-    .should('have.value', '1')
+    .type(deviationDay)
+    .should('have.value', deviationDay)
 
 });
 
@@ -258,7 +234,7 @@ Then('I fill in the expected payment amount', () => {
     })
 });
 
-Then('I fill in the alarm allowed deviation in payment amount', () => {
+Then('I fill {string} into the alarm allowed deviation in payment amount field', (deviationPayment) => {
 
   // Check 'Toegestane afwijking bedrag (in euro's)' field  
   cy.get('[data-test="alarmForm.amountMargin"]')
@@ -266,8 +242,8 @@ Then('I fill in the alarm allowed deviation in payment amount', () => {
 
   // Fill in 'Toegestane afwijking bedrag (in euro's)' field  
   cy.get('[data-test="alarmForm.amountMargin"]')
-    .type('1')
-    .should('have.value', '1')
+    .type(deviationPayment)
+    .should('have.value', deviationPayment)
 
 });
 

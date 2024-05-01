@@ -250,12 +250,5 @@ When('I click the "Delete bank account" button of IBAN "NL86INGB0002445588"', ()
 
 });
 
-Then('a notification of failure is displayed', () => {
-
-  // Assertion
-  cy.get('[data-status="error"]')
-  .should('be.visible')
-
-});
 
 //endregion

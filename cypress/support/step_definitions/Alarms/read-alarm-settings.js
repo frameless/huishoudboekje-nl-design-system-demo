@@ -71,7 +71,7 @@ Then('the alarm expected amount is displayed', () => {
 Then('the alarm allowed deviation of the expected amount is displayed', () => {
 
   // Check if allowed deviation of the expected amount is displayed
-  cy.contains('+/- € 37,00')
+  cy.contains('+/- € 13,37')
 
 });
 

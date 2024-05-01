@@ -13,26 +13,26 @@ Feature: create alarm
     When I view the "Add alarm" modal
     Then the "Create alarm form" is displayed
     Then the recurrency is monthly
-    Then the link "Meer opties" is displayed
+    Then the button 'Meer opties' is displayed
     Then the start date is today
     Then the day of the month is empty
     Then the allowed deviation in days is empty
     Then the expected amount is equal to the amount of the agreement
     Then the allowed deviation in amount is empty
-    Then the "Cancel" button is displayed
+    Then the button 'Annuleren' is displayed
     Then the "Submit form" button is displayed
     Then the "Close modal" button is displayed
 
   @afterCleanupAlarm
   Scenario: save monthly alarm with basic options
     When I view the "Agreement" page
-    When I click the "Add alarm" button
+    When I click the button 'Toevoegen'
     Then the "Create alarm form" is displayed
     Then I fill in the current date for alarm start date
-    Then I fill in the alarm day of the month
-    Then I fill in the alarm allowed deviation in days
+    Then I fill '1' into the alarm day of the month field
+    Then I fill '1' into the alarm allowed deviation in days field
     Then I fill in the expected payment amount
-    Then I fill in the alarm allowed deviation in payment amount
+    Then I fill '1' into the alarm allowed deviation in payment amount field
     Then I click the "Submit form" button
     Then the "Create alarm form" modal is closed
     Then a notification of success is displayed
@@ -41,7 +41,7 @@ Feature: create alarm
 @skip @afterCleanupAlarm
   Scenario: save weekly alarm with basic options
     When I view the "Agreement" page
-    When I click the "Add alarm" button
+    When I click the button 'Toevoegen'
     Then the "Create alarm form" is displayed
     When I click the "Meer opties" link
     Then the recurrency is recurring

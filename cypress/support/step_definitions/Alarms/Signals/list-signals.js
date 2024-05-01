@@ -43,20 +43,6 @@ Given('0 active signals exist', () => {
 
 });
  
-When('I view the "Signals" page', () => {
-
-  cy.visit('/signalen')
-  cy.wait(500);
-  cy.url().should('eq', Cypress.config().baseUrl + '/signalen')
-
-});
-
-Then('the "Er zijn geen signalen gevonden" text is displayed', () => {
-
-  cy.contains('Er zijn geen signalen gevonden');
-
-});
-
 //#endregion
 
 //#region Scenario: active signals exist
