@@ -53,10 +53,10 @@ public class Startup
 
   public void Configure(WebApplication app, IWebHostEnvironment env)
   {
-    using (var scope = app.Services.CreateScope())
+    if (app.Environment.IsDevelopment())
     {
-      scope.ServiceProvider.GetRequiredService<AlarmServiceContext>().Database
-        .Migrate(); //TODO this is not ideal if there are multiple instances https://andrewlock.net/deploying-asp-net-core-applications-to-kubernetes-part-7-running-database-migrations/
+      using IServiceScope scope = app.Services.CreateScope();
+      scope.ServiceProvider.GetRequiredService<AlarmServiceContext>().Database.Migrate();
     }
 
     // Configure GRPC services.

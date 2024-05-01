@@ -14,7 +14,13 @@ COPY ["AlarmService.Application/AlarmService.Application.csproj", "AlarmService.
 RUN dotnet restore "AlarmService.Application/AlarmService.Application.csproj"
 COPY . .
 WORKDIR "/src/AlarmService.Application"
-RUN dotnet build "AlarmService.Application.csproj" -c $BUILD_CONFIGURATION -o /app/build
+RUN dotnet build "AlarmService.Application.csproj" -c $BUILD_CONFIGURATION -o /app/
+
+FROM build AS efbundle
+WORKDIR "/src/AlarmService.Domain"
+RUN dotnet tool install --global dotnet-ef
+ENV PATH="${PATH}:/root/.dotnet/tools"
+RUN dotnet-ef migrations bundle --self-contained -r linux-x64  --msbuildprojectextensionspath _intermediate_
 
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
@@ -23,4 +29,9 @@ RUN dotnet publish "AlarmService.Application.csproj" -c $BUILD_CONFIGURATION -o 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "AlarmService.Application.dll", "--launch-profile production"]
+COPY --from=efbundle ./src/AlarmService.Domain/efbundle ./migrations/
+COPY ["AlarmService.Application/appsettings.json", "./migrations/"]
+COPY execute-migrations.sh .
+RUN chmod 755 ./migrations/efbundle
+RUN chmod 755 ./execute-migrations.sh
+CMD ["dotnet", "AlarmService.Application.dll", "--launch-profile production"]

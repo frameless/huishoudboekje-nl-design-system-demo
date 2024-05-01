@@ -165,7 +165,7 @@ services:
       - /src/app/AlarmService.Application/obj
     environment:
       ASPNETCORE_ENVIRONMENT: "Development"
-      DATABASE_URL: "postgresql://hhb:hhb@db/alarmenservice"
+      HHB_DATABASE_URL: "Host=db;Database=alarmenservice;Port=5432;Username=postgres;Password=postgres"
       LOG_LEVEL: DEBUG
     ports:
       - 8008:8000
@@ -186,7 +186,7 @@ services:
       - /src/app/LogService.Application/obj
     environment:
       ASPNETCORE_ENVIRONMENT: "Development"
-      DATABASE_URL: "postgresql://hhb:hhb@db/logservice"
+      HHB_DATABASE_URL: "Host=db;Database=logservice;Port=5432;Username=postgres;Password=postgres"
       LOG_LEVEL: DEBUG
     ports:
       - 8012:8000
