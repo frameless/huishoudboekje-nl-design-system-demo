@@ -2,6 +2,8 @@
 
 ## 2.0.1
 
+Deze versie omvat een verbetering voor het migreren van gegevens voor alarmen en gebeurtenissen. Verder is er een probleem opgelost met het berekenen van saldo in rapportage. 
+
 ### Patch Changes
 
 - f8cd8ab: Fixed bug rapportage wrong saldo when not 1st of month as start date
