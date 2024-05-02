@@ -8,7 +8,7 @@ const header = {
 };
 
 // Before *each* test, run this (so this runs equal to the amount of tests)
-Before(function () {
+Before({ order: 1 }, function () {
   cy.visit('/');
   cy.getCookie('appSession').then((c) => {
     const cookie = c

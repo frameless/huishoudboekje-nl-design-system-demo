@@ -27,5 +27,5 @@ Feature: create bank account for organisation
     When I fill in the "IBAN" form field
     When I click the "Save" button
     Then the "Add bank account" modal is closed
-    Then a notification of success is displayed
+    Then a success notification containing 'Nieuwe afdeling opgeslagen' is displayed
     Then the text 'NL79 KOEX 0830 6420 05' is displayed

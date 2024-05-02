@@ -18,7 +18,7 @@ Feature: list signals
     When I navigate to the page '/signalen'
     Then the signal description is displayed
     Then the signal date is displayed
-    Then the "Suppress signal" button is displayed
+    Then the "Suppress signal" switch track is displayed
     Then the signal status is displayed
 
   @cleanupSignal

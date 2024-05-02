@@ -7,6 +7,8 @@ const header = {
   'Accept-Encoding': 'gzip, deflate, br',
 };
 
+let uniqueId = Date.now().toString();
+
 //#region Scenario: multiple payments within timeframe
 
 Given('an agreement exists for scenario "multiple payments within timeframe"', () => {
@@ -47,7 +49,7 @@ Given('an agreement exists for scenario "multiple payments within timeframe"', (
     .contains('Toeslagen')
     .click();
   cy.get('[data-test="select.agreementIncomeDescription"]')
-    .type('Zorgtoeslag 2099');
+    .type(uniqueId);
   cy.get('[data-test="select.agreementIncomeAmount"]')
     .type('10');
   cy.get('[data-test="button.Submit"]')
@@ -440,7 +442,7 @@ When('both bank transactions are reconciliated on the same agreement', () => {
       .click({ force: true });
     cy.contains('Mcpherson')
       .click();
-    cy.contains('Zorgtoeslag 2099')
+    cy.contains(uniqueId)
       .click();
     cy.wait(500);
 
@@ -480,7 +482,7 @@ When('both bank transactions are reconciliated on the same agreement', () => {
       .click({ force: true });
     cy.contains('Mcpherson')
       .click();
-    cy.contains('Zorgtoeslag 2099')
+    cy.contains(uniqueId)
       .click();
     cy.wait(500);
     
@@ -495,7 +497,7 @@ Then('a "Multiple payments" signal is created', () => {
 
   // Assertion
   cy.contains('meerdere transacties gevonden');
-  cy.contains('Zorgtoeslag 2099');
+  cy.contains(uniqueId);
   cy.contains('Mcpherson Patterson');
   cy.contains('10.00');
  

@@ -38,6 +38,9 @@ module.exports = defineConfig({
     },
   },
   e2e: {
+    // Extra
+    experimentalRunAllSpecs: true,
+
     // Host Url
     baseUrl: "http://localhost:3000",
 

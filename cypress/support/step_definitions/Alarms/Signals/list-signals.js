@@ -95,7 +95,7 @@ Then('the signal date is displayed', () => {
 
 });
 
-Then('the "Suppress signal" button is displayed', () => {
+Then('the "Suppress signal" switch track is displayed', () => {
 
   cy.get('[data-test="signal.switchActive"]')
     .should('be.visible');

@@ -8,7 +8,7 @@ Feature: create alarm
     # Given I am logged in as an authorised site user
     # Given 1 or more agreements exists
 
-  @beforeCleanupAlarm
+  @beforeCreateAgreement
   Scenario: view create alarm form with default options
     When I view the "Add alarm" modal
     Then the "Create alarm form" is displayed

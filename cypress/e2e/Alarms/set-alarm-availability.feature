@@ -17,6 +17,7 @@ Feature: set alarm availability
     When I click the "Disable alarm" button
     Then the alarm status is "Disabled"
 
+  @afterDeleteAgreement
   Scenario: toggle alarm to enabled
     Given I view the "Agreement" page
     Then the alarm availability is displayed
