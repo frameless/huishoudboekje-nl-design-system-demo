@@ -16,10 +16,10 @@ When('I view the "Add alarm" modal', () => {
   cy.waitForReact();
   cy.url().should('eq', Cypress.config().baseUrl + '/burgers/1')
 
-  // Open first agreement
+  // Open latest agreement
   cy.get('tbody')
     .find('tr')
-    .first()
+    .last()
     .children()
     .last()
     .find('a[aria-label="Bekijken"]:visible')
@@ -148,10 +148,10 @@ When('I view the "Agreement" page', () => {
     .click()
   cy.url().should('contains', Cypress.config().baseUrl + '/burgers/')
 
-  // Navigate to first displayed agreement's detail page
+  // Navigate to last displayed agreement's detail page
   cy.get('tbody')
     .find('tr')
-    .first()
+    .last()
     .children()
     .last()
     .find('a[aria-label="Bekijken"]:visible')

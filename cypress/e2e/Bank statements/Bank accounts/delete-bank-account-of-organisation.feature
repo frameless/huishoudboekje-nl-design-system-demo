@@ -14,7 +14,7 @@ Feature: delete bank account of organisation
     Given the bank account is not applied to a journal entry
     When I click the "Delete bank account" button
     When I confirm by clicking the "Delete" button
-    Then a notification of success is displayed
+    Then a success notification containing 'Bankrekening is verwijderd' is displayed
     Then the bank account "NL79KOEX0830642005" is not displayed
 
   @cleanupOrganizationDepartment @cleanupAgreement @cleanupOrganizationDepartmentPostaddressBankaccount

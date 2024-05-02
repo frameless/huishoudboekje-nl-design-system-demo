@@ -19,13 +19,13 @@ Feature: delete a bank account
     Then the "Add department" modal is displayed
     When I input the name "Meervoudig gebruik IBAN"
     When I click the "Save" button
-    Then a notification of success is displayed
+    Then a success notification containing 'Nieuwe afdeling opgeslagen' is displayed
     When I click the "Meervoudig gebruik IBAN" department
     When I click the "Add bank account" button
     Then I view the "Add bank account" modal
     When I input the IBAN "NL86INGB0002445588"
     When I click the "Save" button
-    Then a notification of success is displayed
+    Then a success notification containing 'op naam van' is displayed
     When I click the "Delete bank account" button
     Then the "Delete bank account" modal is displayed
     When I click the "Delete" button

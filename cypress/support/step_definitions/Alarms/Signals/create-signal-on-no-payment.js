@@ -7,6 +7,9 @@ const header = {
   'Accept-Encoding': 'gzip, deflate, br',
 };
 
+// Unique names
+const uniqueSeed = Date.now().toString();
+
 // Set database query
 const queryTruncateAlarm = `mutation Truncate {
   truncateTable(databaseName: "alarmenservice", tableName: "alarms")
@@ -113,7 +116,7 @@ Given('an agreement exists for scenario "no transaction within timeframe"', () =
       .contains('Toeslagen')
       .click();
     cy.get('[data-test="select.agreementIncomeDescription"]')
-      .type('Zorgtoeslag 2099');
+      .type(uniqueSeed);
     cy.get('[data-test="select.agreementIncomeAmount"]')
       .type('10');
     cy.get('[data-test="button.Submit"]')
@@ -244,7 +247,7 @@ Then('a "Payment missing" signal is created', () => {
 
   // Assertion
   cy.contains('geen transactie gevonden');
-  cy.contains('Zorgtoeslag 2099');
+  cy.contains(uniqueSeed);
   cy.contains('Mcpherson Patterson');
  
 });

@@ -7,56 +7,61 @@ const header = {
   'Accept-Encoding': 'gzip, deflate, br',
 };
 
+let uniqueId = 0;
+
 //#region Scenario: payment amount too high
 
-Given('an agreement exists for scenario "payment amount too high"', () => {
+Given('an agreement exists for scenario "payment amount too high"', function() {
+  
+  // Set unique id names
+  uniqueId = Date.now().toString();
+    
+  // Navigate to citizen
+  cy.visit('/burgers');
+  cy.url().should('eq', Cypress.config().baseUrl + '/burgers')
+  cy.get('input[placeholder="Zoeken"]')
+  .type('Mcpherson');
+  cy.waitForReact();
+  cy.contains('Patterson')
+    .click();
+  cy.url().should('include', Cypress.config().baseUrl + '/burgers/')
+  cy.get('[data-test="button.Add"]')
+    .click();
 
-    // Navigate to citizen
-    cy.visit('/burgers');
-    cy.url().should('eq', Cypress.config().baseUrl + '/burgers')
-    cy.get('input[placeholder="Zoeken"]')
-    .type('Mcpherson');
-    cy.waitForReact();
-    cy.contains('Patterson')
-      .click();
-    cy.url().should('include', Cypress.config().baseUrl + '/burgers/')
-    cy.get('[data-test="button.Add"]')
-      .click();
+  // Add agreement with test department
+  cy.url().should('contains', '/afspraken/toevoegen'); 
+  cy.get('[data-test="radio.agreementOrganization"]')
+    .click();
+  cy.get('#organisatie')
+    .type('Belast');
+  cy.contains('ingdienst')
+    .click();
+  // Check auto-fill
+  cy.contains('Graadt van Roggenweg');
+  // Fill in IBAN
+  cy.get('#tegenrekening')
+    .type('NL86');
+  cy.contains('0002')
+    .click();
 
-    // Add agreement with test department
-    cy.url().should('contains', '/afspraken/toevoegen'); 
-    cy.get('[data-test="radio.agreementOrganization"]')
-      .click();
-    cy.get('#organisatie')
-      .type('Belast');
-    cy.contains('ingdienst')
-      .click();
-    // Check auto-fill
-    cy.contains('Graadt van Roggenweg');
-    // Fill in IBAN
-    cy.get('#tegenrekening')
-      .type('NL86');
-    cy.contains('0002')
-      .click();
+  // Payment direction: Toeslagen
+  cy.get('[data-test="radio.agreementIncome"]')
+    .click();
+  cy.get('#rubriek')
+    .click()
+    .contains('Toeslagen')
+    .click();
+  cy.get('[data-test="select.agreementIncomeDescription"]')
+    .type(uniqueId);
+  cy.get('[data-test="select.agreementIncomeAmount"]')
+    .type('10');
+  cy.get('[data-test="button.Submit"]')
+    .click();
 
-    // Payment direction: Toeslagen
-    cy.get('[data-test="radio.agreementIncome"]')
-      .click();
-    cy.get('#rubriek')
-      .click()
-      .contains('Toeslagen')
-      .click();
-    cy.get('[data-test="select.agreementIncomeDescription"]')
-      .type('Zorgtoeslag 2099');
-    cy.get('[data-test="select.agreementIncomeAmount"]')
-      .type('10');
-    cy.get('[data-test="button.Submit"]')
-      .click();
-
-    // Check success message
-    cy.get('[data-status="success"]')
-    .contains('afspraak')
-    .should('be.visible');
+  // Check success message
+  cy.get('[data-status="success"]')
+  .contains('afspraak')
+  .should('be.visible');
 
 });
 
@@ -305,7 +310,7 @@ When('a high amount bank transaction is booked to an agreement', () => {
     .click({ force: true });
   cy.contains('Mcpherson')
     .click();
-  cy.contains('Zorgtoeslag 2099')
+  cy.contains(uniqueId)
     .click();
  
 });
@@ -349,6 +354,9 @@ Then('a "Payment amount too high" signal is created', () => {
 //#region Scenario: payment amount too low
 
 Given('an agreement exists for scenario "payment amount too low"', () => {
+  
+  // Set unique id names
+  uniqueId = Date.now().toString();
 
   // Navigate to citizen
   cy.visit('/burgers');
@@ -386,7 +394,7 @@ Given('an agreement exists for scenario "payment amount too low"', () => {
     .contains('Toeslagen')
     .click();
   cy.get('[data-test="select.agreementIncomeDescription"]')
-    .type('Zorgtoeslag 2099');
+    .type(uniqueId);
   cy.get('[data-test="select.agreementIncomeAmount"]')
     .type('10');
   cy.get('[data-test="button.Submit"]')
@@ -644,7 +652,7 @@ When('a low amount bank transaction is booked to an agreement', () => {
     .click({ force: true });
   cy.contains('Mcpherson')
     .click();
-  cy.contains('Zorgtoeslag 2099')
+  cy.contains(uniqueId)
     .click();
  
 });
@@ -682,6 +690,9 @@ When('a low amount bank transaction is booked to an agreement', () => {
 //#region Scenario: expected payment amount
 
 Given('an agreement exists for scenario "expected payment amount"', () => {
+  
+  // Set unique id names
+  uniqueId = Date.now().toString();
 
   // Navigate to citizen
   cy.visit('/burgers');
@@ -719,7 +730,7 @@ Given('an agreement exists for scenario "expected payment amount"', () => {
     .contains('Toeslagen')
     .click();
   cy.get('[data-test="select.agreementIncomeDescription"]')
-    .type('Zorgtoeslag 2099');
+    .type(uniqueId);
   cy.get('[data-test="select.agreementIncomeAmount"]')
     .type('10');
   cy.get('[data-test="button.Submit"]')
@@ -976,8 +987,8 @@ When('an expected amount bank transaction is booked to an agreement', () => {
   cy.contains('Alle burgers')
     .click({ force: true });
   cy.contains('Mcpherson')
-    .click();
-  cy.contains('Zorgtoeslag 2099')
+    .click({ force: true });
+  cy.contains(uniqueId)
     .click();
  
 });

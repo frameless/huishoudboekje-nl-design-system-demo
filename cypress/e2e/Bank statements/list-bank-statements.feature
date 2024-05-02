@@ -8,14 +8,14 @@ Feature: list bank statements
 
   Scenario: no bank statements exist
     Given 0 bank statements exist
-    When I view the "Bank statements" page
+    When I navigate to the page '/bankzaken/bankafschriften'
     Then the "Er zijn geen bankafschriften gevonden" text is displayed
     Then the "Add bank statement" button is displayed
 
   @cleanupStatements
   Scenario: bank statements exist
     Given 1 or more bank statements exist
-    When I view the "Bank statement" page
+    When I navigate to the page '/bankzaken/bankafschriften'
     Then the bank statement filenames are displayed
     Then the bank statement upload timestamp is displayed
     Then the "Delete bank statement" button is displayed

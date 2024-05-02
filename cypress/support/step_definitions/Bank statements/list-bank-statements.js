@@ -22,16 +22,6 @@ Given('0 bank statements exist', () => {
 
 });
 
-When('I view the "Bank statements" page', () => {
-
-  cy.visit('/bankzaken/bankafschriften');
-  cy.waitForReact();
-
-  // Assertion
-  cy.url().should('eq', Cypress.config().baseUrl + '/bankzaken/bankafschriften')
-
-});
-
 Then('the "Er zijn geen bankafschriften gevonden" text is displayed', () => {
 
   cy.contains('Er zijn geen bankafschriften gevonden');

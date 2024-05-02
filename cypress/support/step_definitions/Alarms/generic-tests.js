@@ -1,6 +1,6 @@
 // cypress/support/step_definitions/Generic/generic-tests.js
 
-import { Before, After, When } from "@badeball/cypress-cucumber-preprocessor";
+import { Before, After, When, Step } from "@badeball/cypress-cucumber-preprocessor";
 
 const header = {
   'content-type': 'application/json',
@@ -15,6 +15,9 @@ const queryTruncateAlarm = `mutation Truncate {
 const queryTruncateSignal = `mutation Truncate {
   truncateTable(databaseName: "alarmenservice", tableName: "signals")
 }`
+
+// Unique names
+const uniqueSeed = Date.now().toString();
 
 // Before *all* tests, run this (so this runs once at the start)
 Before({ tags: "@alarmservice" }, function (){
@@ -82,14 +85,20 @@ When('I create a test alarm', () => {
 
   cy.wait(1000);
 
-  // Click button element
+  // Open latest agreement
   cy.visit('/burgers/1');
   cy.waitForReact();
   cy.url().should('eq', Cypress.config().baseUrl + '/burgers/1')
-  cy.get('a[aria-label="Bekijken"]:visible')
+
+    // Navigate to last displayed agreement's detail page
+  cy.get('tbody')
+    .find('tr')
+    .last()
+    .children()
+    .last()
+    .find('a[aria-label="Bekijken"]:visible')
     .click();
-  cy.waitForReact();
-  cy.url().should('include', Cypress.config().baseUrl + '/afspraken/')
+  cy.url().should('contains', Cypress.config().baseUrl + '/afspraken/')
   cy.get('h2').contains('Alarm').should('be.visible')
     .scrollIntoView() // Scrolls 'Alarm' into view
   cy.get('button')
@@ -149,5 +158,112 @@ When('I create a test alarm', () => {
     .should('not.exist');
   cy.get('section[aria-modal="true"]')
     .should('not.exist');
+
+});
+
+Before({ tags: "@beforeCreateAgreement" }, () => {
+  
+  // Wipe alarms clean
+    // Truncate alarms
+    cy.request({
+      method: "post",
+      url: Cypress.env().graphqlUrl + '/graphql',
+      body: { query: queryTruncateAlarm },
+    }).then((res) => {
+      console.log(res.body);
+    });
+  
+    // Truncate signals
+    cy.request({
+      method: "post",
+      url: Cypress.env().graphqlUrl + '/graphql',
+      body: { query: queryTruncateSignal },
+    }).then((res) => {
+      console.log(res.body);
+    });
+
+  cy.wait(1000);
+
+  // Navigate to citizen
+  cy.visit('/burgers');
+  cy.url().should('eq', Cypress.config().baseUrl + '/burgers')
+  cy.get('input[placeholder="Zoeken"]')
+    .type('Mcpherson');
+  cy.waitForReact();
+  cy.contains('Patterson')
+    .click();
+  cy.url().should('include', Cypress.config().baseUrl + '/burgers/')
+  
+  Step(this, "I click the button 'Toevoegen'");
+
+  // Add agreement with test department
+  cy.url().should('contains', '/afspraken/toevoegen'); 
+  cy.get('[data-test="radio.agreementOrganization"]')
+    .click();
+  cy.get('#organisatie')
+    .type('Albert');
+  cy.contains('Heijn')
+    .click();
+  // Check auto-fill
+  cy.contains('Zaandam');
+  // Fill in IBAN
+  cy.get('#tegenrekening')
+    .type('NL09');
+  cy.contains('9532')
+    .click();
+
+  // Payment direction: Toeslagen
+  cy.get('[data-test="radio.agreementIncome"]')
+    .click();
+  cy.get('#rubriek')
+    .click()
+    .contains('Inkomsten')
+    .click();
+  cy.get('[data-test="select.agreementIncomeDescription"]')
+    .type(uniqueSeed);
+  cy.get('[data-test="select.agreementIncomeAmount"]')
+    .type('543.54');
+  cy.get('[data-test="button.Submit"]')
+    .click();
+
+  // Check success message
+  Step(this, "a success notification containing 'De afspraak is opgeslagen' is displayed");
+
+});
+
+// Set order to be after @afterCleanupAlarm
+After({ tags: "@afterDeleteAgreement", order: 10 }, () => {
+  
+  cy.wait(1000);
+
+  // Navigate to citizen
+  cy.visit('/burgers');
+  cy.url().should('eq', Cypress.config().baseUrl + '/burgers')
+  cy.get('input[placeholder="Zoeken"]')
+    .type('Mcpherson');
+  cy.waitForReact();
+  cy.contains('Patterson')
+    .click();
+  cy.url().should('include', Cypress.config().baseUrl + '/burgers/')
+  
+  // Navigate to last displayed agreement's detail page
+  cy.get('tbody')
+    .find('tr')
+    .last()
+    .children()
+    .last()
+    .find('a[aria-label="Bekijken"]:visible')
+    .click();
+  cy.url().should('contains', Cypress.config().baseUrl + '/afspraken/')
+
+  cy.get('[data-test="agreement.menuKebab"]')
+    .click();
+  cy.get('[data-test="agreement.menuDelete"]')
+    .click();
+  cy.get('[data-test="button.AlertDelete"]')
+    .click();
+
+  // Check success message
+  Step(this, "a success notification containing 'De afspraak is verwijderd' is displayed");
 
 });

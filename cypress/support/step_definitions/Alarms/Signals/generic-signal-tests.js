@@ -52,7 +52,7 @@ After({ tags: "@cleanupSignal" }, function (){
   cy.get('[data-status="success"]')
     .should('be.visible');
 
-  // Remove agreement
+  // Remove latest agreement
   cy.visit('/burgers');
   cy.url().should('eq', Cypress.config().baseUrl + '/burgers')
   cy.get('input[placeholder="Zoeken"]')
@@ -61,14 +61,14 @@ After({ tags: "@cleanupSignal" }, function (){
   cy.contains('Patterson')
     .click();
   cy.url().should('include', Cypress.config().baseUrl + '/burgers/')
-  cy.get('p').contains('Zorgtoeslag 2099')
-    .parent()
-    .next()
-    .next()
-    .next()
-    .children('a[aria-label="Bekijken"]')
+  cy.get('tbody')
+    .find('tr')
+    .last()
+    .children()
+    .last()
+    .find('a[aria-label="Bekijken"]:visible')
     .click();
-  cy.url().should('include', Cypress.config().baseUrl + '/afspraken/')
+  cy.url().should('contains', Cypress.config().baseUrl + '/afspraken/')
   cy.get('[data-test="agreement.menuKebab"]')
     .click();
   cy.get('[data-test="agreement.menuDelete"]')
@@ -135,7 +135,7 @@ After({ tags: "@cleanupTwoSignals" }, function (){
     .should('be.visible');
   cy.wait(3000);
 
-  // Remove agreement
+  // Remove latest agreement
   cy.visit('/burgers');
   cy.url().should('eq', Cypress.config().baseUrl + '/burgers')
   cy.get('input[placeholder="Zoeken"]')
@@ -144,14 +144,14 @@ After({ tags: "@cleanupTwoSignals" }, function (){
   cy.contains('Patterson')
     .click();
   cy.url().should('include', Cypress.config().baseUrl + '/burgers/')
-  cy.get('p').contains('Zorgtoeslag 2099')
-    .parent()
-    .next()
-    .next()
-    .next()
-    .children('a[aria-label="Bekijken"]')
+  cy.get('tbody')
+    .find('tr')
+    .last()
+    .children()
+    .last()
+    .find('a[aria-label="Bekijken"]:visible')
     .click();
-  cy.url().should('include', Cypress.config().baseUrl + '/afspraken/')
+  cy.url().should('contains', Cypress.config().baseUrl + '/afspraken/')
   cy.get('[data-test="agreement.menuKebab"]')
     .click();
   cy.get('[data-test="agreement.menuDelete"]')
@@ -187,7 +187,7 @@ After({ tags: "@cleanupAlarmSignal" }, function (){
       console.log(res.body);
     });
 
-  // Remove agreement
+  // Remove latest agreement
   cy.visit('/burgers');
   cy.url().should('eq', Cypress.config().baseUrl + '/burgers')
   cy.get('input[placeholder="Zoeken"]')
@@ -196,14 +196,14 @@ After({ tags: "@cleanupAlarmSignal" }, function (){
   cy.contains('Patterson')
     .click();
   cy.url().should('include', Cypress.config().baseUrl + '/burgers/')
-  cy.get('p').contains('Zorgtoeslag 2099')
-    .parent()
-    .next()
-    .next()
-    .next()
-    .children('a[aria-label="Bekijken"]')
+  cy.get('tbody')
+    .find('tr')
+    .last()
+    .children()
+    .last()
+    .find('a[aria-label="Bekijken"]:visible')
     .click();
-  cy.url().should('include', Cypress.config().baseUrl + '/afspraken/')
+  cy.url().should('contains', Cypress.config().baseUrl + '/afspraken/')
   cy.get('[data-test="agreement.menuKebab"]')
     .click();
   cy.get('[data-test="agreement.menuDelete"]')
