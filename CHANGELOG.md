@@ -1,5 +1,18 @@
 # Huishoudboekje Changelog
 
+## 2.0.1
+
+Deze versie omvat een verbetering voor het migreren van gegevens voor alarmen en gebeurtenissen. Verder is er een probleem opgelost met het berekenen van saldo in rapportage. 
+
+### Patch Changes
+
+- f8cd8ab: Fixed bug rapportage wrong saldo when not 1st of month as start date
+- Added efbundle to dockerimage to be able to seperatly execute migrations
+
+## Migration Guide
+
+The Alarm and Log service now have an efbundle in the container. This makes it possible to execute migrations seperatly. The script `execute-migrations.sh` can be used to run the migrations. This script needs the ENV variable HHB_DATABASE_URL to make a conenction to the database.
+
 ## 2.0.0
 
 Deze versie omvat herziene functionaliteit voor gebeurtenissen, alarmen en signalen. Met name snelheid en stabiliteit zijn verbeterd. Diverse kwetsbaarheden zijn opgelost.
@@ -29,11 +42,13 @@ Met de nieuwe User API kan een koppeling gemaakt worden vanuit een klantportaal.
 ## Migration Guide
 
 The grapql-mesh container has the following env variables required:
+
 - **HHB_ALARM_SERVICE_URL**
 - **HHB_LOG_SERVICE_URL**
 - **HHB_BACKEND_URL**
 
 To get the AlarmService up and running these env variables need to be set.
+
 - **HHB_DATABASE_URL**
 - **HHB_RABBITMQ_HOST**
 - **HHB_RABBITMQ_PORT**
@@ -47,6 +62,7 @@ To get the AlarmService up and running these env variables need to be set.
 - **HHB_JWT_JWKS_URI**
 
 To get the Log Service up and running these env variables need to be set.
+
 - **HHB_DATABASE_URL**
 - **HHB_RABBITMQ_HOST**
 - **HHB_RABBITMQ_PORT**
@@ -60,6 +76,7 @@ To get the Log Service up and running these env variables need to be set.
 - **HHB_JWT_JWKS_URI**
 
 To get the UserApi up and running these env variables need to be set.
+
 - **HHB_RABBITMQ_HOST**
 - **HHB_RABBITMQ_PORT**
 - **HHB_RABBITMQ_USER**

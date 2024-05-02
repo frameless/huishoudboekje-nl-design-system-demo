@@ -56,9 +56,9 @@ The Log Service consists of the following modules, each with their own project:
 ![module-structure.svg](Documentation%2Fmodule-structure.svg)
 
 ### Database
-[Entity Framework Core](https://learn.microsoft.com/en-us/ef/core/) is used for database communication.
-The database is code first and it executes migrations on startup. This might change in the future to better support multiple replicas in one namespace.
-
+[Entity Framework Core](https://learn.microsoft.com/en-us/ef/core/) is used for database communication and the database is code first.
+It executes migrations on startup when in development mode.
+For production the docker file contains a script `execute-migrations.sh` this script executes the migrations using ef bundle.
 
 
 

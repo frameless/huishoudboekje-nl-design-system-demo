@@ -1,4 +1,11 @@
-<Project Sdk="Microsoft.NET.Sdk">
+<Project>
+  <PropertyGroup>
+    <!-- Don't use $(Configuration) since it isn't set yet. -->
+    <MSBuildProjectExtensionsPath>$(MSBuildProjectDirectory)\_intermediate_\</MSBuildProjectExtensionsPath>
+  </PropertyGroup>
+
+  <!-- MSBuildProjectExtensionsPath must be set before this gets imported. Directory.Build.props is too late. -->
+  <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" />
 
     <PropertyGroup>
         <TargetFramework>net8.0</TargetFramework>
@@ -24,4 +31,17 @@
     <Folder Include="Migrations\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Remove="_intermediate_\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Remove="_intermediate_\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="_intermediate_\**" />
+  </ItemGroup>
+
+  <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" />
 </Project>
