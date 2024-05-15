@@ -45,8 +45,8 @@ const ParameterItem: React.FC<{c: Configuratie}> = ({c}) => {
 			<Td>{c.waarde}</Td>
 			<Td>
 				<HStack>
-					<IconButton size={"sm"} variant={"ghost"} colorScheme={"gray"} icon={<EditIcon />} aria-label={t("global.actions.edit")} onClick={() => updateParameterModal.onOpen()} />
-					<DeleteConfirmButton onConfirm={() => onDelete()} />
+					<IconButton data-test="button.Edit" size={"sm"} variant={"ghost"} colorScheme={"gray"} icon={<EditIcon />} aria-label={t("global.actions.edit")} onClick={() => updateParameterModal.onOpen()} />
+					<DeleteConfirmButton data-test="button.Delete" onConfirm={() => onDelete()} />
 				</HStack>
 			</Td>
 		</Tr>

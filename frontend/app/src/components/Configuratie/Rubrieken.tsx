@@ -67,7 +67,7 @@ const Rubrieken = () => {
 
 	return (
 		<SectionContainer>
-			<Section title={t("forms.rubrieken.sections.title")} helperText={t("forms.rubrieken.sections.helperText")}>
+			<Section title={t("forms.rubrieken.sections.title")} data-test="section.rubric" helperText={t("forms.rubrieken.sections.helperText")}>
 				<Queryable query={$rubriekenConfiguratie} children={data => {
 					const grootboekrekeningen: Grootboekrekening[] = data.grootboekrekeningen || [];
 					const rubrieken: Rubriek[] = data.rubrieken || [];
@@ -98,6 +98,7 @@ const Rubrieken = () => {
 									<FormControl isInvalid={!isFieldValid("naam")} isRequired={true}>
 										<FormLabel>{t("forms.rubrieken.fields.naam")}</FormLabel>
 										<Input
+											data-test="input.Naam"
 										 	autoComplete="no"
 											aria-autocomplete="none"
 											onChange={v => updateForm("naam", v.target.value)}
@@ -105,7 +106,7 @@ const Rubrieken = () => {
 										/>
 										<FormErrorMessage>{t("configuratieForm.emptyNameErroror")}</FormErrorMessage>
 									</FormControl>
-									<FormControl isInvalid={!isFieldValid("grootboekrekening")} isRequired={true}>
+									<FormControl isInvalid={!isFieldValid("grootboekrekening")} data-test="select.Grootboekrekening" isRequired={true}>
 										<FormLabel>{t("forms.rubrieken.fields.grootboekrekening")}</FormLabel>
 										<Select
 											{...selectProps.defaultProps}
@@ -117,7 +118,7 @@ const Rubrieken = () => {
 										/>
 										<FormErrorMessage>{t("configuratieForm.emptyGrootboekrekeningError")}</FormErrorMessage>
 									</FormControl>
-									<Button type={"submit"} colorScheme={"primary"} isLoading={loading}>{t("global.actions.save")}</Button>
+									<Button data-test="button.rubricSubmit" type={"submit"} colorScheme={"primary"} isLoading={loading}>{t("global.actions.save")}</Button>
 									<Asterisk />
 								</Stack>
 							</form>

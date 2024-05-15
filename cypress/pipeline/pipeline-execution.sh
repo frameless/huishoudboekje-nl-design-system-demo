@@ -17,7 +17,7 @@ echo "Installing npm packages..."
 npm ci
 
 echo "Executing tests..."
-npx cypress run --config baseUrl=$APP_HOST --env graphqlUrl=$DATABASE_HOST,aad_username=$TEST_USER_ONE_EMAIL,aad_password=$TEST_USER_ONE_PASSWORD --record --key $CYPRESS_KEY
+npx cypress run --config baseUrl=$APP_HOST,downloadsFolder="/home/root/Downloads" --env graphqlUrl=$DATABASE_HOST,aad_username=$TEST_USER_ONE_EMAIL,aad_password=$TEST_USER_ONE_PASSWORD --record --key $CYPRESS_KEY
 
 
 

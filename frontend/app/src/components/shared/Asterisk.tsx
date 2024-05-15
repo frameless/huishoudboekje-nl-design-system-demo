@@ -6,7 +6,7 @@ const Asterisk = () => {
 	const {t} = useTranslation();
 	return (
 		<HStack spacing={1}>
-			<Text color={"red.500"}>*</Text>
+			<Text data-test="asterisk.required" color={"red.500"}>*</Text>
 			<Text>{t("forms.asterisk")}</Text>
 		</HStack>
 	);

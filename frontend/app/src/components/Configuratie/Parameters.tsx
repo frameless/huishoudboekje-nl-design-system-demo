@@ -59,7 +59,7 @@ const Parameters = () => {
 
 	return (
 		<SectionContainer>
-			<Section title={t("forms.configuratie.sections.title")} helperText={t("forms.configuratie.sections.helperText")}>
+			<Section title={t("forms.configuratie.sections.title")} data-test="section.parameter" helperText={t("forms.configuratie.sections.helperText")}>
 				<Queryable query={$configuraties} children={data => {
 					const configuraties: IConfiguratie[] = data.configuraties;
 					return (
@@ -86,7 +86,8 @@ const Parameters = () => {
 									<FormControl isInvalid={!isFieldValid("id")} isRequired={true}>
 										<FormLabel>{t("forms.configuratie.fields.id")}</FormLabel>
 										<Input
-										 	autoComplete="no"
+										 	data-test="input.Sleutel"
+											autoComplete="no"
 											aria-autocomplete="none"
 											onChange={e => updateForm("id", e.target.value)}
 											value={form.id || ""}
@@ -96,14 +97,15 @@ const Parameters = () => {
 									<FormControl isInvalid={!isFieldValid("waarde")} isRequired={true}>
 										<FormLabel>{t("forms.configuratie.fields.waarde")}</FormLabel>
 										<Input
-										 	autoComplete="no"
+										 	data-test="input.Waarde"
+											autoComplete="no"
 											aria-autocomplete="none"
 											onChange={e => updateForm("waarde", e.target.value)}
 											value={form.waarde || ""}
 										/>
 										<FormErrorMessage>{t("configuratieForm.emptyWaardeError")}</FormErrorMessage>
 									</FormControl>
-									<Button type={"submit"} colorScheme={"primary"} isLoading={loading}>{t("global.actions.save")}</Button>
+									<Button type={"submit"} data-test="button.parameterSubmit" colorScheme={"primary"} isLoading={loading}>{t("global.actions.save")}</Button>
 									<Asterisk />
 								</Stack>
 							</form>

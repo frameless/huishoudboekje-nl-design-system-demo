@@ -158,8 +158,8 @@ const AfspraakBetaalinstructieForm: React.FC<AfspraakBetaalinstructieProps> = ({
 									});
 								}}>
 									<Stack>
-										<Radio value={"eenmalig"}>{t("schedule.eenmalig")}</Radio>
-										<Radio value={"periodiek"}>{t("schedule.periodiek")}</Radio>
+										<Radio data-test="radio.once" value={"eenmalig"}>{t("schedule.eenmalig")}</Radio>
+										<Radio data-test="radio.periodically" value={"periodiek"}>{t("schedule.periodiek")}</Radio>
 									</Stack>
 								</RadioGroup>
 								<FormErrorMessage>{t("afspraakBetaalinstructie.invalidPeriodiekError")}</FormErrorMessage>
@@ -211,7 +211,7 @@ const AfspraakBetaalinstructieForm: React.FC<AfspraakBetaalinstructieProps> = ({
 												updateForm("startDate", undefined)
 											}
 										}}
-										customInput={<Input type={"text"} autoComplete="no" aria-autocomplete="none" />}
+										customInput={<Input data-test="input.startDate" type={"text"} autoComplete="no" aria-autocomplete="none" />}
 										isClearable={true}
 									/>
 									<FormErrorMessage>{t("afspraakBetaalinstructie.invalidDateError")}</FormErrorMessage>
@@ -231,7 +231,7 @@ const AfspraakBetaalinstructieForm: React.FC<AfspraakBetaalinstructieProps> = ({
 												updateForm("endDate", undefined)
 											}
 										}}
-										customInput={<Input type={"text"} autoComplete="no" aria-autocomplete="none" />}
+										customInput={<Input data-test="input.endDate" type={"text"} autoComplete="no" aria-autocomplete="none" />}
 										isClearable={true}
 									/>
 									<FormErrorMessage>{t("afspraakBetaalinstructie.invalidDateError")}</FormErrorMessage>
@@ -240,7 +240,7 @@ const AfspraakBetaalinstructieForm: React.FC<AfspraakBetaalinstructieProps> = ({
 							</Stack>
 
 							<Stack direction={["column", "row"]}>
-								<FormControl flex={1} isInvalid={!isFieldValid("repeatType")} isRequired>
+								<FormControl flex={1} data-test="select.repeat" isInvalid={!isFieldValid("repeatType")} isRequired>
 									<FormLabel>{t("schedule.repeatType")}</FormLabel>
 									<Box flex={1}>
 										<Select
@@ -317,6 +317,7 @@ const AfspraakBetaalinstructieForm: React.FC<AfspraakBetaalinstructieProps> = ({
 										<FormLabel>{t("schedule.byMonthDay")}</FormLabel>
 										<Input
 											autoComplete="no"
+											data-test="input.byMonthDay"
 											aria-autocomplete="none"
 											type={"number"}
 											min={1}

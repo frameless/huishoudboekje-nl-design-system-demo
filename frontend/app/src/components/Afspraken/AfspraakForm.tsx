@@ -427,7 +427,7 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, or
 												updateForm("validFrom", d(date).format("YYYY-MM-DD"))
 											}
 										}}
-										customInput={(<Input autoComplete="no" aria-autocomplete="none" />)} />
+										customInput={(<Input data-test="input.startDate" autoComplete="no" aria-autocomplete="none" />)} />
 								</InputGroup>
 								<FormErrorMessage>{t("afspraakDetailView.invalidValidFromError")}</FormErrorMessage>
 							</FormControl>
