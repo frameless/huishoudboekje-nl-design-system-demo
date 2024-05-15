@@ -43,6 +43,7 @@ When('I navigate to the page {string}', (url) => {
 
   cy.visit(url)
   cy.wait(500);
+  cy.waitForReact();
   cy.url().should('eq', Cypress.config().baseUrl + url)
 
 });
@@ -71,6 +72,15 @@ Then('the text {string} is displayed', (text) => {
 
 });
 
+// Make sure text is not displayed on page
+Then('the text {string} is not displayed', (text) => {
+
+  cy.wait(500);
+  cy.get('body')
+    .should('not.contain', text);
+
+});
+
 // Find a specific success message
 Then('a success notification containing {string} is displayed', (notificationText) => {
 
@@ -88,5 +98,30 @@ Then('an error notification containing {string} is displayed', (notificationText
   cy.get('[data-status="error"]')
     .contains(notificationText)
     .should('be.visible')
+
+});
+
+// Confirm that a specific citizen exists
+Given('the {string} citizen exists', (citizen) => {
+
+  // Chop off string for search
+  var citizenChop = citizen.slice(0, citizen.length - 8);
+
+  // Search for citizen
+  cy.visit('/burgers');
+  cy.url().should('eq', Cypress.config().baseUrl + '/burgers')
+  cy.get('input[placeholder="Zoeken"]')
+    .type(citizenChop);
+  cy.waitForReact();
+  cy.contains(citizen)
+
+});
+
+// Alarm modal is available
+Then('the "Add alarm" modal is displayed', () => {
+
+  // Assertion
+  cy.get('[data-test="modal.Alarm"]')
+    .should('be.visible');
 
 });

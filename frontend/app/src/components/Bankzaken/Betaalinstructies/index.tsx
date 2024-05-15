@@ -117,7 +117,7 @@ const Betaalinstructies = () => {
 									startDate={dateRange.from}
 									endDate={dateRange.through}
 									onChange={onChangeStartDate}
-									customInput={<Input autoComplete="no" aria-autocomplete="none" />} 
+									customInput={<Input data-test="input.dateRange" autoComplete="no" aria-autocomplete="none" />} 
 								/>
 							</FormControl>
 							<FormControl flex={1}>
@@ -216,7 +216,7 @@ const Betaalinstructies = () => {
 													<Stack>
 														{!isMobile && (
 															<Box flex={0}>
-																<Button size={"sm"} leftIcon={<DownloadIcon />} as={"a"} target={"_blank"} href={href} download={href}>
+																<Button size={"sm"} data-test="button.Download" leftIcon={<DownloadIcon />} as={"a"} target={"_blank"} href={href} download={href}>
 																	{t("global.actions.download")}
 																</Button>
 															</Box>

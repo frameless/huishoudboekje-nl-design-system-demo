@@ -488,7 +488,7 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 
 			{!afspraak.credit && (
 				<SectionContainer>
-					<Section title={t("afspraakDetailView.betaalinstructie.title")} helperText={t("afspraakDetailView.betaalinstructie.helperText")}>
+					<Section title={t("afspraakDetailView.betaalinstructie.title")} data-test="section.paymentInstruction" helperText={t("afspraakDetailView.betaalinstructie.helperText")}>
 						{afspraak.betaalinstructie ? (
 							<Stack>
 								<Stack direction={["column", "row"]} align={"center"}>

@@ -230,8 +230,6 @@ changeset:
 asp-services-tests:
   <<: *rules-tests
   stage: test
-  tags:
-    - docker
   needs: []
   retry:
     max: 2
