@@ -7,6 +7,7 @@ from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.filters.burgers import BurgerFilter
 from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
+from hhb_backend.graphql.utils.sort_result import sort_result
 
 
 class HuishoudenQuery:
@@ -37,7 +38,7 @@ class HuishoudensQuery:
     def resolver(cls, _root, info, ids=None, isLogRequest=False, **kwargs):
         logging.info(f"Get huishoudens")
         if ids:
-            result = hhb_dataloader().huishoudens.load(ids)
+            result = sort_result(ids,  hhb_dataloader().huishoudens.load(ids))
             entities = [
                 GebruikersActiviteitEntity(entityType="huishouden", entityId=huishoudenId)
                 for huishoudenId in ids

@@ -4,6 +4,23 @@ import {Trans} from "react-i18next";
 export const auditLogTexts = (values, components, action) => {
 	const texts = {
 		// Queries
+		SignalsSetIsActive: () => <Trans i18nKey={"auditLog.SignalsSetIsActive"} values={values} components={components} />,
+		AlarmsUpdate: () => <Trans i18nKey={"auditLog.AlarmsUpdate"} values={values} components={components} />,
+		searchAfspraken: () => <Trans i18nKey={"auditLog.searchAfspraken"} values={values} components={components} />,
+		afdelingenByIban: () => <Trans i18nKey={"auditLog.afdelingenByIban"} values={values} components={components} />,
+		overzicht: () => <Trans i18nKey={"auditLog.overzicht"} values={values} components={components} />,
+		SignalsGetActiveSignalsCount: () => <Trans i18nKey={"auditLog.SignalsGetActiveSignalsCount"} values={values} components={components} />,
+		SignalsGetPaged: () => <Trans i18nKey={"auditLog.SignalsGetPaged"} values={values} components={components} />,
+		AlarmsGetByIds: () => <Trans i18nKey={"auditLog.AlarmsGetByIds"} values={values} components={components} />,
+		AlarmsDelete: () => <Trans i18nKey={"auditLog.AlarmsDelete"} values={values} components={components} />,
+		AlarmsCreate: () => <Trans i18nKey={"auditLog.AlarmsCreate"} values={values} components={components} />,
+		burgerRapportages: () => <Trans i18nKey={"auditLog.burgerRapportages"} values={values} components={components} />,
+		burgersUuid: () => <Trans i18nKey={"auditLog.burgersUuid"} values={values} components={components} />,
+		journaalpostenUuid: () => <Trans i18nKey={"auditLog.journaalpostenUuid"} values={values} components={components} />,
+		afsprakenUuid: () => <Trans i18nKey={"auditLog.afsprakenUuid"} values={values} components={components} />,
+		searchTransacties: () => <Trans i18nKey={"auditLog.searchTransacties"} values={values} components={components} />,
+		exportsPaged: () => <Trans i18nKey={"auditLog.exportsPaged"} values={values} components={components} />,
+		saldo: () => <Trans i18nKey={"auditLog.saldo"} values={values} components={components} />,
 		afdeling: () => <Trans i18nKey={"auditLog.viewAfdeling"} values={values} components={components} />,
 		afdelingen: () => <Trans i18nKey={"auditLog.viewAfdelingen"} values={values} components={components} />,
 		organisatie: () => <Trans i18nKey={"auditLog.viewOrganisatie"} values={values} components={components} />,

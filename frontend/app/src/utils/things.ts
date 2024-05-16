@@ -61,6 +61,13 @@ export const DrawerContext = createContext<DrawerContextProps>({
  */
 export const currencyFormat = value => currency(value, {separator: "", decimal: ",", symbol: ""});
 
+export function removeUnwantedCharsUseractivityAction(action: string | undefined) : string | undefined {
+	if (action == undefined){
+		return action
+	}
+	return action.replace('/', '')
+}
+
 
 export function getUnixTimestapFromDate(date:Date | undefined){
 	if(date == undefined){

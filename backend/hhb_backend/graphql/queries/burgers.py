@@ -8,6 +8,7 @@ from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.scalars.dynamic_types import DynamicType
 from hhb_backend.graphql.utils.dates import valid_afspraak
 from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
+from hhb_backend.graphql.utils.sort_result import sort_result
 
 
 class BurgerQuery:
@@ -73,7 +74,7 @@ class BurgersQuery:
                     for id in kwargs["ids"]
                 ]
             )
-            return burgers
+            return sort_result(kwargs["ids"], burgers)
 
         if "search" in kwargs:
             search = str(kwargs["search"]).lower()
@@ -98,7 +99,7 @@ class BurgersQuery:
             entities=[
                 GebruikersActiviteitEntity(
                     entityType="burger", entityId=burger.id)
-                for burger in burgers
+                for burger in burgers  if burger is not None
             ] if "filters" in kwargs else []
         )
         return burgers if not isLogRequest or isLogRequest and len(burgers) > 0 else None

@@ -5,6 +5,7 @@ from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql.models.rubriek import Rubriek
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
+from hhb_backend.graphql.utils.sort_result import sort_result
 
 
 class RubriekQuery:
@@ -31,7 +32,7 @@ class RubriekenQuery:
     def resolver(cls, _root, info, ids=None, isLogRequest=False):
         logging.info(f"Get rubrieken")
         if ids:
-            result = hhb_dataloader().rubrieken.load(ids)
+            result = sort_result(ids,  hhb_dataloader().rubrieken.load(ids))
         else:
             result = hhb_dataloader().rubrieken.load_all()
 

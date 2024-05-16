@@ -98,6 +98,7 @@ export const GetBurgerUserActivitiesQuery = gql`
                     userAgent
                     ip
                     applicationVersion
+                    name
                 }
             }
             PageInfo{

@@ -77,4 +77,5 @@ message Meta {
   string userAgent = 1;
   string ip = 2;
   string applicationVersion = 3;
+  string name = 4;
 }

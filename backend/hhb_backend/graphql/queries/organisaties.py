@@ -6,6 +6,7 @@ from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.models.organisatie import Organisatie
 from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
+from hhb_backend.graphql.utils.sort_result import sort_result
 
 
 class OrganisatieQuery:
@@ -33,7 +34,7 @@ class OrganisatiesQuery:
     def resolver(cls, root, info, ids=None, isLogRequest=False):
         logging.info(f"Get organisaties")
         if ids:
-            result = hhb_dataloader().organisaties.load(ids)
+            result = sort_result(ids,  hhb_dataloader().organisaties.load(ids))
         else:
             result = hhb_dataloader().organisaties.load_all()
         

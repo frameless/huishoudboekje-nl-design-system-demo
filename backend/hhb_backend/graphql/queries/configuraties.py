@@ -5,6 +5,7 @@ from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.models.configuratie import Configuratie
 from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
+from hhb_backend.graphql.utils.sort_result import sort_result
 
 
 class ConfiguratieQuery:
@@ -34,7 +35,7 @@ class ConfiguratiesQuery:
         logging.info(f"Get configuraties")
         result = []
         if ids:
-            result = hhb_dataloader().configuraties.load(ids)
+            result = sort_result(ids,  hhb_dataloader().configuraties.load(ids))
         else:
             result = hhb_dataloader().configuraties.load_all()
 
@@ -43,7 +44,7 @@ class ConfiguratiesQuery:
             action=info.field_name,
             entities=[
                 GebruikersActiviteitEntity(entityType="configuratie", entityId=config["id"])
-                for config in result
+                for config in result if config is not None
             ] if ids else []
         )
 

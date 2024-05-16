@@ -8,6 +8,7 @@ import hhb_backend.graphql.models.afspraak as afspraak
 from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
+from hhb_backend.graphql.utils.sort_result import sort_result
 
 
 class AfspraakQuery:
@@ -56,7 +57,7 @@ class AfsprakenQuery:
     def resolver(cls, _, info, ids=None, isLogRequest=False):
         logging.info(f"Get afspraken")
         if ids:
-            result = hhb_dataloader().afspraken.load(ids)
+            result = sort_result(ids,  hhb_dataloader().afspraken.load(ids))
         else:
             result = hhb_dataloader().afspraken.load_all()
         
