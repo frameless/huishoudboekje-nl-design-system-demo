@@ -1,8 +1,27 @@
 # Huishoudboekje Changelog
 
+## 2.0.2
+
+Deze versie omvat een verbetering voor teksten bij gelogde gebeurtenissen.
+
+### Patch Changes
+
+- a6de36f: added final signal tests
+- 5d5cd1d: QA - add reusable scenarios
+- aabe0a3: added configuration tests
+- 097db10: Added useractivity templates
+- 8ea8988: QA made tests more self reliant
+- 37b3364: added tests
+- a97b008: Added notificationservice that allow global announcement to all current users
+- 6c351af: added inactive tests
+
+## Migration Guide
+This release introduces the notification service however it should not yet be used.
+
+
 ## 2.0.1
 
-Deze versie omvat een verbetering voor het migreren van gegevens voor alarmen en gebeurtenissen. Verder is er een probleem opgelost met het berekenen van saldo in rapportage. 
+Deze versie omvat een verbetering voor het migreren van gegevens voor alarmen en gebeurtenissen. Verder is er een probleem opgelost met het berekenen van saldo in rapportage.
 
 ### Patch Changes
 
