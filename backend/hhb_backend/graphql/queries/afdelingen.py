@@ -6,6 +6,7 @@ from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.models.afdeling import Afdeling
 from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
+from hhb_backend.graphql.utils.sort_result import sort_result
 
 
 class AfdelingQuery:
@@ -23,7 +24,6 @@ class AfdelingQuery:
         )
         return result
 
-
 class AfdelingenQuery:
     return_type = graphene.List(Afdeling, ids=graphene.List(graphene.Int), isLogRequest=graphene.Boolean(required=False))
 
@@ -31,7 +31,7 @@ class AfdelingenQuery:
     def resolver(cls, _, info, ids=None, isLogRequest=False):
         logging.info(f"Get afdelingen")
         if ids:
-            result = hhb_dataloader().afdelingen.load(ids)
+            result = sort_result(ids, hhb_dataloader().afdelingen.load(ids))
         else:
             result = hhb_dataloader().afdelingen.load_all()
 

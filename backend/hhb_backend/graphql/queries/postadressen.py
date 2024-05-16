@@ -4,6 +4,7 @@ from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.models.postadres import Postadres
 from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
+from hhb_backend.graphql.utils.sort_result import sort_result
 
 
 class PostadresQuery:
@@ -30,7 +31,7 @@ class PostadressenQuery:
     def resolver(cls, _root, info, ids=None, isLogRequest=False):
         logging.info(f"Get postadressen")
         if ids:
-            result = hhb_dataloader().postadressen.load(ids)
+            result = sort_result(ids,  hhb_dataloader().postadressen.load(ids))
         else:
             result = hhb_dataloader().postadressen.load_all()
 

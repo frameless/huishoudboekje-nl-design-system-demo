@@ -91,6 +91,7 @@ export const GetUserActivitiesQuery = gql`
                     userAgent
                     ip
                     applicationVersion
+                    name
                 }
             }
             PageInfo{

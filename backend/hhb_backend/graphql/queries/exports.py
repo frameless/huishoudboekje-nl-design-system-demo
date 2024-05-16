@@ -7,6 +7,7 @@ from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.models.export import Export, ExportsPaged
 from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
+from hhb_backend.graphql.utils.sort_result import sort_result
 
 
 class ExportQuery:
@@ -40,7 +41,7 @@ class ExportsQuery:
     def resolver(cls, _root, info, ids=None, start_datum=None, eind_datum=None, isLogRequest=False):
         logging.info(f"Get exports")
         if ids:
-            result = hhb_dataloader().exports.load(ids)
+            result = sort_result(ids,  hhb_dataloader().exports.load(ids))
         elif start_datum and eind_datum:
             result = hhb_dataloader().exports.in_date_range(start_datum, eind_datum)
         else:
@@ -52,7 +53,7 @@ class ExportsQuery:
             entities=[
                 GebruikersActiviteitEntity(
                     entityType="export", entityId=export.id)
-                for export in result
+                for export in result if export is not None
             ] if ids or (start_datum and eind_datum) else []
         )
 

@@ -3,7 +3,7 @@ import React from "react";
 import {useTranslation} from "react-i18next";
 import {AppRoutes} from "../../config/routes";
 import {Burger, UserActivityData} from "../../generated/graphql";
-import {formatBurgerName, formatHuishoudenName, humanJoin} from "../../utils/things";
+import {formatBurgerName, formatHuishoudenName, humanJoin, removeUnwantedCharsUseractivityAction} from "../../utils/things";
 import DataItem from "../shared/DataItem";
 import Modal from "../shared/Modal";
 import AuditLogLink from "./AuditLogLink";
@@ -11,11 +11,12 @@ import {auditLogTexts} from "./texts";
 
 const AuditLogText: React.FC<TextProps & {g: UserActivityData}> = ({g, ...props}) => {
 	const {t} = useTranslation();
-	const action = g.action
+	const action = removeUnwantedCharsUseractivityAction(g.action)
 	const entities = g.entities !== undefined && g.entities !== null ? g.entities : []
 	const modal = useDisclosure();
 
-	const gebruiker = g.user || t("unknownGebruiker");
+	const gebruiker = g.user && !g.user.startsWith('{') ? g.user : (g.meta?.name ?? t("unknownGebruiker"));
+
 	const burger = entities.find(e => e.entityType === "burger")?.burger;
 	const burgers = entities.filter(e => e.entityType === "burger")?.map(b => b.burger as Burger);
 	const huishouden = entities.find(e => e.entityType === "huishouden")?.huishouden;
@@ -61,7 +62,7 @@ const AuditLogText: React.FC<TextProps & {g: UserActivityData}> = ({g, ...props}
 		customerStatementMessage: customerStatementMessage?.filename || t("unknownCsm"),
 		csmId,
 		nTransactions: transactions.length || t("unknownCount"),
-		nCsmTransactions: customerStatementMessage?.bankTransactions?.length || t("unknownCount"),
+		nCsmTransactions: customerStatementMessage ? entities.filter(entity => entity.entityType === "transaction").length :  t("unknownCount"),
 		transactieId: transactions?.[0]?.entityId || t("unknown"),
 		iban: rekening?.iban || t("unknownIban"),
 		rekeninghouder: rekening?.rekeninghouder || t("unknownRekeninghouder"),

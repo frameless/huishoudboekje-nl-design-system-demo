@@ -8,6 +8,7 @@ from hhb_backend.graphql.models.customer_statement_message import (
     CustomerStatementMessage,
 )
 from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
+from hhb_backend.graphql.utils.sort_result import sort_result
 
 
 class CustomerStatementMessageQuery:
@@ -39,7 +40,7 @@ class CustomerStatementMessagesQuery:
     def resolver(cls, _root, info, ids=None, isLogRequest=False):
         logging.info(f"Get customer statement messages")
         if ids:
-            result = hhb_dataloader().csms.load(ids)
+            result = sort_result(ids,  hhb_dataloader().csms.load(ids))
         else:
             result = hhb_dataloader().csms.load_all()
 
@@ -48,7 +49,7 @@ class CustomerStatementMessagesQuery:
             action=info.field_name,
             entities=[
                 GebruikersActiviteitEntity(entityType="customer_statement_message", entityId=csm["id"])
-                for csm in result
+                for csm in result if csm is not None
             ] if ids else []
         )
 
