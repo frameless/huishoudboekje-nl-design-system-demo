@@ -66,66 +66,52 @@ Given('an agreement exists for scenario "no transaction within timeframe"', () =
     console.log(res.body);
   });
 
-  // cy.wait(500);
+  // Navigate to citizen
+  cy.visit('/burgers');
+  cy.url().should('eq', Cypress.config().baseUrl + '/burgers')
+  cy.get('input[placeholder="Zoeken"]')
+  .type('Mcpherson');
+  cy.waitForReact();
+  cy.contains('Patterson')
+    .click();
+  cy.url().should('include', Cypress.config().baseUrl + '/burgers/')
+  cy.get('[data-test="button.Add"]')
+    .click();
 
-  // // Navigate to citizen
-  // cy.visit('/burgers');
-  // cy.url().should('eq', Cypress.config().baseUrl + '/burgers')
-  // cy.get('input[placeholder="Zoeken"]')
-  // .type('Mcpherson');
-  // cy.waitForReact();
-  // cy.contains('Patterson')
-  //   .click();
-  // cy.url().should('include', Cypress.config().baseUrl + '/burgers/')
-  // cy.contains('Loon');
-  // cy.contains('Albert Heijn B.V.');
+  // Add agreement with test department
+  cy.url().should('contains', '/afspraken/toevoegen'); 
+  cy.get('[data-test="radio.agreementOrganization"]')
+    .click();
+  cy.get('#organisatie')
+    .type('Belast');
+  cy.contains('ingdienst')
+    .click();
+  // Check auto-fill
+  cy.contains('Graadt van Roggenweg');
+  // Fill in IBAN
+  cy.get('#tegenrekening')
+    .type('NL86');
+  cy.contains('0002')
+    .click();
 
-    // Navigate to citizen
-    cy.visit('/burgers');
-    cy.url().should('eq', Cypress.config().baseUrl + '/burgers')
-    cy.get('input[placeholder="Zoeken"]')
-    .type('Mcpherson');
-    cy.waitForReact();
-    cy.contains('Patterson')
-      .click();
-    cy.url().should('include', Cypress.config().baseUrl + '/burgers/')
-    cy.get('[data-test="button.Add"]')
-      .click();
-  
-    // Add agreement with test department
-    cy.url().should('contains', '/afspraken/toevoegen'); 
-    cy.get('[data-test="radio.agreementOrganization"]')
-      .click();
-    cy.get('#organisatie')
-      .type('Belast');
-    cy.contains('ingdienst')
-      .click();
-    // Check auto-fill
-    cy.contains('Graadt van Roggenweg');
-    // Fill in IBAN
-    cy.get('#tegenrekening')
-      .type('NL86');
-    cy.contains('0002')
-      .click();
-  
-    // Payment direction: Toeslagen
-    cy.get('[data-test="radio.agreementIncome"]')
-      .click();
-    cy.get('#rubriek')
-      .click()
-      .contains('Toeslagen')
-      .click();
-    cy.get('[data-test="select.agreementIncomeDescription"]')
-      .type(uniqueSeed);
-    cy.get('[data-test="select.agreementIncomeAmount"]')
-      .type('10');
-    cy.get('[data-test="button.Submit"]')
-      .click();
-  
-    // Check success message
-    cy.get('[data-status="success"]')
-    .contains('afspraak')
-    .should('be.visible');
+  // Payment direction: Toeslagen
+  cy.get('[data-test="radio.agreementIncome"]')
+    .click();
+  cy.get('#rubriek')
+    .click()
+    .contains('Toeslagen')
+    .click();
+  cy.get('[data-test="select.agreementIncomeDescription"]')
+    .type(uniqueSeed);
+  cy.get('[data-test="select.agreementIncomeAmount"]')
+    .type('10');
+  cy.get('[data-test="button.Submit"]')
+    .click();
+
+  // Check success message
+  cy.get('[data-status="success"]')
+  .contains('afspraak')
+  .should('be.visible');
 
 });
 
@@ -198,17 +184,6 @@ Given('an alarm exists for scenario "no transaction within timeframe"', () => {
     .should('not.exist');
   cy.get('section[aria-modal="true"]')
     .should('not.exist');
-
-  // // Set alarm
-  // cy.request({
-  //   method: "post",
-  //   url: Cypress.env().graphqlUrl + '/graphql',
-  //   body: { query: queryAddAlarm },
-  // }).then((res) => {
-  //   console.log(res.body);
-  // });
-
-  // cy.wait(500);
  
 });
 

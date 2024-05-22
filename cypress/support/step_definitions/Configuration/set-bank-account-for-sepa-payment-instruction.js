@@ -1,5 +1,6 @@
 
 import { Given, When, Then, Step, DataTable } from "@badeball/cypress-cucumber-preprocessor";
+import fs from 'fs';
 
 const header = {
   'content-type': 'application/json',
@@ -114,12 +115,6 @@ let file1 = "";
 let file2 = "";
 
 Then('I click the button "Downloaden" for the most recent entry', function () {
-    
-  // cy.task('filesInDownload', folder).then(files1 => {
-
-  //   file1 = files1;
-
-  // })
 
   // Click on download button
   cy.get('[data-test="button.Download"]')
@@ -132,16 +127,9 @@ Then('I click the button "Downloaden" for the most recent entry', function () {
 Then('the exported file contains {string}', (string) => {
 
   cy.task('filesInDownload', folder).then(files2 => {
-   // difference = files2.filter(x => !file1.includes(x));
-    //expect(difference.length).to.be.gt(0)
-  
-  cy.readFile(folder + '/' + files2[0]).should('contains', string);
-
+    cy.readFile(folder + '/' + files2[0]).should('contains', string);
   })
 
-  // cy.readFile('Huishoudboekje*.xml').should('contains', string);
-
 });
-
 
 //#endregion

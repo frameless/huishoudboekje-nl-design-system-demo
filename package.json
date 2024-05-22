@@ -34,7 +34,8 @@
     "@changesets/cli": "^2.26.1",
     "changeset": "^0.2.6",
     "cypress-postgres-10v-compatibility": "^1.0.0",
-    "express-session": "^1.17.3"
+    "express-session": "^1.17.3",
+    "fs": "^0.0.1-security"
   },
   "overrides": {
     "semver": "^7.5.2"
@@ -43,5 +44,10 @@
     "cypress": "^13.8.1",
     "cypress-react-selector": "^3.0.0",
     "pg": "^8.11.3"
+  },
+  "browser": {
+    "fs": false,
+    "path": false,
+    "os": false
   }
 }

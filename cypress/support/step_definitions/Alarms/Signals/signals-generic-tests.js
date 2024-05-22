@@ -44,9 +44,11 @@ After({ tags: "@cleanupSignal" }, function (){
   cy.url().should('eq', Cypress.config().baseUrl + '/bankzaken/bankafschriften')
   cy.waitForReact();
   cy.get('[aria-label="Verwijderen"]')
+    .first()
     .click();
   cy.waitForReact();
   cy.get('[aria-label="Verwijderen"]')
+    .first()
     .click();
   cy.waitForReact();
   cy.get('[data-status="success"]')

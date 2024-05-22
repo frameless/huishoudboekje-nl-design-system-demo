@@ -62,6 +62,8 @@ Before({ tags: "@beforeCleanupPaymentInstruction" }, function (){
 
 After({ tags: "@afterCleanupPaymentInstruction" }, function (){
 
+  const folder = Cypress.config().downloadsFolder;
+
   // Clean up agreement
   cy.visit('/burgers');
   cy.url().should('eq', Cypress.config().baseUrl + '/burgers')
@@ -90,6 +92,8 @@ After({ tags: "@afterCleanupPaymentInstruction" }, function (){
   cy.get('[data-status="success"]')
     .contains('afspraak')
     .should('be.visible');
+
+  cy.task('resetFolder', folder);
 
 });
 

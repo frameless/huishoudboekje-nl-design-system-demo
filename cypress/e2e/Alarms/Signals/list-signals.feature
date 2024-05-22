@@ -21,7 +21,7 @@ Feature: list signals
     Then the "Suppress signal" switch track is displayed
     Then the signal status is displayed
 
-  @cleanupSignal
+  @cleanupAlarmSignal
   Scenario: suppressed signals exist
     Given 1 or more suppressed signals exist
     When I navigate to the page '/signalen'

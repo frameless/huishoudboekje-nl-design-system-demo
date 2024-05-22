@@ -16,15 +16,30 @@ async function setupNodeEvents(on, config) {
     })
   );
 
+  // This task performs a database query
   on("task", {
       dbQuery:(query)=> require("cypress-postgres-10v-compatibility")(query.query,query.connection)
   });
 
+  // This task returns an array of files in a specified folder
   on('task', {
     filesInDownload (folderName) {
       return fs.readdirSync(folderName)
     }
   })
+
+  // This task removes a specified folder and all contents, then creates said folder anew
+  on('task', {
+    resetFolder(folder) {
+      // Delete the directory and recreate it
+      fs.rmdirSync(folder, { recursive: true });
+      fs.mkdirSync(folder);
+      console.log('Removed and readded ' + folder + ' folder');
+      return null
+    },
+  })
+
+
 
   // Make sure to return the config object as it might have been modified by the plugin.
   return config;

@@ -1,10 +1,11 @@
 # cypress/e2e/Signals/suppress-signal.feature
 
-@signalservice @cleanupSignal
+@signalservice
 Feature: suppress signal
 
   # Suppress a signal, but keep the alarm enabled.
 
+  @cleanupAlarmSignal
   Scenario: suppress an active signal
     Given 1 or more active signals exist
     When I navigate to the page '/signalen'
