@@ -49,19 +49,13 @@ Given('0 active signals exist', () => {
 
 Given('1 or more active signals exist', () => {
 
-  Step(this, 'an agreement exists for scenario "payment amount too high"');
+  Step(this, 'an agreement exists for scenario "no transaction within timeframe"');
   
-  Step(this, 'an alarm exists for scenario "payment amount too high"');
+  Step(this, 'an alarm exists for scenario "no transaction within timeframe"');
   
-  Step(this, 'a CAMT test file is created with a high payment amount');
-  
-  Step(this, 'a high amount bank transaction is booked to an agreement');
-  
-  Step(this, 'the bank transaction date is within the alarm timeframe');
-  
-  Step(this, 'the high amount bank transaction amount is greater than the sum of the expected amount plus the allowed amount deviation');
-    
-  Step(this, 'a "Payment amount too high" signal is created');
+  Step(this, 'the alarm timeframe expires');
+ 
+  Step(this, 'a "Payment missing" signal is created');
 
   cy.wait(3000);
 
@@ -73,9 +67,8 @@ Given('1 or more active signals exist', () => {
 Then('the signal description is displayed', () => {
 
   // Assertion
-  cy.contains('98,99');
+  cy.contains('geen transactie gevonden');
   cy.contains('Mcpherson Patterson');
-  cy.contains('108.99');
 
 });
 
@@ -143,9 +136,8 @@ Then('I enable the suppressed signals filter', () => {
 Then('all suppressed signals are displayed', () => {
 
   // Assertion
-  cy.contains('98,99');
+  cy.contains('geen transactie gevonden');
   cy.contains('Mcpherson Patterson');
-  cy.contains('108.99');
 
   cy.get('[data-test="signal.badgeActive"]')
     .should('be.visible')
