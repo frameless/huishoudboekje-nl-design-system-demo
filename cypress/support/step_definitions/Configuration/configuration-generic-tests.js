@@ -105,13 +105,17 @@ After({ tags: "@afterCleanupCreateSettings" }, function (){
     .find('[data-test="button.Delete"]')
     .should('be.visible')
     .click();
+  cy.wait(500);
   cy.contains("Dit_is_de_sleutel")
     .parent()
     .find('[data-test="button.Delete"]')
     .should('be.visible')
     .click();
+  cy.wait(500);
   
   Step(this, "a notification of success is displayed");
+
+  cy.wait(3000);
 
 });
 
@@ -125,11 +129,13 @@ After({ tags: "@afterCleanupManageClassifications" }, function (){
     .find('[data-test="button.Delete"]')
     .should('be.visible')
     .click();
+  cy.wait(500);
   cy.contains("WRevHuoHuo")
     .parentsUntil('tbody')
     .find('[data-test="button.Delete"]')
     .should('be.visible')
     .click();
+  cy.wait(500);
   
   Step(this, "a notification of success is displayed");
 
@@ -141,13 +147,17 @@ After({ tags: "@afterCleanupManageClassifications" }, function (){
     .find('[data-test="button.Delete"]')
     .should('be.visible')
     .click();
+  cy.wait(500);
   cy.contains("WKprAklEkn")
     .parentsUntil('tbody')
     .find('[data-test="button.Delete"]')
     .should('be.visible')
     .click();
+  cy.wait(500);
 
   Step(this, "a notification of success is displayed");
+
+  cy.wait(3000);
 
 });
 
@@ -161,13 +171,17 @@ After({ tags: "@afterCleanupDefaultAmountDeviation" }, function (){
     .find('[data-test="button.Delete"]')
     .should('be.visible')
     .click();
+  cy.wait(500);
   cy.contains("alarm_afwijking_bedrag")
     .parent()
     .find('[data-test="button.Delete"]')
     .should('be.visible')
     .click();
+  cy.wait(500);
   
   Step(this, "a notification of success is displayed");
+
+  cy.wait(1000);
 
   // Clean up agreement
   cy.visit('/burgers');
@@ -210,13 +224,17 @@ After({ tags: "@afterCleanupDefaultDateDeviation" }, function (){
     .find('[data-test="button.Delete"]')
     .should('be.visible')
     .click();
+  cy.wait(500);
   cy.contains("alarm_afwijking_datum")
     .parent()
     .find('[data-test="button.Delete"]')
     .should('be.visible')
     .click();
+  cy.wait(500);
   
   Step(this, "a notification of success is displayed");
+
+  cy.wait(1000);
 
   // Clean up agreement
   cy.visit('/burgers');

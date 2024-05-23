@@ -275,7 +275,7 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 										isRequired={true}
 									/>
 
-									<FormControl flex={1} isInvalid={!isFieldValid("startDate")}>
+									<FormControl flex={1} isInvalid={!isFieldValid("startDate")} isRequired>
 										<FormLabel>{t("alarmForm.startDate")}</FormLabel>
 										<DatePicker selected={form.startDate}
 										 	autoComplete="no"
@@ -293,7 +293,7 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 										<FormErrorMessage>{t("afspraakDetailView.invalidValidFromError")}</FormErrorMessage>
 									</FormControl>
 
-									<FormControl flex={1} isInvalid={!isFieldValid("datumMargin")}>
+									<FormControl flex={1} isInvalid={!isFieldValid("datumMargin")} isRequired >
 										<FormLabel>{t("alarmForm.datumMargin")}</FormLabel>
 										<Input
 										 	autoComplete="no"
@@ -319,7 +319,7 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 										/>
 									}
 
-									<FormControl flex={1} isInvalid={!isFieldValid("startDate")}>
+									<FormControl flex={1} isInvalid={!isFieldValid("startDate")} isRequired>
 										<FormLabel>{t("alarmForm.startDate")}</FormLabel>
 										<DatePicker
 										 	autoComplete="no"
@@ -353,7 +353,7 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 										<FormErrorMessage>{t("alarmForm.errors.invalidMonthDayError")}</FormErrorMessage>
 									</FormControl>
 
-									<FormControl flex={1} isInvalid={!isFieldValid("datumMargin")}>
+									<FormControl flex={1} isInvalid={!isFieldValid("datumMargin")} isRequired>
 										<FormLabel>{t("alarmForm.datumMargin")}</FormLabel>
 										<Input
 										 	autoComplete="no"

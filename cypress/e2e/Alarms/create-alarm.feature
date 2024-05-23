@@ -14,13 +14,29 @@ Feature: create alarm
     Then the "Create alarm form" is displayed
     Then the recurrency is monthly
     Then the button 'Meer opties' is displayed
-    Then the start date is today
-    Then the day of the month is empty
-    Then the allowed deviation in days is empty
-    Then the expected amount is equal to the amount of the agreement
-    Then the allowed deviation in amount is empty
+    Then the label 'Startdatum (kan niet in het verleden zijn)' is displayed
+    Then the label 'Startdatum (kan niet in het verleden zijn)' is marked as required
+    Then the start date field is displayed
+    Then the start date field value is today
+    Then the label 'Dag in de maand' is displayed
+    Then the label 'Dag in de maand' is marked as required
+    Then the day of the month field is displayed
+    Then the day of the month field value is empty
+    Then the label 'Toegestane afwijking (in dagen)' is displayed
+    Then the label 'Toegestane afwijking (in dagen)' is marked as required
+    Then the allowed time deviation field is displayed
+    Then the allowed time deviation field is empty
+    Then the label 'Bedrag verwachte betaling' is displayed
+    Then the label 'Bedrag verwachte betaling' is marked as required
+    Then the expected amount field is displayed
+    Then the expected amount field value is equal to the amount of the agreement
+    Then the label 'Toegestane afwijking bedrag' is displayed
+    Then the label 'Toegestane afwijking bedrag' is marked as required
+    Then the allowed amount deviation field is displayed
+    Then the allowed amount deviation field is empty
     Then the button 'Annuleren' is displayed
-    Then the "Submit form" button is displayed
+    Then the button 'Opslaan' is displayed
+    Then the text 'Verplicht veld' is displayed
     Then the "Close modal" button is displayed
 
   @afterCleanupAlarm
