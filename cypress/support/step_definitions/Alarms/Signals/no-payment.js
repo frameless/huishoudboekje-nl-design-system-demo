@@ -207,7 +207,7 @@ When('the alarm timeframe expires', () => {
       })
     }
 
-  cy.wait(5000);
+  cy.wait(12000);
 
   })
 

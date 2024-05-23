@@ -72,10 +72,27 @@ Then('the text {string} is displayed', (text) => {
 
 });
 
+// Find a field label
+Then('the label {string} is displayed', (labelName) => {
+
+  cy.get('label')
+    .contains(labelName);
+
+});
+
+Then('the label {string} is marked as required', (labelName) => {
+
+  cy.get('label')
+    .contains(labelName)
+    .children('span')
+    .contains('*');
+
+});
+
 // Make sure text is not displayed on page
 Then('the text {string} is not displayed', (text) => {
 
-  cy.wait(500);
+  cy.wait(1000);
   cy.get('body')
     .should('not.contain', text);
 

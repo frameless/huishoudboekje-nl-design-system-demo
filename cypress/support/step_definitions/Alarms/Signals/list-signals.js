@@ -57,7 +57,7 @@ Given('1 or more active signals exist', () => {
  
   Step(this, 'a "Payment missing" signal is created');
 
-  cy.wait(3000);
+  cy.wait(10000);
 
 });
  

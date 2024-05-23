@@ -16,12 +16,11 @@ When('I view the "Add alarm" modal', () => {
   cy.waitForReact();
   cy.url().should('eq', Cypress.config().baseUrl + '/burgers/1')
 
-  // Open latest agreement
-  cy.get('tbody')
-    .find('tr')
-    .last()
-    .children()
-    .last()
+  // Open agreement with amount 543,54
+  cy.contains('543,54')
+    .parent()
+    .parent()
+    .next()
     .find('a[aria-label="Bekijken"]:visible')
     .click();
 
@@ -53,7 +52,15 @@ Then('the recurrency is monthly', () => {
 
 });
 
-Then('the start date is today', () => {
+Then('the start date field is displayed', () => {
+
+  // Check if field is visible
+  cy.get('[data-test="alarmForm.startDate"]')
+    .should('be.visible');
+
+});
+
+Then('the start date field value is today', () => {
 
   // Set date constants for comparison
   const dateNow = new Date().toLocaleDateString('nl-NL', {
@@ -68,7 +75,15 @@ Then('the start date is today', () => {
 
 });
 
-Then('the day of the month is empty', () => {
+Then('the day of the month field is displayed', () => {
+
+  // Check if field is visible
+  cy.get('[data-test="alarmForm.byMonthDay"]')
+    .should('be.visible');
+
+});
+
+Then('the day of the month field value is empty', () => {
 
   // Check 'Dag in de maand' field  
   cy.get('[data-test="alarmForm.byMonthDay"]')
@@ -76,7 +91,15 @@ Then('the day of the month is empty', () => {
 
 });
 
-Then('the allowed deviation in days is empty', () => {
+Then('the allowed time deviation field is displayed', () => {
+
+  // Check if field is visible
+  cy.get('[data-test="alarmForm.dateMargin"]')
+    .should('be.visible');
+
+});
+
+Then('the allowed time deviation field is empty', () => {
 
   // Check 'Toegestane afwijking (in dagen)' field  
   cy.get('[data-test="alarmForm.dateMargin"]')
@@ -84,7 +107,15 @@ Then('the allowed deviation in days is empty', () => {
 
 });
 
-Then('the expected amount is equal to the amount of the agreement', () => {
+Then('the expected amount field is displayed', () => {
+
+  // Check visibility 
+  cy.get('[data-test="alarmForm.amount"]')
+    .should('be.visible');
+
+});
+
+Then('the expected amount field value is equal to the amount of the agreement', () => {
 
   let agreementValue;
 
@@ -105,7 +136,15 @@ Then('the expected amount is equal to the amount of the agreement', () => {
 
 });
 
-Then('the allowed deviation in amount is empty', () => {
+Then('the allowed amount deviation field is displayed', () => {
+
+  // Check visibility 
+  cy.get('[data-test="alarmForm.amountMargin"]')
+    .should('be.visible');
+
+});
+
+Then('the allowed amount deviation field is empty', () => {
 
   // Check 'Toegestane afwijking bedrag (in euro's)' field  
   cy.get('[data-test="alarmForm.amountMargin"]')

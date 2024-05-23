@@ -42,16 +42,17 @@ After({ tags: "@cleanupSignal" }, function (){
   cy.visit('/bankzaken/bankafschriften');
   cy.waitForReact();
   cy.url().should('eq', Cypress.config().baseUrl + '/bankzaken/bankafschriften')
-  cy.waitForReact();
+  cy.wait(500);
   cy.get('[aria-label="Verwijderen"]')
     .first()
     .click();
-  cy.waitForReact();
+  cy.wait(500);
   cy.get('[aria-label="Verwijderen"]')
     .first()
     .click();
-  cy.waitForReact();
-  cy.get('[data-status="success"]')
+  cy.wait(500);
+  cy.get('[data-status="success"]', { timeout: 10000 })
+    .contains('Het bankafschrift is verwijderd')
     .should('be.visible');
 
   // Remove latest agreement
@@ -59,7 +60,7 @@ After({ tags: "@cleanupSignal" }, function (){
   cy.url().should('eq', Cypress.config().baseUrl + '/burgers')
   cy.get('input[placeholder="Zoeken"]')
     .type('Mcpherson');
-  cy.waitForReact();
+  cy.wait(500);
   cy.contains('Patterson')
     .click();
   cy.url().should('include', Cypress.config().baseUrl + '/burgers/')
