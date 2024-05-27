@@ -1,4 +1,4 @@
-using UserService.Application;
+using UserApi.Application;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Logging.AddConsole();

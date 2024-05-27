@@ -46,6 +46,9 @@ images:
 - name: mesh
   newName: ${IMAGE_REGISTRY}/mesh
   newTag: ${IMAGE_TAG}
+- name: userapi
+  newName: ${IMAGE_REGISTRY}/userapi
+  newTag: ${IMAGE_TAG}
 - name: databasemesh
   newName: ${IMAGE_REGISTRY}/databasemesh
   newTag: ${IMAGE_TAG}

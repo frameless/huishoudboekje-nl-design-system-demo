@@ -9,10 +9,12 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.0"/>
+    <PackageReference Include="NRedisStack" Version="0.12.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\UserApi.Domain\UserApi.Domain.csproj" />
     <ProjectReference Include="..\UserApi.Producers\UserApi.Producers.csproj" />
   </ItemGroup>
 

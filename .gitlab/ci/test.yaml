@@ -238,7 +238,7 @@ asp-services-tests:
     name: mcr.microsoft.com/dotnet/sdk:8.0
   script:
     - cd huishoudboekje_services
-    - dotnet test huishoudboekje_services.sln --test-adapter-path:. --logger:"junit;LogFilePath=..\artifacts\{assembly}-test-result.xml;MethodFormat=Class;FailureBodyFormat=Verbose" --collect:"XPlat Code Coverage" 
+    - dotnet test huishoudboekje_services.sln --test-adapter-path:. --logger:"junit;LogFilePath=..\artifacts\{assembly}-test-result.xml;MethodFormat=Class;FailureBodyFormat=Verbose" --collect:"XPlat Code Coverage"  --verbosity quiet /p:WarningLevel=0  
   coverage: /Total\s*\|\s*(\d+(?:\.\d+)?)/
   artifacts:
     expire_in: 1 week

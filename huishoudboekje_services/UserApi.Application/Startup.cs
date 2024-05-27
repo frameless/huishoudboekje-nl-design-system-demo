@@ -1,13 +1,19 @@
 using Core.MessageQueue;
 using MassTransit;
 using Prometheus;
+using UserApi.Domain.clients;
+using UserApi.Domain.clients.interfaces;
+using UserApi.Domain.repositories;
+using UserApi.Domain.repositories.interfaces;
 using UserApi.Producers;
 using UserApi.Producers.Interfaces;
-using UserApi.Services;
-using UserApi.Services.Interfaces;
+using UserApi.Services.AuthServices;
+using UserApi.Services.AuthServices.Interfaces;
+using UserApi.Services.BsnServices;
+using UserApi.Services.BsnServices.interfaces;
 using UserApi.Web;
 
-namespace UserService.Application;
+namespace UserApi.Application;
 
 public class Startup(IConfiguration configuration)
 {
@@ -40,5 +46,9 @@ public class Startup(IConfiguration configuration)
       services.AddScoped<ICheckBsnProducer, CheckBsnHttpProducer>();
       services.AddScoped<IMonthlyReportProducer, MonthlyReportHttpProducer>();
       services.AddScoped<IMinimalCitizenDataProducer, MinimalCitizenDataHttpProducer>();
+      services.AddScoped<IAuthService, AuthService>();
+      services.AddScoped<IKeyValueClient, RedisClient>();
+      services.AddScoped<ITokenRepository, TokenRepository>();
+      services.AddScoped<ISecretGenerator, SecretGenerator>();
     }
 }

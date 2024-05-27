@@ -37,6 +37,8 @@
         DOCKERATTRIBUTES: "--file=./huishoudboekje_services/AlarmService.Application/Dockerfile ./huishoudboekje_services"
       - NAME: notificationservice
         DOCKERATTRIBUTES: "--file=./huishoudboekje_services/NotificationService.Application/Dockerfile ./huishoudboekje_services"
+      - NAME: userapi
+        DOCKERATTRIBUTES: "--file=./huishoudboekje_services/UserApi.Application/Dockerfile ./huishoudboekje_services"
       - NAME: authservice
         DOCKERATTRIBUTES: "./services/authservice"
       - NAME: banktransactieservice
