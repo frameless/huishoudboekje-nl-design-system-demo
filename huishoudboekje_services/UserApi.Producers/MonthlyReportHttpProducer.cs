@@ -1,8 +1,10 @@
-﻿using System.Net.Http.Json;
+﻿using System.Net;
+using System.Net.Http.Json;
 using System.Text.Json;
 using Core.CommunicationModels.ReportModels;
 using Core.CommunicationModels.ReportModels.Interfaces;
 using Core.ErrorHandling.Exceptions;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using UserApi.Producers.HttpModels;
 using UserApi.Producers.Interfaces;
@@ -11,12 +13,16 @@ namespace UserApi.Producers;
 
 public class MonthlyReportHttpProducer(IConfiguration config) : IMonthlyReportProducer
 {
-  public async Task<IMonthlyReport> RequestMonthlyReport(long startDate, long endDate, string bsn)
+  public async Task<IMonthlyReport?> RequestMonthlyReport(long startDate, long endDate, string bsn)
   {
     string startDateAsString = DateTimeOffset.FromUnixTimeSeconds(startDate).DateTime.ToString("yyyy-MM-dd");
     string endDateAsString = DateTimeOffset.FromUnixTimeSeconds(endDate).DateTime.ToString("yyyy-MM-dd");
     string id = await GetCitizenId(bsn);
-    MonthlyReportHttpItem report = await GetReport(id, startDateAsString, endDateAsString);
+    MonthlyReportHttpItem? report = await GetReport(id, startDateAsString, endDateAsString);
+    if (report == null)
+    {
+      return null;
+    }
     int balance = await GetBalance(id, endDateAsString);
     return new MonthlyReport
     {
@@ -66,7 +72,7 @@ public class MonthlyReportHttpProducer(IConfiguration config) : IMonthlyReportPr
     return id;
   }
 
-  private async Task<MonthlyReportHttpItem> GetReport(string id, string startDate, string endDate)
+  private async Task<MonthlyReportHttpItem?> GetReport(string id, string startDate, string endDate)
   {
     MonthlyReportHttpItem result = null;
     using var client = new HttpClient();
@@ -78,9 +84,24 @@ public class MonthlyReportHttpProducer(IConfiguration config) : IMonthlyReportPr
     };
     try
     {
-      string response = await client.SendAsync(request).Result.Content.ReadAsStringAsync();
-      HttpProducerResponse<IList<MonthlyReportHttpItem>>? responseObject = JsonSerializer.Deserialize<HttpProducerResponse<IList<MonthlyReportHttpItem>>>(response);
-      result = responseObject!.data[0];
+      HttpResponseMessage response = await client.SendAsync(request);
+      int statusCode = (int)response.StatusCode;
+      switch (statusCode)
+      {
+        case StatusCodes.Status204NoContent:
+          return null;
+        case StatusCodes.Status200OK:
+        {
+          string responseBody = await response.Content.ReadAsStringAsync();
+          HttpProducerResponse<IList<MonthlyReportHttpItem>>? responseObject = JsonSerializer.Deserialize<HttpProducerResponse<IList<MonthlyReportHttpItem>>>(responseBody);
+          result = responseObject!.data[0];
+          break;
+        }
+        default:
+          throw new HHBDataException(
+            $"Unexpected statusCode {response.StatusCode}",
+            "Error during requesting report");
+      }
     }
     catch (HttpRequestException ex)
     {
@@ -93,12 +114,6 @@ public class MonthlyReportHttpProducer(IConfiguration config) : IMonthlyReportPr
       throw new HHBDataException(
         "JSON Exception occured while parsing data",
         "Incorrect data received from rapportageservice");
-    }
-    if (result == null)
-    {
-      throw new HHBDataException(
-        "Executed request correctly but did not receive any data",
-        "No report received from rapportageservice");
     }
     return result;
   }

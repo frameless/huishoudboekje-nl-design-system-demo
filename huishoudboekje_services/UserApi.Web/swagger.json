@@ -7,9 +7,45 @@
   "openapi": "3.0.1",
   "info": {
     "title": "Huishoudboekje User API",
-    "description": "This is a concept for an users api. This api can be used to collect data for one specific citizen in Huishoudboekje."
+    "description": "This is a concept for the users api. This api can be used to collect data for one specific citizen in Huishoudboekje."
   },
   "paths": {
+    "/auth/token": {
+      "get": {
+        "tags": [
+          "Auth"
+        ],
+        "description": "Get a temporary token using an api key",
+        "operationId": "GetToken",
+        "parameters": [
+          {
+            "name": "X-Api-Key",
+            "in": "header",
+            "description": "Api key",
+            "required": true,
+            "style": "simple"
+          }
+        ],
+        "requestBody": {
+          "content": {}
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
     "/citizen": {
       "get": {
         "tags": [
@@ -26,9 +62,9 @@
             "style": "simple"
           },
           {
-            "name": "X-Saml-Token",
+            "name": "X-Api-Token",
             "in": "header",
-            "description": "Saml authentication token",
+            "description": "Api authentication token",
             "required": true,
             "style": "simple"
           }
@@ -89,9 +125,9 @@
             "style": "simple"
           },
           {
-            "name": "X-Saml-Token",
+            "name": "X-Api-Token",
             "in": "header",
-            "description": "Saml authentication token",
+            "description": "Api authentication token",
             "required": true,
             "style": "simple"
           }
@@ -109,6 +145,9 @@
                 }
               }
             }
+          },
+          "204": {
+            "description": "No Content"
           },
           "404": {
             "description": "Not Found"

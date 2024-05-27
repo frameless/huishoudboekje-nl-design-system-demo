@@ -82,6 +82,8 @@ export REDIS_AUTH_PASSWORD=${REDIS_AUTH_PASSWORD:-"authservicepasswordforredis12
 export RABBITMQ_DEFAULT_USER=${RABBITMQ_DEFAULT_USER:-"guest-user"} #default value is unsafe
 export RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS:-"guest-pass"} #default value is unsafe
 
+export USERAPI_KEYS=${USERAPI_KEYS:-""}
+
 cd k8s/overlay/hhb-development-cluster
 
 echo "Applying envvars."

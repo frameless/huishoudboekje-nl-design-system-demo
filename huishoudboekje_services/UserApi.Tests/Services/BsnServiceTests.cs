@@ -1,10 +1,11 @@
 using FakeItEasy;
 using UserApi.Producers.Interfaces;
 using UserApi.Services;
+using UserApi.Services.BsnServices;
 
 namespace UserApi.Tests.Services;
 
-public class Tests
+public class BsnServiceTests
 {
   private ICheckBsnProducer _fakeproducer;
   private BsnService _sut;
@@ -28,10 +29,10 @@ public class Tests
   }
 
   [Test, TestCaseSource(nameof(bsnValidateCases))]
-  public void BsnValidateTest(string bsn, bool isValid)
+  public async Task BsnValidateTest(string bsn, bool isValid)
   {
     //Act
-    var result = _sut.Validate(bsn);
+    var result = await _sut.Validate(bsn);
     //Asset
     Assert.That(result, Is.EqualTo(isValid));
   }

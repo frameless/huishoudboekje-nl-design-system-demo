@@ -6,5 +6,5 @@ namespace UserApi.Producers.Interfaces;
 
 public interface IMonthlyReportProducer
 {
-  public Task<IMonthlyReport> RequestMonthlyReport(long startDate, long endDate, string bsn);
+  public Task<IMonthlyReport?> RequestMonthlyReport(long startDate, long endDate, string bsn);
 }

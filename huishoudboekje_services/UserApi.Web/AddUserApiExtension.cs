@@ -1,7 +1,7 @@
 ﻿using Core.ErrorHandling.ExceptionInterceptors;
 using Microsoft.OpenApi.Models;
-using UserApi.Middleware;
 using UserApi.Web.Endpoints;
+using UserApi.Web.Middleware;
 using UserApi.Web.OpenApiParameters;
 
 namespace UserApi.Web;
@@ -15,14 +15,14 @@ public static class AddUserApiExtension
     services.AddSwaggerGen(
       options =>
     {
-      var info = new OpenApiInfo
+      OpenApiInfo info = new OpenApiInfo
       {
         Title = "Huishoudboekje User API",
         Description = "This is a concept for the users api. This api can be used to collect data for one specific citizen in Huishoudboekje.",
       };
       options.SwaggerDoc(name: "v1", info: info);
       options.OperationFilter<OpenApiRequiredBsnParameter>();
-      options.OperationFilter<OpenApiRequiredSamlParameter>();
+      options.OperationFilter<OpenApiRequiredTokenParameter>();
     });
     return services;
   }
@@ -39,12 +39,13 @@ public static class AddUserApiExtension
     app.UseExceptionHandler("/Error");
 
     app.UseMiddleware<MinimalRestApiExceptionInterceptor>();
-    app.UseMiddleware<SamlAuthMiddleware>();
+    app.UseMiddleware<TokenAuthMiddleware>();
     app.UseMiddleware<BsnValidationMiddleware>();
 
-
-    app.MapGroup("/reports").MapReportsEndpoints().WithTags("Reports");
-    app.MapGroup("/citizen").MapCitizenEndpoints().WithTags("Citizen");
+    string? prefix = app.Configuration["HHB_URL_PREFIX"];
+    app.MapGroup(prefix + "/reports").MapReportsEndpoints().WithTags("Reports");
+    app.MapGroup(prefix + "/citizen").MapCitizenEndpoints().WithTags("Citizen");
+    app.MapGroup(prefix + "/auth").MapAuthEndpoints().WithTags("Auth");
 
     return app;
   }

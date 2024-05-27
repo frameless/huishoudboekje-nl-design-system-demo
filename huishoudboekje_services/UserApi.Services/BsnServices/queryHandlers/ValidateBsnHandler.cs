@@ -1,19 +1,14 @@
 ﻿using Core.ErrorHandling.Exceptions;
-using UserApi.Producers.Interfaces;
+using UserApi.Services.BsnServices.Queries;
 using UserApi.Services.Interfaces;
 
-namespace UserApi.Services;
+namespace UserApi.Services.BsnServices.queryHandlers;
 
-public class BsnService(ICheckBsnProducer checkBsnProducer) : IBsnService
+internal class ValidateBsnHandler : IQueryHandler<ValidateBsn, bool>
 {
-  public bool Validate(string bsn)
+  public Task<bool> HandleAsync(ValidateBsn query)
   {
-    return CheckIsAllDigits(bsn) && CheckBsnLength(bsn) && CheckElevenTest(bsn);
-  }
-
-  public Task<bool> IsAllowed(string bsn)
-  {
-    return checkBsnProducer.RequestCheckBsn(bsn);
+    return Task.FromResult(CheckIsAllDigits(query.Bsn) && CheckBsnLength(query.Bsn) && CheckElevenTest(query.Bsn));
   }
 
   private bool CheckIsAllDigits(string bsn)

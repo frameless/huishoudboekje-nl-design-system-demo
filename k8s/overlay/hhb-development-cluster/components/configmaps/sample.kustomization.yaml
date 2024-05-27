@@ -65,6 +65,12 @@ secretGenerator:
   - name: redis-url
     literals:
       - REDIS_URL=redis://authservice:${REDIS_AUTH_PASSWORD}@hhb-redis:6379
+  - name: redis-config-user-api
+    literals:
+      - HHB_REDIS_PASS=${REDIS_PASSWORD}
+  - name: api-keys
+    literals:
+      - HHB_API_KEYS=${USERAPI_KEYS}
   - name: hhb-database-secrets
     literals:
       - POSTGRESQL_PASSWORD=${POSTGRESQL_PASSWORD}

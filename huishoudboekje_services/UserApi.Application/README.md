@@ -17,7 +17,16 @@ To get the AlarmService up and running these env variables need to be set.
 - **HHB_RABBITMQ_PORT**
 - **HHB_RABBITMQ_USER**
 - **HHB_RABBITMQ_PASS**
+- **HHB_REDIS_HOST**
+- **HHB_REDIS_PORT**
+- **HHB_REDIS_PASS**
+- **HHB_API_KEYS**
 - **HHB_USE_AUTH**
+
+### Auth
+Authentication works with keys. When someone provides a key that is listed in **HHB_API_KEYS** they can access the api. **HHB_API_KEYS** is a list of keys seperated by a `;`. With the key a user can get token to access the data.
+How long these tokens are valid can be controlled with the env var **HHB_TOKEN_DURATION**, it expects a number of seconds the default is 30 seconds.
+Auth is enabled using **HHB_USE_AUTH**
 
 ### Metrics
 A prometheus metrics endpoint is provided. Metrics are available on _hostname_:9000/metrics. No specific metrics are implemented. Default prometheus metrics are available.
