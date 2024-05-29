@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 import json
 import logging
 import time
@@ -24,12 +24,16 @@ class AlarmEvaluation:
         for journalentry, banktransaction in journalEntryToTransaction:
             amount = banktransaction["bedrag"]
 
+            date = datetime.fromisoformat(
+                banktransaction["transactie_datum"])
+            date = date.replace(
+                tzinfo=timezone.utc) if date.tzinfo is None else date.astimezone(timezone.utc)
+
             model = JournalEntryModel(
                 UUID=journalentry["uuid"],
                 AgreementUuid=journalentry["afspraak"]["uuid"],
                 BankTransactionUuid=banktransaction["uuid"],
-                Date=int(datetime.fromisoformat(
-                    banktransaction["transactie_datum"]).timestamp()),
+                Date=int(date.timestamp()),
                 IsAutomaticallyReconciled=journalentry["is_automatisch_geboekt"],
                 StatementUuid=csmIdToUuid[banktransaction["customer_statement_message_id"]],
                 Amount=amount
