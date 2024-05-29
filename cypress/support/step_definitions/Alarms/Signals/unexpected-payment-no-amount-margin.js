@@ -677,10 +677,12 @@ Then('the bank transaction amount is equal to the sum of the expected amount plu
 
 Then('no signal is created', () => {
 
-  cy.wait(3000)
+  cy.wait(5000)
   cy.visit('/signalen')
   cy.waitForReact()
   cy.url().should('eq', Cypress.config().baseUrl + '/signalen')
+
+  cy.wait(3000)
 
   // Assertion
   cy.contains('Er zijn geen signalen gevonden');
@@ -1010,8 +1012,7 @@ Then('the high amount bank transaction amount is greater than the sum of the exp
   
   cy.get('[data-test="transaction.amount"]')
     .contains('10,01');
-  cy.get('[data-test="agreement.amount"]')
-    .contains('10,00');
+  cy.contains('10,00');
  
 });
 

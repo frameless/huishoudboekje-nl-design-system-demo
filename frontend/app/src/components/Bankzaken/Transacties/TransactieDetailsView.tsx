@@ -23,7 +23,7 @@ const TransactieDetailsView: React.FC<StackProps & {transaction: BankTransaction
 				<Box flex={1}>
 					<FormLabel>{t("global.date")}</FormLabel>
 					<Box>
-						<Text>{d(bt.transactieDatum).format("L")}</Text>
+						<Text data-test="transaction.date">{d(bt.transactieDatum).format("L")}</Text>
 					</Box>
 				</Box>
 				<Box flex={1}>
