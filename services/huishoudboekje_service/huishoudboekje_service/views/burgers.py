@@ -68,6 +68,7 @@ class BurgerView(HHBView):
         else:
             return super().get(**kwargs)
 
+
     def extend_post_with_extra_check(self, **kwargs):
         """ Extend the post function with extra check and return a list of errors"""
         errors = []

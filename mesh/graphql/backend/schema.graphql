@@ -149,6 +149,7 @@ type Burger {
   huisnummer: String
   postcode: String
   plaatsnaam: String
+  saldoAlarm: Boolean
   rekeningen: [Rekening]
   afspraken: [Afspraak]
   huishoudenId: Int
@@ -380,7 +381,8 @@ type BurgersPaged {
 type RootMutation {
   createBurger(input: CreateBurgerInput): CreateBurger
   deleteBurger(id: Int!): DeleteBurger
-  updateBurger(achternaam: String, bsn: Int, email: String, geboortedatum: String, huishouden: HuishoudenInput, huisnummer: String, id: Int!, plaatsnaam: String, postcode: String, straatnaam: String, telefoonnummer: String, voorletters: String, voornamen: String): UpdateBurger
+  updateBurger(achternaam: String, bsn: Int, email: String, geboortedatum: String, huishouden: HuishoudenInput, huisnummer: String, id: Int!, plaatsnaam: String, postcode: String, saldoAlarm: Boolean, straatnaam: String, telefoonnummer: String, voorletters: String, voornamen: String): UpdateBurger
+  updateBurgerSaldoAlarm(id: Int!, saldoAlarm: Boolean): UpdateBurgerSaldoAlarm
   createAfspraak(input: CreateAfspraakInput!): CreateAfspraak
   updateAfspraak(id: Int!, input: UpdateAfspraakInput!): UpdateAfspraak
   deleteAfspraak(id: Int!): DeleteAfspraak
@@ -444,6 +446,11 @@ type DeleteBurger {
   previous: Burger
 }
 type UpdateBurger {
+  ok: Boolean
+  burger: Burger
+  previous: Burger
+}
+type UpdateBurgerSaldoAlarm {
   ok: Boolean
   burger: Burger
   previous: Burger

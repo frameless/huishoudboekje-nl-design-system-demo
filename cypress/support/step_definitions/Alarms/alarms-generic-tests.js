@@ -267,3 +267,43 @@ After({ tags: "@afterDeleteAgreement", order: 10 }, () => {
   Step(this, "a success notification containing 'De afspraak is verwijderd' is displayed");
 
 });
+
+After({ tags: "@cleanupBankstatement" }, function (){
+
+  // Clean up
+    // Truncate alarms
+    cy.request({
+      method: "post",
+      url: Cypress.env().graphqlUrl + '/graphql',
+      body: { query: queryTruncateAlarm },
+    }).then((res) => {
+      console.log(res.body);
+    });
+
+    // Truncate signals
+    cy.request({
+      method: "post",
+      url: Cypress.env().graphqlUrl + '/graphql',
+      body: { query: queryTruncateSignal },
+    }).then((res) => {
+      console.log(res.body);
+    });
+  
+  // Remove bank statement
+  cy.visit('/bankzaken/bankafschriften');
+  cy.waitForReact();
+  cy.url().should('eq', Cypress.config().baseUrl + '/bankzaken/bankafschriften')
+  cy.wait(500);
+  cy.get('[aria-label="Verwijderen"]')
+    .first()
+    .click();
+  cy.wait(500);
+  cy.get('[aria-label="Verwijderen"]')
+    .first()
+    .click();
+  cy.wait(500);
+  cy.get('[data-status="success"]', { timeout: 10000 })
+    .contains('Het bankafschrift is verwijderd')
+    .should('be.visible');
+
+});

@@ -40,6 +40,7 @@ from .rekeningen.update_rekening import UpdateRekening
 from .rubrieken.create_rubriek import CreateRubriek
 from .rubrieken.delete_rubriek import DeleteRubriek
 from .rubrieken.update_rubriek import UpdateRubriek
+from .burgers.update_burger_saldo_alarm import UpdateBurgerSaldoAlarm
 
 
 class RootMutation(graphene.ObjectType):
@@ -47,6 +48,7 @@ class RootMutation(graphene.ObjectType):
     createBurger = CreateBurger.Field()
     deleteBurger = DeleteBurger.Field()
     updateBurger = UpdateBurger.Field()
+    updateBurgerSaldoAlarm = UpdateBurgerSaldoAlarm.Field()
 
     createAfspraak = CreateAfspraak.Field()
     updateAfspraak = UpdateAfspraak.Field()

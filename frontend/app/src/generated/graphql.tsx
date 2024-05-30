@@ -249,6 +249,7 @@ export type Burger = {
   plaatsnaam?: Maybe<Scalars['String']>;
   postcode?: Maybe<Scalars['String']>;
   rekeningen?: Maybe<Array<Maybe<Rekening>>>;
+  saldoAlarm?: Maybe<Scalars['Boolean']>;
   straatnaam?: Maybe<Scalars['String']>;
   telefoonnummer?: Maybe<Scalars['String']>;
   uuid?: Maybe<Scalars['UUID']>;
@@ -828,6 +829,7 @@ export type Mutation = {
   /** Mutatie voor het instellen van een nieuwe betaalinstructie voor een afspraak. */
   updateAfspraakBetaalinstructie?: Maybe<UpdateAfspraakBetaalinstructie>;
   updateBurger?: Maybe<UpdateBurger>;
+  updateBurgerSaldoAlarm?: Maybe<UpdateBurgerSaldoAlarm>;
   updateConfiguratie?: Maybe<UpdateConfiguratie>;
   updateOrganisatie?: Maybe<UpdateOrganisatie>;
   updatePostadres?: Maybe<UpdatePostadres>;
@@ -1052,10 +1054,17 @@ export type MutationUpdateBurgerArgs = {
   id: Scalars['Int'];
   plaatsnaam?: InputMaybe<Scalars['String']>;
   postcode?: InputMaybe<Scalars['String']>;
+  saldoAlarm?: InputMaybe<Scalars['Boolean']>;
   straatnaam?: InputMaybe<Scalars['String']>;
   telefoonnummer?: InputMaybe<Scalars['String']>;
   voorletters?: InputMaybe<Scalars['String']>;
   voornamen?: InputMaybe<Scalars['String']>;
+};
+
+
+export type MutationUpdateBurgerSaldoAlarmArgs = {
+  id: Scalars['Int'];
+  saldoAlarm?: InputMaybe<Scalars['Boolean']>;
 };
 
 
@@ -1663,6 +1672,12 @@ export type UpdateBurger = {
   previous?: Maybe<Burger>;
 };
 
+export type UpdateBurgerSaldoAlarm = {
+  burger?: Maybe<Burger>;
+  ok?: Maybe<Scalars['Boolean']>;
+  previous?: Maybe<Burger>;
+};
+
 export type UpdateConfiguratie = {
   configuratie?: Maybe<Configuratie>;
   ok?: Maybe<Scalars['Boolean']>;
@@ -2029,6 +2044,7 @@ export type UpdateAlarmMutation = { Alarms_Update?: { id?: string, isActive?: bo
 export type UpdateBurgerMutationVariables = Exact<{
   id: Scalars['Int'];
   bsn?: InputMaybe<Scalars['Int']>;
+  saldoAlarm?: InputMaybe<Scalars['Boolean']>;
   voorletters?: InputMaybe<Scalars['String']>;
   voornamen?: InputMaybe<Scalars['String']>;
   achternaam?: InputMaybe<Scalars['String']>;
@@ -2042,7 +2058,15 @@ export type UpdateBurgerMutationVariables = Exact<{
 }>;
 
 
-export type UpdateBurgerMutation = { updateBurger?: { ok?: boolean, burger?: { id?: number, bsn?: number, email?: string, telefoonnummer?: string, voorletters?: string, voornamen?: string, achternaam?: string, geboortedatum?: any, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }>, afspraken?: Array<{ id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, validFrom?: any, validThrough?: any, betaalinstructie?: { byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string }, burger?: { id?: number, bsn?: number, voornamen?: string, voorletters?: string, achternaam?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, postadres?: { id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string }, rubriek?: { id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } }, matchingAfspraken?: Array<{ id?: number, credit?: boolean, zoektermen?: Array<string>, bedrag?: any, omschrijving?: string, burger?: { voorletters?: string, voornamen?: string, achternaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string } }> }>, huishouden?: { id?: number, burgers?: Array<{ id?: number }> } } } };
+export type UpdateBurgerMutation = { updateBurger?: { ok?: boolean, burger?: { id?: number, bsn?: number, saldoAlarm?: boolean, email?: string, telefoonnummer?: string, voorletters?: string, voornamen?: string, achternaam?: string, geboortedatum?: any, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }>, afspraken?: Array<{ id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, validFrom?: any, validThrough?: any, betaalinstructie?: { byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string }, burger?: { id?: number, bsn?: number, voornamen?: string, voorletters?: string, achternaam?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, postadres?: { id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string }, rubriek?: { id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } }, matchingAfspraken?: Array<{ id?: number, credit?: boolean, zoektermen?: Array<string>, bedrag?: any, omschrijving?: string, burger?: { voorletters?: string, voornamen?: string, achternaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string } }> }>, huishouden?: { id?: number, burgers?: Array<{ id?: number }> } } } };
+
+export type UpdateBurgerSaldoAlarmMutationVariables = Exact<{
+  id: Scalars['Int'];
+  saldoAlarm: Scalars['Boolean'];
+}>;
+
+
+export type UpdateBurgerSaldoAlarmMutation = { updateBurgerSaldoAlarm?: { ok?: boolean, burger?: { id?: number, bsn?: number, saldoAlarm?: boolean, email?: string, telefoonnummer?: string, voorletters?: string, voornamen?: string, achternaam?: string, geboortedatum?: any, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string } } };
 
 export type UpdateConfiguratieMutationVariables = Exact<{
   id: Scalars['String'];
@@ -2132,14 +2156,14 @@ export type GetBurgerDetailsQueryVariables = Exact<{
 }>;
 
 
-export type GetBurgerDetailsQuery = { burger?: { id?: number, voorletters?: string, voornamen?: string, achternaam?: string, huishouden?: { id?: number }, afspraken?: Array<{ id?: number, bedrag?: any, credit?: boolean, omschrijving?: string, validFrom?: any, validThrough?: any, betaalinstructie?: { byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string }, afdeling?: { naam?: string, organisatie?: { naam?: string } } }> } };
+export type GetBurgerDetailsQuery = { burger?: { id?: number, voorletters?: string, voornamen?: string, saldoAlarm?: boolean, achternaam?: string, huishouden?: { id?: number }, afspraken?: Array<{ id?: number, bedrag?: any, credit?: boolean, omschrijving?: string, validFrom?: any, validThrough?: any, betaalinstructie?: { byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string }, afdeling?: { naam?: string, organisatie?: { naam?: string } } }> } };
 
 export type GetBurgerPersonalDetailsQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type GetBurgerPersonalDetailsQuery = { burger?: { id?: number, bsn?: number, voorletters?: string, voornamen?: string, achternaam?: string, geboortedatum?: any, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string, telefoonnummer?: string, email?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> } };
+export type GetBurgerPersonalDetailsQuery = { burger?: { id?: number, bsn?: number, voorletters?: string, voornamen?: string, saldoAlarm?: boolean, achternaam?: string, geboortedatum?: any, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string, telefoonnummer?: string, email?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> } };
 
 export type GetBurgerAfsprakenQueryVariables = Exact<{
   id: Scalars['Int'];
@@ -4399,10 +4423,11 @@ export type UpdateAlarmMutationHookResult = ReturnType<typeof useUpdateAlarmMuta
 export type UpdateAlarmMutationResult = Apollo.MutationResult<UpdateAlarmMutation>;
 export type UpdateAlarmMutationOptions = Apollo.BaseMutationOptions<UpdateAlarmMutation, UpdateAlarmMutationVariables>;
 export const UpdateBurgerDocument = gql`
-    mutation updateBurger($id: Int!, $bsn: Int, $voorletters: String, $voornamen: String, $achternaam: String, $geboortedatum: String, $straatnaam: String, $huisnummer: String, $postcode: String, $plaatsnaam: String, $telefoonnummer: String, $email: String) {
+    mutation updateBurger($id: Int!, $bsn: Int, $saldoAlarm: Boolean, $voorletters: String, $voornamen: String, $achternaam: String, $geboortedatum: String, $straatnaam: String, $huisnummer: String, $postcode: String, $plaatsnaam: String, $telefoonnummer: String, $email: String) {
   updateBurger(
     id: $id
     bsn: $bsn
+    saldoAlarm: $saldoAlarm
     voorletters: $voorletters
     voornamen: $voornamen
     achternaam: $achternaam
@@ -4418,6 +4443,7 @@ export const UpdateBurgerDocument = gql`
     burger {
       id
       bsn
+      saldoAlarm
       email
       telefoonnummer
       voorletters
@@ -4557,6 +4583,7 @@ export type UpdateBurgerMutationFn = Apollo.MutationFunction<UpdateBurgerMutatio
  *   variables: {
  *      id: // value for 'id'
  *      bsn: // value for 'bsn'
+ *      saldoAlarm: // value for 'saldoAlarm'
  *      voorletters: // value for 'voorletters'
  *      voornamen: // value for 'voornamen'
  *      achternaam: // value for 'achternaam'
@@ -4577,6 +4604,55 @@ export function useUpdateBurgerMutation(baseOptions?: Apollo.MutationHookOptions
 export type UpdateBurgerMutationHookResult = ReturnType<typeof useUpdateBurgerMutation>;
 export type UpdateBurgerMutationResult = Apollo.MutationResult<UpdateBurgerMutation>;
 export type UpdateBurgerMutationOptions = Apollo.BaseMutationOptions<UpdateBurgerMutation, UpdateBurgerMutationVariables>;
+export const UpdateBurgerSaldoAlarmDocument = gql`
+    mutation updateBurgerSaldoAlarm($id: Int!, $saldoAlarm: Boolean!) {
+  updateBurgerSaldoAlarm(id: $id, saldoAlarm: $saldoAlarm) {
+    ok
+    burger {
+      id
+      bsn
+      saldoAlarm
+      email
+      telefoonnummer
+      voorletters
+      voornamen
+      achternaam
+      geboortedatum
+      straatnaam
+      huisnummer
+      postcode
+      plaatsnaam
+    }
+  }
+}
+    `;
+export type UpdateBurgerSaldoAlarmMutationFn = Apollo.MutationFunction<UpdateBurgerSaldoAlarmMutation, UpdateBurgerSaldoAlarmMutationVariables>;
+
+/**
+ * __useUpdateBurgerSaldoAlarmMutation__
+ *
+ * To run a mutation, you first call `useUpdateBurgerSaldoAlarmMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateBurgerSaldoAlarmMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateBurgerSaldoAlarmMutation, { data, loading, error }] = useUpdateBurgerSaldoAlarmMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      saldoAlarm: // value for 'saldoAlarm'
+ *   },
+ * });
+ */
+export function useUpdateBurgerSaldoAlarmMutation(baseOptions?: Apollo.MutationHookOptions<UpdateBurgerSaldoAlarmMutation, UpdateBurgerSaldoAlarmMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateBurgerSaldoAlarmMutation, UpdateBurgerSaldoAlarmMutationVariables>(UpdateBurgerSaldoAlarmDocument, options);
+      }
+export type UpdateBurgerSaldoAlarmMutationHookResult = ReturnType<typeof useUpdateBurgerSaldoAlarmMutation>;
+export type UpdateBurgerSaldoAlarmMutationResult = Apollo.MutationResult<UpdateBurgerSaldoAlarmMutation>;
+export type UpdateBurgerSaldoAlarmMutationOptions = Apollo.BaseMutationOptions<UpdateBurgerSaldoAlarmMutation, UpdateBurgerSaldoAlarmMutationVariables>;
 export const UpdateConfiguratieDocument = gql`
     mutation updateConfiguratie($id: String!, $waarde: String!) {
   updateConfiguratie(input: {id: $id, waarde: $waarde}) {
@@ -5179,6 +5255,7 @@ export const GetBurgerDetailsDocument = gql`
     id
     voorletters
     voornamen
+    saldoAlarm
     achternaam
     huishouden {
       id
@@ -5249,6 +5326,7 @@ export const GetBurgerPersonalDetailsDocument = gql`
     bsn
     voorletters
     voornamen
+    saldoAlarm
     achternaam
     geboortedatum
     straatnaam

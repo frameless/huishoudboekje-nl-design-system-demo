@@ -4,6 +4,7 @@ from hhb_backend.service.model.base_model import BaseModel
 class Burger(BaseModel):
     id: int
     bsn: int
+    saldo_alarm: bool
     voorletters: str
     voornamen: str
     achternaam: str

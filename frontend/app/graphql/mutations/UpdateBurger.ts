@@ -4,6 +4,7 @@ export const UpdateBurgerMutation = gql`
     mutation updateBurger(
         $id: Int!
         $bsn: Int
+        $saldoAlarm: Boolean
         $voorletters: String
         $voornamen: String
         $achternaam: String
@@ -18,6 +19,7 @@ export const UpdateBurgerMutation = gql`
         updateBurger(
             id: $id
             bsn: $bsn
+            saldoAlarm: $saldoAlarm
             voorletters: $voorletters
             voornamen: $voornamen
             achternaam: $achternaam
@@ -33,6 +35,7 @@ export const UpdateBurgerMutation = gql`
             burger {
                 id
                 bsn
+                saldoAlarm
                 email
                 telefoonnummer
                 voorletters

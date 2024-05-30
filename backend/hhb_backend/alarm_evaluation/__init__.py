@@ -17,7 +17,7 @@ class AlarmEvaluation:
         logging.debug(f"AlarmEvaluation: initialized")
 
     @staticmethod
-    def create(agreementToAlarms: dict[str, str], journalEntryToTransaction: dict, affectedCitizens: list[str], alarmToCitizen: dict[str, str], csmIdToUuid: dict, saldoThreshold: int = 0):
+    def create(agreementToAlarms: dict[str, str], journalEntryToTransaction: dict, citizensToSaldoCheck: list[str], alarmToCitizen: dict[str, str], csmIdToUuid: dict, saldoThreshold: int = 0):
         logging.debug(f"AlarmEvaluation: creating message...")
 
         reconilliatedJournalEntries = []
@@ -48,7 +48,7 @@ class AlarmEvaluation:
         )
 
         checkSaldosItem = CheckSaldosMessage(
-            AffectedCitizens=affectedCitizens,
+            AffectedCitizens=citizensToSaldoCheck,
             SaldoThreshold=saldoThreshold
         )
 

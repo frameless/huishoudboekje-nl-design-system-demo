@@ -30,6 +30,7 @@ class UpdateBurger(graphene.Mutation):
         email = graphene.String()
         straatnaam = graphene.String()
         huisnummer = graphene.String()
+        saldo_alarm = graphene.Boolean()
         postcode = graphene.String()
         plaatsnaam = graphene.String()
         huishouden = graphene.Argument(lambda: huishouden_input.HuishoudenInput)
@@ -58,6 +59,10 @@ class UpdateBurger(graphene.Mutation):
                     {"type": "null"},
                     {"type": "string", "pattern": "^\S+@\S+$"}
                 ]},
+                "saldo_alarm": {"anyOf": [
+                    {"type": "null"},
+                    {"type": "boolean"}
+                ]},
                 "straatnaam": {"type": "string","minLength": 1}, 
                 "huisnummer": {"type": "string", "minLength": 1},
                 "postcode": {"type": "string", "pattern": "^[1-9][0-9]{3}[A-Za-z]{2}$"}, #ZipcodeNL
@@ -70,6 +75,10 @@ class UpdateBurger(graphene.Mutation):
             },
             "required": []
         }
+
+        if kwargs["saldo_alarm"] == None:
+            kwargs.pop("saldo_alarm")
+
         JsonInputValidator(validation_schema).validate(kwargs)
         if kwargs["geboortedatum"]:
             before_today(kwargs["geboortedatum"])

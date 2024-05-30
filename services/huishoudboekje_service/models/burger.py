@@ -2,7 +2,7 @@ import logging
 from core_service.database import db
 from models.huishouden import Huishouden
 from models.saldo import Saldo
-from sqlalchemy import Column, DateTime, event, ForeignKey, Integer, Sequence, String, func
+from sqlalchemy import Boolean, Column, DateTime, event, ForeignKey, Integer, Sequence, String, func
 from sqlalchemy.exc import OperationalError
 from sqlalchemy.orm import relationship, Session
 from sqlalchemy.dialects.postgresql import UUID
@@ -29,6 +29,11 @@ class Burger(db.Model):
     telefoonnummer = Column(String)
     email = Column(String)
     geboortedatum = Column(DateTime)
+
+    saldo_alarm = Column(
+        Boolean,
+        nullable=False,
+        server_default='True')
 
     huishouden_id = Column(
         Integer,
