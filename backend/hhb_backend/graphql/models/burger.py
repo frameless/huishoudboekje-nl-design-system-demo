@@ -25,6 +25,7 @@ class Burger(graphene.ObjectType):
     huisnummer = graphene.String()
     postcode = graphene.String()
     plaatsnaam = graphene.String()
+    saldo_alarm = graphene.Boolean()
     rekeningen = graphene.List(lambda: rekening.Rekening)
     afspraken = graphene.List(lambda: afspraak.Afspraak)
     huishouden_id = graphene.Int()

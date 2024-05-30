@@ -143,7 +143,8 @@ def create_journaalposten(input, afspraken, transactions):
     affectedCitizens = list(set(affectedCitizens))
     citizens = hhb_dataloader().burgers.load(affectedCitizens)
     citizenLookup = {citizen["id"]: citizen["uuid"] for citizen in citizens}
-    affectedCitizens = [citizen["uuid"] for citizen in citizens]
+    citizensToSaldoCheck = [citizen["uuid"]
+                            for citizen in citizens if citizen.saldo_alarm]
 
     if len(agreementToAlarm) != 0:
         for key, value in alarmToCitizen.items():
@@ -155,7 +156,7 @@ def create_journaalposten(input, afspraken, transactions):
                        for csm in hhb_dataloader().csms.load(csm_ids)}
 
     AlarmEvaluation.create(
-        agreementToAlarm, journalEntryToTransaction, affectedCitizens, alarmToCitizen, csmIdToUuid)
+        agreementToAlarm, journalEntryToTransaction, citizensToSaldoCheck, alarmToCitizen, csmIdToUuid)
 
     return journaalposten
 
