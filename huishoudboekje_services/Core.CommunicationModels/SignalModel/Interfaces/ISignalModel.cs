@@ -6,11 +6,11 @@ public interface ISignalModel
 
   public int Type { get; }
 
-  public bool IsActive { get; }
+  public bool IsActive { get; set; }
 
   public int OffByAmount { get; }
 
-  public long? UpdatedAt { get; }
+  public long? UpdatedAt { get; set; }
 
   public long CreatedAt { get; }
 

@@ -7,10 +7,12 @@ using Core.CommunicationModels.AlarmModels;
 using Core.CommunicationModels.AlarmModels.Interfaces;
 using Core.CommunicationModels.JournalEntryModel;
 using Core.CommunicationModels.JournalEntryModel.Interfaces;
+using Core.CommunicationModels.SignalModel;
 using Core.CommunicationModels.SignalModel.Interfaces;
 using Core.utils.DataTypes;
 using Core.utils.DateTimeProvider;
 using FakeItEasy;
+using FluentAssertions;
 
 namespace AlarmService.Tests;
 
@@ -30,6 +32,10 @@ public class AlarmEvaluatorTests
     A.CallTo(() => _fakeAlarmRepository.Update(A<UpdateModel>._)).ReturnsLazily(
       alarm
         => Task.FromResult(alarm.Arguments.Get<IAlarmModel>("alarm")));
+
+    A.CallTo(() => _fakeSignalRepository.Update(A<ISignalModel>._)).ReturnsLazily(
+      signal
+        => Task.FromResult(signal.Arguments.Get<ISignalModel>("value")));
 
     A.CallTo(() => _fakeSignalRepository.InsertMany(A<IList<ISignalModel>>._)).Returns(Task.FromResult(true));
   }
@@ -111,6 +117,7 @@ public class AlarmEvaluatorTests
     A.CallTo(() => _fakeSignalRepository.InsertMany(A<IList<ISignalModel>>._)).MustNotHaveHappened();
     A.CallTo(
         () => _fakeAlarmRepository.UpdateMany(
+
           // 1st of march
           A<IList<IAlarmModel>>.That.Matches(list => list.Count == 1 && list[0].CheckOnDate == 1709251200)))
       .MustHaveHappenedOnceExactly();
@@ -440,6 +447,7 @@ public class AlarmEvaluatorTests
 
     A.CallTo(
         () => _fakeAlarmRepository.UpdateMany(
+
           // First of march
           A<IList<IAlarmModel>>.That.Matches(list => list.Count == 1 && list[0].CheckOnDate == 1709251200)))
       .MustHaveHappenedOnceExactly();
@@ -591,10 +599,426 @@ public class AlarmEvaluatorTests
     A.CallTo(() => _fakeAlarmRepository.UpdateMany(A<IList<IAlarmModel>>._))
       .Returns(Task.FromResult(true));
 
-    // A.CallTo(() => _fakeSignalRepository.InsertMany(A<IList<ISignalModel>>._)).Returns(Task.FromResult(true));
-
     A.CallTo(
       () =>
         _fakeSignalRepository.InsertMany(A<IList<ISignalModel>>._)).MustNotHaveHappened();
+  }
+
+  [Test]
+  public void EvaluatingSaldoAlarm_WhenNegativeSaldo_ShouldCreateSignal()
+  {
+    // Arange
+
+    var dateTimeProvider = new DateTimeProvider();
+
+    var provider = A.Fake<IDateTimeProvider>();
+    A.CallTo(() => provider.UnixToDateTime(A<long>._)).ReturnsLazily(
+      time
+        => dateTimeProvider.UnixToDateTime(time.Arguments.Get<long>("unixtime")));
+
+    A.CallTo(() => provider.EndOfDay(A<DateTime>._)).ReturnsLazily(
+      time
+        => dateTimeProvider.EndOfDay(time.Arguments.Get<DateTime>("datetime")));
+
+    A.CallTo(() => _fakeProducer.RequestCitizenSaldos(A<IList<string>>._)).ReturnsLazily(
+      list =>
+      {
+        var ids = list.Arguments.Get<IList<string>>("citizenIds");
+        var result = new Dictionary<string, int>();
+        foreach (string id in ids)
+        {
+          result.Add(id, -10);
+        }
+
+        return Task.FromResult(result);
+      });
+
+    IList<ISignalModel> emptylist = new List<ISignalModel>();
+
+    A.CallTo(
+        () => _fakeSignalRepository.GetAll(
+          false,
+          A<SignalFilterModel?>.That.Matches(filter => filter.CitizenIds != null)))
+      .Returns(Task.FromResult(emptylist));
+
+    var controller = new EvaluationController(
+      _fakeSignalRepository,
+      _fakeAlarmRepository,
+      _fakeProducer,
+      provider,
+      new EvaluationHelper(dateTimeProvider));
+
+    // Act
+    var result = controller.EvaluateBurgerSaldos(new List<string>() { "test-1" }, 0);
+
+    // Assert
+    A.CallTo(() => _fakeAlarmRepository.UpdateMany(A<IList<IAlarmModel>>._))
+      .Returns(Task.FromResult(true));
+
+    // A.CallTo(() => _fakeSignalRepository.InsertMany(A<IList<ISignalModel>>._)).Returns(Task.FromResult(true));
+
+    A.CallTo(
+        () =>
+          _fakeSignalRepository.InsertMany(
+            A<IList<ISignalModel>>.That.Matches(
+              signals => signals.Count == 1 &&
+                         signals[0].Type == 4 &&
+                         signals[0].CitizenUuid == "test-1")))
+      .MustHaveHappenedOnceExactly();
+  }
+
+  [Test]
+  public void EvaluatingSaldoAlarm_WhenPositiveSaldo_ShouldNotCreateSignal()
+  {
+    // Arange
+
+    var dateTimeProvider = new DateTimeProvider();
+
+    var provider = A.Fake<IDateTimeProvider>();
+    A.CallTo(() => provider.UnixToDateTime(A<long>._)).ReturnsLazily(
+      time
+        => dateTimeProvider.UnixToDateTime(time.Arguments.Get<long>("unixtime")));
+
+    A.CallTo(() => provider.EndOfDay(A<DateTime>._)).ReturnsLazily(
+      time
+        => dateTimeProvider.EndOfDay(time.Arguments.Get<DateTime>("datetime")));
+
+    A.CallTo(() => _fakeProducer.RequestCitizenSaldos(A<IList<string>>._)).ReturnsLazily(
+      list =>
+      {
+        var ids = list.Arguments.Get<IList<string>>("citizenIds");
+        var result = new Dictionary<string, int>();
+        foreach (string id in ids)
+        {
+          result.Add(id, 10);
+        }
+
+        return Task.FromResult(result);
+      });
+
+    IList<ISignalModel> emptylist = new List<ISignalModel>();
+
+    A.CallTo(
+        () => _fakeSignalRepository.GetAll(
+          false,
+          A<SignalFilterModel?>.That.Matches(filter => filter.CitizenIds != null)))
+      .Returns(Task.FromResult(emptylist));
+
+    var controller = new EvaluationController(
+      _fakeSignalRepository,
+      _fakeAlarmRepository,
+      _fakeProducer,
+      provider,
+      new EvaluationHelper(dateTimeProvider));
+
+    // Act
+    var result = controller.EvaluateBurgerSaldos(new List<string>() { "test-1" }, 0);
+
+    // Assert
+    A.CallTo(() => _fakeAlarmRepository.UpdateMany(A<IList<IAlarmModel>>._))
+      .Returns(Task.FromResult(true));
+
+    A.CallTo(
+        () =>
+          _fakeSignalRepository.InsertMany(
+            A<IList<ISignalModel>>.That.Matches(
+              signals => signals.Count == 1 &&
+                         signals[0].Type == 4 &&
+                         signals[0].CitizenUuid == "test-1")))
+      .MustNotHaveHappened();
+  }
+
+  [Test]
+  public void EvaluatingSaldoAlarm_WhenNegativeSaldoButAboveThreshhold_ShouldNotCreateSignal()
+  {
+    // Arange
+
+    var dateTimeProvider = new DateTimeProvider();
+
+    var provider = A.Fake<IDateTimeProvider>();
+    A.CallTo(() => provider.UnixToDateTime(A<long>._)).ReturnsLazily(
+      time
+        => dateTimeProvider.UnixToDateTime(time.Arguments.Get<long>("unixtime")));
+
+    A.CallTo(() => provider.EndOfDay(A<DateTime>._)).ReturnsLazily(
+      time
+        => dateTimeProvider.EndOfDay(time.Arguments.Get<DateTime>("datetime")));
+
+    A.CallTo(() => _fakeProducer.RequestCitizenSaldos(A<IList<string>>._)).ReturnsLazily(
+      list =>
+      {
+        var ids = list.Arguments.Get<IList<string>>("citizenIds");
+        var result = new Dictionary<string, int>();
+        foreach (string id in ids)
+        {
+          result.Add(id, -10);
+        }
+
+        return Task.FromResult(result);
+      });
+
+    IList<ISignalModel> emptylist = new List<ISignalModel>();
+
+    A.CallTo(
+        () => _fakeSignalRepository.GetAll(
+          false,
+          A<SignalFilterModel?>.That.Matches(filter => filter.CitizenIds != null)))
+      .Returns(Task.FromResult(emptylist));
+
+    var controller = new EvaluationController(
+      _fakeSignalRepository,
+      _fakeAlarmRepository,
+      _fakeProducer,
+      provider,
+      new EvaluationHelper(dateTimeProvider));
+
+    // Act
+    var result = controller.EvaluateBurgerSaldos(new List<string>() { "test-1" }, -20);
+
+    // Assert
+    A.CallTo(() => _fakeAlarmRepository.UpdateMany(A<IList<IAlarmModel>>._))
+      .Returns(Task.FromResult(true));
+
+    A.CallTo(
+        () =>
+          _fakeSignalRepository.InsertMany(
+            A<IList<ISignalModel>>.That.Matches(
+              signals => signals.Count == 1 &&
+                         signals[0].Type == 4 &&
+                         signals[0].CitizenUuid == "test-1")))
+      .MustNotHaveHappened();
+  }
+
+  [Test]
+  public void EvaluatingSaldoAlarm_WhenPostiveSaldoButBelowThreshhold_ShouldCreateSignal()
+  {
+    // Arange
+
+    var dateTimeProvider = new DateTimeProvider();
+
+    var provider = A.Fake<IDateTimeProvider>();
+    A.CallTo(() => provider.UnixToDateTime(A<long>._)).ReturnsLazily(
+      time
+        => dateTimeProvider.UnixToDateTime(time.Arguments.Get<long>("unixtime")));
+
+    A.CallTo(() => provider.EndOfDay(A<DateTime>._)).ReturnsLazily(
+      time
+        => dateTimeProvider.EndOfDay(time.Arguments.Get<DateTime>("datetime")));
+
+    A.CallTo(() => _fakeProducer.RequestCitizenSaldos(A<IList<string>>._)).ReturnsLazily(
+      list =>
+      {
+        var ids = list.Arguments.Get<IList<string>>("citizenIds");
+        var result = new Dictionary<string, int>();
+        foreach (string id in ids)
+        {
+          result.Add(id, 10);
+        }
+
+        return Task.FromResult(result);
+      });
+
+    IList<ISignalModel> emptylist = new List<ISignalModel>();
+
+    A.CallTo(
+        () => _fakeSignalRepository.GetAll(
+          false,
+          A<SignalFilterModel?>.That.Matches(filter => filter.CitizenIds != null)))
+      .Returns(Task.FromResult(emptylist));
+
+    var controller = new EvaluationController(
+      _fakeSignalRepository,
+      _fakeAlarmRepository,
+      _fakeProducer,
+      provider,
+      new EvaluationHelper(dateTimeProvider));
+
+    // Act
+    var result = controller.EvaluateBurgerSaldos(new List<string>() { "test-1" }, 15);
+
+    // Assert
+    A.CallTo(() => _fakeAlarmRepository.UpdateMany(A<IList<IAlarmModel>>._))
+      .Returns(Task.FromResult(true));
+
+    // A.CallTo(() => _fakeSignalRepository.InsertMany(A<IList<ISignalModel>>._)).Returns(Task.FromResult(true));
+
+    A.CallTo(
+        () =>
+          _fakeSignalRepository.InsertMany(
+            A<IList<ISignalModel>>.That.Matches(
+              signals => signals.Count == 1 &&
+                         signals[0].Type == 4 &&
+                         signals[0].CitizenUuid == "test-1")))
+      .MustHaveHappenedOnceExactly();
+  }
+
+  [Test]
+  public void EvaluatingSaldoAlarm_WhenSignalAlreadyExists_ShouldSetUpdatedAt()
+  {
+    // Arange
+
+    var dateTimeProvider = new DateTimeProvider();
+
+    var provider = A.Fake<IDateTimeProvider>();
+    A.CallTo(() => provider.UnixToDateTime(A<long>._)).ReturnsLazily(
+      time
+        => dateTimeProvider.UnixToDateTime(time.Arguments.Get<long>("unixtime")));
+
+    A.CallTo(() => provider.EndOfDay(A<DateTime>._)).ReturnsLazily(
+      time
+        => dateTimeProvider.EndOfDay(time.Arguments.Get<DateTime>("datetime")));
+
+    A.CallTo(() => provider.UnixNow()).Returns(20);
+
+    A.CallTo(() => _fakeProducer.RequestCitizenSaldos(A<IList<string>>._)).ReturnsLazily(
+      list =>
+      {
+        var ids = list.Arguments.Get<IList<string>>("citizenIds");
+        var result = new Dictionary<string, int>();
+        foreach (string id in ids)
+        {
+          result.Add(id, -10);
+        }
+
+        return Task.FromResult(result);
+      });
+
+    A.CallTo(
+      () => _fakeSignalRepository.GetAll(
+        false,
+        A<SignalFilterModel?>.That.Matches(filter => filter.CitizenIds != null))).ReturnsLazily(
+      obj =>
+      {
+        var ids = obj.Arguments.Get<SignalFilterModel>("filter").CitizenIds;
+        IList<ISignalModel> result = new List<ISignalModel>();
+        foreach (string id in ids)
+        {
+          ISignalModel signal = new SignalModel()
+          {
+            IsActive = true,
+            CreatedAt = 100000,
+            CitizenUuid = id,
+            Type = 4
+          };
+          result.Add(signal);
+        }
+
+        return Task.FromResult(result);
+      });
+
+    var controller = new EvaluationController(
+      _fakeSignalRepository,
+      _fakeAlarmRepository,
+      _fakeProducer,
+      provider,
+      new EvaluationHelper(dateTimeProvider));
+
+    // Act
+    var result = controller.EvaluateBurgerSaldos(new List<string>() { "test-1" }, 0);
+
+    // Assert
+    A.CallTo(() => _fakeAlarmRepository.UpdateMany(A<IList<IAlarmModel>>._))
+      .Returns(Task.FromResult(true));
+
+    A.CallTo(
+        () =>
+          _fakeSignalRepository.InsertMany(
+            A<IList<ISignalModel>>.That.Matches(
+              signals => signals.Count > 0 &&
+                         signals[0].Type == 4 &&
+                         signals[0].CitizenUuid == "test-1")))
+      .MustNotHaveHappened();
+
+    A.CallTo(
+      () => _fakeSignalRepository.Update(
+        A<ISignalModel>.That.Matches(
+          signal => signal.CitizenUuid == "test-1" &&
+                    signal.UpdatedAt == 20 && signal.IsActive == true)))
+      .MustHaveHappenedOnceExactly();
+  }
+
+   [Test]
+  public void EvaluatingSaldoAlarm_WhenSignalAlreadyExistsButIsNotActive_ShouldSetUpdatedAtAndActivateSignal()
+  {
+    // Arange
+
+    var dateTimeProvider = new DateTimeProvider();
+
+    var provider = A.Fake<IDateTimeProvider>();
+    A.CallTo(() => provider.UnixToDateTime(A<long>._)).ReturnsLazily(
+      time
+        => dateTimeProvider.UnixToDateTime(time.Arguments.Get<long>("unixtime")));
+
+    A.CallTo(() => provider.UnixNow()).Returns(20);
+
+    A.CallTo(() => provider.EndOfDay(A<DateTime>._)).ReturnsLazily(
+      time
+        => dateTimeProvider.EndOfDay(time.Arguments.Get<DateTime>("datetime")));
+
+    A.CallTo(() => _fakeProducer.RequestCitizenSaldos(A<IList<string>>._)).ReturnsLazily(
+      list =>
+      {
+        var ids = list.Arguments.Get<IList<string>>("citizenIds");
+        var result = new Dictionary<string, int>();
+        foreach (string id in ids)
+        {
+          result.Add(id, -10);
+        }
+
+        return Task.FromResult(result);
+      });
+
+    A.CallTo(
+      () => _fakeSignalRepository.GetAll(
+        false,
+        A<SignalFilterModel?>.That.Matches(filter => filter.CitizenIds != null))).ReturnsLazily(
+      obj =>
+      {
+        var ids = obj.Arguments.Get<SignalFilterModel>("filter").CitizenIds;
+        IList<ISignalModel> result = new List<ISignalModel>();
+        foreach (string id in ids)
+        {
+          ISignalModel signal = new SignalModel()
+          {
+            IsActive = false,
+            CreatedAt = 10000,
+            CitizenUuid = id,
+            Type = 4
+          };
+          result.Add(signal);
+        }
+
+        return Task.FromResult(result);
+      });
+
+    var controller = new EvaluationController(
+      _fakeSignalRepository,
+      _fakeAlarmRepository,
+      _fakeProducer,
+      provider,
+      new EvaluationHelper(dateTimeProvider));
+
+    // Act
+    var result = controller.EvaluateBurgerSaldos(new List<string>() { "test-1" }, 0);
+
+    // Assert
+    A.CallTo(() => _fakeAlarmRepository.UpdateMany(A<IList<IAlarmModel>>._))
+      .Returns(Task.FromResult(true));
+
+    A.CallTo(
+        () =>
+          _fakeSignalRepository.InsertMany(
+            A<IList<ISignalModel>>.That.Matches(
+              signals => signals.Count > 0 &&
+                         signals[0].Type == 4 &&
+                         signals[0].CitizenUuid == "test-1")))
+      .MustNotHaveHappened();
+
+    A.CallTo(
+      () => _fakeSignalRepository.Update(
+        A<ISignalModel>.That.Matches(
+          signal => signal.CitizenUuid == "test-1" &&
+                    signal.UpdatedAt == (long)20 && signal.IsActive == true)))
+      .MustHaveHappenedOnceExactly();
   }
 }

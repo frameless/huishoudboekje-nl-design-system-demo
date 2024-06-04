@@ -19,15 +19,15 @@ public class SignalMapper : ISignalMapper
       OffByAmount = communicationModel.OffByAmount,
       CreatedAt = communicationModel.CreatedAt,
     };
-    if (communicationModel.AlarmUuid != null)
+    if (communicationModel.AlarmUuid != null && !communicationModel.AlarmUuid.Equals(""))
     {
       signal.AlarmUuid = Guid.Parse(communicationModel.AlarmUuid);
     }
-    if (communicationModel.CitizenUuid != null)
+    if (communicationModel.CitizenUuid != null && !communicationModel.CitizenUuid.Equals(""))
     {
       signal.CitizenUuid = Guid.Parse(communicationModel.CitizenUuid);
     }
-    if (communicationModel.AgreementUuid != null)
+    if (communicationModel.AgreementUuid != null && !communicationModel.AgreementUuid.Equals(""))
     {
       signal.AgreementUuid = Guid.Parse(communicationModel.AgreementUuid);
     }

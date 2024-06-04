@@ -99,7 +99,6 @@ public class EvaluationController(
   {
     TimeFrameEvaluator evaluator = new(dateTimeProvider, evaluationHelper);
     IList<IAlarmModel> alarmModels =
-
       await alarmRepository.GetAllByCheckOnDateBeforeNoTracking(dateTimeProvider.EndOfDay(dateTimeProvider.Today()));
 
     IDictionary<string, IDictionary<string, string>> alarmToCitizen =
@@ -114,10 +113,33 @@ public class EvaluationController(
 
   public async Task<bool> EvaluateBurgerSaldos(IList<string> citizenUuids, int threshhold)
   {
-    SaldoEvaluator evaluator = new SaldoEvaluator();
+    SaldoEvaluator evaluator = new SaldoEvaluator(dateTimeProvider);
     Dictionary<string, int> saldos = await checkAlarmProducer.RequestCitizenSaldos(citizenUuids);
     EvaluationResult evaluation = evaluator.Evaluate(saldos, threshhold);
     IList<ISignalModel> signalsToCreate = evaluation.Evaluations.SelectMany(entry => entry.Signals).ToList();
+    IList<ISignalModel> signalsAlreadyExisting = new List<ISignalModel>();
+    foreach (ISignalModel signal in signalsToCreate)
+    {
+      IList<ISignalModel> signals = await signalRepository.GetAll(
+        false,
+        new SignalFilterModel() { CitizenIds = new List<string>() { signal.CitizenUuid }});
+      if (signals.Count > 0)
+      {
+        foreach (var existingSignal in signals)
+        {
+          if (existingSignal.Type == signal.Type)
+          {
+            existingSignal.UpdatedAt = signal.CreatedAt;
+            existingSignal.IsActive = true;
+            await signalRepository.Update(existingSignal);
+            signalsAlreadyExisting.Add(signal);
+            break;
+          }
+        }
+      }
+    }
+
+    signalsToCreate = signalsToCreate.Where(signal => !signalsAlreadyExisting.Contains(signal)).ToList();
     return await signalRepository.InsertMany(signalsToCreate);
   }
 

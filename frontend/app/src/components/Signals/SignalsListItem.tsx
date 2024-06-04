@@ -55,7 +55,7 @@ const SignalsListItem: React.FC<SignalsListItemProps> = ({signal, onUpdate}) => 
 				}}>
 					{signalMessage}
 				</Text>
-				<Text fontSize={"sm"} color={"gray.500"}>
+				<Text data-test="signal.timestamp" fontSize={"sm"} color={"gray.500"}>
 					{d.unix(signal.updatedAt ? signal.updatedAt : signal.createdAt).format("LL LT")}
 				</Text>
 			</Stack>

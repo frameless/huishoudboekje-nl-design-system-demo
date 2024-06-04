@@ -266,7 +266,6 @@ When('the negative amount bank transaction is booked to the agreement "Loon"', (
 
   Step(this, "a success notification containing 'De transactie is afgeletterd' is displayed");
     
-  
   });
 
 
