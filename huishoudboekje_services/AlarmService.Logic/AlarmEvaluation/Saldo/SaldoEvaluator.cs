@@ -1,9 +1,10 @@
 ﻿using Core.CommunicationModels.SignalModel;
 using Core.CommunicationModels.SignalModel.Interfaces;
+using Core.utils.DateTimeProvider;
 
 namespace AlarmService.Logic.AlarmEvaluation.Saldo;
 
-public class SaldoEvaluator()
+public class SaldoEvaluator(IDateTimeProvider dateTimeProvider)
 {
   public int SIGNAL_TYPE_NEGATIVE_SALDO = 4;
 
@@ -20,7 +21,7 @@ public class SaldoEvaluator()
           new SignalModel()
           {
             AlarmUuid = null,
-            CreatedAt = ((DateTimeOffset)DateTime.UtcNow).ToUnixTimeSeconds(),
+            CreatedAt = dateTimeProvider.UnixNow(),
             IsActive = true,
             JournalEntryUuids = null,
             OffByAmount = entry.Value,

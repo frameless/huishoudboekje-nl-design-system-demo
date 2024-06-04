@@ -1,4 +1,5 @@
 ﻿using Core.CommunicationModels.JournalEntryModel.Interfaces;
+using Core.utils.DateTimeProvider;
 
 namespace AlarmService.Logic.Controllers.Evaluation;
 

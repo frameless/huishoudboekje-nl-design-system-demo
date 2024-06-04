@@ -13,9 +13,24 @@ const SignalsList: React.FC<{signals: SignalData[], onUpdate: () => void}> = ({s
 		);
 	}
 
+	const orderedSignals = signals.sort(compareSignal);
+
+	function compareSignal(a: SignalData, b: SignalData) {
+		const aCompareTime = a.updatedAt ?? a.createdAt
+		const bCompareTime = b.updatedAt ?? b.createdAt
+
+		if (aCompareTime < bCompareTime) {
+			return 1
+		}
+		if (aCompareTime > bCompareTime) {
+			return -1
+		}
+		return 0
+	}
+
 	return (
 		<Stack minHeight={250} >
-			{signals.map((signal) => (
+			{orderedSignals.map((signal) => (
 				<SignalenListItem key={signal.id} signal={signal} onUpdate={onUpdate} />
 			))}
 		</Stack>

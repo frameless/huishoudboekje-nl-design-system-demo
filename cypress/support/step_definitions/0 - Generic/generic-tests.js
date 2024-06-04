@@ -118,6 +118,12 @@ Then('an error notification containing {string} is displayed', (notificationText
 
 });
 
+Then('I wait one minute', () => {
+
+  cy.wait(60000);
+
+});
+
 // Confirm that a specific citizen exists
 Given('the {string} citizen exists', (citizen) => {
 
