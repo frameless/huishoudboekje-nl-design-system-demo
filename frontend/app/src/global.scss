@@ -14,6 +14,10 @@
 	margin: 0 !important;
 }
 
+.pre-wrap {
+	white-space: pre-wrap;
+}
+
 @media print {
 	.do-not-print {
 		display: none;
@@ -28,21 +32,30 @@
 		height: 0;
 	}
 
+	.break-line {
+		overflow-wrap: break-word;
+	}
 
 	.print {
-		display: inline-flex;
+		display: block;
 		visibility: visible;
-		min-width: 200%;
-		font-size: 20px !important;
-		padding-top: 0px !important;
-		margin: 0 !important;
+		position: absolute;
+		left: 0;
+		top: 0;
+		width: 21cm; // aprox. a4 width
+		height: 26.0cm; // aprox. A4 height (bit less for padding)
+		padding: 1cm;
+		margin: 0;
+		border: none;
+		background: white;
+		page-break-after: auto;
 	}
 
 	.printweergave-periode {
 		display: inline-flex;
 		visibility: visible;
-		max-width: 90%;
-		font-size: 20px !important;
+		//max-width: 90%;
+		font-size: 18px !important;
 		margin: 0 !important;
 		padding-top: 10px !important;
 		padding-bottom: 50px !important;
