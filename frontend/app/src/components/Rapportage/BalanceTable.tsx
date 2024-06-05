@@ -26,7 +26,7 @@ const BalanceTable: React.FC<BalanceTableProps> = ({transactions, startDate, end
 			<Section> {/* Todo: Add helperText (07-03-2022) */}
 				<Stack className={"print"}>
 					<Stack spacing={2}>
-						<Text className={" only-show-on-print printweergave-periode"}>
+						<Text className={" only-show-on-print printweergave-periode pre-wrap"}>
 							<Trans i18nKey={"reports.period"} components={{strong: <strong />}} values={{
 								from: startDate && d(startDate, "L").startOf("day").format("L"),
 								through: endDate && d(endDate, "L").endOf("day").format("L"),
@@ -53,7 +53,7 @@ const BalanceTable: React.FC<BalanceTableProps> = ({transactions, startDate, end
 														return (
 															<Stack direction={"row"} key={`${rubriekKey}:${key}`}>
 																<Box flex={2} textAlign={"left"}>
-																	<Text >{aggregationByOrganisatie[category][rubriek][transaction].rekeninghouder}</Text>
+																	<Text className={"break-line"}>{aggregationByOrganisatie[category][rubriek][transaction].rekeninghouder}</Text>
 																</Box>
 																<Box>
 																	<Text>{d(aggregationByOrganisatie[category][rubriek][transaction].transactieDatum).format("DD-MM-YYYY")}</Text>
