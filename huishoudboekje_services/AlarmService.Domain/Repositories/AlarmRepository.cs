@@ -53,6 +53,16 @@ public class AlarmRepository(AlarmServiceContext dbContext) : BaseRepository<Ala
     return _mapper.GetCommunicationModel(insertedAlarm.Entity);
   }
 
+  public async Task<bool> DeleteByIds(IList<string> ids)
+  {
+    bool success = await ExecuteCommand(
+      new DeleteRecordDecorator<Alarm>(
+        new NoTrackingCommandDecorator<Alarm>(
+          new WhereCommandDecorator<Alarm>(new GetAllCommand<Alarm>(), alarm => ids.Contains(alarm.Uuid.ToString())))));
+
+    return success;
+  }
+
   public Task SaveChanges()
   {
     return SaveChangesAsync();

@@ -13,9 +13,7 @@ using AlarmService.Logic.EditSignalService.Interface;
 using AlarmService.Logic.Misc;
 using AlarmService.MessageQueue.Consumers;
 using AlarmService.MessageQueue.Producers;
-using Core.CommunicationModels.AlarmModels;
 using Core.Database;
-using Core.ErrorHandling.ExceptionInterceptors;
 using Core.Grpc;
 using Core.MessageQueue;
 using Core.utils.DateTimeProvider;
@@ -76,6 +74,7 @@ public class Startup
     massTransit.AddConsumer<RemoveJournalEntryFromSignalsConsumer>();
     massTransit.AddConsumer<CheckSaldosConsumer>();
     massTransit.AddConsumer<UpdateEndDateAlarmConsumer>();
+    massTransit.AddConsumer<DeleteAlarmsConsumer>();
     return massTransit;
   }
 

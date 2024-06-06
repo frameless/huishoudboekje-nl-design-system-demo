@@ -12,4 +12,6 @@ public interface IAlarmController
   public Task<IAlarmModel> Update(UpdateModel alarm);
   public Task<IList<IAlarmModel>> GetAllBeforeByCheckOnDateBefore(DateTime date);
   public Task<bool> Delete(string id);
+
+  public Task<bool> DeleteByIds(IList<string> ids);
 }
