@@ -77,6 +77,17 @@ public class AlarmMapper : IAlarmMapper
     return alarm;
   }
 
+  public IList<IAlarmModel> GetCommunicationModels(IList<AlarmData> alarmData)
+  {
+    IList<IAlarmModel> result = new List<IAlarmModel>();
+    foreach (AlarmData alarm in alarmData)
+    {
+      result.Add(GetCommunicationModel(alarm));
+    }
+
+    return result;
+  }
+
   public IList<AlarmData> GetGrpcObjects(IList<IAlarmModel> communicationModels)
   {
     return communicationModels.Select(GetGrpcObject).ToList();

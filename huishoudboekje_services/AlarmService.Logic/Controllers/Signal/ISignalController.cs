@@ -22,4 +22,8 @@ public interface ISignalController
   public Task<bool> Delete(string id);
 
   public Task<int> GetActiveSignalsCount();
+
+  public Task<bool> DeleteByAlarmIds(IList<string> ids);
+
+  public Task<bool> DeleteByCitizenIds(IList<string> ids);
 }

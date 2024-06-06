@@ -8,6 +8,7 @@ public interface IAlarmMapper
 {
   public AlarmData GetGrpcObject(IAlarmModel communicationModel);
   public IAlarmModel GetCommunicationModel(AlarmData alarmData);
+  public IList<IAlarmModel> GetCommunicationModels(IList<AlarmData> alarmData);
   public IList<AlarmData> GetGrpcObjects(IList<IAlarmModel> communicationModels);
 
   public UpdateModel GetUpdateDictionary(AlarmUpdateData alarmData);

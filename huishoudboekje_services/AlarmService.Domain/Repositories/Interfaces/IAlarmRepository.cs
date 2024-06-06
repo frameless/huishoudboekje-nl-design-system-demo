@@ -14,5 +14,7 @@ public interface IAlarmRepository
   public Task<IList<IAlarmModel>> GetAllByCheckOnDateBeforeNoTracking(DateTime date);
   public Task<bool> Delete(string id);
 
+  public Task<bool> DeleteByIds(IList<string> ids);
+
   public Task SaveChanges();
 }

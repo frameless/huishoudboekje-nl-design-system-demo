@@ -1,6 +1,7 @@
 """ GraphQL mutation for deleting a Afspraak """
 
 import logging
+from hhb_backend.delete_alarms_producer import DeleteAlarmsProducer
 import graphene
 import requests
 
@@ -31,6 +32,12 @@ class DeleteAfspraak(graphene.Mutation):
         # Check if afspraak in use by journaalposten
         if previous.journaalposten:
             raise GraphQLError("Afspraak is linked to one or multiple journaalposten - deletion is not possible.")
+
+        try:
+            deleteAlarmsProducer = DeleteAlarmsProducer.create(
+                [previous.alarm_id], [] , True)
+        except:
+            raise GraphQLError(f"Failed deleting alarms for this citizen")
 
         response = requests.delete(f"{settings.HHB_SERVICES_URL}/afspraken/{id}")
         if response.status_code != 204:

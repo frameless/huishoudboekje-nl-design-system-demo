@@ -11,6 +11,7 @@ using Core.CommunicationModels.SignalModel.Interfaces;
 using Core.ErrorHandling.Exceptions;
 using Grpc.Core;
 using Core.utils.DateTimeProvider;
+using LinqKit;
 
 namespace AlarmService.Logic.Controllers.Alarm;
 
@@ -57,7 +58,7 @@ public class AlarmController : IAlarmController
     var updatedSend = await alarmProducer.UpdateAlarmUuidAgreement(insertedAlarm.UUID, agreementUuid);
     if (!updatedSend)
     {
-      throw new HHBConnectionException("Could not updated Agreement therefore the Alarm is not created", "Failed to update agreement, alarm was not created", StatusCode.Aborted);
+      throw new HHBConnectionException("Could not update Agreement therefore the Alarm is not created", "Failed to update agreement, alarm was not created", StatusCode.Aborted);
     }
     await alarmRepository.SaveChanges();
     return insertedAlarm;
@@ -74,6 +75,12 @@ public class AlarmController : IAlarmController
   {
     alarmValidator.IsValid(id);
     return alarmRepository.Delete(id);
+  }
+
+  public Task<bool> DeleteByIds(IList<string> ids)
+  {
+    ids.ForEach(id => alarmValidator.IsValid(id));
+    return alarmRepository.DeleteByIds(ids);
   }
 
   public Task<IList<IAlarmModel>> GetAllBeforeByCheckOnDateBefore(DateTime date)

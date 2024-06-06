@@ -3,6 +3,7 @@ from hhb_backend.service.model.base_model import BaseModel
 
 class Burger(BaseModel):
     id: int
+    uuid: str
     bsn: int
     saldo_alarm: bool
     voorletters: str

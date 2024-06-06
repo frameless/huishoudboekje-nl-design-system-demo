@@ -71,4 +71,14 @@ public class SignalController : ISignalController
   {
     return signalRepository.InsertMany(values);
   }
+
+  public Task<bool> DeleteByAlarmIds(IList<string> ids)
+  {
+    return signalRepository.DeleteByAlarmIds(ids);
+  }
+
+  public Task<bool> DeleteByCitizenIds(IList<string> ids)
+  {
+    return signalRepository.DeleteByCitizenIds(ids);
+  }
 }

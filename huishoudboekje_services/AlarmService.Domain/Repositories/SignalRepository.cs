@@ -31,13 +31,14 @@ public class SignalRepository(AlarmServiceContext dbContext) : BaseRepository<Si
 
   public async Task<IList<ISignalModel>> GetAll(bool tracking, SignalFilterModel? filter = null)
   {
-    IDatabaseDecoratableCommand<Signal> command = filter != null ? DecorateFilters(new GetAllCommand<Signal>(), filter) : new GetAllCommand<Signal>();
+    IDatabaseDecoratableCommand<Signal> command =
+      filter != null ? DecorateFilters(new GetAllCommand<Signal>(), filter) : new GetAllCommand<Signal>();
     if (!tracking)
     {
       command = new NoTrackingCommandDecorator<Signal>(command);
     }
-    return _mapper.GetCommunicationModels(
-      await ExecuteCommand(command));
+
+    return _mapper.GetCommunicationModels(await ExecuteCommand(command));
   }
 
   public async Task<ISignalModel> Insert(ISignalModel value)
@@ -106,6 +107,28 @@ public class SignalRepository(AlarmServiceContext dbContext) : BaseRepository<Si
         new WhereCommandDecorator<Signal>(
           new GetAllCommand<Signal>(),
           x => x.IsActive)).Result.Count());
+  }
+
+  public async Task<bool> DeleteByAlarmIds(IList<string> ids)
+  {
+    bool result = await ExecuteCommand(
+      new DeleteRecordDecorator<Signal>(
+        new WhereCommandDecorator<Signal>(
+          new NoTrackingCommandDecorator<Signal>(new GetAllCommand<Signal>()),
+          signal => ids.Contains(signal.AlarmUuid.ToString() ?? string.Empty))));
+
+    return result;
+  }
+
+  public async Task<bool> DeleteByCitizenIds(IList<string> ids)
+  {
+    bool result = await ExecuteCommand(
+      new DeleteRecordDecorator<Signal>(
+        new WhereCommandDecorator<Signal>(
+          new NoTrackingCommandDecorator<Signal>(new GetAllCommand<Signal>()),
+          signal => ids.Contains(signal.CitizenUuid.ToString() ?? string.Empty))));
+
+    return result;
   }
 
   private IDatabaseDecoratableCommand<Signal> DecorateFilters(

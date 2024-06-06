@@ -3,6 +3,7 @@
 from datetime import datetime
 import logging
 
+from hhb_backend.delete_alarms_producer import DeleteAlarmsProducer
 import graphene
 import requests
 
@@ -31,8 +32,10 @@ class DeleteBurger(graphene.Mutation):
             raise GraphQLError(f"Burger with id {id} not found")
 
         afspraken = hhb_dataloader().afspraken.by_burger(id)
+        alarm_ids = []
         input = {'valid_through': datetime.now().strftime("%Y-%m-%d")}
         for afspraak in afspraken:
+            alarm_ids.append(afspraak.alarm_id)
             response = requests.post(
                 f"{settings.HHB_SERVICES_URL}/afspraken/{afspraak.id}",
                 json=input,
@@ -43,6 +46,11 @@ class DeleteBurger(graphene.Mutation):
             except:
                 if response.status_code != 201:
                     raise GraphQLError(f"Upstream API responded: {response.text}")
+
+        try:
+            deleteAlarmsProducer = DeleteAlarmsProducer.create(alarm_ids, [previous.uuid], True)
+        except:
+            raise GraphQLError(f"Failed deleting alarms for this citizen")
 
         response = requests.delete(f"{settings.HHB_SERVICES_URL}/burgers/{id}")
         if response.status_code != 204:
