@@ -1,5 +1,24 @@
 # Huishoudboekje Changelog
 
+## 2.0.3
+
+Deze versie omvat verbeteringen aan de werking van alarmen en signalen. Daarnaast is een probleem met de afdrukweergave van rapportage opgelost.
+Ook bevat deze versie de eerste versie van de userapi met key authentication. Niet aangeraden om te draaien momenteel i.v.m security
+
+### Patch Changes
+
+- 3d1c8e4: Added functionality to turn off/on negative saldo alarms for citizens
+- d70503a: qa signal tests
+- 159a564: data in voorbeelddata
+- e65b199: fixed orphaned alarms when deleting citizens or agreements
+- 8ea7c19: Fixed 0-day margin alarms not properly creating signals due to timezones
+- a55a334: QA expanded create-alarm test
+- acfe573: fix rapportage print falling of the page
+- 0035b88: Added first version of the userapi with key authentication
+- 0228822: reduced production logging
+- b6af995: Saldo signals are no longer repeated, but instead are set to active if inactive and updatedAt is used to put them at the top of the list again
+- 130128c: updated npm package for braces due to vulnerability
+
 ## 2.0.2
 
 Deze versie omvat een verbetering voor teksten bij gelogde gebeurtenissen.
@@ -16,8 +35,8 @@ Deze versie omvat een verbetering voor teksten bij gelogde gebeurtenissen.
 - 6c351af: added inactive tests
 
 ## Migration Guide
-This release introduces the notification service however it should not yet be used.
 
+This release introduces the notification service however it should not yet be used.
 
 ## 2.0.1
 
