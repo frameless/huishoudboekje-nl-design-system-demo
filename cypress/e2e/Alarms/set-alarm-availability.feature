@@ -10,6 +10,7 @@ Feature: set alarm availability
     # Given 1 or more agreements exists
     # Given an alarm exists
 
+  @beforeCreateAgreement
   Scenario: toggle alarm to disabled
     Given I view the "Agreement" page
     Then the alarm availability is displayed

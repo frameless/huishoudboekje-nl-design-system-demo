@@ -68,7 +68,7 @@ Then('the signal description is displayed', () => {
 
   // Assertion
   cy.contains('geen transactie gevonden');
-  cy.contains('Mcpherson Patterson');
+  cy.contains('Dingus Bingus');
 
 });
 
@@ -137,7 +137,7 @@ Then('all suppressed signals are displayed', () => {
 
   // Assertion
   cy.contains('geen transactie gevonden');
-  cy.contains('Mcpherson Patterson');
+  cy.contains('Dingus Bingus');
 
   cy.get('[data-test="signal.badgeActive"]')
     .should('be.visible')

@@ -1,6 +1,6 @@
 // cypress/support/step_definitions/Alarms/create-alarm.js
 
-import {Given, When, Then, Step} from "@badeball/cypress-cucumber-preprocessor";
+import { Given, When, Then, Step } from "@badeball/cypress-cucumber-preprocessor";
 
 const header = {
   'content-type': 'application/json',
@@ -8,19 +8,6 @@ const header = {
 };
 
 //#region Scenario: view toggle form
-
-When('I open the citizen overview page for "Mcpherson Patterson"', () => {
-
-  cy.visit('/burgers');
-  cy.url().should('eq', Cypress.config().baseUrl + '/burgers')
-  cy.get('input[placeholder="Zoeken"]')
-    .type('Mcpherson');
-  cy.wait(500);
-  cy.contains('Patterson')
-    .click();
-  cy.url().should('include', Cypress.config().baseUrl + '/burgers/')
-
-});
 
 Then('the negative account balance alarm toggle label "Alarm bij negatief saldo" is displayed in the section "Saldo"', () => {
 
@@ -48,21 +35,59 @@ Then('the negative account balance alarm toggle is set to enabled', () => {
 
 //#region Scenario: enable toggle
 
-Given('the account balance for "Mcpherson Patterson" is 0', () => {
+Given("the citizen's account balance is 0", () => {
 
   cy.get('[data-test="citizen.balance"]')
     .contains('€ 0,00');
 
 });
 
-Given('the citizen "Mcpherson Patterson" has an agreement "Loon"', () => {
+Given('the citizen has an agreement "Loon"', () => {
 
-  cy.get('table')
-    .contains('Loon');
+  // Already on correct page, so click 'Toevoegen' button
+  cy.get('[data-test="button.Add"]')
+    .click();
+
+  // Add agreement with test department
+  cy.url().should('contains', '/afspraken/toevoegen'); 
+  cy.get('[data-test="radio.agreementOrganization"]')
+    .click();
+  cy.get('#organisatie')
+    .type('Belast');
+  cy.contains('ingdienst')
+    .click();
+  // Check auto-fill
+  cy.contains('Graadt van Roggenweg');
+  // Fill in IBAN
+  cy.get('#tegenrekening')
+    .type('NL86');
+  cy.contains('0002')
+    .click();
+
+  // Payment direction: Toeslagen
+  cy.get('[data-test="radio.agreementIncome"]')
+    .click();
+  cy.get('#rubriek')
+    .click()
+    .contains('Toeslagen')
+    .click();
+  cy.get('[data-test="select.agreementIncomeDescription"]')
+    .type('Loon');
+  cy.get('[data-test="select.agreementIncomeAmount"]')
+    .type('10');
+  cy.get('[data-test="button.Submit"]')
+    .click();
+
+  // Check success message
+  cy.get('[data-status="success"]')
+    .contains('afspraak')
+    .should('be.visible');
 
 });
 
 When('I set the negative account balance alarm toggle to enabled', () => {
+
+  Step(this, 'I open the citizen overview page for "Dingus Bingus"');
 
   cy.get('[data-test="citizen.sectionBalance"]')
     .find('label[class^="chakra-switch"]')
@@ -257,7 +282,7 @@ When('the negative amount bank transaction is booked to the agreement "Loon"', (
   cy.url().should('include', '/bankzaken/transacties/')
   cy.contains('Alle burgers')
     .click({ force: true });
-  cy.contains('Mcpherson')
+  cy.contains('Dingus')
     .click();
   cy.get('[aria-label="Remove Belastingdienst Toeslagen Kantoor Utrecht"]')
     .click();
@@ -274,6 +299,8 @@ When('the negative amount bank transaction is booked to the agreement "Loon"', (
 //#region Scenario: disable toggle
 
 When('I set the negative account balance alarm toggle to disabled', () => {
+
+  Step(this, 'I open the citizen overview page for "Dingus Bingus"');
 
   cy.get('[data-test="citizen.sectionBalance"]')
     .find('label[data-checked]')

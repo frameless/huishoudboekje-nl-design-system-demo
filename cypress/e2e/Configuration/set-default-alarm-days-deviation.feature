@@ -9,7 +9,7 @@ Feature: set default alarm days deviation
 
   @afterCleanupDefaultDateDeviation
   Scenario: save default alarm days deviation
-    Given the "Carly Padilla" citizen exists
+    Given the "Dingus Bingus" citizen exists
     Given the "Gemeente Utrecht" organisation exists
     Given the "Gemeente Utrecht" department exists
     Given the "Gemeente Utrecht" department has the "Postbus 16200, 3500CE Utrecht" postal address
@@ -26,7 +26,7 @@ Feature: set default alarm days deviation
     Then the text 'alarm_afwijking_datum' is displayed
     Then the text '5' is displayed
 
-    When I open the "Citizen details" page for the "Carly Padilla" citizen
+    When I open the "Citizen details" page for the "Dingus Bingus" citizen
     When I click the button 'Toevoegen'
     When I set the "Partij" option to "Organisatie"
     Then the field 'Organisatie' is displayed

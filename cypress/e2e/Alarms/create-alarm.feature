@@ -39,22 +39,7 @@ Feature: create alarm
     Then the text 'Verplicht veld' is displayed
     Then the "Close modal" button is displayed
 
-  @afterCleanupAlarm
-  Scenario: save monthly alarm with basic options
-    When I view the "Agreement" page
-    When I click the button 'Toevoegen'
-    Then the "Create alarm form" is displayed
-    Then I fill in the current date for alarm start date
-    Then I fill '1' into the alarm day of the month field
-    Then I fill '1' into the alarm allowed deviation in days field
-    Then I fill in the expected payment amount
-    Then I fill '1' into the alarm allowed deviation in payment amount field
-    Then I click the "Submit form" button
-    Then the "Create alarm form" modal is closed
-    Then a notification of success is displayed
-    Then the current status of the alarm on the agreements page is displayed
-
-@skip @afterCleanupAlarm
+  @skip @afterCleanupAlarm
   Scenario: save weekly alarm with basic options
     When I view the "Agreement" page
     When I click the button 'Toevoegen'
@@ -69,6 +54,21 @@ Feature: create alarm
     When I fill in the expected payment amount
     When I fill in the alarm allowed deviation in payment amount
     When I click the "Submit form" button
+    Then the "Create alarm form" modal is closed
+    Then a notification of success is displayed
+    Then the current status of the alarm on the agreements page is displayed
+
+  @afterCleanupAlarm
+  Scenario: save monthly alarm with basic options
+    When I view the "Agreement" page
+    When I click the button 'Toevoegen'
+    Then the "Create alarm form" is displayed
+    Then I fill in the current date for alarm start date
+    Then I fill '1' into the alarm day of the month field
+    Then I fill '1' into the alarm allowed deviation in days field
+    Then I fill in the expected payment amount
+    Then I fill '1' into the alarm allowed deviation in payment amount field
+    Then I click the "Submit form" button
     Then the "Create alarm form" modal is closed
     Then a notification of success is displayed
     Then the current status of the alarm on the agreements page is displayed

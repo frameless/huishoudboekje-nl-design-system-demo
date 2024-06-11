@@ -143,17 +143,17 @@ const BurgerDetailPage = () => {
 					</Stack>
 				)} menu={(
 					<Menu>
-						<IconButton as={MenuButton} icon={<MenuIcon />} variant={"solid"} aria-label={"Open menu"} />
+						<IconButton data-test="kebab.citizen" as={MenuButton} icon={<MenuIcon />} variant={"solid"} aria-label={"Open menu"} />
 						<MenuList>
-							<Link href={AppRoutes.BrievenExport(id, "excel")} target={"_blank"}><MenuItem>{t("global.actions.brievenExport")}</MenuItem></Link>
-							<NavLink to={AppRoutes.Overzicht([...[String(burger.id)]])}><MenuItem>{t("global.actions.showOverzicht")}</MenuItem></NavLink>
-							<NavLink to={AppRoutes.RapportageBurger([id])}><MenuItem>{t("global.actions.showReports")}</MenuItem></NavLink>
-							<NavLink to={AppRoutes.ViewBurgerPersonalDetails(String(burger.id))}><MenuItem>{t("global.actions.showPersonalDetails")}</MenuItem></NavLink>
-							<NavLink to={AppRoutes.ViewBurgerAuditLog(String(burger.id))}><MenuItem>{t("global.actions.showBurgerAuditLog")}</MenuItem></NavLink>
-							<NavLink to={AppRoutes.Huishouden(String(burger.huishouden?.id))}><MenuItem>{t("global.actions.showHuishouden")}</MenuItem></NavLink>
+							<Link href={AppRoutes.BrievenExport(id, "excel")} target={"_blank"}><MenuItem data-test="kebab.citizenExport">{t("global.actions.brievenExport")}</MenuItem></Link>
+							<NavLink to={AppRoutes.Overzicht([...[String(burger.id)]])}><MenuItem data-test="kebab.citizenOverview">{t("global.actions.showOverzicht")}</MenuItem></NavLink>
+							<NavLink to={AppRoutes.RapportageBurger([id])}><MenuItem data-test="kebab.citizenReports">{t("global.actions.showReports")}</MenuItem></NavLink>
+							<NavLink to={AppRoutes.ViewBurgerPersonalDetails(String(burger.id))}><MenuItem data-test="kebab.citizenDetails">{t("global.actions.showPersonalDetails")}</MenuItem></NavLink>
+							<NavLink to={AppRoutes.ViewBurgerAuditLog(String(burger.id))}><MenuItem data-test="kebab.citizenAuditLog">{t("global.actions.showBurgerAuditLog")}</MenuItem></NavLink>
+							<NavLink to={AppRoutes.Huishouden(String(burger.huishouden?.id))}><MenuItem data-test="kebab.citizenShowHousehold">{t("global.actions.showHuishouden")}</MenuItem></NavLink>
 							<Divider />
-							<MenuItem onClick={() => deleteHuishoudenBurgerAlert.onOpen()}>{t("global.actions.deleteBurgerFromHuishouden")}</MenuItem>
-							<MenuItem onClick={() => deleteAlert.onOpen()}>{t("global.actions.delete")}</MenuItem>
+							<MenuItem data-test="kebab.citizenDeleteFromHousehold" onClick={() => deleteHuishoudenBurgerAlert.onOpen()}>{t("global.actions.deleteBurgerFromHuishouden")}</MenuItem>
+							<MenuItem data-test="kebab.citizenDelete" onClick={() => deleteAlert.onOpen()}>{t("global.actions.delete")}</MenuItem>
 						</MenuList>
 					</Menu>
 				)}>

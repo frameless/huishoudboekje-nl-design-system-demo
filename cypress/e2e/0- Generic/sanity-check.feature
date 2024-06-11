@@ -6,6 +6,6 @@ Feature: bezoek huishoudboekje
     Then I am actually on the baseUrl
 
   Scenario: use search to find citizen
-    Given I visit the Burgers page
-    When I fill 'Mcpherso' in search
-    Then I find the citizen 'Mcpherson'
+    Given I navigate to the page '/burgers'
+    When I fill 'Dingu' in search
+    Then I find the citizen 'Dingus'

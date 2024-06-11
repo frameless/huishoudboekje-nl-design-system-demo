@@ -68,9 +68,9 @@ After({ tags: "@afterCleanupPaymentInstruction" }, function (){
   cy.visit('/burgers');
   cy.url().should('eq', Cypress.config().baseUrl + '/burgers')
   cy.get('input[placeholder="Zoeken"]')
-    .type('Allie');
+    .type('Dingus');
   cy.waitForReact();
-  cy.contains('Noble')
+  cy.contains('Bingus')
     .click();
   cy.url().should('include', Cypress.config().baseUrl + '/burgers/')
   cy.get('p').contains('Maandelijks leefgeld HHB000003')
@@ -187,9 +187,9 @@ After({ tags: "@afterCleanupDefaultAmountDeviation" }, function (){
   cy.visit('/burgers');
   cy.url().should('eq', Cypress.config().baseUrl + '/burgers')
   cy.get('input[placeholder="Zoeken"]')
-    .type('Carly');
+    .type('Dingus');
   cy.waitForReact();
-  cy.contains('Padilla')
+  cy.contains('Bingus')
     .click();
   cy.url().should('include', Cypress.config().baseUrl + '/burgers/')
   cy.get('p').contains('Periodieke uitkering')
@@ -240,9 +240,9 @@ After({ tags: "@afterCleanupDefaultDateDeviation" }, function (){
   cy.visit('/burgers');
   cy.url().should('eq', Cypress.config().baseUrl + '/burgers')
   cy.get('input[placeholder="Zoeken"]')
-    .type('Carly');
+    .type('Dingus');
   cy.waitForReact();
-  cy.contains('Padilla')
+  cy.contains('Bingus')
     .click();
   cy.url().should('include', Cypress.config().baseUrl + '/burgers/')
   cy.get('p').contains('Periodieke uitkering')

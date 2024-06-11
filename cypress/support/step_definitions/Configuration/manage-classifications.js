@@ -87,15 +87,15 @@ When('the "Huuropbrengsten" classification is displayed', () => {
 
 });
 
-When('I open the "Citizen details" page for the "Sasha Baker" citizen', () => {
+When('I open the "Citizen details" page for the "Dingus Bingus" citizen', () => {
 
   // Navigate to citizen
   cy.visit('/burgers');
   cy.url().should('eq', Cypress.config().baseUrl + '/burgers')
   cy.get('input[placeholder="Zoeken"]')
-    .type('Sasha');
+    .type('Dingus');
   cy.waitForReact();
-  cy.contains('Baker')
+  cy.contains('Bingus')
     .click();
   cy.url().should('include', Cypress.config().baseUrl + '/burgers/')
 
@@ -107,9 +107,9 @@ When('I click the "Add agreement" button', () => {
   cy.visit('/burgers');
   cy.url().should('eq', Cypress.config().baseUrl + '/burgers')
   cy.get('input[placeholder="Zoeken"]')
-    .type('Sasha');
+    .type('Dingus');
   cy.waitForReact();
-  cy.contains('Baker')
+  cy.contains('Bingus')
     .click();
   cy.url().should('include', Cypress.config().baseUrl + '/burgers/')
 

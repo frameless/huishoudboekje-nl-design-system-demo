@@ -19,10 +19,6 @@ const queryTruncateSignal = `mutation Truncate {
 // Unique names
 const uniqueSeed = Date.now().toString();
 
-// Before *all* tests, run this (so this runs once at the start)
-Before({ tags: "@alarmservice" }, function (){
-});
-
 After({ tags: "@afterCleanupAlarm" }, function (){
 
   // Clean up alarm
@@ -85,12 +81,17 @@ When('I create a test alarm', () => {
 
   cy.wait(1000);
 
-  // Open latest agreement
-  cy.visit('/burgers/1');
+  // Navigate to citizen
+  cy.visit('/burgers');
+  cy.url().should('eq', Cypress.config().baseUrl + '/burgers')
+  cy.get('input[placeholder="Zoeken"]')
+    .type('Dingus');
   cy.waitForReact();
-  cy.url().should('eq', Cypress.config().baseUrl + '/burgers/1')
+  cy.contains('Bingus')
+    .click();
+  cy.url().should('include', Cypress.config().baseUrl + '/burgers/')
 
-    // Navigate to last displayed agreement's detail page
+  // Navigate to last displayed agreement's detail page
   cy.get('tbody')
     .find('tr')
     .last()
@@ -161,7 +162,7 @@ When('I create a test alarm', () => {
 
 });
 
-Before({ tags: "@beforeCreateAgreement" }, () => {
+Before({ order: 3, tags: "@beforeCreateAgreement" }, () => {
   
   // Wipe alarms clean
     // Truncate alarms
@@ -188,9 +189,9 @@ Before({ tags: "@beforeCreateAgreement" }, () => {
   cy.visit('/burgers');
   cy.url().should('eq', Cypress.config().baseUrl + '/burgers')
   cy.get('input[placeholder="Zoeken"]')
-    .type('Mcpherson');
+    .type('Dingus');
   cy.waitForReact();
-  cy.contains('Patterson')
+  cy.contains('Bingus')
     .click();
   cy.url().should('include', Cypress.config().baseUrl + '/burgers/')
   
@@ -240,9 +241,9 @@ After({ tags: "@afterDeleteAgreement", order: 10 }, () => {
   cy.visit('/burgers');
   cy.url().should('eq', Cypress.config().baseUrl + '/burgers')
   cy.get('input[placeholder="Zoeken"]')
-    .type('Mcpherson');
+    .type('Dingus');
   cy.waitForReact();
-  cy.contains('Patterson')
+  cy.contains('Bingus')
     .click();
   cy.url().should('include', Cypress.config().baseUrl + '/burgers/')
   

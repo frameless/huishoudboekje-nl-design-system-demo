@@ -70,9 +70,9 @@ Given('an agreement exists for scenario "no transaction within timeframe"', () =
   cy.visit('/burgers');
   cy.url().should('eq', Cypress.config().baseUrl + '/burgers')
   cy.get('input[placeholder="Zoeken"]')
-  .type('Mcpherson');
+    .type('Dingus');
   cy.waitForReact();
-  cy.contains('Patterson')
+  cy.contains('Bingus')
     .click();
   cy.url().should('include', Cypress.config().baseUrl + '/burgers/')
   cy.get('[data-test="button.Add"]')
@@ -223,7 +223,7 @@ Then('a "Payment missing" signal is created', () => {
   // Assertion
   cy.contains('geen transactie gevonden');
   cy.contains(uniqueSeed);
-  cy.contains('Mcpherson Patterson');
+  cy.contains('Dingus Bingus');
  
 });
 

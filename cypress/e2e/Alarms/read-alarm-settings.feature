@@ -8,7 +8,7 @@ Feature: read alarm
     # Given I am logged in as an authorised site user
     # Given 1 or more agreements exists
 
-  @beforecleanupAlarm
+  @beforeCleanupAlarm @beforeCreateAgreement
   Scenario: no alarm exists
     When I view the "Agreement" page
     Then the text 'Er is geen alarm ingesteld.' is displayed

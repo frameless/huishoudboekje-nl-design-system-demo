@@ -1,6 +1,6 @@
 // cypress/support/step_definitions/Signals/payment-with-amount-margin.js
 
-import { Given, When, Then } from "@badeball/cypress-cucumber-preprocessor";
+import { Given, When, Then, Step } from "@badeball/cypress-cucumber-preprocessor";
 
 const header = {
   'content-type': 'application/json',
@@ -20,9 +20,9 @@ Given('an agreement exists for feature "create signal on unexpected payment amou
   cy.visit('/burgers');
   cy.url().should('eq', Cypress.config().baseUrl + '/burgers')
   cy.get('input[placeholder="Zoeken"]')
-  .type('Mcpherson');
+    .type('Dingus');
   cy.waitForReact();
-  cy.contains('Patterson')
+  cy.contains('Bingus')
     .click();
   cy.url().should('include', Cypress.config().baseUrl + '/burgers/')
   cy.get('[data-test="button.Add"]')
@@ -313,7 +313,7 @@ When('the low amount outside amount margin bank transaction is booked to an agre
   cy.url().should('include', '/bankzaken/transacties/')
   cy.contains('Alle burgers')
     .click({ force: true });
-  cy.contains('Mcpherson')
+  cy.contains('Dingus')
     .click();
   cy.contains(uniqueId)
     .click();
@@ -349,7 +349,7 @@ When('the low amount outside amount margin bank transaction is booked to an agre
   
     // Assertion
     cy.contains('-1,00');
-    cy.contains('Mcpherson Patterson');
+    cy.contains('Dingus Bingus');
     cy.contains('9.00');
    
   });
@@ -534,7 +534,7 @@ When('the low amount on amount margin bank transaction is booked to an agreement
   cy.url().should('include', '/bankzaken/transacties/')
   cy.contains('Alle burgers')
     .click({ force: true });
-  cy.contains('Mcpherson')
+  cy.contains('Dingus')
     .click({ force: true });
   cy.contains(uniqueId)
     .click();
@@ -739,7 +739,7 @@ When('the low amount within amount margin bank transaction is booked to an agree
   cy.url().should('include', '/bankzaken/transacties/')
   cy.contains('Alle burgers')
     .click({ force: true });
-  cy.contains('Mcpherson')
+  cy.contains('Dingus')
     .click();
   cy.contains(uniqueId)
     .click();
@@ -946,7 +946,7 @@ When('the expected amount on amount margin bank transaction is booked to an agre
   cy.url().should('include', '/bankzaken/transacties/')
   cy.contains('Alle burgers')
     .click({ force: true });
-  cy.contains('Mcpherson')
+  cy.contains('Dingus')
     .click();
   cy.contains(uniqueId)
     .click();
@@ -1153,7 +1153,7 @@ When('the high amount within amount margin bank transaction is booked to an agre
   cy.url().should('include', '/bankzaken/transacties/')
   cy.contains('Alle burgers')
     .click({ force: true });
-  cy.contains('Mcpherson')
+  cy.contains('Dingus')
     .click();
   cy.contains(uniqueId)
     .click();
@@ -1360,7 +1360,7 @@ When('the high amount on amount margin bank transaction is booked to an agreemen
   cy.url().should('include', '/bankzaken/transacties/')
   cy.contains('Alle burgers')
     .click({ force: true });
-  cy.contains('Mcpherson')
+  cy.contains('Dingus')
     .click({ force: true });
   cy.contains(uniqueId)
     .click();
@@ -1565,7 +1565,7 @@ When('the high amount outside amount margin bank transaction is booked to an agr
   cy.url().should('include', '/bankzaken/transacties/')
   cy.contains('Alle burgers')
     .click({ force: true });
-  cy.contains('Mcpherson')
+  cy.contains('Dingus')
     .click();
   cy.contains(uniqueId)
     .click();
@@ -1601,7 +1601,7 @@ When('the high amount outside amount margin bank transaction is booked to an agr
   
     // Assertion
     cy.contains('1,00');
-    cy.contains('Mcpherson Patterson');
+    cy.contains('Dingus Bingus');
     cy.contains('11.00');
    
   });
