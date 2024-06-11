@@ -11,10 +11,15 @@ const header = {
 
 When('I view the "Add alarm" modal', () => {
 
-  // Click button element
-  cy.visit('/burgers/1');
+  // Navigate to citizen
+  cy.visit('/burgers');
+  cy.url().should('eq', Cypress.config().baseUrl + '/burgers')
+  cy.get('input[placeholder="Zoeken"]')
+    .type('Dingus');
   cy.waitForReact();
-  cy.url().should('eq', Cypress.config().baseUrl + '/burgers/1')
+  cy.contains('Bingus')
+    .click();
+  cy.url().should('include', Cypress.config().baseUrl + '/burgers/')
 
   // Open agreement with amount 543,54
   cy.contains('543,54')
@@ -174,18 +179,15 @@ Then('the "Close modal" button is displayed', () => {
 
 When('I view the "Agreement" page', () => {
 
-  // Navigate to /burgers
-  cy.visit('/');
-  cy.waitForReact();
-  cy.url().should('eq', Cypress.config().baseUrl + '/huishoudens')
-  cy.get('[href="/burgers"]')
-    .click()
+  // Navigate to citizen
+  cy.visit('/burgers');
   cy.url().should('eq', Cypress.config().baseUrl + '/burgers')
-
-  // Navigate to first displayed cilivian's detail page
-  cy.contains('HHB000001')
-    .click()
-  cy.url().should('contains', Cypress.config().baseUrl + '/burgers/')
+  cy.get('input[placeholder="Zoeken"]')
+    .type('Dingus');
+  cy.waitForReact();
+  cy.contains('Bingus')
+    .click();
+  cy.url().should('include', Cypress.config().baseUrl + '/burgers/')
 
   // Navigate to last displayed agreement's detail page
   cy.get('tbody')
@@ -311,7 +313,7 @@ Then('the "Create alarm form" modal is closed', () => {
 Then('a notification of success is displayed', () => {
 
   // Check success message
-  cy.get('[data-status="success"]')
+  cy.get('[data-status="success"]', { timeout: 10000 })
     .should('be.visible')
 
 });

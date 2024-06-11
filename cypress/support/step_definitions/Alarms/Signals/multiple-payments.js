@@ -1,6 +1,6 @@
 // cypress/support/step_definitions/Signals/create-signal-on-multiple-payments.js
 
-import { Given, When, Then } from "@badeball/cypress-cucumber-preprocessor";
+import { Given, When, Then, Step } from "@badeball/cypress-cucumber-preprocessor";
 
 const header = {
   'content-type': 'application/json',
@@ -14,14 +14,8 @@ let uniqueId = Date.now().toString();
 Given('an agreement exists for scenario "multiple payments within timeframe"', () => {
 
   // Navigate to citizen
-  cy.visit('/burgers');
-  cy.url().should('eq', Cypress.config().baseUrl + '/burgers')
-  cy.get('input[placeholder="Zoeken"]')
-  .type('Mcpherson');
-  cy.waitForReact();
-  cy.contains('Patterson')
-    .click();
-  cy.url().should('include', Cypress.config().baseUrl + '/burgers/')
+  Step(this, 'I open the citizen overview page for "Dingus Bingus"');
+  
   cy.get('[data-test="button.Add"]')
     .click();
 
@@ -440,7 +434,7 @@ When('both bank transactions are reconciliated on the same agreement', () => {
     cy.url().should('include', '/bankzaken/transacties/')
     cy.contains('Alle burgers')
       .click({ force: true });
-    cy.contains('Mcpherson')
+    cy.contains('Dingus')
       .click();
     cy.contains(uniqueId)
       .click();
@@ -480,7 +474,7 @@ When('both bank transactions are reconciliated on the same agreement', () => {
     cy.url().should('include', '/bankzaken/transacties/')
     cy.contains('Alle burgers')
       .click({ force: true });
-    cy.contains('Mcpherson')
+    cy.contains('Dingus')
       .click();
     cy.contains(uniqueId)
       .click();
@@ -498,7 +492,7 @@ Then('a "Multiple payments" signal is created', () => {
   // Assertion
   cy.contains('meerdere transacties gevonden');
   cy.contains(uniqueId);
-  cy.contains('Mcpherson Patterson');
+  cy.contains('Dingus Bingus');
   cy.contains('10.00');
  
 });

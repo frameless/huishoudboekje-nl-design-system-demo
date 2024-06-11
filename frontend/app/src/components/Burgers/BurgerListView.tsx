@@ -46,7 +46,7 @@ const BurgerListView: React.FC<BurgerListViewProps> = ({burgers, showAddButton =
 							</Badge>
 						</Box>
 					)} */}
-					<Stack direction={["row", "column"]} spacing={5} alignItems={"center"}>
+					<Stack data-test="citizen.tile" direction={["row", "column"]} spacing={5} alignItems={"center"}>
 						<Avatar name={formatBurgerName(g, true)} />
 						<Text fontSize={"md"} {...!isMobile && {textAlign: "center"}}><strong>{`${g.voornamen} ${g.achternaam}`}</strong></Text>
 						<Text fontSize={"sm"} textColor={"gray"} {...!isMobile && {textAlign: "center"}}><strong>{`${getBurgerHhbId(g)}`}</strong></Text>

@@ -9,6 +9,7 @@ Feature: delete alarm
     # Given 1 or more agreements exists
     # Given an alarm exists
 
+  @beforeCreateAgreement
   Scenario: view delete alarm form
     Given I view the "Agreement" page
     When I click the "Delete alarm" button

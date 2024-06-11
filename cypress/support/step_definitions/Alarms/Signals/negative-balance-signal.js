@@ -27,9 +27,9 @@ Given('an agreement exists for scenario "negative citizen balance"', () => {
   cy.visit('/burgers');
   cy.url().should('eq', Cypress.config().baseUrl + '/burgers')
   cy.get('input[placeholder="Zoeken"]')
-  .type('Mcpherson');
+  .type('Dingus');
   cy.waitForReact();
-  cy.contains('Patterson')
+  cy.contains('Bingus')
     .click();
   cy.url().should('include', Cypress.config().baseUrl + '/burgers/')
   cy.get('[data-test="button.Add"]')
@@ -59,7 +59,7 @@ Given('an agreement exists for scenario "negative citizen balance"', () => {
     .contains('Toeslagen')
     .click();
   cy.get('[data-test="select.agreementIncomeDescription"]')
-    .type(uniqueSeed);
+    .type('Loon');
   cy.get('[data-test="select.agreementIncomeAmount"]')
     .type('10');
   cy.get('[data-test="button.Submit"]')
@@ -245,7 +245,7 @@ When('the zero amount bank transaction is booked to the agreement "Loon"', () =>
   cy.url().should('include', '/bankzaken/transacties/')
   cy.contains('Alle burgers')
     .click({ force: true });
-  cy.contains('Mcpherson')
+  cy.contains('Bingus')
     .click();
   cy.get('[aria-label="Remove Belastingdienst Toeslagen Kantoor Utrecht"]')
     .click();
@@ -434,9 +434,9 @@ When('a positive bank transaction with amount {string} is booked to an agreement
   cy.url().should('include', '/bankzaken/transacties/')
   cy.contains('Alle burgers')
     .click({ force: true });
-  cy.contains('Mcpherson')
+  cy.contains('Bingus')
     .click();
-  cy.contains(uniqueSeed)
+  cy.contains('Loon')
     .click();
 
   cy.wait(1000);
@@ -464,9 +464,9 @@ When('the negative amount bank transaction with amount {string} is booked to the
   cy.url().should('include', '/bankzaken/transacties/')
   cy.contains('Alle burgers')
     .click({ force: true });
-  cy.contains('Mcpherson')
+  cy.contains('Bingus')
     .click();
-  cy.contains(uniqueSeed)
+  cy.contains('Loon')
     .click();
 
   cy.wait(1000);

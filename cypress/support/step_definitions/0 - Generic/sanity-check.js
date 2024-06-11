@@ -22,12 +22,6 @@ Then('I am actually on the baseUrl', () => {
 
 // ---------------
 
-Given('I visit the Burgers page', () => {
-
-  cy.visit('/burgers')
-
-});
-
 When("I fill {string} in search", (citizenname) => {
 
   cy.get('[placeholder="Zoeken"]')

@@ -20,7 +20,7 @@ Feature: manage classifications
     Then the text 'Verplicht veld' is displayed
 
   Scenario: save classification with incoming payment direction
-    Given the 'Sasha Baker' citizen exists
+    Given the 'Dingus Bingus' citizen exists
     Given I navigate to the page '/configuratie'
     Given the "Add classification form" is displayed
     When I set the "Naam" field to 'Huuropbrengsten'
@@ -28,7 +28,7 @@ Feature: manage classifications
     When I click the "Opslaan" button in the section with the header "Rubrieken"
     Then a notification of success is displayed
     Then the "Huuropbrengsten" classification is displayed
-    When I open the "Citizen details" page for the "Sasha Baker" citizen
+    When I open the "Citizen details" page for the "Dingus Bingus" citizen
     When I click the button 'Toevoegen'
     When I set the "Payment direction" option to "Inkomsten"
     Then the "Rubriek" option is displayed
@@ -40,14 +40,14 @@ Feature: manage classifications
 
   @afterCleanupManageClassifications
   Scenario: save classification with outgoing payment direction
-    Given the "Sasha Baker" citizen exists
+    Given the "Dingus Bingus" citizen exists
     Given I navigate to the page '/configuratie'
     When I set the "Naam" field to 'Elektrakosten'
     When I set the "Grootboekrekening" field to "Elektrakosten WKprAklEkn"
     When I click the "Opslaan" button in the section with the header "Rubrieken"
     Then a notification of success is displayed
     Then the "Elektrakosten" classification is displayed
-    When I open the "Citizen details" page for the "Sasha Baker" citizen
+    When I open the "Citizen details" page for the "Dingus Bingus" citizen
     When I click the button 'Toevoegen'
     When I set the "Payment direction" option to "Inkomsten"
     Then the "Rubriek" option is displayed

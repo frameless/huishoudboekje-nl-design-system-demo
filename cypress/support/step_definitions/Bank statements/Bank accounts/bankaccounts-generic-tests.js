@@ -1,6 +1,6 @@
 // cypress/support/step_definitions/Bank statements/Bank accounts/generic-tests.js
 
-import { Before, After } from "@badeball/cypress-cucumber-preprocessor";
+import { Before, After, Step } from "@badeball/cypress-cucumber-preprocessor";
 
 const header = {
   'content-type': 'application/json',

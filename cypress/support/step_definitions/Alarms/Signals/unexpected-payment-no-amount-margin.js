@@ -1,6 +1,6 @@
 // cypress/support/step_definitions/Signals/create-signal-on-unexpected-payment.js
 
-import { Given, When, Then } from "@badeball/cypress-cucumber-preprocessor";
+import { Given, When, Then, Step } from "@badeball/cypress-cucumber-preprocessor";
 
 const header = {
   'content-type': 'application/json',
@@ -20,9 +20,9 @@ Given('an agreement exists for scenario "payment amount too low, no amount margi
   cy.visit('/burgers');
   cy.url().should('eq', Cypress.config().baseUrl + '/burgers')
   cy.get('input[placeholder="Zoeken"]')
-  .type('Mcpherson');
+    .type('Dingus');
   cy.waitForReact();
-  cy.contains('Patterson')
+  cy.contains('Bingus')
     .click();
   cy.url().should('include', Cypress.config().baseUrl + '/burgers/')
   cy.get('[data-test="button.Add"]')
@@ -308,7 +308,7 @@ When('a low amount bank transaction is booked to an agreement', () => {
   cy.url().should('include', '/bankzaken/transacties/')
   cy.contains('Alle burgers')
     .click({ force: true });
-  cy.contains('Mcpherson')
+  cy.contains('Dingus')
     .click();
   cy.contains(uniqueId)
     .click();
@@ -344,7 +344,7 @@ When('a low amount bank transaction is booked to an agreement', () => {
   
     // Assertion
     cy.contains('0,01');
-    cy.contains('Mcpherson Patterson');
+    cy.contains('Dingus Bingus');
     cy.contains('9.99');
    
   });
@@ -362,9 +362,9 @@ Given('an agreement exists for scenario "expected payment amount, no amount marg
   cy.visit('/burgers');
   cy.url().should('eq', Cypress.config().baseUrl + '/burgers')
   cy.get('input[placeholder="Zoeken"]')
-  .type('Mcpherson');
+    .type('Dingus');
   cy.waitForReact();
-  cy.contains('Patterson')
+  cy.contains('Bingus')
     .click();
   cy.url().should('include', Cypress.config().baseUrl + '/burgers/')
   cy.get('[data-test="button.Add"]')
@@ -650,7 +650,7 @@ When('an expected amount bank transaction is booked to an agreement', () => {
   cy.url().should('include', '/bankzaken/transacties/')
   cy.contains('Alle burgers')
     .click({ force: true });
-  cy.contains('Mcpherson')
+  cy.contains('Dingus')
     .click({ force: true });
   cy.contains(uniqueId)
     .click();
@@ -702,9 +702,9 @@ Given('an agreement exists for scenario "payment amount too high, no amount marg
   cy.visit('/burgers');
   cy.url().should('eq', Cypress.config().baseUrl + '/burgers')
   cy.get('input[placeholder="Zoeken"]')
-  .type('Mcpherson');
+    .type('Dingus');
   cy.waitForReact();
-  cy.contains('Patterson')
+  cy.contains('Bingus')
     .click();
   cy.url().should('include', Cypress.config().baseUrl + '/burgers/')
   cy.get('[data-test="button.Add"]')
@@ -990,7 +990,7 @@ When('a high amount bank transaction is booked to an agreement', () => {
   cy.url().should('include', '/bankzaken/transacties/')
   cy.contains('Alle burgers')
     .click({ force: true });
-  cy.contains('Mcpherson')
+  cy.contains('Dingus')
     .click();
   cy.contains(uniqueId)
     .click();
@@ -1025,7 +1025,7 @@ Then('a "Payment amount too high" signal is created', () => {
 
   // Assertion
   cy.contains('0,01');
-  cy.contains('Mcpherson Patterson');
+  cy.contains('Dingus Bingus');
   cy.contains('10.01');
  
 });

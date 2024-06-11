@@ -6,6 +6,32 @@ Feature: add bank statement
   Background:
     # Given I am logged in as an authorised site user
 
+  @cleanupStatement
+  Scenario: no transactions in file
+    Given I view the "Bank statement" page
+    When I click the "Add bank statement" button
+    When I select "Empty_customer_statement_message_CAMT.053_v2.xml"
+    Then the "Add bank statement" modal opens
+    Then the "Close modal" button is displayed
+    Then the "Empty_customer_statement_message_CAMT.053_v2.xml" filename is displayed
+    Then the file upload warning status icon is displayed
+    Then the "No transactions in file" text is displayed
+    When I click the "Close modal" button
+    Then the "Empty_customer_statement_message_CAMT.053_v2.xml" file is displayed
+    Then 0 transactions were added
+
+  # ready to add to e2e tests
+  @skip
+  Scenario: add bank transaction with negative amount
+    Given I view the "Bank statement" page
+    When I click the "Add bank statement" button
+    When I select "Negative_amount_CAMT.053_v1.xml"
+    Then the "Add bank statement" modal opens
+    Then the close "Add bank statement" modal button is displayed
+    Then the "Negative_amount_CAMT.053_v1.xml" filename is displayed
+    Then the file upload error status icon is displayed
+    Then the "Customer statement message contains entry with negative amount" notification is displayed
+
   # ready to add to e2e tests
   @skip
   Scenario: invalid format
@@ -31,20 +57,6 @@ Feature: add bank statement
     Then the file upload error status icon is displayed
     Then the "Bank account in file does not match bank account in application" text is displayed
     Then 0 transactions where added
-
-  @cleanupStatement
-  Scenario: no transactions in file
-    Given I view the "Bank statement" page
-    When I click the "Add bank statement" button
-    When I select "Empty_customer_statement_message_CAMT.053_v2.xml"
-    Then the "Add bank statement" modal opens
-    Then the "Close modal" button is displayed
-    Then the "Empty_customer_statement_message_CAMT.053_v2.xml" filename is displayed
-    Then the file upload warning status icon is displayed
-    Then the "No transactions in file" text is displayed
-    When I click the "Close modal" button
-    Then the "Empty_customer_statement_message_CAMT.053_v2.xml" file is displayed
-    Then 0 transactions were added
 
   # ready to add to e2e tests
   @skip
@@ -171,15 +183,3 @@ Feature: add bank statement
     When I click the "1251,26" bank transaction
     Then the bank transaction description contains "Normale bijschrijving"
     Then the bank transaction description contains the "000000013289682" end-to-end id
-
-  # ready to add to e2e tests
-  @skip
-  Scenario: add bank transaction with negative amount
-    Given I view the "Bank statement" page
-    When I click the "Add bank statement" button
-    When I select "Negative_amount_CAMT.053_v1.xml"
-    Then the "Add bank statement" modal opens
-    Then the close "Add bank statement" modal button is displayed
-    Then the "Negative_amount_CAMT.053_v1.xml" filename is displayed
-    Then the file upload error status icon is displayed
-    Then the "Customer statement message contains entry with negative amount" notification is displayed

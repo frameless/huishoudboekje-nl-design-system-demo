@@ -11,7 +11,7 @@ Feature: create signal on negative balance
     @beforeTruncateSignals
     Scenario: negative citizen balance
     # citizen with balance 0 should not trigger signal
-        When I open the citizen overview page for "Mcpherson Patterson"
+        When I open the citizen overview page for 'Dingus Bingus'
         Given the citizen's balance is '0,00'
         Given the negative account balance alarm toggle is displayed
         Then the negative account balance alarm toggle is set to enabled
@@ -34,7 +34,7 @@ Feature: create signal on negative balance
         When the negative amount bank transaction with amount '10,01' is booked to the correct agreement
     # signal
         When I navigate to the page '/signalen'
-        Then the text 'Er is een negatief saldo geconstateerd bij Mcpherson Patterson.' is displayed
+        Then the text 'Er is een negatief saldo geconstateerd bij Dingus Bingus.' is displayed
         Then the signal has a timestamp
 
     Scenario: repeating negative citizen balance, active signal
@@ -43,7 +43,7 @@ Feature: create signal on negative balance
         When a positive bank transaction with amount '0,01' is booked to an agreement
     # no changed signal
         When I navigate to the page '/signalen'
-        Then the text 'Er is een negatief saldo geconstateerd bij Mcpherson Patterson.' is displayed
+        Then the text 'Er is een negatief saldo geconstateerd bij Dingus Bingus.' is displayed
         Then no new signal is created
     # add transaction with amount -0,01 for a balance of 0.01
         Given I select a CAMT test file with negative payment amount '0.01'
@@ -51,7 +51,7 @@ Feature: create signal on negative balance
         When the negative amount bank transaction with amount '0,01' is booked to the correct agreement
     # signal, changed date
         When I navigate to the page '/signalen'
-        Then the text 'Er is een negatief saldo geconstateerd bij Mcpherson Patterson.' is displayed
+        Then the text 'Er is een negatief saldo geconstateerd bij Dingus Bingus.' is displayed
         Then the signal's timestamp has changed
 
     Scenario: deactivate signal negative balance
@@ -63,7 +63,7 @@ Feature: create signal on negative balance
     # apply filter
         When I click the "Uitgeschakelde signalen" filter
     # deactivated signal visible
-        Then the text 'Er is een negatief saldo geconstateerd bij Mcpherson Patterson.' is displayed
+        Then the text 'Er is een negatief saldo geconstateerd bij Dingus Bingus.' is displayed
 
     @cleanupSixStatementsAgreement
     Scenario: repeating negative citizen balance, deactivated signal

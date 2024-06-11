@@ -1,6 +1,5 @@
 
-import { Given, When, Then, Step, DataTable } from "@badeball/cypress-cucumber-preprocessor";
-import fs from 'fs';
+import { Given, When, Then } from "@badeball/cypress-cucumber-preprocessor";
 
 const header = {
   'content-type': 'application/json',
@@ -10,20 +9,6 @@ const header = {
 const folder = Cypress.config().downloadsFolder;
 
 //#region - Scenario: set sepa payment instruction bank account
-
-When('I open the "Citizen details" page for the "Allie Noble" citizen', () => {
-  cy.clearLocalStorage()
-  // Navigate to citizen
-  cy.visit('/burgers');
-  cy.url().should('eq', Cypress.config().baseUrl + '/burgers')
-  cy.get('input[placeholder="Zoeken"]')
-    .type('Allie');
-  cy.waitForReact();
-  cy.contains('Noble')
-    .click();
-  cy.url().should('include', Cypress.config().baseUrl + '/burgers/')
-
-});
 
 Given('the "Privé-opname" exists with the accounting reference "BEivKapProPok"', () => {
 
@@ -108,11 +93,6 @@ When('the value "Gemeente Sloothuizen Huishoudboekje" for the key "derdengeldenr
     .contains("Gemeente Sloothuizen Huishoudboekje");
 
 });
-
-let difference = 0;
-
-let file1 = "";
-let file2 = "";
 
 Then('I click the button "Downloaden" for the most recent entry', function () {
 

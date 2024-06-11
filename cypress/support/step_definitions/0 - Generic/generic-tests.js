@@ -1,15 +1,47 @@
 // cypress/support/step_definitions/Generic/generic-tests.js
 
-import {When, Then, Given, Before, After} from "@badeball/cypress-cucumber-preprocessor";
+import { When, Then, Given, Before, BeforeAll, After, AfterAll } from "@badeball/cypress-cucumber-preprocessor";
 
 const header = {
   'content-type': 'application/json',
   'Accept-Encoding': 'gzip, deflate, br',
 };
 
-// Before *each* test, run this (so this runs equal to the amount of tests)
-Before({ order: 1 }, function () {
+const queryAddCitizen = `mutation createBurger {
+  createBurger(input:
+  {
+  	voornamen: "Dingus",
+		voorletters: "D.L.C.",
+  	achternaam: "Bingus",
+  	bsn: 496734349,
+		geboortedatum: "2000-01-01",
+  	straatnaam: "Sesamstraat",
+  	huisnummer: "23",
+  	plaatsnaam: "Maaskantje",
+  	postcode: "4321AB",
+    email: "dingus@bingus.tk",
+    telefoonnummer: "0612344321",
+    rekeningen:
+      [{rekeninghouder: "Tonnie Test",
+        iban: "NL02ARSN0905984706"
+      }],  
+  }
+)
+  {
+    burger{id}
+  }
+}`
+
+let cookieAppSession = '';
+let cookieAppToken = '';
+
+let citizenId = 0;
+
+// Before each feature
+BeforeAll({ order: 1 }, function () {
+  
   cy.visit('/');
+  Cypress.Cookies.debug(true)
   cy.getCookie('appSession').then((c) => {
     const cookie = c
     if (c) {
@@ -25,6 +57,18 @@ Before({ order: 1 }, function () {
           cy.get('[data-test="button.Login"]').click()
           //cy.get('button').contains('Inloggen').click()
           cy.loginToAAD(Cypress.env('aad_username'), Cypress.env('aad_password'))
+          
+          // Save cookie
+          cy.getCookie('appSession').then((c) => {
+            cookieAppSession = c;
+            console.log('Saved cookie appSession: ' + cookieAppSession)
+          })
+
+          // Save cookie
+          cy.getCookie('app-token').then((c) => {
+            cookieAppToken = c;
+            console.log('Saved cookie app-token: ' + cookieAppToken)
+          })
         }
         else {
           // Already logged in; do nothing
@@ -37,6 +81,115 @@ Before({ order: 1 }, function () {
   })
 
 });
+
+BeforeAll({ order: 2 },function () {
+// This hook will be executed once at the start of a feature.
+
+  // Delete the test citizen if it exists
+  cy.request({
+    method: "post",
+    url: Cypress.config().baseUrl + '/apiV2/graphql',
+    body: { query: `query citizenSearch {
+      burgers(search: "Bingus") {
+        id
+      }
+    }` },
+  }).then((res) => {
+    citizenName = res.body.data.burgers;
+    cy.log(citizenName);
+    if (citizenName.length != 0)
+    {
+      // Delete test citizen
+      cy.request({
+        method: "post",
+        url: Cypress.config().baseUrl + '/apiV2/graphql',
+        body: { query: `mutation deleteBurger {
+          deleteBurger(id: ` + citizenId + `)
+          {
+            ok
+          }
+        }` },
+      }).then((res) => {
+        console.log(res.body);
+        console.log('Test citizen has been deleted.')
+      });
+    }
+    else
+    {
+      // Test citizen does not exist
+      // Do nothing
+    }
+
+  })
+  
+});
+
+BeforeAll({ order: 3 },function () {
+  // This hook will be executed once at the start of a feature.
+
+  // Create a test user
+  cy.request({
+    method: "post",
+    url: Cypress.config().baseUrl + '/apiV2/graphql',
+    body: { query: queryAddCitizen },
+  }).then((res) => {
+    console.log(res.body);
+    citizenId = res.body.data.createBurger.burger.id;
+    console.log('Test citizen has been created with id ' + citizenId)
+  });
+
+
+});
+
+Before(function () {
+
+  cy.visit('/');
+  cy.url().then((url) => {
+
+    if (url.includes("localhost"))
+    {
+      // do nothing
+      console.log('url includes "localhost", so no cookies shoud be set.')
+    } 
+    else
+    {
+      Cypress.Cookies.debug(true)
+
+      // Set cookie
+      cy.setCookie('appSession', cookieAppSession.value).then((c) => {
+        console.log('Loaded cookie appSession: ' + cookieAppSession)
+      })
+
+      // Set cookie
+      cy.setCookie('app-token', cookieAppToken.value).then((c) => {
+        console.log('Loaded cookie app-token: ' + cookieAppToken)
+      })
+
+    }
+
+  })
+
+});
+
+AfterAll({ order: 1 },function () {
+// This hook will be executed once at the end of a feature.
+  
+    // Delete test citizen
+    cy.request({
+      method: "post",
+      url: Cypress.config().baseUrl + '/apiV2/graphql',
+      body: { query: `mutation deleteBurger {
+        deleteBurger(id: ` + citizenId + `)
+        {
+          ok
+        }
+      }` },
+    }).then((res) => {
+      console.log(res.body);
+      console.log('Test citizen has been deleted.')
+    });
+    
+  });
 
 // Navigate to a page
 When('I navigate to the page {string}', (url) => {
@@ -69,6 +222,14 @@ When('I click the button {string}', (buttonName) => {
 Then('the text {string} is displayed', (text) => {
 
   cy.contains(text);
+
+});
+
+// Click text
+Then('the text {string} is clicked', (text) => {
+
+  cy.contains(text)
+    .click();
 
 });
 
@@ -125,18 +286,23 @@ Then('I wait one minute', () => {
 });
 
 // Confirm that a specific citizen exists
-Given('the {string} citizen exists', (citizen) => {
+Given('the {string} citizen exists', (fullName) => {
 
-  // Chop off string for search
-  var citizenChop = citizen.slice(0, citizen.length - 8);
+  // Function that splits last name from other names
+  function lastName(fullName) {
+    var n = fullName.split(" ");
+    return n[n.length - 1];
+  }
+
+  searchTerm = lastName(fullName)
 
   // Search for citizen
   cy.visit('/burgers');
   cy.url().should('eq', Cypress.config().baseUrl + '/burgers')
   cy.get('input[placeholder="Zoeken"]')
-    .type(citizenChop);
-  cy.waitForReact();
-  cy.contains(citizen)
+    .type(searchTerm);
+  cy.get('[data-test="citizen.tile"]', { timeout: 30000 })
+    .should('be.visible')
 
 });
 
@@ -146,5 +312,28 @@ Then('the "Add alarm" modal is displayed', () => {
   // Assertion
   cy.get('[data-test="modal.Alarm"]')
     .should('be.visible');
+
+});
+
+// Navigate to the test citizen's page
+When('I open the citizen overview page for {string}', (fullName) => {
+
+  // Function that splits last name from other names
+  function lastName(fullName) {
+    var n = fullName.split(" ");
+    return n[n.length - 1];
+  }
+
+  searchTerm = lastName(fullName)
+
+  cy.visit('/burgers');
+  cy.url().should('eq', Cypress.config().baseUrl + '/burgers')
+  cy.get('input[placeholder="Zoeken"]')
+    .type(searchTerm);
+  cy.get('[data-test="citizen.tile"]', { timeout: 30000 })
+    .should('be.visible')
+    .first()
+    .click();
+  cy.url().should('include', Cypress.config().baseUrl + '/burgers/')
 
 });

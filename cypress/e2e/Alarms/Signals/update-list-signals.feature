@@ -13,14 +13,14 @@ Feature: update list signals
     Then the signals refresh timestamp is displayed
     Then the "Refresh signals" button is displayed
 
-  Scenario: manually refresh signals
-    When I navigate to the page '/signalen'
-    Then I click the "Refresh signals" button
-    Then the "Signals" page is refreshed
-
   @skip
   Scenario: automatically refresh signals
     When I navigate to the page '/signalen'
     Then 5 minutes pass
     Then the "Signals" page is automatically refreshed
+
+  Scenario: manually refresh signals
+    When I navigate to the page '/signalen'
+    Then I click the "Refresh signals" button
+    Then the "Signals" page is refreshed
 
