@@ -27,12 +27,12 @@ const Rapportage = () => {
 		setFilterBurgerIds(value ? value.map(v => v.value) : [])
 	};
 
-	const setCurrentMonth = () =>{
+	const setCurrentMonth = () => {
 		setStartDate(d().startOf("month").toDate())
 		setEndDate(d().endOf("month").toDate())
 	}
 
-	const setLastMonth = () =>{
+	const setLastMonth = () => {
 		setStartDate(d().subtract(1, "month").startOf("month").toDate())
 		setEndDate(d().subtract(1, "month").endOf("month").toDate())
 	}
@@ -67,13 +67,13 @@ const Rapportage = () => {
 												aria-autocomplete="none"
 												dateFormat={"dd-MM-yyyy"}
 												onChange={(value: Date) => {
-													if(value){
+													if (value) {
 														setStartDate(value)
 													}
 												}}
 												showYearDropdown
 												dropdownMode={"select"}
-												customInput={<Input autoComplete="no" aria-autocomplete="none"/>}
+												customInput={<Input autoComplete="no" aria-autocomplete="none" />}
 											>
 												<Box>
 													<Button width={"45%"} marginX={"2.5%"} colorScheme={"primary"} size={"xs"} onClick={setCurrentMonth}>{t("reports.currentMonth")}</Button>
@@ -81,7 +81,7 @@ const Rapportage = () => {
 												</Box>
 											</DatePicker>
 										</FormControl>
-										<Text maxWidth={"20%"}fontSize={"sm"}>{t("reports.till")}</Text>
+										<Text maxWidth={"20%"} fontSize={"sm"}>{t("reports.till")}</Text>
 										<FormControl maxWidth={"40%"}>
 											<DatePicker
 												selected={endDate || null}
@@ -89,13 +89,13 @@ const Rapportage = () => {
 												aria-autocomplete="none"
 												dateFormat={"dd-MM-yyyy"}
 												onChange={(value: Date) => {
-													if(value){
+													if (value) {
 														setEndDate(value)
 													}
 												}}
 												showYearDropdown
 												dropdownMode={"select"}
-												customInput={<Input autoComplete="no" aria-autocomplete="none"/>}
+												customInput={<Input autoComplete="no" aria-autocomplete="none" />}
 											>
 												<Box>
 													<Button width={"45%"} marginX={"2.5%"} colorScheme={"primary"} size={"xs"} onClick={setCurrentMonth}>{t("reports.currentMonth")}</Button>
@@ -135,8 +135,7 @@ const Rapportage = () => {
 
 						</SectionContainer>
 						{/* pagina */}
-						<Heading className={"only-show-on-print print"}  size={"sm"} fontWeight={"normal"}>{selectedBurgers.length > 0 ? humanJoin(selectedBurgers.map(b => formatBurgerName(b) + " " + getBurgerHhbId(b))) : t("allBurgers")}</Heading>
-						<RapportageComponent burgerIds={filterBurgerIds} startDate={startDate} endDate={endDate} rubrieken={filterRubriekIds} />
+						<RapportageComponent burgerIds={filterBurgerIds} startDate={startDate} selectedBurgers={selectedBurgers} endDate={endDate} rubrieken={filterRubriekIds} />
 					</Page>
 				</RapportageContext.Provider>
 			)

@@ -1,17 +1,17 @@
-import {Box, Divider, HStack, Stack, Text, VStack} from "@chakra-ui/react";
+import {Box, Divider, Heading, HStack, Stack, Text, VStack} from "@chakra-ui/react";
 import React from "react";
 import {Trans, useTranslation} from "react-i18next";
 import {BurgerRapportage} from "../../generated/graphql";
 import d from "../../utils/dayjs";
-import {MathOperation, currencyFormat2, floatMathOperation} from "../../utils/things";
+import {MathOperation, currencyFormat2, floatMathOperation, formatBurgerName, getBurgerHhbId, humanJoin} from "../../utils/things";
 import Section from "../shared/Section";
 import SectionContainer from "../shared/SectionContainer";
 import {createBalanceTableAggregation, createSaldos, Transaction, Type} from "./Aggregator";
-import { Dayjs } from "dayjs";
+import {Dayjs} from "dayjs";
 
-type BalanceTableProps = {transactions: BurgerRapportage[], startDate: Dayjs, endDate: Dayjs, startSaldo: number};
+type BalanceTableProps = {transactions: BurgerRapportage[], selectedBurgers, startDate: Dayjs, endDate: Dayjs, startSaldo: number};
 
-const BalanceTable: React.FC<BalanceTableProps> = ({transactions, startDate, endDate, startSaldo}) => {
+const BalanceTable: React.FC<BalanceTableProps> = ({transactions, selectedBurgers, startDate, endDate, startSaldo}) => {
 	const {t} = useTranslation();
 	const aggregationByOrganisatie: Transaction[] = createBalanceTableAggregation(startDate, transactions);
 	const saldos = createSaldos(transactions)
@@ -22,47 +22,51 @@ const BalanceTable: React.FC<BalanceTableProps> = ({transactions, startDate, end
 	};
 	const dataFound = Object.keys(aggregationByOrganisatie).length !== 0
 	return (
-		<SectionContainer  minHeight={"600px"}>
+		<SectionContainer minHeight={"600px"}>
 			<Section> {/* Todo: Add helperText (07-03-2022) */}
 				<Stack className={"print"}>
 					<Stack spacing={2}>
-						<Text className={" only-show-on-print printweergave-periode pre-wrap"}>
-							<Trans i18nKey={"reports.period"} components={{strong: <strong />}} values={{
-								from: startDate && d(startDate, "L").startOf("day").format("L"),
-								through: endDate && d(endDate, "L").endOf("day").format("L"),
-							}} />
-						</Text>
-						{ dataFound && (<>
+						<Stack spacing={1}>
+							<Text className={"only-show-on-print print-title"}>{t("reports.title")}</Text>
+							<Text className={"only-show-on-print printweergave"} size={"sm"} fontWeight={"normal"}>{selectedBurgers.length > 0 ? humanJoin(selectedBurgers.map(b => formatBurgerName(b) + " " + getBurgerHhbId(b))) : t("allBurgers")}</Text>
+							<Text className={" only-show-on-print printweergave-periode pre-wrap"}>
+								<Trans i18nKey={"reports.period"} components={{strong: <strong />}} values={{
+									from: startDate && d(startDate, "L").startOf("day").format("L"),
+									through: endDate && d(endDate, "L").endOf("day").format("L"),
+								}} />
+							</Text>
+						</Stack>
+						{dataFound && (<>
 							{Object.keys(aggregationByOrganisatie).map(category => {
 								const total = saldos[category]
 								return (
 									<Stack key={category} spacing={3}>
 										<Text fontWeight={"bold"}>{translatedCategory[category]}</Text>
-										{Object.keys(aggregationByOrganisatie[category]).sort((a,b)=> a.localeCompare(b)).map((rubriek, rubriekKey) => {
+										{Object.keys(aggregationByOrganisatie[category]).sort((a, b) => a.localeCompare(b)).map((rubriek, rubriekKey) => {
 											return (
 												<VStack alignItems={"left"} key={`${category}:${rubriekKey}`} spacing={0}>
 													<Box flex={1}>
 														<Text fontStyle={"italic"}>{rubriek === Type.Ongeboekt ? t("charts.inkomstenUitgaven.unbooked") : rubriek}</Text>
 													</Box>
 													{Object.keys(aggregationByOrganisatie[category][rubriek]
-															.sort((a,b) =>
-																d(a.transactieDatum).isSame(d(b.transactieDatum)) ? 
-																Math.abs(b.bedrag) - Math.abs(a.bedrag): 
-																	d(a.transactieDatum).isAfter(d(b.transactieDatum)) ? 1 : -1))
-															.map((transaction, key) => {
-														return (
-															<Stack direction={"row"} key={`${rubriekKey}:${key}`}>
-																<Box flex={2} textAlign={"left"}>
-																	<Text className={"break-line"}>{aggregationByOrganisatie[category][rubriek][transaction].rekeninghouder}</Text>
-																</Box>
-																<Box>
-																	<Text>{d(aggregationByOrganisatie[category][rubriek][transaction].transactieDatum).format("DD-MM-YYYY")}</Text>
-																</Box>
-																<Box flex={2} textAlign={"right"}>
-																	<Text paddingRight={"35%"}>{`€ ${currencyFormat2(false).format(Math.abs(aggregationByOrganisatie[category][rubriek][transaction].bedrag))}`}</Text>
-																</Box>
-															</Stack>);
-													})};
+														.sort((a, b) =>
+															d(a.transactieDatum).isSame(d(b.transactieDatum)) ?
+																Math.abs(b.bedrag) - Math.abs(a.bedrag) :
+																d(a.transactieDatum).isAfter(d(b.transactieDatum)) ? 1 : -1))
+														.map((transaction, key) => {
+															return (
+																<Stack direction={"row"} key={`${rubriekKey}:${key}`}>
+																	<Box flex={2} textAlign={"left"}>
+																		<Text className={"break-line"}>{aggregationByOrganisatie[category][rubriek][transaction].rekeninghouder}</Text>
+																	</Box>
+																	<Box>
+																		<Text>{d(aggregationByOrganisatie[category][rubriek][transaction].transactieDatum).format("DD-MM-YYYY")}</Text>
+																	</Box>
+																	<Box flex={2} textAlign={"right"}>
+																		<Text paddingRight={"35%"}>{`€ ${currencyFormat2(false).format(Math.abs(aggregationByOrganisatie[category][rubriek][transaction].bedrag))}`}</Text>
+																	</Box>
+																</Stack>);
+														})};
 												</VStack>
 											);
 										})}
@@ -94,7 +98,7 @@ const BalanceTable: React.FC<BalanceTableProps> = ({transactions, startDate, end
 								</Box>
 							</Stack>
 						</>)}
-						{ !dataFound && (<Text paddingTop={"30px"} >{t("reports.noData")}</Text>)}
+						{!dataFound && (<Text paddingTop={"30px"} >{t("reports.noData")}</Text>)}
 						<HStack direction={"row"}>
 							<Box flex={1} paddingTop={"30px"}>
 								<Text>{t("end saldo at") + " " + saldoDate.format("L")}:
