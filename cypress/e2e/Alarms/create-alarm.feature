@@ -55,7 +55,7 @@ Feature: create alarm
     When I fill in the alarm allowed deviation in payment amount
     When I click the "Submit form" button
     Then the "Create alarm form" modal is closed
-    Then a notification of success is displayed
+    Then a success notification containing 'Het alarm is opgeslagen' is displayed
     Then the current status of the alarm on the agreements page is displayed
 
   @afterCleanupAlarm
@@ -70,5 +70,5 @@ Feature: create alarm
     Then I fill '1' into the alarm allowed deviation in payment amount field
     Then I click the "Submit form" button
     Then the "Create alarm form" modal is closed
-    Then a notification of success is displayed
+    Then a success notification containing 'Het alarm is opgeslagen' is displayed
     Then the current status of the alarm on the agreements page is displayed

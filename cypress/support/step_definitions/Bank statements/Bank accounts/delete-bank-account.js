@@ -15,7 +15,6 @@ const modalWait = 4000;
 Given('the "Belastingdienst Toeslagen Kantoor Utrecht" organisation exists', () => {
 
   cy.visit('/organisaties')
-  cy.waitForReact()
   cy.url().should('eq', Cypress.config().baseUrl + '/organisaties')
 
   // Type into search bar
@@ -58,8 +57,7 @@ Given('an agreement link to the department and the bank account exists', () => {
   cy.url().should('eq', Cypress.config().baseUrl + '/burgers')
   cy.get('input[placeholder="Zoeken"]')
     .type('Fien');
-  cy.waitForReact();
-  cy.contains('Sandra de Jager')
+  cy.contains('Sandra de Jager', { timeout: 10000 })
     .click();
   cy.url().should('include', Cypress.config().baseUrl + '/burgers/')
 
@@ -84,7 +82,6 @@ Given('an agreement link to the department and the bank account exists', () => {
 Given('the "UWV Utrecht" organisation exists', () => {
 
   cy.visit('/organisaties')
-  cy.waitForReact()
   cy.url().should('eq', Cypress.config().baseUrl + '/organisaties')
 
   // Type into search bar
@@ -184,7 +181,7 @@ When('I click the "Delete bank account" button', () => {
 Then('the "Delete bank account" modal is displayed', () => {
 
   // Assertion
-  cy.get('header[id^="chakra-modal"]')
+  cy.get('header[id^="chakra-modal"]', { timeout: 10000 })
     .should('be.visible');
 
 });
@@ -193,19 +190,8 @@ When('I click the "Delete" button', () => {
 
   cy.get('[data-test="button.Delete"]')
     .click();
-  cy.wait(500);
 
 });
-
-Then('a notification of successful bank account deletion is displayed', () => {
-
-  // Assertion
-  cy.get('[data-status="success"]')
-    .contains('Bankrekening is verwijderd')
-    .should('be.visible');
-
-});
-
 
 //endregion
 

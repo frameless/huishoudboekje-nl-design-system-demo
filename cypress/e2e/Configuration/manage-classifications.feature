@@ -26,9 +26,9 @@ Feature: manage classifications
     When I set the "Naam" field to 'Huuropbrengsten'
     When I set the "Grootboekrekening" field to "Huuropbrengsten WRevHuoHuo"
     When I click the "Opslaan" button in the section with the header "Rubrieken"
-    Then a notification of success is displayed
+    Then a success notification containing 'toegevoegd' is displayed
     Then the "Huuropbrengsten" classification is displayed
-    When I open the "Citizen details" page for the "Dingus Bingus" citizen
+    When I open the citizen overview page for "Dingus Bingus"
     When I click the button 'Toevoegen'
     When I set the "Payment direction" option to "Inkomsten"
     Then the "Rubriek" option is displayed
@@ -45,9 +45,9 @@ Feature: manage classifications
     When I set the "Naam" field to 'Elektrakosten'
     When I set the "Grootboekrekening" field to "Elektrakosten WKprAklEkn"
     When I click the "Opslaan" button in the section with the header "Rubrieken"
-    Then a notification of success is displayed
+    Then a success notification containing 'toegevoegd' is displayed
     Then the "Elektrakosten" classification is displayed
-    When I open the "Citizen details" page for the "Dingus Bingus" citizen
+    When I open the citizen overview page for "Dingus Bingus"
     When I click the button 'Toevoegen'
     When I set the "Payment direction" option to "Inkomsten"
     Then the "Rubriek" option is displayed

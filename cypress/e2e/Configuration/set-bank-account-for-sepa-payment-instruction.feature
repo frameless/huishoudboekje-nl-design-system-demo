@@ -15,7 +15,7 @@ Feature: set bank account for sepa payment instruction
     Given the text 'derdengeldenrekening_rekeninghouder' is not displayed
 
     Given the "Dingus Bingus" citizen exists
-    When I open the "Citizen details" page for the "Dingus Bingus" citizen
+    When I open the citizen overview page for 'Dingus Bingus'
     # Then the text 'HHB000003' is displayed
     Given the "Gemeente Utrecht" organisation exists
     Given the "Gemeente Utrecht" department exists
@@ -25,7 +25,7 @@ Feature: set bank account for sepa payment instruction
     Given I navigate to the page '/configuratie'
     Given the "Privé-opname" exists with the accounting reference "BEivKapProPok"
 
-    When I open the "Citizen details" page for the "Dingus Bingus" citizen
+    When I open the citizen overview page for 'Dingus Bingus'
     When I click the button 'Toevoegen'
     When I set the "Partij" option to "Organisatie"
     When I set the field "Organisatie" to 'Gemeente Utrecht'

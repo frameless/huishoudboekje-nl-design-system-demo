@@ -17,14 +17,8 @@ Given('an agreement exists for feature "create signal on unexpected payment amou
   uniqueId = Date.now().toString();
 
   // Navigate to citizen
-  cy.visit('/burgers');
-  cy.url().should('eq', Cypress.config().baseUrl + '/burgers')
-  cy.get('input[placeholder="Zoeken"]')
-    .type('Dingus');
-  cy.waitForReact();
-  cy.contains('Bingus')
-    .click();
-  cy.url().should('include', Cypress.config().baseUrl + '/burgers/')
+  Step(this, 'I open the citizen overview page for "Dingus Bingus"');
+  
   cy.get('[data-test="button.Add"]')
     .click();
 
@@ -41,7 +35,7 @@ Given('an agreement exists for feature "create signal on unexpected payment amou
   // Fill in IBAN
   cy.get('#tegenrekening')
     .type('NL86');
-  cy.contains('0002')
+  cy.contains('0002 4455')
     .click();
 
   // Payment direction: Toeslagen
@@ -62,17 +56,12 @@ Given('an agreement exists for feature "create signal on unexpected payment amou
   cy.url().should('not.include', '/toevoegen');
   cy.url().should('include', Cypress.config().baseUrl + '/afspraken/');
 
-  // Check success message
-  cy.get('[data-status="success"]', { timeout: 10000 })
-    .contains('De afspraak is opgeslagen.')
-    .scrollIntoView()
-    .should('be.visible');
+  Step(this, "a success notification containing 'afspraak' is displayed");
 
 });
 
 Given('an alarm exists for feature "create signal on unexpected payment amount, with amount margin"', () => {
 
-  cy.waitForReact();
   cy.url().should('include', Cypress.config().baseUrl + '/afspraken/')
   cy.get('h2').contains('Alarm').should('be.visible')
     .scrollIntoView() // Scrolls 'Alarm' into view
@@ -80,10 +69,8 @@ Given('an alarm exists for feature "create signal on unexpected payment amount, 
     .contains('Toevoegen')
     .click();
 
-  cy.waitForReact(); // Wait for modal opening
-
   // Check whether modal is opened and visible
-  cy.get('section[aria-modal="true"]')
+  cy.get('section[aria-modal="true"]', { timeout: 10000 })
     .scrollIntoView()
     .should('exist');
 
@@ -122,17 +109,11 @@ Given('an alarm exists for feature "create signal on unexpected payment amount, 
         .should('have.value', '0.99')
 
   // Click 'Opslaan' button
-  cy.waitForReact()
   cy.get('[data-test="buttonModal.submit"]')
       .click()
 
-  // Wait for modal to close
-  cy.waitForReact();
-
   // Check whether modal is closed
-  cy.contains('Alarm toevoegen')
-      .should('not.exist');
-  cy.get('section[aria-modal="true"]')
+  cy.get('section[aria-modal="true"]', { timeout: 10000 })
       .should('not.exist');
 
 });
@@ -282,7 +263,6 @@ When('the low amount outside amount margin bank transaction is booked to an agre
 
   // Upload testdata CAMT
   cy.visit('/bankzaken/bankafschriften')
-  cy.waitForReact()
   cy.url().should('eq', Cypress.config().baseUrl + '/bankzaken/bankafschriften')
 
   cy.get('input[type="file"]')
@@ -298,7 +278,6 @@ When('the low amount outside amount margin bank transaction is booked to an agre
 
   // Reconciliate the bank transaction to the correct agreement
   cy.visit('/bankzaken/transacties')
-  cy.waitForReact()
   cy.url().should('eq', Cypress.config().baseUrl + '/bankzaken/transacties')
 
   cy.get('[data-test="transactionsPage.filters.notReconciliated"]')
@@ -344,7 +323,6 @@ When('the low amount outside amount margin bank transaction is booked to an agre
   
     cy.wait(3000)
     cy.visit('/signalen')
-    cy.waitForReact()
     cy.url().should('eq', Cypress.config().baseUrl + '/signalen')
   
     // Assertion
@@ -503,7 +481,6 @@ When('the low amount on amount margin bank transaction is booked to an agreement
 
   // Upload testdata CAMT
   cy.visit('/bankzaken/bankafschriften')
-  cy.waitForReact()
   cy.url().should('eq', Cypress.config().baseUrl + '/bankzaken/bankafschriften')
 
   cy.get('input[type="file"]')
@@ -519,7 +496,6 @@ When('the low amount on amount margin bank transaction is booked to an agreement
 
   // Reconciliate the bank transaction to the correct agreement
   cy.visit('/bankzaken/transacties')
-  cy.waitForReact()
   cy.url().should('eq', Cypress.config().baseUrl + '/bankzaken/transacties')
 
   cy.get('[data-test="transactionsPage.filters.notReconciliated"]')
@@ -708,7 +684,6 @@ When('the low amount within amount margin bank transaction is booked to an agree
 
   // Upload testdata CAMT
   cy.visit('/bankzaken/bankafschriften')
-  cy.waitForReact()
   cy.url().should('eq', Cypress.config().baseUrl + '/bankzaken/bankafschriften')
 
   cy.get('input[type="file"]')
@@ -724,7 +699,6 @@ When('the low amount within amount margin bank transaction is booked to an agree
 
   // Reconciliate the bank transaction to the correct agreement
   cy.visit('/bankzaken/transacties')
-  cy.waitForReact()
   cy.url().should('eq', Cypress.config().baseUrl + '/bankzaken/transacties')
 
   cy.get('[data-test="transactionsPage.filters.notReconciliated"]')
@@ -915,7 +889,6 @@ When('the expected amount on amount margin bank transaction is booked to an agre
 
   // Upload testdata CAMT
   cy.visit('/bankzaken/bankafschriften')
-  cy.waitForReact()
   cy.url().should('eq', Cypress.config().baseUrl + '/bankzaken/bankafschriften')
 
   cy.get('input[type="file"]')
@@ -931,7 +904,6 @@ When('the expected amount on amount margin bank transaction is booked to an agre
 
   // Reconciliate the bank transaction to the correct agreement
   cy.visit('/bankzaken/transacties')
-  cy.waitForReact()
   cy.url().should('eq', Cypress.config().baseUrl + '/bankzaken/transacties')
 
   cy.get('[data-test="transactionsPage.filters.notReconciliated"]')
@@ -1122,7 +1094,6 @@ When('the high amount within amount margin bank transaction is booked to an agre
 
   // Upload testdata CAMT
   cy.visit('/bankzaken/bankafschriften')
-  cy.waitForReact()
   cy.url().should('eq', Cypress.config().baseUrl + '/bankzaken/bankafschriften')
 
   cy.get('input[type="file"]')
@@ -1138,7 +1109,6 @@ When('the high amount within amount margin bank transaction is booked to an agre
 
   // Reconciliate the bank transaction to the correct agreement
   cy.visit('/bankzaken/transacties')
-  cy.waitForReact()
   cy.url().should('eq', Cypress.config().baseUrl + '/bankzaken/transacties')
 
   cy.get('[data-test="transactionsPage.filters.notReconciliated"]')
@@ -1329,7 +1299,6 @@ When('the high amount on amount margin bank transaction is booked to an agreemen
 
   // Upload testdata CAMT
   cy.visit('/bankzaken/bankafschriften')
-  cy.waitForReact()
   cy.url().should('eq', Cypress.config().baseUrl + '/bankzaken/bankafschriften')
 
   cy.get('input[type="file"]')
@@ -1345,7 +1314,6 @@ When('the high amount on amount margin bank transaction is booked to an agreemen
 
   // Reconciliate the bank transaction to the correct agreement
   cy.visit('/bankzaken/transacties')
-  cy.waitForReact()
   cy.url().should('eq', Cypress.config().baseUrl + '/bankzaken/transacties')
 
   cy.get('[data-test="transactionsPage.filters.notReconciliated"]')
@@ -1534,7 +1502,6 @@ When('the high amount outside amount margin bank transaction is booked to an agr
 
   // Upload testdata CAMT
   cy.visit('/bankzaken/bankafschriften')
-  cy.waitForReact()
   cy.url().should('eq', Cypress.config().baseUrl + '/bankzaken/bankafschriften')
 
   cy.get('input[type="file"]')
@@ -1550,7 +1517,6 @@ When('the high amount outside amount margin bank transaction is booked to an agr
 
   // Reconciliate the bank transaction to the correct agreement
   cy.visit('/bankzaken/transacties')
-  cy.waitForReact()
   cy.url().should('eq', Cypress.config().baseUrl + '/bankzaken/transacties')
 
   cy.get('[data-test="transactionsPage.filters.notReconciliated"]')
@@ -1596,7 +1562,6 @@ When('the high amount outside amount margin bank transaction is booked to an agr
   
     cy.wait(3000)
     cy.visit('/signalen')
-    cy.waitForReact()
     cy.url().should('eq', Cypress.config().baseUrl + '/signalen')
   
     // Assertion

@@ -120,7 +120,7 @@ Feature: add bank statement
     When I click the "-281,94" bank transaction
     When I click the "Rubriek" button
     When I select the "Lokale lasten" option
-    Then a success-notification is displayed
+    Then a success notification containing 'De transactie is afgeletterd' is displayed
     Then the status is "Handmatig afgeletterd"
     Then the "Rubriek" button is not displayed
     Then the classification is "Lokale lasten"

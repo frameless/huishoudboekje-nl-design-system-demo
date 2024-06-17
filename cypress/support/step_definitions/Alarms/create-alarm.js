@@ -12,14 +12,7 @@ const header = {
 When('I view the "Add alarm" modal', () => {
 
   // Navigate to citizen
-  cy.visit('/burgers');
-  cy.url().should('eq', Cypress.config().baseUrl + '/burgers')
-  cy.get('input[placeholder="Zoeken"]')
-    .type('Dingus');
-  cy.waitForReact();
-  cy.contains('Bingus')
-    .click();
-  cy.url().should('include', Cypress.config().baseUrl + '/burgers/')
+  Step(this, 'I open the citizen overview page for "Dingus Bingus"');
 
   // Open agreement with amount 543,54
   cy.contains('543,54')
@@ -29,7 +22,6 @@ When('I view the "Add alarm" modal', () => {
     .find('a[aria-label="Bekijken"]:visible')
     .click();
 
-  cy.waitForReact();
   cy.url().should('include', Cypress.config().baseUrl + '/afspraken/')
   cy.get('h2').contains('Alarm').should('be.visible')
     .scrollIntoView() // Scrolls 'Alarm' into view
@@ -37,14 +29,12 @@ When('I view the "Add alarm" modal', () => {
     .contains('Toevoegen')
     .click();
 
-  cy.waitForReact(); // Wait for modal opening
-
 });
 
 Then('the "Create alarm form" is displayed', () => {
 
   // Check whether modal is opened and visible
-  cy.get('section[aria-modal="true"]')
+  cy.get('section[aria-modal="true"]', { timeout: 10000 })
     .scrollIntoView()
     .should('exist');
 
@@ -180,14 +170,7 @@ Then('the "Close modal" button is displayed', () => {
 When('I view the "Agreement" page', () => {
 
   // Navigate to citizen
-  cy.visit('/burgers');
-  cy.url().should('eq', Cypress.config().baseUrl + '/burgers')
-  cy.get('input[placeholder="Zoeken"]')
-    .type('Dingus');
-  cy.waitForReact();
-  cy.contains('Bingus')
-    .click();
-  cy.url().should('include', Cypress.config().baseUrl + '/burgers/')
+  Step(this, 'I open the citizen overview page for "Dingus Bingus"');
 
   // Navigate to last displayed agreement's detail page
   cy.get('tbody')
@@ -291,30 +274,16 @@ Then('I fill {string} into the alarm allowed deviation in payment amount field',
 Then('I click the "Submit form" button', () => {
 
   // Click 'Opslaan' button
-  cy.waitForReact()
   cy.get('[data-test="buttonModal.submit"]')
     .click()
-
-  // Wait for modal to close
-  cy.waitForReact();
 
 });
 
 Then('the "Create alarm form" modal is closed', () => {
 
   // Check whether modal is closed
-  cy.contains('Alarm toevoegen')
+  cy.get('section[aria-modal="true"]', { timeout: 10000 })
     .should('not.exist')
-  cy.get('section[aria-modal="true"]')
-    .should('not.exist')
-
-});
-
-Then('a notification of success is displayed', () => {
-
-  // Check success message
-  cy.get('[data-status="success"]', { timeout: 10000 })
-    .should('be.visible')
 
 });
 

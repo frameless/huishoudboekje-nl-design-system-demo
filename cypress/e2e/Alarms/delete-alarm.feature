@@ -24,6 +24,6 @@ Feature: delete alarm
   Scenario: confirm alarm deletion
     Given I view the "Agreement" page
     When I click the "Confirm delete alarm" button
-    Then a notification of success is displayed
+    Then a success notification containing 'Het alarm is verwijderd' is displayed
     Then the text 'Er is geen alarm ingesteld.' is displayed
     Then the button 'Toevoegen' is displayed

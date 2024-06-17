@@ -16,17 +16,22 @@ const queryTruncateSignal = `mutation Truncate {
   truncateTable(databaseName: "alarmenservice", tableName: "signals")
 }`
 
+const queryTruncateBankTransactions = `mutation Truncate {
+  truncateTable(databaseName: "banktransactieservice", tableName: "bank_transactions")
+}`
+
+const queryTruncateCustomerStatements = `mutation Truncate {
+  truncateTable(databaseName: "banktransactieservice", tableName: "customer_statement_messages")
+}`
+
+const queryTruncateJournaalposten = `mutation Truncate {
+  truncateTable(databaseName: "huishoudboekjeservice", tableName: "journaalposten")
+}`
+
 Before({ tags: "@beforeTruncateSignals" }, function (){
 
   // Clean up
-    // Truncate signals
-    cy.request({
-      method: "post",
-      url: Cypress.env().graphqlUrl + '/graphql',
-      body: { query: queryTruncateSignal },
-    }).then((res) => {
-      console.log(res.body);
-    });
+  Step(this, 'I truncate the signals table in alarmenservice');
 
 });
 
@@ -34,40 +39,9 @@ Before({ tags: "@beforeTruncateSignals" }, function (){
 After({ tags: "@cleanupSignal" }, function (){
 
   // Clean up
-    // Truncate alarms
-    cy.request({
-      method: "post",
-      url: Cypress.env().graphqlUrl + '/graphql',
-      body: { query: queryTruncateAlarm },
-    }).then((res) => {
-      console.log(res.body);
-    });
-
-    // Truncate signals
-    cy.request({
-      method: "post",
-      url: Cypress.env().graphqlUrl + '/graphql',
-      body: { query: queryTruncateSignal },
-    }).then((res) => {
-      console.log(res.body);
-    });
-  
-  // Remove bank statement
-  cy.visit('/bankzaken/bankafschriften');
-  cy.waitForReact();
-  cy.url().should('eq', Cypress.config().baseUrl + '/bankzaken/bankafschriften')
-  cy.wait(500);
-  cy.get('[aria-label="Verwijderen"]')
-    .first()
-    .click();
-  cy.wait(500);
-  cy.get('[aria-label="Verwijderen"]')
-    .first()
-    .click();
-  cy.wait(500);
-  cy.get('[data-status="success"]', { timeout: 10000 })
-    .contains('Het bankafschrift is verwijderd')
-    .should('be.visible');
+  Step(this, 'I truncate the alarms table in alarmenservice');
+  Step(this, 'I truncate the signals table in alarmenservice');
+  Step(this, 'I truncate the bank transaction tables');
 
   // Remove latest agreement
   Step(this, 'I open the citizen overview page for "Dingus Bingus"');
@@ -88,63 +62,16 @@ After({ tags: "@cleanupSignal" }, function (){
     .click();
   
   // Check success message
-  cy.get('[data-status="success"]')
-    .contains('afspraak')
-    .should('be.visible');
+  Step(this, "a success notification containing 'afspraak' is displayed");
 
 });
 
 After({ tags: "@cleanupTwoSignals" }, function (){
 
   // Clean up
-    // Truncate alarms
-    cy.request({
-      method: "post",
-      url: Cypress.env().graphqlUrl + '/graphql',
-      body: { query: queryTruncateAlarm },
-    }).then((res) => {
-      console.log(res.body);
-    });
-
-    // Truncate signals
-    cy.request({
-      method: "post",
-      url: Cypress.env().graphqlUrl + '/graphql',
-      body: { query: queryTruncateSignal },
-    }).then((res) => {
-      console.log(res.body);
-    });
-  
-  // Remove bank statement
-  cy.visit('/bankzaken/bankafschriften');
-  cy.waitForReact();
-  cy.url().should('eq', Cypress.config().baseUrl + '/bankzaken/bankafschriften')
-  cy.waitForReact();
-  cy.get('[aria-label="Verwijderen"]')
-    .first()
-    .click();
-  cy.waitForReact();
-  cy.get('[aria-label="Verwijderen"]')
-    .first()
-    .click();
-  cy.waitForReact();
-  cy.get('[data-status="success"]')
-    .should('be.visible');
-  cy.wait(3000);
-  
-  // Remove bank statement two
-  cy.get('[aria-label="Verwijderen"]')
-    .first()
-    .click();
-  cy.waitForReact();
-  cy.get('[aria-label="Verwijderen"]')
-    .first()
-    .click();
-  cy.waitForReact();
-  cy.wait(1000);
-  cy.get('[data-status="success"]')
-    .should('be.visible');
-  cy.wait(3000);
+  Step(this, 'I truncate the alarms table in alarmenservice');
+  Step(this, 'I truncate the signals table in alarmenservice');
+  Step(this, 'I truncate the bank transaction tables');
 
   // Remove latest agreement
   Step(this, 'I open the citizen overview page for "Dingus Bingus"');
@@ -165,32 +92,15 @@ After({ tags: "@cleanupTwoSignals" }, function (){
     .click();
   
   // Check success message
-  cy.get('[data-status="success"]')
-    .contains('afspraak')
-    .should('be.visible');
+  Step(this, "a success notification containing 'afspraak' is displayed");
 
 });
 
 After({ tags: "@cleanupAlarmSignal" }, function (){
 
   // Clean up
-    // Truncate alarms
-    cy.request({
-      method: "post",
-      url: Cypress.env().graphqlUrl + '/graphql',
-      body: { query: queryTruncateAlarm },
-    }).then((res) => {
-      console.log(res.body);
-    });
-
-    // Truncate signals
-    cy.request({
-      method: "post",
-      url: Cypress.env().graphqlUrl + '/graphql',
-      body: { query: queryTruncateSignal },
-    }).then((res) => {
-      console.log(res.body);
-    });
+  Step(this, 'I truncate the alarms table in alarmenservice');
+  Step(this, 'I truncate the signals table in alarmenservice');
 
   // Remove latest agreement
   Step(this, 'I open the citizen overview page for "Dingus Bingus"');
@@ -211,125 +121,15 @@ After({ tags: "@cleanupAlarmSignal" }, function (){
     .click();
   
   // Check success message
-  cy.get('[data-status="success"]')
-    .contains('afspraak')
-    .should('be.visible');
+  Step(this, "a success notification containing 'afspraak' is displayed");
 
 });
 
-After({ tags: "@cleanupSixStatementsAgreement" }, function (){
+After({ tags: "@truncateStatements" }, function (){
 
   // Clean up
-    // Truncate alarms
-    cy.request({
-      method: "post",
-      url: Cypress.env().graphqlUrl + '/graphql',
-      body: { query: queryTruncateAlarm },
-    }).then((res) => {
-      console.log(res.body);
-    });
-
-    // Truncate signals
-    cy.request({
-      method: "post",
-      url: Cypress.env().graphqlUrl + '/graphql',
-      body: { query: queryTruncateSignal },
-    }).then((res) => {
-      console.log(res.body);
-    });
+  Step(this, 'I truncate the alarms table in alarmenservice');
+  Step(this, 'I truncate the signals table in alarmenservice');
+  Step(this, 'I truncate the bank transaction tables');
   
-  // Remove bank statement 1
-  cy.visit('/bankzaken/bankafschriften');
-  cy.waitForReact();
-  cy.url().should('eq', Cypress.config().baseUrl + '/bankzaken/bankafschriften')
-  cy.wait(500);
-  cy.get('[aria-label="Verwijderen"]')
-    .first()
-    .click();
-  cy.wait(500);
-  cy.get('[aria-label="Verwijderen"]')
-    .first()
-    .click();
-  cy.wait(500);
-  cy.get('[data-status="success"]', { timeout: 10000 })
-    .contains('Het bankafschrift is verwijderd')
-    .should('be.visible');
-  cy.get('[data-status="success"]', { timeout: 10000 })
-    .should('not.exist');
-
-  // Remove bank statement 2
-  cy.get('[aria-label="Verwijderen"]')
-    .first()
-    .click();
-  cy.wait(500);
-  cy.get('[aria-label="Verwijderen"]')
-    .first()
-    .click();
-  cy.wait(500);
-  cy.get('[data-status="success"]', { timeout: 10000 })
-    .contains('Het bankafschrift is verwijderd')
-    .should('be.visible');
-  cy.get('[data-status="success"]', { timeout: 10000 })
-    .should('not.exist');
-
-  // Remove bank statement 3
-  cy.get('[aria-label="Verwijderen"]')
-    .first()
-    .click();
-  cy.wait(500);
-  cy.get('[aria-label="Verwijderen"]')
-    .first()
-    .click();
-  cy.wait(500);
-  cy.get('[data-status="success"]', { timeout: 10000 })
-    .contains('Het bankafschrift is verwijderd')
-    .should('be.visible');
-  cy.get('[data-status="success"]', { timeout: 10000 })
-    .should('not.exist');
-    
-  // Remove bank statement 4
-  cy.get('[aria-label="Verwijderen"]')
-    .first()
-    .click();
-  cy.wait(500);
-  cy.get('[aria-label="Verwijderen"]')
-    .first()
-    .click();
-  cy.wait(500);
-  cy.get('[data-status="success"]', { timeout: 10000 })
-    .contains('Het bankafschrift is verwijderd')
-    .should('be.visible');
-  cy.get('[data-status="success"]', { timeout: 10000 })
-    .should('not.exist');
-    
-  // Remove bank statement 5
-  cy.get('[aria-label="Verwijderen"]')
-    .first()
-    .click();
-  cy.wait(500);
-  cy.get('[aria-label="Verwijderen"]')
-    .first()
-    .click();
-  cy.wait(500);
-  cy.get('[data-status="success"]', { timeout: 10000 })
-    .contains('Het bankafschrift is verwijderd')
-    .should('be.visible');
-  cy.get('[data-status="success"]', { timeout: 10000 })
-    .should('not.exist');
-    
-  // Remove bank statement 6
-  cy.get('[aria-label="Verwijderen"]')
-    .first()
-    .click();
-  cy.wait(500);
-  cy.get('[aria-label="Verwijderen"]')
-    .first()
-    .click();
-  cy.wait(500);
-  cy.get('[data-status="success"]', { timeout: 10000 })
-    .contains('Het bankafschrift is verwijderd')
-    .should('be.visible');
-  cy.get('[data-status="success"]', { timeout: 10000 })
-    .should('not.exist');
-    
 });

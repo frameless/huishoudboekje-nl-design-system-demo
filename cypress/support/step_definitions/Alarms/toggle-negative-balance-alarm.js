@@ -61,7 +61,7 @@ Given('the citizen has an agreement "Loon"', () => {
   // Fill in IBAN
   cy.get('#tegenrekening')
     .type('NL86');
-  cy.contains('0002')
+  cy.contains('0002 4455')
     .click();
 
   // Payment direction: Toeslagen
@@ -78,10 +78,11 @@ Given('the citizen has an agreement "Loon"', () => {
   cy.get('[data-test="button.Submit"]')
     .click();
 
+  // Check redirect
+  cy.url({ timeout: 10000 }).should('not.include', '/toevoegen')
+
   // Check success message
-  cy.get('[data-status="success"]')
-    .contains('afspraak')
-    .should('be.visible');
+  Step(this, "a success notification containing 'afspraak' is displayed");
 
 });
 
@@ -92,11 +93,11 @@ When('I set the negative account balance alarm toggle to enabled', () => {
   cy.get('[data-test="citizen.sectionBalance"]')
     .find('label[class^="chakra-switch"]')
     .click()
-  cy.waitForReact()
-  cy.get('input[type="checkbox"]')
+  cy.get('input[type="checkbox"]', { timeout: 10000 })
     .should('be.visible')
 
-  cy.wait(1000);
+  // Wait for switch track to process toggle
+  cy.wait(500);
 
 });
 
@@ -241,7 +242,6 @@ cy.writeFile('cypress/testdata/paymentAmountNegative.xml', `<?xml version='1.0' 
 
   // Upload testdata CAMT
   cy.visit('/bankzaken/bankafschriften')
-  cy.waitForReact()
   cy.url().should('eq', Cypress.config().baseUrl + '/bankzaken/bankafschriften')
   
   cy.get('input[type="file"]')
@@ -250,6 +250,8 @@ cy.writeFile('cypress/testdata/paymentAmountNegative.xml', `<?xml version='1.0' 
 
   cy.get('input[type="file"]')
     .selectFile('cypress/testdata/paymentAmountNegative.xml', { force: true })
+
+  // Wait for file to upload
   cy.wait(3000);
 
 });
@@ -267,7 +269,6 @@ When('the negative amount bank transaction is booked to the agreement "Loon"', (
   
   // Reconciliate the bank transaction to the correct agreement
   cy.visit('/bankzaken/transacties')
-  cy.waitForReact()
   cy.url().should('eq', Cypress.config().baseUrl + '/bankzaken/transacties')
   
   cy.get('[data-test="transactionsPage.filters.notReconciliated"]')
@@ -306,11 +307,11 @@ When('I set the negative account balance alarm toggle to disabled', () => {
     .find('label[data-checked]')
     .should('be.visible')
     .click()
-  cy.waitForReact()
-  cy.get('input[type="checkbox"]')
+  cy.get('input[type="checkbox"]', { timeout: 10000 })
     .should('be.visible')
 
-  cy.wait(1000);
+  // Wait for switch track to process toggle
+  cy.wait(500);
 
 });
 

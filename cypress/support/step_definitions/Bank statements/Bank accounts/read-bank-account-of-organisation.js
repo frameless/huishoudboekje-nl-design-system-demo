@@ -30,7 +30,7 @@ Then('no bank account is displayed', () => {
 Then('the "Add bank account" button is displayed', () => {
 
   // Assertion
-  cy.get('[data-test="button.addBankAccountModal"]')
+  cy.get('[data-test="button.addBankAccountModal"]', { timeout: 10000 })
     .should('be.visible');
   
 });

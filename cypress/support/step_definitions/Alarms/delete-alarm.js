@@ -70,11 +70,8 @@ Then('the "Delete alarm" button is displayed', () => {
 
 When('I click the "Confirm delete alarm" button', () => {
  
-  // Wait for back-end to catch up to front-end
-  cy.wait(500);
-
   // Check assertion
-  cy.get('button[aria-label="Verwijderen"]')
+  cy.get('button[aria-label="Verwijderen"]', { timeout: 10000 })
     .click()
   cy.get('button[aria-label="Verwijderen"]')
     .click()

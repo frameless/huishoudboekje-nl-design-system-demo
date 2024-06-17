@@ -100,6 +100,8 @@ Then('I click the button "Downloaden" for the most recent entry', function () {
   cy.get('[data-test="button.Download"]')
     .first()
     .click()
+
+  // Wait for download to finish
   cy.wait(3000);
 
 });

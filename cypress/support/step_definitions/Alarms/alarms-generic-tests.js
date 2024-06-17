@@ -28,68 +28,28 @@ After({ tags: "@afterCleanupAlarm" }, function (){
     .click();
 
   // Check success message
-  cy.get('[data-status="success"]')
-    .should('be.visible');
-  cy.contains('Het alarm is verwijderd');
+  Step(this, "a success notification containing 'Het alarm is verwijderd' is displayed");
 
-  // Clean up
-    // Truncate alarms
-    cy.request({
-      method: "post",
-      url: Cypress.env().graphqlUrl + '/graphql',
-      body: { query: queryTruncateAlarm },
-    }).then((res) => {
-      console.log(res.body);
-    });
+// Clean up
+Step(this, 'I truncate the alarms table in alarmenservice');
 
 });
 
 Before({ tags: "@beforeCleanupAlarm" }, function (){
 
   // Clean up
-    // Truncate alarms
-    cy.request({
-      method: "post",
-      url: Cypress.env().graphqlUrl + '/graphql',
-      body: { query: queryTruncateAlarm },
-    }).then((res) => {
-      console.log(res.body);
-    });
-
-    // Truncate signals
-    cy.request({
-      method: "post",
-      url: Cypress.env().graphqlUrl + '/graphql',
-      body: { query: queryTruncateSignal },
-    }).then((res) => {
-      console.log(res.body);
-    });
+  Step(this, 'I truncate the alarms table in alarmenservice');
+  Step(this, 'I truncate the signals table in alarmenservice');
 
 });
 
 When('I create a test alarm', () => {
   
-  // Wipe alarms clean
-    // Truncate alarms
-    cy.request({
-      method: "post",
-      url: Cypress.env().graphqlUrl + '/graphql',
-      body: { query: queryTruncateAlarm },
-    }).then((res) => {
-      console.log(res.body);
-    });
+  // Truncate alarms
+  Step(this, 'I truncate the alarms table in alarmenservice');
 
-  cy.wait(1000);
-
-  // Navigate to citizen
-  cy.visit('/burgers');
-  cy.url().should('eq', Cypress.config().baseUrl + '/burgers')
-  cy.get('input[placeholder="Zoeken"]')
-    .type('Dingus');
-  cy.waitForReact();
-  cy.contains('Bingus')
-    .click();
-  cy.url().should('include', Cypress.config().baseUrl + '/burgers/')
+  // Navigate to test citizen's overview page
+  Step(this, 'I open the citizen overview page for "Dingus Bingus"');
 
   // Navigate to last displayed agreement's detail page
   cy.get('tbody')
@@ -106,10 +66,8 @@ When('I create a test alarm', () => {
     .contains('Toevoegen')
     .click();
 
-  cy.waitForReact(); // Wait for modal opening
-
   // Check whether modal is opened and visible
-  cy.get('section[aria-modal="true"]')
+  cy.get('section[aria-modal="true"]', { timeout: 10000 })
     .scrollIntoView()
     .should('exist');
   
@@ -147,54 +105,25 @@ When('I create a test alarm', () => {
       .should('have.value', '13.37')
 
   // Click 'Opslaan' button
-  cy.waitForReact()
-  cy.get('[data-test="buttonModal.submit"]')
+  cy.get('[data-test="buttonModal.submit"]', { timeout: 10000 })
     .click()
 
-  // Wait for modal to close
-  cy.waitForReact();
-
   // Check whether modal is closed
-  cy.contains('Alarm toevoegen')
+  cy.contains('Alarm toevoegen', { timeout: 10000 })
     .should('not.exist');
-  cy.get('section[aria-modal="true"]')
+  cy.get('section[aria-modal="true"]', { timeout: 10000 })
     .should('not.exist');
 
 });
 
 Before({ order: 3, tags: "@beforeCreateAgreement" }, () => {
   
-  // Wipe alarms clean
-    // Truncate alarms
-    cy.request({
-      method: "post",
-      url: Cypress.env().graphqlUrl + '/graphql',
-      body: { query: queryTruncateAlarm },
-    }).then((res) => {
-      console.log(res.body);
-    });
-  
-    // Truncate signals
-    cy.request({
-      method: "post",
-      url: Cypress.env().graphqlUrl + '/graphql',
-      body: { query: queryTruncateSignal },
-    }).then((res) => {
-      console.log(res.body);
-    });
+  // Clean up
+  Step(this, 'I truncate the alarms table in alarmenservice');
+  Step(this, 'I truncate the signals table in alarmenservice');
 
-  cy.wait(1000);
-
-  // Navigate to citizen
-  cy.visit('/burgers');
-  cy.url().should('eq', Cypress.config().baseUrl + '/burgers')
-  cy.get('input[placeholder="Zoeken"]')
-    .type('Dingus');
-  cy.waitForReact();
-  cy.contains('Bingus')
-    .click();
-  cy.url().should('include', Cypress.config().baseUrl + '/burgers/')
-  
+  // Navigate to test citizen's overview page
+  Step(this, 'I open the citizen overview page for "Dingus Bingus"');
   Step(this, "I click the button 'Toevoegen'");
 
   // Add agreement with test department
@@ -235,17 +164,8 @@ Before({ order: 3, tags: "@beforeCreateAgreement" }, () => {
 // Set order to be after @afterCleanupAlarm
 After({ tags: "@afterDeleteAgreement", order: 10 }, () => {
   
-  cy.wait(1000);
-
-  // Navigate to citizen
-  cy.visit('/burgers');
-  cy.url().should('eq', Cypress.config().baseUrl + '/burgers')
-  cy.get('input[placeholder="Zoeken"]')
-    .type('Dingus');
-  cy.waitForReact();
-  cy.contains('Bingus')
-    .click();
-  cy.url().should('include', Cypress.config().baseUrl + '/burgers/')
+  // Navigate to test citizen's overview page
+  Step(this, 'I open the citizen overview page for "Dingus Bingus"');
   
   // Navigate to last displayed agreement's detail page
   cy.get('tbody')
@@ -272,39 +192,8 @@ After({ tags: "@afterDeleteAgreement", order: 10 }, () => {
 After({ tags: "@cleanupBankstatement" }, function (){
 
   // Clean up
-    // Truncate alarms
-    cy.request({
-      method: "post",
-      url: Cypress.env().graphqlUrl + '/graphql',
-      body: { query: queryTruncateAlarm },
-    }).then((res) => {
-      console.log(res.body);
-    });
-
-    // Truncate signals
-    cy.request({
-      method: "post",
-      url: Cypress.env().graphqlUrl + '/graphql',
-      body: { query: queryTruncateSignal },
-    }).then((res) => {
-      console.log(res.body);
-    });
-  
-  // Remove bank statement
-  cy.visit('/bankzaken/bankafschriften');
-  cy.waitForReact();
-  cy.url().should('eq', Cypress.config().baseUrl + '/bankzaken/bankafschriften')
-  cy.wait(500);
-  cy.get('[aria-label="Verwijderen"]')
-    .first()
-    .click();
-  cy.wait(500);
-  cy.get('[aria-label="Verwijderen"]')
-    .first()
-    .click();
-  cy.wait(500);
-  cy.get('[data-status="success"]', { timeout: 10000 })
-    .contains('Het bankafschrift is verwijderd')
-    .should('be.visible');
+  Step(this, 'I truncate the alarms table in alarmenservice');
+  Step(this, 'I truncate the signals table in alarmenservice');
+  Step(this, 'I truncate the bank transaction tables');
 
 });

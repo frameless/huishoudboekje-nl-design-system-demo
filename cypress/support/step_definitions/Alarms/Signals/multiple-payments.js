@@ -32,7 +32,7 @@ Given('an agreement exists for scenario "multiple payments within timeframe"', (
   // Fill in IBAN
   cy.get('#tegenrekening')
     .type('NL86');
-  cy.contains('0002')
+  cy.contains('0002 4455')
     .click();
 
   // Payment direction: Toeslagen
@@ -50,15 +50,12 @@ Given('an agreement exists for scenario "multiple payments within timeframe"', (
     .click();
 
   // Check success message
-  cy.get('[data-status="success"]')
-  .contains('afspraak')
-  .should('be.visible');
+  Step(this, "a success notification containing 'afspraak' is displayed");
 
 });
 
 Given('an alarm exists for scenario "multiple payments within timeframe"', () => {
 
-  cy.waitForReact();
   cy.url().should('include', Cypress.config().baseUrl + '/afspraken/')
   cy.get('h2').contains('Alarm').should('be.visible')
     .scrollIntoView() // Scrolls 'Alarm' into view
@@ -66,10 +63,8 @@ Given('an alarm exists for scenario "multiple payments within timeframe"', () =>
     .contains('Toevoegen')
     .click();
 
-  cy.waitForReact(); // Wait for modal opening
-
   // Check whether modal is opened and visible
-  cy.get('section[aria-modal="true"]')
+  cy.get('section[aria-modal="true"]', { timeout: 10000 })
     .scrollIntoView()
     .should('exist');
 
@@ -108,17 +103,11 @@ Given('an alarm exists for scenario "multiple payments within timeframe"', () =>
         .should('have.value', '0')
 
   // Click 'Opslaan' button
-  cy.waitForReact()
   cy.get('[data-test="buttonModal.submit"]')
       .click()
 
-  // Wait for modal to close
-  cy.waitForReact();
-
   // Check whether modal is closed
-  cy.contains('Alarm toevoegen')
-      .should('not.exist');
-  cy.get('section[aria-modal="true"]')
+  cy.get('section[aria-modal="true"]', { timeout: 10000 })
       .should('not.exist');
 
 });
@@ -403,7 +392,6 @@ When('both bank transactions are reconciliated on the same agreement', () => {
   // Test file 1
     // Upload test file 1 CAMT
     cy.visit('/bankzaken/bankafschriften')
-    cy.waitForReact()
     cy.url().should('eq', Cypress.config().baseUrl + '/bankzaken/bankafschriften')
 
     cy.get('input[type="file"]')
@@ -412,6 +400,8 @@ When('both bank transactions are reconciliated on the same agreement', () => {
 
     cy.get('input[type="file"]')
       .selectFile('cypress/testdata/paymentMultiple1.xml', { force: true })
+
+    // Wait for file to be uploaded
     cy.wait(3000);
     cy.get('[aria-label="Close"]')
       .should('be.visible')
@@ -419,7 +409,6 @@ When('both bank transactions are reconciliated on the same agreement', () => {
 
     // Reconciliate the bank transactions to the correct agreement
     cy.visit('/bankzaken/transacties')
-    cy.waitForReact()
     cy.url().should('eq', Cypress.config().baseUrl + '/bankzaken/transacties')
 
     cy.get('[data-test="transactionsPage.filters.notReconciliated"]')
@@ -438,12 +427,13 @@ When('both bank transactions are reconciliated on the same agreement', () => {
       .click();
     cy.contains(uniqueId)
       .click();
-    cy.wait(500);
+
+    // Check success message
+    Step(this, "a success notification containing 'transactie' is displayed");
 
   // Test file 2
     // Upload test files CAMT
     cy.visit('/bankzaken/bankafschriften')
-    cy.waitForReact()
     cy.url().should('eq', Cypress.config().baseUrl + '/bankzaken/bankafschriften')
   
     cy.get('input[type="file"]')
@@ -452,6 +442,8 @@ When('both bank transactions are reconciliated on the same agreement', () => {
   
     cy.get('input[type="file"]')
       .selectFile('cypress/testdata/paymentMultiple2.xml', { force: true })
+
+    // Wait for file to be uploaded
     cy.wait(3000);
     cy.get('[aria-label="Close"]')
       .should('be.visible')
@@ -459,7 +451,6 @@ When('both bank transactions are reconciliated on the same agreement', () => {
   
     // Reconciliate the bank transactions to the correct agreement
     cy.visit('/bankzaken/transacties')
-    cy.waitForReact()
     cy.url().should('eq', Cypress.config().baseUrl + '/bankzaken/transacties')
   
     cy.get('[data-test="transactionsPage.filters.notReconciliated"]')
@@ -478,15 +469,19 @@ When('both bank transactions are reconciliated on the same agreement', () => {
       .click();
     cy.contains(uniqueId)
       .click();
-    cy.wait(500);
+    
+    // Check success message
+    Step(this, "a success notification containing 'transactie' is displayed");
     
 });
 
 Then('a "Multiple payments" signal is created', () => {
 
+  // Wait for signals to be triggered in frontend
   cy.wait(3000)
+
+  // Navigate to page
   cy.visit('/signalen')
-  cy.waitForReact()
   cy.url().should('eq', Cypress.config().baseUrl + '/signalen')
 
   // Assertion

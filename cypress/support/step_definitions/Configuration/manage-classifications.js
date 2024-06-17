@@ -77,41 +77,14 @@ When('I click the "Opslaan" button in the section with the header "Rubrieken"', 
 
   cy.get('[data-test="button.rubricSubmit"]')
     .click();
-  cy.wait(1000);
+  
+  cy.wait(500)
 
 });
 
 When('the "Huuropbrengsten" classification is displayed', () => {
 
   cy.contains('Huuropbrengsten');
-
-});
-
-When('I open the "Citizen details" page for the "Dingus Bingus" citizen', () => {
-
-  // Navigate to citizen
-  cy.visit('/burgers');
-  cy.url().should('eq', Cypress.config().baseUrl + '/burgers')
-  cy.get('input[placeholder="Zoeken"]')
-    .type('Dingus');
-  cy.waitForReact();
-  cy.contains('Bingus')
-    .click();
-  cy.url().should('include', Cypress.config().baseUrl + '/burgers/')
-
-});
-
-When('I click the "Add agreement" button', () => {
-
-  // Navigate to citizen
-  cy.visit('/burgers');
-  cy.url().should('eq', Cypress.config().baseUrl + '/burgers')
-  cy.get('input[placeholder="Zoeken"]')
-    .type('Dingus');
-  cy.waitForReact();
-  cy.contains('Bingus')
-    .click();
-  cy.url().should('include', Cypress.config().baseUrl + '/burgers/')
 
 });
 

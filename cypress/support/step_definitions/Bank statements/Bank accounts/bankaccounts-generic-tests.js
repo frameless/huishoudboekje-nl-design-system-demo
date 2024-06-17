@@ -10,14 +10,8 @@ const header = {
 // Clean-up testdata after Scenario 'organisation and bank account are not used for reconciliation'
 After({ tags: "@cleanupAgreement" }, function ()  {
 
-  cy.visit('/burgers');
-  cy.url().should('eq', Cypress.config().baseUrl + '/burgers')
-  cy.get('input[placeholder="Zoeken"]')
-    .type('Mcpherson');
-  cy.waitForReact();
-  cy.contains('Patterson')
-    .click();
-  cy.url().should('include', Cypress.config().baseUrl + '/burgers/')
+  Step(this, 'I open the citizen overview page for "Dingus Bingus"');
+  
   cy.get('p').contains('1337')
     .parent()
     .next()
@@ -34,16 +28,13 @@ After({ tags: "@cleanupAgreement" }, function ()  {
     .click();
   
   // Check success message
-  cy.get('[data-status="success"]')
-    .contains('afspraak')
-    .should('be.visible');
+  Step(this, "a success notification containing 'afspraak' is displayed");
 
 });
 
 Before({ tags: "@cleanupDepartment" }, function ()  {
 
   cy.visit('/organisaties')
-  cy.waitForReact()
   cy.url().should('eq', Cypress.config().baseUrl + '/organisaties')
 
   // Type into search bar
@@ -60,18 +51,15 @@ Before({ tags: "@cleanupDepartment" }, function ()  {
   cy.get('[data-test="menuDepartment"]')
     .scrollIntoView()
     .click();
-  cy.get('[data-test="menuDepartment.delete"]')
+  cy.get('[data-test="menuDepartment.delete"]', { timeout: 10000 })
+    .should('be.visible')
     .click();
-  cy.wait(500)
-  cy.get('[data-test="modalDepartment.delete"]')
+  cy.get('[data-test="modalDepartment.delete"]', { timeout: 10000 })
+    .should('be.visible')
     .click();
-  cy.waitForReact();
 
   // Check success message
-  cy.get('[data-status="success"]')
-    .contains('Afdeling')
-    .contains('verwijderd')
-    .should('be.visible')
+  Step(this, "a success notification containing 'verwijderd' is displayed");
 
 });
 
@@ -79,7 +67,6 @@ Before({ tags: "@cleanupDepartment" }, function ()  {
 Before({ tags: "@cleanupOrganizationDepartment" }, function ()  {
 
   cy.visit('/organisaties');
-  cy.waitForReact();
   cy.url().should('eq', Cypress.config().baseUrl + '/organisaties');
   cy.get('input[placeholder="Zoeken"]')
     .type('Lorem Ipsum 1337');
@@ -99,27 +86,20 @@ Before({ tags: "@cleanupOrganizationDepartment" }, function ()  {
     .click();
   
   // Check success message
-  cy.get('[data-status="success"]')
-    .should('be.visible')
+  Step(this, "a success notification containing 'verwijderd' is displayed");
 
   cy.url().should('include', '/organisaties/');  
 
   // Delete organization
-  cy.waitForReact();
-  cy.get('[data-test="menuOrganization"]')
+  cy.get('[data-test="menuOrganization"]', { timeout: 10000 })
     .click();
-  cy.waitForReact();
-  cy.get('[data-test="menuOrganization.delete"]')
+  cy.get('[data-test="menuOrganization.delete"]', { timeout: 10000 })
     .click();
-  cy.waitForReact();
-  cy.get('[data-test="buttonModal.delete"]')
+  cy.get('[data-test="buttonModal.delete"]', { timeout: 10000 })
     .click();
-  cy.waitForReact();
   
   // Check success message
-  cy.get('[data-status="success"]')
-    .contains('Organisatie')
-    .should('be.visible')
+  Step(this, "a success notification containing 'Organisatie' is displayed");
 
 });
 
@@ -127,7 +107,6 @@ Before({ tags: "@cleanupOrganizationDepartment" }, function ()  {
 After({ tags: "@cleanupOrganizationDepartmentBankaccount" }, function ()  {
 
   cy.visit('/organisaties');
-  cy.waitForReact();
   cy.url().should('eq', Cypress.config().baseUrl + '/organisaties');
   cy.get('input[placeholder="Zoeken"]')
     .type('Lorem Ipsum 1337');
@@ -144,9 +123,7 @@ After({ tags: "@cleanupOrganizationDepartmentBankaccount" }, function ()  {
     .click();
 
   // Check success message
-  cy.get('[data-status="success"]')
-    .contains('Bankrekening')
-    .should('be.visible');
+  Step(this, "a success notification containing 'Bankrekening' is displayed");
   
   // Delete department
   cy.url().should('include', '/afdelingen/');  
@@ -158,35 +135,26 @@ After({ tags: "@cleanupOrganizationDepartmentBankaccount" }, function ()  {
     .click();
   
   // Check success message
-  cy.get('[data-status="success"]')
-    .contains('Afdeling')
-    .should('be.visible');
+  Step(this, "a success notification containing 'Afdeling' is displayed");
 
   cy.url().should('include', '/organisaties/');  
 
   // Delete organization
-  cy.waitForReact();
-  cy.get('[data-test="menuOrganization"]')
+  cy.get('[data-test="menuOrganization"]', { timeout: 10000 })
     .click();
-  cy.waitForReact();
-  cy.get('[data-test="menuOrganization.delete"]')
+  cy.get('[data-test="menuOrganization.delete"]', { timeout: 10000 })
     .click();
-  cy.waitForReact();
-  cy.get('[data-test="buttonModal.delete"]')
+  cy.get('[data-test="buttonModal.delete"]', { timeout: 10000 })
     .click();
-  cy.waitForReact();
   
   // Check success message
-  cy.get('[data-status="success"]')
-    .contains('Organisatie')
-    .should('be.visible');
+  Step(this, "a success notification containing 'Organisatie' is displayed");
 
 });
 
 After({ tags: "@cleanupOrganizationDepartmentPostaddressBankaccount", order: 9999 }, function ()  {
 
   cy.visit('/organisaties');
-  cy.waitForReact();
   cy.url().should('eq', Cypress.config().baseUrl + '/organisaties');
   cy.get('input[placeholder="Zoeken"]')
     .type('Lorem Ipsum 1337');
@@ -203,9 +171,7 @@ After({ tags: "@cleanupOrganizationDepartmentPostaddressBankaccount", order: 999
     .click();
 
   // Check success message
-  cy.get('[data-status="success"]')
-    .contains('Bankrekening')
-    .should('be.visible');
+  Step(this, "a success notification containing 'Bankrekening' is displayed");
   
   // Delete post address
   cy.get('[data-test="departmentPostaddress.delete"]')
@@ -214,9 +180,7 @@ After({ tags: "@cleanupOrganizationDepartmentPostaddressBankaccount", order: 999
     .click();
 
   // Check success message
-  cy.get('[data-status="success"]')
-    .contains('Postadres')
-    .should('be.visible');
+  Step(this, "a success notification containing 'Postadres' is displayed");
 
   // Delete department
   cy.url().should('include', '/afdelingen/');  
@@ -228,88 +192,37 @@ After({ tags: "@cleanupOrganizationDepartmentPostaddressBankaccount", order: 999
     .click();
   
   // Check success message
-  cy.get('[data-status="success"]')
-    .contains('Afdeling')
-    .should('be.visible');
+  Step(this, "a success notification containing 'Afdeling' is displayed");
 
   cy.url().should('include', '/organisaties/');  
 
   // Delete organization
-  cy.waitForReact();
-  cy.get('[data-test="menuOrganization"]')
+  cy.get('[data-test="menuOrganization"]', { timeout: 10000 })
     .click();
-  cy.waitForReact();
-  cy.get('[data-test="menuOrganization.delete"]')
+  cy.get('[data-test="menuOrganization.delete"]', { timeout: 10000 })
     .click();
-  cy.waitForReact();
-  cy.get('[data-test="buttonModal.delete"]')
+  cy.get('[data-test="buttonModal.delete"]', { timeout: 10000 })
     .click();
-  cy.waitForReact();
   
   // Check success message
-  cy.get('[data-status="success"]')
-    .contains('Organisatie')
-    .should('be.visible');
+  Step(this, "a success notification containing 'Organisatie' is displayed");
 
 });
 
 After({ tags: "@cleanupStatements" }, function ()  {
 
-  // Move to correct url
-  cy.visit('/bankzaken/bankafschriften');
-  cy.waitForReact();
-  cy.url().should('eq', Cypress.config().baseUrl + '/bankzaken/bankafschriften');
-  
-  // Clean up bank statement 1
-  cy.get('[data-test="button.Delete"]')
-    .first()
-    .click();
-  cy.waitForReact();
-  cy.get('[data-test="button.Delete"]')
-    .first()
-    .click();
-  cy.waitForReact();
-  cy.get('[data-status="success"]')
-    .should('be.visible');
-  cy.wait(6000);
-  cy.get('[data-status="success"]')
-    .should('not.exist');
-
-  // Clean up bank statement 2
-  cy.get('[data-test="button.Delete"]')
-    .click();
-  cy.waitForReact();
-  cy.get('[data-test="button.Delete"]')
-    .click();
-  cy.waitForReact();
-  cy.get('[data-status="success"]')
-    .should('be.visible');
-  cy.wait(6000);
-  cy.get('[data-status="success"]')
-    .should('not.exist');
+  // Clean up
+  Step(this, 'I truncate the alarms table in alarmenservice');
+  Step(this, 'I truncate the signals table in alarmenservice');
+  Step(this, 'I truncate the bank transaction tables');
   
 });
 
 After({ tags: "@cleanupStatement" }, function ()  {
 
-  // Move to correct url
-  cy.visit('/bankzaken/bankafschriften');
-  cy.waitForReact();
-  cy.url().should('eq', Cypress.config().baseUrl + '/bankzaken/bankafschriften');
-
-  // Clean up bank statement
-  cy.get('[data-test="button.Delete"]')
-    .first()
-    .click();
-  cy.waitForReact();
-  cy.get('[data-test="button.Delete"]')
-    .first()
-    .click();
-  cy.waitForReact();
-  cy.get('[data-status="success"]')
-    .should('be.visible');
-  cy.wait(6000);
-  cy.get('[data-status="success"]')
-    .should('not.exist');
+  // Clean up
+  Step(this, 'I truncate the alarms table in alarmenservice');
+  Step(this, 'I truncate the signals table in alarmenservice');
+  Step(this, 'I truncate the bank transaction tables');
   
 });

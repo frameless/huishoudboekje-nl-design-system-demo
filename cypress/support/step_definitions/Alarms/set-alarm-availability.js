@@ -21,9 +21,7 @@ Then('the alarm availability is displayed', () => {
     .should('be.visible')
 
   // Check success message
-  cy.get('[data-status="success"]')
-    .should('be.visible')
-  cy.contains('Het alarm is opgeslagen')
+  Step(this, "a success notification containing 'Het alarm is opgeslagen' is displayed");
   
 });
 
@@ -43,8 +41,7 @@ When('I click the "Disable alarm" button', () => {
   cy.get('label[data-checked]')
     .should('be.visible')
     .click()
-  cy.waitForReact()
-  cy.get('input[type="checkbox"]')
+  cy.get('input[type="checkbox"]', { timeout: 10000 })
     .should('be.visible')
   
 });
@@ -57,11 +54,7 @@ Then('the alarm status is "Disabled"', () => {
     .should('not.exist')
 
   // Check success message
-  cy.get('[data-status="success"]')
-    .should('be.visible')
-  cy.contains('Het alarm is uitgeschakeld')
-
-
+  Step(this, "a success notification containing 'Het alarm is uitgeschakeld' is displayed");
   
 });
 
@@ -82,10 +75,9 @@ Then('the alarm status is "Disabled"', () => {
     cy.get('label[data-checked]')
       .should('be.visible')
       .click()
-    cy.waitForReact()
 
     // Assert that the alarm is disabled
-    cy.get('input[type="checkbox"]')
+    cy.get('input[type="checkbox"]', { timeout: 10000 })
     cy.get('label[data-checked]')
       .should('not.exist')
     
@@ -96,8 +88,7 @@ Then('the alarm status is "Disabled"', () => {
     // Click the alarm toggle
     cy.get('label[class^="chakra-switch"]')
       .click()
-    cy.waitForReact()
-    cy.get('input[type="checkbox"]')
+    cy.get('input[type="checkbox"]', { timeout: 10000 })
       .should('be.visible')
     
   });
@@ -110,9 +101,7 @@ Then('the alarm status is "Disabled"', () => {
       .should('be.visible')
   
     // Check success message
-    cy.get('[data-status="success"]')
-      .should('be.visible')
-    cy.contains('Het alarm is ingeschakeld')
+    Step(this, "a success notification containing 'Het alarm is ingeschakeld' is displayed");
     
   });
   

@@ -17,14 +17,8 @@ Given('an agreement exists for scenario "payment amount too low, no amount margi
   uniqueId = Date.now().toString();
 
   // Navigate to citizen
-  cy.visit('/burgers');
-  cy.url().should('eq', Cypress.config().baseUrl + '/burgers')
-  cy.get('input[placeholder="Zoeken"]')
-    .type('Dingus');
-  cy.waitForReact();
-  cy.contains('Bingus')
-    .click();
-  cy.url().should('include', Cypress.config().baseUrl + '/burgers/')
+  Step(this, 'I open the citizen overview page for "Dingus Bingus"');
+
   cy.get('[data-test="button.Add"]')
     .click();
 
@@ -41,7 +35,7 @@ Given('an agreement exists for scenario "payment amount too low, no amount margi
   // Fill in IBAN
   cy.get('#tegenrekening')
     .type('NL86');
-  cy.contains('0002')
+  cy.contains('0002 4455')
     .click();
 
   // Payment direction: Toeslagen
@@ -59,15 +53,12 @@ Given('an agreement exists for scenario "payment amount too low, no amount margi
     .click();
 
   // Check success message
-  cy.get('[data-status="success"]')
-  .contains('afspraak')
-  .should('be.visible');
+  Step(this, "a success notification containing 'afspraak' is displayed");
 
 });
 
 Given('an alarm exists for scenario "payment amount too low, no amount margin"', () => {
 
-  cy.waitForReact();
   cy.url().should('include', Cypress.config().baseUrl + '/afspraken/')
   cy.get('h2').contains('Alarm').should('be.visible')
     .scrollIntoView() // Scrolls 'Alarm' into view
@@ -75,10 +66,8 @@ Given('an alarm exists for scenario "payment amount too low, no amount margin"',
     .contains('Toevoegen')
     .click();
 
-  cy.waitForReact(); // Wait for modal opening
-
   // Check whether modal is opened and visible
-  cy.get('section[aria-modal="true"]')
+  cy.get('section[aria-modal="true"]', { timeout: 10000 })
     .scrollIntoView()
     .should('exist');
 
@@ -117,17 +106,11 @@ Given('an alarm exists for scenario "payment amount too low, no amount margin"',
         .should('have.value', '0')
 
   // Click 'Opslaan' button
-  cy.waitForReact()
   cy.get('[data-test="buttonModal.submit"]')
       .click()
 
-  // Wait for modal to close
-  cy.waitForReact();
-
   // Check whether modal is closed
-  cy.contains('Alarm toevoegen')
-      .should('not.exist');
-  cy.get('section[aria-modal="true"]')
+  cy.get('section[aria-modal="true"]', { timeout: 10000 })
       .should('not.exist');
 
 });
@@ -277,7 +260,6 @@ When('a low amount bank transaction is booked to an agreement', () => {
 
   // Upload testdata CAMT
   cy.visit('/bankzaken/bankafschriften')
-  cy.waitForReact()
   cy.url().should('eq', Cypress.config().baseUrl + '/bankzaken/bankafschriften')
 
   cy.get('input[type="file"]')
@@ -293,7 +275,6 @@ When('a low amount bank transaction is booked to an agreement', () => {
 
   // Reconciliate the bank transaction to the correct agreement
   cy.visit('/bankzaken/transacties')
-  cy.waitForReact()
   cy.url().should('eq', Cypress.config().baseUrl + '/bankzaken/transacties')
 
   cy.get('[data-test="transactionsPage.filters.notReconciliated"]')
@@ -339,7 +320,6 @@ When('a low amount bank transaction is booked to an agreement', () => {
   
     cy.wait(3000)
     cy.visit('/signalen')
-    cy.waitForReact()
     cy.url().should('eq', Cypress.config().baseUrl + '/signalen')
   
     // Assertion
@@ -359,14 +339,8 @@ Given('an agreement exists for scenario "expected payment amount, no amount marg
   uniqueId = Date.now().toString();
 
   // Navigate to citizen
-  cy.visit('/burgers');
-  cy.url().should('eq', Cypress.config().baseUrl + '/burgers')
-  cy.get('input[placeholder="Zoeken"]')
-    .type('Dingus');
-  cy.waitForReact();
-  cy.contains('Bingus')
-    .click();
-  cy.url().should('include', Cypress.config().baseUrl + '/burgers/')
+  Step(this, 'I open the citizen overview page for "Dingus Bingus"');
+
   cy.get('[data-test="button.Add"]')
     .click();
 
@@ -383,7 +357,7 @@ Given('an agreement exists for scenario "expected payment amount, no amount marg
   // Fill in IBAN
   cy.get('#tegenrekening')
     .type('NL86');
-  cy.contains('0002')
+  cy.contains('0002 4455')
     .click();
 
   // Payment direction: Toeslagen
@@ -401,15 +375,12 @@ Given('an agreement exists for scenario "expected payment amount, no amount marg
     .click();
 
   // Check success message
-  cy.get('[data-status="success"]')
-  .contains('afspraak')
-  .should('be.visible');
+  Step(this, "a success notification containing 'afspraak' is displayed");
 
 });
 
 Given('an alarm exists for scenario "expected payment amount, no amount margin"', () => {
 
-  cy.waitForReact();
   cy.url().should('include', Cypress.config().baseUrl + '/afspraken/')
   cy.get('h2').contains('Alarm').should('be.visible')
     .scrollIntoView() // Scrolls 'Alarm' into view
@@ -417,10 +388,8 @@ Given('an alarm exists for scenario "expected payment amount, no amount margin"'
     .contains('Toevoegen')
     .click();
 
-  cy.waitForReact(); // Wait for modal opening
-
   // Check whether modal is opened and visible
-  cy.get('section[aria-modal="true"]')
+  cy.get('section[aria-modal="true"]', { timeout: 10000 })
     .scrollIntoView()
     .should('exist');
 
@@ -459,17 +428,11 @@ Given('an alarm exists for scenario "expected payment amount, no amount margin"'
         .should('have.value', '0')
 
   // Click 'Opslaan' button
-  cy.waitForReact()
   cy.get('[data-test="buttonModal.submit"]')
       .click()
 
-  // Wait for modal to close
-  cy.waitForReact();
-
   // Check whether modal is closed
-  cy.contains('Alarm toevoegen')
-      .should('not.exist');
-  cy.get('section[aria-modal="true"]')
+  cy.get('section[aria-modal="true"]', { timeout: 10000 })
       .should('not.exist');
 
 });
@@ -619,7 +582,6 @@ When('an expected amount bank transaction is booked to an agreement', () => {
 
   // Upload testdata CAMT
   cy.visit('/bankzaken/bankafschriften')
-  cy.waitForReact()
   cy.url().should('eq', Cypress.config().baseUrl + '/bankzaken/bankafschriften')
 
   cy.get('input[type="file"]')
@@ -635,7 +597,6 @@ When('an expected amount bank transaction is booked to an agreement', () => {
 
   // Reconciliate the bank transaction to the correct agreement
   cy.visit('/bankzaken/transacties')
-  cy.waitForReact()
   cy.url().should('eq', Cypress.config().baseUrl + '/bankzaken/transacties')
 
   cy.get('[data-test="transactionsPage.filters.notReconciliated"]')
@@ -677,12 +638,10 @@ Then('the bank transaction amount is equal to the sum of the expected amount plu
 
 Then('no signal is created', () => {
 
-  cy.wait(5000)
+  cy.wait(3000)
   cy.visit('/signalen')
   cy.waitForReact()
   cy.url().should('eq', Cypress.config().baseUrl + '/signalen')
-
-  cy.wait(3000)
 
   // Assertion
   cy.contains('Er zijn geen signalen gevonden');
@@ -699,14 +658,8 @@ Given('an agreement exists for scenario "payment amount too high, no amount marg
   uniqueId = Date.now().toString();
     
   // Navigate to citizen
-  cy.visit('/burgers');
-  cy.url().should('eq', Cypress.config().baseUrl + '/burgers')
-  cy.get('input[placeholder="Zoeken"]')
-    .type('Dingus');
-  cy.waitForReact();
-  cy.contains('Bingus')
-    .click();
-  cy.url().should('include', Cypress.config().baseUrl + '/burgers/')
+  Step(this, 'I open the citizen overview page for "Dingus Bingus"');
+  
   cy.get('[data-test="button.Add"]')
     .click();
 
@@ -723,7 +676,7 @@ Given('an agreement exists for scenario "payment amount too high, no amount marg
   // Fill in IBAN
   cy.get('#tegenrekening')
     .type('NL86');
-  cy.contains('0002')
+  cy.contains('0002 4455')
     .click();
 
   // Payment direction: Toeslagen
@@ -741,15 +694,12 @@ Given('an agreement exists for scenario "payment amount too high, no amount marg
     .click();
 
   // Check success message
-  cy.get('[data-status="success"]')
-  .contains('afspraak')
-  .should('be.visible');
+  Step(this, "a success notification containing 'afspraak' is displayed");
 
 });
 
 Given('an alarm exists for scenario "payment amount too high, no amount margin"', () => {
 
-    cy.waitForReact();
     cy.url().should('include', Cypress.config().baseUrl + '/afspraken/')
     cy.get('h2').contains('Alarm').should('be.visible')
       .scrollIntoView() // Scrolls 'Alarm' into view
@@ -757,10 +707,8 @@ Given('an alarm exists for scenario "payment amount too high, no amount margin"'
       .contains('Toevoegen')
       .click();
 
-    cy.waitForReact(); // Wait for modal opening
-
     // Check whether modal is opened and visible
-    cy.get('section[aria-modal="true"]')
+    cy.get('section[aria-modal="true"]', { timeout: 10000 })
       .scrollIntoView()
       .should('exist');
 
@@ -799,17 +747,11 @@ Given('an alarm exists for scenario "payment amount too high, no amount margin"'
           .should('have.value', '0')
 
     // Click 'Opslaan' button
-    cy.waitForReact()
     cy.get('[data-test="buttonModal.submit"]')
         .click()
 
-    // Wait for modal to close
-    cy.waitForReact();
-
     // Check whether modal is closed
-    cy.contains('Alarm toevoegen')
-        .should('not.exist');
-    cy.get('section[aria-modal="true"]')
+    cy.get('section[aria-modal="true"]', { timeout: 10000 })
         .should('not.exist');
 
 });
@@ -959,7 +901,6 @@ When('a high amount bank transaction is booked to an agreement', () => {
 
   // Upload testdata CAMT
   cy.visit('/bankzaken/bankafschriften')
-  cy.waitForReact()
   cy.url().should('eq', Cypress.config().baseUrl + '/bankzaken/bankafschriften')
 
   cy.get('input[type="file"]')
@@ -975,7 +916,6 @@ When('a high amount bank transaction is booked to an agreement', () => {
 
   // Reconciliate the bank transaction to the correct agreement
   cy.visit('/bankzaken/transacties')
-  cy.waitForReact()
   cy.url().should('eq', Cypress.config().baseUrl + '/bankzaken/transacties')
 
   cy.get('[data-test="transactionsPage.filters.notReconciliated"]')
@@ -1020,7 +960,6 @@ Then('a "Payment amount too high" signal is created', () => {
 
   cy.wait(3000)
   cy.visit('/signalen')
-  cy.waitForReact()
   cy.url().should('eq', Cypress.config().baseUrl + '/signalen')
 
   // Assertion

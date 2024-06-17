@@ -39,8 +39,6 @@ Given('0 active signals exist', () => {
       console.log(res.body);
     });
 
-  cy.wait(3000);
-
 });
  
 //#endregion
@@ -56,8 +54,6 @@ Given('1 or more active signals exist', () => {
   Step(this, 'the alarm timeframe expires');
  
   Step(this, 'a "Payment missing" signal is created');
-
-  cy.wait(10000);
 
 });
  
@@ -110,7 +106,6 @@ Then('the signal status is displayed', () => {
 Given('1 or more suppressed signals exist', () => {
 
   cy.visit('/signalen')
-  cy.wait(500);
   cy.url().should('eq', Cypress.config().baseUrl + '/signalen')
 
   // Suppress active signal from previous test
