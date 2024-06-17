@@ -13,8 +13,7 @@ When('I create a test organisation', () => {
 
   cy.visit('/organisaties');
   cy.url().should('eq', Cypress.config().baseUrl + '/organisaties');
-  cy.waitForReact();
-  cy.get('button')
+  cy.get('button', { timeout: 10000 })
     .contains('Toevoegen')
     .click();
   cy.url().should('eq', Cypress.config().baseUrl + '/organisaties/toevoegen');
@@ -29,14 +28,13 @@ When('I create a test organisation', () => {
   cy.get('button[type="submit"]')
     .click();
 
-  Step(this, 'a notification of success is displayed');
+    Step(this, "a success notification containing 'organisatie opgeslagen' is displayed");
 
 });
 
 When('I create a test department', () => {
 
   cy.visit('/organisaties');
-  cy.waitForReact();
   cy.url().should('eq', Cypress.config().baseUrl + '/organisaties');
   cy.get('input[placeholder="Zoeken"]')
     .type('Lorem Ipsum 1337');
@@ -55,7 +53,7 @@ When('I create a test department', () => {
   cy.get('button[type="submit"]')
     .click();
 
-  Step(this, 'a notification of success is displayed');
+  Step(this, "a success notification containing 'Nieuwe afdeling opgeslagen' is displayed");
 
 });
 
@@ -71,7 +69,7 @@ When('I create a test bank account', () => {
   cy.get('[data-test="buttonModal.submit"]')
     .click();
 
-  Step(this, 'a notification of success is displayed');
+  Step(this, "a success notification containing 'toegevoegd' is displayed");
 
   cy.contains('NL79 KOEX 0830 6420 05');
 

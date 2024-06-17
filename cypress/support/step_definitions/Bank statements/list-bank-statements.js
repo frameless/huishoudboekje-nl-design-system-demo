@@ -14,10 +14,8 @@ Given('0 bank statements exist', () => {
 
   // Assert no bank statements
   cy.visit('/bankzaken/bankafschriften');
-  cy.waitForReact();
   cy.url().should('eq', Cypress.config().baseUrl + '/bankzaken/bankafschriften')
-  cy.waitForReact();
-  cy.get('[aria-label="Verwijderen"]')
+  cy.get('[aria-label="Verwijderen"]', { timeout: 10000 })
     .should('not.exist');
 
 });
@@ -38,10 +36,8 @@ Given('1 or more bank statements exist', () => {
 
   // Navigate to bank statements page
   cy.visit('/bankzaken/bankafschriften');
-  cy.waitForReact();
   cy.url().should('eq', Cypress.config().baseUrl + '/bankzaken/bankafschriften')
-  cy.waitForReact();
-  cy.get('[aria-label="Verwijderen"]')
+  cy.get('[aria-label="Verwijderen"]', { timeout: 10000 })
     .should('not.exist');
 
   // Add file 1

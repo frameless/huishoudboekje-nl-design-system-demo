@@ -11,7 +11,7 @@ const header = {
 Then('the "Toegestane afwijking dag" field is set to {string}', (number) => {
 
   // Check 'Toegestane afwijking dag' field  
-  cy.get('[data-test="alarmForm.dateMargin"]')
+  cy.get('[data-test="alarmForm.dateMargin"]', { timeout: 10000 })
     .should('have.value', number)
 
 });

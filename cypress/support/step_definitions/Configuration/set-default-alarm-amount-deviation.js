@@ -65,8 +65,7 @@ When('I open the "Citizen details" page for the "Carly Padilla" citizen', () => 
   cy.url().should('eq', Cypress.config().baseUrl + '/burgers')
   cy.get('input[placeholder="Zoeken"]')
     .type('Carly');
-  cy.waitForReact();
-  cy.contains('Padilla')
+  cy.contains('Padilla', { timeout: 10000 })
     .click();
   cy.url().should('include', Cypress.config().baseUrl + '/burgers/')
 
@@ -90,21 +89,17 @@ When('I set the field "Organisatie" to {string}', (input) => {
   // Chop off string for search
   var inputSlice = input.slice(0, input.length - 3);
 
-  cy.get('#organisatie')
+  cy.get('#organisatie', { timeout: 10000 })
     .type(inputSlice)
-  cy.contains(input)
+  cy.contains(input, { timeout: 10000 })
     .click({ force: true });
-
-  cy.wait(2000);
 
 });
 
 When('the field "Afdeling" is set to {string}', (input) => {
 
-  cy.get('#afdeling')
+  cy.get('#afdeling', { timeout: 10000 })
     .contains(input)
-
-  cy.wait(500);
 
 });
 
@@ -113,20 +108,18 @@ When('I set the field "Postadres" to {string}', (input) => {
   // Chop off string for search
   var inputSlice = input.slice(0, input.length - 3);
 
-  cy.get('#postadres')
+  cy.get('#postadres', { timeout: 10000 })
     .type(inputSlice)
-  cy.wait(500);
-  cy.contains(input)
+  cy.contains(input, { timeout: 10000 })
     .click({ force: true });
-  cy.wait(500);
 
 });
 
 When('I set the field "Tegenrekening" to {string}', (input) => {
 
-  cy.get('#tegenrekening')
+  cy.get('#tegenrekening', { timeout: 10000 })
     .click()
-  cy.contains(input)
+  cy.contains(input, { timeout: 10000 })
     .click({ force: true });
 
 });
@@ -136,30 +129,30 @@ When('I set the field "Rubriek" to {string}', (input) => {
   // Chop off string for search
   var inputSlice = input.slice(0, input.length - 3);
 
-  cy.get('#rubriek')
+  cy.get('#rubriek', { timeout: 10000 })
     .type(inputSlice)
-  cy.contains(input)
+  cy.contains(input, { timeout: 10000 })
     .click({ force: true });
 
 });
 
 When('I set the field "Omschrijving" to {string}', (input) => {
 
-  cy.get('[data-test="select.agreementIncomeDescription"]')
+  cy.get('[data-test="select.agreementIncomeDescription"]', { timeout: 10000 })
     .type(input);
 
 });
 
 When('I set the field "Bedrag" to {string}', (input) => {
 
-  cy.get('[data-test="select.agreementIncomeAmount"]')
+  cy.get('[data-test="select.agreementIncomeAmount"]', { timeout: 10000 })
     .type(input);
 
 });
 
 When('I set the field "Startdatum" to {string}', (input) => {
 
-  cy.get('[data-test="input.startDate"]')
+  cy.get('[data-test="input.startDate"]', { timeout: 10000 })
     .type('{selectAll}' + input + '{enter}');
 
 });
@@ -167,7 +160,7 @@ When('I set the field "Startdatum" to {string}', (input) => {
 Then('the "Toegestane afwijking bedrag" field is set to {string}', (number) => {
 
   // Check 'Toegestane afwijking bedrag (in euro's)' field  
-  cy.get('[data-test="alarmForm.amountMargin"]')
+  cy.get('[data-test="alarmForm.amountMargin"]', { timeout: 10000 })
     .should('have.value', number)
 
 });

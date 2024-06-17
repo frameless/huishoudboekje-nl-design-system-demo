@@ -67,14 +67,8 @@ Given('an agreement exists for scenario "no transaction within timeframe"', () =
   });
 
   // Navigate to citizen
-  cy.visit('/burgers');
-  cy.url().should('eq', Cypress.config().baseUrl + '/burgers')
-  cy.get('input[placeholder="Zoeken"]')
-    .type('Dingus');
-  cy.waitForReact();
-  cy.contains('Bingus')
-    .click();
-  cy.url().should('include', Cypress.config().baseUrl + '/burgers/')
+  Step(this, 'I open the citizen overview page for "Dingus Bingus"');
+  
   cy.get('[data-test="button.Add"]')
     .click();
 
@@ -91,7 +85,7 @@ Given('an agreement exists for scenario "no transaction within timeframe"', () =
   // Fill in IBAN
   cy.get('#tegenrekening')
     .type('NL86');
-  cy.contains('0002')
+  cy.contains('0002 4455')
     .click();
 
   // Payment direction: Toeslagen
@@ -109,9 +103,7 @@ Given('an agreement exists for scenario "no transaction within timeframe"', () =
     .click();
 
   // Check success message
-  cy.get('[data-status="success"]')
-  .contains('afspraak')
-  .should('be.visible');
+  Step(this, "a success notification containing 'afspraak' is displayed");
 
 });
 
@@ -126,9 +118,6 @@ Given('an alarm exists for scenario "no transaction within timeframe"', () => {
     console.log(res.body);
   });
 
-  cy.wait(500);
-
-  cy.waitForReact();
   cy.url().should('include', Cypress.config().baseUrl + '/afspraken/')
   cy.get('h2').contains('Alarm').should('be.visible')
     .scrollIntoView() // Scrolls 'Alarm' into view
@@ -136,10 +125,8 @@ Given('an alarm exists for scenario "no transaction within timeframe"', () => {
     .contains('Toevoegen')
     .click();
 
-  cy.waitForReact(); // Wait for modal opening
-
   // Check whether modal is opened and visible
-  cy.get('section[aria-modal="true"]')
+  cy.get('section[aria-modal="true"]', { timeout: 10000 })
     .scrollIntoView()
     .should('exist');
 
@@ -172,17 +159,11 @@ Given('an alarm exists for scenario "no transaction within timeframe"', () => {
         .should('have.value', '0')
 
   // Click 'Opslaan' button
-  cy.waitForReact()
   cy.get('[data-test="buttonModal.submit"]')
     .click()
 
-  // Wait for modal to close
-  cy.waitForReact();
-
   // Check whether modal is closed
-  cy.contains('Alarm toevoegen')
-    .should('not.exist');
-  cy.get('section[aria-modal="true"]')
+  cy.get('section[aria-modal="true"]', { timeout: 10000 })
     .should('not.exist');
  
 });
@@ -207,7 +188,8 @@ When('the alarm timeframe expires', () => {
       })
     }
 
-  cy.wait(12000);
+  // Wait for alarm evaluation to complete
+  cy.wait(6000);
 
   })
 
@@ -217,7 +199,6 @@ Then('a "Payment missing" signal is created', () => {
 
   // Refresh alarms to trigger timeframe expiration evaluation
   cy.visit('/signalen')
-  cy.waitForReact()
   cy.url().should('eq', Cypress.config().baseUrl + '/signalen')
 
   // Assertion

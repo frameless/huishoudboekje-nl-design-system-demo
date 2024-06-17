@@ -24,14 +24,8 @@ Then("the citizen's balance is {string}", (balance) => {
 Given('an agreement exists for scenario "negative citizen balance"', () => {
   
   // Navigate to citizen
-  cy.visit('/burgers');
-  cy.url().should('eq', Cypress.config().baseUrl + '/burgers')
-  cy.get('input[placeholder="Zoeken"]')
-  .type('Dingus');
-  cy.waitForReact();
-  cy.contains('Bingus')
-    .click();
-  cy.url().should('include', Cypress.config().baseUrl + '/burgers/')
+  Step(this, 'I open the citizen overview page for "Dingus Bingus"');
+  
   cy.get('[data-test="button.Add"]')
     .click();
 
@@ -48,7 +42,7 @@ Given('an agreement exists for scenario "negative citizen balance"', () => {
   // Fill in IBAN
   cy.get('#tegenrekening')
     .type('NL86');
-  cy.contains('0002')
+  cy.contains('0002 4455')
     .click();
 
   // Payment direction: Toeslagen
@@ -66,9 +60,7 @@ Given('an agreement exists for scenario "negative citizen balance"', () => {
     .click();
 
   // Check success message
-  cy.get('[data-status="success"]')
-  .contains('afspraak')
-  .should('be.visible');
+  Step(this, "a success notification containing 'afspraak' is displayed");
 
 });
 
@@ -213,7 +205,6 @@ When('I select a CAMT test file with zero payment amount', () => {
   
     // Upload testdata CAMT
     cy.visit('/bankzaken/bankafschriften')
-    cy.waitForReact()
     cy.url().should('eq', Cypress.config().baseUrl + '/bankzaken/bankafschriften')
     
     cy.get('input[type="file"]')
@@ -222,6 +213,8 @@ When('I select a CAMT test file with zero payment amount', () => {
   
     cy.get('input[type="file"]')
       .selectFile('cypress/testdata/paymentAmountZero.xml', { force: true })
+
+    // Wait for file to be uploaded
     cy.wait(3000);
   
   });
@@ -230,7 +223,6 @@ When('the zero amount bank transaction is booked to the agreement "Loon"', () =>
   
   // Reconciliate the bank transaction to the correct agreement
   cy.visit('/bankzaken/transacties')
-  cy.waitForReact()
   cy.url().should('eq', Cypress.config().baseUrl + '/bankzaken/transacties')
   
   cy.get('[data-test="transactionsPage.filters.notReconciliated"]')
@@ -251,8 +243,6 @@ When('the zero amount bank transaction is booked to the agreement "Loon"', () =>
     .click();
   cy.contains('Loon')
     .click();
-
-  cy.wait(1000);
 
   Step(this, "a success notification containing 'De transactie is afgeletterd' is displayed");
     
@@ -403,7 +393,6 @@ When('a positive bank transaction with amount {string} is booked to an agreement
 
   // Upload testdata CAMT
   cy.visit('/bankzaken/bankafschriften')
-  cy.waitForReact()
   cy.url().should('eq', Cypress.config().baseUrl + '/bankzaken/bankafschriften')
 
   cy.get('input[type="file"]')
@@ -412,6 +401,8 @@ When('a positive bank transaction with amount {string} is booked to an agreement
 
   cy.get('input[type="file"]')
     .selectFile('cypress/testdata/paymentAmountPositive.xml', { force: true })
+  
+  // Wait for file to upload
   cy.wait(3000);
   cy.get('[aria-label="Close"]')
     .should('be.visible')
@@ -419,7 +410,6 @@ When('a positive bank transaction with amount {string} is booked to an agreement
 
   // Reconciliate the bank transaction to the correct agreement
   cy.visit('/bankzaken/transacties')
-  cy.waitForReact()
   cy.url().should('eq', Cypress.config().baseUrl + '/bankzaken/transacties')
 
   cy.get('[data-test="transactionsPage.filters.notReconciliated"]')
@@ -438,8 +428,6 @@ When('a positive bank transaction with amount {string} is booked to an agreement
     .click();
   cy.contains('Loon')
     .click();
-
-  cy.wait(1000);
 
   Step(this, "a success notification containing 'De transactie is afgeletterd' is displayed");
  
@@ -449,7 +437,6 @@ When('the negative amount bank transaction with amount {string} is booked to the
   
   // Reconciliate the bank transaction to the correct agreement
   cy.visit('/bankzaken/transacties')
-  cy.waitForReact()
   cy.url().should('eq', Cypress.config().baseUrl + '/bankzaken/transacties')
   
   cy.get('[data-test="transactionsPage.filters.notReconciliated"]')
@@ -468,8 +455,6 @@ When('the negative amount bank transaction with amount {string} is booked to the
     .click();
   cy.contains('Loon')
     .click();
-
-  cy.wait(1000);
 
   Step(this, "a success notification containing 'De transactie is afgeletterd' is displayed");
     

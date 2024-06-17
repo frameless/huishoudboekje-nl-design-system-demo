@@ -40,8 +40,7 @@ Given('the bank account is applied to a journal entry', () => {
   // Add post address to test department
   cy.get('[data-test="button.addPostaddressModal"]')
     .click();
-  cy.waitForReact();
-  cy.get('[data-test="postaddress.streetname"]')
+  cy.get('[data-test="postaddress.streetname"]', { timeout: 10000 })
     .type('Teststraat');
   cy.get('[data-test="postaddress.housenumber"]')
     .type('1');
@@ -53,19 +52,11 @@ Given('the bank account is applied to a journal entry', () => {
     .click();
 
   // Check success message
-  cy.get('[data-status="success"]')
-    .contains('Postadres')
-    .should('be.visible');
+  Step(this, "a success notification containing 'Postadres' is displayed");
     
   // Navigate to citizen
-  cy.visit('/burgers');
-  cy.url().should('eq', Cypress.config().baseUrl + '/burgers')
-  cy.get('input[placeholder="Zoeken"]')
-    .type('Mcpherson');
-  cy.waitForReact();
-  cy.contains('Patterson')
-    .click();
-  cy.url().should('include', Cypress.config().baseUrl + '/burgers/')
+  Step(this, 'I open the citizen overview page for "Dingus Bingus"');
+  
   cy.get('[data-test="button.Add"]')
     .click();
 
@@ -96,13 +87,10 @@ Given('the bank account is applied to a journal entry', () => {
     .click();
   
   // Check success message
-  cy.get('[data-status="success"]')
-    .contains('afspraak')
-    .should('be.visible');
+  Step(this, "a success notification containing 'afspraak' is displayed");
 
   // Navigate to test department
   cy.visit('/organisaties');
-  cy.waitForReact();
   cy.url().should('eq', Cypress.config().baseUrl + '/organisaties');
   cy.get('input[placeholder="Zoeken"]')
     .type('Lorem Ipsum 1337');

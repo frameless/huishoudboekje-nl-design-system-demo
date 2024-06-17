@@ -59,8 +59,6 @@ Then('the "Refresh signals" button is displayed', () => {
         timestampLater2 = text.split(':')[1] + ":" + text.split(':')[2];
         cy.log(timestampLater2);
       })
-    
-    cy.wait(500);
 
     expect(timestampLater2).not.to.equal(timestamp);
   

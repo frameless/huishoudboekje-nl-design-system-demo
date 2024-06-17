@@ -65,7 +65,7 @@ Feature: create signal on negative balance
     # deactivated signal visible
         Then the text 'Er is een negatief saldo geconstateerd bij Dingus Bingus.' is displayed
 
-    @cleanupSixStatementsAgreement
+    @truncateStatements
     Scenario: repeating negative citizen balance, deactivated signal
     # reset filter
     # add transaction with amount -0,01

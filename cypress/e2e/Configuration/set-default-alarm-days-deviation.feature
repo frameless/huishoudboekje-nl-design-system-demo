@@ -22,11 +22,11 @@ Feature: set default alarm days deviation
     When I set the field "Sleutel" to 'alarm_afwijking_datum'
     When I set the field "Waarde" to '5'
     When I click the button "Opslaan" in the section with the header "Parameters"
-    Then a notification of success is displayed
+    Then a success notification containing 'opgeslagen' is displayed
     Then the text 'alarm_afwijking_datum' is displayed
     Then the text '5' is displayed
 
-    When I open the "Citizen details" page for the "Dingus Bingus" citizen
+    When I open the citizen overview page for 'Dingus Bingus'
     When I click the button 'Toevoegen'
     When I set the "Partij" option to "Organisatie"
     Then the field 'Organisatie' is displayed
@@ -48,7 +48,7 @@ Feature: set default alarm days deviation
     When I set the field "Bedrag" to '1234'
     When I set the field "Startdatum" to '29-04-2024'
     When I click the button "Opslaan"
-    Then a notification of success is displayed
+    Then a success notification containing 'afspraak is opgeslagen' is displayed
 
     When I click the button 'Toevoegen'
     Then the "Create alarm form" is displayed

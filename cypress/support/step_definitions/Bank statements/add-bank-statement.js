@@ -98,7 +98,6 @@ When('I click the "Close modal" button', () => {
 
   cy.get('button[aria-label="Close"]')
     .click();
-  cy.wait(500);
 
 });
 
@@ -112,12 +111,10 @@ Then('0 transactions were added', () => {
 
   cy.visit('/bankzaken/transacties');
   cy.url().should('eq', Cypress.config().baseUrl + '/bankzaken/transacties');
-  cy.waitForReact();
 
-  cy.get('[data-test="transactionsPage.filters.allReconciliated"]')
+  cy.get('[data-test="transactionsPage.filters.allReconciliated"]', { timeout: 10000 })
     .click();
-  cy.waitForReact();
-  cy.contains('Er zijn geen banktransacties gevonden');
+  cy.contains('Er zijn geen banktransacties gevonden', { timeout: 10000 })
 
 });
 
@@ -168,16 +165,14 @@ Then('the "Duplicate_bank_transaction_2_CAMT.053_v1.xml" file is not displayed',
 
 When('I set the "Date from" filter to "3-4-2023"', () => {
 
-  cy.wait(1000);
-  cy.get('[data-test="transactionsPage.filters.from"]')
+  cy.get('[data-test="transactionsPage.filters.from"]', { timeout: 10000 })
     .type('3-4-2023{enter}');
 
 });
 
 When('I set the "Date to" filter to "3-4-2023"', () => {
 
-  cy.wait(1000);
-  cy.get('[data-test="transactionsPage.filters.to"]')
+  cy.get('[data-test="transactionsPage.filters.to"]', { timeout: 10000 })
     .type('3-4-2023{enter}');
 
 });
@@ -185,16 +180,14 @@ When('I set the "Date to" filter to "3-4-2023"', () => {
 Then('the bank transaction amount is "-234,56"', () => {
 
   // Assert bank transaction amount
-  cy.waitForReact();
-  cy.contains('-234,56');
+  cy.contains('-234,56', { timeout: 10000 })
 
 });
 
 Then('1 bank transaction with "GEMEENTE UTRECHT" name is displayed', () => {
 
   // Assert only one transaction
-  cy.waitForReact();
-  cy.find('contains("GEMEENTE UTRECHT")')
+  cy.find('contains("GEMEENTE UTRECHT")', { timeout: 10000 })
     .should('have.length', 1);
 
 });
@@ -225,7 +218,6 @@ Then('Add bank statement without cleaning up', () => {
 When('I view the "Bank statement" page', () => {
 
   cy.visit('/bankzaken/bankafschriften')
-  cy.waitForReact()
   cy.url().should('eq', Cypress.config().baseUrl + '/bankzaken/bankafschriften')
 
 });
@@ -241,13 +233,13 @@ When('I select "camt053-kosten-betalingsverkeer-20231130.xml"', () => {
 
   cy.get('input[type="file"]')
     .selectFile('voorbeeldbankafschriften/camt053-kosten-betalingsverkeer-20231130.xml', { force: true })
+  cy.wait(modalWait)
 
 });
 
 Then('the "Add bank statement" modal opens', () => {
-
-  cy.wait(modalWait)
-  cy.get('header')
+  
+  cy.get('header', { timeout: 10000 })
     .contains('Bankafschrift toevoegen')
 
 });
@@ -276,7 +268,7 @@ Then('the file upload success status icon is displayed', () => {
 When('I click the close "Add bank statement" modal button', () => {
 
   // Close modal
-  cy.get('[aria-label="Close"]')
+  cy.get('[aria-label="Close"]', { timeout: 10000 })
     .should('exist')  
     .should('be.visible')
     .click() // Assert clicking 'Close' button works
@@ -286,7 +278,7 @@ When('I click the close "Add bank statement" modal button', () => {
 Then('the "Add bank statement" modal closes', () => {
 
   // Assertion
-  cy.get('header[id^="chakra-modal"]')
+  cy.get('header[id^="chakra-modal"]', { timeout: 10000 })
     .should('not.exist');
 
 });
@@ -327,30 +319,26 @@ When('I view the "Bank transactions" page', () => {
 
   cy.visit('/bankzaken/transacties');
   cy.url().should('eq', Cypress.config().baseUrl + '/bankzaken/transacties');
-  cy.waitForReact();
 
 });
 
 When('I click the "Advanced search options" button', () => {
 
-  cy.waitForReact();
-  cy.get('[data-test="transactions.expandFilter"]')
+  cy.get('[data-test="transactions.expandFilter"]', { timeout: 10000 })
     .click();
 
 });
 
 When('I set the "Date from" filter to "1-12-2023"', () => {
 
-  cy.wait(1000);
-  cy.get('[data-test="transactionsPage.filters.from"]')
+  cy.get('[data-test="transactionsPage.filters.from"]', { timeout: 10000 })
     .type('1-12-2023{enter}');
 
 });
 
 When('I set the "Date to" filter to "1-12-2023"', () => {
 
-  cy.wait(1000);
-  cy.get('[data-test="transactionsPage.filters.to"]')
+  cy.get('[data-test="transactionsPage.filters.to"]', { timeout: 10000 })
     .type('1-12-2023{enter}');
 
 });
@@ -358,24 +346,21 @@ When('I set the "Date to" filter to "1-12-2023"', () => {
 Then('a bank transaction with "Onbekende IBAN" name is displayed', () => {
 
   // Assert that transaction with "Onbekende IBAN" name is displayed
-  cy.wait(1000);
-  cy.contains('Onbekende IBAN')
+  cy.contains('Onbekende IBAN', { timeout: 10000 })
 
 });
 
 Then('the bank transaction amount is "-281,94"', () => {
 
   // Assert that bank transaction amount is "-281,94"
-  cy.waitForReact();
-  cy.contains('-281,94');
+  cy.contains('-281,94', { timeout: 10000 })
 
 });
 
 When('I click the "-281,94" bank transaction', () => {
 
   // Click the bank transaction
-  cy.waitForReact();
-  cy.contains('-281,94')
+  cy.contains('-281,94', { timeout: 10000 })
     .click();
   cy.url().should('include', Cypress.config().baseUrl + '/bankzaken/transacties/')
 
@@ -384,8 +369,7 @@ When('I click the "-281,94" bank transaction', () => {
 When('I click the "Rubriek" button', () => {
 
   // Click the bank transaction
-  cy.waitForReact();
-  cy.contains('-281,94')
+  cy.contains('-281,94', { timeout: 10000 })
     .click();
   cy.url().should('include', Cypress.config().baseUrl + '/bankzaken/transacties/')
 
@@ -403,14 +387,6 @@ When('I select the "Lokale lasten" option', () => {
   cy.contains('Lokale lasten')
     .click({ force: true })
   
-});
-
-Then('a success-notification is displayed', () => {
-
-  // Assert that a notification of success is displayed
-  cy.get('[data-status="success"]')
-    .should('be.visible');
-
 });
 
 Then('the status is "Handmatig afgeletterd"', () => {
@@ -450,7 +426,6 @@ Then('the "Afletteren ongedaan maken" button is displayed', () => {
 Given('the "Gemeente Utrecht" organisation exists', () => {
 
   cy.visit('/organisaties');
-  cy.waitForReact();
   cy.url().should('eq', Cypress.config().baseUrl + '/organisaties');
   cy.get('input[placeholder="Zoeken"]')
     .type('Gemeente');
@@ -489,16 +464,14 @@ Then('the "Payment_mandate_CAMT.053_v1.xml" filename is displayed', () => {
 
 When('I set the "Date from" filter to "15-2-2024"', () => {
 
-  cy.wait(1000);
-  cy.get('[data-test="transactionsPage.filters.from"]')
+  cy.get('[data-test="transactionsPage.filters.from"]', { timeout: 10000 })
     .type('15-2-2024{enter}');
 
 });
 
 When('I set the "Date to" filter to "15-2-2024"', () => {
 
-  cy.wait(1000);
-  cy.get('[data-test="transactionsPage.filters.to"]')
+  cy.get('[data-test="transactionsPage.filters.to"]', { timeout: 10000 })
     .type('15-2-2024{enter}');
 
 });
@@ -506,24 +479,21 @@ When('I set the "Date to" filter to "15-2-2024"', () => {
 Then('a bank transaction with "GEMEENTE UTRECHT" name is displayed', () => {
 
   // Assert transaction name
-  cy.wait(1000);
-  cy.contains('GEMEENTE UTRECHT')
+  cy.contains('GEMEENTE UTRECHT', { timeout: 10000 })
 
 });
 
 Then('the bank transaction amount is "-654,32"', () => {
 
   // Assert bank transaction amount
-  cy.waitForReact();
-  cy.contains('-654,32');
+  cy.contains('-654,32', { timeout: 10000 })
 
 });
 
 When('I click the "-654,32" bank transaction', () => {
 
   // Click the bank transaction
-  cy.waitForReact();
-  cy.contains('-654,32')
+  cy.contains('-654,32', { timeout: 10000 })
     .click();
   cy.url().should('include', Cypress.config().baseUrl + '/bankzaken/transacties/')
 
@@ -576,16 +546,14 @@ Then('the "Basic_bank_transaction_CAMT.053_v1.xml" filename is displayed', () =>
 
 When('I set the "Date from" filter to "27-10-2023"', () => {
 
-  cy.wait(1000);
-  cy.get('[data-test="transactionsPage.filters.from"]')
+  cy.get('[data-test="transactionsPage.filters.from"]', { timeout: 10000 })
     .type('27-10-2023{enter}');
 
 });
 
 When('I set the "Date to" filter to "27-10-2023"', () => {
 
-  cy.wait(1000);
-  cy.get('[data-test="transactionsPage.filters.to"]')
+  cy.get('[data-test="transactionsPage.filters.to"]', { timeout: 10000 })
     .type('27-10-2023{enter}');
 
 });
@@ -593,24 +561,21 @@ When('I set the "Date to" filter to "27-10-2023"', () => {
 Then('a bank transaction with "GEM UTRECHT WENI" name is displayed', () => {
 
   // Assert that transaction name is displayed
-  cy.wait(1000);
-  cy.contains('GEM UTRECHT WENI')
+  cy.contains('GEM UTRECHT WENI', { timeout: 10000 })
 
 });
 
 Then('the bank transaction amount is "1251,26"', () => {
 
   // Assert bank transaction amount
-  cy.waitForReact();
-  cy.contains('1.251,26');
+  cy.contains('1.251,26', { timeout: 10000 })
 
 });
 
 When('I click the "1251,26" bank transaction', () => {
 
   // Click the bank transaction
-  cy.waitForReact();
-  cy.contains('1.251,26')
+  cy.contains('1.251,26', { timeout: 10000 })
     .click();
   cy.url().should('include', Cypress.config().baseUrl + '/bankzaken/transacties/')
 

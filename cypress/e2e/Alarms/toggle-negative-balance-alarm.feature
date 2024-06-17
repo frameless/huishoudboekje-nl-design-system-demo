@@ -6,7 +6,7 @@ Feature: toggle negative account balance alarm
 
   Background:
     # Given I am logged in as an authorised site user
-    # Given the citizen 'Mcpherson Patterson' exists
+    # Given the test citizen exists
 
   Scenario: view toggle form
     When I open the citizen overview page for 'Dingus Bingus'

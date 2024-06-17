@@ -7,6 +7,7 @@ const header = {
   'Accept-Encoding': 'gzip, deflate, br',
 };
 
+// Set database queries
 const queryAddCitizen = `mutation createBurger {
   createBurger(input:
   {
@@ -30,6 +31,26 @@ const queryAddCitizen = `mutation createBurger {
   {
     burger{id}
   }
+}`
+
+const queryTruncateAlarm = `mutation Truncate {
+  truncateTable(databaseName: "alarmenservice", tableName: "Alarm")
+}`
+
+const queryTruncateSignal = `mutation Truncate {
+  truncateTable(databaseName: "alarmenservice", tableName: "signals")
+}`
+
+const queryTruncateBankTransactions = `mutation Truncate {
+  truncateTable(databaseName: "banktransactieservice", tableName: "bank_transactions")
+}`
+
+const queryTruncateCustomerStatements = `mutation Truncate {
+  truncateTable(databaseName: "banktransactieservice", tableName: "customer_statement_messages")
+}`
+
+const queryTruncateJournaalposten = `mutation Truncate {
+  truncateTable(databaseName: "huishoudboekjeservice", tableName: "journaalposten")
 }`
 
 let cookieAppSession = '';
@@ -174,29 +195,140 @@ Before(function () {
 AfterAll({ order: 1 },function () {
 // This hook will be executed once at the end of a feature.
   
-    // Delete test citizen
-    cy.request({
-      method: "post",
-      url: Cypress.config().baseUrl + '/apiV2/graphql',
-      body: { query: `mutation deleteBurger {
-        deleteBurger(id: ` + citizenId + `)
-        {
-          ok
-        }
-      }` },
-    }).then((res) => {
-      console.log(res.body);
-      console.log('Test citizen has been deleted.')
-    });
-    
+  // Delete test citizen
+  cy.request({
+    method: "post",
+    url: Cypress.config().baseUrl + '/apiV2/graphql',
+    body: { query: `mutation deleteBurger {
+      deleteBurger(id: ` + citizenId + `)
+      {
+        ok
+      }
+    }` },
+  }).then((res) => {
+    console.log(res.body);
+    console.log('Test citizen has been deleted.')
+    cy.log('Deleted test citizen')
   });
+
+// Clean up
+  // Truncate alarms
+  cy.request({
+    method: "post",
+    url: Cypress.env().graphqlUrl + '/graphql',
+    body: { query: queryTruncateAlarm },
+  }).then((res) => {
+    console.log(res.body);
+  });
+  cy.log("Truncated table 'alarms'")
+
+  // Truncate signals
+  cy.request({
+    method: "post",
+    url: Cypress.env().graphqlUrl + '/graphql',
+    body: { query: queryTruncateSignal },
+  }).then((res) => {
+    console.log(res.body);
+  });
+  cy.log("Truncated table 'signals'")
+
+  // Truncate bank statements
+  cy.request({
+    method: "post",
+    url: Cypress.env().graphqlUrl + '/graphql',
+    body: { query: queryTruncateBankTransactions },
+  }).then((res) => {
+    console.log(res.body);
+  });
+  cy.log("Truncated table 'bank_transactions'")
+
+  // Truncate customer statements
+  cy.request({
+    method: "post",
+    url: Cypress.env().graphqlUrl + '/graphql',
+    body: { query: queryTruncateCustomerStatements },
+  }).then((res) => {
+    console.log(res.body);
+  });
+  cy.log("Truncated table 'customer_statement_messages'")
+
+  // Truncate journaalposten
+  cy.request({
+    method: "post",
+    url: Cypress.env().graphqlUrl + '/graphql',
+    body: { query: queryTruncateJournaalposten },
+  }).then((res) => {
+    console.log(res.body);
+  });
+  cy.log("Truncated table 'journaalposten'")
+    
+});
+
+// Truncate tables
+When('I truncate the alarms table in alarmenservice', () => {
+
+  cy.request({
+    method: "post",
+    url: Cypress.env().graphqlUrl + '/graphql',
+    body: { query: queryTruncateAlarm },
+  }).then((res) => {
+    console.log(res.body);
+  });
+  cy.log("Truncated table 'alarms'")
+
+});
+
+When('I truncate the signals table in alarmenservice', () => {
+
+  cy.request({
+    method: "post",
+    url: Cypress.env().graphqlUrl + '/graphql',
+    body: { query: queryTruncateSignal },
+  }).then((res) => {
+    console.log(res.body);
+  });
+  cy.log("Truncated table 'signals'")
+
+});
+
+When('I truncate the bank transaction tables', () => {
+
+  // Truncate bank statements
+  cy.request({
+    method: "post",
+    url: Cypress.env().graphqlUrl + '/graphql',
+    body: { query: queryTruncateBankTransactions },
+  }).then((res) => {
+    console.log(res.body);
+  });
+  cy.log("Truncated table 'bank_transactions'")
+
+  // Truncate customer statements
+  cy.request({
+    method: "post",
+    url: Cypress.env().graphqlUrl + '/graphql',
+    body: { query: queryTruncateCustomerStatements },
+  }).then((res) => {
+    console.log(res.body);
+  });
+  cy.log("Truncated table 'customer_statement_messages'")
+
+  // Truncate journaalposten
+  cy.request({
+    method: "post",
+    url: Cypress.env().graphqlUrl + '/graphql',
+    body: { query: queryTruncateJournaalposten },
+  }).then((res) => {
+    console.log(res.body);
+  });
+  cy.log("Truncated table 'journaalposten'")
+
+});
 
 // Navigate to a page
 When('I navigate to the page {string}', (url) => {
 
   cy.visit(url)
-  cy.wait(500);
-  cy.waitForReact();
   cy.url().should('eq', Cypress.config().baseUrl + url)
 
 });
@@ -253,9 +385,22 @@ Then('the label {string} is marked as required', (labelName) => {
 // Make sure text is not displayed on page
 Then('the text {string} is not displayed', (text) => {
 
-  cy.wait(1000);
-  cy.get('body')
+  cy.get('body', { timeout: 10000 })
     .should('not.contain', text);
+
+});
+
+// Find a generic success message
+Then('a notification of success is displayed', () => {
+
+  // Assertion
+  cy.get('[data-status="success"]', { timeout: 10000 })
+    .scrollIntoView()
+    .should('be.visible');
+
+  // Make sure notification has disappeared from view
+  cy.get('[data-status="success"]', { timeout: 10000 })
+    .should('not.exist');
 
 });
 
@@ -263,9 +408,13 @@ Then('the text {string} is not displayed', (text) => {
 Then('a success notification containing {string} is displayed', (notificationText) => {
 
   // Assertion
-  cy.get('[data-status="success"]')
-    .contains(notificationText)
-    .should('be.visible');
+  cy.get('[data-status="success"]', { timeout: 10000 })
+    .should('contain', notificationText)
+    .and('be.visible')
+
+  // Make sure notification has disappeared from view
+  cy.get('[data-status="success"]', { timeout: 10000 })
+    .should('not.exist');
 
 });
 
@@ -273,9 +422,13 @@ Then('a success notification containing {string} is displayed', (notificationTex
 Then('an error notification containing {string} is displayed', (notificationText) => {
 
   // Assertion
-  cy.get('[data-status="error"]')
-    .contains(notificationText)
-    .should('be.visible')
+  cy.get('[data-status="error"]', { timeout: 10000 })
+    .should('contain', notificationText)
+    .and('be.visible');
+
+  // Make sure notification has disappeared from view
+  cy.get('[data-status="error"]', { timeout: 10000 })
+    .should('not.exist');
 
 });
 
@@ -310,7 +463,7 @@ Given('the {string} citizen exists', (fullName) => {
 Then('the "Add alarm" modal is displayed', () => {
 
   // Assertion
-  cy.get('[data-test="modal.Alarm"]')
+  cy.get('[data-test="modal.Alarm"]', { timeout: 10000 })
     .should('be.visible');
 
 });

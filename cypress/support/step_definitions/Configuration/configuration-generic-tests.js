@@ -22,12 +22,11 @@ Before({ tags: "@beforeCleanupPaymentInstruction" }, function (){
     .should('be.visible')
     .click();
   
-  Step(this, "a notification of success is displayed");
+  // Check success message
+  Step(this, "a success notification containing 'verwijderd' is displayed");
 
-  cy.wait(3000);
-
-    // Clean up derdengeldenrekening_iban
-    cy.contains("derdengeldenrekening_iban")
+  // Clean up derdengeldenrekening_iban
+  cy.contains("derdengeldenrekening_iban")
     .parent()
     .find('[data-test="button.Delete"]')
     .should('be.visible')
@@ -38,12 +37,11 @@ Before({ tags: "@beforeCleanupPaymentInstruction" }, function (){
     .should('be.visible')
     .click();
   
-  Step(this, "a notification of success is displayed");
+  // Check success message
+  Step(this, "a success notification containing 'verwijderd' is displayed");
 
-  cy.wait(3000);
-
-    // Clean up derdengeldenrekening_rekeninghouder
-    cy.contains("derdengeldenrekening_rekeninghouder")
+  // Clean up derdengeldenrekening_rekeninghouder
+  cy.contains("derdengeldenrekening_rekeninghouder")
     .parent()
     .find('[data-test="button.Delete"]')
     .should('be.visible')
@@ -54,9 +52,8 @@ Before({ tags: "@beforeCleanupPaymentInstruction" }, function (){
     .should('be.visible')
     .click();
   
-  Step(this, "a notification of success is displayed");
-
-  cy.wait(3000);
+  // Check success message
+  Step(this, "a success notification containing 'verwijderd' is displayed");
 
 });
 
@@ -65,14 +62,8 @@ After({ tags: "@afterCleanupPaymentInstruction" }, function (){
   const folder = Cypress.config().downloadsFolder;
 
   // Clean up agreement
-  cy.visit('/burgers');
-  cy.url().should('eq', Cypress.config().baseUrl + '/burgers')
-  cy.get('input[placeholder="Zoeken"]')
-    .type('Dingus');
-  cy.waitForReact();
-  cy.contains('Bingus')
-    .click();
-  cy.url().should('include', Cypress.config().baseUrl + '/burgers/')
+  Step(this, 'I open the citizen overview page for "Dingus Bingus"');
+
   cy.get('p').contains('Maandelijks leefgeld HHB000003')
     .parent()
     .next()
@@ -89,9 +80,7 @@ After({ tags: "@afterCleanupPaymentInstruction" }, function (){
     .click();
   
   // Check success message
-  cy.get('[data-status="success"]')
-    .contains('afspraak')
-    .should('be.visible');
+  Step(this, "a success notification containing 'afspraak' is displayed");
 
   cy.task('resetFolder', folder);
 
@@ -105,17 +94,14 @@ After({ tags: "@afterCleanupCreateSettings" }, function (){
     .find('[data-test="button.Delete"]')
     .should('be.visible')
     .click();
-  cy.wait(500);
-  cy.contains("Dit_is_de_sleutel")
+  cy.contains("Dit_is_de_sleutel", { timeout: 10000 })
     .parent()
     .find('[data-test="button.Delete"]')
     .should('be.visible')
     .click();
-  cy.wait(500);
-  
-  Step(this, "a notification of success is displayed");
-
-  cy.wait(3000);
+    
+  // Check success message
+  Step(this, "a success notification containing 'verwijderd' is displayed");
 
 });
 
@@ -129,17 +115,14 @@ After({ tags: "@afterCleanupManageClassifications" }, function (){
     .find('[data-test="button.Delete"]')
     .should('be.visible')
     .click();
-  cy.wait(500);
-  cy.contains("WRevHuoHuo")
+  cy.contains("WRevHuoHuo", { timeout: 10000 })
     .parentsUntil('tbody')
     .find('[data-test="button.Delete"]')
     .should('be.visible')
     .click();
-  cy.wait(500);
-  
-  Step(this, "a notification of success is displayed");
 
-  cy.wait(3000);
+  // Check success message
+  Step(this, "a success notification containing 'verwijderd' is displayed");
 
   // Clean up configuration 2
   cy.contains("WKprAklEkn")
@@ -147,17 +130,14 @@ After({ tags: "@afterCleanupManageClassifications" }, function (){
     .find('[data-test="button.Delete"]')
     .should('be.visible')
     .click();
-  cy.wait(500);
-  cy.contains("WKprAklEkn")
+  cy.contains("WKprAklEkn", { timeout: 10000 })
     .parentsUntil('tbody')
     .find('[data-test="button.Delete"]')
     .should('be.visible')
     .click();
-  cy.wait(500);
 
-  Step(this, "a notification of success is displayed");
-
-  cy.wait(3000);
+  // Check success message
+  Step(this, "a success notification containing 'verwijderd' is displayed");
 
 });
 
@@ -171,27 +151,18 @@ After({ tags: "@afterCleanupDefaultAmountDeviation" }, function (){
     .find('[data-test="button.Delete"]')
     .should('be.visible')
     .click();
-  cy.wait(500);
-  cy.contains("alarm_afwijking_bedrag")
+  cy.contains("alarm_afwijking_bedrag", { timeout: 10000 })
     .parent()
     .find('[data-test="button.Delete"]')
     .should('be.visible')
     .click();
-  cy.wait(500);
-  
-  Step(this, "a notification of success is displayed");
 
-  cy.wait(1000);
+  // Check success message
+  Step(this, "a success notification containing 'verwijderd' is displayed");
 
   // Clean up agreement
-  cy.visit('/burgers');
-  cy.url().should('eq', Cypress.config().baseUrl + '/burgers')
-  cy.get('input[placeholder="Zoeken"]')
-    .type('Dingus');
-  cy.waitForReact();
-  cy.contains('Bingus')
-    .click();
-  cy.url().should('include', Cypress.config().baseUrl + '/burgers/')
+  Step(this, 'I open the citizen overview page for "Dingus Bingus"');
+
   cy.get('p').contains('Periodieke uitkering')
     .parent()
     .next()
@@ -208,9 +179,7 @@ After({ tags: "@afterCleanupDefaultAmountDeviation" }, function (){
     .click();
   
   // Check success message
-  cy.get('[data-status="success"]')
-    .contains('afspraak')
-    .should('be.visible');
+  Step(this, "a success notification containing 'afspraak' is displayed");
 
 });
 
@@ -224,27 +193,18 @@ After({ tags: "@afterCleanupDefaultDateDeviation" }, function (){
     .find('[data-test="button.Delete"]')
     .should('be.visible')
     .click();
-  cy.wait(500);
-  cy.contains("alarm_afwijking_datum")
+  cy.contains("alarm_afwijking_datum", { timeout: 10000 })
     .parent()
     .find('[data-test="button.Delete"]')
     .should('be.visible')
     .click();
-  cy.wait(500);
-  
-  Step(this, "a notification of success is displayed");
 
-  cy.wait(1000);
+  // Check success message
+  Step(this, "a success notification containing 'verwijderd' is displayed");
 
   // Clean up agreement
-  cy.visit('/burgers');
-  cy.url().should('eq', Cypress.config().baseUrl + '/burgers')
-  cy.get('input[placeholder="Zoeken"]')
-    .type('Dingus');
-  cy.waitForReact();
-  cy.contains('Bingus')
-    .click();
-  cy.url().should('include', Cypress.config().baseUrl + '/burgers/')
+  Step(this, 'I open the citizen overview page for "Dingus Bingus"');
+  
   cy.get('p').contains('Periodieke uitkering')
     .parent()
     .next()
@@ -261,8 +221,6 @@ After({ tags: "@afterCleanupDefaultDateDeviation" }, function (){
     .click();
   
   // Check success message
-  cy.get('[data-status="success"]')
-    .contains('afspraak')
-    .should('be.visible');
+  Step(this, "a success notification containing 'afspraak' is displayed");
 
 });
