@@ -1,5 +1,15 @@
 # Huishoudboekje Changelog
 
+## 2.0.4
+
+Deze versie omvat een fix voor de rapportage waar de naam van burgers van de pagina was verdwenen
+
+### Patch Changes
+
+- 446a6d3: remove unused serviceworker due to critical vulnerabilities
+- f1f714b: refactoring tests
+- b710135: added test citizen support
+
 ## 2.0.3
 
 Deze versie omvat verbeteringen aan de werking van alarmen en signalen. Daarnaast is een probleem met de afdrukweergave van rapportage opgelost.

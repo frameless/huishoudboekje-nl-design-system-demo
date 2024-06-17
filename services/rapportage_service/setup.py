@@ -22,6 +22,7 @@ setup(
                 'future==0.18.3',
                 'WTForms==3.0.1',
         'statsd==4.0.1',
+        'numpy>=1.0.0,<2',
         'pandas>=2.1.3,<3'
     ],
 )
