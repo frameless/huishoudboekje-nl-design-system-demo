@@ -1,4 +1,4 @@
-import {Text, Tabs, Stack, Tab, TabPanels, TabPanel, Box} from "@chakra-ui/react";
+import {Text, Tabs, Stack, Tab, TabPanels, TabPanel, Box, Heading} from "@chakra-ui/react";
 import {useTranslation} from "react-i18next";
 import {BurgerRapportage, useGetBurgerRapportagesQuery} from "../../generated/graphql";
 import Queryable from "../../utils/Queryable";
@@ -6,14 +6,15 @@ import SectionContainer from "../shared/SectionContainer";
 import InkomstenUitgaven from "./InkomstenUitgaven";
 import d from "../../utils/dayjs";
 import BalanceTable from "./BalanceTable";
-import { Granularity } from "./Aggregator";
-import { useState } from "react";
+import {Granularity} from "./Aggregator";
+import {useState} from "react";
 import Saldo from "./Saldo";
+import {formatBurgerName, getBurgerHhbId, humanJoin} from "../../utils/things";
 
 
-type RapportageComponentParams = {burgerIds: number[], startDate: Date, endDate: Date, rubrieken: number[]};
+type RapportageComponentParams = {burgerIds: number[], selectedBurgers, startDate: Date, endDate: Date, rubrieken: number[]};
 
-const RapportageComponent: React.FC<RapportageComponentParams> = ({burgerIds, startDate, endDate, rubrieken}) => {
+const RapportageComponent: React.FC<RapportageComponentParams> = ({burgerIds, selectedBurgers, startDate, endDate, rubrieken}) => {
 	const {t} = useTranslation();
 
 	//Check here because it has to be correct data for the query
@@ -66,20 +67,20 @@ const RapportageComponent: React.FC<RapportageComponentParams> = ({burgerIds, st
 								</Stack>
 								<TabPanels>
 									<TabPanel className={"do-not-print"}>
-										<BalanceTable transactions={reports} startDate={d(startDate)} endDate={d(endDate)} startSaldo={startSaldo} />
+										<BalanceTable selectedBurgers={selectedBurgers} transactions={reports} startDate={d(startDate)} endDate={d(endDate)} startSaldo={startSaldo} />
 									</TabPanel>
 									<TabPanel>
-										<Saldo transactions={reports} startSaldo={startSaldo} granularity={granularity} setGranularity={setGranularity} granularityOptions={granularityOptions}/>
+										<Saldo transactions={reports} startSaldo={startSaldo} granularity={granularity} setGranularity={setGranularity} granularityOptions={granularityOptions} />
 									</TabPanel>
 									<TabPanel>
-										<InkomstenUitgaven transactions={reports} granularity={granularity} setGranularity={setGranularity} granularityOptions={granularityOptions}/>
+										<InkomstenUitgaven transactions={reports} granularity={granularity} setGranularity={setGranularity} granularityOptions={granularityOptions} />
 									</TabPanel>
 								</TabPanels>
 							</Tabs>
 						</SectionContainer>
 					</Stack>
 					<Box className={"only-show-on-print print"}>
-						<BalanceTable transactions={reports} startDate={d(startDate)} endDate={d(endDate)} startSaldo={startSaldo} />
+						<BalanceTable selectedBurgers={selectedBurgers} transactions={reports} startDate={d(startDate)} endDate={d(endDate)} startSaldo={startSaldo} />
 					</Box>
 				</Box>
 			)

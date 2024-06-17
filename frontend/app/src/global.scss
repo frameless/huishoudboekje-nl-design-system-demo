@@ -51,13 +51,32 @@
 		page-break-after: auto;
 	}
 
+	.printweergave {
+		display: inline-flex;
+		visibility: visible;
+		//max-width: 90%;
+		font-size: 18px !important;
+		margin: 0 !important;
+		padding-bottom: 20px !important;
+	}
+
+
+	.print-title {
+		display: inline-flex;
+		visibility: visible;
+		//max-width: 90%;
+		font-size: 18px !important;
+		font-weight: bold;
+		margin: 0 !important;
+		padding-bottom: 50px !important;
+	}
+
 	.printweergave-periode {
 		display: inline-flex;
 		visibility: visible;
 		//max-width: 90%;
 		font-size: 18px !important;
 		margin: 0 !important;
-		padding-top: 10px !important;
 		padding-bottom: 50px !important;
 	}
 }
