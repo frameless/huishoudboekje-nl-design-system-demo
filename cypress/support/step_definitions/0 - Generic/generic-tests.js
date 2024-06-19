@@ -58,19 +58,13 @@ let cookieAppToken = '';
 
 let citizenId = 0;
 
-// Before each feature
-BeforeAll({ order: 1 }, function () {
-  
-  cy.visit('/');
-  Cypress.Cookies.debug(true)
-  cy.getCookie('appSession').then((c) => {
-    const cookie = c
-    if (c) {
-      // If there is a cookie, do this
-    }
-    else {
-      // If no cookie, log in
+const login = (name) => {
+  cy.session(
+    'session',
+    () => {
+      
       // Log in
+      cy.visit('/')
       cy.wait(500);
       cy.get('body').then(($body) => {
         const buttonLogin = $body.find('button[type="submit"]')
@@ -78,28 +72,102 @@ BeforeAll({ order: 1 }, function () {
           cy.get('[data-test="button.Login"]').click()
           //cy.get('button').contains('Inloggen').click()
           cy.loginToAAD(Cypress.env('aad_username'), Cypress.env('aad_password'))
-          
-          // Save cookie
-          cy.getCookie('appSession').then((c) => {
-            cookieAppSession = c;
-            console.log('Saved cookie appSession: ' + cookieAppSession)
-          })
-
-          // Save cookie
-          cy.getCookie('app-token').then((c) => {
-            cookieAppToken = c;
-            console.log('Saved cookie app-token: ' + cookieAppToken)
-          })
         }
-        else {
-          // Already logged in; do nothing
-        }
-
       })
+    },
+    {
+      validate() {
+        cy.visit('/')
+        cy.contains(`${Cypress.env('aad_username')}`, {timeout: 10000});
+      },
+      cacheAcrossSpecs: true,
+    }
+  )
+}
 
+// Before each feature
+// BeforeAll({ order: 1 }, function () {
+  
+//   cy.visit('/');
+//   Cypress.Cookies.debug(true)
+//   cy.url().then((url) => {
+//     if (url.includes("localhost"))
+//     {
+//       // do nothing
+//       console.log('url includes "localhost", so no cookies should be set.')
+//     }
+//     else
+//     {
+//       // If there is a saved cookie, load available cookies
+//       if (Cypress.env(cookieAppToken) != '') {
+
+//         console.log('Session cookie found.')
+
+//         // Set cookie
+//         cy.setCookie('appSession', Cypress.env(cookieAppSession).value).then((c) => {
+//           console.log('Loaded cookie appSession: ' + Cypress.env(cookieAppSession))
+//         })
+  
+//         // Set cookie
+//         cy.setCookie('app-token', Cypress.env(cookieAppToken).value).then((c) => {
+//           console.log('Loaded cookie app-token: ' + Cypress.env(cookieAppToken))
+//         })
+    
+//       }
+//       // If there is no cookie saved, log in
+//       else
+//       {
+//         console.log('Session cookie not found. Proceeding with login.')
+//         // Log in
+//         cy.wait(500);
+//         cy.get('body').then(($body) => {
+//           const buttonLogin = $body.find('button[type="submit"]')
+//           if (buttonLogin.length) {
+//             cy.get('[data-test="button.Login"]').click()
+//             //cy.get('button').contains('Inloggen').click()
+//             cy.loginToAAD(Cypress.env('aad_username'), Cypress.env('aad_password'))
+            
+//             // Save cookie
+//             cy.getCookie('appSession').then((c) => {
+//               Cypress.env(cookieAppSession, c);
+//               console.log('Saved cookie appSession: ' + Cypress.env(cookieAppSession));
+//             })
+
+//             // Save cookie
+//             cy.getCookie('app-token').then((c) => {
+//               Cypress.env(cookieAppToken, c);
+//               console.log('Saved cookie app-token: ' + Cypress.env(cookieAppToken));
+//             })
+//           }
+
+//         })
+
+//       }  
+
+//     }
+
+//   })
+
+// });
+
+
+BeforeAll({ order: 1 }, function () {
+  
+  cy.visit('/');
+  Cypress.Cookies.debug(true)
+  cy.url().then((url) => {
+
+    if (url.includes("localhost"))
+    {
+      // do nothing
+      console.log('url includes "localhost", so no cookies should be set.')
+    }
+    else
+    {
+      login()
     }
 
-  })
+  });
 
 });
 
@@ -165,32 +233,52 @@ BeforeAll({ order: 3 },function () {
 Before(function () {
 
   cy.visit('/');
+  Cypress.Cookies.debug(true)
   cy.url().then((url) => {
-
+    
     if (url.includes("localhost"))
     {
       // do nothing
-      console.log('url includes "localhost", so no cookies shoud be set.')
-    } 
+      console.log('url includes "localhost", so no cookies should be set.')
+    }
     else
     {
-      Cypress.Cookies.debug(true)
-
-      // Set cookie
-      cy.setCookie('appSession', cookieAppSession.value).then((c) => {
-        console.log('Loaded cookie appSession: ' + cookieAppSession)
-      })
-
-      // Set cookie
-      cy.setCookie('app-token', cookieAppToken.value).then((c) => {
-        console.log('Loaded cookie app-token: ' + cookieAppToken)
-      })
-
+      login()
     }
 
-  })
+  });
 
 });
+
+// Before(function () {
+
+//   cy.visit('/');
+//   cy.url().then((url) => {
+
+//     if (url.includes("localhost"))
+//     {
+//       // do nothing
+//       console.log('url includes "localhost", so no cookies shoud be set.')
+//     } 
+//     else
+//     {
+//       Cypress.Cookies.debug(true)
+
+//       // Set cookie
+//       cy.setCookie('appSession', Cypress.env(cookieAppSession).value).then((c) => {
+//         console.log('Loaded cookie appSession: ' + Cypress.env(cookieAppSession))
+//       })
+
+//       // Set cookie
+//       cy.setCookie('app-token', Cypress.env(cookieAppToken).value).then((c) => {
+//         console.log('Loaded cookie app-token: ' + Cypress.env(cookieAppToken))
+//       })
+
+//     }
+
+//   })
+
+// });
 
 AfterAll({ order: 1 },function () {
 // This hook will be executed once at the end of a feature.
