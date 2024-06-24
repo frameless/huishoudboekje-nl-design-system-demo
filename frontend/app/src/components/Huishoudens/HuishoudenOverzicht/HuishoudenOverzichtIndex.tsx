@@ -29,7 +29,7 @@ const HuishoudenOverzichtIndex = () => {
 		sessionStorage.setItem('overzicht-burgers', JSON.stringify(filterBurgerIds))
 	}, [filterBurgerIds])
 
-	const range = sessionStorage.getItem('overzicht-daterange') && new URLSearchParams(queryParams).get("burgerId") == undefined ? JSON.parse(sessionStorage.getItem('overzicht-daterange') ?? '{}') : {from: d().subtract(3, 'month').startOf('month').toDate(), through: d().subtract(1, 'month').endOf('month').toDate()}
+	const range = sessionStorage.getItem('overzicht-daterange') && new URLSearchParams(queryParams).get("burgerId") == undefined ? JSON.parse(sessionStorage.getItem('overzicht-daterange') ?? '{}') : {from: d().subtract(2, 'month').startOf('month').toDate(), through: d().endOf('month').toDate()}
 
 	const [dateRange, setDateRange] = useState<DateRange>(range)
 	useEffect(() => {
@@ -64,7 +64,7 @@ const HuishoudenOverzichtIndex = () => {
 									label: formatBurgerName(b) + " " + getBurgerHhbId(b),
 								}))} styles={reactSelectStyles.default} isMulti isClearable={true} noOptionsMessage={() => t("select.noOptions")} maxMenuHeight={200} placeholder={t("charts.optionAllBurgers")} value={burgers_filter} />
 							</FormControl>
-							<Button paddingLeft={"2.5%"} paddingRight={"2.5%"} size={"md"} variant={"outline"} colorScheme={"primary"} onClick={((value) => setDateRange({from: d().subtract(3, 'month').startOf('month').toDate(), through: d().subtract(1, 'month').endOf('month').toDate()}))}>{t("overzicht.resetMonthView")}</Button>
+							<Button paddingLeft={"2.5%"} paddingRight={"2.5%"} size={"md"} variant={"outline"} colorScheme={"primary"} onClick={((value) => setDateRange({from: d().subtract(2, 'month').startOf('month').toDate(), through: d().endOf('month').toDate()}))}>{t("overzicht.resetMonthView")}</Button>
 						</HStack>
 					</Card>
 					{(selectedBurgers.length > 0) &&

@@ -36,7 +36,7 @@
       "deleteSuccessMessage": "De aflettering van de transactie is ongedaan gemaakt.",
       "createSuccessMessage": "De transactie is afgeletterd.",
       "errors": {
-        "unknownTransactionIban" : "Transactie bevat een onbekende iban"
+        "unknownTransactionIban": "Transactie bevat een onbekende iban"
       }
     },
     "transactions": {
@@ -729,7 +729,7 @@
     "helperText": "Alle signalen van alle burgers.",
     "filterByStatus": "Filter op status",
     "filterByBurger": "Filter op burger",
-    "selectNoOptionsMessage": "Geen opties", 
+    "selectNoOptionsMessage": "Geen opties",
     "amountSignalMessage": "Er is een afwijking van <strong>{{amountDifference}}</strong> gevonden bij <agreementLink>{{agreementDescription}}</agreementLink> van <citizenLink>{{citizenName}}</citizenLink> met een transactie van <transctionLink>{{transactionAmount}}</transctionLink>.",
     "dateSignalMessage": "Er is geen transactie gevonden voor <agreementLink>{{agreementDescription}}</agreementLink> van <citizenLink>{{citizenName}}</citizenLink>.",
     "multipleTransactionsSignalMessage": "Er zijn meerdere transacties gevonden bij <agreementLink>{{agreementDescription}}</agreementLink> van <citizenLink>{{citizenName}}</citizenLink> met een transactie van <transctions></transctions>",
@@ -870,7 +870,7 @@
   "overzicht": {
     "tegenrekening": "Tegenrekening",
     "afspraak": "Afspraak",
-    "resetMonthView": "Bekijk afgelopen 3 maanden",
+    "resetMonthView": "Vandaag",
     "noData": "Selecteer burger(s) om een overzicht te genereren"
   },
   "interval": {
