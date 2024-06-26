@@ -1,7 +1,7 @@
 """ Filters that can be used on the Afspraak model"""
 
 from datetime import datetime
-from sqlalchemy import  func, or_, and_ , String
+from sqlalchemy import  desc, func, or_, and_ , String, text
 from models.afspraak import Afspraak          
         
 def add_afspraak_afspraak_ids_filter(afspraak_ids, query):
@@ -33,3 +33,17 @@ def add_afspraak_max_bedrag_filter(max_bedrag, query):
 def add_afspraak_text_zoektermen_filter(zoektermen, query):
     clauses = [or_(func.lower(Afspraak.omschrijving).like(f"%{term.lower()}%"), func.lower(Afspraak.zoektermen.cast(String)).like(f"%{term.lower()}%")) for term in zoektermen]
     return query.filter(and_(*clauses))
+
+def add_afspraak_transaction_description_filter(transaction_description: str, query):
+    subquery_unset = Afspraak.query.with_entities(
+        Afspraak.id,
+        func.unnest(Afspraak.zoektermen).label("zoekterm")
+    ).subquery()
+
+    subquery_count =  Afspraak.query.with_entities(
+        subquery_unset.c.id,
+        func.count(subquery_unset.c.zoekterm).label("count")
+    ).filter(func.lower(transaction_description).like(func.concat('%', func.lower(subquery_unset.c.zoekterm), '%'))
+    ).group_by(subquery_unset.c.id).subquery()
+
+    return query.join(subquery_count, subquery_count.c.id == Afspraak.id).order_by(desc(subquery_count.c.count))

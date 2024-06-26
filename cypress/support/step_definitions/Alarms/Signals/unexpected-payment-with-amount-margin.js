@@ -290,6 +290,8 @@ When('the low amount outside amount margin bank transaction is booked to an agre
     .click();
 
   cy.url().should('include', '/bankzaken/transacties/')
+  cy.get('[data-test="switch.filterDescription"]') 
+    .click({ force: true });
   cy.contains('Alle burgers')
     .click({ force: true });
   cy.contains('Dingus')
@@ -508,6 +510,8 @@ When('the low amount on amount margin bank transaction is booked to an agreement
     .click();
 
   cy.url().should('include', '/bankzaken/transacties/')
+  cy.get('[data-test="switch.filterDescription"]') 
+    .click({ force: true });
   cy.contains('Alle burgers')
     .click({ force: true });
   cy.contains('Dingus')
@@ -711,6 +715,8 @@ When('the low amount within amount margin bank transaction is booked to an agree
     .click();
 
   cy.url().should('include', '/bankzaken/transacties/')
+  cy.get('[data-test="switch.filterDescription"]') 
+    .click({ force: true });
   cy.contains('Alle burgers')
     .click({ force: true });
   cy.contains('Dingus')
@@ -916,6 +922,8 @@ When('the expected amount on amount margin bank transaction is booked to an agre
     .click();
 
   cy.url().should('include', '/bankzaken/transacties/')
+  cy.get('[data-test="switch.filterDescription"]') 
+    .click({ force: true });
   cy.contains('Alle burgers')
     .click({ force: true });
   cy.contains('Dingus')
@@ -1121,6 +1129,8 @@ When('the high amount within amount margin bank transaction is booked to an agre
     .click();
 
   cy.url().should('include', '/bankzaken/transacties/')
+  cy.get('[data-test="switch.filterDescription"]') 
+    .click({ force: true });
   cy.contains('Alle burgers')
     .click({ force: true });
   cy.contains('Dingus')
@@ -1326,6 +1336,8 @@ When('the high amount on amount margin bank transaction is booked to an agreemen
     .click();
 
   cy.url().should('include', '/bankzaken/transacties/')
+  cy.get('[data-test="switch.filterDescription"]') 
+    .click({ force: true });
   cy.contains('Alle burgers')
     .click({ force: true });
   cy.contains('Dingus')
@@ -1529,6 +1541,8 @@ When('the high amount outside amount margin bank transaction is booked to an agr
     .click();
 
   cy.url().should('include', '/bankzaken/transacties/')
+  cy.get('[data-test="switch.filterDescription"]') 
+    .click({ force: true });
   cy.contains('Alle burgers')
     .click({ force: true });
   cy.contains('Dingus')

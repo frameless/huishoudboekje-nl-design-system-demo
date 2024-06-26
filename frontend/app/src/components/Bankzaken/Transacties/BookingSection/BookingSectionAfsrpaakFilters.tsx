@@ -1,4 +1,4 @@
-import {Button, FormControl, FormLabel, HStack, Icon, Input, InputGroup, InputLeftAddon, InputRightElement, NumberInput, NumberInputField, Radio, RadioGroup, Stack, Tab, Table, TabList, TabPanel, TabPanels, Tabs, Tag, Tbody, Text, Th, Thead, Tr} from "@chakra-ui/react";
+import {Button, FormControl, FormLabel, HStack, Icon, Input, InputGroup, InputLeftAddon, InputRightElement, NumberInput, NumberInputField, Radio, RadioGroup, Stack, Switch, Tab, Table, TabList, TabPanel, TabPanels, Tabs, Tag, Tbody, Text, Th, Thead, Tr} from "@chakra-ui/react";
 import { useState } from "react";
 import { useGetSearchAfsprakenQuery } from "../../../../generated/graphql";
 import { formatBurgerName, getBurgerHhbId } from "../../../../utils/things";
@@ -18,10 +18,11 @@ type AfspraakSearchVariables = {
 	only_valid: boolean | undefined,
 	min_bedrag: number | undefined,
 	max_bedrag: number | undefined,
-	zoektermen: string[] | undefined
+	zoektermen: string[] | undefined,
+    transaction_description: string | undefined
 };
 
-const BookingSectionAfspraakFilters = ({organisaties, burgers, rekeningen, updateAfspraken, reset, offset, expectedTransactionOrganisation}) => {
+const BookingSectionAfspraakFilters = ({organisaties, burgers, rekeningen, updateAfspraken, reset, offset, expectedTransactionOrganisation, banktransaction_description}) => {
 	const reactSelectStyles = useReactSelectStyles();
 	const {t} = useTranslation();
     
@@ -35,9 +36,11 @@ const BookingSectionAfspraakFilters = ({organisaties, burgers, rekeningen, updat
 		only_valid: true,
 		min_bedrag: undefined,
 		max_bedrag: undefined,
-		zoektermen: undefined
+		zoektermen: undefined,
+        transaction_description: undefined
 	}
 
+	const [filterDescription, setFilterDescription] = useState(true)
 	const [minBedrag, setMinBedrag] = useState(searchVariables.min_bedrag)
 	const [maxBedrag, setMaxBedrag] = useState(searchVariables.max_bedrag)
 	const [filterBurgerIds, setFilterBurgerIds] = useState<number[]>([]);
@@ -120,6 +123,7 @@ const BookingSectionAfspraakFilters = ({organisaties, burgers, rekeningen, updat
 		reset()
 	}
 
+    searchVariables.transaction_description = filterDescription ? banktransaction_description : undefined
 	searchVariables.burgers = filterBurgerIds.length > 0 ? filterBurgerIds : undefined
 	searchVariables.min_bedrag = minBedrag ? Math.round(+minBedrag * 100) : undefined
 	searchVariables.max_bedrag = maxBedrag ? Math.round(+maxBedrag * 100) : undefined
@@ -151,7 +155,6 @@ const BookingSectionAfspraakFilters = ({organisaties, burgers, rekeningen, updat
         label: account.rekeninghouder + ' (' + account.iban + ')',
     }));
 
-    
 	useGetSearchAfsprakenQuery({
 		fetchPolicy: "no-cache",
 		variables: searchVariables,
@@ -238,19 +241,27 @@ const BookingSectionAfspraakFilters = ({organisaties, burgers, rekeningen, updat
                     {t("transactionsPage.filters.amountwarning")}
                 </Tag> : ""
             }
-            <RadioGroup defaultValue={"1"} onChange={onChangeValidRadio}>
-                <Stack spacing={5} direction={"row"}>
-                    <Radio colorScheme={"blue"} value={"1"}>
-                        {t("bookingSection.active")}
-                    </Radio>
-                    <Radio colorScheme={"blue"} value={"2"}>
-                        {t("bookingSection.ended")}
-                    </Radio>
-                    <Radio colorScheme={"blue"} value={"3"}>
-                        {t("bookingSection.all")}
-                    </Radio>
-                </Stack>
-            </RadioGroup>
+            <HStack>
+                <FormControl>
+                    <RadioGroup defaultValue={"1"} onChange={onChangeValidRadio}>
+                        <Stack spacing={5} direction={"row"}>
+                            <Radio colorScheme={"blue"} value={"1"}>
+                                {t("bookingSection.active")}
+                            </Radio>
+                            <Radio colorScheme={"blue"} value={"2"}>
+                                {t("bookingSection.ended")}
+                            </Radio>
+                            <Radio colorScheme={"blue"} value={"3"}>
+                                {t("bookingSection.all")}
+                            </Radio>
+                        </Stack>
+                    </RadioGroup>
+                </FormControl>
+                <FormControl>
+                    <FormLabel flex={1}>{t("bookingSection.filterDescription")}</FormLabel>
+                    <Switch data-test="switch.filterDescription" size={"sm"} isChecked={filterDescription} onChange={() => setFilterDescription(!filterDescription)} />
+                </FormControl>
+            </HStack>
             <FormLabel flex={1}>{t("bookingSection.searchOmschrijvingAndTerms")}</FormLabel>
             <form onSubmit={onAddzoekterm}>
                 <InputGroup size={"md"}>

@@ -1,5 +1,5 @@
 import {useTranslation} from "react-i18next";
-import { Afdeling, Afspraak, Burger, GetTransactieDocument, Organisatie, Rekening, useCreateJournaalpostAfspraakMutation, useGetBurgersAndOrganisatiesAndRekeningenQuery } from "../../../../generated/graphql";
+import { Afdeling, Afspraak, BankTransaction, Burger, GetTransactieDocument, Organisatie, Rekening, useCreateJournaalpostAfspraakMutation, useGetBurgersAndOrganisatiesAndRekeningenQuery } from "../../../../generated/graphql";
 import Queryable, { Loading } from "../../../../utils/Queryable";
 import { Stack, Table, Thead, Tr, Th, Tbody, HStack, Text } from "@chakra-ui/react";
 import SelectAfspraakOption from "../../../shared/SelectAfspraakOption";
@@ -8,15 +8,14 @@ import usePagination from "../../../../utils/usePagination";
 import React, { useState } from "react";
 import BookingSectionAfspraakFilters from "./BookingSectionAfsrpaakFilters";
 
-// commented this for if we need it in future use
-//
-// export function isSuggestie(suggestie: Afspraak, transaction: BankTransaction): boolean {
-// 	//Only check on zoektermen because the backend checks on iban (on organisation level)
-// 	if (suggestie.zoektermen?.every(zoekterm => transaction.informationToAccountOwner?.includes(zoekterm))) {
-// 		return true
-// 	}
-// 	return false
-// }
+
+export function isSuggestie(suggestie: Afspraak, transaction: BankTransaction): boolean {
+	//Only check on zoektermen because the backend checks on iban (on organisation level)
+	if (suggestie.zoektermen?.every(zoekterm => transaction.informationToAccountOwner?.includes(zoekterm))) {
+		return true
+	}
+	return false
+}
 
 const BookingSectionAfspraak = ({transaction}) => {
 	const {t} = useTranslation();
@@ -81,7 +80,7 @@ const BookingSectionAfspraak = ({transaction}) => {
             const expectedTransactionOrganisationsIds: number[] = Array.from(new Set(expectedTransactionAfdeling.map(afdeing => afdeing.organisatieId ?? -1)))
             return (
                 <Stack spacing={2}>
-                    <BookingSectionAfspraakFilters organisaties={organisaties} burgers={burgers} rekeningen={rekeningen} updateAfspraken={updateAfspraken} reset={reset}offset={offset} expectedTransactionOrganisation={expectedTransactionOrganisationsIds}></BookingSectionAfspraakFilters>
+                    <BookingSectionAfspraakFilters organisaties={organisaties} burgers={burgers} rekeningen={rekeningen} updateAfspraken={updateAfspraken} reset={reset}offset={offset} expectedTransactionOrganisation={expectedTransactionOrganisationsIds} banktransaction_description={transaction.informationToAccountOwner}></BookingSectionAfspraakFilters>
                     {
                         isLoading ? (
                             <Loading></Loading>
@@ -101,7 +100,7 @@ const BookingSectionAfspraak = ({transaction}) => {
                                     </Thead>
                                     <Tbody>
                                         {afspraken.map(afspraak => (
-                                            <SelectAfspraakOption key={afspraak.id} afspraak={afspraak} onClick={() => onSelectAfspraak(afspraak)} />
+                                            <SelectAfspraakOption key={afspraak.id} afspraak={afspraak} isSuggestion={isSuggestie(afspraak, transaction)} onClick={() => onSelectAfspraak(afspraak) } />
                                         ))}
                                     </Tbody>
                                 </Table>

@@ -56,7 +56,6 @@ class BasicFilterView(MethodView):
                     "limit": int(limit)
                 }
             })
-        
         return response, 200
 
     def set_basic_query(self):

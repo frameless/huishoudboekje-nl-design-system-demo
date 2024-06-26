@@ -287,6 +287,8 @@ When('a low amount bank transaction is booked to an agreement', () => {
     .click();
 
   cy.url().should('include', '/bankzaken/transacties/')
+  cy.get('[data-test="switch.filterDescription"]') 
+    .click({ force: true });
   cy.contains('Alle burgers')
     .click({ force: true });
   cy.contains('Dingus')
@@ -609,6 +611,8 @@ When('an expected amount bank transaction is booked to an agreement', () => {
     .click();
 
   cy.url().should('include', '/bankzaken/transacties/')
+  cy.get('[data-test="switch.filterDescription"]') 
+    .click({ force: true });
   cy.contains('Alle burgers')
     .click({ force: true });
   cy.contains('Dingus')
@@ -928,6 +932,8 @@ When('a high amount bank transaction is booked to an agreement', () => {
     .click();
 
   cy.url().should('include', '/bankzaken/transacties/')
+  cy.get('[data-test="switch.filterDescription"]') 
+    .click({ force: true });
   cy.contains('Alle burgers')
     .click({ force: true });
   cy.contains('Dingus')
