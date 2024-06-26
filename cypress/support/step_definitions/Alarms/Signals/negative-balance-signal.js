@@ -235,6 +235,8 @@ When('the zero amount bank transaction is booked to the agreement "Loon"', () =>
     .click();
   
   cy.url().should('include', '/bankzaken/transacties/')
+  cy.get('[data-test="switch.filterDescription"]') 
+    .click({ force: true });
   cy.contains('Alle burgers')
     .click({ force: true });
   cy.contains('Bingus')
@@ -422,6 +424,8 @@ When('a positive bank transaction with amount {string} is booked to an agreement
     .click();
 
   cy.url().should('include', '/bankzaken/transacties/')
+  cy.get('[data-test="switch.filterDescription"]') 
+    .click({ force: true });
   cy.contains('Alle burgers')
     .click({ force: true });
   cy.contains('Bingus')
@@ -449,6 +453,8 @@ When('the negative amount bank transaction with amount {string} is booked to the
     .click();
   
   cy.url().should('include', '/bankzaken/transacties/')
+  cy.get('[data-test="switch.filterDescription"]') 
+    .click({ force: true });
   cy.contains('Alle burgers')
     .click({ force: true });
   cy.contains('Bingus')

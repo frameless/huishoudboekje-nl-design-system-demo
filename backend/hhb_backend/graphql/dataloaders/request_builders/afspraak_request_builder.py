@@ -40,3 +40,6 @@ class AfsprakenGetRequestBuilder(GetRequestBuilder):
     def by_zoektermen(self, zoektermen: list[str]):
         self._request.add_to_filter("zoektermen", zoektermen)
         return self
+    
+    def order_by_transaction_description_matches(self, transaction_description: str):
+        self._request.add_to_filter("transaction_description", transaction_description)

@@ -606,7 +606,8 @@
     "active": "Actief",
     "ended": "Beëindigd",
     "all": "Alle",
-    "searchOmschrijvingAndTerms": "Zoek in omschrijving en zoektermen"
+    "searchOmschrijvingAndTerms": "Zoek in omschrijving en zoektermen",
+    "filterDescription": "Match zoektermen op omschrijving"
   },
   "charts": {
     "filterBurgers": "Filter op burgers",

@@ -289,6 +289,8 @@ When('a high amount bank transaction with transaction date before the alarm time
     .click();
 
   cy.url().should('include', '/bankzaken/transacties/')
+  cy.get('[data-test="switch.filterDescription"]') 
+    .click({ force: true });
   cy.contains('Alle burgers')
     .click({ force: true });
   cy.contains('Dingus')
@@ -578,6 +580,8 @@ When('a high amount bank transaction with transaction date on start of the alarm
     .click();
 
   cy.url().should('include', '/bankzaken/transacties/')
+  cy.get('[data-test="switch.filterDescription"]') 
+    .click({ force: true });
   cy.contains('Alle burgers')
     .click({ force: true });
   cy.contains('Dingus')
@@ -884,6 +888,8 @@ When('a high amount bank transaction with transaction date within the alarm time
     .click();
 
   cy.url().should('include', '/bankzaken/transacties/')
+  cy.get('[data-test="switch.filterDescription"]') 
+    .click({ force: true });
   cy.contains('Alle burgers')
     .click({ force: true });
   cy.contains('Dingus')
@@ -1194,6 +1200,8 @@ When('a high amount bank transaction with transaction date on end of the alarm t
     .click();
 
   cy.url().should('include', '/bankzaken/transacties/')
+  cy.get('[data-test="switch.filterDescription"]') 
+    .click({ force: true });
   cy.contains('Alle burgers')
     .click({ force: true });
   cy.contains('Dingus')
@@ -1504,6 +1512,8 @@ When('a high amount bank transaction with transaction date after the alarm timef
     .click();
 
   cy.url().should('include', '/bankzaken/transacties/')
+  cy.get('[data-test="switch.filterDescription"]') 
+    .click({ force: true });
   cy.contains('Alle burgers')
     .click({ force: true });
   cy.contains('Dingus')

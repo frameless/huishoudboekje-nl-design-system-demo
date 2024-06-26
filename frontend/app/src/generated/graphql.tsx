@@ -1168,6 +1168,7 @@ export type PaginationRequest = {
   take?: InputMaybe<Scalars['Int']>;
 };
 
+/** TODO See if we can move these in the Core since it is also used in LogService */
 export type PaginationResponse = {
   skip?: Maybe<Scalars['Int']>;
   take?: Maybe<Scalars['Int']>;
@@ -1531,6 +1532,7 @@ export type QuerySearchAfsprakenArgs = {
   offset?: InputMaybe<Scalars['Int']>;
   onlyValid?: InputMaybe<Scalars['Boolean']>;
   tegenRekeningIds?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
+  transactionDescription?: InputMaybe<Scalars['String']>;
   zoektermen?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
@@ -2318,6 +2320,7 @@ export type GetSearchAfsprakenQueryVariables = Exact<{
   min_bedrag?: InputMaybe<Scalars['Int']>;
   max_bedrag?: InputMaybe<Scalars['Int']>;
   zoektermen?: InputMaybe<Array<InputMaybe<Scalars['String']>> | InputMaybe<Scalars['String']>>;
+  transaction_description?: InputMaybe<Scalars['String']>;
 }>;
 
 
@@ -6606,7 +6609,7 @@ export type GetSaldoQueryHookResult = ReturnType<typeof useGetSaldoQuery>;
 export type GetSaldoLazyQueryHookResult = ReturnType<typeof useGetSaldoLazyQuery>;
 export type GetSaldoQueryResult = Apollo.QueryResult<GetSaldoQuery, GetSaldoQueryVariables>;
 export const GetSearchAfsprakenDocument = gql`
-    query getSearchAfspraken($offset: Int, $limit: Int, $afspraken: [Int], $afdelingen: [Int], $tegenrekeningen: [Int], $burgers: [Int], $only_valid: Boolean, $min_bedrag: Int, $max_bedrag: Int, $zoektermen: [String]) {
+    query getSearchAfspraken($offset: Int, $limit: Int, $afspraken: [Int], $afdelingen: [Int], $tegenrekeningen: [Int], $burgers: [Int], $only_valid: Boolean, $min_bedrag: Int, $max_bedrag: Int, $zoektermen: [String], $transaction_description: String) {
   searchAfspraken(
     offset: $offset
     limit: $limit
@@ -6618,6 +6621,7 @@ export const GetSearchAfsprakenDocument = gql`
     minBedrag: $min_bedrag
     maxBedrag: $max_bedrag
     zoektermen: $zoektermen
+    transactionDescription: $transaction_description
   ) {
     afspraken {
       id
@@ -6665,6 +6669,7 @@ export const GetSearchAfsprakenDocument = gql`
  *      min_bedrag: // value for 'min_bedrag'
  *      max_bedrag: // value for 'max_bedrag'
  *      zoektermen: // value for 'zoektermen'
+ *      transaction_description: // value for 'transaction_description'
  *   },
  * });
  */

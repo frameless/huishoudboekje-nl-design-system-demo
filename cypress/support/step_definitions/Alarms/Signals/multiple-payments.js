@@ -421,6 +421,8 @@ When('both bank transactions are reconciliated on the same agreement', () => {
       .click();
 
     cy.url().should('include', '/bankzaken/transacties/')
+    cy.get('[data-test="switch.filterDescription"]') 
+      .click({ force: true });
     cy.contains('Alle burgers')
       .click({ force: true });
     cy.contains('Dingus')
@@ -463,6 +465,8 @@ When('both bank transactions are reconciliated on the same agreement', () => {
       .click();
   
     cy.url().should('include', '/bankzaken/transacties/')
+    cy.get('[data-test="switch.filterDescription"]') 
+      .click({ force: true });
     cy.contains('Alle burgers')
       .click({ force: true });
     cy.contains('Dingus')

@@ -1,7 +1,8 @@
 """ MethodView for /afspraken/filter path """
 
+import logging
 from core_service.views.basic_view.basic_filter_view import BasicFilterView
-from huishoudboekje_service.filters.afspraak_filters import add_afspraak_afspraak_ids_filter, add_afspraak_burger_ids_filter, add_afspraak_afdeling_ids_filter, add_afspraak_max_bedrag_filter, add_afspraak_min_bedrag_filter, add_afspraak_only_valid_filter, add_afspraak_tegen_rekening_ids_filter, add_afspraak_text_zoektermen_filter
+from huishoudboekje_service.filters.afspraak_filters import add_afspraak_afspraak_ids_filter, add_afspraak_burger_ids_filter, add_afspraak_afdeling_ids_filter, add_afspraak_max_bedrag_filter, add_afspraak_min_bedrag_filter, add_afspraak_only_valid_filter, add_afspraak_tegen_rekening_ids_filter, add_afspraak_text_zoektermen_filter, add_afspraak_transaction_description_filter
 from models.afspraak import Afspraak
 from models.burger import Burger
 
@@ -12,7 +13,7 @@ class AfsprakenFilterView(BasicFilterView):
     model = "afspraken"
 
     def set_basic_query(self): 
-        self.query = Afspraak.query.join(Burger).order_by(Burger.voornamen.asc(), Burger.achternaam.asc(), Afspraak.omschrijving.asc(),Afspraak.zoektermen.asc(), Afspraak.bedrag.desc())
+        self.query = Afspraak.query
 
     def add_filter_options(self, filter_options, query):
         afspraak_ids = filter_options.get("afspraak_ids", None)
@@ -23,6 +24,7 @@ class AfsprakenFilterView(BasicFilterView):
         min_bedrag = filter_options.get("min_bedrag", None)
         max_bedrag = filter_options.get("max_bedrag", None)
         zoektermen = filter_options.get("zoektermen", None)
+        transaction_description = filter_options.get("transaction_description", None)
 
         new_query = query
 
@@ -49,6 +51,10 @@ class AfsprakenFilterView(BasicFilterView):
 
         if zoektermen:
             new_query = add_afspraak_text_zoektermen_filter(zoektermen, new_query)
+            
+        if transaction_description is not None:
+            new_query = add_afspraak_transaction_description_filter(transaction_description, new_query)
 
-        
+        #here to make sure the ordering happends last
+        new_query = new_query.join(Burger).order_by(Burger.voornamen.asc(), Burger.achternaam.asc(), Afspraak.omschrijving.asc(),Afspraak.zoektermen.asc(), Afspraak.bedrag.desc())
         return new_query
