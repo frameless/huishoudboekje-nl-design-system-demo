@@ -164,11 +164,7 @@ public class EvaluationController(
     foreach (var evaluation in evaluationResult.Evaluations)
     {
       AlarmModel alarm = (AlarmModel)lookupDictAlarms[evaluation.AlarmUuid];
-      if (evaluation.NewCheckOnDate != null)
-      {
-        alarm.UpdateCheckOnDate(evaluation.NewCheckOnDate);
-      }
-
+      alarm.UpdateCheckOnDate(evaluation.NewCheckOnDate);
       alarmsToUpdate.Add(alarm);
     }
 

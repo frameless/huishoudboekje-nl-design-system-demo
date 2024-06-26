@@ -19,13 +19,15 @@ public class AlarmController : IAlarmController
 {
   private readonly AlarmValidator alarmValidator = new();
   private readonly IAlarmRepository alarmRepository;
+  private readonly ISignalRepository signalRepository;
   private readonly ICheckAlarmProducer alarmProducer;
   private readonly EvaluationHelper evaluationHelper;
   private readonly IDateTimeProvider dateTimeProvider;
 
-  public AlarmController(IAlarmRepository alarmRepository, ICheckAlarmProducer alarmProducer, EvaluationHelper evaluationHelper, IDateTimeProvider dateTimeProvider)
+  public AlarmController(IAlarmRepository alarmRepository, ISignalRepository signalRepository, ICheckAlarmProducer alarmProducer, EvaluationHelper evaluationHelper, IDateTimeProvider dateTimeProvider)
   {
     this.alarmRepository = alarmRepository;
+    this.signalRepository = signalRepository;
     this.alarmProducer = alarmProducer;
     this.evaluationHelper = evaluationHelper;
     this.dateTimeProvider = dateTimeProvider;
@@ -74,6 +76,7 @@ public class AlarmController : IAlarmController
   public Task<bool> Delete(string id)
   {
     alarmValidator.IsValid(id);
+    signalRepository.DeleteByAlarmIds([id]);
     return alarmRepository.Delete(id);
   }
 
