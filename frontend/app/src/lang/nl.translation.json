@@ -678,7 +678,8 @@
       },
       "afspraak": {
         "title": "Afspraak",
-        "helperText": "Deze transactie is afgeletterd op deze afspraak."
+        "helperText": "Deze transactie is afgeletterd op deze afspraak.",
+        "next": "Volgende"
       },
       "afletteren": {
         "title": "Afletteren",
