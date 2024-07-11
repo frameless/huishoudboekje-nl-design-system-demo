@@ -77,7 +77,7 @@ const BookingDetailsView: React.FC<BookingDetailsViewProps> = ({transactie}) => 
 				<Stack direction={"row"} spacing={5}>
 					<Box mb={3}>
 						<Button leftIcon={
-							<ViewIcon />} colorScheme={"primary"} size={"sm"} as={NavLink} to={AppRoutes.ViewAfspraak(String(journaalpostAfspraak.id))}>{t("global.actions.view")}</Button>
+							<ViewIcon />}  variant={"outline"} colorScheme={"primary"} size={"sm"} as={NavLink} to={AppRoutes.ViewAfspraak(String(journaalpostAfspraak.id))}>{t("global.actions.view")}</Button>
 					</Box>
 					<Box>
 						<Button leftIcon={

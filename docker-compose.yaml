@@ -200,11 +200,11 @@ services:
     container_name: notificationservice
     build:
       context: ./huishoudboekje_services
-      dockerfile: ./notificationservice.Application/dev.Dockerfile
+      dockerfile: ./NotificationService.Application/dev.Dockerfile
     volumes: 
       - ./huishoudboekje_services/:/src/app
-      - /src/app/notificationservice.Application/bin
-      - /src/app/notificationservice.Application/obj
+      - /src/app/NotificationService.Application/bin
+      - /src/app/NotificationService.Application/obj
     environment:
       ASPNETCORE_ENVIRONMENT: "Development"
       LOG_LEVEL: DEBUG
