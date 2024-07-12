@@ -63,7 +63,7 @@ public class ReconciliationEvaluator(IDateTimeProvider dateTimeProvider, Evaluat
           }
         }
 
-        if (DateIsInCurrentPeriod(entry.Date, alarm))
+        if (alarm.CheckOnDate != null && DateIsInCurrentPeriod(entry.Date, alarm))
         {
           evaluation.NewCheckOnDate = evaluationHelper.DetermineNextCheckOnDate(
             GetCurrentAlarmPeriod(alarm).From.AddDays(alarm.DateMargin),

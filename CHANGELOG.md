@@ -1,5 +1,17 @@
 # Huishoudboekje Changelog
 
+## 2.0.5
+
+Deze versie omvat diverse oplossingen voor problemen met alarmen en signalen. Bij het afletteren van een banktransactie worden afspraken met zoektermen vergeleken en gemarkeerd als suggestie. 
+
+### Patch Changes
+
+- ea522fd: overview now starts on current month instead of previous
+- 91792cf: QA moved cookie set
+- 6bd04dd: Added filter and suggestion marking transactie"
+- ea2e077: Added next button on booked transactions page
+- 29e701f: Fixed error on deleting alarm that has signals. Fixed correct setting next checkOnDate when there is no next checkOnDate to prevent multiple signals on for example one time alarms.
+
 ## 2.0.4
 
 Deze versie omvat een fix voor de rapportage waar de naam van burgers van de pagina was verdwenen
