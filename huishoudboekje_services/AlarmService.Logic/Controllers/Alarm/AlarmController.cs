@@ -66,28 +66,28 @@ public class AlarmController : IAlarmController
     return insertedAlarm;
   }
 
-  public Task<IAlarmModel> Update(UpdateModel alarm)
+  public async Task<IAlarmModel> Update(UpdateModel alarm)
   {
     alarmValidator.IsValid(alarm.Uuid);
     //TODO validate rest
-    return alarmRepository.Update(alarm);
+    return await alarmRepository.Update(alarm);
   }
 
-  public Task<bool> Delete(string id)
+  public async Task<bool> Delete(string id)
   {
     alarmValidator.IsValid(id);
-    signalRepository.DeleteByAlarmIds([id]);
-    return alarmRepository.Delete(id);
+    await signalRepository.DeleteByAlarmIds([id]);
+    return await alarmRepository.Delete(id);
   }
 
-  public Task<bool> DeleteByIds(IList<string> ids)
+  public async Task<bool> DeleteByIds(IList<string> ids)
   {
     ids.ForEach(id => alarmValidator.IsValid(id));
-    return alarmRepository.DeleteByIds(ids);
+    return await alarmRepository.DeleteByIds(ids);
   }
 
-  public Task<IList<IAlarmModel>> GetAllBeforeByCheckOnDateBefore(DateTime date)
+  public async Task<IList<IAlarmModel>> GetAllBeforeByCheckOnDateBefore(DateTime date)
   {
-    return alarmRepository.GetAllByCheckOnDateBeforeNoTracking(date);
+    return await alarmRepository.GetAllByCheckOnDateBeforeNoTracking(date);
   }
 }
