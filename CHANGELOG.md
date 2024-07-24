@@ -1,8 +1,17 @@
 # Huishoudboekje Changelog
 
+## 2.0.6
+
+Deze versie omvat een correctie voor het verwijderen van alarmen. Suggesties zullen nu altijd bovenaan staan bij het afboeken van transacties.
+
+### Patch Changes
+
+- d88145f: Suggestions are now at the top of the menu when manually reconciling transactions
+- 6d6db23: Fixed alarm deletion for real this time
+
 ## 2.0.5
 
-Deze versie omvat diverse oplossingen voor problemen met alarmen en signalen. Bij het afletteren van een banktransactie worden afspraken met zoektermen vergeleken en gemarkeerd als suggestie. 
+Deze versie omvat diverse oplossingen voor problemen met alarmen en signalen. Bij het afletteren van een banktransactie worden afspraken met zoektermen vergeleken en gemarkeerd als suggestie.
 
 ### Patch Changes
 
