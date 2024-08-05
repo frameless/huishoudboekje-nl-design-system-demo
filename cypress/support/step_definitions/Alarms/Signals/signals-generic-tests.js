@@ -58,7 +58,12 @@ After({ tags: "@cleanupSignal" }, function (){
     .click();
   cy.get('[data-test="agreement.menuDelete"]')
     .click();
-  cy.get('[data-test="button.AlertDelete"]')
+
+  // Check whether modal is opened and visible
+  cy.get('section[aria-modal="true"]', { timeout: 10000 })
+    .scrollIntoView()
+    .should('exist');
+  cy.get('[data-test="button.AlertDelete"]', { timeout: 10000 })
     .click();
   
   // Check success message

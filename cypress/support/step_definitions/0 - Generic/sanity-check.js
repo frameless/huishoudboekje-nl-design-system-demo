@@ -1,38 +1,23 @@
 
 import { Given, When, Then, Step, DataTable } from "@badeball/cypress-cucumber-preprocessor";
+import Burgers from "../../../pages/Burgers";
+ 
+const burgers = new Burgers()
 
-const header = {
-  'content-type': 'application/json',
-  'Accept-Encoding': 'gzip, deflate, br',
-};
+Given('I visit the Burgers page', () => {
 
-When('I visit the baseUrl', () => {
-
-  cy.visit('/')
+  burgers.visit()
 
 });
  
-Then('I am actually on the baseUrl', () => {
+When("I search for {string}", (citizenname) => {
 
-  Step(this, 'I visit the baseUrl');
-  
-  cy.url().should('include', Cypress.config().baseUrl)
- 
-});
-
-// ---------------
-
-When("I fill {string} in search", (citizenname) => {
-
-  cy.get('[placeholder="Zoeken"]')
-    .type(citizenname);
+  burgers.search(citizenname)
 
 });
 
 Then('I find the citizen {string}', (citizenname) => {
 
-  cy.contains(citizenname)
+  burgers.findBurger(citizenname)
 
 });
-
-// ---------------

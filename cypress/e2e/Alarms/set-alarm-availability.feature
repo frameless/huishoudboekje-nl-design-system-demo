@@ -10,20 +10,11 @@ Feature: set alarm availability
     # Given 1 or more agreements exists
     # Given an alarm exists
 
-  @beforeCreateAgreement
-  Scenario: toggle alarm to disabled
-    Given I view the "Agreement" page
-    Then the alarm availability is displayed
-    Then the alarm availability is "Enabled"
-    When I click the "Disable alarm" button
+  @beforeCreateAgreement @afterDeleteAgreement
+  Scenario: toggle alarm to disabled and enabled
+    Given an alarm exists
+    And an agreement's alarm availability is 'Enabled'
+    When I disable the alarm
     Then the alarm status is "Disabled"
-
-  @afterDeleteAgreement
-  Scenario: toggle alarm to enabled
-    Given I view the "Agreement" page
-    Then the alarm availability is displayed
-    Then the alarm availability is "Disabled"
-    When I click the "Enable alarm" button
+    When I enable the alarm
     Then the alarm status is "Enabled"
-
-

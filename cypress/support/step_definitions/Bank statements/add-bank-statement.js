@@ -65,6 +65,13 @@ Then('the "Bank account in file does not match bank account in application" text
 
 //#region Scenario: no transactions in file
 
+Then('the "X" button is displayed', () => {
+
+  cy.get('button[aria-label="Close"]')
+    .should('be.visible');
+
+});
+
 When('I select "Empty_customer_statement_message_CAMT.053_v2.xml"', () => {
 
   Step(this, 'I click the "Add bank statement" button');
@@ -94,7 +101,7 @@ Then('the "No transactions in file" text is displayed', () => {
 
 });
 
-When('I click the "Close modal" button', () => {
+When('I click the "X" button', () => {
 
   cy.get('button[aria-label="Close"]')
     .click();

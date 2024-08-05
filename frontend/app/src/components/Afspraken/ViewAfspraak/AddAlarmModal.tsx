@@ -173,8 +173,8 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 
 
 	return (
-		<Modal title={t("addAlarmModal.title")} data-test="modal.Alarm" onClose={onClose}>
-			<form onSubmit={onClickSubmit} noValidate>
+		<Modal title={t("addAlarmModal.title")} onClose={onClose}>
+			<form data-test="modal.Alarm" onSubmit={onClickSubmit} noValidate>
 				<Stack>
 					<Stack>
 						<Text>{t("addAlarmModal.helperText")}</Text>

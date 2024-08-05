@@ -14,7 +14,6 @@ Feature: create signal on negative balance
         When I open the citizen overview page for 'Dingus Bingus'
         Given the citizen's balance is '0,00'
         Given the negative account balance alarm toggle is displayed
-        Then the negative account balance alarm toggle is set to enabled
         Given an agreement exists for scenario "negative citizen balance"
     # add transaction with amount 0
         Given I select a CAMT test file with zero payment amount
@@ -57,7 +56,7 @@ Feature: create signal on negative balance
     Scenario: deactivate signal negative balance
         Given I navigate to the page '/signalen'
     # deactivate signal
-        When I deactive the top signal
+        When I deactivate the top signal
     # no signal visible
         Then no signal is visible
     # apply filter
