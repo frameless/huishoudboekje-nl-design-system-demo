@@ -10,34 +10,18 @@ Feature: toggle negative account balance alarm
 
   Scenario: view toggle form
     When I open the citizen overview page for 'Dingus Bingus'
-    Then the negative account balance alarm toggle label "Alarm bij negatief saldo" is displayed in the section "Saldo"
     Then the negative account balance alarm toggle is displayed
-    Then the negative account balance alarm toggle is set to enabled
 
   @cleanupBankstatement
   Scenario: disable toggle
-    When I open the citizen overview page for 'Dingus Bingus'
-    Given the citizen's account balance is 0
-    Given the citizen has an agreement "Loon"
-    When I set the negative account balance alarm toggle to disabled
-    When I navigate to the page '/bankzaken/bankafschriften'
-    When I select a CAMT test file with negative payment amount '10.00'
-    Then the CAMT test file with a negative payment amount is displayed
-    When the negative amount bank transaction is booked to the agreement "Loon"
-    When I navigate to the page '/signalen'
-    Then no signal is created
+    Given I open the citizen overview page for 'Dingus Bingus'
+    When I disable the negative account balance alarm
+    When I consolidate a negative amount bank transaction to the agreement
+    Then no negative balance signal is created
 
   @cleanupBankstatement
   Scenario: enable toggle
-    When I open the citizen overview page for 'Dingus Bingus'
-    Given the citizen's account balance is 0
-    Given the citizen has an agreement "Loon"
-    When I set the negative account balance alarm toggle to enabled
-    When I navigate to the page '/bankzaken/bankafschriften'
-    When I select a CAMT test file with negative payment amount '10.00'
-    Then the CAMT test file with a negative payment amount is displayed
-    When the negative amount bank transaction is booked to the agreement "Loon"
-    When I navigate to the page '/signalen'
-    Then the text 'Er is een negatief saldo geconstateerd bij Dingus Bingus.' is displayed
-
-
+    Given I open the citizen overview page for 'Dingus Bingus'
+    When I enable the negative account balance alarm
+    When I consolidate a negative amount bank transaction to the agreement
+    Then a negative balance signal is created

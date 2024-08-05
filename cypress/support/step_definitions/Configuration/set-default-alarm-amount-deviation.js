@@ -1,10 +1,9 @@
 
 import { Given, When, Then, Step, DataTable } from "@badeball/cypress-cucumber-preprocessor";
 
-const header = {
-  'content-type': 'application/json',
-  'Accept-Encoding': 'gzip, deflate, br',
-};
+import AlarmModal from "../../../pages/AlarmModal";
+
+const alarmModal = new AlarmModal()
 
 //#region - Scenario: save default alarm amount deviation
 
@@ -154,6 +153,12 @@ When('I set the field "Startdatum" to {string}', (input) => {
 
   cy.get('[data-test="input.startDate"]', { timeout: 10000 })
     .type('{selectAll}' + input + '{enter}');
+
+});
+
+Then('the "Create alarm form" is displayed', () => {
+
+  alarmModal.isModalOpen()
 
 });
 

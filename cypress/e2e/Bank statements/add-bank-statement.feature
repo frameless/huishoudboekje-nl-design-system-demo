@@ -12,11 +12,11 @@ Feature: add bank statement
     When I click the "Add bank statement" button
     When I select "Empty_customer_statement_message_CAMT.053_v2.xml"
     Then the "Add bank statement" modal opens
-    Then the "Close modal" button is displayed
+    Then the "X" button is displayed
     Then the "Empty_customer_statement_message_CAMT.053_v2.xml" filename is displayed
     Then the file upload warning status icon is displayed
     Then the "No transactions in file" text is displayed
-    When I click the "Close modal" button
+    When I click the "X" button
     Then the "Empty_customer_statement_message_CAMT.053_v2.xml" file is displayed
     Then 0 transactions were added
 
@@ -134,11 +134,11 @@ Feature: add bank statement
     When I click the "Add bank statement" button
     When I select "Payment_mandate_CAMT.053_v1.xml"
     Then the "Add bank statement" modal opens
-    Then the "Close modal" button is displayed
+    Then the "X" button is displayed
     Then the "Payment_mandate_CAMT.053_v1.xml" filename is displayed
     Then the file upload success status icon is displayed
 
-    When I click the "Close modal" button
+    When I click the "X" button
     Then the "Payment_mandate_CAMT.053_v1.xml" filename is displayed
     Then the bank statement upload timestamp is displayed
     Then the "Delete bank statement" button is displayed
@@ -163,11 +163,11 @@ Feature: add bank statement
     When I click the "Add bank statement" button
     When I select "Basic_bank_transaction_CAMT.053_v1.xml"
     Then the "Add bank statement" modal opens
-    Then the "Close modal" button is displayed
+    Then the "X" button is displayed
     Then the "Basic_bank_transaction_CAMT.053_v1.xml" filename is displayed
     Then the file upload success status icon is displayed
 
-    When I click the "Close modal" button
+    When I click the "X" button
     Then the "Basic_bank_transaction_CAMT.053_v1.xml" filename is displayed
     Then the bank statement upload timestamp is displayed
     Then the "Delete bank statement" button is displayed

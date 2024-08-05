@@ -1,37 +1,35 @@
 // cypress/support/step_definitions/Generic/generic-tests.js
 
 import { Before, After, When, Step } from "@badeball/cypress-cucumber-preprocessor";
+import Generic from "../../../pages/Generic";
+import Api from "../../../pages/Api";
+import Burgers from "../../../pages/Burgers";
+import BurgerDetails from "../../../pages/BurgerDetails";
+import AfspraakDetails from "../../../pages/AfspraakDetails";
+import AlarmModal from "../../../pages/AlarmModal";
+ 
+const generic = new Generic()
+const api = new Api ()
+const burgers = new Burgers()
+const burgerDetails = new BurgerDetails()
+const afspraakDetails = new AfspraakDetails()
+const alarmModal = new AlarmModal()
 
-const header = {
-  'content-type': 'application/json',
-  'Accept-Encoding': 'gzip, deflate, br',
-};
 
-// Set database query
-const queryTruncateAlarm = `mutation Truncate {
-  truncateTable(databaseName: "alarmenservice", tableName: "alarms")
-}`
-
-const queryTruncateSignal = `mutation Truncate {
-  truncateTable(databaseName: "alarmenservice", tableName: "signals")
-}`
 
 // Unique names
 const uniqueSeed = Date.now().toString();
 
 After({ tags: "@afterCleanupAlarm" }, function (){
 
-  // Clean up alarm
-  cy.get('button[aria-label="Verwijderen"]')
-    .click();
-  cy.get('button[aria-label="Verwijderen"]')
-    .click();
+  // Delete alarm
+  afspraakDetails.buttonDeleteAlarm().click();
+  afspraakDetails.buttonDeleteAlarm().click();
 
-  // Check success message
-  Step(this, "a success notification containing 'Het alarm is verwijderd' is displayed");
+  generic.notificationSuccess('Het alarm is verwijderd')
 
-// Clean up
-Step(this, 'I truncate the alarms table in alarmenservice');
+  // Clean up
+  Step(this, 'I truncate the alarms table in alarmenservice');
 
 });
 
@@ -46,7 +44,7 @@ Before({ tags: "@beforeCleanupAlarm" }, function (){
 When('I create a test alarm', () => {
   
   // Truncate alarms
-  Step(this, 'I truncate the alarms table in alarmenservice');
+  api.truncateAlarms()
 
   // Navigate to test citizen's overview page
   Step(this, 'I open the citizen overview page for "Dingus Bingus"');
@@ -116,11 +114,11 @@ When('I create a test alarm', () => {
 
 });
 
-Before({ order: 3, tags: "@beforeCreateAgreement" }, () => {
+Before({ order: 10, tags: "@beforeCreateAgreement" }, () => {
   
   // Clean up
-  Step(this, 'I truncate the alarms table in alarmenservice');
-  Step(this, 'I truncate the signals table in alarmenservice');
+  api.truncateAlarms()
+  api.truncateSignals()
 
   // Navigate to test citizen's overview page
   Step(this, 'I open the citizen overview page for "Dingus Bingus"');
@@ -156,8 +154,7 @@ Before({ order: 3, tags: "@beforeCreateAgreement" }, () => {
   cy.get('[data-test="button.Submit"]')
     .click();
 
-  // Check success message
-  Step(this, "a success notification containing 'De afspraak is opgeslagen' is displayed");
+  generic.notificationSuccess('De afspraak is opgeslagen')
 
 });
 
@@ -184,16 +181,15 @@ After({ tags: "@afterDeleteAgreement", order: 10 }, () => {
   cy.get('[data-test="button.AlertDelete"]')
     .click();
 
-  // Check success message
-  Step(this, "a success notification containing 'De afspraak is verwijderd' is displayed");
+  generic.notificationSuccess('De afspraak is verwijderd')
 
 });
 
 After({ tags: "@cleanupBankstatement" }, function (){
 
   // Clean up
-  Step(this, 'I truncate the alarms table in alarmenservice');
-  Step(this, 'I truncate the signals table in alarmenservice');
-  Step(this, 'I truncate the bank transaction tables');
+  api.truncateAlarms()
+  api.truncateSignals()
+  api.truncateBankTransactions()
 
 });

@@ -2,10 +2,9 @@
 
 import { Given, When, Then, Step } from "@badeball/cypress-cucumber-preprocessor";
 
-const header = {
-  'content-type': 'application/json',
-  'Accept-Encoding': 'gzip, deflate, br',
-};
+import AlarmModal from "../../../../pages/AlarmModal";
+
+const alarmModal = new AlarmModal()
 
 //#region Generic steps
 
@@ -105,8 +104,11 @@ Then('the "Add bank account" modal opens', () => {
 
 });
 
-// Then('the "Close modal" button is displayed', () => {});
-// Part of create-alarm.js
+Then('the "Close modal" button is displayed', () => {
+
+  alarmModal.buttonAnnuleren().should('be.visible');
+
+});
 
 Then('the "Account holder" form field is displayed', () => {
 
@@ -129,8 +131,12 @@ Then('the "Cancel form" button is displayed', () => {
 
 });
 
-//Then('the "Submit form" button is displayed');
-// Part of create-alarm.js
+Then('the "Submit form" button is displayed', () => {
+
+  alarmModal.buttonOpslaan().should('be.visible');
+
+});
+
 
 //#endregion
 

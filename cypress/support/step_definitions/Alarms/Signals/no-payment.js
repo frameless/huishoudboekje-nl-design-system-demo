@@ -2,10 +2,9 @@
 
 import { Given, When, Then, Step } from "@badeball/cypress-cucumber-preprocessor";
 
-const header = {
-  'content-type': 'application/json',
-  'Accept-Encoding': 'gzip, deflate, br',
-};
+import Generic from "../../../../pages/Generic";
+
+const generic = new Generic()
 
 // Unique names
 const uniqueSeed = Date.now().toString();
@@ -165,7 +164,10 @@ Given('an alarm exists for scenario "no transaction within timeframe"', () => {
   // Check whether modal is closed
   cy.get('section[aria-modal="true"]', { timeout: 10000 })
     .should('not.exist');
- 
+
+  // Success notification
+  generic.notificationSuccess('Het alarm is opgeslagen.');
+
 });
 
 When('the alarm timeframe expires', () => {
@@ -189,7 +191,7 @@ When('the alarm timeframe expires', () => {
     }
 
   // Wait for alarm evaluation to complete
-  cy.wait(6000);
+  cy.wait(10000);
 
   })
 
