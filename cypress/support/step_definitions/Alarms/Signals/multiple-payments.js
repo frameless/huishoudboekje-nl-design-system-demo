@@ -7,7 +7,7 @@ const header = {
   'Accept-Encoding': 'gzip, deflate, br',
 };
 
-let uniqueId = Date.now().toString();
+let uniqueId = Date.now().toString() + 1;
 
 //#region Scenario: multiple payments within timeframe
 
@@ -109,6 +109,9 @@ Given('an alarm exists for scenario "multiple payments within timeframe"', () =>
   // Check whether modal is closed
   cy.get('section[aria-modal="true"]', { timeout: 10000 })
       .should('not.exist');
+
+  // Check success message
+  Step(this, "a success notification containing 'alarm' is displayed");
 
 });
 

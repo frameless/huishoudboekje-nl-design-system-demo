@@ -1,4 +1,4 @@
-﻿using AlarmService.Logic.EditSignalService.Interface;
+﻿using AlarmService.Logic.Services.SignalServices.Interfaces;
 using Core.CommunicationModels.SignalModel.ConsumerMessages;
 using MassTransit;
 using Microsoft.Extensions.Logging;
@@ -7,10 +7,10 @@ namespace AlarmService.MessageQueue.Consumers;
 
 public class RemoveJournalEntryFromSignalsConsumer(
   ILogger<RemoveJournalEntryFromSignalsConsumer> _logger,
-  IEditSignalService editSignalService) : IConsumer<RemoveJournalEntryFromSignalMessage>
+  ISignalService signalService) : IConsumer<RemoveJournalEntryFromSignalMessage>
 {
   public async Task Consume(ConsumeContext<RemoveJournalEntryFromSignalMessage> context)
   {
-    await editSignalService.UpdateSignalsForJournalEntryRemoval(context.Message.JournalEntryIds);
+    await signalService.HandleJournalEntryDeletion(context.Message.JournalEntryIds);
   }
 }

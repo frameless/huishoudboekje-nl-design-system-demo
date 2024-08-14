@@ -44,6 +44,7 @@ message SignalFilter {
     repeated string citizenIds = 2;
     repeated string agreementIds = 3;
     optional bool isActive = 4;
+    repeated int32 signalTypes = 5;
 }
 message CitizenIdList {
   repeated string ids = 1;

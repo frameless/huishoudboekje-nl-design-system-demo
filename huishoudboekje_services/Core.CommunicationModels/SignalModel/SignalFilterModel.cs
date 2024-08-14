@@ -10,4 +10,5 @@ public class SignalFilterModel : ISignalFilterModel
     public IList<string>? AgreementIds { get; set; }
     public IList<string>? JournalEntryIds { get; set; }
     public bool? IsActive { get; set; }
+    public IList<int>? Types { get; set; }
 }

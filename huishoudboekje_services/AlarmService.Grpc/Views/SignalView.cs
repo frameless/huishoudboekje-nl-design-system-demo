@@ -1,6 +1,7 @@
 ﻿using AlarmService_RPC;
 using AlarmService.Grpc.Mapper;
-using AlarmService.Logic.Controllers.Signal;
+using AlarmService.Logic.Services.SignalServices;
+using AlarmService.Logic.Services.SignalServices.Interfaces;
 using Core.CommunicationModels;
 using Core.CommunicationModels.LogModels.Interfaces;
 using Core.CommunicationModels.SignalModel.Interfaces;
@@ -10,21 +11,21 @@ namespace AlarmService.Grpc.Views;
 
 public class SignalView : Signals.SignalsBase
 {
-  private readonly ISignalController _controller;
+  private readonly ISignalService _service;
   private readonly ISignalMapper _mapper;
 
-  public SignalView(ISignalController controller)
+  public SignalView(ISignalService service)
   {
-    _controller = controller;
+    _service = service;
     _mapper = new SignalMapper();
   }
 
   public override async Task<SignalsPagedResponse> GetPaged(SignalsPagedRequest request, ServerCallContext context)
   {
     Pagination page = new(request.Page.Take, request.Page.Skip);
-    Paged<ISignalModel> signals = await _controller.GetItemsPaged(page, _mapper.GetSignalFilters(request.Filter));
+    Paged<ISignalModel> signals = await _service.GetItemsPaged(page, _mapper.GetSignalFilters(request.Filter));
 
-    SignalsPagedResponse response = new SignalsPagedResponse();
+    SignalsPagedResponse response = new();
     response.Data.AddRange(_mapper.GetGrpcObjects(signals.Data));
     response.PageInfo = new PaginationResponse
     {
@@ -37,13 +38,13 @@ public class SignalView : Signals.SignalsBase
 
   public override async Task<SignalData> SetIsActive(SetIsActiveRequest request, ServerCallContext context)
   {
-    return _mapper.GetGrpcObject(await _controller.SetIsActive(request.Id, request.IsActive));
+    return _mapper.GetGrpcObject(await _service.SetIsActive(request.Id, request.IsActive));
   }
 
   public override async Task<SignalsResponse> GetAll(SignalsRequest request, ServerCallContext context)
   {
     var response = new SignalsResponse();
-    response.Data.AddRange(_mapper.GetGrpcObjects(await _controller.GetAll(false)));
+    response.Data.AddRange(_mapper.GetGrpcObjects(await _service.GetAll(false, null)));
     return response;
   }
 
@@ -51,7 +52,7 @@ public class SignalView : Signals.SignalsBase
   {
     return new GetActiveSignalsCountResponse
     {
-      Count = await _controller.GetActiveSignalsCount()
+      Count = await _service.GetActiveSignalsCount()
     };
   }
 }

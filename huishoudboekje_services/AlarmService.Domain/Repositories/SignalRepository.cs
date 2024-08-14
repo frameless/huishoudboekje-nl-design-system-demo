@@ -135,7 +135,7 @@ public class SignalRepository(AlarmServiceContext dbContext) : BaseRepository<Si
     IDatabaseDecoratableCommand<Signal> command,
     SignalFilterModel filter)
   {
-    var predicate = PredicateBuilder.New<Signal>(true);
+    ExpressionStarter<Signal>? predicate = PredicateBuilder.New<Signal>(true);
     if (filter.IsActive != null)
     {
       predicate.And(signal => signal.IsActive == filter.IsActive);
@@ -165,6 +165,11 @@ public class SignalRepository(AlarmServiceContext dbContext) : BaseRepository<Si
     if (filter.Ids is { Count : > 0 })
     {
       predicate.And(signal => filter.Ids.Contains(signal.Uuid.ToString()));
+    }
+
+    if (filter.Types is { Count : > 0 })
+    {
+      predicate.And(signal => filter.Types.Contains(signal.Type));
     }
 
     return new WhereCommandDecorator<Signal>(command, predicate);
