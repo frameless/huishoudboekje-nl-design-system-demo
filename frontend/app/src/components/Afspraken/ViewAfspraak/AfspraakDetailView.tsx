@@ -556,7 +556,7 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 											</HStack>
 										}
 								</DataItem>
-								{afspraak.alarm?.checkOnDate && (
+								{(afspraak.alarm?.checkOnDate && afspraak.alarm?.isActive) && (
 										<DataItem label={t("schedule.nextExpectedCheck")}>
 											<HStack>
 												<Text>{d.unix(afspraak.alarm.checkOnDate).format("L")}</Text>
@@ -575,7 +575,7 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 								</DataItem>
 								<DataItem label={t("afspraak.alarm.options")}>
 									<HStack>
-										<Switch size={"sm"} isChecked={!!afspraak.alarm?.isActive} onChange={() => toggleAlarmActive()} />
+										<Switch  isDisabled={afspraak.alarm?.endDate !== null && afspraak.alarm?.checkOnDate > afspraak.alarm?.endDate} size={"sm"} isChecked={!!afspraak.alarm?.isActive} onChange={() => toggleAlarmActive()} />
 										<DeleteConfirmButton onConfirm={() => onDeleteAlarm()} />
 									</HStack>
 								</DataItem>

@@ -724,6 +724,12 @@
     "burgers": "Burgers"
   },
   "signals": {
+    "types": {
+      "NoPaymentFound": "Missende betaling",
+      "UnexpectedAmount": "Onverwacht bedrag",
+      "MultiplePayments": "Meerdere transacties",
+      "NegativeBalance": "Negatief saldo"
+    },
     "showActive": "Ingeschakelde signalen",
     "showInActive": "Uitgeschakelde signalen",
     "signals": "Signalen",
@@ -731,6 +737,7 @@
     "helperText": "Alle signalen van alle burgers.",
     "filterByStatus": "Filter op status",
     "filterByBurger": "Filter op burger",
+    "filterByType": "Filter op type",
     "selectNoOptionsMessage": "Geen opties",
     "amountSignalMessage": "Er is een afwijking van <strong>{{amountDifference}}</strong> gevonden bij <agreementLink>{{agreementDescription}}</agreementLink> van <citizenLink>{{citizenName}}</citizenLink> met een transactie van <transctionLink>{{transactionAmount}}</transctionLink>.",
     "dateSignalMessage": "Er is geen transactie gevonden voor <agreementLink>{{agreementDescription}}</agreementLink> van <citizenLink>{{citizenName}}</citizenLink>.",

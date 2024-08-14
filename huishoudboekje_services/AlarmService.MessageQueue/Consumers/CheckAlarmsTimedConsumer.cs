@@ -1,15 +1,16 @@
-﻿using AlarmService.Logic.Controllers.Evaluation;
+﻿using AlarmService.Logic.Services.AlarmServices.Interfaces;
+using AlarmService.Logic.Services.EvaluationServices.Interfaces;
 using Core.CommunicationModels.AlarmModels;
 using MassTransit;
 using Microsoft.Extensions.Logging;
 
 namespace AlarmService.MessageQueue.Consumers;
 
-public class CheckAlarmsTimedConsumer(IEvaluationController evaluationController, ILogger<CheckAlarmsTimedConsumer> logger)
+public class CheckAlarmsTimedConsumer(IEvaluatorService evaluatorService, ILogger<CheckAlarmsTimedConsumer> logger)
   : IConsumer<CheckAlarmsTimed>
 {
   public async Task Consume(ConsumeContext<CheckAlarmsTimed> context)
   {
-    await evaluationController.EvaluateMissingTransactionAlarms();
+    await evaluatorService.EvaluateMissingTransactionAlarms();
   }
 }

@@ -1,7 +1,7 @@
 ﻿using System.Net;
 using System.Net.Http.Json;
 using System.Text.Json;
-using AlarmService.Logic.Misc;
+using AlarmService.Logic.Producers;
 using Core.CommunicationModels.JournalEntryModel;
 using Core.CommunicationModels.JournalEntryModel.Interfaces;
 using Core.ErrorHandling.Exceptions;

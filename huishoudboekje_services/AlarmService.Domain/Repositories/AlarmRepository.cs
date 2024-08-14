@@ -26,24 +26,29 @@ public class AlarmRepository(AlarmServiceContext dbContext) : BaseRepository<Ala
   public async Task<IList<IAlarmModel>> GetMultipleByIds(IList<string> ids)
   {
     return _mapper.GetCommunicationModels(
-      await ExecuteCommand(new GetMultipleByIdCommand<Alarm>(activity => ids.Contains(activity.Uuid.ToString()))));
+      await ExecuteCommand(
+        new NoTrackingCommandDecorator<Alarm>(
+          new GetMultipleByIdCommand<Alarm>(alarm => ids.Contains(alarm.Uuid.ToString())))));
   }
 
-  public async Task<IList<IAlarmModel>> GetMultipleByIdsNoTracking(IList<string> ids)
+
+  public async Task<IList<IAlarmModel>> GetMultipleActiveByIds(IList<string> ids)
   {
     return _mapper.GetCommunicationModels(
       await ExecuteCommand(
         new NoTrackingCommandDecorator<Alarm>(
-          new GetMultipleByIdCommand<Alarm>(activity => ids.Contains(activity.Uuid.ToString())))));
+          new WhereCommandDecorator<Alarm>(
+            new GetAllCommand<Alarm>(),
+            alarm => alarm.IsActive && ids.Contains(alarm.Uuid.ToString())))));
   }
 
-  public async Task<IList<IAlarmModel>> GetAllByCheckOnDateBeforeNoTracking(DateTime date)
+  public async Task<IList<IAlarmModel>> GetActiveByCheckOnDateBeforeNoTracking(DateTime date)
   {
     long unixTimeDate = ((DateTimeOffset)date).ToUnixTimeSeconds();
     return _mapper.GetCommunicationModels(
       await ExecuteCommand(
         new NoTrackingCommandDecorator<Alarm>(
-          new WhereCommandDecorator<Alarm>(new GetAllCommand<Alarm>(), alarm => alarm.CheckOnDate <= unixTimeDate))));
+          new WhereCommandDecorator<Alarm>(new GetAllCommand<Alarm>(), alarm => alarm.IsActive && alarm.CheckOnDate <= unixTimeDate))));
   }
 
   public async Task<IAlarmModel> InsertWithoutSave(IAlarmModel value)

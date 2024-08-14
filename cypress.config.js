@@ -49,6 +49,7 @@ module.exports = defineConfig({
   projectId: 'ne2amu',
   video: false,
   screenshotOnRunFailure: false,
+  defaultCommandTimeout: 10000,
   env: {
     graphqlUrl: "http://localhost:4200",
     'cypress-react-selector': {

@@ -65,11 +65,13 @@ public class SignalMapper : ISignalMapper
       return null;
     }
 
-    SignalFilterModel result = new SignalFilterModel
+    SignalFilterModel result = new()
     {
       AgreementIds = filters.AgreementIds.ToList(),
       CitizenIds = filters.CitizenIds.ToList(),
-      AlarmIds = filters.AlarmIds
+      AlarmIds = filters.AlarmIds,
+      Types = filters.SignalTypes
+
     };
     if (filters.HasIsActive)
     {

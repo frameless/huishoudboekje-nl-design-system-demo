@@ -30,7 +30,7 @@ Given('an agreement exists for scenario "negative citizen balance"', () => {
 
   // Add agreement with test department
   cy.url().should('contains', '/afspraken/toevoegen'); 
-  cy.get('[data-test="radio.agreementOrganization"]')
+  cy.get('[data-test="radio.agreementOrganization"]', { timeout: 10000 })
     .click();
   cy.get('#organisatie')
     .type('Belast');
@@ -45,17 +45,17 @@ Given('an agreement exists for scenario "negative citizen balance"', () => {
     .click();
 
   // Payment direction: Toeslagen
-  cy.get('[data-test="radio.agreementIncome"]')
+  cy.get('[data-test="radio.agreementIncome"]', { timeout: 10000 })
     .click();
   cy.get('#rubriek')
     .click()
     .contains('Toeslagen')
     .click();
-  cy.get('[data-test="select.agreementIncomeDescription"]')
+  cy.get('[data-test="select.agreementIncomeDescription"]', { timeout: 10000 })
     .type('Loon');
-  cy.get('[data-test="select.agreementIncomeAmount"]')
+  cy.get('[data-test="select.agreementIncomeAmount"]', { timeout: 10000 })
     .type('10');
-  cy.get('[data-test="button.Submit"]')
+  cy.get('[data-test="button.Submit"]', { timeout: 10000 })
     .click();
 
   // Check success message
@@ -224,7 +224,7 @@ When('the zero amount bank transaction is booked to the agreement "Loon"', () =>
   cy.visit('/bankzaken/transacties')
   cy.url().should('eq', Cypress.config().baseUrl + '/bankzaken/transacties')
   
-  cy.get('[data-test="transactionsPage.filters.notReconciliated"]')
+  cy.get('[data-test="transactionsPage.filters.notReconciliated"]', { timeout: 10000 })
     .click();
   cy.get('[data-test="transactions.expandFilter"]')
     .click();
@@ -551,7 +551,7 @@ When('a positive bank transaction with amount {string} is booked to an agreement
   cy.visit('/bankzaken/bankafschriften')
   cy.url().should('eq', Cypress.config().baseUrl + '/bankzaken/bankafschriften')
 
-  cy.get('input[type="file"]')
+  cy.get('input[type="file"]', { timeout: 10000 })
     .should('exist')
     .click({ force: true })
 
@@ -560,7 +560,7 @@ When('a positive bank transaction with amount {string} is booked to an agreement
   
   // Wait for file to upload
   cy.wait(3000);
-  cy.get('[aria-label="Close"]')
+  cy.get('[aria-label="Close"]', { timeout: 10000 })
     .should('be.visible')
     .click();
 
@@ -597,17 +597,17 @@ When('the negative amount bank transaction with amount {string} is booked to the
   cy.visit('/bankzaken/transacties')
   cy.url().should('eq', Cypress.config().baseUrl + '/bankzaken/transacties')
   
-  cy.get('[data-test="transactionsPage.filters.notReconciliated"]')
+  cy.get('[data-test="transactionsPage.filters.notReconciliated"]', { timeout: 10000 })
     .click();
-  cy.get('[data-test="transactions.expandFilter"]')
+  cy.get('[data-test="transactions.expandFilter"]', { timeout: 10000 })
     .click();
-  cy.get('#zoektermen')
+  cy.get('#zoektermen', { timeout: 10000 })
     .type('HHB000001 Zorgtoeslag{enter}');
   cy.contains(amount)
     .click();
   
   cy.url().should('include', '/bankzaken/transacties/')
-  cy.get('[data-test="switch.filterDescription"]') 
+  cy.get('[data-test="switch.filterDescription"]', { timeout: 10000 })
     .click({ force: true });
   cy.contains('Alle burgers')
     .click({ force: true });
@@ -684,7 +684,7 @@ Then('no signal is visible', () => {
 Then('I click the "Uitgeschakelde signalen" filter', () => {
 
   // Click filter checkbox
-  cy.get('[data-test="checkbox.signalInactive"]')
+  cy.get('[data-test="checkbox.signalInactive"]', { timeout: 10000 })
     .click();
     
 });
@@ -696,7 +696,7 @@ Then('I click the "Uitgeschakelde signalen" filter', () => {
 Then('I click the "Ingeschakelde signalen" filter', () => {
 
   // Click filter checkbox
-  cy.get('[data-test="checkbox.signalActive"]')
+  cy.get('[data-test="checkbox.signalActive"]', { timeout: 10000 })
     .click();
     
 });

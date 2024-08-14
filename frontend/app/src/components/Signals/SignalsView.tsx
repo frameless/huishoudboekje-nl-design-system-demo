@@ -24,12 +24,16 @@ const SignalsView = () => {
 	//Filter states are here to prevent infinite re-render loop
 	const [filterByActive, setFilterByActive]  = useState<ActiveSwitch>({active: true, inactive: false});
 	const [filterByCitizens, setFilterByCitizens] = useState<string[]>([]);
+	const [filterByTypes, setFilterByTypes] = useState<number[]>([]);
 
 
 	const buildFilter = () => {
         const filter: SignalFilter = {}
         if(filterByCitizens.length > 0){
             filter.citizenIds = filterByCitizens
+        }
+        if(filterByTypes.length > 0){
+            filter.signalTypes = filterByTypes
         }
         if(!filterByActive.active || !filterByActive.inactive){
             if(filterByActive.active){
@@ -84,6 +88,8 @@ const SignalsView = () => {
 						goFirst={goFirst}
 						filterByCitizens={filterByCitizens} 
 						setFilterByCitizens={setFilterByCitizens} 
+						filterByTypes={filterByTypes} 
+						setFilterByTypes={setFilterByTypes} 
 						setFilterByActive={setFilterByActive}>
 					</SignalsFilters>
 				}>

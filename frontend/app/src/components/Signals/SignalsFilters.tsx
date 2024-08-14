@@ -9,12 +9,28 @@ type AfspraakFormProps = {
     goFirst: () => void,
     filterByCitizens,
 	setFilterByCitizens: (value) => void,
+    filterByTypes,
+    setFilterByTypes: (value) => void ,
 	setFilterByActive: (value) => void
 };
 
-const SignalsFilters: React.FC<AfspraakFormProps>  = ({goFirst, filterByCitizens, setFilterByCitizens, setFilterByActive}) => {
+
+const SignalsFilters: React.FC<AfspraakFormProps>  = ({goFirst, filterByCitizens, setFilterByCitizens, filterByTypes, setFilterByTypes, setFilterByActive}) => {
 	const {t} = useTranslation();
 	const $citizens = useGetCitizensSignalsFilterQuery();
+	const types = [{
+        id: 1,
+        name: t("signals.types.NoPaymentFound")
+    },{
+        id: 2,
+        name: t("signals.types.UnexpectedAmount")
+    },{
+        id: 3,
+        name: t("signals.types.MultiplePayments")
+    },{
+        id: 4,
+        name: t("signals.types.NegativeBalance")
+    }]
 	const reactSelectStyles = useReactSelectStyles();
 
     const onSelectBurger = (value) => {
@@ -22,6 +38,18 @@ const SignalsFilters: React.FC<AfspraakFormProps>  = ({goFirst, filterByCitizens
 		setFilterByCitizens(newValue)
         goFirst()
 	};
+
+    const onSelectType = (value) => {
+		const newValue = value ? value.map(v => v.value) : []
+		setFilterByTypes(newValue)
+        goFirst()
+	};
+
+    const typesSelection = types.filter(type => filterByTypes.includes(type.id!)).map(type => ({
+        key: type.id,
+        value: type.id,
+        label: type.name,
+    }));
 
     const onSetActive = (value) => {           
         setFilterByActive(() => ({
@@ -70,6 +98,26 @@ const SignalsFilters: React.FC<AfspraakFormProps>  = ({goFirst, filterByCitizens
                         maxMenuHeight={350}
                         placeholder={t("select.placeholder")}
                         value={citizensSelection} 
+                    />
+                </FormControl>
+                <FormControl>
+                    <FormLabel>{t("signals.filterByType")}</FormLabel>
+                    <Select 
+                        id={"typeFilter"}
+                        data-test="signal.typeFilter"
+                        onChange={onSelectType} 
+                        options={types.map(type => ({
+                            key: type.id,
+                            value: type.id,
+                            label: type.name,
+                        }))}
+                        styles={reactSelectStyles.default} 
+                        isMulti={true}
+                        isClearable={true} 
+                        noOptionsMessage={() => t("select.noOptions")} 
+                        maxMenuHeight={350}
+                        placeholder={t("select.placeholder")}
+                        value={typesSelection} 
                     />
                 </FormControl>
             </Stack>

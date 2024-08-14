@@ -15,7 +15,7 @@ class Burgers {
 
     findBurger(text) {
 
-      return cy.get('[data-test="citizen.tile"]').contains(text)
+      return cy.get('[data-test="citizen.tile"]', { timeout: 10000 }).contains(text)
 
     }
 

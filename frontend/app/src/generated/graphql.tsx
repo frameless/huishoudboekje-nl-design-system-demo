@@ -1604,6 +1604,7 @@ export type SignalFilter = {
   alarmIds?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   citizenIds?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   isActive?: InputMaybe<Scalars['Boolean']>;
+  signalTypes?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
 };
 
 export type SignalsPagedRequest = {

@@ -18,7 +18,7 @@ public class SignalModel : ISignalModel
 
   public IList<string>? JournalEntryUuids { get; set; }
 
-  public string AlarmUuid { get; set; }
+  public string? AlarmUuid { get; set; }
 
   public string CitizenUuid { get; set; }
 

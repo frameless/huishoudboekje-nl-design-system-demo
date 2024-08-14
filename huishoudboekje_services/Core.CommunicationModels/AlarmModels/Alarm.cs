@@ -28,17 +28,4 @@ public class AlarmModel : IAlarmModel
 
   public int AlarmType { get; set; }
 
-  public void UpdateCheckOnDate(long? checkOnDate)
-  {
-    if (EndDate != null || EndDate != 0)
-    {
-      if (checkOnDate >= EndDate)
-      {
-        this.CheckOnDate = null;
-        return;
-      }
-    }
-
-    this.CheckOnDate = checkOnDate;
-  }
 }

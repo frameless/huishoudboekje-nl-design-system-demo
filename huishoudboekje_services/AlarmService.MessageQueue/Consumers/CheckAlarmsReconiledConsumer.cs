@@ -1,4 +1,5 @@
-﻿using AlarmService.Logic.Controllers.Evaluation;
+﻿using AlarmService.Logic.Services.AlarmServices.Interfaces;
+using AlarmService.Logic.Services.EvaluationServices.Interfaces;
 using Core.CommunicationModels.AlarmModels;
 using Core.ErrorHandling.Exceptions;
 using Core.CommunicationModels.AlarmModels.Interfaces;
@@ -9,7 +10,7 @@ using Microsoft.Extensions.Logging;
 
 namespace AlarmService.MessageQueue.Consumers;
 
-public class CheckAlarmsReconiledConsumer(IEvaluationController evaluationController, ILogger<CheckAlarmsReconiledConsumer> logger)
+public class CheckAlarmsReconiledConsumer(IEvaluatorService evaluatorService, ILogger<CheckAlarmsReconiledConsumer> logger)
   : IConsumer<CheckAlarmsReconciled>
 {
   public Task Consume(ConsumeContext<CheckAlarmsReconciled> context)
@@ -21,7 +22,7 @@ public class CheckAlarmsReconiledConsumer(IEvaluationController evaluationContro
   {
     if (message != null)
     {
-      await evaluationController.EvaluateReconciliatedJournalEntries(
+      await evaluatorService.EvaluateReconciliatedJournalEntries(
         message.AgreementToAlarm,
         message.ReconciledJournalEntries,
         message.AlarmToCitizen);

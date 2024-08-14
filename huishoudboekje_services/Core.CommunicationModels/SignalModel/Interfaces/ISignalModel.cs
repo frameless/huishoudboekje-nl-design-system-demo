@@ -16,7 +16,7 @@ public interface ISignalModel
 
   public IList<string>? JournalEntryUuids { get; }
 
-  public string AlarmUuid { get; }
+  public string? AlarmUuid { get; }
 
   public string CitizenUuid { get; }
   public string AgreementUuid { get; }
