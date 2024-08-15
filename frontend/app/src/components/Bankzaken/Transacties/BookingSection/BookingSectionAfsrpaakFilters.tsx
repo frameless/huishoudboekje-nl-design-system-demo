@@ -7,6 +7,7 @@ import Select from "react-select";
 import {useReactSelectStyles} from "../../../../utils/things";
 import { WarningTwoIcon } from "@chakra-ui/icons";
 import { useTranslation } from "react-i18next";
+import useStore from "../../../../store";
 
 type AfspraakSearchVariables = {
 	offset: number,
@@ -40,7 +41,9 @@ const BookingSectionAfspraakFilters = ({organisaties, burgers, rekeningen, updat
         transaction_description: undefined
 	}
 
-	const [filterDescription, setFilterDescription] = useState(true)
+	const filterDescription = useStore(store => store.transactionDescriptionFilter);
+	const setFilterDescription = useStore(store => store.setTransactionDescriptionFilter);
+
 	const [minBedrag, setMinBedrag] = useState(searchVariables.min_bedrag)
 	const [maxBedrag, setMaxBedrag] = useState(searchVariables.max_bedrag)
 	const [filterBurgerIds, setFilterBurgerIds] = useState<number[]>([]);
