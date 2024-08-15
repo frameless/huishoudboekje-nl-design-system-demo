@@ -7,7 +7,7 @@ import TransactieItem from "./TransactieItem";
 import { TransactionSimple } from "./TransactieOverzichtObject";
 
 type TransactiesListProps = {
-	transacties: TransactionSimple[],
+	transacties: TransactionSimple[]
 };
 
 const TransactiesList: React.FC<TransactiesListProps> = ({transacties}) => {
