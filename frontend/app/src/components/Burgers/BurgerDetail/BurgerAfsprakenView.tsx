@@ -3,12 +3,13 @@ import React, {useState} from "react";
 import {useTranslation} from "react-i18next";
 import {useNavigate} from "react-router-dom";
 import {AppRoutes} from "../../../config/routes";
-import {Burger} from "../../../generated/graphql";
+import {Afspraak, Burger} from "../../../generated/graphql";
 import {isAfspraakActive} from "../../../utils/things";
 import AfspraakTableRow from "../../Afspraken/AfspraakTableRow";
 import AddButton from "../../shared/AddButton";
 import Section from "../../shared/Section";
 import SectionContainer from "../../shared/SectionContainer";
+import d from "../../../utils/dayjs";
 
 type ActiveSwitch = {
 	active: boolean,
@@ -28,6 +29,28 @@ const BurgerAfsprakenView: React.FC<{burger: Burger}> = ({burger}) => {
 		...afspraken.filter(a => filter.inactive && !isAfspraakActive(a) && !a.credit).sort((a, b) => parseFloat(a.bedrag) >= parseFloat(b.bedrag) ? -1 : 1),
 		...afspraken.filter(a => filter.inactive && !isAfspraakActive(a) && a.credit).sort((a, b) => a.bedrag >= b.bedrag ? -1 : 1),
 	];
+
+	function sortAfspraken(a: Afspraak, b: Afspraak) {
+		const aStartDate = a.betaalinstructie?.startDate
+		const bStartDate = b.betaalinstructie?.startDate
+
+		const aIsOneTimeAgreement = aStartDate !== undefined && aStartDate === a.betaalinstructie?.endDate
+		const bIsOneTimeAgreement = bStartDate !== undefined &&  bStartDate === b.betaalinstructie?.endDate
+
+		// First, sort by the one time agreements
+		if (aIsOneTimeAgreement !== bIsOneTimeAgreement) {
+			return aIsOneTimeAgreement ? -1 : 1;
+		}
+
+		// If both are one time agreements sort by date
+		if (aIsOneTimeAgreement && bIsOneTimeAgreement) {
+			return  d(aStartDate).unix() - d(bStartDate).unix() ;
+		}
+
+		//If not one time agreement keep same order
+		return 0;
+    }
+
 
 	return (
 		<SectionContainer>
@@ -66,7 +89,7 @@ const BurgerAfsprakenView: React.FC<{burger: Burger}> = ({burger}) => {
 									</Td>
 								</Tr>
 							)}
-							{sortedAfspraken.length > 0 && sortedAfspraken.map((a) => (
+							{sortedAfspraken.length > 0 && sortedAfspraken.sort(sortAfspraken).map((a) => (
 								<AfspraakTableRow key={a.id} data-id={a.id} afspraak={a} py={2} />
 							))}
 						</Tbody>
