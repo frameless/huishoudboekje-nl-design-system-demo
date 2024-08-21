@@ -50,6 +50,8 @@ class Burger(db.Model):
 
     saldo = Column(Integer, nullable=False, server_default='0')
 
+    end_date = Column(DateTime)
+
     # Relations from other models
     rekeningen = relationship(
         "RekeningBurger",

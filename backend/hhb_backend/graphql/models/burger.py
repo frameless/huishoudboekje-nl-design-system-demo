@@ -19,6 +19,7 @@ class Burger(graphene.ObjectType):
     voornamen = graphene.String()
     achternaam = graphene.String()
     geboortedatum = graphene.Date()
+    end_date = graphene.String()
     telefoonnummer = graphene.String()
     email = graphene.String()
     straatnaam = graphene.String()

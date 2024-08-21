@@ -28,7 +28,8 @@ from huishoudboekje_service.views import (
     AfsprakenOverviewView,
     AfsprakenTransactiesView,
     CitizenView,
-    BurgerUpdateSaldoAlarmView
+    BurgerUpdateSaldoAlarmView,
+    BurgerEndAfspraken
 )
 from core_service import database
 from core_service.seed import seed_database_with_test_data
@@ -85,6 +86,8 @@ def create_app(config_name='huishoudboekje_service.config.Config'):
             "view": BurgerTransactiesView, "name": "burger_transacties"},
         {"path": "/burgers/transacties/ids",
             "view": BurgerTransactieIdsView, "name": "burger_transactie_ids"},
+        {"path": "/burger/end/afspraken",
+            "view": BurgerEndAfspraken, "name": "end_burger_afspraken"},
         {"path": "/afspraken", "view": AfspraakView, "name": "afspraak_view"},
         {"path": "/afspraken/filter", "view": AfsprakenFilterView,
             "name": "afspraak_filter_view"},

@@ -66,7 +66,19 @@
       "bsnLengthError": "Het burgerservicenummer moet bestaan uit 8 of 9 cijfers.",
       "bsnElfProefError": "Dit geen geldig burgerservicenummer. Controleer de ingevulde gegevens en probeer het opnieuw.",
       "createSuccessMessage": "Nieuwe burger opgeslagen.",
-      "updateSuccessMessage": "Gegevens gewijzigd."
+      "updateSuccessMessage": "Gegevens gewijzigd.",
+      "endBurger": "Beëindig deelname",
+      "endBurgerSuccess": "De deelname stopt na {{enddate}}",
+      "willEndOn": "Deelname stopt na {{enddate}}",
+      "endedOn": "Deelname is gestopt na {{enddate}}",
+      "endModal": {
+        "title": "Deelname beëindigen",
+        "message": "Einddatum",
+        "button": "Bevestigen",
+        "confirmTitle": "Weet u het zeker?",
+        "confirmMessage": "De deelname stopt na {{date}}",
+        "invalidDateError": "De datum kan niet in het verleden zijn"
+      }
     },
     "formInputError": "Er is een fout opgetreden. Controleer de invoer.",
     "configuratie": {

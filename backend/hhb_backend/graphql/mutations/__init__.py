@@ -13,7 +13,7 @@ from .afspraken.update_afspraak import UpdateAfspraak
 from .afspraken.update_afspraak_betaalinstructie import UpdateAfspraakBetaalinstructie
 from .burgers.create_burger import CreateBurger
 from .burgers.delete_burger import DeleteBurger
-from .burgers.update_burger import UpdateBurger
+from .burgers.update_burger import EndBurger, UpdateBurger
 from .configuraties.configuraties import CreateConfiguratie, DeleteConfiguratie, UpdateConfiguratie
 from .customer_statement_messages.create_customer_statement_message import CreateCustomerStatementMessage
 from .customer_statement_messages.delete_customer_statement_message import DeleteCustomerStatementMessage
@@ -49,6 +49,7 @@ class RootMutation(graphene.ObjectType):
     deleteBurger = DeleteBurger.Field()
     updateBurger = UpdateBurger.Field()
     updateBurgerSaldoAlarm = UpdateBurgerSaldoAlarm.Field()
+    endBurger = EndBurger.Field()
 
     createAfspraak = CreateAfspraak.Field()
     updateAfspraak = UpdateAfspraak.Field()

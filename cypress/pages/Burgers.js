@@ -26,7 +26,7 @@ class Burgers {
         return n[n.length - 1];
       }
 
-      searchTerm = lastName(fullName)
+      var searchTerm = lastName(fullName)
 
       cy.visit('/burgers');
       cy.url().should('eq', Cypress.config().baseUrl + '/burgers')
@@ -38,7 +38,8 @@ class Burgers {
         .click();
       cy.url().should('include', Cypress.config().baseUrl + '/burgers/')
     }
-   
+
+    
 }
 
 export default Burgers;

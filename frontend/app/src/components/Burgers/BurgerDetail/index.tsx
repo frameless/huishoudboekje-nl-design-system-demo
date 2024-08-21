@@ -1,5 +1,4 @@
 import {Button, Divider, IconButton, Link, Menu, MenuButton, MenuItem, MenuList, Stack, useDisclosure} from "@chakra-ui/react";
-import React from "react";
 import {useTranslation} from "react-i18next";
 import {NavLink, useNavigate, useParams} from "react-router-dom";
 import {AppRoutes} from "../../../config/routes";
@@ -11,6 +10,7 @@ import {
 	GetHuishoudensDocument,
 	useDeleteBurgerMutation,
 	useDeleteHuishoudenBurgerMutation,
+	useEndBurgerMutation,
 	useGetBurgerDetailsQuery,
 } from "../../../generated/graphql";
 import useStore from "../../../store";
@@ -25,12 +25,16 @@ import PageNotFound from "../../shared/PageNotFound";
 import BurgerAfsprakenView from "./BurgerAfsprakenView";
 import BurgerSaldoView from "./BurgerSaldoView";
 import BurgerContextContainer from "../BurgerContextContainer";
+import EndedBurgerAlert from "./EndedBurgerAlert";
+import BurgerEndModal from "./BurgerEndModal";
+import d from "../../../utils/dayjs";
 
 const BurgerDetailPage = () => {
 	const {id = ""} = useParams<{id: string}>();
 	const {t} = useTranslation();
 	const toast = useToaster();
 	const navigate = useNavigate();
+	const endModal = useDisclosure();
 	const deleteAlert = useDisclosure();
 	const deleteHuishoudenBurgerAlert = useDisclosure();
 	const burgerSearch = useStore(store => store.burgerSearch);
@@ -57,6 +61,13 @@ const BurgerDetailPage = () => {
 			{query: GetHuishoudensDocument},
 		],
 	});
+
+	const [endBurger, $endBurger] = useEndBurgerMutation({
+		refetchQueries: [
+			{query: GetBurgerDetailsDocument, variables: {id: parseInt(id)}}
+		],
+	});
+
 
 	return (
 		<Queryable query={$burger}>{(data) => {
@@ -106,7 +117,28 @@ const BurgerDetailPage = () => {
 					});
 			};
 
+			const onSubmitEndBurger = (enddate: Date) => {
+				endBurger({
+					variables: {
+						enddate: d(enddate).format("YYYY-MM-DD"),
+						id: parseInt(id),
+					},
+				}).then(() => {
+						toast({
+							success: t("messages.burgers.endBurgerSuccess", {enddate: d(enddate).format("DD-MM-YYYY")}),
+						});
+					})
+					.catch(err => {
+						console.error(err);
+						toast({
+							error: err.message,
+						});
+					});
+			};
+		
+
 			return (<>
+				{endModal.isOpen && <BurgerEndModal onSubmit={onSubmitEndBurger} onClose={endModal.onClose} />}
 				{deleteAlert.isOpen && (
 					<Alert
 						title={t("messages.burgers.deleteTitle")}
@@ -154,9 +186,13 @@ const BurgerDetailPage = () => {
 							<Divider />
 							<MenuItem data-test="kebab.citizenDeleteFromHousehold" onClick={() => deleteHuishoudenBurgerAlert.onOpen()}>{t("global.actions.deleteBurgerFromHuishouden")}</MenuItem>
 							<MenuItem data-test="kebab.citizenDelete" onClick={() => deleteAlert.onOpen()}>{t("global.actions.delete")}</MenuItem>
+							<MenuItem data-test="agreement.menuEnd" onClick={endModal.onOpen}>{t("messages.burgers.endBurger")}</MenuItem>
 						</MenuList>
 					</Menu>
 				)}>
+					{burger.endDate && (
+						<EndedBurgerAlert burger={burger}/>
+					)}
 					<BurgerContextContainer burger={burger} />
 					<BurgerSaldoView burger={burger} />
 					{/* TODO: uncomment when singalen views are implemented */}

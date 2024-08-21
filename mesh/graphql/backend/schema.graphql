@@ -143,6 +143,7 @@ type Burger {
   voornamen: String
   achternaam: String
   geboortedatum: Date
+  endDate: String
   telefoonnummer: String
   email: String
   straatnaam: String
@@ -383,6 +384,7 @@ type RootMutation {
   deleteBurger(id: Int!): DeleteBurger
   updateBurger(achternaam: String, bsn: Int, email: String, geboortedatum: String, huishouden: HuishoudenInput, huisnummer: String, id: Int!, plaatsnaam: String, postcode: String, saldoAlarm: Boolean, straatnaam: String, telefoonnummer: String, voorletters: String, voornamen: String): UpdateBurger
   updateBurgerSaldoAlarm(id: Int!, saldoAlarm: Boolean): UpdateBurgerSaldoAlarm
+  endBurger(endDate: String, id: Int!): EndBurger
   createAfspraak(input: CreateAfspraakInput!): CreateAfspraak
   updateAfspraak(id: Int!, input: UpdateAfspraakInput!): UpdateAfspraak
   deleteAfspraak(id: Int!): DeleteAfspraak
@@ -451,6 +453,11 @@ type UpdateBurger {
   previous: Burger
 }
 type UpdateBurgerSaldoAlarm {
+  ok: Boolean
+  burger: Burger
+  previous: Burger
+}
+type EndBurger {
   ok: Boolean
   burger: Burger
   previous: Burger

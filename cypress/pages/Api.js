@@ -28,7 +28,34 @@ const queryAddCitizen = `mutation createBurger {
   }
 }`
 
+const queryAddCitizenEndParcip = `mutation createBurger {
+  createBurger(input:
+  {
+    voornamen: "Party",
+    voorletters: "C.",
+    achternaam: "Cipator",
+    bsn: 578803008,
+    geboortedatum: "2000-01-01",
+    straatnaam: "Sesamstraat",
+    huisnummer: "99",
+    plaatsnaam: "Maaskantje",
+    postcode: "4321AB",
+    email: "part-i-c-pator@bingus.tk",
+    telefoonnummer: "0618542337",
+    rekeningen:
+      [{rekeninghouder: "Tonnie Test",
+        iban: "NL02ARSN0905984706"
+      }],  
+  }
+)
+  {
+    burger{id}
+  }
+}`
+
+
 let citizenId = 0;
+let citizenIdEndParcip = 0;
 
 class Api {
 
@@ -117,6 +144,21 @@ class Api {
     
   }
 
+  createTestBurgerEndParcip() {
+
+    // Create a test user
+    cy.request({
+      method: "post",
+      url: Cypress.config().baseUrl + '/apiV2/graphql',
+      body: { query: queryAddCitizenEndParcip },
+    }).then((res) => {
+      console.log(res.body);
+      citizenIdEndParcip = res.body.data.createBurger.burger.id;
+      console.log('Test citizen has been created', res.body.data.createBurger.burger.id)
+    });
+    
+  }
+
   deleteTestBurger() {
 
     // Delete test citizen
@@ -136,9 +178,39 @@ class Api {
     });
   }
 
+  deleteTestBurgerEndParcip() {
 
+    // Delete test citizen
+    cy.request({
+      method: "post",
+      url: Cypress.config().baseUrl + '/apiV2/graphql',
+      body: { query: `mutation deleteBurger {
+        deleteBurger(id: ` + citizenIdEndParcip + `)
+        {
+          ok
+        }
+      }` },
+    }).then((res) => {
+      console.log(res.body);
+      console.log('Test citizen has been deleted.')
+      cy.log('Deleted test citizen')
+    });
+  }
 
-  
+  getBurgerId(name)
+  {
+    
+    return cy.request({
+      method: "post",
+      url: Cypress.config().baseUrl + '/apiV2/graphql',
+      body: { query: `query citizenSearch {
+			burgers(search: "`+ name +`") {
+				id
+			}
+		}` },
+    }).its('body')
+      
+  }
    
 }
 
