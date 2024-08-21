@@ -240,6 +240,7 @@ export type Burger = {
   afspraken?: Maybe<Array<Maybe<Afspraak>>>;
   bsn?: Maybe<Scalars['Int']>;
   email?: Maybe<Scalars['String']>;
+  endDate?: Maybe<Scalars['String']>;
   geboortedatum?: Maybe<Scalars['Date']>;
   gebruikersactiviteiten?: Maybe<Array<Maybe<GebruikersActiviteit>>>;
   huishouden?: Maybe<Huishouden>;
@@ -607,6 +608,12 @@ export type DeleteRubriek = {
   previous?: Maybe<Rubriek>;
 };
 
+export type EndBurger = {
+  burger?: Maybe<Burger>;
+  ok?: Maybe<Scalars['Boolean']>;
+  previous?: Maybe<Burger>;
+};
+
 export type Entity = {
   afdeling?: Maybe<Afdeling>;
   afspraak?: Maybe<Afspraak>;
@@ -822,6 +829,7 @@ export type Mutation = {
   deleteOrganisatie?: Maybe<DeleteOrganisatie>;
   deletePostadres?: Maybe<DeletePostadres>;
   deleteRubriek?: Maybe<DeleteRubriek>;
+  endBurger?: Maybe<EndBurger>;
   /** Mutatie om niet afgeletterde banktransacties af te letteren. */
   startAutomatischBoeken?: Maybe<StartAutomatischBoeken>;
   updateAfdeling?: Maybe<UpdateAfdeling>;
@@ -1021,6 +1029,12 @@ export type MutationDeletePostadresArgs = {
 
 
 export type MutationDeleteRubriekArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type MutationEndBurgerArgs = {
+  endDate?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
 };
 
@@ -1999,6 +2013,14 @@ export type EndAfspraakMutationVariables = Exact<{
 
 export type EndAfspraakMutation = { updateAfspraak?: { ok?: boolean, afspraak?: { id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, validFrom?: any, validThrough?: any, betaalinstructie?: { byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string }, burger?: { id?: number, bsn?: number, voornamen?: string, voorletters?: string, achternaam?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, postadres?: { id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string }, rubriek?: { id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } }, matchingAfspraken?: Array<{ id?: number, credit?: boolean, zoektermen?: Array<string>, bedrag?: any, omschrijving?: string, burger?: { voorletters?: string, voornamen?: string, achternaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string } }> } } };
 
+export type EndBurgerMutationVariables = Exact<{
+  enddate: Scalars['String'];
+  id: Scalars['Int'];
+}>;
+
+
+export type EndBurgerMutation = { endBurger?: { ok?: boolean } };
+
 export type SignalSetIsActiveMutationVariables = Exact<{
   input: SetIsActiveRequest;
 }>;
@@ -2158,7 +2180,7 @@ export type GetBurgerDetailsQueryVariables = Exact<{
 }>;
 
 
-export type GetBurgerDetailsQuery = { burger?: { id?: number, voorletters?: string, voornamen?: string, saldoAlarm?: boolean, achternaam?: string, huishouden?: { id?: number }, afspraken?: Array<{ id?: number, bedrag?: any, credit?: boolean, omschrijving?: string, validFrom?: any, validThrough?: any, betaalinstructie?: { byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string }, afdeling?: { naam?: string, organisatie?: { naam?: string } } }> } };
+export type GetBurgerDetailsQuery = { burger?: { id?: number, voorletters?: string, voornamen?: string, endDate?: string, saldoAlarm?: boolean, achternaam?: string, huishouden?: { id?: number }, afspraken?: Array<{ id?: number, bedrag?: any, credit?: boolean, omschrijving?: string, validFrom?: any, validThrough?: any, betaalinstructie?: { byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string }, afdeling?: { naam?: string, organisatie?: { naam?: string } } }> } };
 
 export type GetBurgerPersonalDetailsQueryVariables = Exact<{
   id: Scalars['Int'];
@@ -4088,6 +4110,40 @@ export function useEndAfspraakMutation(baseOptions?: Apollo.MutationHookOptions<
 export type EndAfspraakMutationHookResult = ReturnType<typeof useEndAfspraakMutation>;
 export type EndAfspraakMutationResult = Apollo.MutationResult<EndAfspraakMutation>;
 export type EndAfspraakMutationOptions = Apollo.BaseMutationOptions<EndAfspraakMutation, EndAfspraakMutationVariables>;
+export const EndBurgerDocument = gql`
+    mutation endBurger($enddate: String!, $id: Int!) {
+  endBurger(endDate: $enddate, id: $id) {
+    ok
+  }
+}
+    `;
+export type EndBurgerMutationFn = Apollo.MutationFunction<EndBurgerMutation, EndBurgerMutationVariables>;
+
+/**
+ * __useEndBurgerMutation__
+ *
+ * To run a mutation, you first call `useEndBurgerMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useEndBurgerMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [endBurgerMutation, { data, loading, error }] = useEndBurgerMutation({
+ *   variables: {
+ *      enddate: // value for 'enddate'
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useEndBurgerMutation(baseOptions?: Apollo.MutationHookOptions<EndBurgerMutation, EndBurgerMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<EndBurgerMutation, EndBurgerMutationVariables>(EndBurgerDocument, options);
+      }
+export type EndBurgerMutationHookResult = ReturnType<typeof useEndBurgerMutation>;
+export type EndBurgerMutationResult = Apollo.MutationResult<EndBurgerMutation>;
+export type EndBurgerMutationOptions = Apollo.BaseMutationOptions<EndBurgerMutation, EndBurgerMutationVariables>;
 export const SignalSetIsActiveDocument = gql`
     mutation signalSetIsActive($input: SetIsActiveRequest!) {
   Signals_SetIsActive(input: $input) {
@@ -5258,6 +5314,7 @@ export const GetBurgerDetailsDocument = gql`
     id
     voorletters
     voornamen
+    endDate
     saldoAlarm
     achternaam
     huishouden {

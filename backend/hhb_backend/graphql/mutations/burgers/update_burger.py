@@ -14,7 +14,7 @@ from hhb_backend.graphql.mutations.huishoudens import huishouden_input as huisho
 from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity
 from hhb_backend.service.model import burger
 from hhb_backend.graphql.mutations.json_input_validator import JsonInputValidator
-from hhb_backend.graphql.mutations.validators import before_today
+from hhb_backend.graphql.mutations.validators import before_today, after_or_today, correct_date
 
 
 class UpdateBurger(graphene.Mutation):
@@ -118,3 +118,61 @@ class UpdateBurger(graphene.Mutation):
         )
 
         return UpdateBurger(ok=True, burger=updated_burger, previous=previous)
+
+
+
+class EndBurger(graphene.Mutation):
+    class Arguments:
+        # burger arguments
+        id = graphene.Int(required=True)
+        end_date = graphene.String()
+
+    ok = graphene.Boolean()
+    burger = graphene.Field(lambda: graphene_burger.Burger)
+    previous = graphene.Field(lambda: graphene_burger.Burger)
+
+    @staticmethod
+    def mutate(self, info, id, **kwargs):
+        """ Update the current Gebruiker/Burger """
+        logging.info(f"End burger {id}")
+
+        if kwargs["end_date"]:
+            correct_date(kwargs["end_date"])
+            after_or_today(kwargs["end_date"])
+            end_date = kwargs["end_date"]
+
+        previous = hhb_dataloader().burgers.load_one(id)
+
+        response = requests.post(
+            f"{settings.HHB_SERVICES_URL}/burgers/{id}",
+            data=json.dumps(kwargs),
+            headers={"Content-type": "application/json"},
+        )
+        if response.status_code != 200:
+            raise GraphQLError(f"Upstream API responded: {response.json()}")
+
+        updated_burger = burger.Burger(response.json()["data"])
+
+        entities = [
+            GebruikersActiviteitEntity(entityType="burger", entityId=id),
+        ]
+
+        update_afspraken = requests.post(
+            f"{settings.HHB_SERVICES_URL}/burger/end/afspraken",
+            data=json.dumps({
+                "burger_id": id,
+                "end_date": end_date
+            }),
+            headers={"Content-type": "application/json"},
+        )
+        if update_afspraken.status_code != 200:
+            raise GraphQLError(f"Upstream API responded: {update_afspraken}")
+        
+        AuditLogging.create(
+            action=info.field_name,
+            entities=entities,
+            before=dict(burger=previous),
+            after=dict(burger=updated_burger),
+        )
+
+        return EndBurger(ok=True, burger=updated_burger, previous=previous)

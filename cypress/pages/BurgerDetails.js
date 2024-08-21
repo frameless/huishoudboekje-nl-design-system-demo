@@ -1,11 +1,44 @@
 import Generic from "./Generic";
+import Api from "./Api";
 
 const generic = new Generic()
+const api = new Api()
+
+let afspraakName = 0;
 
 class BurgersDetails {
 
-	insertAfspraak(citizen) {
-			// Back end
+	insertAfspraak(burgerId) {
+		
+		const queryAddAfspraak = `mutation createAfspraak {
+			createAfspraak(input:
+			{
+			burgerId: `+ burgerId +`,
+			tegenRekeningId: 1,
+			rubriekId: 5,
+			omschrijving: "Test afspraak 1234",
+			bedrag: 100.00,
+			credit: false
+				afdelingId : null,
+				postadresId : null,
+		}
+		)
+		{
+			ok,
+			afspraak{omschrijving}
+		}
+		}`
+		
+		// Create afspraak
+		cy.request({
+			method: "post",
+			url: Cypress.config().baseUrl + '/apiV2/graphql',
+			body: { query: queryAddAfspraak },
+		}).then((res) => {
+			console.log(res.body);
+			afspraakName = res.body.data.createAfspraak.afspraak.omschrijving;
+			console.log('Test afspraak has been created with name ' + afspraakName)
+		});
 	}
 	
 	addAfspraak(agreementName) {
@@ -82,6 +115,13 @@ class BurgersDetails {
 		cy.url().should('include', Cypress.config().baseUrl + '/afspraken/')
 	}
 
+	viewAfspraakByEntry(entryNumber) {
+		cy.get('a[aria-label="Bekijken"]:visible')
+			.eq(entryNumber)
+			.click();
+		cy.url().should('include', Cypress.config().baseUrl + '/afspraken/')
+	}
+
 	buttonToevoegen() {
 		return cy.get('[data-test="button.Add"]')
 	}
@@ -106,7 +146,26 @@ class BurgersDetails {
 		return cy.get('[data-test="citizen.sectionBalance"]', { timeout: 10000 }).find('input[type="checkbox"]')
 	}
 
-	
+	getMenu() {
+		return cy.get('[data-test="kebab.citizen"]')
+	}
+
+	menuEndCitizen() {
+		return cy.get('[data-test="agreement.menuEnd"]')
+	}
+
+	endCitizenDateField() {
+		return cy.get('[data-test="input.endDate"]')
+	}
+
+	endCitizenConfirm() {
+		return cy.get('[data-test="button.endModal.confirm"]')
+	}
+
+	endCitizenWarnConfirm() {
+		return cy.get('[data-test="button.warnModal.confirm"]')
+	}
+  
    
 }
 

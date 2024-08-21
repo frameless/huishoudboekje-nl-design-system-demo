@@ -7,6 +7,7 @@ export const GetBurgerDetailsQuery = gql`
 			id
 			voorletters
 			voornamen
+			endDate
 			saldoAlarm
 			achternaam
 			huishouden {
