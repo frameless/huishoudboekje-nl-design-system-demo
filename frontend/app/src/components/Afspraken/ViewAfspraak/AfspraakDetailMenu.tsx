@@ -84,6 +84,8 @@ const AfspraakDetailMenu: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 			<MenuList>
 				<NavLink
 					to={AppRoutes.EditAfspraak(String(afspraak.id))}><MenuItem data-test="agreement.menuEdit">{t("global.actions.edit")}</MenuItem></NavLink>
+				<NavLink
+					to={AppRoutes.CopyAfspraak(String(afspraak.id))}><MenuItem>{t("afspraak.copy")}</MenuItem></NavLink>
 				<MenuItem data-test="agreement.menuEnd" onClick={endModal.onOpen}>{t("global.actions.end")}</MenuItem>
 				<MenuItem data-test="agreement.menuDelete" onClick={deleteAlert.onOpen}>{t("global.actions.delete")}</MenuItem>
 			</MenuList>
