@@ -375,9 +375,12 @@
     "bedrag": "Bedrag",
     "startdatum": "Startdatum",
     "periodiek": "Periodiek",
+    "copy": {
+      "title": "Afspraak kopie toevoegen"
+    },
     "vervolgAfspraak": {
       "title": "Vervolgafspraak toevoegen",
-      "zoektermenHelperText": "De volgende zoektermen worden overgenomen bij de vervolgafspraak:",
+      "zoektermenHelperText": "De volgende zoektermen worden overgenomen:",
       "betaalinstructieHelperText": "Let op: voor een vervolgafspraak moet een nieuwe betaalinstructie worden ingesteld."
     },
     "willEndOn": "Deze afspraak eindigt op {{date}}.",
@@ -554,7 +557,8 @@
       "datumMargin_one": "1 dag",
       "datumMargin_other": "{{count}} dagen",
       "options": "Opties"
-    }
+    },
+    "copy": "Kopiëren"
   },
   "bedrag": "Bedrag",
   "errors": {

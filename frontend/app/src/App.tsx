@@ -129,6 +129,7 @@ const App = () => {
 								<Route path={`:id/${RouteNames.edit}`} element={<EditAfspraak />} />
 								<Route path={`:id/${RouteNames.betaalinstructie}`} element={<BetaalinstructiePage />} />
 								<Route path={`:id/${RouteNames.followUp}`} element={<FollowUpAfspraak />} />
+								<Route path={`:id/${RouteNames.copy}`} element={<FollowUpAfspraak />} />
 							</Route>
 							<Route path={RouteNames.organisaties} element={<Outlet />}>
 								<Route index element={<OrganisatieList />} />

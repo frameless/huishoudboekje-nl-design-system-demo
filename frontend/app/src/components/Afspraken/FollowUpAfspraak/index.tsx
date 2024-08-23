@@ -2,7 +2,7 @@ import {List, ListIcon, ListItem} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
 import {MdCheckCircle, MdReportProblem} from "react-icons/md";
-import {useNavigate, useParams} from "react-router-dom";
+import {useLocation, useNavigate, useParams} from "react-router-dom";
 import {AppRoutes} from "../../../config/routes";
 import {Afspraak, CreateAfspraakMutationVariables, useAddAfspraakZoektermMutation, useCreateAfspraakMutation, useGetAfspraakFormDataQuery} from "../../../generated/graphql";
 import d from "../../../utils/dayjs";
@@ -19,6 +19,8 @@ import {FollowUpAfspraakFormContextType} from "./context";
 
 const FollowUpAfspraak = () => {
 	const {id = ""} = useParams<{id: string}>();
+	const location = useLocation();
+	
 	const {t} = useTranslation();
 	const toast = useToaster();
 	const [createAfspraak] = useCreateAfspraakMutation();
@@ -31,6 +33,8 @@ const FollowUpAfspraak = () => {
 		},
 	});
 
+	const isCopy = location.pathname.endsWith("/kopie")
+
 	return (
 		<Queryable query={$afspraak} children={(data) => {
 			const afspraak: Afspraak = data.afspraak;
@@ -38,6 +42,8 @@ const FollowUpAfspraak = () => {
 			if (!afspraak.burger?.id) {
 				return <PageNotFound />;
 			}
+
+			console.log(afspraak)
 
 			const createFollowupAfspraak = async (input: Omit<CreateAfspraakMutationVariables["input"], "burgerId">) => {
 				if (!afspraak.burger?.id) {
@@ -76,15 +82,17 @@ const FollowUpAfspraak = () => {
 				}
 			};
 
+			const validFromDay = isCopy ? d() : d(afspraak.validThrough, "YYYY-MM-DD").add(1, "day")
+
 			const values: Partial<CreateAfspraakMutationVariables["input"]> = {
 				bedrag: parseFloat(afspraak.bedrag),
 				credit: afspraak.credit,
 				rubriekId: afspraak.rubriek?.id,
-				omschrijving: afspraak.omschrijving,
+				omschrijving: isCopy ? "KOPIE - " + afspraak.omschrijving : afspraak.omschrijving,
 				afdelingId: afspraak.afdeling?.id,
 				tegenRekeningId: afspraak.tegenRekening?.id,
 				postadresId: afspraak.postadres?.id,
-				validFrom: d(afspraak.validThrough, "YYYY-MM-DD").add(1, "day").format("YYYY-MM-DD")
+				validFrom: validFromDay.format("YYYY-MM-DD")
 			};
 
 			const ctxValue: FollowUpAfspraakFormContextType = {
@@ -93,7 +101,7 @@ const FollowUpAfspraak = () => {
 			};
 
 			return (
-				<Page title={t("afspraken.vervolgAfspraak.title")} backButton={<BackButton to={AppRoutes.ViewAfspraak(String(afspraak.id))} />}>
+				<Page title={isCopy ?  t("afspraken.copy.title"): t("afspraken.vervolgAfspraak.title")} backButton={<BackButton to={AppRoutes.ViewAfspraak(String(afspraak.id))} />}>
 					{((afspraak.zoektermen || []).length > 0 || afspraak.betaalinstructie) && (
 						<SectionContainer>
 							<List spacing={2}>

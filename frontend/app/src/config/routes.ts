@@ -27,6 +27,7 @@ export enum RouteNames {
 	add = "toevoegen",
 	edit = "wijzigen",
 	followUp = "vervolg",
+	copy = "kopie",
 	betaalinstructie = "betaalinstructie",
 }
 
@@ -98,6 +99,10 @@ export const AppRoutes = {
 	FollowUpAfspraak: (id: string) => generatePath(AppRoutesNew.afspraakAction, {
 		id,
 		action: RouteNames.followUp,
+	}),
+	CopyAfspraak: (id: string) => generatePath(AppRoutesNew.afspraakAction, {
+		id,
+		action: RouteNames.copy,
 	}),
 	AfspraakBetaalinstructie: (id: string) => generatePath(AppRoutesNew.afspraakAction, {
 		id,
