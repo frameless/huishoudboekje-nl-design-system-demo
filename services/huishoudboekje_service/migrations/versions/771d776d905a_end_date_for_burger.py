@@ -1,7 +1,7 @@
 """end_date for burger
 
 Revision ID: 771d776d905a
-Revises: 65fd104756c0
+Revises: e96955415ec1
 Create Date: 2024-08-15 09:38:39.388371
 
 """
@@ -11,7 +11,7 @@ import sqlalchemy as sa
 
 # revision identifiers, used by Alembic.
 revision = '771d776d905a'
-down_revision = '65fd104756c0'
+down_revision = 'e96955415ec1'
 branch_labels = None
 depends_on = None
 
