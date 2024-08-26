@@ -13,15 +13,11 @@ class Journaalpost(graphene.ObjectType):
     id = graphene.Int()
     uuid = graphene.String()
     afspraak = graphene.Field(lambda: afspraak.Afspraak)
-    transaction = graphene.Field(lambda: bank_transaction.BankTransaction)
-    grootboekrekening = graphene.Field(lambda: grootboekrekening.Grootboekrekening)
+    grootboekrekening = graphene.Field(
+        lambda: grootboekrekening.Grootboekrekening)
     rubriek = graphene.Field(lambda: rubriek.Rubriek)
     is_automatisch_geboekt = graphene.Boolean()
-
-    def resolve_transaction(root, info):
-        """ Get transaction when requested """
-        if root.get('transaction_id'):
-            return hhb_dataloader().bank_transactions.load_one(root.get('transaction_id'))
+    transaction_uuid = graphene.String()
 
     def resolve_grootboekrekening(root, info):
         """ Get grootboekrekening when requested """
@@ -32,7 +28,7 @@ class Journaalpost(graphene.ObjectType):
         """ Get afspraak when requested """
         if root.get('afspraak_id'):
             return hhb_dataloader().afspraken.load_one(root.get('afspraak_id'))
-        
+
     def resolve_rubriekk(root, info):
         """ Get Rubriek when requested """
         rubriek = root.get('rubriek')
@@ -40,6 +36,7 @@ class Journaalpost(graphene.ObjectType):
             return rubriek
         if root.get('grootboekrekening_id'):
             return hhb_dataloader().rubrieken.by_grootboekrekening(root.get('grootboekrekening_id'))
+
 
 class JournaalpostTransactieRubriek(graphene.ObjectType):
     """Model van een afgeletterde banktransactie. (minimale data om eenvoudig de rubriek van een banktransactie te kunnen vinden) """

@@ -36,9 +36,26 @@ class AfspraakDetails {
     return cy.get('label[class^="chakra-switch"]', { timeout: 10000 })
   }
 
+  buttonBetaalinstructieToevoegen()
+  {
+    return cy.get('[data-test="section.paymentInstruction"]')
+      .find('button')
+      .contains('Toevoegen')
+  }
+
   buttonDeleteAlarm() {
     return cy.get('button[aria-label="Verwijderen"]', { timeout: 10000 })
   
+  }
+
+  redirectToAfspraak()
+  {
+    cy.url().should('include', Cypress.config().baseUrl + '/afspraken/', { timeout: 10000 });
+  }
+
+  redirectToBetaalinstructie()
+  {
+    cy.url().should('include', '/betaalinstructie', { timeout: 10000 });
   }
 
 }

@@ -55,3 +55,6 @@ images:
 - name: rabbitmq-message-publisher
   newName: ${IMAGE_REGISTRY}/rabbitmq-message-publisher
   newTag: ${IMAGE_TAG}
+- name: fileservice
+  newName: ${IMAGE_REGISTRY}/fileservice
+  newTag: ${IMAGE_TAG}

@@ -39,6 +39,8 @@ import useAuth from "./utils/useAuth";
 import HuishoudenOverzichtIndex from "./components/Huishoudens/HuishoudenOverzicht/HuishoudenOverzichtIndex";
 import SignalsView from "./components/Signals/SignalsView";
 import {useNotifications} from "./components/Notificaties";
+import CreateBetaalinstructies from "./components/Bankzaken/Betaalinstructies/CreatePaymentExport";
+import ViewPaymentExport from "./components/Bankzaken/Betaalinstructies/ViewPaymentExport";
 
 
 
@@ -145,7 +147,12 @@ const App = () => {
 									<Route path={":id"} element={<TransactieDetailPage />} />
 								</Route>
 								<Route path={RouteNames.bankafschriften} element={<CustomerStatementMessages />} />
-								<Route path={RouteNames.betaalinstructies} element={<Betaalinstructies />} />
+								<Route path={RouteNames.betaalinstructies} element={<Outlet />} >
+									<Route index element={<Betaalinstructies />} />
+									<Route path={RouteNames.add} element={<CreateBetaalinstructies />} />
+									<Route path={`${RouteNames.exports}/:id`} element={<ViewPaymentExport />} />
+								</Route>
+
 							</Route>
 							<Route path={RouteNames.signalen} element={<SignalsView />} />
 							<Route path={RouteNames.rapportage} element={<Rapportage />} />

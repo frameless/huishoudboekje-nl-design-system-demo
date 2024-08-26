@@ -136,13 +136,13 @@ Given('a CAMT test file is created for scenario "payment amount too low, outside
               </MsgPgntn>
           </GrpHdr>
           <Stmt>
-              <Id>1</Id>
+              <Id>15</Id>
               <ElctrncSeqNb>1</ElctrncSeqNb>
               <CreDtTm>2024-04-02T13:58:31.802216</CreDtTm>
               <Acct>
-                  <Id>
-                      <IBAN>NL86INGB0002445588</IBAN>
-                  </Id>
+                <Id>
+                      <IBAN>NL36ABNA5632579034</IBAN>
+                </Id>
                   <Ccy>EUR</Ccy>
                   <Svcr>
                       <FinInstnId>
@@ -186,7 +186,7 @@ Given('a CAMT test file is created for scenario "payment amount too low, outside
               </TxsSummry>
               <Ntry>
                   <!-- Amount voor deze transactie -->
-                  <Amt Ccy="EUR">123.00</Amt>
+                  <Amt Ccy="EUR">` + amount + `</Amt>
                   <!-- /Amount voor deze transactie -->
                   <!-- Debit = negatief voor burger, credit = positief -->
                   <CdtDbtInd>CRDT</CdtDbtInd>
@@ -330,7 +330,7 @@ When('the low amount outside amount margin bank transaction is booked to an agre
     // Assertion
     cy.contains('-1,00');
     cy.contains('Dingus Bingus');
-    cy.contains('9.00');
+    cy.contains('9,00');
    
   });
 
@@ -356,13 +356,13 @@ Given('a CAMT test file is created for scenario "payment amount too low, on amou
               </MsgPgntn>
           </GrpHdr>
           <Stmt>
-              <Id>1</Id>
+              <Id>16</Id>
               <ElctrncSeqNb>1</ElctrncSeqNb>
               <CreDtTm>2024-04-02T13:58:31.802216</CreDtTm>
               <Acct>
-                  <Id>
-                      <IBAN>NL86INGB0002445588</IBAN>
-                  </Id>
+                <Id>
+                      <IBAN>NL36ABNA5632579034</IBAN>
+                </Id>
                   <Ccy>EUR</Ccy>
                   <Svcr>
                       <FinInstnId>
@@ -406,7 +406,7 @@ Given('a CAMT test file is created for scenario "payment amount too low, on amou
               </TxsSummry>
               <Ntry>
                   <!-- Amount voor deze transactie -->
-                  <Amt Ccy="EUR">123.00</Amt>
+                  <Amt Ccy="EUR">` + amount + `</Amt>
                   <!-- /Amount voor deze transactie -->
                   <!-- Debit = negatief voor burger, credit = positief -->
                   <CdtDbtInd>CRDT</CdtDbtInd>
@@ -561,13 +561,13 @@ Given('a CAMT test file is created for scenario "payment amount too low, within 
               </MsgPgntn>
           </GrpHdr>
           <Stmt>
-              <Id>1</Id>
+              <Id>17</Id>
               <ElctrncSeqNb>1</ElctrncSeqNb>
               <CreDtTm>2024-04-02T13:58:31.802216</CreDtTm>
               <Acct>
-                  <Id>
-                      <IBAN>NL86INGB0002445588</IBAN>
-                  </Id>
+                <Id>
+                      <IBAN>NL36ABNA5632579034</IBAN>
+                </Id>
                   <Ccy>EUR</Ccy>
                   <Svcr>
                       <FinInstnId>
@@ -611,7 +611,7 @@ Given('a CAMT test file is created for scenario "payment amount too low, within 
               </TxsSummry>
               <Ntry>
                   <!-- Amount voor deze transactie -->
-                  <Amt Ccy="EUR">123.00</Amt>
+                  <Amt Ccy="EUR">` + amount + `</Amt>
                   <!-- /Amount voor deze transactie -->
                   <!-- Debit = negatief voor burger, credit = positief -->
                   <CdtDbtInd>CRDT</CdtDbtInd>
@@ -768,13 +768,13 @@ Given('a CAMT test file is created for scenario "expected payment amount, on amo
               </MsgPgntn>
           </GrpHdr>
           <Stmt>
-              <Id>1</Id>
+              <Id>18</Id>
               <ElctrncSeqNb>1</ElctrncSeqNb>
               <CreDtTm>2024-04-02T13:58:31.802216</CreDtTm>
               <Acct>
-                  <Id>
-                      <IBAN>NL86INGB0002445588</IBAN>
-                  </Id>
+                <Id>
+                      <IBAN>NL36ABNA5632579034</IBAN>
+                </Id>
                   <Ccy>EUR</Ccy>
                   <Svcr>
                       <FinInstnId>
@@ -818,7 +818,7 @@ Given('a CAMT test file is created for scenario "expected payment amount, on amo
               </TxsSummry>
               <Ntry>
                   <!-- Amount voor deze transactie -->
-                  <Amt Ccy="EUR">123.00</Amt>
+                  <Amt Ccy="EUR">` + amount + `</Amt>
                   <!-- /Amount voor deze transactie -->
                   <!-- Debit = negatief voor burger, credit = positief -->
                   <CdtDbtInd>CRDT</CdtDbtInd>
@@ -975,13 +975,13 @@ Given('a CAMT test file is created for scenario "payment amount too high, within
               </MsgPgntn>
           </GrpHdr>
           <Stmt>
-              <Id>1</Id>
+              <Id>19</Id>
               <ElctrncSeqNb>1</ElctrncSeqNb>
               <CreDtTm>2024-04-02T13:58:31.802216</CreDtTm>
               <Acct>
-                  <Id>
-                      <IBAN>NL86INGB0002445588</IBAN>
-                  </Id>
+                <Id>
+                      <IBAN>NL36ABNA5632579034</IBAN>
+                </Id>
                   <Ccy>EUR</Ccy>
                   <Svcr>
                       <FinInstnId>
@@ -1025,7 +1025,7 @@ Given('a CAMT test file is created for scenario "payment amount too high, within
               </TxsSummry>
               <Ntry>
                   <!-- Amount voor deze transactie -->
-                  <Amt Ccy="EUR">123.00</Amt>
+                  <Amt Ccy="EUR">` + amount + `</Amt>
                   <!-- /Amount voor deze transactie -->
                   <!-- Debit = negatief voor burger, credit = positief -->
                   <CdtDbtInd>CRDT</CdtDbtInd>
@@ -1182,13 +1182,13 @@ Given('a CAMT test file is created for scenario "payment amount too high, on amo
               </MsgPgntn>
           </GrpHdr>
           <Stmt>
-              <Id>1</Id>
+              <Id>20</Id>
               <ElctrncSeqNb>1</ElctrncSeqNb>
               <CreDtTm>2024-04-02T13:58:31.802216</CreDtTm>
               <Acct>
-                  <Id>
-                      <IBAN>NL86INGB0002445588</IBAN>
-                  </Id>
+                <Id>
+                      <IBAN>NL36ABNA5632579034</IBAN>
+                </Id>
                   <Ccy>EUR</Ccy>
                   <Svcr>
                       <FinInstnId>
@@ -1232,7 +1232,7 @@ Given('a CAMT test file is created for scenario "payment amount too high, on amo
               </TxsSummry>
               <Ntry>
                   <!-- Amount voor deze transactie -->
-                  <Amt Ccy="EUR">123.00</Amt>
+                  <Amt Ccy="EUR">` + amount + `</Amt>
                   <!-- /Amount voor deze transactie -->
                   <!-- Debit = negatief voor burger, credit = positief -->
                   <CdtDbtInd>CRDT</CdtDbtInd>
@@ -1387,13 +1387,13 @@ Given('a CAMT test file is created for scenario "payment amount too high, outsid
               </MsgPgntn>
           </GrpHdr>
           <Stmt>
-              <Id>1</Id>
+              <Id>21</Id>
               <ElctrncSeqNb>1</ElctrncSeqNb>
               <CreDtTm>2024-04-02T13:58:31.802216</CreDtTm>
               <Acct>
-                  <Id>
-                      <IBAN>NL86INGB0002445588</IBAN>
-                  </Id>
+                <Id>
+                      <IBAN>NL36ABNA5632579034</IBAN>
+                </Id>
                   <Ccy>EUR</Ccy>
                   <Svcr>
                       <FinInstnId>
@@ -1437,7 +1437,7 @@ Given('a CAMT test file is created for scenario "payment amount too high, outsid
               </TxsSummry>
               <Ntry>
                   <!-- Amount voor deze transactie -->
-                  <Amt Ccy="EUR">123.00</Amt>
+                  <Amt Ccy="EUR">` + amount + `</Amt>
                   <!-- /Amount voor deze transactie -->
                   <!-- Debit = negatief voor burger, credit = positief -->
                   <CdtDbtInd>CRDT</CdtDbtInd>
@@ -1581,7 +1581,7 @@ When('the high amount outside amount margin bank transaction is booked to an agr
     // Assertion
     cy.contains('1,00');
     cy.contains('Dingus Bingus');
-    cy.contains('11.00');
+    cy.contains('11,00');
    
   });
 

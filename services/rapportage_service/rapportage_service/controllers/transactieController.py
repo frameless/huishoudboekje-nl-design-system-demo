@@ -23,19 +23,17 @@ class TransactieController():
         transaction_ids = []
         journalentryLookup = {}
 
-
         for agreement in agreement_with_transactions:
             agreement_uuid, transactions = agreement
             if transactions is not None:
                 transaction_ids.extend(transactions.keys())
                 journalentryLookup.update(transactions)
 
-
         transactions_info = self._banktransactionservice_repository.get_transacties_in_range(
             start, end, transaction_ids)
 
         transactie_id_to_transactie_dict = {
-            transaction["id"]: transaction for transaction in transactions_info}
+            transaction["uuid"]: transaction for transaction in transactions_info}
 
         resulting_values = []
 
@@ -45,11 +43,11 @@ class TransactieController():
             if transactions is not None:
                 for transaction_id, journalentry_uuid in transactions.items():
                     transaction = transactie_id_to_transactie_dict.get(
-                        int(transaction_id), None)
+                        transaction_id, None)
                     if transaction is not None:
                         transaction["journalentry_uuid"] = journalentry_uuid
                         entry["transactions"].append(transaction)
 
             resulting_values.append(entry)
-                    
+
         return {"data": resulting_values}, 200

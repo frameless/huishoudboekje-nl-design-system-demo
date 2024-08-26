@@ -6,11 +6,12 @@ using Microsoft.Extensions.Logging;
 
 namespace AlarmService.MessageQueue.Consumers;
 
-public class CheckSaldosConsumer(IEvaluatorService evaluatorService, ILogger<CheckAlarmsReconiledConsumer> logger)
+public class CheckSaldosConsumer(IEvaluatorService evaluatorService, ILogger<CheckSaldosConsumer> logger)
   : IConsumer<CheckSaldos>
 {
   public Task Consume(ConsumeContext<CheckSaldos> context)
   {
+    logger.LogInformation("Checking alarms: saldos");
     return CheckSaldos(context.Message);
   }
 

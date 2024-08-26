@@ -55,14 +55,14 @@ const BookingSectionAfspraak = ({transaction}) => {
     }
 
     const [createJournaalpostAfspraak] = useCreateJournaalpostAfspraakMutation({
-        refetchQueries: [
-            {query: GetTransactieDocument, variables: {id: transaction.id}},
-        ],
-    });
+		refetchQueries: [
+			{query: GetTransactieDocument, variables: {uuid: transaction.uuid}},
+		],
+	});
 
-    const onSelectAfspraak = (afspraak: Afspraak) => {
-        const transactionId = transaction?.id;
-        const afspraakId = afspraak.id;
+	const onSelectAfspraak = (afspraak: Afspraak) => {
+		const transactionId = transaction?.uuid;
+		const afspraakId = afspraak.id;
 
         if (transactionId && afspraakId) {
             createJournaalpostAfspraak({
@@ -70,10 +70,11 @@ const BookingSectionAfspraak = ({transaction}) => {
             }).then(() => {
                 toast({success: t("messages.journals.createSuccessMessage")});
             }).catch(err => {
-                console.error(err);
                 if (err.message.includes("(some) transactions have unknown ibans ")) {
                     toast({error: t("messages.journals.errors.unknownTransactionIban")})
-                } else {
+                } else if(err.message.includes("(some) transactions have no iban")){
+                    toast({error: t("messages.journals.errors.noTransactionIban")})
+                }else {
                     toast({error: err.message});
                 }
             });

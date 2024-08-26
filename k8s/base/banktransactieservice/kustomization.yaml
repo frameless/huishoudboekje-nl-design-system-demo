@@ -5,3 +5,4 @@ resources:
   - deployment.yaml
   - service.yaml
   - horizontalpodautoscaler.yaml
+  - generate-payment-instructions-cron-job.yaml

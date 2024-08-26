@@ -1,0 +1,98 @@
+﻿syntax = "proto3";
+
+
+option csharp_namespace = "BankService_RPC";
+
+
+
+package GrpcServices;
+
+
+service PaymentExport {
+  rpc Create(CreatePaymentExportRequest) returns (CreatePaymentExportResponse);
+  rpc GetPaged(PaymentExportsPagedRequest) returns (PaymentExportsPagedResponse);
+  rpc Get(GetPaymentExportRequest) returns (PaymentExportData);
+  rpc GetFile(DownloadPaymentExportRequest) returns (DownloadPaymentExportResponse);
+}
+
+message PaymentExportData {
+  string id = 1;
+  int64 createdAt = 2;
+  int64 startDate = 3;
+  int64 endDate = 4;
+  PaymentExportFileData file = 5;
+  PaymentExportRecordsInfo recordsInfo = 6;
+  repeated PaymentExportRecordData records = 7;
+}
+
+message PaymentExportRecordData {
+  string id = 1;
+  string agreementUuid = 2;
+  int32 amount = 3;
+  int64 createdAt = 4;
+  int64 processAt = 5;
+  int64 originalProcessingDate = 7;
+  string accountName = 8;
+  string accountIban = 9;
+}
+
+message PaymentExportRecordsInfo {
+  int32 totalAmount = 1;
+  int32 count = 2;
+  repeated int64 processingDates = 3;
+}
+
+message PaymentExportFileData {
+  string name = 1;
+  string id = 2;
+  string sha256 = 3;
+}
+
+message GetPaymentExportRequest {
+  string id = 1;
+}
+
+message CreatePaymentExportRequest {
+  repeated string recordIds = 1;
+  int64 startDate = 2;
+  int64 endDate = 3;
+}
+
+message DownloadPaymentExportRequest {
+  string id = 1;
+}
+
+message DownloadPaymentExportResponse {
+  string id = 1;
+  string name = 2;
+  string fileString = 3;
+}
+
+message CreatePaymentExportResponse {
+  string id = 1;
+  bool success = 2;
+}
+
+message PaymentExportsPagedRequest {
+  PaymentExportPaginationRequest page = 1;
+}
+
+message PaymentExportPaginationRequest {
+  int32 take = 1;
+  int32 skip = 2;
+}
+
+message PaymentExportPaginationResponse {
+  int32 total_count = 1;
+  int32 skip = 2;
+  int32 take = 3;
+}
+
+message PaymentExportsPagedResponse {
+  repeated PaymentExportData data = 1;
+  optional PaymentExportPaginationResponse PageInfo = 2;
+}
+
+message PaymentExportSuccess {
+  bool success = 1;
+}

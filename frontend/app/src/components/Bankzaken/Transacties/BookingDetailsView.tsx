@@ -17,7 +17,7 @@ const BookingDetailsView: React.FC<BookingDetailsViewProps> = ({transactie}) => 
 	const toast = useToaster();
 	const [deleteJournaalpost, $deleteJournaalpost] = useDeleteJournaalpostMutation({
 		refetchQueries: [
-			{query: GetTransactieDocument, variables: {id: transactie.id}},
+			{query: GetTransactieDocument, variables: {uuid: transactie.uuid}},
 		],
 	});
 

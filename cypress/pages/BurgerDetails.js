@@ -48,7 +48,7 @@ class BurgersDetails {
 		
 		// Add agreement with test department
 		cy.url().should('contains', '/afspraken/toevoegen'); 
-		cy.get('[data-test="radio.agreementOrganization"]', { timeout: 10000 })
+		cy.get('[data-test="radio.agreementOrganization"]')
 			.click();
 		cy.get('#organisatie')
 			.type('Belast');
@@ -63,17 +63,17 @@ class BurgersDetails {
 			.click();
 		
 		// Payment direction: Toeslagen
-		cy.get('[data-test="radio.agreementIncome"]', { timeout: 10000 })
+		cy.get('[data-test="radio.agreementIncome"]')
 			.click();
 		cy.get('#rubriek')
 			.click()
 			.contains('Toeslagen')
 			.click();
-		cy.get('[data-test="select.agreementIncomeDescription"]', { timeout: 10000 })
+		cy.get('[data-test="select.agreementIncomeDescription"]')
 			.type(agreementName);
-		cy.get('[data-test="select.agreementIncomeAmount"]', { timeout: 10000 })
+		cy.get('[data-test="select.agreementIncomeAmount"]')
 			.type('10');
-		cy.get('[data-test="button.Submit"]', { timeout: 10000 })
+		cy.get('[data-test="button.Submit"]')
 			.click();
 		
 		// Check redirect
@@ -88,14 +88,13 @@ class BurgersDetails {
 		cy.contains(agreementName)
 			.parent()
 			.parent()
-			.next()
 			.find('a[aria-label="Bekijken"]:visible')
 			.click();
 		cy.url().should('include', Cypress.config().baseUrl + '/afspraken/')
 	}
 
 	viewLatestAfspraak() {
-		cy.get('tbody', { timeout: 10000 })
+		cy.get('tbody')
 			.find('tr')
 			.last()
 			.children()
@@ -109,7 +108,6 @@ class BurgersDetails {
 		cy.contains(agreementAmount)
 			.parent()
 			.parent()
-			.next()
 			.find('a[aria-label="Bekijken"]:visible')
 			.click();
 		cy.url().should('include', Cypress.config().baseUrl + '/afspraken/')

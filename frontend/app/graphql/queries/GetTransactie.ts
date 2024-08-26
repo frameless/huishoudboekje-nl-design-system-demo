@@ -1,9 +1,9 @@
 import {gql} from "@apollo/client";
 
 export const GetTransactieQuery = gql`
-	query getTransactie($id: Int!) {
-		bankTransaction(id: $id){
-			id
+	query getTransactie($uuid: String!) {
+		bankTransaction(uuid: $uuid){
+			uuid
 			informationToAccountOwner
 			statementLine
 			bedrag

@@ -38,14 +38,14 @@ Feature: create signal on negative balance
 
     Scenario: repeating negative citizen balance, active signal
     # add transaction with amount 0,01 for a balance of 0.00
-        Given a positive CAMT test file is created with the amount '0.01'
-        When a positive bank transaction with amount '0,01' is booked to an agreement
+        Given another positive CAMT test file is created with the amount '0.01'
+        When another positive bank transaction with amount '0,01' is booked to an agreement
     # no changed signal
         When I navigate to the page '/signalen'
         Then the text 'Er is een negatief saldo geconstateerd bij Dingus Bingus.' is displayed
         Then no new signal is created
     # add transaction with amount -0,01 for a balance of 0.01
-        Given I select a CAMT test file with negative payment amount '0.01'
+        Given I select another CAMT test file with negative payment amount '0.01'
         Then I wait one minute
         When the negative amount bank transaction with amount '0,01' is booked to the correct agreement
     # signal, changed date
@@ -64,11 +64,10 @@ Feature: create signal on negative balance
     # deactivated signal visible
         Then the text 'Er is een negatief saldo geconstateerd bij Dingus Bingus.' is displayed
 
-    @truncateStatements
     Scenario: repeating negative citizen balance, deactivated signal
     # reset filter
     # add transaction with amount -0,01
-        Given I select a CAMT test file with negative payment amount '0.01'
+        Given I select one more CAMT test file with negative payment amount '0.01'
         Then I wait one minute
         When the negative amount bank transaction with amount '0,01' is booked to the correct agreement
     # signal, changed date

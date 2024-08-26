@@ -7,15 +7,17 @@ import SectionContainer from "../../shared/SectionContainer";
 import {currencyFormat2} from "../../../utils/things";
 import d from "../../../utils/dayjs";
 import Queryable from "../../../utils/Queryable";
+import CitizenOpenPaymentRecordsSaldo from "./CitizenOpenPaymentRecordsSaldo";
 
 
 const BurgerSaldoView: React.FC<{burger: Burger}> = ({burger}) => {
-	const {t} = useTranslation();
+	const {t} = useTranslation("citizendetails");
 	if (typeof burger.id !== "number") {
 		return <SectionContainer>
 			<Text>Invalid burgerId</Text>
 		</SectionContainer>
 	}
+
 
 	const $saldo = useGetSaldoQuery({
 		variables: {
@@ -54,15 +56,18 @@ const BurgerSaldoView: React.FC<{burger: Burger}> = ({burger}) => {
 			const saldo: number = +data.saldo.saldo || 0;
 			return (
 				<SectionContainer>
-					<Section data-test="citizen.sectionBalance" title={t("forms.burgers.sections.saldo.title")}>
+					<Section data-test="citizen.sectionBalance" title={t("saldo")}>
 						<Stack spacing={2} mb={1} direction={["column", "row"]}>
 							<Stack direction={["column", "row"]} spacing={1} flex={1}>
 								<Stack spacing={1} flex={1}>
-									<FormLabel>{t("forms.burgers.sections.saldo.title")}</FormLabel>
+									<FormLabel>{t("saldo")}</FormLabel>
 									<Text data-test="citizen.balance">{` € ${currencyFormat2(false).format(saldo)}`}</Text>
 								</Stack>
 								<Stack spacing={1} flex={1}>
-									<FormLabel>Alarm bij negatief saldo</FormLabel>
+									<CitizenOpenPaymentRecordsSaldo citizen={burger}></CitizenOpenPaymentRecordsSaldo>
+								</Stack>
+								<Stack spacing={1} flex={1}>
+									<FormLabel>{t("useSaldoAlarm")}</FormLabel>
 									<Switch isChecked={saldoAlarmActive} onChange={() => onChangeCitizenSaldoAlarm()} data-test={"citizen.toggleNegativeBalance"}></Switch>
 								</Stack>
 							</Stack>
@@ -70,7 +75,7 @@ const BurgerSaldoView: React.FC<{burger: Burger}> = ({burger}) => {
 					</Section>
 				</SectionContainer>
 			)
-		}}/>
+		}} />
 	);
 };
 

@@ -1,4 +1,9 @@
+import json
 import logging
+from hhb_backend.graphql.dataloaders.msq_loaders.RPCClient import RpcClient
+from graphql import GraphQLError
+from hhb_backend.graphql.mutations.journaalposten.settings import RABBBITMQ_USER, RABBBITMQ_PASS,RABBBITMQ_HOST, RABBBITMQ_PORT
+import pika
 import requests
 from typing import List, Union
 
@@ -16,28 +21,24 @@ def update_transaction_service_is_geboekt(
     _transaction_ids = []
     for transaction in transactions:
         transaction.is_geboekt = is_geboekt
-        _transaction_ids.append(str(transaction.id))
+        _transaction_ids.append(str(transaction.uuid))
 
-    update_transactions_geboekt(transactions, _transaction_ids)
+    update_transactions_geboekt(transactions, _transaction_ids, is_geboekt)
 
 
-def update_transactions_geboekt(transactions: List[BankTransaction], _transaction_ids):
+def update_transactions_geboekt(transactions: List[BankTransaction], _transaction_ids, is_geboekt):
     """ Sets the is_geboekt flag to true for all transactions """
-    if len(transactions) == 1:
-        ids = _transaction_ids[0]
-        transactions = transactions[0]
-    else:
-        ids = ",".join(_transaction_ids)
+    logging.debug(f"updating transactions is reconciled")
 
-    # TODO
-    # The ids are all joined and added in the url. For large updates this makes the url very long.
-    # In the Dockerfile for the banktransaction service is GUNICORN_LIMIT_REQUEST_LINE=0 added to set the limit for the url to unlimited.
-    # This makes sure this works for larger updates, however this should not be necessary.
-    transaction_response = requests.put(
-        f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/{ids}",
-        json=transactions
-    )
+    # Create the log item
+    item = {
+        "Ids": _transaction_ids,
+        "IsReconciled": is_geboekt
+    }
+    logging.debug(f"Sending transaction update to message broker...")
 
-    if not transaction_response.ok:
-        logging.warning(
-            f"Failed to save is_geboekt on transactions {_transaction_ids}: {transaction_response.text}")
+
+    rpc_client = RpcClient("update-is-reconciled")
+    response = rpc_client.call(item)
+    logging.debug(response)
+    logging.debug(f"Ttransactions updated")

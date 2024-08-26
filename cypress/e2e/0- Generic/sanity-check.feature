@@ -1,5 +1,5 @@
 
-Feature: bezoek huishoudboekje
+Feature: visit huishoudboekje
 
   Scenario: use search to find citizen
     Given I visit the Burgers page

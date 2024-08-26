@@ -1,0 +1,40 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: generate-payment-instructions
+spec:
+  schedule: "0 3 * * *" # Every day at 3am
+  concurrencyPolicy: Replace # Only one job at a time, replace the previous if it hasn't finished yet
+  startingDeadlineSeconds: 3600 # Allow the job to start up to 1 hour late
+  failedJobsHistoryLimit: 5 # Keep the last 5 failed jobs
+  successfulJobsHistoryLimit: 1 # Keep only the last successful job
+  jobTemplate:
+    spec:
+      backoffLimit: 2  # Maximum number of retries
+      template:
+        spec:
+          containers:
+          - name: generate-payment-instructions
+            image: rabbitmq-message-publisher
+            env:
+            - name: HHB_RABBITMQ_HOST
+              value: hhb-rabbitmq
+            - name: HHB_RABBITMQ_PORT
+              value: "15672"  # Management api port
+            - name: HHB_RABBITMQ_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: rabbitmq-config
+                  key: RABBITMQ_DEFAULT_USER
+            - name: HHB_RABBITMQ_PASS
+              valueFrom:
+                configMapKeyRef:
+                  name: rabbitmq-config
+                  key: RABBITMQ_DEFAULT_PASS
+            - name: EXCHANGE
+              value: check-payment-instructions
+            - name: ROUTING_KEY
+              value: check-payment-instructions
+            - name: MESSAGE
+              value: "{}"
+          restartPolicy: OnFailure

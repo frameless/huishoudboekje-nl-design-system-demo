@@ -15,7 +15,7 @@ const BookingSectionRubriek = ({transaction}) => {
 
     const [createJournaalpostGrootboekrekening] = useCreateJournaalpostGrootboekrekeningMutation({
 		refetchQueries: [
-			{query: GetTransactieDocument, variables: {id: transaction.id}},
+			{query: GetTransactieDocument, variables: {uuid: transaction.uuid}},
 		],
 	});
 	
@@ -25,7 +25,7 @@ const BookingSectionRubriek = ({transaction}) => {
 
             const onSelectRubriek = (val) => {
                 const grootboekrekeningId = rubrieken.find(rubriek => rubriek.grootboekrekening?.id === val.value)?.grootboekrekening?.id;
-                const transactionId = transaction?.id;
+                const transactionId = transaction?.uuid;
         
                 if (transactionId && grootboekrekeningId) {
                     createJournaalpostGrootboekrekening({

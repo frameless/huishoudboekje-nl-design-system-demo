@@ -10,12 +10,12 @@
             </MsgPgntn>
         </GrpHdr>
         <Stmt>
-            <Id>51408742</Id>
+            <Id>4760859</Id>
             <ElctrncSeqNb>236</ElctrncSeqNb>
             <CreDtTm>2023-11-30T22:59:13Z</CreDtTm>
             <Acct>
                 <Id>
-                    <IBAN>NL49BNGH0285171712</IBAN>
+                    <IBAN>NL36ABNA5632579034</IBAN>
                 </Id>
                 <Ccy>EUR</Ccy>
                 <Svcr>

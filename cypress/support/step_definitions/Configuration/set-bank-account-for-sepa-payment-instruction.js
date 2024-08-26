@@ -1,10 +1,10 @@
 
 import { Given, When, Then } from "@badeball/cypress-cucumber-preprocessor";
+import AfspraakDetails from "../../../pages/AfspraakDetails";
+import Betaalinstructies from "../../../pages/Betaalinstructies";
 
-const header = {
-  'content-type': 'application/json',
-  'Accept-Encoding': 'gzip, deflate, br',
-};
+const afspraakDetails = new AfspraakDetails()
+const betaalinstructies = new Betaalinstructies()
 
 const folder = Cypress.config().downloadsFolder;
 
@@ -19,7 +19,7 @@ Given('the "Privé-opname" exists with the accounting reference "BEivKapProPok"'
 
 Then('the page is redirected to the agreement page', () => {
 
-  cy.url().should('include', Cypress.config().baseUrl + '/afspraken/');
+  afspraakDetails.redirectToAfspraak()
 
 });
 
@@ -55,18 +55,18 @@ When('I set the field "Dag van de maand" to "1"', () => {
 
 When('I set the select option "Herhaling" to "Maandelijks"', () => {
 
-  cy.get('[data-test="select.repeat"]')
-    .find('input')
-    .type('Maand')
-  cy.contains('Maandelijks')
-    .click();
+    cy.get('[data-test="select.repeat"]')
+      .find('input')
+      .type('Maand')
+    cy.contains('Maandelijks')
+      .click();
 
 });
 
 When('I set the field "Periode" to "01-05-2024 - 01-05-2024"', () => {
 
-  cy.get('[data-test="input.dateRange"]')
-    .type('{selectAll}01-05-2024 {enter}');
+  betaalinstructies.inputDateRangeStart('01-05-2024');
+  betaalinstructies.inputDateRangeEnd('01-05-2024');
 
 });
 

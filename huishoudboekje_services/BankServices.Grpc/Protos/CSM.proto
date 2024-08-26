@@ -1,0 +1,68 @@
+syntax = "proto3";
+
+
+option csharp_namespace = "BankService_RPC";
+
+package GrpcServices;
+
+service CSM {
+  rpc Upload(CSMUploadRequest) returns (FileUploadResponse);
+  rpc GetPaged(CSMPagedRequest) returns (CSMPagedResponse);
+  rpc Delete(CSMDeleteRequest) returns (CSMDeleteResponse);
+}
+
+message FileUpload {
+  repeated bytes blobParts = 1;
+  string name = 2;
+  int64  lastModified = 3;
+}
+
+message CsmData {
+  string id = 1;
+  FileData file = 2;
+  int32 transactionCount = 3;
+}
+
+message FileData {
+  string name = 1;
+  string id = 2;
+  int64  uploadedAt = 3;
+}
+
+message CSMUploadRequest {
+  FileUpload file = 1;
+}
+
+message CSMDeleteRequest {
+  string id = 1;
+}
+
+message CSMPagedRequest {
+  PaginationRequest page = 1;
+}
+
+message PaginationRequest {
+  int32 take = 1;
+  int32 skip = 2;
+}
+
+message PaginationResponse {
+  int32 total_count = 1;
+  int32 skip = 2;
+  int32 take = 3;
+}
+
+message CSMPagedResponse {
+  repeated CsmData data = 1;
+  optional PaginationResponse PageInfo = 2;
+}
+
+message FileUploadResponse {
+  string name = 1;
+  string id = 2;
+}
+
+message CSMDeleteResponse {
+  bool deleted = 1;
+  string id = 2;
+}

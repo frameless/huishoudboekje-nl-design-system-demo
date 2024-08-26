@@ -14,18 +14,18 @@ from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActivitei
 
 
 class BankTransactionQuery:
-    return_type = graphene.Field(bank_transaction.BankTransaction, id=graphene.Int(required=True))
+    return_type = graphene.Field(bank_transaction.BankTransaction, uuid=graphene.String(required=True))
 
     @classmethod
-    def resolver(cls, _, info, id):
+    def resolver(cls, _, info, uuid):
         logging.info(f"Get banktransactie")
         AuditLogging.create(
             action=info.field_name,
             entities=[
-                GebruikersActiviteitEntity(entityType="transactie", entityId=id)
+                GebruikersActiviteitEntity(entityType="transactie", entityId=uuid)
             ],
         )
-        return hhb_dataloader().bank_transactions.load_one(id)
+        return hhb_dataloader().transactions_msq.load_one(uuid)
 
 
 class BankTransactionsQuery:
@@ -43,36 +43,6 @@ class BankTransactionsQuery:
             ] if "filters" in kwargs else []
         )
         return result
-
-
-class BankTransactionsPagedQuery:
-    return_type = graphene.Field(
-        bank_transaction.BankTransactionsPaged,
-        start=graphene.Int(),
-        limit=graphene.Int(),
-        filters=BankTransactionFilter()
-    )
-
-    @classmethod
-    def resolver(cls, _, info, filters=None, **kwargs):
-        logging.info(f"Get banktransacties paged")
-        if "start" not in kwargs or "limit" not in kwargs:
-            raise GraphQLError(f"Query needs params 'start', 'limit'. ")
-
-        result = hhb_dataloader().bank_transactions.load_paged(
-            start=kwargs["start"], limit=kwargs["limit"], desc=True,
-            sorting_column="transactie_datum", filters=filters
-        )
-
-        AuditLogging.create(
-            action=info.field_name,
-            entities=[
-                GebruikersActiviteitEntity(entityType="transactie", entityId=transaction["id"])
-                for transaction in result["banktransactions"]
-            ],
-        )
-        return result
-
 
 class BankTransactionsSearchQuery:
     return_type = graphene.Field(
@@ -101,7 +71,7 @@ class BankTransactionsSearchQuery:
                     journaalpostBuilder.by_automatically_booked(filters.automatisch_geboekt)
 
                 journaalposten = hhb_dataloader().journaalposten_concept.load_request(journaalpostBuilder.request).get("journaalposten", {})
-                transaction_ids = [journaalpost.get("transaction_id", None) for journaalpost in journaalposten if journaalpost.get("transaction_id", None) is not None]  
+                transaction_ids = [journaalpost.get("transaction_uuid", None) for journaalpost in journaalposten if journaalpost.get("transaction_uuid", None) is not None]  
 
             if transaction_ids is not None:
                 transactionsBuilder.by_ids(transaction_ids)
@@ -139,12 +109,14 @@ class BankTransactionsSearchQuery:
         if offset is not None and limit is not None:
                 transactionsBuilder.paged(limit=limit, offset=offset)
 
-        transactions = hhb_dataloader().transacties_concept.load_request(transactionsBuilder.request)
+        transactions = hhb_dataloader().transactions_msq.load_request(transactionsBuilder.request)
+        if transactions is None:
+            raise GraphQLError("Did not receive data, try again!")
 
         AuditLogging.create(
             action=info.field_name,
             entities=[
-                GebruikersActiviteitEntity(entityType="transactie", entityId=transaction["id"])
+                GebruikersActiviteitEntity(entityType="transactie", entityId=transaction["uuid"])
                 for transaction in transactions.get("banktransactions",[])
             ],
         )
@@ -152,9 +124,9 @@ class BankTransactionsSearchQuery:
         if len(transactions.get("banktransactions",[])) > 0:
             #This is (maybe) not necessary when batching is implemented but for now it makes it faster :)
             if journaalposten is None:
-                transaction_ids = [transaction.get("id", -1) for transaction in transactions.get("banktransactions",[]) if transaction.get("is_geboekt", False)]
+                transaction_ids = [transaction.get("uuid", -1) for transaction in transactions.get("banktransactions",[]) if transaction.get("is_geboekt", False)]
                 if len(transaction_ids) > 0:
-                    journaalpostBuilder.by_transation_ids(transation_ids=transaction_ids)
+                    journaalpostBuilder.by_transation_uuids(transation_uuids=transaction_ids)
                     journaalposten = hhb_dataloader().journaalposten_concept.load_request(journaalpostBuilder.request).get("journaalposten", {})
 
             if journaalposten is not None:
@@ -169,14 +141,13 @@ class BankTransactionsSearchQuery:
                 journaalposten = []
 
             for transaction in transactions.get("banktransactions",[]):
-                transaction_journaalpost = next((journaalpost for journaalpost in journaalposten if journaalpost["transaction_id"] == transaction["id"]), -1)
+                transaction_journaalpost = next((journaalpost for journaalpost in journaalposten if journaalpost["transaction_uuid"] == transaction["uuid"]), -1)
                 transaction["journaalpost"] = transaction_journaalpost
 
             ibans = [transaction.get("tegen_rekening", "") for transaction in transactions.get("banktransactions",[])]
             rekeningen = hhb_dataloader().rekeningen.by_ibans(ibans)
             for transaction in transactions.get("banktransactions",[]):
                 transaction_rekening = next((rekening for rekening in rekeningen if rekening["iban"] == transaction["tegen_rekening"]), None)
-                if transaction_rekening is not None:
-                    transaction["rekening"] = transaction_rekening
+                transaction["rekening"] = transaction_rekening
 
         return transactions

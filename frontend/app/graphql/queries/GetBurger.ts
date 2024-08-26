@@ -15,6 +15,7 @@ export const GetBurgerDetailsQuery = gql`
 			}
 			afspraken {
 				id
+				uuid
 				bedrag
 				credit
 				omschrijving

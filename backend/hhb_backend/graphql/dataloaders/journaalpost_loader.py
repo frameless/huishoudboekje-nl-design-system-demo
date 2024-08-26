@@ -12,10 +12,10 @@ class JournaalpostLoader(DataLoader[Journaalpost]):
     def by_grootboekrekening(self, grootboekrekening_id: str) -> Journaalpost:
         return self.load_one(grootboekrekening_id, filter_item="filter_grootboekrekeningen")
 
-    def by_transaction(self, transaction_id: int) -> Journaalpost:
+    def by_transaction(self, transaction_id: str) -> Journaalpost:
         return self.load_one(transaction_id, filter_item="filter_transactions")
 
-    def by_transactions(self, transaction_ids: List[int]) -> List[Journaalpost]:
+    def by_transactions(self, transaction_ids: List[str]) -> List[Journaalpost]:
         if len(transaction_ids) > 0:
             return self.load(transaction_ids, filter_item="filter_transactions")
         else:

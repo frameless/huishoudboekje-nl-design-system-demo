@@ -5,7 +5,19 @@
     "messages": {
         "csm": {
             "uploaded": "bankafschrift {{name}} is geüpload",
-            "evaluated": "{{transactions}} transacties toegevoegd, waarvan {{reconciled}} automatisch afgeletterd"
+            "evaluated": "{{transactions}} transacties toegevoegd, waarvan {{reconciled}} automatisch afgeletterd",
+            "delete": {
+                "successTitle": "Bankafschrift verwijderd",
+                "failTitle": "Bankafschrift kon niet verwijderd worden",
+                "message": "{{file}}"
+            },
+            "parsing": {
+                "errorTitle": "Bestand kon niet verwerkt worden",
+                "errorMessage": "Bestand: {{file}} error: {{message}}",
+                "transactionReferenceExists": "Bestand: {{file}} error: De transactiereferentie van het bestand is al eens gebruikt. Controleer of de transactiereferentie uniek is en probeer het opnieuw.",
+                "incorrectAccountIban": "Bestand: {{file}} error: De IBAN in het bestand komt niet overeen met de IBAN in de configuratie. Controleer of de IBAN correct is en probeer het opnieuw.",
+                "noTransactions": "Bestand: {{file}} error: Er zitten geen transacties in het bestand. Controleer of het bestand correct is en probeer het opnieuw."
+            }
         }
     }
 }

@@ -7,6 +7,7 @@ using AlarmService.Logic.Services.EvaluationServices.QueryHandlers;
 using AlarmService.Logic.Services.SignalServices.Interfaces;
 using Core.CommunicationModels.JournalEntryModel.Interfaces;
 using Core.utils.DateTimeProvider;
+using Microsoft.Extensions.Logging;
 
 namespace AlarmService.Logic.Services.EvaluationServices;
 
@@ -17,7 +18,8 @@ public class EvaluatorService(
   ICheckAlarmProducer checkAlarmProducer,
   IDateTimeProvider dateTimeProvider,
   CheckOnDateHelper checkOnDateHelper,
-  EvaluationHelper evaluationHelper)
+  EvaluationHelper evaluationHelper,
+  ILogger<EvaluatorService> logger)
   : IEvaluatorService
 {
   public async Task<bool> EvaluateReconciliatedJournalEntries(
@@ -42,7 +44,7 @@ public class EvaluatorService(
   public async Task<bool> EvaluateCitizenSaldos(IList<string> citizenUuids, int threshold)
   {
     EvaluateCitizenSaldo query = new (citizenUuids, threshold);
-    EvaluateCitizenSaldoQueryHandler handler = new(evaluationResultService, checkAlarmProducer, dateTimeProvider);
+    EvaluateCitizenSaldoQueryHandler handler = new(evaluationResultService, checkAlarmProducer, dateTimeProvider, logger);
     return await handler.HandleAsync(query);
   }
 }

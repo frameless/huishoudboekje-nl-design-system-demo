@@ -41,16 +41,6 @@ x-grootboekservice: &x-grootboekservice
   environment:
     DATABASE_URL: "postgresql://hhb:hhb@db/grootboekservice"
 
-x-banktransactieservice: &x-banktransactieservice
-  build:
-    dockerfile: ./bank_transactie_service/dev.Dockerfile
-    context: ./services
-  volumes:
-    - ./services/bank_transactie_service:/app
-    - ./services/core_service/core_service:/app/core_service
-  environment:
-    DATABASE_URL: "postgresql://hhb:hhb@db/banktransactieservice"
-
 x-postadressenservice: &x-postadressenservice
   build:
     context: ./services/postadressenservice
@@ -153,6 +143,7 @@ services:
 ##################################################
 # Csharp services
 ################################################## 
+
   alarmenservice: 
     image: ${DOCKER_REGISTRY-}alarmservice
     container_name: alarmenservice
@@ -170,6 +161,48 @@ services:
     ports:
       - 8008:8000
       - 8108:9000
+    depends_on:
+      db:
+        condition: service_healthy
+
+  banktransactieservice: 
+    image: ${DOCKER_REGISTRY-}banktransactieservice
+    container_name: banktransactieservice
+    build:
+      context: ./huishoudboekje_services
+      dockerfile: ./BankServices.Application/dev.Dockerfile
+    volumes: 
+      - ./huishoudboekje_services/:/src/app
+      - /src/app/BankServices.Application/bin
+      - /src/app/BankServices.Application/obj
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Development"
+      DATABASE_URL: "Host=localhost;Database=banktransactieservice;Port=5432;Username=postgres;Password=postgres"
+      LOG_LEVEL: DEBUG
+    ports:
+      - 8003:8000
+      - 8103:9000
+    depends_on:
+      db:
+        condition: service_healthy
+
+  fileservice: 
+    image: ${DOCKER_REGISTRY-}fileservice
+    container_name: fileservice
+    build:
+      context: ./huishoudboekje_services
+      dockerfile: ./FileServices.Application/dev.Dockerfile
+    volumes: 
+      - ./huishoudboekje_services/:/src/app
+      - /src/app/FileServices.Application/bin
+      - /src/app/FileServices.Application/obj
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Development"
+      DATABASE_URL: "Host=localhost;Database=fileservice;Port=5432;Username=postgres;Password=postgres"
+      LOG_LEVEL: DEBUG
+    ports:
+      - 8015:8000
+      - 8115:9000
     depends_on:
       db:
         condition: service_healthy
@@ -273,6 +306,17 @@ services:
     profiles:
       - evaluate-alarms
 
+  generate-payment-instructions:
+    build:
+      context: ./rabbitmq-message-publisher
+      dockerfile: ./Dockerfile
+    environment:
+      EXCHANGE: check-payment-instructions
+      ROUTING_KEY: check-payment-instructions
+      MESSAGE: "{}"
+    profiles:
+      - generate-payment-instructions
+
   sampledata:
     image: registry.gitlab.com/commonground/huishoudboekje/data-importer/data-importer:1.5.4
     container_name: sampledata
@@ -349,21 +393,6 @@ services:
 
   organisatieservice-test:
     <<: [ *x-py-tests, *x-organisatieservice ]
-
-  banktransactieservice:
-    <<: *x-banktransactieservice
-    container_name: banktransactieservice
-    environment:
-      DATABASE_URL: "postgresql://hhb:hhb@db/banktransactieservice"
-      LOG_LEVEL: DEBUG
-    ports:
-      - 8003:8000
-    depends_on:
-      db:
-        condition: service_healthy
-
-  banktransactieservice-test:
-    <<: [ *x-py-tests, *x-banktransactieservice ]
 
   grootboekservice:
     <<: *x-grootboekservice

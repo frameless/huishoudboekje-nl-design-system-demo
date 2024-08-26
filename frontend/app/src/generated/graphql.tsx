@@ -17,6 +17,8 @@ export type Scalars = {
   Bedrag: any;
   /** The `BigInt` scalar type represents non-fractional signed whole numeric values. */
   BigInt: any;
+  /** The `Byte` scalar type represents byte value as a Buffer */
+  Byte: any;
   /**
    * The `Date` scalar type represents a Date
    * value as specified by
@@ -180,6 +182,7 @@ export type BankTransaction = {
   tegenRekening?: Maybe<Rekening>;
   tegenRekeningIban?: Maybe<Scalars['String']>;
   transactieDatum?: Maybe<Scalars['Date']>;
+  uuid?: Maybe<Scalars['String']>;
 };
 
 export type BankTransactionFilter = {
@@ -251,6 +254,7 @@ export type Burger = {
   postcode?: Maybe<Scalars['String']>;
   rekeningen?: Maybe<Array<Maybe<Rekening>>>;
   saldoAlarm?: Maybe<Scalars['Boolean']>;
+  startDate?: Maybe<Scalars['Float']>;
   straatnaam?: Maybe<Scalars['String']>;
   telefoonnummer?: Maybe<Scalars['String']>;
   uuid?: Maybe<Scalars['UUID']>;
@@ -294,6 +298,28 @@ export type BurgerRapportage = {
 export type BurgersPaged = {
   burgers?: Maybe<Array<Maybe<Burger>>>;
   pageInfo?: Maybe<PageInfo>;
+};
+
+export type CsmDeleteRequest = {
+  id?: InputMaybe<Scalars['String']>;
+};
+
+export type CsmDeleteResponse = {
+  deleted?: Maybe<Scalars['Boolean']>;
+  id?: Maybe<Scalars['String']>;
+};
+
+export type CsmPagedRequest = {
+  page?: InputMaybe<PaginationRequest>;
+};
+
+export type CsmPagedResponse = {
+  PageInfo?: Maybe<PaginationResponse>;
+  data?: Maybe<Array<Maybe<CsmData>>>;
+};
+
+export type CsmUploadRequest = {
+  file?: InputMaybe<FileUpload>;
 };
 
 export type ComplexBedragFilterType = {
@@ -444,7 +470,7 @@ export type CreateJournaalpostAfspraak = {
 export type CreateJournaalpostAfspraakInput = {
   afspraakId: Scalars['Int'];
   isAutomatischGeboekt: Scalars['Boolean'];
-  transactionId: Scalars['Int'];
+  transactionUuid: Scalars['String'];
 };
 
 /** Mutatie om een banktransactie af te letteren op een grootboekrekening. */
@@ -456,7 +482,7 @@ export type CreateJournaalpostGrootboekrekening = {
 export type CreateJournaalpostGrootboekrekeningInput = {
   grootboekrekeningId: Scalars['String'];
   isAutomatischGeboekt: Scalars['Boolean'];
-  transactionId: Scalars['Int'];
+  transactionUuid: Scalars['String'];
 };
 
 export type CreateOrganisatie = {
@@ -468,6 +494,34 @@ export type CreateOrganisatieInput = {
   kvknummer: Scalars['String'];
   naam?: InputMaybe<Scalars['String']>;
   vestigingsnummer?: InputMaybe<Scalars['String']>;
+};
+
+export type CreatePaymentExportRequest = {
+  endDate?: InputMaybe<Scalars['BigInt']>;
+  recordIds?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  startDate?: InputMaybe<Scalars['BigInt']>;
+};
+
+export type CreatePaymentExportResponse = {
+  id?: Maybe<Scalars['String']>;
+  success?: Maybe<Scalars['Boolean']>;
+};
+
+export type CreatePaymentRecord = {
+  agreement?: Maybe<Afspraak>;
+  agreementId?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['String']>;
+};
+
+export type CreatePaymentRecordResponse = {
+  count?: Maybe<Scalars['Int']>;
+  data?: Maybe<Array<Maybe<CreatePaymentRecord>>>;
+};
+
+export type CreatePaymentRecordsData = {
+  from?: InputMaybe<Scalars['BigInt']>;
+  processAt?: InputMaybe<Scalars['BigInt']>;
+  to?: InputMaybe<Scalars['BigInt']>;
 };
 
 export type CreatePostadres = {
@@ -487,6 +541,12 @@ export type CreatePostadresInput = {
 export type CreateRubriek = {
   ok?: Maybe<Scalars['Boolean']>;
   rubriek?: Maybe<Rubriek>;
+};
+
+export type CsmData = {
+  file?: Maybe<FileData>;
+  id?: Maybe<Scalars['String']>;
+  transactionCount?: Maybe<Scalars['Int']>;
 };
 
 /** Model van een bankafschrift. */
@@ -608,6 +668,16 @@ export type DeleteRubriek = {
   previous?: Maybe<Rubriek>;
 };
 
+export type DownloadPaymentExportRequest = {
+  id?: InputMaybe<Scalars['String']>;
+};
+
+export type DownloadPaymentExportResponse = {
+  fileString?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
+};
+
 export type EndBurger = {
   burger?: Maybe<Burger>;
   ok?: Maybe<Scalars['Boolean']>;
@@ -650,6 +720,23 @@ export type Export = {
 export type ExportsPaged = {
   exports?: Maybe<Array<Maybe<Export>>>;
   pageInfo?: Maybe<PageInfo>;
+};
+
+export type FileData = {
+  id?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
+  uploadedAt?: Maybe<Scalars['BigInt']>;
+};
+
+export type FileUpload = {
+  blobParts?: InputMaybe<Array<InputMaybe<Scalars['Byte']>>>;
+  lastModified?: InputMaybe<Scalars['BigInt']>;
+  name?: InputMaybe<Scalars['String']>;
+};
+
+export type FileUploadResponse = {
+  id?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
 };
 
 export type Filter = {
@@ -723,6 +810,19 @@ export type GetByIdsResponse = {
   data?: Maybe<Array<Maybe<AlarmData>>>;
 };
 
+export type GetNotExportedPaymentRecordsMessage = {
+  from?: InputMaybe<Scalars['BigInt']>;
+  to?: InputMaybe<Scalars['BigInt']>;
+};
+
+export type GetPaymentExportRequest = {
+  id?: InputMaybe<Scalars['String']>;
+};
+
+export type GetPaymentRecordsByAgreementsMessage = {
+  agreementIds?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+};
+
 export type Grootboekrekening = {
   children?: Maybe<Array<Maybe<Grootboekrekening>>>;
   credit?: Maybe<Scalars['Boolean']>;
@@ -755,7 +855,8 @@ export type Journaalpost = {
   id?: Maybe<Scalars['Int']>;
   isAutomatischGeboekt?: Maybe<Scalars['Boolean']>;
   rubriek?: Maybe<Rubriek>;
-  transaction?: Maybe<BankTransaction>;
+  transaction?: Maybe<TransactionData>;
+  transactionUuid?: Maybe<Scalars['String']>;
   uuid?: Maybe<Scalars['String']>;
 };
 
@@ -784,6 +885,11 @@ export type Mutation = {
   Alarms_Create?: Maybe<AlarmData>;
   Alarms_Delete?: Maybe<DeleteResponse>;
   Alarms_Update?: Maybe<AlarmData>;
+  CSM_Delete?: Maybe<CsmDeleteResponse>;
+  CSM_Upload?: Maybe<FileUploadResponse>;
+  PaymentExport_Create?: Maybe<CreatePaymentExportResponse>;
+  PaymentRecordService_CreatePaymentRecords?: Maybe<CreatePaymentRecordResponse>;
+  PaymentRecordService_UpdateProcessingDates?: Maybe<UpdateProcessingDateResponse>;
   Signals_SetIsActive?: Maybe<SignalData>;
   /** Mutatie om een zoekterm aan een afspraak toe te voegen. */
   addAfspraakZoekterm?: Maybe<AddAfspraakZoekterm>;
@@ -858,6 +964,31 @@ export type MutationAlarms_DeleteArgs = {
 
 export type MutationAlarms_UpdateArgs = {
   input?: InputMaybe<UpdateAlarmRequest>;
+};
+
+
+export type MutationCsm_DeleteArgs = {
+  input?: InputMaybe<CsmDeleteRequest>;
+};
+
+
+export type MutationCsm_UploadArgs = {
+  input?: InputMaybe<CsmUploadRequest>;
+};
+
+
+export type MutationPaymentExport_CreateArgs = {
+  input?: InputMaybe<CreatePaymentExportRequest>;
+};
+
+
+export type MutationPaymentRecordService_CreatePaymentRecordsArgs = {
+  input?: InputMaybe<CreatePaymentRecordsData>;
+};
+
+
+export type MutationPaymentRecordService_UpdateProcessingDatesArgs = {
+  input?: InputMaybe<UpdateProcessingDateRequest>;
 };
 
 
@@ -1116,6 +1247,15 @@ export type MutationUpdateRubriekArgs = {
   naam?: InputMaybe<Scalars['String']>;
 };
 
+export type NotExportedPaymentRecordDates = {
+  data?: Maybe<Array<Maybe<NotExportedRecordDate>>>;
+};
+
+export type NotExportedRecordDate = {
+  date?: Maybe<Scalars['BigInt']>;
+  id?: Maybe<Scalars['String']>;
+};
+
 export type Notification = {
   additionalProperties?: Maybe<Array<KeyValuePairOfStringAndString>>;
   message: Scalars['String'];
@@ -1182,11 +1322,85 @@ export type PaginationRequest = {
   take?: InputMaybe<Scalars['Int']>;
 };
 
-/** TODO See if we can move these in the Core since it is also used in LogService */
 export type PaginationResponse = {
   skip?: Maybe<Scalars['Int']>;
   take?: Maybe<Scalars['Int']>;
   total_count?: Maybe<Scalars['Int']>;
+};
+
+export type PaymentExportData = {
+  createdAt?: Maybe<Scalars['BigInt']>;
+  endDate?: Maybe<Scalars['BigInt']>;
+  file?: Maybe<PaymentExportFileData>;
+  id?: Maybe<Scalars['String']>;
+  records?: Maybe<Array<Maybe<PaymentExportRecordData>>>;
+  recordsInfo?: Maybe<PaymentExportRecordsInfo>;
+  startDate?: Maybe<Scalars['BigInt']>;
+};
+
+export type PaymentExportFileData = {
+  id?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
+  sha256?: Maybe<Scalars['String']>;
+};
+
+export type PaymentExportPaginationRequest = {
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+};
+
+export type PaymentExportPaginationResponse = {
+  skip?: Maybe<Scalars['Int']>;
+  take?: Maybe<Scalars['Int']>;
+  total_count?: Maybe<Scalars['Int']>;
+};
+
+export type PaymentExportRecordData = {
+  accountIban?: Maybe<Scalars['String']>;
+  accountName?: Maybe<Scalars['String']>;
+  agreement?: Maybe<Afspraak>;
+  agreementUuid?: Maybe<Scalars['String']>;
+  amount?: Maybe<Scalars['Int']>;
+  createdAt?: Maybe<Scalars['BigInt']>;
+  id?: Maybe<Scalars['String']>;
+  originalProcessingDate?: Maybe<Scalars['BigInt']>;
+  processAt?: Maybe<Scalars['BigInt']>;
+};
+
+export type PaymentExportRecordsInfo = {
+  count?: Maybe<Scalars['Int']>;
+  processingDates?: Maybe<Array<Maybe<Scalars['BigInt']>>>;
+  totalAmount?: Maybe<Scalars['Int']>;
+};
+
+export type PaymentExportsPagedRequest = {
+  page?: InputMaybe<PaymentExportPaginationRequest>;
+};
+
+export type PaymentExportsPagedResponse = {
+  PageInfo?: Maybe<PaymentExportPaginationResponse>;
+  data?: Maybe<Array<Maybe<PaymentExportData>>>;
+};
+
+export type PaymentRecord = {
+  accountIban?: Maybe<Scalars['String']>;
+  accountName?: Maybe<Scalars['String']>;
+  agreement?: Maybe<Afspraak>;
+  agreementUuid?: Maybe<Scalars['String']>;
+  amount?: Maybe<Scalars['Int']>;
+  createdAt?: Maybe<Scalars['BigInt']>;
+  id?: Maybe<Scalars['String']>;
+  originalProcessingDate?: Maybe<Scalars['BigInt']>;
+  paymentExportUuid?: Maybe<Scalars['String']>;
+  processAt?: Maybe<Scalars['BigInt']>;
+};
+
+export type PaymentRecords = {
+  data?: Maybe<Array<Maybe<PaymentRecord>>>;
+};
+
+export type PaymentRecordsById = {
+  ids?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
 export type Postadres = {
@@ -1201,10 +1415,22 @@ export type Query = {
   Alarms_GetById?: Maybe<AlarmData>;
   Alarms_GetByIds?: Maybe<GetByIdsResponse>;
   Alarms_connectivityState?: Maybe<ConnectivityState>;
+  CSM_GetPaged?: Maybe<CsmPagedResponse>;
+  CSM_connectivityState?: Maybe<ConnectivityState>;
+  PaymentExport_Get?: Maybe<PaymentExportData>;
+  PaymentExport_GetFile?: Maybe<DownloadPaymentExportResponse>;
+  PaymentExport_GetPaged?: Maybe<PaymentExportsPagedResponse>;
+  PaymentExport_connectivityState?: Maybe<ConnectivityState>;
+  PaymentRecordService_GetNotExportedPaymentRecordDates?: Maybe<NotExportedPaymentRecordDates>;
+  PaymentRecordService_GetPaymentRecordsById?: Maybe<PaymentRecords>;
+  PaymentRecordService_GetRecordsNotReconciledForAgreements?: Maybe<PaymentRecords>;
+  PaymentRecordService_connectivityState?: Maybe<ConnectivityState>;
   Signals_GetActiveSignalsCount?: Maybe<GetActiveSignalsCountResponse>;
   Signals_GetAll?: Maybe<SignalsResponse>;
   Signals_GetPaged?: Maybe<SignalsPagedResponse>;
   Signals_connectivityState?: Maybe<ConnectivityState>;
+  Transaction_GetByIds?: Maybe<Transactions>;
+  Transaction_connectivityState?: Maybe<ConnectivityState>;
   UserActivities_GetUserActivities?: Maybe<UserActivitiesResponse>;
   UserActivities_GetUserActivitiesPaged?: Maybe<UserActivitiesPagedResponse>;
   /**
@@ -1221,7 +1447,6 @@ export type Query = {
   afsprakenUuid?: Maybe<Array<Maybe<Afspraak>>>;
   bankTransaction?: Maybe<BankTransaction>;
   bankTransactions?: Maybe<Array<Maybe<BankTransaction>>>;
-  bankTransactionsPaged?: Maybe<BankTransactionsPaged>;
   burger?: Maybe<Burger>;
   burgerRapportages?: Maybe<Array<Maybe<BurgerRapportage>>>;
   burgers?: Maybe<Array<Maybe<Burger>>>;
@@ -1275,6 +1500,56 @@ export type QueryAlarms_ConnectivityStateArgs = {
 };
 
 
+export type QueryCsm_GetPagedArgs = {
+  input?: InputMaybe<CsmPagedRequest>;
+};
+
+
+export type QueryCsm_ConnectivityStateArgs = {
+  tryToConnect?: InputMaybe<Scalars['Boolean']>;
+};
+
+
+export type QueryPaymentExport_GetArgs = {
+  input?: InputMaybe<GetPaymentExportRequest>;
+};
+
+
+export type QueryPaymentExport_GetFileArgs = {
+  input?: InputMaybe<DownloadPaymentExportRequest>;
+};
+
+
+export type QueryPaymentExport_GetPagedArgs = {
+  input?: InputMaybe<PaymentExportsPagedRequest>;
+};
+
+
+export type QueryPaymentExport_ConnectivityStateArgs = {
+  tryToConnect?: InputMaybe<Scalars['Boolean']>;
+};
+
+
+export type QueryPaymentRecordService_GetNotExportedPaymentRecordDatesArgs = {
+  input?: InputMaybe<GetNotExportedPaymentRecordsMessage>;
+};
+
+
+export type QueryPaymentRecordService_GetPaymentRecordsByIdArgs = {
+  input?: InputMaybe<PaymentRecordsById>;
+};
+
+
+export type QueryPaymentRecordService_GetRecordsNotReconciledForAgreementsArgs = {
+  input?: InputMaybe<GetPaymentRecordsByAgreementsMessage>;
+};
+
+
+export type QueryPaymentRecordService_ConnectivityStateArgs = {
+  tryToConnect?: InputMaybe<Scalars['Boolean']>;
+};
+
+
 export type QuerySignals_GetActiveSignalsCountArgs = {
   input?: InputMaybe<Scalars['SignalsRequest']>;
 };
@@ -1291,6 +1566,16 @@ export type QuerySignals_GetPagedArgs = {
 
 
 export type QuerySignals_ConnectivityStateArgs = {
+  tryToConnect?: InputMaybe<Scalars['Boolean']>;
+};
+
+
+export type QueryTransaction_GetByIdsArgs = {
+  input?: InputMaybe<GetByIdsRequest>;
+};
+
+
+export type QueryTransaction_ConnectivityStateArgs = {
   tryToConnect?: InputMaybe<Scalars['Boolean']>;
 };
 
@@ -1346,19 +1631,12 @@ export type QueryAfsprakenUuidArgs = {
 
 
 export type QueryBankTransactionArgs = {
-  id: Scalars['Int'];
+  uuid: Scalars['String'];
 };
 
 
 export type QueryBankTransactionsArgs = {
   filters?: InputMaybe<BankTransactionFilter>;
-};
-
-
-export type QueryBankTransactionsPagedArgs = {
-  filters?: InputMaybe<BankTransactionFilter>;
-  limit?: InputMaybe<Scalars['Int']>;
-  start?: InputMaybe<Scalars['Int']>;
 };
 
 
@@ -1645,6 +1923,21 @@ export type Subscription = {
   notification: Notification;
 };
 
+export type TransactionData = {
+  amount?: Maybe<Scalars['Int']>;
+  customerStatementMessage?: Maybe<Scalars['String']>;
+  date?: Maybe<Scalars['BigInt']>;
+  fromAccount?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['String']>;
+  informationToAccountOwner?: Maybe<Scalars['String']>;
+  isCredit?: Maybe<Scalars['Boolean']>;
+  isReconciled?: Maybe<Scalars['Boolean']>;
+};
+
+export type Transactions = {
+  data?: Maybe<Array<Maybe<TransactionData>>>;
+};
+
 export type UpdateAfdeling = {
   afdeling?: Maybe<Afdeling>;
   ok?: Maybe<Scalars['Boolean']>;
@@ -1710,6 +2003,19 @@ export type UpdatePostadres = {
   ok?: Maybe<Scalars['Boolean']>;
   postadres?: Maybe<Postadres>;
   previous?: Maybe<Postadres>;
+};
+
+export type UpdateProcessingDateRequest = {
+  updates?: InputMaybe<Array<InputMaybe<UpdateProcessingDateRow>>>;
+};
+
+export type UpdateProcessingDateResponse = {
+  success?: Maybe<Scalars['Boolean']>;
+};
+
+export type UpdateProcessingDateRow = {
+  id?: InputMaybe<Scalars['String']>;
+  processAt?: InputMaybe<Scalars['BigInt']>;
 };
 
 export type UpdateRekening = {
@@ -1819,22 +2125,6 @@ export type CreateConfiguratieMutationVariables = Exact<{
 
 export type CreateConfiguratieMutation = { createConfiguratie?: { ok?: boolean, configuratie?: { id?: string, waarde?: string } } };
 
-export type CreateCustomerStatementMessageMutationVariables = Exact<{
-  file: Scalars['Upload'];
-}>;
-
-
-export type CreateCustomerStatementMessageMutation = { createCustomerStatementMessage?: { ok?: boolean } };
-
-export type CreateExportOverschrijvingenMutationVariables = Exact<{
-  startDatum: Scalars['String'];
-  eindDatum: Scalars['String'];
-  verwerkingDatum?: InputMaybe<Scalars['String']>;
-}>;
-
-
-export type CreateExportOverschrijvingenMutation = { createExportOverschrijvingen?: { ok?: boolean, export?: { id?: number } } };
-
 export type CreateHuishoudenMutationVariables = Exact<{
   burgerIds?: InputMaybe<Array<InputMaybe<Scalars['Int']>> | InputMaybe<Scalars['Int']>>;
 }>;
@@ -1843,7 +2133,7 @@ export type CreateHuishoudenMutationVariables = Exact<{
 export type CreateHuishoudenMutation = { createHuishouden?: { ok?: boolean, huishouden?: { id?: number, burgers?: Array<{ id?: number, bsn?: number, email?: string, telefoonnummer?: string, voorletters?: string, voornamen?: string, achternaam?: string, geboortedatum?: any, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }>, afspraken?: Array<{ id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, validFrom?: any, validThrough?: any, betaalinstructie?: { byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string }, burger?: { id?: number, bsn?: number, voornamen?: string, voorletters?: string, achternaam?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, postadres?: { id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string }, rubriek?: { id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } }, matchingAfspraken?: Array<{ id?: number, credit?: boolean, zoektermen?: Array<string>, bedrag?: any, omschrijving?: string, burger?: { voorletters?: string, voornamen?: string, achternaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string } }> }>, huishouden?: { id?: number, burgers?: Array<{ id?: number }> } }> } } };
 
 export type CreateJournaalpostAfspraakMutationVariables = Exact<{
-  transactionId: Scalars['Int'];
+  transactionId: Scalars['String'];
   afspraakId: Scalars['Int'];
   isAutomatischGeboekt?: InputMaybe<Scalars['Boolean']>;
 }>;
@@ -1852,7 +2142,7 @@ export type CreateJournaalpostAfspraakMutationVariables = Exact<{
 export type CreateJournaalpostAfspraakMutation = { createJournaalpostAfspraak?: { ok?: boolean, journaalposten?: Array<{ id?: number, afspraak?: { id?: number } }> } };
 
 export type CreateJournaalpostGrootboekrekeningMutationVariables = Exact<{
-  transactionId: Scalars['Int'];
+  transactionId: Scalars['String'];
   grootboekrekeningId: Scalars['String'];
 }>;
 
@@ -1875,6 +2165,22 @@ export type CreateAfdelingRekeningMutationVariables = Exact<{
 
 
 export type CreateAfdelingRekeningMutation = { createAfdelingRekening?: { ok?: boolean, rekening?: { id?: number, iban?: string, rekeninghouder?: string } } };
+
+export type CreatePaymentExportMutationVariables = Exact<{
+  input: CreatePaymentExportRequest;
+}>;
+
+
+export type CreatePaymentExportMutation = { PaymentExport_Create?: { success?: boolean } };
+
+export type PaymentRecordService_CreatePaymentRecordsMutationVariables = Exact<{
+  from: Scalars['BigInt'];
+  to: Scalars['BigInt'];
+  processAt?: InputMaybe<Scalars['BigInt']>;
+}>;
+
+
+export type PaymentRecordService_CreatePaymentRecordsMutation = { PaymentRecordService_CreatePaymentRecords?: { count?: number, data?: Array<{ id?: string, agreement?: { burger?: { achternaam?: string, voornamen?: string, id?: number, startDate?: number } } }> } };
 
 export type CreateAfdelingPostadresMutationVariables = Exact<{
   afdelingId: Scalars['Int'];
@@ -1969,11 +2275,11 @@ export type DeleteConfiguratieMutationVariables = Exact<{
 export type DeleteConfiguratieMutation = { deleteConfiguratie?: { ok?: boolean } };
 
 export type DeleteCustomerStatementMessageMutationVariables = Exact<{
-  id: Scalars['Int'];
+  input: CsmDeleteRequest;
 }>;
 
 
-export type DeleteCustomerStatementMessageMutation = { deleteCustomerStatementMessage?: { ok?: boolean } };
+export type DeleteCustomerStatementMessageMutation = { CSM_Delete?: { deleted?: boolean } };
 
 export type DeleteHuishoudenBurgerMutationVariables = Exact<{
   huishoudenId: Scalars['Int'];
@@ -2110,6 +2416,14 @@ export type UpdateOrganisatieMutationVariables = Exact<{
 
 export type UpdateOrganisatieMutation = { updateOrganisatie?: { ok?: boolean, organisatie?: { id?: number, naam?: string, kvknummer?: string, vestigingsnummer?: string, afdelingen?: Array<{ id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }> } } };
 
+export type UpdatePaymentRecordProcessingDateMutationVariables = Exact<{
+  id: Scalars['String'];
+  processAt: Scalars['BigInt'];
+}>;
+
+
+export type UpdatePaymentRecordProcessingDateMutation = { PaymentRecordService_UpdateProcessingDates?: { success?: boolean } };
+
 export type UpdatePostadresMutationVariables = Exact<{
   id: Scalars['String'];
   straatnaam?: InputMaybe<Scalars['String']>;
@@ -2138,6 +2452,13 @@ export type UpdateRubriekMutationVariables = Exact<{
 
 
 export type UpdateRubriekMutation = { updateRubriek?: { ok?: boolean } };
+
+export type UploadCustomerStatementMessageMutationVariables = Exact<{
+  input: CsmUploadRequest;
+}>;
+
+
+export type UploadCustomerStatementMessageMutation = { CSM_Upload?: { id?: string, name?: string } };
 
 export type GetAdditionalTransactionDataQueryVariables = Exact<{
   ibans?: InputMaybe<Array<Scalars['String']> | Scalars['String']>;
@@ -2180,7 +2501,7 @@ export type GetBurgerDetailsQueryVariables = Exact<{
 }>;
 
 
-export type GetBurgerDetailsQuery = { burger?: { id?: number, voorletters?: string, voornamen?: string, endDate?: string, saldoAlarm?: boolean, achternaam?: string, huishouden?: { id?: number }, afspraken?: Array<{ id?: number, bedrag?: any, credit?: boolean, omschrijving?: string, validFrom?: any, validThrough?: any, betaalinstructie?: { byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string }, afdeling?: { naam?: string, organisatie?: { naam?: string } } }> } };
+export type GetBurgerDetailsQuery = { burger?: { id?: number, voorletters?: string, voornamen?: string, endDate?: string, saldoAlarm?: boolean, achternaam?: string, huishouden?: { id?: number }, afspraken?: Array<{ id?: number, uuid?: any, bedrag?: any, credit?: boolean, omschrijving?: string, validFrom?: any, validThrough?: any, betaalinstructie?: { byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string }, afdeling?: { naam?: string, organisatie?: { naam?: string } } }> } };
 
 export type GetBurgerPersonalDetailsQueryVariables = Exact<{
   id: Scalars['Int'];
@@ -2246,18 +2567,12 @@ export type GetCreateAfspraakFormDataQueryVariables = Exact<{
 
 export type GetCreateAfspraakFormDataQuery = { burger?: { id?: number, voorletters?: string, voornamen?: string, achternaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, rubrieken?: Array<{ id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, credit?: boolean } }>, organisaties?: Array<{ id?: number, naam?: string, kvknummer?: string, vestigingsnummer?: string }> };
 
-export type GetCsmsQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type GetCsmsQuery = { customerStatementMessages?: Array<{ id?: number, filename?: string, uploadDate?: any, accountIdentification?: string, closingAvailableFunds?: number, closingBalance?: number, forwardAvailableBalance?: number, openingBalance?: number, relatedReference?: string, sequenceNumber?: string, transactionReferenceNumber?: string }> };
-
-export type GetExportsPagedQueryVariables = Exact<{
-  offset: Scalars['Int'];
-  limit: Scalars['Int'];
+export type GetCsmsPagedQueryVariables = Exact<{
+  input: CsmPagedRequest;
 }>;
 
 
-export type GetExportsPagedQuery = { exportsPaged?: { exports?: Array<{ id?: number, naam?: string, timestamp?: any, startDatum?: any, eindDatum?: any, verwerkingDatum?: any, sha256?: string, overschrijvingen?: Array<{ id?: number, bedrag?: any }> }>, pageInfo?: { count?: number, limit?: number, start?: number } } };
+export type GetCsmsPagedQuery = { CSM_GetPaged?: { data?: Array<{ id?: string, transactionCount?: number, file?: { name?: string, id?: string, uploadedAt?: any } }>, PageInfo?: { total_count?: number, skip?: number, take?: number } } };
 
 export type GetHuishoudenQueryVariables = Exact<{
   id: Scalars['Int'];
@@ -2280,6 +2595,21 @@ export type GetHuishoudensQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetHuishoudensQuery = { burgers?: Array<{ id?: number, voorletters?: string, voornamen?: string, achternaam?: string, huishoudenId?: number }> };
 
+export type GetNotExportedPaymentRecordsByIdQueryVariables = Exact<{
+  from?: InputMaybe<Scalars['BigInt']>;
+  to?: InputMaybe<Scalars['BigInt']>;
+}>;
+
+
+export type GetNotExportedPaymentRecordsByIdQuery = { PaymentRecordService_GetNotExportedPaymentRecordDates?: { data?: Array<{ date?: any, id?: string }> } };
+
+export type GetNotReconciledRecordsForAgreementsQueryVariables = Exact<{
+  input: GetPaymentRecordsByAgreementsMessage;
+}>;
+
+
+export type GetNotReconciledRecordsForAgreementsQuery = { PaymentRecordService_GetRecordsNotReconciledForAgreements?: { data?: Array<{ id?: string, originalProcessingDate?: any, processAt?: any, paymentExportUuid?: string, createdAt?: any, amount?: number, agreementUuid?: string, accountName?: string, accountIban?: string }> } };
+
 export type GetOrganisatieQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
@@ -2296,6 +2626,34 @@ export type GetSimpleOrganisatiesQueryVariables = Exact<{ [key: string]: never; 
 
 
 export type GetSimpleOrganisatiesQuery = { organisaties?: Array<{ id?: number, naam?: string }> };
+
+export type GetPaymentExportQueryVariables = Exact<{
+  input: GetPaymentExportRequest;
+}>;
+
+
+export type GetPaymentExportQuery = { PaymentExport_Get?: { id?: string, createdAt?: any, startDate?: any, endDate?: any, file?: { id?: string, sha256?: string }, recordsInfo?: { count?: number, processingDates?: Array<any>, totalAmount?: number }, records?: Array<{ id?: string, amount?: number, processAt?: any, agreement?: { omschrijving?: string, tegenRekening?: { rekeninghouder?: string }, burger?: { achternaam?: string, voornamen?: string, id?: number, startDate?: number } } }> } };
+
+export type GetPaymentExportFileQueryVariables = Exact<{
+  input: DownloadPaymentExportRequest;
+}>;
+
+
+export type GetPaymentExportFileQuery = { PaymentExport_GetFile?: { id?: string, name?: string, fileString?: string } };
+
+export type GetPaymentExportsPagedQueryVariables = Exact<{
+  input: PaymentExportsPagedRequest;
+}>;
+
+
+export type GetPaymentExportsPagedQuery = { PaymentExport_GetPaged?: { data?: Array<{ id?: string, createdAt?: any, startDate?: any, endDate?: any, file?: { id?: string, sha256?: string }, recordsInfo?: { count?: number, processingDates?: Array<any>, totalAmount?: number } }>, PageInfo?: { total_count?: number, skip?: number, take?: number } } };
+
+export type GetPaymentRecordsByIdQueryVariables = Exact<{
+  input: PaymentRecordsById;
+}>;
+
+
+export type GetPaymentRecordsByIdQuery = { PaymentRecordService_GetPaymentRecordsById?: { data?: Array<{ id?: string, amount?: number, processAt?: any, agreement?: { omschrijving?: string, tegenRekening?: { rekeninghouder?: string } } }> } };
 
 export type GetRekeningQueryVariables = Exact<{
   id: Scalars['Int'];
@@ -2354,7 +2712,7 @@ export type GetSignalsPagedQueryVariables = Exact<{
 }>;
 
 
-export type GetSignalsPagedQuery = { Signals_GetPaged?: { data?: Array<{ alarmId?: string, createdAt?: any, id?: string, isActive?: boolean, journalEntryIds?: Array<string>, offByAmount?: number, signalType?: number, updatedAt?: any, agreement?: { id?: number, omschrijving?: string }, citizen?: { id?: number, voornamen?: string, achternaam?: string, voorletters?: string }, journalEntries?: Array<{ id?: number, transaction?: { id?: number, bedrag?: any } }> }>, PageInfo?: { skip?: number, take?: number, total_count?: number } } };
+export type GetSignalsPagedQuery = { Signals_GetPaged?: { data?: Array<{ alarmId?: string, createdAt?: any, id?: string, isActive?: boolean, journalEntryIds?: Array<string>, offByAmount?: number, signalType?: number, updatedAt?: any, agreement?: { id?: number, omschrijving?: string }, citizen?: { id?: number, voornamen?: string, achternaam?: string, voorletters?: string }, journalEntries?: Array<{ id?: number, transactionUuid?: string, transaction?: { id?: string, amount?: number } }> }>, PageInfo?: { skip?: number, take?: number, total_count?: number } } };
 
 export type GetCitizensSignalsFilterQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -2379,25 +2737,16 @@ export type GetSimpleBurgersQueryVariables = Exact<{ [key: string]: never; }>;
 export type GetSimpleBurgersQuery = { burgers?: Array<{ id?: number, bsn?: number, voorletters?: string, achternaam?: string }> };
 
 export type GetTransactieQueryVariables = Exact<{
-  id: Scalars['Int'];
+  uuid: Scalars['String'];
 }>;
 
 
-export type GetTransactieQuery = { bankTransaction?: { id?: number, informationToAccountOwner?: string, statementLine?: string, bedrag?: any, isCredit?: boolean, tegenRekeningIban?: string, transactieDatum?: any, tegenRekening?: { iban?: string, rekeninghouder?: string }, journaalpost?: { id?: number, isAutomatischGeboekt?: boolean, afspraak?: { id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, burger?: { voornamen?: string, voorletters?: string, achternaam?: string, id?: number }, rubriek?: { id?: number, naam?: string } }, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } } } };
+export type GetTransactieQuery = { bankTransaction?: { uuid?: string, informationToAccountOwner?: string, statementLine?: string, bedrag?: any, isCredit?: boolean, tegenRekeningIban?: string, transactieDatum?: any, tegenRekening?: { iban?: string, rekeninghouder?: string }, journaalpost?: { id?: number, isAutomatischGeboekt?: boolean, afspraak?: { id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, burger?: { voornamen?: string, voorletters?: string, achternaam?: string, id?: number }, rubriek?: { id?: number, naam?: string } }, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } } } };
 
 export type GetTransactionItemFormDataQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetTransactionItemFormDataQuery = { rubrieken?: Array<{ id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string } }>, afspraken?: Array<{ id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, validFrom?: any, validThrough?: any, betaalinstructie?: { byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string }, burger?: { id?: number, bsn?: number, voornamen?: string, voorletters?: string, achternaam?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, postadres?: { id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string }, rubriek?: { id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } }, matchingAfspraken?: Array<{ id?: number, credit?: boolean, zoektermen?: Array<string>, bedrag?: any, omschrijving?: string, burger?: { voorletters?: string, voornamen?: string, achternaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string } }> }> };
-
-export type GetTransactiesQueryVariables = Exact<{
-  offset: Scalars['Int'];
-  limit: Scalars['Int'];
-  filters?: InputMaybe<BankTransactionFilter>;
-}>;
-
-
-export type GetTransactiesQuery = { bankTransactionsPaged?: { banktransactions?: Array<{ id?: number, informationToAccountOwner?: string, statementLine?: string, bedrag?: any, isCredit?: boolean, tegenRekeningIban?: string, transactieDatum?: any }>, pageInfo?: { count?: number, limit?: number, start?: number } } };
 
 export type SearchTransactiesQueryVariables = Exact<{
   offset: Scalars['Int'];
@@ -2406,7 +2755,7 @@ export type SearchTransactiesQueryVariables = Exact<{
 }>;
 
 
-export type SearchTransactiesQuery = { searchTransacties?: { banktransactions?: Array<{ id?: number, informationToAccountOwner?: string, statementLine?: string, bedrag?: any, isCredit?: boolean, isGeboekt?: boolean, transactieDatum?: any, journaalpost?: { id?: number, rubriek?: { naam?: string } }, tegenRekening?: { iban?: string, rekeninghouder?: string } }>, pageInfo?: { count?: number, limit?: number, start?: number } } };
+export type SearchTransactiesQuery = { searchTransacties?: { banktransactions?: Array<{ id?: number, uuid?: string, informationToAccountOwner?: string, statementLine?: string, bedrag?: any, isCredit?: boolean, isGeboekt?: boolean, transactieDatum?: any, journaalpost?: { id?: number, rubriek?: { naam?: string } }, tegenRekening?: { iban?: string, rekeninghouder?: string } }>, pageInfo?: { count?: number, limit?: number, start?: number } } };
 
 export type GetUserActivitiesQueryVariables = Exact<{
   input?: InputMaybe<UserActivitiesPagedRequest>;
@@ -2954,81 +3303,6 @@ export function useCreateConfiguratieMutation(baseOptions?: Apollo.MutationHookO
 export type CreateConfiguratieMutationHookResult = ReturnType<typeof useCreateConfiguratieMutation>;
 export type CreateConfiguratieMutationResult = Apollo.MutationResult<CreateConfiguratieMutation>;
 export type CreateConfiguratieMutationOptions = Apollo.BaseMutationOptions<CreateConfiguratieMutation, CreateConfiguratieMutationVariables>;
-export const CreateCustomerStatementMessageDocument = gql`
-    mutation createCustomerStatementMessage($file: Upload!) {
-  createCustomerStatementMessage(file: $file) {
-    ok
-  }
-}
-    `;
-export type CreateCustomerStatementMessageMutationFn = Apollo.MutationFunction<CreateCustomerStatementMessageMutation, CreateCustomerStatementMessageMutationVariables>;
-
-/**
- * __useCreateCustomerStatementMessageMutation__
- *
- * To run a mutation, you first call `useCreateCustomerStatementMessageMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateCustomerStatementMessageMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [createCustomerStatementMessageMutation, { data, loading, error }] = useCreateCustomerStatementMessageMutation({
- *   variables: {
- *      file: // value for 'file'
- *   },
- * });
- */
-export function useCreateCustomerStatementMessageMutation(baseOptions?: Apollo.MutationHookOptions<CreateCustomerStatementMessageMutation, CreateCustomerStatementMessageMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<CreateCustomerStatementMessageMutation, CreateCustomerStatementMessageMutationVariables>(CreateCustomerStatementMessageDocument, options);
-      }
-export type CreateCustomerStatementMessageMutationHookResult = ReturnType<typeof useCreateCustomerStatementMessageMutation>;
-export type CreateCustomerStatementMessageMutationResult = Apollo.MutationResult<CreateCustomerStatementMessageMutation>;
-export type CreateCustomerStatementMessageMutationOptions = Apollo.BaseMutationOptions<CreateCustomerStatementMessageMutation, CreateCustomerStatementMessageMutationVariables>;
-export const CreateExportOverschrijvingenDocument = gql`
-    mutation createExportOverschrijvingen($startDatum: String!, $eindDatum: String!, $verwerkingDatum: String) {
-  createExportOverschrijvingen(
-    startDatum: $startDatum
-    eindDatum: $eindDatum
-    verwerkingDatum: $verwerkingDatum
-  ) {
-    ok
-    export {
-      id
-    }
-  }
-}
-    `;
-export type CreateExportOverschrijvingenMutationFn = Apollo.MutationFunction<CreateExportOverschrijvingenMutation, CreateExportOverschrijvingenMutationVariables>;
-
-/**
- * __useCreateExportOverschrijvingenMutation__
- *
- * To run a mutation, you first call `useCreateExportOverschrijvingenMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateExportOverschrijvingenMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [createExportOverschrijvingenMutation, { data, loading, error }] = useCreateExportOverschrijvingenMutation({
- *   variables: {
- *      startDatum: // value for 'startDatum'
- *      eindDatum: // value for 'eindDatum'
- *      verwerkingDatum: // value for 'verwerkingDatum'
- *   },
- * });
- */
-export function useCreateExportOverschrijvingenMutation(baseOptions?: Apollo.MutationHookOptions<CreateExportOverschrijvingenMutation, CreateExportOverschrijvingenMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<CreateExportOverschrijvingenMutation, CreateExportOverschrijvingenMutationVariables>(CreateExportOverschrijvingenDocument, options);
-      }
-export type CreateExportOverschrijvingenMutationHookResult = ReturnType<typeof useCreateExportOverschrijvingenMutation>;
-export type CreateExportOverschrijvingenMutationResult = Apollo.MutationResult<CreateExportOverschrijvingenMutation>;
-export type CreateExportOverschrijvingenMutationOptions = Apollo.BaseMutationOptions<CreateExportOverschrijvingenMutation, CreateExportOverschrijvingenMutationVariables>;
 export const CreateHuishoudenDocument = gql`
     mutation createHuishouden($burgerIds: [Int] = []) {
   createHuishouden(input: {burgerIds: $burgerIds}) {
@@ -3188,9 +3462,9 @@ export type CreateHuishoudenMutationHookResult = ReturnType<typeof useCreateHuis
 export type CreateHuishoudenMutationResult = Apollo.MutationResult<CreateHuishoudenMutation>;
 export type CreateHuishoudenMutationOptions = Apollo.BaseMutationOptions<CreateHuishoudenMutation, CreateHuishoudenMutationVariables>;
 export const CreateJournaalpostAfspraakDocument = gql`
-    mutation createJournaalpostAfspraak($transactionId: Int!, $afspraakId: Int!, $isAutomatischGeboekt: Boolean = false) {
+    mutation createJournaalpostAfspraak($transactionId: String!, $afspraakId: Int!, $isAutomatischGeboekt: Boolean = false) {
   createJournaalpostAfspraak(
-    input: [{transactionId: $transactionId, afspraakId: $afspraakId, isAutomatischGeboekt: $isAutomatischGeboekt}]
+    input: [{transactionUuid: $transactionId, afspraakId: $afspraakId, isAutomatischGeboekt: $isAutomatischGeboekt}]
   ) {
     ok
     journaalposten {
@@ -3231,9 +3505,9 @@ export type CreateJournaalpostAfspraakMutationHookResult = ReturnType<typeof use
 export type CreateJournaalpostAfspraakMutationResult = Apollo.MutationResult<CreateJournaalpostAfspraakMutation>;
 export type CreateJournaalpostAfspraakMutationOptions = Apollo.BaseMutationOptions<CreateJournaalpostAfspraakMutation, CreateJournaalpostAfspraakMutationVariables>;
 export const CreateJournaalpostGrootboekrekeningDocument = gql`
-    mutation createJournaalpostGrootboekrekening($transactionId: Int!, $grootboekrekeningId: String!) {
+    mutation createJournaalpostGrootboekrekening($transactionId: String!, $grootboekrekeningId: String!) {
   createJournaalpostGrootboekrekening(
-    input: {transactionId: $transactionId, grootboekrekeningId: $grootboekrekeningId, isAutomatischGeboekt: false}
+    input: {transactionUuid: $transactionId, grootboekrekeningId: $grootboekrekeningId, isAutomatischGeboekt: false}
   ) {
     ok
     journaalpost {
@@ -3373,6 +3647,87 @@ export function useCreateAfdelingRekeningMutation(baseOptions?: Apollo.MutationH
 export type CreateAfdelingRekeningMutationHookResult = ReturnType<typeof useCreateAfdelingRekeningMutation>;
 export type CreateAfdelingRekeningMutationResult = Apollo.MutationResult<CreateAfdelingRekeningMutation>;
 export type CreateAfdelingRekeningMutationOptions = Apollo.BaseMutationOptions<CreateAfdelingRekeningMutation, CreateAfdelingRekeningMutationVariables>;
+export const CreatePaymentExportDocument = gql`
+    mutation createPaymentExport($input: CreatePaymentExportRequest!) {
+  PaymentExport_Create(input: $input) {
+    success
+  }
+}
+    `;
+export type CreatePaymentExportMutationFn = Apollo.MutationFunction<CreatePaymentExportMutation, CreatePaymentExportMutationVariables>;
+
+/**
+ * __useCreatePaymentExportMutation__
+ *
+ * To run a mutation, you first call `useCreatePaymentExportMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreatePaymentExportMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createPaymentExportMutation, { data, loading, error }] = useCreatePaymentExportMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreatePaymentExportMutation(baseOptions?: Apollo.MutationHookOptions<CreatePaymentExportMutation, CreatePaymentExportMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreatePaymentExportMutation, CreatePaymentExportMutationVariables>(CreatePaymentExportDocument, options);
+      }
+export type CreatePaymentExportMutationHookResult = ReturnType<typeof useCreatePaymentExportMutation>;
+export type CreatePaymentExportMutationResult = Apollo.MutationResult<CreatePaymentExportMutation>;
+export type CreatePaymentExportMutationOptions = Apollo.BaseMutationOptions<CreatePaymentExportMutation, CreatePaymentExportMutationVariables>;
+export const PaymentRecordService_CreatePaymentRecordsDocument = gql`
+    mutation PaymentRecordService_CreatePaymentRecords($from: BigInt!, $to: BigInt!, $processAt: BigInt) {
+  PaymentRecordService_CreatePaymentRecords(
+    input: {from: $from, to: $to, processAt: $processAt}
+  ) {
+    count
+    data {
+      id
+      agreement {
+        burger {
+          achternaam
+          voornamen
+          id
+          startDate
+        }
+      }
+    }
+  }
+}
+    `;
+export type PaymentRecordService_CreatePaymentRecordsMutationFn = Apollo.MutationFunction<PaymentRecordService_CreatePaymentRecordsMutation, PaymentRecordService_CreatePaymentRecordsMutationVariables>;
+
+/**
+ * __usePaymentRecordService_CreatePaymentRecordsMutation__
+ *
+ * To run a mutation, you first call `usePaymentRecordService_CreatePaymentRecordsMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `usePaymentRecordService_CreatePaymentRecordsMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [paymentRecordServiceCreatePaymentRecordsMutation, { data, loading, error }] = usePaymentRecordService_CreatePaymentRecordsMutation({
+ *   variables: {
+ *      from: // value for 'from'
+ *      to: // value for 'to'
+ *      processAt: // value for 'processAt'
+ *   },
+ * });
+ */
+export function usePaymentRecordService_CreatePaymentRecordsMutation(baseOptions?: Apollo.MutationHookOptions<PaymentRecordService_CreatePaymentRecordsMutation, PaymentRecordService_CreatePaymentRecordsMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<PaymentRecordService_CreatePaymentRecordsMutation, PaymentRecordService_CreatePaymentRecordsMutationVariables>(PaymentRecordService_CreatePaymentRecordsDocument, options);
+      }
+export type PaymentRecordService_CreatePaymentRecordsMutationHookResult = ReturnType<typeof usePaymentRecordService_CreatePaymentRecordsMutation>;
+export type PaymentRecordService_CreatePaymentRecordsMutationResult = Apollo.MutationResult<PaymentRecordService_CreatePaymentRecordsMutation>;
+export type PaymentRecordService_CreatePaymentRecordsMutationOptions = Apollo.BaseMutationOptions<PaymentRecordService_CreatePaymentRecordsMutation, PaymentRecordService_CreatePaymentRecordsMutationVariables>;
 export const CreateAfdelingPostadresDocument = gql`
     mutation createAfdelingPostadres($afdelingId: Int!, $huisnummer: String!, $plaatsnaam: String!, $postcode: String!, $straatnaam: String!) {
   createPostadres(
@@ -3813,9 +4168,9 @@ export type DeleteConfiguratieMutationHookResult = ReturnType<typeof useDeleteCo
 export type DeleteConfiguratieMutationResult = Apollo.MutationResult<DeleteConfiguratieMutation>;
 export type DeleteConfiguratieMutationOptions = Apollo.BaseMutationOptions<DeleteConfiguratieMutation, DeleteConfiguratieMutationVariables>;
 export const DeleteCustomerStatementMessageDocument = gql`
-    mutation deleteCustomerStatementMessage($id: Int!) {
-  deleteCustomerStatementMessage(id: $id) {
-    ok
+    mutation deleteCustomerStatementMessage($input: CSMDeleteRequest!) {
+  CSM_Delete(input: $input) {
+    deleted
   }
 }
     `;
@@ -3834,7 +4189,7 @@ export type DeleteCustomerStatementMessageMutationFn = Apollo.MutationFunction<D
  * @example
  * const [deleteCustomerStatementMessageMutation, { data, loading, error }] = useDeleteCustomerStatementMessageMutation({
  *   variables: {
- *      id: // value for 'id'
+ *      input: // value for 'input'
  *   },
  * });
  */
@@ -4819,6 +5174,42 @@ export function useUpdateOrganisatieMutation(baseOptions?: Apollo.MutationHookOp
 export type UpdateOrganisatieMutationHookResult = ReturnType<typeof useUpdateOrganisatieMutation>;
 export type UpdateOrganisatieMutationResult = Apollo.MutationResult<UpdateOrganisatieMutation>;
 export type UpdateOrganisatieMutationOptions = Apollo.BaseMutationOptions<UpdateOrganisatieMutation, UpdateOrganisatieMutationVariables>;
+export const UpdatePaymentRecordProcessingDateDocument = gql`
+    mutation updatePaymentRecordProcessingDate($id: String!, $processAt: BigInt!) {
+  PaymentRecordService_UpdateProcessingDates(
+    input: {updates: {id: $id, processAt: $processAt}}
+  ) {
+    success
+  }
+}
+    `;
+export type UpdatePaymentRecordProcessingDateMutationFn = Apollo.MutationFunction<UpdatePaymentRecordProcessingDateMutation, UpdatePaymentRecordProcessingDateMutationVariables>;
+
+/**
+ * __useUpdatePaymentRecordProcessingDateMutation__
+ *
+ * To run a mutation, you first call `useUpdatePaymentRecordProcessingDateMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdatePaymentRecordProcessingDateMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updatePaymentRecordProcessingDateMutation, { data, loading, error }] = useUpdatePaymentRecordProcessingDateMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      processAt: // value for 'processAt'
+ *   },
+ * });
+ */
+export function useUpdatePaymentRecordProcessingDateMutation(baseOptions?: Apollo.MutationHookOptions<UpdatePaymentRecordProcessingDateMutation, UpdatePaymentRecordProcessingDateMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdatePaymentRecordProcessingDateMutation, UpdatePaymentRecordProcessingDateMutationVariables>(UpdatePaymentRecordProcessingDateDocument, options);
+      }
+export type UpdatePaymentRecordProcessingDateMutationHookResult = ReturnType<typeof useUpdatePaymentRecordProcessingDateMutation>;
+export type UpdatePaymentRecordProcessingDateMutationResult = Apollo.MutationResult<UpdatePaymentRecordProcessingDateMutation>;
+export type UpdatePaymentRecordProcessingDateMutationOptions = Apollo.BaseMutationOptions<UpdatePaymentRecordProcessingDateMutation, UpdatePaymentRecordProcessingDateMutationVariables>;
 export const UpdatePostadresDocument = gql`
     mutation updatePostadres($id: String!, $straatnaam: String, $huisnummer: String, $postcode: String, $plaatsnaam: String) {
   updatePostadres(
@@ -4935,6 +5326,40 @@ export function useUpdateRubriekMutation(baseOptions?: Apollo.MutationHookOption
 export type UpdateRubriekMutationHookResult = ReturnType<typeof useUpdateRubriekMutation>;
 export type UpdateRubriekMutationResult = Apollo.MutationResult<UpdateRubriekMutation>;
 export type UpdateRubriekMutationOptions = Apollo.BaseMutationOptions<UpdateRubriekMutation, UpdateRubriekMutationVariables>;
+export const UploadCustomerStatementMessageDocument = gql`
+    mutation UploadCustomerStatementMessage($input: CSMUploadRequest!) {
+  CSM_Upload(input: $input) {
+    id
+    name
+  }
+}
+    `;
+export type UploadCustomerStatementMessageMutationFn = Apollo.MutationFunction<UploadCustomerStatementMessageMutation, UploadCustomerStatementMessageMutationVariables>;
+
+/**
+ * __useUploadCustomerStatementMessageMutation__
+ *
+ * To run a mutation, you first call `useUploadCustomerStatementMessageMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUploadCustomerStatementMessageMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [uploadCustomerStatementMessageMutation, { data, loading, error }] = useUploadCustomerStatementMessageMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUploadCustomerStatementMessageMutation(baseOptions?: Apollo.MutationHookOptions<UploadCustomerStatementMessageMutation, UploadCustomerStatementMessageMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UploadCustomerStatementMessageMutation, UploadCustomerStatementMessageMutationVariables>(UploadCustomerStatementMessageDocument, options);
+      }
+export type UploadCustomerStatementMessageMutationHookResult = ReturnType<typeof useUploadCustomerStatementMessageMutation>;
+export type UploadCustomerStatementMessageMutationResult = Apollo.MutationResult<UploadCustomerStatementMessageMutation>;
+export type UploadCustomerStatementMessageMutationOptions = Apollo.BaseMutationOptions<UploadCustomerStatementMessageMutation, UploadCustomerStatementMessageMutationVariables>;
 export const GetAdditionalTransactionDataDocument = gql`
     query getAdditionalTransactionData($ibans: [String!], $transaction_ids: [Int!]) {
   rekeningenByIbans(ibans: $ibans) {
@@ -5322,6 +5747,7 @@ export const GetBurgerDetailsDocument = gql`
     }
     afspraken {
       id
+      uuid
       bedrag
       credit
       omschrijving
@@ -5990,103 +6416,54 @@ export function useGetCreateAfspraakFormDataLazyQuery(baseOptions?: Apollo.LazyQ
 export type GetCreateAfspraakFormDataQueryHookResult = ReturnType<typeof useGetCreateAfspraakFormDataQuery>;
 export type GetCreateAfspraakFormDataLazyQueryHookResult = ReturnType<typeof useGetCreateAfspraakFormDataLazyQuery>;
 export type GetCreateAfspraakFormDataQueryResult = Apollo.QueryResult<GetCreateAfspraakFormDataQuery, GetCreateAfspraakFormDataQueryVariables>;
-export const GetCsmsDocument = gql`
-    query getCsms {
-  customerStatementMessages {
-    id
-    filename
-    uploadDate
-    accountIdentification
-    closingAvailableFunds
-    closingBalance
-    forwardAvailableBalance
-    openingBalance
-    relatedReference
-    sequenceNumber
-    transactionReferenceNumber
-  }
-}
-    `;
-
-/**
- * __useGetCsmsQuery__
- *
- * To run a query within a React component, call `useGetCsmsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetCsmsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetCsmsQuery({
- *   variables: {
- *   },
- * });
- */
-export function useGetCsmsQuery(baseOptions?: Apollo.QueryHookOptions<GetCsmsQuery, GetCsmsQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetCsmsQuery, GetCsmsQueryVariables>(GetCsmsDocument, options);
-      }
-export function useGetCsmsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetCsmsQuery, GetCsmsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetCsmsQuery, GetCsmsQueryVariables>(GetCsmsDocument, options);
-        }
-export type GetCsmsQueryHookResult = ReturnType<typeof useGetCsmsQuery>;
-export type GetCsmsLazyQueryHookResult = ReturnType<typeof useGetCsmsLazyQuery>;
-export type GetCsmsQueryResult = Apollo.QueryResult<GetCsmsQuery, GetCsmsQueryVariables>;
-export const GetExportsPagedDocument = gql`
-    query getExportsPaged($offset: Int!, $limit: Int!) {
-  exportsPaged(offset: $offset, limit: $limit) {
-    exports {
+export const GetCsmsPagedDocument = gql`
+    query getCsmsPaged($input: CSMPagedRequest!) {
+  CSM_GetPaged(input: $input) {
+    data {
       id
-      naam
-      timestamp
-      startDatum
-      eindDatum
-      verwerkingDatum
-      sha256
-      overschrijvingen {
+      transactionCount
+      file {
+        name
         id
-        bedrag
+        uploadedAt
       }
     }
-    pageInfo {
-      count
-      limit
-      start
+    PageInfo {
+      total_count
+      skip
+      take
     }
   }
 }
     `;
 
 /**
- * __useGetExportsPagedQuery__
+ * __useGetCsmsPagedQuery__
  *
- * To run a query within a React component, call `useGetExportsPagedQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetExportsPagedQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetCsmsPagedQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCsmsPagedQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetExportsPagedQuery({
+ * const { data, loading, error } = useGetCsmsPagedQuery({
  *   variables: {
- *      offset: // value for 'offset'
- *      limit: // value for 'limit'
+ *      input: // value for 'input'
  *   },
  * });
  */
-export function useGetExportsPagedQuery(baseOptions: Apollo.QueryHookOptions<GetExportsPagedQuery, GetExportsPagedQueryVariables>) {
+export function useGetCsmsPagedQuery(baseOptions: Apollo.QueryHookOptions<GetCsmsPagedQuery, GetCsmsPagedQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetExportsPagedQuery, GetExportsPagedQueryVariables>(GetExportsPagedDocument, options);
+        return Apollo.useQuery<GetCsmsPagedQuery, GetCsmsPagedQueryVariables>(GetCsmsPagedDocument, options);
       }
-export function useGetExportsPagedLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetExportsPagedQuery, GetExportsPagedQueryVariables>) {
+export function useGetCsmsPagedLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetCsmsPagedQuery, GetCsmsPagedQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetExportsPagedQuery, GetExportsPagedQueryVariables>(GetExportsPagedDocument, options);
+          return Apollo.useLazyQuery<GetCsmsPagedQuery, GetCsmsPagedQueryVariables>(GetCsmsPagedDocument, options);
         }
-export type GetExportsPagedQueryHookResult = ReturnType<typeof useGetExportsPagedQuery>;
-export type GetExportsPagedLazyQueryHookResult = ReturnType<typeof useGetExportsPagedLazyQuery>;
-export type GetExportsPagedQueryResult = Apollo.QueryResult<GetExportsPagedQuery, GetExportsPagedQueryVariables>;
+export type GetCsmsPagedQueryHookResult = ReturnType<typeof useGetCsmsPagedQuery>;
+export type GetCsmsPagedLazyQueryHookResult = ReturnType<typeof useGetCsmsPagedLazyQuery>;
+export type GetCsmsPagedQueryResult = Apollo.QueryResult<GetCsmsPagedQuery, GetCsmsPagedQueryVariables>;
 export const GetHuishoudenDocument = gql`
     query getHuishouden($id: Int!) {
   huishouden(id: $id) {
@@ -6228,6 +6605,92 @@ export function useGetHuishoudensLazyQuery(baseOptions?: Apollo.LazyQueryHookOpt
 export type GetHuishoudensQueryHookResult = ReturnType<typeof useGetHuishoudensQuery>;
 export type GetHuishoudensLazyQueryHookResult = ReturnType<typeof useGetHuishoudensLazyQuery>;
 export type GetHuishoudensQueryResult = Apollo.QueryResult<GetHuishoudensQuery, GetHuishoudensQueryVariables>;
+export const GetNotExportedPaymentRecordsByIdDocument = gql`
+    query getNotExportedPaymentRecordsById($from: BigInt, $to: BigInt) {
+  PaymentRecordService_GetNotExportedPaymentRecordDates(
+    input: {from: $from, to: $to}
+  ) {
+    data {
+      date
+      id
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetNotExportedPaymentRecordsByIdQuery__
+ *
+ * To run a query within a React component, call `useGetNotExportedPaymentRecordsByIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetNotExportedPaymentRecordsByIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetNotExportedPaymentRecordsByIdQuery({
+ *   variables: {
+ *      from: // value for 'from'
+ *      to: // value for 'to'
+ *   },
+ * });
+ */
+export function useGetNotExportedPaymentRecordsByIdQuery(baseOptions?: Apollo.QueryHookOptions<GetNotExportedPaymentRecordsByIdQuery, GetNotExportedPaymentRecordsByIdQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetNotExportedPaymentRecordsByIdQuery, GetNotExportedPaymentRecordsByIdQueryVariables>(GetNotExportedPaymentRecordsByIdDocument, options);
+      }
+export function useGetNotExportedPaymentRecordsByIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetNotExportedPaymentRecordsByIdQuery, GetNotExportedPaymentRecordsByIdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetNotExportedPaymentRecordsByIdQuery, GetNotExportedPaymentRecordsByIdQueryVariables>(GetNotExportedPaymentRecordsByIdDocument, options);
+        }
+export type GetNotExportedPaymentRecordsByIdQueryHookResult = ReturnType<typeof useGetNotExportedPaymentRecordsByIdQuery>;
+export type GetNotExportedPaymentRecordsByIdLazyQueryHookResult = ReturnType<typeof useGetNotExportedPaymentRecordsByIdLazyQuery>;
+export type GetNotExportedPaymentRecordsByIdQueryResult = Apollo.QueryResult<GetNotExportedPaymentRecordsByIdQuery, GetNotExportedPaymentRecordsByIdQueryVariables>;
+export const GetNotReconciledRecordsForAgreementsDocument = gql`
+    query getNotReconciledRecordsForAgreements($input: GetPaymentRecordsByAgreementsMessage!) {
+  PaymentRecordService_GetRecordsNotReconciledForAgreements(input: $input) {
+    data {
+      id
+      originalProcessingDate
+      processAt
+      paymentExportUuid
+      createdAt
+      amount
+      agreementUuid
+      accountName
+      accountIban
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetNotReconciledRecordsForAgreementsQuery__
+ *
+ * To run a query within a React component, call `useGetNotReconciledRecordsForAgreementsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetNotReconciledRecordsForAgreementsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetNotReconciledRecordsForAgreementsQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useGetNotReconciledRecordsForAgreementsQuery(baseOptions: Apollo.QueryHookOptions<GetNotReconciledRecordsForAgreementsQuery, GetNotReconciledRecordsForAgreementsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetNotReconciledRecordsForAgreementsQuery, GetNotReconciledRecordsForAgreementsQueryVariables>(GetNotReconciledRecordsForAgreementsDocument, options);
+      }
+export function useGetNotReconciledRecordsForAgreementsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetNotReconciledRecordsForAgreementsQuery, GetNotReconciledRecordsForAgreementsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetNotReconciledRecordsForAgreementsQuery, GetNotReconciledRecordsForAgreementsQueryVariables>(GetNotReconciledRecordsForAgreementsDocument, options);
+        }
+export type GetNotReconciledRecordsForAgreementsQueryHookResult = ReturnType<typeof useGetNotReconciledRecordsForAgreementsQuery>;
+export type GetNotReconciledRecordsForAgreementsLazyQueryHookResult = ReturnType<typeof useGetNotReconciledRecordsForAgreementsLazyQuery>;
+export type GetNotReconciledRecordsForAgreementsQueryResult = Apollo.QueryResult<GetNotReconciledRecordsForAgreementsQuery, GetNotReconciledRecordsForAgreementsQueryVariables>;
 export const GetOrganisatieDocument = gql`
     query getOrganisatie($id: Int!) {
   organisatie(id: $id) {
@@ -6382,6 +6845,206 @@ export function useGetSimpleOrganisatiesLazyQuery(baseOptions?: Apollo.LazyQuery
 export type GetSimpleOrganisatiesQueryHookResult = ReturnType<typeof useGetSimpleOrganisatiesQuery>;
 export type GetSimpleOrganisatiesLazyQueryHookResult = ReturnType<typeof useGetSimpleOrganisatiesLazyQuery>;
 export type GetSimpleOrganisatiesQueryResult = Apollo.QueryResult<GetSimpleOrganisatiesQuery, GetSimpleOrganisatiesQueryVariables>;
+export const GetPaymentExportDocument = gql`
+    query getPaymentExport($input: GetPaymentExportRequest!) {
+  PaymentExport_Get(input: $input) {
+    id
+    createdAt
+    startDate
+    endDate
+    file {
+      id
+      sha256
+    }
+    recordsInfo {
+      count
+      processingDates
+      totalAmount
+    }
+    records {
+      id
+      agreement {
+        omschrijving
+        tegenRekening {
+          rekeninghouder
+        }
+        burger {
+          achternaam
+          voornamen
+          id
+          startDate
+        }
+      }
+      amount
+      processAt
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetPaymentExportQuery__
+ *
+ * To run a query within a React component, call `useGetPaymentExportQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetPaymentExportQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetPaymentExportQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useGetPaymentExportQuery(baseOptions: Apollo.QueryHookOptions<GetPaymentExportQuery, GetPaymentExportQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetPaymentExportQuery, GetPaymentExportQueryVariables>(GetPaymentExportDocument, options);
+      }
+export function useGetPaymentExportLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetPaymentExportQuery, GetPaymentExportQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetPaymentExportQuery, GetPaymentExportQueryVariables>(GetPaymentExportDocument, options);
+        }
+export type GetPaymentExportQueryHookResult = ReturnType<typeof useGetPaymentExportQuery>;
+export type GetPaymentExportLazyQueryHookResult = ReturnType<typeof useGetPaymentExportLazyQuery>;
+export type GetPaymentExportQueryResult = Apollo.QueryResult<GetPaymentExportQuery, GetPaymentExportQueryVariables>;
+export const GetPaymentExportFileDocument = gql`
+    query getPaymentExportFile($input: DownloadPaymentExportRequest!) {
+  PaymentExport_GetFile(input: $input) {
+    id
+    name
+    fileString
+  }
+}
+    `;
+
+/**
+ * __useGetPaymentExportFileQuery__
+ *
+ * To run a query within a React component, call `useGetPaymentExportFileQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetPaymentExportFileQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetPaymentExportFileQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useGetPaymentExportFileQuery(baseOptions: Apollo.QueryHookOptions<GetPaymentExportFileQuery, GetPaymentExportFileQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetPaymentExportFileQuery, GetPaymentExportFileQueryVariables>(GetPaymentExportFileDocument, options);
+      }
+export function useGetPaymentExportFileLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetPaymentExportFileQuery, GetPaymentExportFileQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetPaymentExportFileQuery, GetPaymentExportFileQueryVariables>(GetPaymentExportFileDocument, options);
+        }
+export type GetPaymentExportFileQueryHookResult = ReturnType<typeof useGetPaymentExportFileQuery>;
+export type GetPaymentExportFileLazyQueryHookResult = ReturnType<typeof useGetPaymentExportFileLazyQuery>;
+export type GetPaymentExportFileQueryResult = Apollo.QueryResult<GetPaymentExportFileQuery, GetPaymentExportFileQueryVariables>;
+export const GetPaymentExportsPagedDocument = gql`
+    query getPaymentExportsPaged($input: PaymentExportsPagedRequest!) {
+  PaymentExport_GetPaged(input: $input) {
+    data {
+      id
+      createdAt
+      startDate
+      endDate
+      file {
+        id
+        sha256
+      }
+      recordsInfo {
+        count
+        processingDates
+        totalAmount
+      }
+    }
+    PageInfo {
+      total_count
+      skip
+      take
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetPaymentExportsPagedQuery__
+ *
+ * To run a query within a React component, call `useGetPaymentExportsPagedQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetPaymentExportsPagedQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetPaymentExportsPagedQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useGetPaymentExportsPagedQuery(baseOptions: Apollo.QueryHookOptions<GetPaymentExportsPagedQuery, GetPaymentExportsPagedQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetPaymentExportsPagedQuery, GetPaymentExportsPagedQueryVariables>(GetPaymentExportsPagedDocument, options);
+      }
+export function useGetPaymentExportsPagedLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetPaymentExportsPagedQuery, GetPaymentExportsPagedQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetPaymentExportsPagedQuery, GetPaymentExportsPagedQueryVariables>(GetPaymentExportsPagedDocument, options);
+        }
+export type GetPaymentExportsPagedQueryHookResult = ReturnType<typeof useGetPaymentExportsPagedQuery>;
+export type GetPaymentExportsPagedLazyQueryHookResult = ReturnType<typeof useGetPaymentExportsPagedLazyQuery>;
+export type GetPaymentExportsPagedQueryResult = Apollo.QueryResult<GetPaymentExportsPagedQuery, GetPaymentExportsPagedQueryVariables>;
+export const GetPaymentRecordsByIdDocument = gql`
+    query getPaymentRecordsById($input: PaymentRecordsById!) {
+  PaymentRecordService_GetPaymentRecordsById(input: $input) {
+    data {
+      id
+      agreement {
+        omschrijving
+        tegenRekening {
+          rekeninghouder
+        }
+      }
+      amount
+      processAt
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetPaymentRecordsByIdQuery__
+ *
+ * To run a query within a React component, call `useGetPaymentRecordsByIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetPaymentRecordsByIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetPaymentRecordsByIdQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useGetPaymentRecordsByIdQuery(baseOptions: Apollo.QueryHookOptions<GetPaymentRecordsByIdQuery, GetPaymentRecordsByIdQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetPaymentRecordsByIdQuery, GetPaymentRecordsByIdQueryVariables>(GetPaymentRecordsByIdDocument, options);
+      }
+export function useGetPaymentRecordsByIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetPaymentRecordsByIdQuery, GetPaymentRecordsByIdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetPaymentRecordsByIdQuery, GetPaymentRecordsByIdQueryVariables>(GetPaymentRecordsByIdDocument, options);
+        }
+export type GetPaymentRecordsByIdQueryHookResult = ReturnType<typeof useGetPaymentRecordsByIdQuery>;
+export type GetPaymentRecordsByIdLazyQueryHookResult = ReturnType<typeof useGetPaymentRecordsByIdLazyQuery>;
+export type GetPaymentRecordsByIdQueryResult = Apollo.QueryResult<GetPaymentRecordsByIdQuery, GetPaymentRecordsByIdQueryVariables>;
 export const GetRekeningDocument = gql`
     query getRekening($id: Int!) {
   rekening(id: $id) {
@@ -6763,9 +7426,10 @@ export const GetSignalsPagedDocument = gql`
       }
       journalEntries {
         id
+        transactionUuid
         transaction {
           id
-          bedrag
+          amount
         }
       }
       offByAmount
@@ -6966,9 +7630,9 @@ export type GetSimpleBurgersQueryHookResult = ReturnType<typeof useGetSimpleBurg
 export type GetSimpleBurgersLazyQueryHookResult = ReturnType<typeof useGetSimpleBurgersLazyQuery>;
 export type GetSimpleBurgersQueryResult = Apollo.QueryResult<GetSimpleBurgersQuery, GetSimpleBurgersQueryVariables>;
 export const GetTransactieDocument = gql`
-    query getTransactie($id: Int!) {
-  bankTransaction(id: $id) {
-    id
+    query getTransactie($uuid: String!) {
+  bankTransaction(uuid: $uuid) {
+    uuid
     informationToAccountOwner
     statementLine
     bedrag
@@ -7027,7 +7691,7 @@ export const GetTransactieDocument = gql`
  * @example
  * const { data, loading, error } = useGetTransactieQuery({
  *   variables: {
- *      id: // value for 'id'
+ *      uuid: // value for 'uuid'
  *   },
  * });
  */
@@ -7178,61 +7842,12 @@ export function useGetTransactionItemFormDataLazyQuery(baseOptions?: Apollo.Lazy
 export type GetTransactionItemFormDataQueryHookResult = ReturnType<typeof useGetTransactionItemFormDataQuery>;
 export type GetTransactionItemFormDataLazyQueryHookResult = ReturnType<typeof useGetTransactionItemFormDataLazyQuery>;
 export type GetTransactionItemFormDataQueryResult = Apollo.QueryResult<GetTransactionItemFormDataQuery, GetTransactionItemFormDataQueryVariables>;
-export const GetTransactiesDocument = gql`
-    query getTransacties($offset: Int!, $limit: Int!, $filters: BankTransactionFilter) {
-  bankTransactionsPaged(start: $offset, limit: $limit, filters: $filters) {
-    banktransactions {
-      id
-      informationToAccountOwner
-      statementLine
-      bedrag
-      isCredit
-      tegenRekeningIban
-      transactieDatum
-    }
-    pageInfo {
-      count
-      limit
-      start
-    }
-  }
-}
-    `;
-
-/**
- * __useGetTransactiesQuery__
- *
- * To run a query within a React component, call `useGetTransactiesQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetTransactiesQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetTransactiesQuery({
- *   variables: {
- *      offset: // value for 'offset'
- *      limit: // value for 'limit'
- *      filters: // value for 'filters'
- *   },
- * });
- */
-export function useGetTransactiesQuery(baseOptions: Apollo.QueryHookOptions<GetTransactiesQuery, GetTransactiesQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetTransactiesQuery, GetTransactiesQueryVariables>(GetTransactiesDocument, options);
-      }
-export function useGetTransactiesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetTransactiesQuery, GetTransactiesQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetTransactiesQuery, GetTransactiesQueryVariables>(GetTransactiesDocument, options);
-        }
-export type GetTransactiesQueryHookResult = ReturnType<typeof useGetTransactiesQuery>;
-export type GetTransactiesLazyQueryHookResult = ReturnType<typeof useGetTransactiesLazyQuery>;
-export type GetTransactiesQueryResult = Apollo.QueryResult<GetTransactiesQuery, GetTransactiesQueryVariables>;
 export const SearchTransactiesDocument = gql`
     query searchTransacties($offset: Int!, $limit: Int!, $filters: BankTransactionSearchFilter) {
   searchTransacties(offset: $offset, limit: $limit, filters: $filters) {
     banktransactions {
       id
+      uuid
       informationToAccountOwner
       statementLine
       bedrag

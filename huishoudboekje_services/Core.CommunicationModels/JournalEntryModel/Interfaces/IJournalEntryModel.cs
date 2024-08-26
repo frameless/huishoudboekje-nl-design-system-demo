@@ -8,5 +8,4 @@ public interface IJournalEntryModel
   public bool IsAutomaticallyReconciled { get; }
   public string AgreementUuid { get; }
   public string BankTransactionUuid { get; }
-  public string StatementUuid { get; }
 }

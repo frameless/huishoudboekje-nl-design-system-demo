@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System.Globalization;
+using System.Net;
 using System.Net.Http.Json;
 using System.Text.Json;
 using AlarmService.Logic.Producers;
@@ -8,11 +9,12 @@ using Core.ErrorHandling.Exceptions;
 using Core.utils.DataTypes;
 using Grpc.Core;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 
 namespace AlarmService.MessageQueue.Producers;
 
 // This is a class only used while transactions & journalentries are NOT in their new architecture. This should be a regular producer later
-public class CheckAlarmHttpProducer(IConfiguration config) : ICheckAlarmProducer
+public class CheckAlarmHttpProducer(IConfiguration config, ILogger<CheckAlarmHttpProducer> logger) : ICheckAlarmProducer
 {
   private string DATETIME_FORMAT = "yyyy-MM-dd";
 
@@ -167,7 +169,7 @@ public class CheckAlarmHttpProducer(IConfiguration config) : ICheckAlarmProducer
     return new JournalEntryModel()
     {
       Amount = transaction.bedrag,
-      Date = ((DateTimeOffset)transaction.transactie_datum).ToUnixTimeSeconds(),
+      Date = ((DateTimeOffset)DateTime.ParseExact(transaction.transactie_datum, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture)).ToUnixTimeSeconds(),
       AgreementUuid = agreementUUID,
       BankTransactionUuid = transaction.uuid,
       UUID = transaction.journalentry_uuid
@@ -227,10 +229,6 @@ public class CheckAlarmHttpProducer(IConfiguration config) : ICheckAlarmProducer
   internal struct Transaction
   {
     public int bedrag { get; set; }
-
-    public int customer_statement_message_id { get; set; }
-
-    public int id { get; set; }
     public string uuid { get; set; }
 
     public string information_to_account_owner { get; set; }
@@ -242,7 +240,7 @@ public class CheckAlarmHttpProducer(IConfiguration config) : ICheckAlarmProducer
     public string tegen_rekening { get; set; }
     public string journalentry_uuid { get; set; }
 
-    public DateTime transactie_datum { get; set; }
+    public string transactie_datum { get; set; }
   }
 
   internal struct Data

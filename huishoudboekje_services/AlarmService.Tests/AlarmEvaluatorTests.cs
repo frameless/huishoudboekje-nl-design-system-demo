@@ -16,6 +16,7 @@ using Core.CommunicationModels.SignalModel.Interfaces;
 using Core.utils.DataTypes;
 using Core.utils.DateTimeProvider;
 using FakeItEasy;
+using Microsoft.Extensions.Logging;
 
 namespace AlarmService.Tests;
 
@@ -27,6 +28,7 @@ public class AlarmEvaluatorTests
   private IAlarmRepository _fakeAlarmRepository;
   private ISignalRepository _fakeSignalRepository;
   private ICheckAlarmProducer _fakeProducer;
+  private ILogger<EvaluatorService> _fakeLogger;
   private readonly DateTimeProvider _realDateTimeProvider = new();
 
   private void FakeRepos()
@@ -35,6 +37,7 @@ public class AlarmEvaluatorTests
     _fakeSignalService = A.Fake<ISignalService>();
     _fakeAlarmRepository = A.Fake<IAlarmRepository>();
     _fakeSignalRepository = A.Fake<ISignalRepository>();
+    _fakeLogger = A.Fake<ILogger<EvaluatorService>>();
     _evaluationResultService = new EvaluationResultService(_fakeAlarmRepository, _fakeSignalRepository);
     _fakeProducer = A.Fake<ICheckAlarmProducer>();
 
@@ -741,7 +744,8 @@ public class AlarmEvaluatorTests
       producer ?? _fakeProducer,
       dateTimeProvider ?? _realDateTimeProvider,
       new CheckOnDateHelper(_realDateTimeProvider),
-      new EvaluationHelper(_realDateTimeProvider));
+      new EvaluationHelper(_realDateTimeProvider),
+      _fakeLogger);
   }
 
   private IDateTimeProvider CreateFakeDateTimeProvider(long unixNow, DateTime? today = null)

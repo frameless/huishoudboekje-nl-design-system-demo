@@ -16,7 +16,7 @@
             </MsgRcpt>
         </GrpHdr>
         <Stmt>
-            <Id>15111000</Id>
+            <Id>5724938</Id>
             <ElctrncSeqNb>1</ElctrncSeqNb>
             <LglSeqNb>1</LglSeqNb>
             <CreDtTm>2021-08-04T04:09:10.259Z</CreDtTm>
@@ -26,9 +26,7 @@
             </FrToDt>
             <Acct>
                 <Id>
-                    <Othr>
-                        <Id>105084986</Id>
-                    </Othr>
+                    <IBAN>NL36ABNA5632579034</IBAN>
                 </Id>
                 <Tp>
                     <Prtry>IBDA_DDA</Prtry>

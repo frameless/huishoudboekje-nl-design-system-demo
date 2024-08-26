@@ -17,7 +17,7 @@ class AlarmEvaluation:
         logging.debug(f"AlarmEvaluation: initialized")
 
     @staticmethod
-    def create(agreementToAlarms: dict[str, str], journalEntryToTransaction: dict, citizensToSaldoCheck: list[str], alarmToCitizen: dict[str, str], csmIdToUuid: dict, saldoThreshold: int = 0):
+    def create(agreementToAlarms: dict[str, str], journalEntryToTransaction: dict, citizensToSaldoCheck: list[str], alarmToCitizen: dict[str, str], saldoThreshold: int = 0):
         logging.debug(f"AlarmEvaluation: creating message...")
 
         reconilliatedJournalEntries = []
@@ -35,11 +35,9 @@ class AlarmEvaluation:
                 BankTransactionUuid=banktransaction["uuid"],
                 Date=int(date.timestamp()),
                 IsAutomaticallyReconciled=journalentry["is_automatisch_geboekt"],
-                StatementUuid=csmIdToUuid[banktransaction["customer_statement_message_id"]],
                 Amount=amount
             )
             reconilliatedJournalEntries.append(model.to_dict())
-
 
         checkAlarmsReconciledItem = CheckAlarmsReconciledMessage(
             AgreementToAlarm=agreementToAlarms,
@@ -62,41 +60,46 @@ class AlarmEvaluation:
             raise GraphQLError("Error connecting to alarmservice")
 
         if checkAlarmsReconciledItem.AgreementToAlarm is not None and len(checkAlarmsReconciledItem.AgreementToAlarm) > 0 \
-            and checkAlarmsReconciledItem.AlarmToCitizen is not None and len(checkAlarmsReconciledItem.AlarmToCitizen) > 0 \
-            and checkAlarmsReconciledItem.ReconciledJournalEntries is not None and len(checkAlarmsReconciledItem.ReconciledJournalEntries) > 0:
+                and checkAlarmsReconciledItem.AlarmToCitizen is not None and len(checkAlarmsReconciledItem.AlarmToCitizen) > 0 \
+                and checkAlarmsReconciledItem.ReconciledJournalEntries is not None and len(checkAlarmsReconciledItem.ReconciledJournalEntries) > 0:
 
             checkAlarmsReconciledMessage = {
                 **checkAlarmsReconciledItem.to_dict()
             }
 
-            logging.debug(f"Sending alarm evaluation request to message broker...")
+            logging.debug(
+                f"Sending alarm evaluation request to message broker...")
             reconiledChannel = connection.channel()
-            reconiledChannel.queue_declare(queue='check-alarms-reconiled', durable=True)
+            reconiledChannel.queue_declare(
+                queue='check-alarms-reconiled', durable=True)
             reconiledBody = json.dumps(checkAlarmsReconciledMessage)
             reconiledChannel.basic_publish(
                 exchange='',
-                routing_key='check-alarms-reconiled',	
+                routing_key='check-alarms-reconiled',
                 body=reconiledBody,
                 properties=pika.BasicProperties(
                     delivery_mode=2,  # make message persistent
                 ))
-            logging.info(f"AlarmEvaluation: alarm evaluation message send to message broker")
+            logging.info(
+                f"AlarmEvaluation: alarm evaluation message send to message broker")
 
-        if checkSaldosItem.AffectedCitizens is not None and len(checkSaldosItem.AffectedCitizens) > 0:    
+        if checkSaldosItem.AffectedCitizens is not None and len(checkSaldosItem.AffectedCitizens) > 0:
             checkSaldosMessage = {
                 **checkSaldosItem.to_dict()
             }
-            logging.debug(f"Sending saldo evaluation request to message broker...")
+            logging.debug(
+                f"Sending saldo evaluation request to message broker...")
             saldoChannel = connection.channel()
             saldoChannel.queue_declare(queue='check-saldos', durable=True)
             saldoBody = json.dumps(checkSaldosMessage)
             saldoChannel.basic_publish(
                 exchange='',
-                routing_key='check-saldos',	
+                routing_key='check-saldos',
                 body=saldoBody,
                 properties=pika.BasicProperties(
                     delivery_mode=2,  # make message persistent
                 ))
-            logging.info(f"AlarmEvaluation: saldo evaluation message send to message broker")
-        
+            logging.info(
+                f"AlarmEvaluation: saldo evaluation message send to message broker")
+
         connection.close()

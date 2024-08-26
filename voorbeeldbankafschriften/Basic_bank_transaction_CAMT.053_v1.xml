@@ -3,16 +3,16 @@
     <BkToCstmrStmt>
         <GrpHdr>
             <MsgId>588d0a9f-439d-4410-8a3e-1354c2a9c55e</MsgId>
-            <CreDtTm>2023-10-27T13:58:31.802216</CreDtTm>
+            <CreDtTm>2024-07-18T10:40:39</CreDtTm>
             <MsgPgntn>
                 <PgNb>1</PgNb>
                 <LastPgInd>true</LastPgInd>
             </MsgPgntn>
         </GrpHdr>
         <Stmt>
-            <Id>1</Id>
+            <Id>8687396</Id>
             <ElctrncSeqNb>1</ElctrncSeqNb>
-            <CreDtTm>2023-10-27T13:58:31.802216</CreDtTm>
+            <CreDtTm>2024-07-18T10:40:39</CreDtTm>
             <Acct>
                 <Id>
                     <IBAN>NL36ABNA5632579034</IBAN>

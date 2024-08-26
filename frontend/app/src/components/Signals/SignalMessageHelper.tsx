@@ -1,34 +1,35 @@
-import { Trans, useTranslation } from "react-i18next"
-import { Journaalpost, SignalData } from "../../generated/graphql"
-import { currencyFormat2, formatBurgerName } from "../../utils/things"
+import {Trans, useTranslation} from "react-i18next"
+import {Journaalpost, SignalData} from "../../generated/graphql"
+import {currencyFormat2, formatBurgerName} from "../../utils/things"
 import AuditLogLink from "../Gebeurtenissen/AuditLogLink"
-import { AppRoutes } from "../../config/routes"
-import { ListItem, UnorderedList } from "@chakra-ui/react"
+import {AppRoutes} from "../../config/routes"
+import {ListItem, UnorderedList} from "@chakra-ui/react"
+import {t} from "i18next"
 
-export function createSignalMessage(signal: SignalData){
+export function createSignalMessage(signal: SignalData) {
     let result = <Trans i18nKey={"signals.genericSignal"} />
-    switch(signal.signalType) { 
-        case 1: { 
+    switch (signal.signalType) {
+        case 1: {
             result = createDateSignalMessage(signal)
             break
-        } 
-        case 2: { 
+        }
+        case 2: {
             result = createAmountSignalMessage(signal)
             break
-        } 
-        case 3: { 
+        }
+        case 3: {
             result = createMultipleTransactionsSignalMessage(signal)
             break
-        } 
-        case 4: { 
+        }
+        case 4: {
             result = createNegativeSaldoSignalMessage(signal)
             break
         }
     }
-    return result		
+    return result
 }
 
-function createDateSignalMessage(signal: SignalData){
+function createDateSignalMessage(signal: SignalData) {
     const values = {
         agreementDescription: signal.agreement?.omschrijving,
         citizenName: formatBurgerName(signal.citizen),
@@ -40,15 +41,15 @@ function createDateSignalMessage(signal: SignalData){
     return <Trans i18nKey={"signals.dateSignalMessage"} values={values} components={components} />;
 }
 
-function createAmountSignalMessage(signal: SignalData){
-	const {t} = useTranslation();
-    const journalEntries : Journaalpost[] = signal.journalEntries ? signal.journalEntries : []
+function createAmountSignalMessage(signal: SignalData) {
+    const {t} = useTranslation();
+    const journalEntries: Journaalpost[] = signal.journalEntries ? signal.journalEntries : []
     const journalEntry = journalEntries[0]
     const values = {
         amountDifference: signal.offByAmount ? currencyFormat2(true).format(signal.offByAmount / 100) : t("signals.amountUnknown"),
-        agreementDescription: signal.agreement?.omschrijving, 
+        agreementDescription: signal.agreement?.omschrijving,
         citizenName: formatBurgerName(signal.citizen),
-        transactionAmount: journalEntry.transaction?.bedrag
+        transactionAmount: journalEntry.transaction?.amount ? currencyFormat2(true).format(journalEntry.transaction?.amount / 100) : t("signals.amountUnknown")
     };
     const components = {
         strong: <strong />,
@@ -59,7 +60,7 @@ function createAmountSignalMessage(signal: SignalData){
     return <Trans i18nKey={"signals.amountSignalMessage"} values={values} components={components} />;
 }
 
-function createMultipleTransactionsSignalMessage(signal: SignalData){
+function createMultipleTransactionsSignalMessage(signal: SignalData) {
     const values = {
         agreementDescription: signal.agreement?.omschrijving,
         citizenName: formatBurgerName(signal.citizen),
@@ -72,7 +73,7 @@ function createMultipleTransactionsSignalMessage(signal: SignalData){
     return <Trans i18nKey={"signals.multipleTransactionsSignalMessage"} values={values} components={components} />;
 }
 
-function createNegativeSaldoSignalMessage(signal: SignalData){
+function createNegativeSaldoSignalMessage(signal: SignalData) {
     const values = {
         citizenName: formatBurgerName(signal.citizen),
     };
@@ -82,24 +83,24 @@ function createNegativeSaldoSignalMessage(signal: SignalData){
     return <Trans i18nKey={"signals.negativeSaldoeSignalMessage"} values={values} components={components} />;
 }
 
-function getCitizenLink(signal: SignalData){
+function getCitizenLink(signal: SignalData) {
     return <AuditLogLink to={AppRoutes.ViewBurger(String(signal.citizen?.id))}></AuditLogLink>
 }
 
-function getAgreementLink(signal: SignalData){
+function getAgreementLink(signal: SignalData) {
     return <AuditLogLink to={AppRoutes.ViewAfspraak(String(signal.agreement?.id))}></AuditLogLink>
 }
 
-function getTransationLink(journalEntry: Journaalpost){
+function getTransationLink(journalEntry: Journaalpost) {
     const transactionId = journalEntry.transaction?.id
     return <AuditLogLink to={AppRoutes.ViewTransactie(String(transactionId))}></AuditLogLink>
 }
 
-function getTransactionLinks(signal: SignalData){
-    const journalEntries : Journaalpost[] = signal.journalEntries ? signal.journalEntries : []
+function getTransactionLinks(signal: SignalData) {
+    const journalEntries: Journaalpost[] = signal.journalEntries ? signal.journalEntries : []
     return <UnorderedList>
-            {journalEntries.map((entry) => (
-                <ListItem><AuditLogLink to={AppRoutes.ViewTransactie(String(entry.transaction?.id))}>{entry.transaction?.bedrag}</AuditLogLink></ListItem>
-            ))}
-        </UnorderedList>
+        {journalEntries.map((entry) => (
+            <ListItem><AuditLogLink to={AppRoutes.ViewTransactie(String(entry.transaction?.id))}>{entry.transaction?.amount ? currencyFormat2(true).format(entry.transaction?.amount / 100) : t("signals.amountUnknown")}</AuditLogLink></ListItem>
+        ))}
+    </UnorderedList>
 }

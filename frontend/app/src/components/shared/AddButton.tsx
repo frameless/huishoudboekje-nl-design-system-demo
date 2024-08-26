@@ -12,7 +12,7 @@ const AddButton: React.FC<AddButtonProps> = ({onClick, children, ...props}) => {
 	const {t} = useTranslation();
 
 	return (
-		<Button leftIcon={<AddIcon />} colorScheme={"primary"} size={"sm"} onClick={onClick} {...props}>
+		<Button colorScheme={"primary"} size={"sm"} onClick={onClick} {...props}>
 			{children || t("global.actions.add")}
 		</Button>
 	);

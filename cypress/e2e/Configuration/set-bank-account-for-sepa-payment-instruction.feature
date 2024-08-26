@@ -53,10 +53,11 @@ Feature: set bank account for sepa payment instruction
     Then the text 'Elke maand op de 1e' is displayed
     Then the text 'Vanaf 01-05-2024 t/m ∞' is displayed
 
-    When I navigate to the page '/bankzaken/betaalinstructies'
+    When I navigate to the page '/bankzaken/betaalinstructies/toevoegen'
     When I set the field "Periode" to "01-05-2024 - 01-05-2024"
     When I click the button 'Exporteren'
-    Then an error notification containing 'object is not subscriptable' is displayed
+    When I click the button 'Bevestigen'
+    Then the text 'Er is geen account iban gevonden in de configuratie' is displayed
 
     When I navigate to the page '/configuratie'
     When I set the field "Sleutel" to "derdengeldenrekening_bic"
@@ -80,10 +81,10 @@ Feature: set bank account for sepa payment instruction
     Then the text 'derdengeldenrekening_rekeninghouder' is displayed
     Then the value "Gemeente Sloothuizen Huishoudboekje" for the key "derdengeldenrekening_rekeninghouder" is displayed
 
-    When I navigate to the page '/bankzaken/betaalinstructies'
+    When I navigate to the page '/bankzaken/betaalinstructies/toevoegen'
     When I set the field "Periode" to "01-05-2024 - 01-05-2024"
     When I click the button 'Exporteren'
-    Then a success notification containing 'Exportbestand aangemaakt.' is displayed
+    When I click the button 'Bevestigen'
 
 # checken of deze drie parameters toegepast zijn in specifieke attributen in XML
     Then I click the button "Downloaden" for the most recent entry

@@ -27,6 +27,8 @@ from .transactie_loader_concept import TransactieLoaderConcept
 from .journaalpost_loader_concept import JournaalpostLoaderConcept
 from .overzicht_loader import OverzichtLoader
 
+from .msq_loaders.tranaction_msq_loader import TransactionMsqLoader
+
 
 class HHBDataLoader:
     """ Main Dataloader class for HHB """
@@ -58,6 +60,8 @@ class HHBDataLoader:
         self.afspraken_concept = AfspraakLoaderConcept()
         self.transacties_concept = TransactieLoaderConcept()
         self.journaalposten_concept = JournaalpostLoaderConcept()
+
+        self.transactions_msq = TransactionMsqLoader()
 
     def __getitem__(self, item: str):
         return getattr(self, item)

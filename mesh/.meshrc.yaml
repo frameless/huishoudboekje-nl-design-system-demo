@@ -5,7 +5,6 @@ sources:
         endpoint: "{env.HHB_NOTIFICATION_SERVICE_URL}"
         operationHeaders:
           cookie: "{context.headers['cookie']}"
-          test : "test"
           User-Agent: "{context.headers['user-agent']}"
         source: ./graphql/notificationservice/schema.graphql
         subscriptionsProtocol: SSE
@@ -31,6 +30,14 @@ sources:
       grpc:
         endpoint: "{env.HHB_ALARM_SERVICE_URL}"
         source: ./protos/alarmservice/*.proto
+        metaData:
+          "cookies": "{context.headers['cookie']}"
+          "client-user-agent": "{context.headers['user-agent']}"
+  - name: BankService
+    handler:
+      grpc:
+        endpoint: "{env.HHB_BANK_SERVICE_URL}"
+        source: ./protos/bankservice/*.proto
         metaData:
           "cookies": "{context.headers['cookie']}"
           "client-user-agent": "{context.headers['user-agent']}"
@@ -75,6 +82,10 @@ additionalTypeDefs: |
   extend type Afspraak {
     alarm: GrpcServices__AlarmData
   }
+
+  extend type Journaalpost {
+    transaction: GrpcServices__TransactionData
+  }
     
   extend type GrpcServices__SignalData {
     citizen: Burger @resolveTo(
@@ -114,10 +125,39 @@ additionalTypeDefs: |
     export: Export
   }
 
+  extend type GrpcServices__PaymentRecord {
+    agreement: Afspraak @resolveTo(
+      sourceName: "Backend",
+      sourceTypeName: "RootQuery",
+      sourceFieldName: "afsprakenUuid",
+      keyField: "agreementUuid",
+      keysArg: "uuids"
+    )
+  }
+
+  extend type GrpcServices__PaymentExportRecordData {
+    agreement: Afspraak @resolveTo(
+      sourceName: "Backend",
+      sourceTypeName: "RootQuery",
+      sourceFieldName: "afsprakenUuid",
+      keyField: "agreementUuid",
+      keysArg: "uuids"
+    )
+  }
+
+  extend type GrpcServices__CreatePaymentRecord {
+    agreement: Afspraak @resolveTo(
+      sourceName: "Backend",
+      sourceTypeName: "RootQuery",
+      sourceFieldName: "afsprakenUuid",
+      keyField: "agreementId",
+      keysArg: "uuids"
+    )
+  }
+
 additionalResolvers:
-  - './resolvers'
+  - "./resolvers"
 serve:
   hostname: 0.0.0.0
   endpoint: "/apiV2/graphql"
   batchingLimit: 10
-

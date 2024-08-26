@@ -38,6 +38,7 @@ export POSTGRESQL_DATABASE_NAME_ORGSVC="organisatieservice"
 export POSTGRESQL_DATABASE_NAME_PADSVC="postadressenservice"
 export POSTGRESQL_DATABASE_NAME_ALMSVC="alarmenservice"
 export POSTGRESQL_DATABASE_NAME_SIGSVC="signalenservice"
+export POSTGRESQL_DATABASE_NAME_FLSVC="fileservice"
 
 # Database usernames
 export POSTGRESQL_USERNAME="postgres"
@@ -49,6 +50,7 @@ export POSTGRESQL_USERNAME_ORGSVC="orgsvc"
 export POSTGRESQL_USERNAME_PADSVC="padsvc"
 export POSTGRESQL_USERNAME_ALMSVC="almsvc"
 export POSTGRESQL_USERNAME_SIGSVC="sigsvc"
+export POSTGRESQL_USERNAME_FLSVC="flsvc"
 
 # Passwords for databases
 export POSTGRESQL_PASSWORD="postgres"
@@ -60,6 +62,7 @@ export POSTGRESQL_PASSWORD_ORGSVC="orgsvc"
 export POSTGRESQL_PASSWORD_PADSVC="padsvc"
 export POSTGRESQL_PASSWORD_ALMSVC="almsvc"
 export POSTGRESQL_PASSWORD_SIGSVC="sigsvc"
+export POSTGRESQL_PASSWORD_FLSVC="flsvc"
 
 
 # OIDC Settings

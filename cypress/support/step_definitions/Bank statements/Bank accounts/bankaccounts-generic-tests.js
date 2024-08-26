@@ -12,12 +12,10 @@ After({ tags: "@cleanupAgreement" }, function ()  {
 
   Step(this, 'I open the citizen overview page for "Dingus Bingus"');
   
-  cy.get('p').contains('1337')
+  cy.contains('1337')
     .parent()
-    .next()
-    .next()
-    .next()
-    .children('a[aria-label="Bekijken"]')
+    .parent()
+    .find('a[aria-label="Bekijken"]:visible')
     .click();
   cy.url().should('include', Cypress.config().baseUrl + '/afspraken/')
   cy.get('[data-test="agreement.menuKebab"]')

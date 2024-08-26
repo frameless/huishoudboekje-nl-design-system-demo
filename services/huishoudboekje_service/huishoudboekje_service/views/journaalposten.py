@@ -26,7 +26,7 @@ class JournaalpostView(HHBView):
                 "type": "object",
                 "required": [
                     "grootboekrekening_id",
-                    "transaction_id",
+                    "transaction_uuid",
                     "is_automatisch_geboekt"
                 ],
                 "properties": {
@@ -36,8 +36,8 @@ class JournaalpostView(HHBView):
                     "grootboekrekening_id": {
                         "type": "string"
                     },
-                    "transaction_id": {
-                        "type": "integer"
+                    "transaction_uuid": {
+                        "type": "string"
                     },
                     "is_automatisch_geboekt": {
                         "type": "boolean"
@@ -58,7 +58,7 @@ class JournaalpostView(HHBView):
     def add_filter_transactions(self):
         def add_filter(ids):
             self.hhb_query.query = self.hhb_query.query.filter(
-                Journaalpost.transaction_id.in_(ids)
+                Journaalpost.transaction_uuid.in_(ids)
             )
 
         JournaalpostView.filter_in_string('filter_transactions', add_filter)

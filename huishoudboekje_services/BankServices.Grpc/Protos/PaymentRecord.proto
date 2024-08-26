@@ -1,0 +1,81 @@
+﻿syntax = "proto3";
+
+
+option csharp_namespace = "BankService_RPC";
+
+package GrpcServices;
+
+service PaymentRecordService {
+  rpc CreatePaymentRecords(CreatePaymentRecordsData) returns (CreatePaymentRecordResponse);
+  rpc GetPaymentRecordsById(PaymentRecordsById) returns (PaymentRecords);
+  rpc UpdateProcessingDates(UpdateProcessingDateRequest) returns (UpdateProcessingDateResponse);
+  rpc GetNotExportedPaymentRecordDates(GetNotExportedPaymentRecordsMessage) returns (NotExportedPaymentRecordDates);
+  rpc GetRecordsNotReconciledForAgreements(GetPaymentRecordsByAgreementsMessage) returns (PaymentRecords);
+}
+
+message CreatePaymentRecordsData {
+  int64 from = 1;
+  int64 to = 2;
+  optional int64 processAt = 3;
+}
+
+message PaymentRecords {
+  repeated PaymentRecord data = 1;
+}
+
+message PaymentRecord {
+  string id = 1;
+  string agreementUuid = 2;
+  int32 amount = 3;
+  int64 createdAt = 4;
+  int64 processAt = 5;
+  optional string paymentExportUuid = 6;
+  int64 originalProcessingDate = 7;
+  string accountName = 8;
+  string accountIban = 9;
+}
+
+message GetNotExportedPaymentRecordsMessage {
+  optional int64 from = 1;
+  optional int64 to = 2;
+}
+
+message NotExportedPaymentRecordDates {
+  repeated NotExportedRecordDate data = 1;
+}
+
+message NotExportedRecordDate {
+  string id = 1;
+  int64 date = 2;
+}
+
+message PaymentRecordsById {
+  repeated string ids = 1;
+}
+
+message CreatePaymentRecordResponse {
+  repeated CreatePaymentRecord data = 1;
+  int32 count = 2;
+}
+
+message CreatePaymentRecord {
+  string id = 1;
+  string agreementId = 2;
+}
+
+message UpdateProcessingDateRequest {
+  repeated UpdateProcessingDateRow updates = 1;
+}
+
+message UpdateProcessingDateRow {
+  string id = 1;
+  int64 processAt = 2;
+}
+
+message UpdateProcessingDateResponse {
+  bool success = 1;
+}
+
+message GetPaymentRecordsByAgreementsMessage {
+  repeated string agreementIds = 1;
+}

@@ -60,14 +60,14 @@ class BurgerTransactieIdsView(HHBView):
         '''
         return Afspraak.query\
                         .join(Journaalpost)\
-                        .with_entities(Journaalpost.transaction_id.label("transaction_id"))\
+                        .with_entities(Journaalpost.transaction_uuid.label("transaction_id"))\
                         .filter(Afspraak.burger_id.in_(burger_ids))
 
     def __get_transaction_ids_by_uuid(self, citizen_uuids):
         return Afspraak.query\
             .join(Journaalpost)\
             .join(Burger, Burger.id == Afspraak.burger_id)\
-            .with_entities(func.array_agg(Journaalpost.transaction_id).label('transactions'), Burger.uuid)\
+            .with_entities(func.array_agg(Journaalpost.transaction_uuid).label('transactions'), Burger.uuid)\
             .filter(Burger.uuid.in_(citizen_uuids))\
             .group_by(Burger.uuid)
 

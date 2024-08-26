@@ -15,7 +15,7 @@ class Journaalpost(db.Model):
     afspraken = relationship("Afspraak", back_populates="journaalposten")
 
     transaction_id = Column(Integer, index=True)
-    # transaction_uuid = Column(UUID, index=True)
+    transaction_uuid = Column(UUID, index=True)
     
     grootboekrekening_id = Column(String)
     # grootboekrekening_uuid = Column(UUID)

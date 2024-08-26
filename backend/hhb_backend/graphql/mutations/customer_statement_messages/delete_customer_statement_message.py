@@ -1,5 +1,6 @@
 """ GraphQL mutation for deleting a Organisatie """
 import logging
+from hhb_backend.unmatch_paymentrecord_from_transactions import UnMatchPaymentRecordsFromTransactions
 from hhb_backend.remove_journalentry_from_signals import RemoveJournalEntryFromSignals
 import graphene
 import requests
@@ -33,6 +34,7 @@ class DeleteCustomerStatementMessage(graphene.Mutation):
 
         transactions = hhb_dataloader().bank_transactions.by_csm(id)
         transaction_ids = [t.id for t in transactions]
+        transaction_uuids = [t.uuid for t in transactions]
 
         journaalposten = hhb_dataloader().journaalposten.by_transactions(transaction_ids)
         uuids = []
@@ -46,6 +48,7 @@ class DeleteCustomerStatementMessage(graphene.Mutation):
                         f"Upstream API responded: {response.text}")
 
         RemoveJournalEntryFromSignals.create(uuids)
+        UnMatchPaymentRecordsFromTransactions.create(transaction_uuids)
 
         for transaction in transaction_ids:
             response = requests.delete(

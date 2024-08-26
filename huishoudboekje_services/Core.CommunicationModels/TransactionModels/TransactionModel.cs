@@ -1,4 +1,5 @@
-﻿using Core.CommunicationModels.TransactionModels.Interfaces;
+﻿using Core.CommunicationModels.JournalEntryModel.Interfaces;
+using Core.CommunicationModels.TransactionModels.Interfaces;
 
 namespace Core.CommunicationModels.TransactionModels;
 
@@ -10,7 +11,7 @@ public class TransactionModel : ITransactionModel
 
   public bool IsCredit { get; set; }
 
-  public string FromAccount { get; set; }
+  public string? FromAccount { get; set; }
 
   public long Date { get; set; }
 
@@ -18,7 +19,7 @@ public class TransactionModel : ITransactionModel
 
   public string InformationToAccountOwner { get; set; }
 
-  public bool IsRecorded { get; set; }
+  public bool IsReconciled { get; set; }
 
   public string CustomerStatementMessageUUID { get; set; }
 }

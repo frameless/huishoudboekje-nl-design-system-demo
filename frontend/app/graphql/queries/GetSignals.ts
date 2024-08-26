@@ -21,9 +21,10 @@ export const GetSignalsPagedQuery = gql`
                 }
                 journalEntries {
                     id
+                    transactionUuid
                     transaction {
                         id
-                        bedrag
+                        amount
                     }
                 }
                 offByAmount

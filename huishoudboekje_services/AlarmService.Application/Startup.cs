@@ -36,7 +36,7 @@ public class Startup
   public void ConfigureServices(IServiceCollection services)
   {
     services.AddMetricServer(options => { options.Port = (ushort)Configuration.GetValue("HHB_METRICS_PORT", 9000); });
-
+    services.AddLogging(configure => configure.AddConsole());
     services.AddGrpcService(Configuration);
     services.AddMassTransitService(Configuration, AddConsumers);
     services.AddDatabaseContext<AlarmServiceContext>(Configuration);

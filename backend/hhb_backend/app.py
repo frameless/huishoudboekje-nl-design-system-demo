@@ -2,6 +2,8 @@
 import asyncio
 import io
 import logging
+from hhb_backend.consumers.reconciliation_consumer import ReconciliationConsumer
+from hhb_backend.consumers.register_consumer import RegisterConsumers
 import nest_asyncio
 from flask import Flask, make_response, render_template, send_file, request, abort
 from functools import wraps
@@ -127,6 +129,11 @@ def create_app(
         return output
 
     app.register_blueprint(alarms_cli)
+
+    consumers = [
+        ReconciliationConsumer
+    ]
+    RegisterConsumers(consumers)
 
     return app
 

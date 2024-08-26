@@ -1,17 +1,19 @@
-import {Button, ButtonGroup, useBreakpointValue} from "@chakra-ui/react";
+import {ChevronLeftIcon, ChevronRightIcon} from "@chakra-ui/icons";
+import {Box, Button, ButtonGroup, Stack, useBreakpointValue, Text, HStack, Center, IconButton} from "@chakra-ui/react";
 import fill from "fill-range";
 import React, {useState} from "react";
-import { useTranslation } from "react-i18next";
+import {useTranslation} from "react-i18next";
 
 const defaultOptions = (t) => ({
-	/* I18n: t("pagination.first"), t("pagination.previous"), t("pagination.next"), t("pagination.last") */
 	pageSize: 10,
 	pagesAround: 3,
+	iconOnly: false,
+	colorScheme: "primary",
 	buttonLabels: {
 		first: t("pagination.first"),
 		previous: t("pagination.previous"),
 		next: t("pagination.next"),
-		last: t("pagination.last"),
+		last: t("pagination.last")
 	},
 });
 
@@ -27,7 +29,7 @@ const usePagination = (options?: Partial<typeof defaultOptions>, customOnPaginat
 	const nPages = total ? Math.ceil(total / pageSize) : 0;
 
 	const onPaginationClick = () => {
-		if(customOnPaginationClick !== undefined){
+		if (customOnPaginationClick !== undefined) {
 			customOnPaginationClick();
 		}
 	}
@@ -81,16 +83,28 @@ const usePagination = (options?: Partial<typeof defaultOptions>, customOnPaginat
 			return null;
 		}
 
+		if (nPages == 1) {
+			return null;
+		}
+
 		return (
-			<ButtonGroup size={"sm"} isAttached>
-				<Button mr={0} colorScheme={"gray"} isDisabled={page === 1} onClick={fn.goFirst}>{_options.buttonLabels.first}</Button>
-				<Button mr={0} colorScheme={"gray"} isDisabled={page === 1} onClick={fn.goPrevious}>{_options.buttonLabels.previous}</Button>
-				{fn.navigation().map((p, i) => (
-					<Button mr={0} w={"3em"} key={i} colorScheme={page === p ? "primary" : "gray"} onClick={() => fn.goPage(p)}>{p}</Button>
-				))}
-				<Button mr={0} colorScheme={"gray"} isDisabled={page === nPages} onClick={fn.goNext}>{_options.buttonLabels.next}</Button>
-				<Button mr={0} colorScheme={"gray"} isDisabled={page === nPages} onClick={fn.goLast}>{_options.buttonLabels.last}</Button>
-			</ButtonGroup>
+			<HStack justifyContent={"center"} verticalAlign={"center"} textAlign={"center"}>
+				<ButtonGroup size={"sm"}>
+					{_options.iconOnly &&
+						<IconButton aria-label="previous" colorScheme={_options.colorScheme} variant={"ghost"} isDisabled={page === 1} onClick={fn.goPrevious}><ChevronLeftIcon boxSize={5} /></IconButton>
+					}
+					{!_options.iconOnly &&
+						<Button colorScheme={_options.colorScheme} variant={"ghost"} isDisabled={page === 1} onClick={fn.goPrevious}><ChevronLeftIcon boxSize={5} /> {_options.buttonLabels.previous}</Button>}
+
+					<Center>{t("pagination.pageText", {"page": page, "total": nPages})}</Center>
+					{_options.iconOnly &&
+						<IconButton aria-label="next" colorScheme={_options.colorScheme} variant={"ghost"} isDisabled={page === nPages} onClick={fn.goNext}><ChevronRightIcon boxSize={5} /></IconButton>
+					}
+					{!_options.iconOnly &&
+						<Button colorScheme={_options.colorScheme} variant={"ghost"} isDisabled={page === nPages} onClick={fn.goNext}>{_options.buttonLabels.next} <ChevronRightIcon boxSize={5} /></Button>
+					}
+				</ButtonGroup>
+			</HStack>
 		);
 	};
 

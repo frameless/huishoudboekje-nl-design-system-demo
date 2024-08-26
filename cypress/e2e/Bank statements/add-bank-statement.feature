@@ -14,10 +14,10 @@ Feature: add bank statement
     Then the "Add bank statement" modal opens
     Then the "X" button is displayed
     Then the "Empty_customer_statement_message_CAMT.053_v2.xml" filename is displayed
-    Then the file upload warning status icon is displayed
-    Then the "No transactions in file" text is displayed
+    Then the "Er zitten geen transacties in het bestand" text is displayed
+    Then the text "Er zitten geen transacties in het bestand" is not displayed
     When I click the "X" button
-    Then the "Empty_customer_statement_message_CAMT.053_v2.xml" file is displayed
+    Then the "Empty_customer_statement_message_CAMT.053_v2.xml" file is not displayed
     Then 0 transactions were added
 
   # ready to add to e2e tests
@@ -107,8 +107,6 @@ Feature: add bank statement
     Then the "Add bank statement" modal closes
     Then the bank statement filename is displayed
     Then the bank statement upload timestamp is displayed
-    Then the "Delete bank statement" button is displayed
-    Then the "Add bank statement" button is displayed
 
     When I view the "Bank transactions" page
     When I click the "Advanced search options" button
@@ -141,8 +139,6 @@ Feature: add bank statement
     When I click the "X" button
     Then the "Payment_mandate_CAMT.053_v1.xml" filename is displayed
     Then the bank statement upload timestamp is displayed
-    Then the "Delete bank statement" button is displayed
-    Then the "Add bank statement" button is displayed
 
     When I view the "Bank transactions" page
     When I click the "Advanced search options" button
@@ -170,8 +166,6 @@ Feature: add bank statement
     When I click the "X" button
     Then the "Basic_bank_transaction_CAMT.053_v1.xml" filename is displayed
     Then the bank statement upload timestamp is displayed
-    Then the "Delete bank statement" button is displayed
-    Then the "Add bank statement" button is displayed
 
     When I view the "Bank transactions" page
     When I click the "Advanced search options" button

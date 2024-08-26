@@ -7,3 +7,4 @@ CREATE DATABASE grootboekservice;
 CREATE DATABASE logservice;
 CREATE DATABASE postadressenservice;
 CREATE DATABASE alarmenservice;
+CREATE DATABASE fileservice;

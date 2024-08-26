@@ -47,7 +47,7 @@ class OverviewController():
         saldos = self.__get_saldos(start, end, burger_ids)
 
         transactie_id_to_transactie_dict = {
-            transaction["id"]: transaction for transaction in transactions_info}
+            transaction["uuid"]: transaction for transaction in transactions_info}
 
         for afspraak in afspraken_info:
             afspraak["transactions"] = [transactie_id_to_transactie_dict[transaction_id]

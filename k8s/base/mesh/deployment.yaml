@@ -52,6 +52,7 @@ spec:
               value: "http://hhb-backend/api/graphql"
             - name: HHB_ALARM_SERVICE_URL
               value: "hhb-alarmenservice:80"
+            - name: HHB_BANK_SERVICE_URL
+              value: "hhb-banktransactieservice:80"
             - name: HHB_NOTIFICATION_SERVICE_URL
               value: "http://hhb-notificationservice/graphql"
-           

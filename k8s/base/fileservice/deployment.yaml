@@ -1,0 +1,122 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hhb-fileservice
+  labels:
+    name: hhb-fileservice
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: hhb-fileservice
+  template:
+    metadata:
+      labels:
+        name: hhb-fileservice
+    spec:
+      initContainers:
+        - name: init1-wait-for-db
+          image: busybox
+          envFrom:
+            - configMapRef:
+                name: postgres-config
+          command:
+            [
+              "sh",
+              "-c",
+              "while true; do sleep 1; echo Waiting for database...; if nc -z $POSTGRESQL_HOSTNAME $POSTGRESQL_PORT; then echo Database is up!; exit 0; fi; done; echo Aint gonna wait for the database forever...; exit 1",
+            ]
+        - name: init2-prepare-db
+          image: bitnami/postgresql:13
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - configMapRef:
+                name: postgres-config
+          env:
+            - name: POSTGRESQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: hhb-database-secrets
+                  key: POSTGRESQL_PASSWORD
+            - name: POSTGRESQL_PASSWORD_FLSVC
+              valueFrom:
+                secretKeyRef:
+                  name: hhb-database-secrets
+                  key: POSTGRESQL_PASSWORD_FLSVC
+          command: ["/bin/sh"]
+          args:
+            - -c
+            - >-
+              export PGPASSWORD=$POSTGRESQL_PASSWORD &&
+              export PGPORT=$POSTGRESQL_PORT &&
+              psql -h $POSTGRESQL_HOSTNAME -U $POSTGRESQL_USERNAME -c "CREATE USER $POSTGRESQL_USERNAME_FLSVC WITH PASSWORD '$POSTGRESQL_PASSWORD_FLSVC'" || true &&
+              psql -h $POSTGRESQL_HOSTNAME -U $POSTGRESQL_USERNAME -c "CREATE DATABASE $POSTGRESQL_DATABASE_NAME_FLSVC" || true &&
+              psql -h $POSTGRESQL_HOSTNAME -U $POSTGRESQL_USERNAME -c "GRANT ALL PRIVILEGES ON DATABASE $POSTGRESQL_DATABASE_NAME_FLSVC TO $POSTGRESQL_USERNAME_FLSVC" || true &&
+              psql -h $POSTGRESQL_HOSTNAME -U $POSTGRESQL_USERNAME -c "ALTER USER $POSTGRESQL_USERNAME_FLSVC WITH PASSWORD '$POSTGRESQL_PASSWORD_FLSVC'" || true;
+        - name: init3-migrate-db
+          image: fileservice
+          imagePullPolicy: Always
+          env:
+            - name: HHB_DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: hhb-database-secrets
+                  key: FILESERVICE_DATABASE_URL
+          command: ["./execute-migrations.sh"]    
+      containers:
+        - name: hhb-fileservice
+          image: fileservice
+          imagePullPolicy: Always
+          envFrom:
+            - configMapRef:
+                name: postgres-config
+            - configMapRef:
+                name: backend-auth-config
+          ports:
+            - name: grpc
+              containerPort: 8000
+              protocol: TCP
+            - name: metrics
+              containerPort: 9000
+              protocol: TCP
+          startupProbe:
+            grpc:
+              port: 8000
+            periodSeconds: 10
+            failureThreshold: 60
+          livenessProbe:
+            grpc:
+              port: 8000
+            periodSeconds: 10
+          readinessProbe:
+            grpc:
+              port: 8000
+            periodSeconds: 10
+          resources:
+            limits:
+              cpu: "300m"
+              memory: 256Mi
+            requests:
+              cpu: 100m
+              memory: 128Mi
+          env:
+            - name: HHB_DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: hhb-database-secrets
+                  key: FILESERVICE_DATABASE_URL
+            - name: HHB_RABBITMQ_HOST
+              value: hhb-rabbitmq
+            - name: HHB_RABBITMQ_PORT
+              value: "5672"
+            - name: HHB_RABBITMQ_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: rabbitmq-config
+                  key: RABBITMQ_DEFAULT_USER
+            - name: HHB_RABBITMQ_PASS
+              valueFrom:
+                configMapKeyRef:
+                  name: rabbitmq-config
+                  key: RABBITMQ_DEFAULT_PASS

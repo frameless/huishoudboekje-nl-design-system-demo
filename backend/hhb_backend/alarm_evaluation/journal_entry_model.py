@@ -9,7 +9,6 @@ class JournalEntryModel:
     IsAutomaticallyReconciled: bool
     AgreementUuid: str
     BankTransactionUuid: str
-    StatementUuid: str
 
     def to_dict(self):
         return asdict(self)

@@ -7,7 +7,7 @@ import {Afspraak, AlarmData, CreateAlarmRequest, DayOfWeek, useGetConfiguratieQu
 import {RepeatType} from "../../../models/models";
 import d from "../../../utils/dayjs";
 import Queryable from "../../../utils/Queryable";
-import {getUnixTimestapFromDate, useReactSelectStyles} from "../../../utils/things";
+import {getUnixTimestampFromDate, useReactSelectStyles} from "../../../utils/things";
 import useForm from "../../../utils/useForm";
 import useToaster from "../../../utils/useToaster";
 import zod from "../../../utils/zod";
@@ -142,20 +142,20 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 					break;
 				}
 				case 3: {
-					alarm.startDate = getUnixTimestapFromDate(date)
-					alarm.endDate = getUnixTimestapFromDate(date)
+					alarm.startDate = getUnixTimestampFromDate(date)
+					alarm.endDate = getUnixTimestampFromDate(date)
 					break;
 				}
 			}
 			if(alarm.startDate == null){
-				alarm.startDate = getUnixTimestapFromDate(startDate)
+				alarm.startDate = getUnixTimestampFromDate(startDate)
 			}
 			if(alarm.endDate == null && afspraak.validThrough != null && startDate != null){
 				const endDate = d(afspraak.validThrough)
 				if(endDate.isSameOrBefore(startDate, "date")){
 					throw new Error("Endate cant be the same or before the startdate")
 				}
-				alarm.endDate = getUnixTimestapFromDate(endDate.toDate())
+				alarm.endDate = getUnixTimestampFromDate(endDate.toDate())
 			}
 			onSubmit({
 				agreementUuid: afspraak.uuid!,
@@ -431,7 +431,4 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 };
 
 export default AddAlarmModal;
-function GetUnixTimestapFromDate(date: Date | undefined): any {
-	throw new Error("Function not implemented.");
-}
 

@@ -42,13 +42,15 @@
       - NAME: authservice
         DOCKERATTRIBUTES: "./services/authservice"
       - NAME: banktransactieservice
-        DOCKERATTRIBUTES: "--file=./services/bank_transactie_service/Dockerfile services"
+        DOCKERATTRIBUTES: "--file=./huishoudboekje_services/BankServices.Application/Dockerfile ./huishoudboekje_services"
       - NAME: grootboekservice
         DOCKERATTRIBUTES: "--file=./services/grootboek_service/Dockerfile services"
       - NAME: huishoudboekjeservice
         DOCKERATTRIBUTES: "--file=./services/huishoudboekje_service/Dockerfile services"
       - NAME: logservice
         DOCKERATTRIBUTES: "--file=./huishoudboekje_services/LogService.Application/Dockerfile ./huishoudboekje_services"
+      - NAME: fileservice
+        DOCKERATTRIBUTES: "--file=./huishoudboekje_services/FileServices.Application/Dockerfile ./huishoudboekje_services"
       - NAME: organisatieservice
         DOCKERATTRIBUTES: "--file=./services/organisatie_service/Dockerfile services"
       - NAME: rapportageservice
@@ -59,7 +61,7 @@
 build-databasemesh-image:
   stage: build
   image: docker:24.0.2-git
-  needs: [ ]
+  needs: []
   services:
     - docker:24.0.2-dind
   variables:
@@ -78,8 +80,6 @@ build-databasemesh-image:
   rules:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
 
-
-
 # Build docker images with default tag ("branchName-commitSha").
 build-images-dev:
   <<: *build-docker-images
@@ -95,7 +95,3 @@ build-tagged-images:
     IMAGE_TAG: $CI_COMMIT_TAG
   rules:
     - if: $CI_COMMIT_TAG
-
-
-
-

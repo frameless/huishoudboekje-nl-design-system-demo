@@ -20,4 +20,4 @@ resources:
   - ./rabbitmq
   - ./userapi
   - ./notificationservice
-
+  - ./fileservice

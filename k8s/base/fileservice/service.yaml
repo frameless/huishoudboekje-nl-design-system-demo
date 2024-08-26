@@ -1,0 +1,20 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hhb-fileservice
+  labels:
+    name: hhb-fileservice
+spec:
+  type: ClusterIP
+  selector:
+    name: hhb-fileservice
+  ports:
+    - name: grpc
+      protocol: TCP
+      port: 80
+      targetPort: grpc
+    - name: metrics
+      protocol: TCP
+      port: 9000
+      targetPort: metrics

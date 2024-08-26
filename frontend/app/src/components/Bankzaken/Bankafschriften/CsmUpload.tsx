@@ -1,7 +1,7 @@
-import {Box, Input, useDisclosure} from "@chakra-ui/react";
+import {Box, Button, Input, useDisclosure} from "@chakra-ui/react";
 import React, {useRef} from "react";
 import {useTranslation} from "react-i18next";
-import {useCreateCustomerStatementMessageMutation} from "../../../generated/graphql";
+import {useUploadCustomerStatementMessageMutation} from "../../../generated/graphql";
 import {FileUpload} from "../../../models/models";
 import useUploadFiles from "../../../utils/useUploadFiles";
 import AddButton from "../../shared/AddButton";
@@ -11,14 +11,18 @@ const CsmUpload: React.FC<{refetch: VoidFunction}> = ({refetch}) => {
 	const {t} = useTranslation();
 	const csmUploadModal = useDisclosure();
 	const fileUploadInput = useRef<HTMLInputElement>(null);
-	const [createCSM] = useCreateCustomerStatementMessageMutation({
+	const [createCSM] = useUploadCustomerStatementMessageMutation({
 		context: {
 			method: "fileUpload",
 		},
 	});
 	const [files, {addFiles}] = useUploadFiles({
 		doUpload: ({file}: FileUpload) => new Promise((resolve, reject) => {
-			return createCSM({variables: {file}})
+			return createCSM({variables: {
+				input: {
+					file
+				}
+			}})
 				.then(() => resolve(true))
 				.catch(err => reject(err));
 		}),
@@ -43,7 +47,7 @@ const CsmUpload: React.FC<{refetch: VoidFunction}> = ({refetch}) => {
 
 		<Box>
 			<Input type={"file"} id={"fileUpload"} onChange={onChangeFiles} ref={fileUploadInput} hidden={true} multiple={true} />
-			<AddButton data-test="fileUpload" onClick={() => fileUploadInput.current?.click()}>{t("global.actions.add")}</AddButton>
+			<Button colorScheme="primary" data-test="fileUpload" onClick={() => fileUploadInput.current?.click()}>{t("global.actions.add")}</Button>
 		</Box>
 	</>);
 };

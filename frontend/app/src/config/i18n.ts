@@ -8,7 +8,10 @@ const notifationNamespace = "notifications"
 const resources = {
 	nl: {
 		translation: require("../lang/nl.translation.json"),
-		notifications: require("../lang/nl.notifications.json")
+		notifications: require("../lang/nl.notifications.json"),
+		paymentrecords: require("../lang/nl.paymentrecords.json"),
+		formcomponents: require("../lang/nl.formcomponents.json"),
+		citizendetails: require("../lang/nl.citizendetails.json")
 	},
 };
 

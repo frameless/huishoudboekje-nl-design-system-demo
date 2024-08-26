@@ -1,8 +1,9 @@
 import logging
+from time import time
 from core_service.database import db
 from models.huishouden import Huishouden
 from models.saldo import Saldo
-from sqlalchemy import Boolean, Column, DateTime, event, ForeignKey, Integer, Sequence, String, func
+from sqlalchemy import Boolean, BigInteger, Column, DateTime, event, ForeignKey, Integer, Sequence, String, func
 from sqlalchemy.exc import OperationalError
 from sqlalchemy.orm import relationship, Session
 from sqlalchemy.dialects.postgresql import UUID
@@ -47,6 +48,8 @@ class Burger(db.Model):
     # )
 
     bsn = Column(Integer, unique=True)
+
+    start_date = Column(BigInteger, default=time)
 
     saldo = Column(Integer, nullable=False, server_default='0')
 
