@@ -1,0 +1,64 @@
+{
+    "title": "Betaalinstructie",
+    "record": {
+        "title": "Betaalinstructie",
+        "amount": "Bedrag",
+        "processAt": "Verwerkingsdatum",
+        "agreement": "Afspraak",
+        "citizen": "Burger",
+        "accountholder": "Tegenrekening",
+        "accountholderName": "Tegenpartij",
+        "citizenName": "{{name}} {{surname}}"
+    },
+    "sorting": {
+        "firstname": "Voornaam",
+        "lastname": "Achternaam",
+        "startdate": "Startdatum"
+    },
+    "filter": {
+        "allBurgers": "Alle burgers"
+    },
+    "invalidPaymentDate": "Selecteer een geldige verwerkingsdatum (van {{startDate}} t/m {{endDate}})",
+    "customPaymentInformation": "Een aangepaste verwerkingsdatum mag maximaal een week in het verleden (vanaf vandaag), en een week na de einddatum van de periode",
+    "messages": {},
+    "cancel": "Annuleren",
+    "export": {
+        "all": "Exporteren",
+        "single": "Exporteer"
+    },
+    "confirmAlert": {
+        "confirm": "Bevestigen",
+        "cancel": "Annuleren",
+        "title": "Weet u het zeker?",
+        "message": "U gaat nu {{selected}} van de {{total}} instructie(s) exporteren.",
+        "info": "U exporteert mogelijk meer dan wat er in beeld wordt weergegeven."
+    },
+    "creationPage": {
+        "title": "Betaalinstructie",
+        "addSection": "Betaalinstructie Toevoegen",
+        "sectionHelperText": "Voeg een betaalinstructie toe. Aanpassingen kunnen hier nog gemaakt worden aan verwerkingsdatum en een selectie kan gemaakt worden",
+        "period": "Periode",
+        "useCustomPaymentDate": "Aangepaste verwerkingsdatum",
+        "paymentDate": "Verwerkingsdatum",
+        "invalidPaymentDate": "Selecteer een geldige verwerkingsdatum (van {{startDate}} t/m {{endDate}})",
+        "customPaymentInformation": "Een aangepaste verwerkingsdatum mag maximaal een week in het verleden (vanaf vandaag), en een week na de einddatum van de periode",
+        "deselect": {
+            "all": "Alles deselecteren"
+        },
+        "select": {
+            "all": "Alles selecteren"
+        },
+        "selected": "Geselecteerd",
+        "highlightedDateText": "Gemarkeerde dagen hebben betaalinstructies die niet zijn meegenomen in een vorige export",
+        "openRecordsAlert": "Er is/zijn {{amount}} transactie(s) niet meegenomen in exports van de voorgaande week",
+        "noInstructionFound": "Geen betaalinstructies gevonden in periode"
+    },
+    "viewExportPage": {
+        "backButton": "Terug naar overzicht",
+        "title": "Betaalinstructie {{start}} tot en met {{end}}"
+    },
+    "error": {
+        "account": "Er is geen account iban gevonden in de configuratie",
+        "global": "Er ging iets mis"
+    }
+}

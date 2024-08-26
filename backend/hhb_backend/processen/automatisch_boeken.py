@@ -12,7 +12,7 @@ from hhb_backend.service.model.bank_transaction import BankTransaction
 from hhb_backend.graphql.mutations.journaalposten.create_journaalpost import create_journaalposten
 from hhb_backend.notifications import Notificator
 
-def automatisch_boeken(customer_statement_message_id: int = None):
+def automatisch_boeken(customer_statement_message_id = None):
     logging.info(f"Start automatisch boeken")
     transactions = get_transactions_to_write_off(customer_statement_message_id)
     suggesties = transactie_suggesties(transactions=transactions)
@@ -28,7 +28,7 @@ def automatisch_boeken(customer_statement_message_id: int = None):
         if matching_afspraak:
             _afspraken[matching_afspraak.id] = matching_afspraak
             _automatische_transacties.append(
-                {"transaction_id": transactie_id, "afspraak_id": matching_afspraak.id, "is_automatisch_geboekt": True})
+                {"transaction_uuid": transactie_id, "afspraak_id": matching_afspraak.id, "is_automatisch_geboekt": True})
             _matching_transaction_ids.append(transactie_id)
 
     stats = Counter(len(s) for s in suggesties.values())
@@ -51,7 +51,7 @@ def automatisch_boeken(customer_statement_message_id: int = None):
             {**item, "grootboekrekening_id": rubriek.grootboekrekening_id})
 
     _matching_transactions = [
-        t for t in transactions if t.id in _matching_transaction_ids]
+        t for t in transactions if t.uuid in _matching_transaction_ids]
 
     logging.info("Creating journaalposten")
     journaalposten_ = create_journaalposten(
@@ -71,16 +71,16 @@ def get_transactions_to_write_off(customer_statement_message_id):
     if customer_statement_message_id is not None:
         transactions = [
             transaction for
-            transaction in hhb_dataloader().bank_transactions.by_csm(
+            transaction in hhb_dataloader().transactions_msq.by_csm(
                 customer_statement_message_id)
             if not transaction.is_geboekt
         ]
     else:
-        transactions = hhb_dataloader().bank_transactions.by_is_geboekt(False)
+        transactions = hhb_dataloader().transactions_msq.by_is_geboekt(False)
     return transactions
 
 
-def transactie_suggesties(transactie_ids: List[int] = None, transactions: List[BankTransaction] = None, exact_zoekterm_matches=True) -> Dict[int, List[Afspraak]]:
+def transactie_suggesties(transactie_ids: List[str] = None, transactions: List[BankTransaction] = None, exact_zoekterm_matches=True) -> Dict[int, List[Afspraak]]:
     logging.info("Collecting matching afspraken for transactions")
     if transactie_ids:
         if type(transactie_ids) != list:
@@ -88,12 +88,11 @@ def transactie_suggesties(transactie_ids: List[int] = None, transactions: List[B
 
     # fetch transactions
     if not transactions:
-        transactions = hhb_dataloader().bank_transactions.load(transactie_ids)
+        transactions = hhb_dataloader().transactions_msq.load(transactie_ids)
         if not transactions:
             return {key: [] for key in transactie_ids}
-
     if transactions and not transactie_ids:
-        transactie_ids = [transaction.id for transaction in transactions]
+        transactie_ids = [transaction.uuid for transaction in transactions]
 
     # Rekeningen ophalen adhv iban
     rekening_ibans = [
@@ -153,7 +152,7 @@ def transactie_suggesties(transactie_ids: List[int] = None, transactions: List[B
             continue
 
         # Transactie koppelen aan afspraken
-        transactie_ids_with_afspraken[transaction.id] = [
+        transactie_ids_with_afspraken[transaction.uuid] = [
             afspraak
             for afspraak in rekening_afspraken[transactie_rekening.id]
             if valid_afspraak(afspraak, to_date(transaction.transactie_datum))
@@ -161,7 +160,7 @@ def transactie_suggesties(transactie_ids: List[int] = None, transactions: List[B
         ]
 
         if not exact_zoekterm_matches:
-            transactie_ids_with_afspraken[transaction.id].sort(key=lambda afspraak: matching_zoektermen_count(
+            transactie_ids_with_afspraken[transaction.uuid].sort(key=lambda afspraak: matching_zoektermen_count(
                 afspraak, transaction.information_to_account_owner), reverse=True)
 
     return transactie_ids_with_afspraken

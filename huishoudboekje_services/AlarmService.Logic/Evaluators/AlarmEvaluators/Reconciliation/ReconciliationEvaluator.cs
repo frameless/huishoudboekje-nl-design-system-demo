@@ -1,4 +1,5 @@
-﻿using AlarmService.Logic.Helpers;
+﻿using AlarmService.Domain.Contexts;
+using AlarmService.Logic.Helpers;
 using Core.CommunicationModels.AlarmModels;
 using Core.CommunicationModels.AlarmModels.Interfaces;
 using Core.CommunicationModels.JournalEntryModel.Interfaces;
@@ -9,12 +10,15 @@ using Core.utils.DateTimeProvider;
 
 namespace AlarmService.Logic.Evaluators.AlarmEvaluators.Reconciliation;
 
-public class ReconciliationEvaluator(IDateTimeProvider dateTimeProvider, CheckOnDateHelper checkOnDateHelper, EvaluationHelper evaluationHelper) : BaseEvaluator<AlarmEvaluationInfo>
+public class ReconciliationEvaluator(
+  IDateTimeProvider dateTimeProvider,
+  CheckOnDateHelper checkOnDateHelper,
+  EvaluationHelper evaluationHelper) : BaseEvaluator<AlarmEvaluationInfo>
 {
-
   protected override Evaluation? GetEvaluation(AlarmEvaluationInfo evaluationInfo)
   {
-    IList<IJournalEntryModel> entriesInRange = evaluationHelper.DetermineJournalEntriesInRange(evaluationInfo.NewJournalEntries, evaluationInfo.Alarm);
+    IList<IJournalEntryModel> entriesInRange =
+      evaluationHelper.DetermineJournalEntriesInRange(evaluationInfo.NewJournalEntries, evaluationInfo.Alarm);
     return EvaluateAlarmJournalEntries(evaluationInfo, entriesInRange);
   }
 
@@ -23,25 +27,26 @@ public class ReconciliationEvaluator(IDateTimeProvider dateTimeProvider, CheckOn
     return dateTimeProvider.Now() + "Error evaluating reconiliation, alarm id: " + evaluationInfo.Alarm.UUID;
   }
 
-  private Evaluation? EvaluateAlarmJournalEntries(AlarmEvaluationInfo evaluationInfo, IList<IJournalEntryModel> entriesInRange)
+  private Evaluation? EvaluateAlarmJournalEntries(
+    AlarmEvaluationInfo evaluationInfo,
+    IList<IJournalEntryModel> entriesInRange)
   {
     Evaluation evaluation = new()
     {
       Alarm = (AlarmModel)evaluationInfo.Alarm
     };
 
-    IList<ISignalModel> signals = new List<ISignalModel>();
     foreach (IJournalEntryModel entry in entriesInRange)
     {
-      if(entry.Date < evaluationInfo.Alarm.StartDate) continue;
+      if (entry.Date < evaluationInfo.Alarm.StartDate) continue;
 
       ISignalModel? amountSignal = CheckJournalEntryForAmountDifferences(evaluationInfo, entry);
-      if (amountSignal != null) signals.Add(amountSignal);
+      if (amountSignal != null) evaluation.Signals.Add(new SignalResult() { Signal = amountSignal });
 
-      if (ShouldCheckForRepetition(evaluationInfo, signals, entry))
+      if (ShouldCheckForRepetition(evaluationInfo, evaluation.Signals.Select(signal => signal.Signal).ToList(), entry))
       {
-        ISignalModel? multipleSignal = CheckJournalEntryForRepetition(evaluationInfo, entry);
-        if (multipleSignal != null) signals.Add(multipleSignal);
+        SignalResult? multipleSignal = CheckJournalEntryForRepetition(evaluationInfo, entry);
+        if (multipleSignal != null) evaluation.Signals.Add(multipleSignal);
       }
 
       if (DateIsInCurrentPeriod(entry.Date, evaluationInfo.Alarm))
@@ -51,32 +56,51 @@ public class ReconciliationEvaluator(IDateTimeProvider dateTimeProvider, CheckOn
           evaluationInfo.Alarm);
       }
     }
-    evaluation.Signals.AddRange(signals);
+
     return evaluation;
   }
 
-  private static bool ShouldCheckForRepetition(AlarmEvaluationInfo info,  IList<ISignalModel> newSignals, IJournalEntryModel entry)
+  private static bool ShouldCheckForRepetition(
+    AlarmEvaluationInfo info,
+    IList<ISignalModel> newSignals,
+    IJournalEntryModel entry)
   {
-    return info.ExistingSignals
-             .Where(signal =>
-               signal.JournalEntryUuids != null && signal.JournalEntryUuids.Any(uuid => uuid == entry.UUID))
-             .All(signal => signal.Type != 3)
-           && newSignals
-             .Where(signal =>
-               signal.JournalEntryUuids != null && signal.JournalEntryUuids.Any(uuid => uuid == entry.UUID))
-             .All(signal => signal.Type != 3);
+    return newSignals
+      .Where(
+        signal =>
+          signal.JournalEntryUuids != null && signal.JournalEntryUuids.Any(uuid => uuid == entry.UUID))
+      .All(signal => signal.Type != 3);
   }
 
-  private ISignalModel? CheckJournalEntryForRepetition(
+  private SignalResult? CheckJournalEntryForRepetition(
     AlarmEvaluationInfo info,
     IJournalEntryModel entry)
   {
     DateTime entryPeriod = evaluationHelper.GetAlarmDateForJournalEntry(entry, info.Alarm);
 
-    if (!info.PeriodSeperatedEntries.TryGetValue(entryPeriod, out List<IJournalEntryModel>? periodSeperatedEntriesEntryPeriod))
+    if (!info.PeriodSeperatedEntries.TryGetValue(
+          entryPeriod,
+          out List<IJournalEntryModel>? periodSeperatedEntriesEntryPeriod))
     {
       return null;
     }
+
+    IList<ISignalModel> existingSignals = info.ExistingSignals
+      .Where(signal => signal.Type == 3 && signal.AgreementUuid == entry.AgreementUuid).ToList();
+    if (existingSignals.Count > 0)
+    {
+      IList<string> journalEntryUUIDSInPeriod =
+        periodSeperatedEntriesEntryPeriod.Select(entryInPeriod => entryInPeriod.UUID).ToList();
+      IList<ISignalModel> signalWithThisPeriod = existingSignals.Where(
+        signal => signal.JournalEntryUuids.Any(uuid => journalEntryUUIDSInPeriod.Contains(uuid))).ToList();
+      if (signalWithThisPeriod.Count > 0)
+      {
+        var signal = existingSignals[0];
+        signal.JournalEntryUuids.Add(entry.UUID);
+        return new SignalResult() { Signal = signal, UpdateExisting = true };
+      }
+    }
+
     if (periodSeperatedEntriesEntryPeriod.Count == 1 && periodSeperatedEntriesEntryPeriod[0].UUID == entry.UUID)
     {
       return null;
@@ -84,24 +108,27 @@ public class ReconciliationEvaluator(IDateTimeProvider dateTimeProvider, CheckOn
 
     int total = entry.Amount;
     List<string> entryIds = [entry.UUID];
-    foreach (IJournalEntryModel journalEntry in periodSeperatedEntriesEntryPeriod.Where(journalEntry => journalEntry.UUID != entry.UUID))
+    foreach (IJournalEntryModel journalEntry in periodSeperatedEntriesEntryPeriod.Where(
+               journalEntry => journalEntry.UUID != entry.UUID))
     {
       total = +journalEntry.Amount;
       entryIds.Add(journalEntry.UUID);
     }
 
-    return new SignalModel()
+    return new SignalResult()
     {
-      Type = 3,
-      IsActive = true,
-      OffByAmount = total - info.Alarm.Amount,
-      CreatedAt = dateTimeProvider.UnixNow(),
-      JournalEntryUuids = entryIds,
-      AlarmUuid = info.Alarm.UUID,
-      CitizenUuid = info.CitizenId,
-      AgreementUuid = info.AgreementId
+      Signal = new SignalModel()
+      {
+        Type = 3,
+        IsActive = true,
+        OffByAmount = total - info.Alarm.Amount,
+        CreatedAt = dateTimeProvider.UnixNow(),
+        JournalEntryUuids = entryIds,
+        AlarmUuid = info.Alarm.UUID,
+        CitizenUuid = info.CitizenId,
+        AgreementUuid = info.AgreementId
+      }
     };
-
   }
 
   private ISignalModel? CheckJournalEntryForAmountDifferences(

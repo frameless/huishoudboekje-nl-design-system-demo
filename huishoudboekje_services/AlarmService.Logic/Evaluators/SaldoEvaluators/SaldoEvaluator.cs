@@ -3,7 +3,8 @@ using Core.utils.DateTimeProvider;
 
 namespace AlarmService.Logic.Evaluators.SaldoEvaluators;
 
-public class SaldoEvaluator(IDateTimeProvider dateTimeProvider, int threshold) : BaseEvaluator<KeyValuePair<string, int>>
+public class SaldoEvaluator(IDateTimeProvider dateTimeProvider, int threshold)
+  : BaseEvaluator<KeyValuePair<string, int>>
 {
   private const int SignalTypeNegativeSaldo = 4;
 
@@ -14,18 +15,23 @@ public class SaldoEvaluator(IDateTimeProvider dateTimeProvider, int threshold) :
     {
       evaluation.Signals =
       [
-        new SignalModel()
+        new SignalResult()
         {
-          AlarmUuid = null,
-          CreatedAt = dateTimeProvider.UnixNow(),
-          IsActive = true,
-          JournalEntryUuids = null,
-          OffByAmount = evaluationInfo.Value,
-          Type = SignalTypeNegativeSaldo,
-          CitizenUuid = evaluationInfo.Key
+          UpdateExisting = true,
+          Signal = new SignalModel()
+          {
+            AlarmUuid = null,
+            CreatedAt = dateTimeProvider.UnixNow(),
+            IsActive = true,
+            JournalEntryUuids = null,
+            OffByAmount = evaluationInfo.Value,
+            Type = SignalTypeNegativeSaldo,
+            CitizenUuid = evaluationInfo.Key
+          }
         }
       ];
     }
+
     return evaluation;
   }
 

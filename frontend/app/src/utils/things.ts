@@ -10,6 +10,7 @@ import {Granularity, periodFormatForGranularity} from "../components/Rapportage/
 import {Afspraak, BankTransaction, Burger, UserActivityData, Huishouden, Organisatie, Rubriek} from "../generated/graphql";
 import {BanktransactieFilters} from "../models/models";
 import d from "./dayjs";
+import {clear} from "console";
 
 const HHB_NUMMER_FORMAT = "HHB000000";
 
@@ -61,21 +62,20 @@ export const DrawerContext = createContext<DrawerContextProps>({
  */
 export const currencyFormat = value => currency(value, {separator: "", decimal: ",", symbol: ""});
 
-export function removeUnwantedCharsUseractivityAction(action: string | undefined) : string | undefined {
-	if (action == undefined){
+export function removeUnwantedCharsUseractivityAction(action: string | undefined): string | undefined {
+	if (action == undefined) {
 		return action
 	}
 	return action.replace('/', '')
 }
 
-
-export function getUnixTimestapFromDate(date:Date | undefined){
-	if(date == undefined){
+export function getUnixTimestampFromDate(date: Date | undefined) {
+	if (date == undefined) {
 		return undefined
 	}
 	const checkDate = new Date(date)
-	const offset = checkDate.getTimezoneOffset()/60;
-	checkDate.setHours(checkDate.getHours()-offset)
+	const offset = checkDate.getTimezoneOffset() / 60;
+	checkDate.setHours(checkDate.getHours() - offset)
 	return Math.floor(checkDate.getTime() / 1000);
 }
 
@@ -208,19 +208,19 @@ export function floatMathOperation(left, right, decimals: number, operation: Mat
 	const rightModified = +right * modifier;
 	let result = 0;
 	switch (operation) {
-			case MathOperation.Plus:
-				result = leftModified + rightModified
-				break;
-			case MathOperation.Minus:
-				result = leftModified - rightModified
-				break;
-			case MathOperation.Divide:
-				result = leftModified / rightModified
-				break;
-			case MathOperation.Times:
-				result = leftModified * rightModified
-				break;
-			default: throw new TypeError("operation not supported")
+		case MathOperation.Plus:
+			result = leftModified + rightModified
+			break;
+		case MathOperation.Minus:
+			result = leftModified - rightModified
+			break;
+		case MathOperation.Divide:
+			result = leftModified / rightModified
+			break;
+		case MathOperation.Times:
+			result = leftModified * rightModified
+			break;
+		default: throw new TypeError("operation not supported")
 	}
 	return result / modifier
 }
@@ -271,3 +271,77 @@ export const createQueryParamsFromFilters = (filters: Partial<BanktransactieFilt
 		},
 	};
 };
+
+export interface IDictionary<T> {
+	[Key: string]: T;
+}
+
+export class Dictionary<T> {
+	Entries: IDictionary<T[]>
+	_keys: string[]
+	_allowMultipleEntriesPerKey: boolean
+
+	constructor(allowMultipleValuePerKey = true) {
+		this._allowMultipleEntriesPerKey = allowMultipleValuePerKey
+		this.Entries = {}
+		this._keys = []
+	}
+
+	Replace(key, value, index = -1) {
+		if (index != -1) {
+			this.Entries[key][index] = value
+		}
+		else {
+			this.Entries[key] = [];
+			this.Add(key, value)
+		}
+	}
+
+
+	Add(key, value) {
+		if (!this.ContainsKey(key)) {
+			this._keys.push(key)
+			this.Entries[key] = []
+		}
+		if (!this._allowMultipleEntriesPerKey && this.Entries[key].length > 0) {
+			throw new KeyAlreadyExistsError("Key already exists")
+		}
+		this.Entries[key].push(value)
+	}
+
+	Remove(key, value) {
+		if (!this.ContainsKey(key)) {
+			return;
+		}
+		else {
+			this.Entries[key] = this.Entries[key].filter(v => v != value)
+		}
+	}
+
+	ContainsKey(key): boolean {
+		return this._keys.includes(key)
+	}
+
+	GetKeys(): string[] {
+		return this._keys
+	}
+
+	Clear(key = "") {
+		if (key != "") {
+			this.Entries[key] = []
+		}
+		else {
+			this.Entries = {}
+			this._keys = []
+		}
+	}
+
+}
+
+export class KeyAlreadyExistsError extends Error {
+	constructor(msg: string) {
+		super(msg)
+
+		Object.setPrototypeOf(this, KeyAlreadyExistsError.prototype)
+	}
+}

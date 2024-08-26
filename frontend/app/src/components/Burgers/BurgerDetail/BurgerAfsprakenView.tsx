@@ -9,6 +9,7 @@ import AfspraakTableRow from "../../Afspraken/AfspraakTableRow";
 import AddButton from "../../shared/AddButton";
 import Section from "../../shared/Section";
 import SectionContainer from "../../shared/SectionContainer";
+import CitizenAgreementTable from "./CitizenAgreementTable";
 import d from "../../../utils/dayjs";
 
 type ActiveSwitch = {
@@ -30,28 +31,6 @@ const BurgerAfsprakenView: React.FC<{burger: Burger}> = ({burger}) => {
 		...afspraken.filter(a => filter.inactive && !isAfspraakActive(a) && a.credit).sort((a, b) => a.bedrag >= b.bedrag ? -1 : 1),
 	];
 
-	function sortAfspraken(a: Afspraak, b: Afspraak) {
-		const aStartDate = a.betaalinstructie?.startDate
-		const bStartDate = b.betaalinstructie?.startDate
-
-		const aIsOneTimeAgreement = aStartDate !== undefined && aStartDate === a.betaalinstructie?.endDate
-		const bIsOneTimeAgreement = bStartDate !== undefined &&  bStartDate === b.betaalinstructie?.endDate
-
-		// First, sort by the one time agreements
-		if (aIsOneTimeAgreement !== bIsOneTimeAgreement) {
-			return aIsOneTimeAgreement ? -1 : 1;
-		}
-
-		// If both are one time agreements sort by date
-		if (aIsOneTimeAgreement && bIsOneTimeAgreement) {
-			return  d(aStartDate).unix() - d(bStartDate).unix() ;
-		}
-
-		//If not one time agreement keep same order
-		return 0;
-    }
-
-
 	return (
 		<SectionContainer>
 			<Section title={t("forms.burgers.sections.agreements.title")} helperText={t("forms.burgers.sections.agreements.detailText")} left={afspraken.length > 0 && (
@@ -71,12 +50,13 @@ const BurgerAfsprakenView: React.FC<{burger: Burger}> = ({burger}) => {
 				</FormControl>
 			)}>
 				{sortedAfspraken.length > 0 && (
-					<Table size={"sm"} variant={"noLeftPadding"}>
+					<Table size={"sm"} variant={"simple"}>
 						<Thead>
 							<Tr>
 								<Th>{t("afspraken.tegenpartij")}</Th>
 								{!isMobile && <Th>{t("afspraken.omschrijving")}</Th>}
 								{!isMobile && <Th>{t("afspraken.nextBooking")}</Th>}
+								{!isMobile && <Th>{t("paymentinstruction.openInstructions")}</Th>}
 								<Th textAlign={"right"}>{t("afspraken.bedrag")}</Th>
 								<Th />
 							</Tr>
@@ -89,15 +69,13 @@ const BurgerAfsprakenView: React.FC<{burger: Burger}> = ({burger}) => {
 									</Td>
 								</Tr>
 							)}
-							{sortedAfspraken.length > 0 && sortedAfspraken.sort(sortAfspraken).map((a) => (
-								<AfspraakTableRow key={a.id} data-id={a.id} afspraak={a} py={2} />
-							))}
+							<CitizenAgreementTable agreements={sortedAfspraken}></CitizenAgreementTable>
 						</Tbody>
 					</Table>
 				)}
 
 				{id && (
-					<Box>
+					<Box marginTop={2}>
 						<AddButton data-test="button.Add" onClick={() => navigate(AppRoutes.CreateBurgerAfspraak(String(id)))} />
 					</Box>
 				)}

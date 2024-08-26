@@ -1,4 +1,6 @@
-﻿namespace Core.CommunicationModels.TransactionModels.Interfaces;
+﻿using Core.CommunicationModels.JournalEntryModel.Interfaces;
+
+namespace Core.CommunicationModels.TransactionModels.Interfaces;
 
 public interface ITransactionModel
 {
@@ -12,7 +14,7 @@ public interface ITransactionModel
 
   public string InformationToAccountOwner { get; }
 
-  public bool IsRecorded { get; }
+  public bool IsReconciled { get; }
 
   public string CustomerStatementMessageUUID { get; }
 }

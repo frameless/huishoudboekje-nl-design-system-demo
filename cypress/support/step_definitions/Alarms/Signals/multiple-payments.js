@@ -133,13 +133,13 @@ Given('two CAMT test files are created with the same transaction date', () => {
               </MsgPgntn>
           </GrpHdr>
           <Stmt>
-              <Id>1</Id>
+              <Id>2</Id>
               <ElctrncSeqNb>1</ElctrncSeqNb>
               <CreDtTm>2024-04-02T13:58:31.802216</CreDtTm>
               <Acct>
-                  <Id>
-                      <IBAN>NL86INGB0002445588</IBAN>
-                  </Id>
+                <Id>
+                      <IBAN>NL36ABNA5632579034</IBAN>
+                </Id>
                   <Ccy>EUR</Ccy>
                   <Svcr>
                       <FinInstnId>
@@ -183,7 +183,7 @@ Given('two CAMT test files are created with the same transaction date', () => {
               </TxsSummry>
               <Ntry>
                   <!-- Amount voor deze transactie -->
-                  <Amt Ccy="EUR">123.00</Amt>
+                  <Amt Ccy="EUR">10.00</Amt>
                   <!-- /Amount voor deze transactie -->
                   <!-- Debit = negatief voor burger, credit = positief -->
                   <CdtDbtInd>CRDT</CdtDbtInd>
@@ -267,13 +267,13 @@ Given('two CAMT test files are created with the same transaction date', () => {
               </MsgPgntn>
           </GrpHdr>
           <Stmt>
-              <Id>1</Id>
+              <Id>3</Id>
               <ElctrncSeqNb>1</ElctrncSeqNb>
               <CreDtTm>2024-04-02T13:58:31.802216</CreDtTm>
               <Acct>
-                  <Id>
-                      <IBAN>NL86INGB0002445588</IBAN>
-                  </Id>
+                <Id>
+                      <IBAN>NL36ABNA5632579034</IBAN>
+                </Id>
                   <Ccy>EUR</Ccy>
                   <Svcr>
                       <FinInstnId>
@@ -317,7 +317,7 @@ Given('two CAMT test files are created with the same transaction date', () => {
               </TxsSummry>
               <Ntry>
                   <!-- Amount voor deze transactie -->
-                  <Amt Ccy="EUR">123.00</Amt>
+                  <Amt Ccy="EUR">10.00</Amt>
                   <!-- /Amount voor deze transactie -->
                   <!-- Debit = negatief voor burger, credit = positief -->
                   <CdtDbtInd>CRDT</CdtDbtInd>
@@ -405,7 +405,7 @@ When('both bank transactions are reconciliated on the same agreement', () => {
       .selectFile('cypress/testdata/paymentMultiple1.xml', { force: true })
 
     // Wait for file to be uploaded
-    cy.wait(3000);
+    cy.get('[data-test="uploadItem.check"]');
     cy.get('[aria-label="Close"]')
       .should('be.visible')
       .click();
@@ -449,7 +449,7 @@ When('both bank transactions are reconciliated on the same agreement', () => {
       .selectFile('cypress/testdata/paymentMultiple2.xml', { force: true })
 
     // Wait for file to be uploaded
-    cy.wait(3000);
+    cy.get('[data-test="uploadItem.check"]');
     cy.get('[aria-label="Close"]')
       .should('be.visible')
       .click();
@@ -485,7 +485,7 @@ When('both bank transactions are reconciliated on the same agreement', () => {
 Then('a "Multiple payments" signal is created', () => {
 
   // Wait for signals to be triggered in frontend
-  cy.wait(3000)
+  cy.wait(5000)
 
   // Navigate to page
   cy.visit('/signalen')
@@ -495,7 +495,7 @@ Then('a "Multiple payments" signal is created', () => {
   cy.contains('meerdere transacties gevonden');
   cy.contains(uniqueId);
   cy.contains('Dingus Bingus');
-  cy.contains('10.00');
+  cy.contains('10,00');
  
 });
 

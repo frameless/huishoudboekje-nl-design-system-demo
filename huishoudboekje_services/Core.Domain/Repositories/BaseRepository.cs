@@ -32,7 +32,9 @@ public class BaseRepository<T> : IBaseRepository<T> where T : DatabaseModel
 
     public async Task<List<T>> ExecuteCommand(IDatabaseDecoratableCommand<T> command)
     {
-      List<T> result = await command.Execute(_dbContext.Set<T>()).Result.ToListAsync();
+      var query =  command.Execute(_dbContext.Set<T>()).Result;
+      List<T> result = await query.ToListAsync();
+
       return result;
     }
 

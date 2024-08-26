@@ -49,7 +49,7 @@ class BurgerTransactiesView(HHBView):
                         .join(Journaalpost)\
                         .join(Rekening)\
                         .join(Rubriek, Rubriek.grootboekrekening_id == Journaalpost.grootboekrekening_id)\
-                        .with_entities(Afspraak.burger_id, Rubriek.naam.label("rubriek"), Rekening.rekeninghouder, Journaalpost.transaction_id.label("transaction_id"))
+                        .with_entities(Afspraak.burger_id, Rubriek.naam.label("rubriek"), Rekening.rekeninghouder, Journaalpost.transaction_uuid.label("transaction_id"))
 
         if(len(burger_ids) > 0):
             result = result.filter(Afspraak.burger_id.in_(burger_ids))

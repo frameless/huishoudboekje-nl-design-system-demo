@@ -70,9 +70,8 @@ type RootQuery {
   afsprakenUuid(uuids: [String]): [Afspraak]
   afspraken(ids: [Int], isLogRequest: Boolean): [Afspraak]
   searchAfspraken(offset: Int, limit: Int, afspraakIds: [Int], burgerIds: [Int], afdelingIds: [Int], tegenRekeningIds: [Int], onlyValid: Boolean, minBedrag: Int, maxBedrag: Int, zoektermen: [String], transactionDescription: String): AfsprakenPaged
-  bankTransaction(id: Int!): BankTransaction
+  bankTransaction(uuid: String!): BankTransaction
   bankTransactions(filters: BankTransactionFilter): [BankTransaction]
-  bankTransactionsPaged(start: Int, limit: Int, filters: BankTransactionFilter): BankTransactionsPaged
   searchTransacties(offset: Int, limit: Int, filters: BankTransactionSearchFilter): BankTransactionsPaged
   burger(id: Int!): Burger
   burgersUuid(uuids: [String]): [Burger]
@@ -100,6 +99,7 @@ type OverzichtAfspraak {
 }
 type BankTransaction {
   id: Int
+  uuid: String
   bedrag: Bedrag
   isCredit: Boolean
   isGeboekt: Boolean
@@ -150,6 +150,7 @@ type Burger {
   huisnummer: String
   postcode: String
   plaatsnaam: String
+  startDate: Float
   saldoAlarm: Boolean
   rekeningen: [Rekening]
   afspraken: [Afspraak]
@@ -232,10 +233,10 @@ type Journaalpost {
   id: Int
   uuid: String
   afspraak: Afspraak
-  transaction: BankTransaction
   grootboekrekening: Grootboekrekening
   rubriek: Rubriek
   isAutomatischGeboekt: Boolean
+  transactionUuid: String
 }
 type Overschrijving {
   id: Int
@@ -796,12 +797,12 @@ input CreateOrganisatieInput {
   vestigingsnummer: String
 }
 input CreateJournaalpostAfspraakInput {
-  transactionId: Int!
+  transactionUuid: String!
   afspraakId: Int!
   isAutomatischGeboekt: Boolean!
 }
 input CreateJournaalpostGrootboekrekeningInput {
-  transactionId: Int!
+  transactionUuid: String!
   grootboekrekeningId: String!
   isAutomatischGeboekt: Boolean!
 }

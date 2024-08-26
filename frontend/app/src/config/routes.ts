@@ -17,6 +17,7 @@ export enum RouteNames {
 	gebeurtenissen = "gebeurtenissen",
 	configuratie = "configuratie",
 	export = "export",
+	exports = "exports",
 	status = "status",
 	notFound = "404",
 	brievenExport = "brievenexport",
@@ -53,7 +54,9 @@ const AppRoutesNew = {
 	transactiesView: `/${RouteNames.bankzaken}/${RouteNames.transacties}/:id`,
 	bankafschriften: `/${RouteNames.bankzaken}/${RouteNames.bankafschriften}`,
 	betaalinstructies: `/${RouteNames.bankzaken}/${RouteNames.betaalinstructies}`,
+	betaalinstructiesAction: `/${RouteNames.bankzaken}/${RouteNames.betaalinstructies}/:action`,
 	betaalinstructiesExport: `/${RouteNames.bankzaken}/${RouteNames.betaalinstructies}/${RouteNames.export}`,
+	paymentExportView: `/${RouteNames.bankzaken}/${RouteNames.betaalinstructies}/${RouteNames.exports}/:id`,
 	configuratie: `/${RouteNames.configuratie}`,
 	rapportage: `/${RouteNames.rapportage}`,
 	rapportageBurger: `/${RouteNames.rapportage}`,
@@ -129,6 +132,12 @@ export const AppRoutes = {
 	}),
 	Bankafschriften: generatePath(AppRoutesNew.bankafschriften),
 	Betaalinstructies: generatePath(AppRoutesNew.betaalinstructies),
+	CreateBetaalinstructies: () => generatePath(AppRoutesNew.betaalinstructiesAction, {
+		action: RouteNames.add
+	}),
+	ViewPaymentExport: (paymentExportId: string) => generatePath(AppRoutesNew.paymentExportView, {
+		id: paymentExportId
+	}),
 	Configuratie: generatePath(AppRoutesNew.configuratie),
 	Rapportage: generatePath(AppRoutesNew.rapportage),
 	RapportageBurger: (burgerIds: string[]) => {

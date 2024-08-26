@@ -30,9 +30,9 @@ class Bankafschriften {
                     <ElctrncSeqNb>1</ElctrncSeqNb>
                     <CreDtTm>2024-04-02T13:58:31.802216</CreDtTm>
                     <Acct>
-                        <Id>
-                            <IBAN>NL86INGB0002445588</IBAN>
-                        </Id>
+                    <Id>
+                        <IBAN>NL36ABNA5632579034</IBAN>
+                    </Id>
                         <Ccy>EUR</Ccy>
                         <Svcr>
                             <FinInstnId>
@@ -76,7 +76,7 @@ class Bankafschriften {
                     </TxsSummry>
                     <Ntry>
                         <!-- Amount voor deze transactie -->
-                        <Amt Ccy="EUR">123.00</Amt>
+                        <Amt Ccy="EUR">` + amount + `0</Amt>
                         <!-- /Amount voor deze transactie -->
                         <!-- Debit = negatief voor burger, credit = positief -->
                         <CdtDbtInd>DBIT</CdtDbtInd>
@@ -159,7 +159,7 @@ class Bankafschriften {
             .selectFile('cypress/testdata/paymentAmountNegative.xml', { force: true })
     
         // Wait for file to upload
-        cy.wait(3000);
+        cy.get('[data-test="uploadItem.check"]');
     
         // Contains file
         cy.contains('paymentAmountNegative.xml')
@@ -222,9 +222,9 @@ class Bankafschriften {
                   <ElctrncSeqNb>1</ElctrncSeqNb>
                   <CreDtTm>2024-04-02T13:58:31.802216</CreDtTm>
                   <Acct>
-                      <Id>
-                          <IBAN>NL86INGB0002445588</IBAN>
-                      </Id>
+                    <Id>
+                        <IBAN>NL36ABNA5632579034</IBAN>
+                    </Id>
                       <Ccy>EUR</Ccy>
                       <Svcr>
                           <FinInstnId>
@@ -268,7 +268,7 @@ class Bankafschriften {
                   </TxsSummry>
                   <Ntry>
                       <!-- Amount voor deze transactie -->
-                      <Amt Ccy="EUR">123.00</Amt>
+                      <Amt Ccy="EUR">` + amount + `</Amt>
                       <!-- /Amount voor deze transactie -->
                       <!-- Debit = negatief voor burger, credit = positief -->
                       <CdtDbtInd>DBIT</CdtDbtInd>
@@ -351,7 +351,7 @@ class Bankafschriften {
         .selectFile('cypress/testdata/paymentAmountNegative.xml', { force: true })
 
       // Wait for file to upload
-      cy.wait(3000);
+      cy.get('[data-test="uploadItem.check"]');
 
       // Contains file
       cy.contains('paymentAmountNegative.xml')

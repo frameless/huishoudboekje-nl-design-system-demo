@@ -22,5 +22,4 @@ const Modal: React.FC<ModalProps> = ({
 		</ChakraModal>
 	);
 };
-
 export default Modal;

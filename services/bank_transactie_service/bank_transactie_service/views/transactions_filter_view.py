@@ -2,7 +2,7 @@
 from core_service.utils import valid_date
 from core_service.views.basic_view.basic_filter_view import BasicFilterView
 from models.bank_transaction import BankTransaction
-from sqlalchemy import  func, and_
+from sqlalchemy import func, and_
 
 
 class BanktransactionFilterView(BasicFilterView):
@@ -11,7 +11,8 @@ class BanktransactionFilterView(BasicFilterView):
     model = "banktransactions"
 
     def set_basic_query(self):
-        self.query = BankTransaction.query.order_by(BankTransaction.transactie_datum.desc())
+        self.query = BankTransaction.query.order_by(
+            BankTransaction.transactie_datum.desc())
 
     def add_filter_options(self, filter_options, query):
         ids = filter_options.get("ids", None)
@@ -29,28 +30,36 @@ class BanktransactionFilterView(BasicFilterView):
             new_query = new_query.filter(BankTransaction.id.in_(ids))
 
         if min_bedrag is not None:
-            new_query = new_query.filter(func.abs(BankTransaction.bedrag) >= min_bedrag)
+            new_query = new_query.filter(
+                func.abs(BankTransaction.bedrag) >= min_bedrag)
 
         if max_bedrag is not None:
-            new_query = new_query.filter(func.abs(BankTransaction.bedrag) <= max_bedrag)
+            new_query = new_query.filter(
+                func.abs(BankTransaction.bedrag) <= max_bedrag)
 
         if start_date is not None and valid_date(start_date):
-            new_query = new_query.filter(BankTransaction.transactie_datum >= start_date)
+            new_query = new_query.filter(
+                BankTransaction.transactie_datum >= start_date)
 
         if end_date is not None and valid_date(end_date):
-            new_query = new_query.filter(end_date >= BankTransaction.transactie_datum)
-    
+            new_query = new_query.filter(
+                end_date >= BankTransaction.transactie_datum)
+
         if ibans is not None:
-            new_query = new_query.filter(BankTransaction.tegen_rekening.in_(ibans))
+            new_query = new_query.filter(
+                BankTransaction.tegen_rekening.in_(ibans))
 
         if only_booked is not None:
-            new_query = new_query.filter(BankTransaction.is_geboekt.is_(only_booked))
+            new_query = new_query.filter(
+                BankTransaction.is_geboekt.is_(only_booked))
 
         if only_credit is not None:
-            new_query = new_query.filter(BankTransaction.is_credit.is_(only_credit))
+            new_query = new_query.filter(
+                BankTransaction.is_credit.is_(only_credit))
 
         if zoektermen:
-            clauses = [func.lower(BankTransaction.information_to_account_owner).like(f"%{term.lower()}%") for term in zoektermen]
-            new_query =  new_query.filter(and_(*clauses))
+            clauses = [func.lower(BankTransaction.information_to_account_owner).like(
+                f"%{term.lower()}%") for term in zoektermen]
+            new_query = new_query.filter(and_(*clauses))
 
         return new_query

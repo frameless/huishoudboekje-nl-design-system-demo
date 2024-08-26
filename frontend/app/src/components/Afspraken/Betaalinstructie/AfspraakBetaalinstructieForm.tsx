@@ -337,7 +337,7 @@ const AfspraakBetaalinstructieForm: React.FC<AfspraakBetaalinstructieProps> = ({
 						</>)}
 
 						<Stack align={"flex-end"}>
-							<Button type={"submit"} colorScheme={"primary"}>{t("global.actions.save")}</Button>
+							<Button data-test="button.Submit" type={"submit"} colorScheme={"primary"}>{t("global.actions.save")}</Button>
 							<Asterisk />
 						</Stack>
 					</Stack>

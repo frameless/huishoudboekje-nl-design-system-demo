@@ -74,11 +74,11 @@ def test_rapportage_rapportage_burger():
     mock_hhbservice_repository.get_transactions_burgers.return_value = [transaction_info_1,transaction_info_2,transaction_info_3,transaction_info_4,transaction_info_5,transaction_info_6, transaction_info_7]
     mock_banktransactionservice_repository = Mock()
     
-    transaction_1 = {"id" : 11, "transactie_datum" : "2023-12-11", "bedrag": "-11125"}
-    transaction_2 = {"id" : 12, "transactie_datum" : "2023-12-12", "bedrag": "-11225"}
-    transaction_3 = {"id" : 13, "transactie_datum" : "2023-12-13", "bedrag": "11325"}
-    transaction_4 = {"id" : 14, "transactie_datum" : "2023-12-14", "bedrag": "11425"}
-    transaction_5 = {"id" : 17, "transactie_datum" : "2023-12-15", "bedrag": "-100"}
+    transaction_1 = {"uuid" : 11, "transactie_datum" : "2023-12-11", "bedrag": "-11125"}
+    transaction_2 = {"uuid" : 12, "transactie_datum" : "2023-12-12", "bedrag": "-11225"}
+    transaction_3 = {"uuid" : 13, "transactie_datum" : "2023-12-13", "bedrag": "11325"}
+    transaction_4 = {"uuid" : 14, "transactie_datum" : "2023-12-14", "bedrag": "11425"}
+    transaction_5 = {"uuid" : 17, "transactie_datum" : "2023-12-15", "bedrag": "-100"}
 
     mock_banktransactionservice_repository.get_transacties_in_range.return_value = [transaction_1, transaction_2, transaction_3, transaction_4, transaction_5]
 
@@ -127,11 +127,11 @@ def test_rapportage_all_burgers_rapportage():
     mock_hhbservice_repository.get_transactions_burgers.return_value = [transaction_info_1,transaction_info_2,transaction_info_3,transaction_info_4,transaction_info_5,transaction_info_6, transaction_info_7]
     mock_banktransactionservice_repository = Mock()
     
-    transaction_1 = {"id" : 11, "transactie_datum" : "2023-12-11", "bedrag": "-11125"}
-    transaction_2 = {"id" : 12, "transactie_datum" : "2023-12-12", "bedrag": "-11225"}
-    transaction_3 = {"id" : 13, "transactie_datum" : "2023-12-13", "bedrag": "11325"}
-    transaction_4 = {"id" : 14, "transactie_datum" : "2023-12-14", "bedrag": "11425"}
-    transaction_5 = {"id" : 17, "transactie_datum" : "2023-12-15", "bedrag": "-100"}
+    transaction_1 = {"uuid" : 11, "transactie_datum" : "2023-12-11", "bedrag": "-11125"}
+    transaction_2 = {"uuid" : 12, "transactie_datum" : "2023-12-12", "bedrag": "-11225"}
+    transaction_3 = {"uuid" : 13, "transactie_datum" : "2023-12-13", "bedrag": "11325"}
+    transaction_4 = {"uuid" : 14, "transactie_datum" : "2023-12-14", "bedrag": "11425"}
+    transaction_5 = {"uuid" : 17, "transactie_datum" : "2023-12-15", "bedrag": "-100"}
 
     mock_banktransactionservice_repository.get_transacties_in_range.return_value = [transaction_1, transaction_2, transaction_3, transaction_4, transaction_5]
 
@@ -179,13 +179,13 @@ def test_rapportage_rapportage_more_burger():
     mock_hhbservice_repository.get_transactions_burgers.return_value = [transaction_info_1,transaction_info_2,transaction_info_3,transaction_info_4,transaction_info_5,transaction_info_6, transaction_info_7]
     mock_banktransactionservice_repository = Mock()
     
-    transaction_1 = {"id" : 11, "transactie_datum" : "2023-12-11", "bedrag": "-11125"}
-    transaction_2 = {"id" : 12, "transactie_datum" : "2023-12-12", "bedrag": "-11225"}
-    transaction_3 = {"id" : 13, "transactie_datum" : "2023-12-13", "bedrag": "11325"}
-    transaction_4 = {"id" : 14, "transactie_datum" : "2023-12-14", "bedrag": "11425"}
-    transaction_5 = {"id" : 15, "transactie_datum" : "2023-12-14", "bedrag": "11425"}
-    transaction_6 = {"id" : 16, "transactie_datum" : "2023-12-14", "bedrag": "11425"}
-    transaction_7 = {"id" : 17, "transactie_datum" : "2023-12-15", "bedrag": "-100"}
+    transaction_1 = {"uuid" : 11, "transactie_datum" : "2023-12-11", "bedrag": "-11125"}
+    transaction_2 = {"uuid" : 12, "transactie_datum" : "2023-12-12", "bedrag": "-11225"}
+    transaction_3 = {"uuid" : 13, "transactie_datum" : "2023-12-13", "bedrag": "11325"}
+    transaction_4 = {"uuid" : 14, "transactie_datum" : "2023-12-14", "bedrag": "11425"}
+    transaction_5 = {"uuid" : 15, "transactie_datum" : "2023-12-14", "bedrag": "11425"}
+    transaction_6 = {"uuid" : 16, "transactie_datum" : "2023-12-14", "bedrag": "11425"}
+    transaction_7 = {"uuid" : 17, "transactie_datum" : "2023-12-15", "bedrag": "-100"}
 
     mock_banktransactionservice_repository.get_transacties_in_range.return_value = [transaction_1, transaction_2, transaction_3, transaction_4, transaction_5, transaction_6, transaction_7]
 

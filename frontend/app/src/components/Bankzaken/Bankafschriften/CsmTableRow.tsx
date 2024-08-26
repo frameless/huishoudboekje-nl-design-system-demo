@@ -1,23 +1,26 @@
 import {Td, Text, Tr} from "@chakra-ui/react";
 import React from "react";
-import {CustomerStatementMessage} from "../../../generated/graphql";
+import {CsmData} from "../../../generated/graphql";
 import d from "../../../utils/dayjs";
 import {truncateText} from "../../../utils/things";
 import DeleteConfirmButton from "../../shared/DeleteConfirmButton";
 
 type CsmTableRowProps = {
-	csm: CustomerStatementMessage,
-	onDelete?: (id: number) => void
+	csm: CsmData,
+	onDelete?: (id: string) => void
 };
 
 const CsmTableRow: React.FC<CsmTableRowProps> = ({csm, onDelete}) => {
 	return (
 		<Tr>
 			<Td>
-				<Text>{truncateText(csm.filename || "", 60)}</Text>
+				<Text>{truncateText(csm.file?.name || "", 60)}</Text>
 			</Td>
 			<Td>
-				<Text fontSize={"sm"} color={"gray.500"}>{d(csm.uploadDate).format("L LT")}</Text>
+				<Text>{csm.transactionCount || ""}</Text>
+			</Td>
+			<Td>
+				<Text fontSize={"sm"} color={"gray.500"}>{d.unix(csm.file?.uploadedAt).format("L LT")}</Text>
 			</Td>
 			{onDelete && (
 				<Td style={{width: "100px", textAlign: "right"}}>

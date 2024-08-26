@@ -8,14 +8,16 @@ using Core.CommunicationModels.SignalModel.Interfaces;
 
 namespace AlarmService.Logic.Services.EvaluationServices.QueryHandlers;
 
-internal class HandleEvaluationResultQueryHandler(IAlarmRepository alarmRepository, ISignalRepository signalRepository) : IQueryHandler<HandleEvaluationResult, bool>
+internal class HandleEvaluationResultQueryHandler(IAlarmRepository alarmRepository, ISignalRepository signalRepository)
+  : IQueryHandler<HandleEvaluationResult, bool>
 {
-
   public async Task<bool> HandleAsync(HandleEvaluationResult query)
   {
-    IList<ISignalModel> signalsToCreate = query.EvaluationResult.Evaluations.SelectMany(entry => entry.Signals).ToList();
+    IList<ISignalModel> signalsToCreate = query.EvaluationResult.Evaluations
+      .SelectMany(entry => entry.Signals.Select(signalResult => signalResult.Signal)).ToList();
     List<IAlarmModel> alarmsToUpdate = AlarmsToUpdate(query);
-    IList<ISignalModel> signalsAlreadyExisting = await SignalsAlreadyExisting(signalsToCreate);
+    IList<ISignalModel> signalsAlreadyExisting =
+      await SignalsAlreadyExisting(query.EvaluationResult.Evaluations.SelectMany(eval => eval.Signals).ToList());
     signalsToCreate = signalsToCreate.Where(signal => !signalsAlreadyExisting.Contains(signal)).ToList();
 
     bool createdSignal = true;
@@ -34,26 +36,40 @@ internal class HandleEvaluationResultQueryHandler(IAlarmRepository alarmReposito
     return createdSignal && updatedAlarms;
   }
 
-  private async Task<IList<ISignalModel>> SignalsAlreadyExisting(IList<ISignalModel> signalsToCreate)
+  private async Task<IList<ISignalModel>> SignalsAlreadyExisting(IList<SignalResult> signalsToCreate)
   {
     IList<ISignalModel> signalsAlreadyExisting = new List<ISignalModel>();
-    foreach (ISignalModel signal in signalsToCreate)
+    foreach (SignalResult result in signalsToCreate)
     {
       IList<ISignalModel> signals = await signalRepository.GetAll(
         false,
-        new SignalFilterModel() { CitizenIds = new List<string>() { signal.CitizenUuid }});
+        new SignalFilterModel() { CitizenIds = new List<string>() { result.Signal.CitizenUuid }, Types = [result.Signal.Type]});
       if (signals.Count <= 0) continue;
       foreach (ISignalModel existingSignal in signals)
       {
-        if (existingSignal.Type != signal.Type) continue;
-        existingSignal.UpdatedAt = signal.CreatedAt;
-        existingSignal.IsActive = true;
-        await signalRepository.Update(existingSignal);
-        signalsAlreadyExisting.Add(signal);
+        if (result.UpdateExisting == false ||
+            (result.Signal.Type is 2 or 3 && !HasMatchingJournalEntryuuids(result, existingSignal)))
+          continue;
+        ISignalModel signalToUpdate = result.UpdateExisting ? existingSignal : result.Signal;
+        if (result.Signal.Type == 3)
+        {
+          //Multiple transaction signal gets updated with new journal entries in evaluator
+          signalToUpdate = result.Signal;
+        }
+        signalToUpdate.UpdatedAt = result.Signal.CreatedAt;
+        signalToUpdate.IsActive = true;
+        await signalRepository.Update(signalToUpdate);
+        signalsAlreadyExisting.Add(result.Signal);
         break;
       }
     }
+
     return signalsAlreadyExisting;
+  }
+
+  private static bool HasMatchingJournalEntryuuids(SignalResult result, ISignalModel existingSignal)
+  {
+    return result.Signal.JournalEntryUuids.Any(entryUuid => existingSignal.JournalEntryUuids.Contains(entryUuid));
   }
 
   private static List<IAlarmModel> AlarmsToUpdate(HandleEvaluationResult query)
@@ -68,6 +84,7 @@ internal class HandleEvaluationResultQueryHandler(IAlarmRepository alarmReposito
       {
         evaluation.Alarm.IsActive = false;
       }
+
       alarmsToUpdate.Add(evaluation.Alarm);
     }
 

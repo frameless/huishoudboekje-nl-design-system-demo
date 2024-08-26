@@ -1,9 +1,9 @@
 import {gql} from "@apollo/client";
 
 export const CreateJournaalpostGrootboekrekeningMutation = gql`
-    mutation createJournaalpostGrootboekrekening($transactionId: Int! $grootboekrekeningId: String!){
+    mutation createJournaalpostGrootboekrekening($transactionId: String! $grootboekrekeningId: String!){
         createJournaalpostGrootboekrekening(input: {
-            transactionId: $transactionId,
+            transactionUuid: $transactionId,
             grootboekrekeningId: $grootboekrekeningId,
             isAutomatischGeboekt: false,
         }){

@@ -115,4 +115,18 @@ spec:
             - name: LOG_LEVEL
               value: INFO
             - name: STATSD_HOST
-              value: "hhb-statsd-exporter:9125"
+              value: "hhb-statsd-exporter:9125" 
+            - name: RABBITMQ_HOST
+              value: hhb-rabbitmq
+            - name: RABBITMQ_PORT
+              value: "5672"
+            - name: RABBITMQ_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: rabbitmq-config
+                  key: RABBITMQ_DEFAULT_USER
+            - name: RABBITMQ_PASS
+              valueFrom:
+                configMapKeyRef:
+                  name: rabbitmq-config
+                  key: RABBITMQ_DEFAULT_PASS

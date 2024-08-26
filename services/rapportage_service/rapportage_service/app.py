@@ -33,6 +33,9 @@ def create_app(config_name='rapportage_service.config.Config', dependency_inject
     # Werkzeug has their own logger which outputs info level URL calls.
     # This can also cause parameters that are normally hidden to be logged
     logging.getLogger('werkzeug').setLevel("WARNING")
+    
+    #Pika logs very much so default only warning so the logs stay readable
+    logging.getLogger("pika").setLevel(logging.WARNING)
 
     add_statsd_metrics(app)
 

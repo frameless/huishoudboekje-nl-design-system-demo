@@ -34,7 +34,7 @@ public class TimeFrameEvaluator(IDateTimeProvider dateTimeProvider, CheckOnDateH
         CitizenUuid = evaluationInfo.CitizenId,
         AgreementUuid = evaluationInfo.AgreementId
       };
-      evaluation.Signals.Add(signal);
+      evaluation.Signals.Add(new SignalResult(){Signal = signal, UpdateExisting = true});
 
       evaluation.NewCheckOnDate = checkOnDateHelper.DetermineNextCheckOnDate(
         dateTimeProvider.Today().AddDays(-(1 + evaluationInfo.Alarm.DateMargin)),

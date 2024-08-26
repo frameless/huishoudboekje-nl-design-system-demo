@@ -18,7 +18,7 @@ class RapportageController():
     BEDRAG = "bedrag"
     REPORT_LINE_COLUMNS = [TEGENREKENING, TRANSACTIE_DATUM, BEDRAG]
     TRANSACTION_ID = "transaction_id"
-    ID = "id"
+    ID = "uuid"
 
 
     @inject

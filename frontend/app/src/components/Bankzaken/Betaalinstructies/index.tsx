@@ -1,45 +1,51 @@
-import {DownloadIcon} from "@chakra-ui/icons";
-import {Box, Button, Checkbox, FormControl, FormErrorMessage, FormLabel, HStack, Input, Stack, Text, useBreakpointValue} from "@chakra-ui/react";
+import {DownloadIcon, ViewIcon} from "@chakra-ui/icons";
+import {Box, Button, Checkbox, FormControl, FormErrorMessage, FormLabel, HStack, Input, Stack, Text, useBreakpointValue, useDisclosure} from "@chakra-ui/react";
 import {useState} from "react";
 import DatePicker from "react-datepicker";
 import {useTranslation} from "react-i18next";
 import {AppRoutes} from "../../../config/routes";
-import {Export, useCreateExportOverschrijvingenMutation, useGetExportsPagedQuery} from "../../../generated/graphql";
+import {PaymentExportData, useGetPaymentExportFileLazyQuery, useGetPaymentExportFileQuery, useGetPaymentExportsPagedQuery, usePaymentRecordService_CreatePaymentRecordsMutation} from "../../../generated/graphql";
 import {DateRange} from "../../../models/models";
 import d from "../../../utils/dayjs";
-import Queryable, { Loading } from "../../../utils/Queryable";
+import Queryable, {Loading} from "../../../utils/Queryable";
 import useHandleMutation from "../../../utils/useHandleMutation";
 import Page from "../../shared/Page";
 import Section from "../../shared/Section";
 import SectionContainer from "../../shared/SectionContainer";
-import {MathOperation, currencyFormat2, floatMathOperation} from "../../../utils/things";
+import {MathOperation, currencyFormat2, floatMathOperation, getUnixTimestampFromDate} from "../../../utils/things";
 import usePagination from "../../../utils/usePagination";
+import PaymentRecordModal from "./CreatePaymentExport/PaymentRecordList";
+import {Navigate, NavLink, useNavigate} from "react-router-dom";
+import PaymentExportOverviewSkeleton from "./paymentExportOverviewSkeleton";
 
 const Betaalinstructies = () => {
 	const {t} = useTranslation();
 	const handleMutation = useHandleMutation();
 	const [isLoading, setIsLoading] = useState(true);
-    const onPaginationClick = () => {
-        setIsLoading(true)
-    }
+	const onPaginationClick = () => {
+		setIsLoading(true)
+	}
+	const paymentRecordsModal = useDisclosure();
+
 	const {offset, total, pageSize, setTotal, goFirst, PaginationButtons} = usePagination({pageSize: 10}, onPaginationClick);
-	const $exports = useGetExportsPagedQuery({
+	const $paymentExports = useGetPaymentExportsPagedQuery({
 		fetchPolicy: "no-cache",
 		variables: {
-			offset: offset <= 1 ? 0 : offset,
-			limit: pageSize,
+			input: {
+				page: {
+					skip: offset <= 1 ? 0 : offset,
+					take: pageSize
+				}
+			}
 		},
-        onCompleted: () => {
+		onCompleted: () => {
 			setIsLoading(false)
 		},
 	});
+
+
+
 	const isMobile = useBreakpointValue([true, null, null, false]);
-	const [createExportOverschrijvingen, $createExportOverschrijvingen] = useCreateExportOverschrijvingenMutation(
-		{onCompleted: () =>{
-			goFirst()
-			$exports.refetch().then(() => {setIsLoading(false)})
-		}
-	});
 
 	const [dateRange, setDateRange] = useState<DateRange>({
 		from: d().startOf("day").toDate(),
@@ -76,17 +82,22 @@ const Betaalinstructies = () => {
 	}
 
 	const [paymentDateValid, setPaymentDateValid] = useState<boolean>(true)
-
+	let payment_date: string | undefined = undefined;
 	const onClickExportButton = () => {
-		const payment_date = useCustomPaymentDate ? d(paymentDate).format("YYYY-MM-DD") : undefined
-		handleMutation(createExportOverschrijvingen({
-			variables: {
-				startDatum: d(dateRange.from).format("YYYY-MM-DD"),
-				eindDatum: d(dateRange.through).format("YYYY-MM-DD"),
-				verwerkingDatum: payment_date
-			},
-		}), t("messages.exports.createSuccessMessage"));
+		payment_date = useCustomPaymentDate ? d(paymentDate).format("YYYY-MM-DD") : undefined
+		paymentRecordServiceCreatePaymentRecordsMutation();
+		paymentRecordsModal.onOpen();
 	};
+
+	const [paymentRecordServiceCreatePaymentRecordsMutation, {data, loading, error}] = usePaymentRecordService_CreatePaymentRecordsMutation({
+		variables: {
+			from: 1717408394,
+			to: 1717581194,
+			processAt: payment_date
+		}
+	})
+
+	const navigate = useNavigate();
 
 	const onChangeStartDate = (value: [Date, Date]) => {
 		const [from, through] = value;
@@ -100,143 +111,108 @@ const Betaalinstructies = () => {
 
 	};
 
+	const [getPaymentExportFile] = useGetPaymentExportFileLazyQuery()
+
+	const onDownload = (id) => {
+		getPaymentExportFile({
+			variables: {
+				input: {
+					id: id
+				}
+			},
+			onCompleted: (data) => {
+				const file = data.PaymentExport_GetFile?.fileString;
+				if (file == undefined) {
+					throw new Error('Invalid or file data recieved');
+				}
+				const blob = new Blob([file], { type: 'text/plain' });
+				const downloadLink = document.createElement('a');
+				const url = URL.createObjectURL(blob);
+				downloadLink.href = url;
+				downloadLink.setAttribute('download', data.PaymentExport_GetFile?.name || "Download");
+				document.body.appendChild(downloadLink);
+				downloadLink.click();
+				document.body.removeChild(downloadLink);
+				URL.revokeObjectURL(url);
+			}
+		})
+	}
+
 	return (
 		<Page title={t("bankzaken.exports.title")}>
 			<SectionContainer>
-				<Section title={t("bankzaken.createExport.title")} helperText={t("bankzaken.createExport.helperText")}>
-					<Stack spacing={5}>
-						<Stack direction={["column", "row"]} alignItems={"flex-end"}>
-							<FormControl flex={1}>
-								<FormLabel>{t("global.period")}</FormLabel>
-								<DatePicker
-								 	autoComplete="no"
-									aria-autocomplete="none"
-									dateFormat={"dd-MM-yyyy"}
-									selectsRange={true}
-									isClearable={true}
-									startDate={dateRange.from}
-									endDate={dateRange.through}
-									onChange={onChangeStartDate}
-									customInput={<Input data-test="input.dateRange" autoComplete="no" aria-autocomplete="none" />} 
-								/>
-							</FormControl>
-							<FormControl flex={1}>
-								<Stack direction={["column", "row"]} alignItems={"flex-end"}>
-									<Button colorScheme={"primary"} isLoading={$createExportOverschrijvingen.loading} isDisabled={!(dateRange.from && dateRange.through) || !paymentDateValid && useCustomPaymentDate} onClick={onClickExportButton}>{t("global.actions.export")}</Button>
-								</Stack>
-							</FormControl>
-						</Stack>
-						<Checkbox onChange={e => {
-							onChangeUseCustomPaymentDate(e.target.checked ?? false)
-						}} flex={1}>{t("exports.useCustomPaymentDate")}</Checkbox>
-						{useCustomPaymentDate && (
-							<Stack>
-								<FormControl flex={1} isInvalid={!paymentDateValid}>
-									<FormLabel>{t("exports.paymentDate")}</FormLabel>
-									<DatePicker
-									 	autoComplete="no"
-										aria-autocomplete="none"
-										dateFormat={"dd-MM-yyyy"}
-										isClearable={false}
-										selected={paymentDate}
-										selectsRange={false}
-										showYearDropdown
-										dropdownMode={"select"}
-										onChange={value => {
-											const date = value === null ? undefined : value
-											validateCustomPaymentDate(date)
-											onChangePaymentDate(date)
-										}}
-										customInput={<Input autoComplete="no" aria-autocomplete="none" />}
-									/>
-									<FormErrorMessage>{t("exports.invalidPaymentDate", {"startDate": d().subtract(7, "days").format("L"), "endDate": d(dateRange.through).add(7, "days").format("L")})}</FormErrorMessage>
-								</FormControl>
-								<FormLabel>{t("exports.customPaymentInformation")}</FormLabel>
-							</Stack>
-						)}
-					</Stack>
+				<Section>
+					<Button colorScheme="primary" onClick={() => navigate(AppRoutes.CreateBetaalinstructies())}>Toevoegen</Button>
 				</Section>
 			</SectionContainer>
-
-			<SectionContainer>
-				<Section title={t("bankzaken.exports.title")} helperText={t("bankzaken.exports.helperText")}>
-					<Stack spacing={5}>
-						<Queryable query={$exports} children={(data) => {
-							const exports: Export[] = [...data.exportsPaged.exports || []].sort((a: Export, b: Export) => {
-								const timestampsExist = a.timestamp && b.timestamp;
-								const sortDescending = a.timestamp >= b.timestamp ? -1 : 1;
-								return timestampsExist ? sortDescending : -1;
-							});
-							setTotal(data.exportsPaged.pageInfo.count)
-
+			<Queryable query={$paymentExports} loading={<PaymentExportOverviewSkeleton/>} children={(data) => {
+				const exports: PaymentExportData[] = data.PaymentExport_GetPaged.data || []
+				setTotal(data.PaymentExport_GetPaged.PageInfo.total_count)
+				return (
+					<SectionContainer>
+						{exports.map((paymentExport) => {
 							return (
-								<Stack>
-									{isLoading ? <Loading></Loading> : 
-									<Stack spacing={4}>
-										{exports.map((e) => {
-											const href = AppRoutes.Export(e.id);
-											const overschrijvingen = e.overschrijvingen || []
-											let total = 0;
-											overschrijvingen.forEach(overschrijving => total = floatMathOperation(total, overschrijving.bedrag, 2, MathOperation.Plus))
-											return (
-												<HStack justify={"space-between"} key={e.id}>
-													<Stack>
-														<Stack flex={2} spacing={0}>
-															<Stack direction={"row"}>
-																<FormLabel>{t("exports.dateCreated")}</FormLabel>
-																<Text fontSize={"sm"}>{d(e.timestamp).format("L LT")}</Text>
-															</Stack>
-															<Stack direction={"row"}>
-																<FormLabel>{t("exports.period")}</FormLabel>
-																<Text fontSize={"sm"}>{d(e.startDatum).format("L")} - {d(e.eindDatum).format("L")}</Text>
-															</Stack>
-															<Stack direction={"row"}>
-																<FormLabel>{t("exports.paymentDate")}</FormLabel>
-																{e.verwerkingDatum && (
-																	<Text fontSize={"sm"}>{d(e.verwerkingDatum).format("L")}</Text>
-																)}
-																{!e.verwerkingDatum && (
-																	<Text fontSize={"sm"}>{t("exports.individualPaymentDate")}</Text>
-																)}
-															</Stack>
-															<Stack direction={"row"}>
-																<FormLabel>{t("export.nOverschrijvingen")}</FormLabel>
-																<Text fontSize={"sm"}>{overschrijvingen.length}</Text>
-															</Stack>
-															<Stack direction={"row"}>
-																<FormLabel>{t("export.totaalBedrag")}</FormLabel>
-																<Text fontSize={"sm"}>€{currencyFormat2(false).format(total)}</Text>
-															</Stack>
-															<Stack direction={"row"}>
-																<FormLabel>{t("checksum.sha265")}</FormLabel>
-																<Text fontSize={"sm"} maxWidth={["170px", "300px", "100%"]}>{e.sha256}</Text>
-															</Stack>
-														</Stack>
-													</Stack>
-													<Stack>
-														{!isMobile && (
-															<Box flex={0}>
-																<Button size={"sm"} data-test="button.Download" leftIcon={<DownloadIcon />} as={"a"} target={"_blank"} href={href} download={href}>
-																	{t("global.actions.download")}
-																</Button>
-															</Box>
-														)}
-													</Stack>
-												</HStack>
-											);
-										})}
-									</Stack>
-								}
-								<HStack justify={"center"}>
-									<PaginationButtons />
-								</HStack>
-							</Stack>
+									<HStack justify={"space-between"} key={paymentExport.id}>
+										<Stack flex={2} spacing={0}>
+											<HStack>
+												<FormLabel>{t("exports.dateCreated")}</FormLabel>
+												<Text fontSize={"sm"}>{d.unix(paymentExport.createdAt).format("L LT")}</Text>
+											</HStack>
+											<HStack>
+												<FormLabel>{t("exports.period")}</FormLabel>
+												<Text fontSize={"sm"}>{d.unix(paymentExport.startDate).format("L")} - {d.unix(paymentExport.endDate).format("L")}</Text>
+											</HStack>
+											<HStack>
+												<FormLabel>{t("exports.paymentDate")}</FormLabel>
+												{!paymentExport.recordsInfo?.processingDates ? (
+													<Text fontSize={"sm"} >{t("exports.unknown")}</Text>
+												) : (
+													<Text fontSize={"sm"}>
+													{paymentExport.recordsInfo?.processingDates.length === 1 ? (
+														d.unix(paymentExport.recordsInfo?.processingDates[0]).format("L")
+													) : (
+														t("exports.multiple")
+													)}
+													</Text>
+												)}
+											</HStack>
+											<HStack>
+												<FormLabel>{t("export.nOverschrijvingen")}</FormLabel>
+												<Text fontSize={"sm"}>{paymentExport.recordsInfo?.count}</Text>
+											</HStack>
+											<HStack>
+												<FormLabel>{t("export.totaalBedrag")}</FormLabel>
+												<Text fontSize={"sm"}>€
+													{!paymentExport.recordsInfo?.totalAmount ? (
+														t("exports.unknown")
+													) : (
+														currencyFormat2(false).format(paymentExport?.recordsInfo?.totalAmount / 100)
+													)}
+												</Text>
+											</HStack>
+											<HStack>
+												<FormLabel>{t("checksum.sha265")}</FormLabel>
+												<Text fontSize={"sm"} maxWidth={["170px", "300px", "100%"]}>{paymentExport?.file?.sha256}</Text>
+											</HStack>
+										</Stack>
+										{!isMobile && (
+											<Stack>
+												<Button size={"sm"} data-test="button.View" leftIcon={<ViewIcon />} onClick={() => {navigate(AppRoutes.ViewPaymentExport(String(paymentExport.id)))}}>
+													{t("global.actions.view")}
+												</Button>
+												<Button size={"sm"} data-test="button.Download" leftIcon={<DownloadIcon />} colorScheme={"primary"} variant={"outline"} onClick={() => {onDownload(paymentExport.id)}}>
+													{t("global.actions.download")}
+												</Button>
+											</Stack>
+										)}
+									</HStack>
 							);
-						}} />
-					</Stack>
-				</Section>
-			</SectionContainer>
-		</Page>
+						})}
+						<PaginationButtons />
+					</SectionContainer>
+				);
+			}} />
+		</Page >
 	);
 };
 

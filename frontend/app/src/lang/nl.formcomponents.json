@@ -1,0 +1,7 @@
+{
+    "dateRangePicker": {
+        "label": "Periode",
+        "till": "tot en met ",
+        "invalidEndDate" : "Einddatum kan niet voor de startdatum vallen"
+    }
+}

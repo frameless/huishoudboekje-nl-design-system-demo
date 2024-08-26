@@ -135,13 +135,13 @@ Given('a high amount CAMT test file is created with the amount {string} and tran
               </MsgPgntn>
           </GrpHdr>
           <Stmt>
-              <Id>1</Id>
+              <Id>7</Id>
               <ElctrncSeqNb>1</ElctrncSeqNb>
               <CreDtTm>2024-04-02T13:58:31.802216</CreDtTm>
               <Acct>
-                  <Id>
-                      <IBAN>NL86INGB0002445588</IBAN>
-                  </Id>
+                <Id>
+                      <IBAN>NL36ABNA5632579034</IBAN>
+                </Id>
                   <Ccy>EUR</Ccy>
                   <Svcr>
                       <FinInstnId>
@@ -185,7 +185,7 @@ Given('a high amount CAMT test file is created with the amount {string} and tran
               </TxsSummry>
               <Ntry>
                   <!-- Amount voor deze transactie -->
-                  <Amt Ccy="EUR">123.00</Amt>
+                  <Amt Ccy="EUR">` + amount + `</Amt>
                   <!-- /Amount voor deze transactie -->
                   <!-- Debit = negatief voor burger, credit = positief -->
                   <CdtDbtInd>CRDT</CdtDbtInd>
@@ -426,13 +426,13 @@ Given('a high amount CAMT test file is created with the amount {string} and tran
               </MsgPgntn>
           </GrpHdr>
           <Stmt>
-              <Id>1</Id>
+              <Id>8</Id>
               <ElctrncSeqNb>1</ElctrncSeqNb>
               <CreDtTm>2024-04-02T13:58:31.802216</CreDtTm>
               <Acct>
-                  <Id>
-                      <IBAN>NL86INGB0002445588</IBAN>
-                  </Id>
+                <Id>
+                      <IBAN>NL36ABNA5632579034</IBAN>
+                </Id>
                   <Ccy>EUR</Ccy>
                   <Svcr>
                       <FinInstnId>
@@ -476,7 +476,7 @@ Given('a high amount CAMT test file is created with the amount {string} and tran
               </TxsSummry>
               <Ntry>
                   <!-- Amount voor deze transactie -->
-                  <Amt Ccy="EUR">123.00</Amt>
+                  <Amt Ccy="EUR">` + amount + `</Amt>
                   <!-- /Amount voor deze transactie -->
                   <!-- Debit = negatief voor burger, credit = positief -->
                   <CdtDbtInd>CRDT</CdtDbtInd>
@@ -734,13 +734,13 @@ Given('a high amount CAMT test file is created with the amount {string} and tran
               </MsgPgntn>
           </GrpHdr>
           <Stmt>
-              <Id>1</Id>
+              <Id>9</Id>
               <ElctrncSeqNb>1</ElctrncSeqNb>
               <CreDtTm>2024-04-02T13:58:31.802216</CreDtTm>
               <Acct>
-                  <Id>
-                      <IBAN>NL86INGB0002445588</IBAN>
-                  </Id>
+                <Id>
+                      <IBAN>NL36ABNA5632579034</IBAN>
+                </Id>
                   <Ccy>EUR</Ccy>
                   <Svcr>
                       <FinInstnId>
@@ -784,7 +784,7 @@ Given('a high amount CAMT test file is created with the amount {string} and tran
               </TxsSummry>
               <Ntry>
                   <!-- Amount voor deze transactie -->
-                  <Amt Ccy="EUR">123.00</Amt>
+                  <Amt Ccy="EUR">` + amount + `</Amt>
                   <!-- /Amount voor deze transactie -->
                   <!-- Debit = negatief voor burger, credit = positief -->
                   <CdtDbtInd>CRDT</CdtDbtInd>
@@ -1046,13 +1046,13 @@ Given('a high amount CAMT test file is created with the amount {string} and tran
               </MsgPgntn>
           </GrpHdr>
           <Stmt>
-              <Id>1</Id>
+              <Id>10</Id>
               <ElctrncSeqNb>1</ElctrncSeqNb>
               <CreDtTm>2024-04-02T13:58:31.802216</CreDtTm>
               <Acct>
-                  <Id>
-                      <IBAN>NL86INGB0002445588</IBAN>
-                  </Id>
+                <Id>
+                      <IBAN>NL36ABNA5632579034</IBAN>
+                </Id>
                   <Ccy>EUR</Ccy>
                   <Svcr>
                       <FinInstnId>
@@ -1096,7 +1096,7 @@ Given('a high amount CAMT test file is created with the amount {string} and tran
               </TxsSummry>
               <Ntry>
                   <!-- Amount voor deze transactie -->
-                  <Amt Ccy="EUR">123.00</Amt>
+                  <Amt Ccy="EUR">` + amount + `</Amt>
                   <!-- /Amount voor deze transactie -->
                   <!-- Debit = negatief voor burger, credit = positief -->
                   <CdtDbtInd>CRDT</CdtDbtInd>
@@ -1358,13 +1358,13 @@ Given('a high amount CAMT test file is created with the amount {string} and tran
               </MsgPgntn>
           </GrpHdr>
           <Stmt>
-              <Id>1</Id>
+              <Id>11</Id>
               <ElctrncSeqNb>1</ElctrncSeqNb>
               <CreDtTm>2024-04-02T13:58:31.802216</CreDtTm>
               <Acct>
-                  <Id>
-                      <IBAN>NL86INGB0002445588</IBAN>
-                  </Id>
+                <Id>
+                      <IBAN>NL36ABNA5632579034</IBAN>
+                </Id>
                   <Ccy>EUR</Ccy>
                   <Svcr>
                       <FinInstnId>
@@ -1408,7 +1408,7 @@ Given('a high amount CAMT test file is created with the amount {string} and tran
               </TxsSummry>
               <Ntry>
                   <!-- Amount voor deze transactie -->
-                  <Amt Ccy="EUR">123.00</Amt>
+                  <Amt Ccy="EUR">` + amount + `</Amt>
                   <!-- /Amount voor deze transactie -->
                   <!-- Debit = negatief voor burger, credit = positief -->
                   <CdtDbtInd>CRDT</CdtDbtInd>

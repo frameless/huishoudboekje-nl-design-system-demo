@@ -6,6 +6,7 @@ class Burger(BaseModel):
     uuid: str
     bsn: int
     saldo_alarm: bool
+    start_date: int
     voorletters: str
     voornamen: str
     achternaam: str

@@ -1,6 +1,7 @@
 FROM node:18-bookworm-slim AS base
 WORKDIR /app
 ENV HHB_ALARM_SERVICE_URL="alarmenservice:8000"
+ENV HHB_BANK_SERVICE_URL="bankservice:8000"
 ENV HHB_LOG_SERVICE_URL="logservice:8000"
 ENV HHB_NOTIFICATION_SERVICE_URL="http://notificationservice:8000/graphql"
 ENV HHB_BACKEND_URL="backend:8000/api/graphql"

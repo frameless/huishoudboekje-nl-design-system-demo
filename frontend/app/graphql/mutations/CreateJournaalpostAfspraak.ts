@@ -1,9 +1,9 @@
 import {gql} from "@apollo/client";
 
 export const CreateJournaalpostAfspraakMutation = gql`
-    mutation createJournaalpostAfspraak($transactionId: Int!, $afspraakId: Int!, $isAutomatischGeboekt: Boolean = false){
+    mutation createJournaalpostAfspraak($transactionId: String!, $afspraakId: Int!, $isAutomatischGeboekt: Boolean = false){
         createJournaalpostAfspraak(input: [{
-            transactionId: $transactionId,
+            transactionUuid: $transactionId,
             afspraakId: $afspraakId,
             isAutomatischGeboekt: $isAutomatischGeboekt
         }]){

@@ -1,10 +1,9 @@
 
 import { Given, When, Then, Step } from "@badeball/cypress-cucumber-preprocessor";
 
-const header = {
-  'content-type': 'application/json',
-  'Accept-Encoding': 'gzip, deflate, br',
-};
+import Generic from "../../../pages/Generic";
+
+const generic = new Generic()
 
 const dayjs = require('dayjs');
 
@@ -95,9 +94,9 @@ Then('the file upload warning status icon is displayed', () => {
 
 });
 
-Then('the "No transactions in file" text is displayed', () => {
+Then('the "Er zitten geen transacties in het bestand" text is displayed', () => {
 
-  cy.contains('No transactions in file');
+  cy.contains('Er zitten geen transacties in het bestand');
 
 });
 
@@ -108,9 +107,9 @@ When('I click the "X" button', () => {
 
 });
 
-Then('the "Empty_customer_statement_message_CAMT.053_v2.xml" file is displayed', () => {
+Then('the "Empty_customer_statement_message_CAMT.053_v2.xml" file is not displayed', () => {
 
-  cy.contains('Empty_customer_statement_message_CAMT.053_v2.xml');
+  generic.notContainsText('Empty_customer_statement_message_CAMT.053_v2.xml');
 
 });
 
@@ -210,7 +209,6 @@ Then('Add bank statement without cleaning up', () => {
   
   cy.get('input[type="file"]')
     .selectFile('voorbeeldbankafschriften/camt053-kosten-betalingsverkeer-20231130.xml', { force: true });
-  cy.wait(modalWait)
   cy.get('[data-test="uploadItem.check"]') // Assert file upload status icon is displayed
     .should('be.visible')
 
@@ -246,7 +244,7 @@ When('I select "camt053-kosten-betalingsverkeer-20231130.xml"', () => {
 
 Then('the "Add bank statement" modal opens', () => {
   
-  cy.get('header', { timeout: 10000 })
+  cy.get('header')
     .contains('Bankafschrift toevoegen')
 
 });

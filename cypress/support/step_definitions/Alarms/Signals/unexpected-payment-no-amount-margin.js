@@ -133,13 +133,13 @@ Given('a low amount CAMT test file is created with the amount {string}', (amount
               </MsgPgntn>
           </GrpHdr>
           <Stmt>
-              <Id>1</Id>
+              <Id>12</Id>
               <ElctrncSeqNb>1</ElctrncSeqNb>
               <CreDtTm>2024-04-02T13:58:31.802216</CreDtTm>
               <Acct>
-                  <Id>
-                      <IBAN>NL86INGB0002445588</IBAN>
-                  </Id>
+                <Id>
+                      <IBAN>NL36ABNA5632579034</IBAN>
+                </Id>
                   <Ccy>EUR</Ccy>
                   <Svcr>
                       <FinInstnId>
@@ -183,7 +183,7 @@ Given('a low amount CAMT test file is created with the amount {string}', (amount
               </TxsSummry>
               <Ntry>
                   <!-- Amount voor deze transactie -->
-                  <Amt Ccy="EUR">123.00</Amt>
+                  <Amt Ccy="EUR">` + amount + `</Amt>
                   <!-- /Amount voor deze transactie -->
                   <!-- Debit = negatief voor burger, credit = positief -->
                   <CdtDbtInd>CRDT</CdtDbtInd>
@@ -327,7 +327,7 @@ When('a low amount bank transaction is booked to an agreement', () => {
     // Assertion
     cy.contains('0,01');
     cy.contains('Dingus Bingus');
-    cy.contains('9.99');
+    cy.contains('9,99');
    
   });
 
@@ -457,13 +457,13 @@ Given('a CAMT test file is created with the amount {string}', (amount) => {
               </MsgPgntn>
           </GrpHdr>
           <Stmt>
-              <Id>1</Id>
+              <Id>13</Id>
               <ElctrncSeqNb>1</ElctrncSeqNb>
               <CreDtTm>2024-04-02T13:58:31.802216</CreDtTm>
               <Acct>
-                  <Id>
-                      <IBAN>NL86INGB0002445588</IBAN>
-                  </Id>
+                <Id>
+                      <IBAN>NL36ABNA5632579034</IBAN>
+                </Id>
                   <Ccy>EUR</Ccy>
                   <Svcr>
                       <FinInstnId>
@@ -507,7 +507,7 @@ Given('a CAMT test file is created with the amount {string}', (amount) => {
               </TxsSummry>
               <Ntry>
                   <!-- Amount voor deze transactie -->
-                  <Amt Ccy="EUR">123.00</Amt>
+                  <Amt Ccy="EUR">` + amount + `</Amt>
                   <!-- /Amount voor deze transactie -->
                   <!-- Debit = negatief voor burger, credit = positief -->
                   <CdtDbtInd>CRDT</CdtDbtInd>
@@ -778,13 +778,13 @@ Given('a high amount CAMT test file is created with the amount {string}', (amoun
               </MsgPgntn>
           </GrpHdr>
           <Stmt>
-              <Id>1</Id>
+              <Id>14</Id>
               <ElctrncSeqNb>1</ElctrncSeqNb>
               <CreDtTm>2024-04-02T13:58:31.802216</CreDtTm>
               <Acct>
-                  <Id>
-                      <IBAN>NL86INGB0002445588</IBAN>
-                  </Id>
+                <Id>
+                      <IBAN>NL36ABNA5632579034</IBAN>
+                </Id>
                   <Ccy>EUR</Ccy>
                   <Svcr>
                       <FinInstnId>
@@ -828,7 +828,7 @@ Given('a high amount CAMT test file is created with the amount {string}', (amoun
               </TxsSummry>
               <Ntry>
                   <!-- Amount voor deze transactie -->
-                  <Amt Ccy="EUR">123.00</Amt>
+                  <Amt Ccy="EUR">` + amount + `</Amt>
                   <!-- /Amount voor deze transactie -->
                   <!-- Debit = negatief voor burger, credit = positief -->
                   <CdtDbtInd>CRDT</CdtDbtInd>
@@ -971,7 +971,7 @@ Then('a "Payment amount too high" signal is created', () => {
   // Assertion
   cy.contains('0,01');
   cy.contains('Dingus Bingus');
-  cy.contains('10.01');
+  cy.contains('10,01');
  
 });
 

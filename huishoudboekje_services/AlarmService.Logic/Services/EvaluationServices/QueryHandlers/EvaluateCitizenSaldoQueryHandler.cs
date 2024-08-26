@@ -5,13 +5,15 @@ using AlarmService.Logic.Services.EvaluationServices.Interfaces;
 using AlarmService.Logic.Services.EvaluationServices.Queries;
 using AlarmService.Logic.Services.Interfaces;
 using Core.utils.DateTimeProvider;
+using Microsoft.Extensions.Logging;
 
 namespace AlarmService.Logic.Services.EvaluationServices.QueryHandlers;
 
 internal class EvaluateCitizenSaldoQueryHandler(
   IEvaluationResultService evaluationResultService,
   ICheckAlarmProducer checkAlarmProducer,
-  IDateTimeProvider dateTimeProvider) : IQueryHandler<EvaluateCitizenSaldo, bool>
+  IDateTimeProvider dateTimeProvider,
+  ILogger<EvaluatorService> logger) : IQueryHandler<EvaluateCitizenSaldo, bool>
 {
 
   public async Task<bool> HandleAsync(EvaluateCitizenSaldo query)

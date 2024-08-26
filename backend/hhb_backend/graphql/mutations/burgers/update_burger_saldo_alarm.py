@@ -48,7 +48,6 @@ class UpdateBurgerSaldoAlarm(graphene.Mutation):
             data=json.dumps(kwargs),
             headers={"Content-type": "application/json"},
         )
-        logging.info(response)
         if response.status_code != 200:
             raise GraphQLError(f"Upstream API responded: {response.json()}")
 

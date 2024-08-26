@@ -66,6 +66,7 @@ environment:
 - Run `docker-compose up sampledata` to insert a small dataset into your system. Make sure you have all your services, a
   database and the backend running.
 - Run `docker-compose up evaluate-alarms` to run the timed alarm evaluation.
+- Run `docker-compose up generate-payment-instructions` to generate payment instructions for today.
 
 #### Testing
 

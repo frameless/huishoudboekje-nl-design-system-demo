@@ -57,22 +57,13 @@ spec:
         - name: init3-migrate-db
           image: banktransactieservice
           imagePullPolicy: Always
-          envFrom:
-            - configMapRef:
-                name: postgres-config
           env:
-            - name: DATABASE_URL
+            - name: HHB_DATABASE_URL
               valueFrom:
                 secretKeyRef:
                   name: hhb-database-secrets
                   key: TRANSACTIESERVICE_DATABASE_URL
-            - name: POSTGRESQL_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: hhb-database-secrets
-                  key: POSTGRESQL_PASSWORD
-          command: ["flask"]
-          args: ["db", "upgrade"]
+          command: ["./execute-migrations.sh"]    
       containers:
         - name: hhb-banktransactieservice
           image: banktransactieservice
@@ -80,25 +71,27 @@ spec:
           envFrom:
             - configMapRef:
                 name: postgres-config
+            - configMapRef:
+                name: backend-auth-config
           ports:
-            - name: http
+            - name: grpc
               containerPort: 8000
               protocol: TCP
+            - name: metrics
+              containerPort: 9000
+              protocol: TCP
           startupProbe:
-            httpGet:
-              path: /health
-              port: http
+            grpc:
+              port: 8000
             periodSeconds: 10
             failureThreshold: 60
           livenessProbe:
-            httpGet:
-              path: /health
-              port: http
+            grpc:
+              port: 8000
             periodSeconds: 10
           readinessProbe:
-            httpGet:
-              path: /health
-              port: http
+            grpc:
+              port: 8000
             periodSeconds: 10
           resources:
             limits:
@@ -108,12 +101,24 @@ spec:
               cpu: 100m
               memory: 128Mi
           env:
-            - name: DATABASE_URL
+            - name: HHB_DATABASE_URL
               valueFrom:
                 secretKeyRef:
                   name: hhb-database-secrets
                   key: TRANSACTIESERVICE_DATABASE_URL
-            - name: LOG_LEVEL
-              value: INFO
-            - name: STATSD_HOST
-              value: "hhb-statsd-exporter:9125"
+            - name: HHB_RABBITMQ_HOST
+              value: hhb-rabbitmq
+            - name: HHB_RABBITMQ_PORT
+              value: "5672"
+            - name: HHB_HUISHOUDBOEKJE_SERVICE
+              value: "http://hhb-huishoudboekjeservice"
+            - name: HHB_RABBITMQ_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: rabbitmq-config
+                  key: RABBITMQ_DEFAULT_USER
+            - name: HHB_RABBITMQ_PASS
+              valueFrom:
+                configMapKeyRef:
+                  name: rabbitmq-config
+                  key: RABBITMQ_DEFAULT_PASS

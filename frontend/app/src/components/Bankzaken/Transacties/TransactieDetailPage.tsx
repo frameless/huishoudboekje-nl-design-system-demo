@@ -15,7 +15,7 @@ const TransactieDetailPage = () => {
 		return useGetTransactieQuery({
 			fetchPolicy: "cache-and-network",
 			variables: {
-				id: parseInt(id),
+				uuid: id,
 			},
 		});
 	}
@@ -23,7 +23,7 @@ const TransactieDetailPage = () => {
 	return (
 		<Queryable query={$transactie()} children={(data => {
 			const transactie: BankTransaction = data.bankTransaction;
-			if (!transactie?.id) {
+			if (!transactie?.uuid) {
 				return <PageNotFound />;
 			}
 			return (

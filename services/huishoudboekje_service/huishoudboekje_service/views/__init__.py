@@ -13,6 +13,7 @@ from .huishoudens import HuishoudenView
 from .afdelingen import AfdelingView
 from .journaalposten_rubriek import JournaalpostRubriekView
 from .journaalpost_transacties import BurgerTransactiesView
+from .journaalposten_delete import JournaalpostDeleteView
 from .saldo import SaldoView
 from .afspraken_filter import AfsprakenFilterView
 from .journaalposten_filter import JournaalpostenFilterView

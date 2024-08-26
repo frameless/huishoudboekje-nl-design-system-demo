@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <RootNamespace>FileServices.Logic</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Core.CommunicationModels\Core.CommunicationModels.csproj" />
+      <ProjectReference Include="..\Core.ErrorHandling\Core.ErrorHandling.csproj" />
+      <ProjectReference Include="..\Core.Utils\Core.Utils.csproj" />
+      <ProjectReference Include="..\FileServices.Domain\FileServices.Domain.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Update="Generators\pain.001.001.03\pain.001.001.03.xsd">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="FileGenerators\PaymentInstructionsExport\pain.001.001.03\pain.001.001.03.xsd">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
+</Project>

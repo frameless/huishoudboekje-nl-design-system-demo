@@ -59,9 +59,6 @@ const TransactieOverzichtPopover: React.FC<TransactieOverzichtPopover> = ({bank_
 								<h4>
 									<strong>{t("transactions.description")}:</strong>
 								</h4>
-								<p>
-									{bank_transaction.statementLine}<br /> <br />
-								</p>
 								<Text wordBreak={"break-word"}>{bank_transaction.informationToAccountOwner?.replace(/\s+/g, ' ')}
 								</Text>
 

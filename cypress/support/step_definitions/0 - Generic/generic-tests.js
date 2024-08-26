@@ -9,7 +9,7 @@ import AfspraakDetails from "../../../pages/AfspraakDetails";
 import AlarmModal from "../../../pages/AlarmModal";
  
 const generic = new Generic()
-const api = new Api ()
+const api = new Api()
 const burgers = new Burgers()
 const burgerDetails = new BurgerDetails()
 const afspraakDetails = new AfspraakDetails()
@@ -17,52 +17,6 @@ const alarmModal = new AlarmModal()
 
 let cookieAppSession = '';
 let cookieAppToken = '';
-
-// Set database queries
-const queryAddCitizen = `mutation createBurger {
-  createBurger(input:
-  {
-  	voornamen: "Dingus",
-		voorletters: "D.L.C.",
-  	achternaam: "Bingus",
-  	bsn: 496734349,
-		geboortedatum: "2000-01-01",
-  	straatnaam: "Sesamstraat",
-  	huisnummer: "23",
-  	plaatsnaam: "Maaskantje",
-  	postcode: "4321AB",
-    email: "dingus@bingus.tk",
-    telefoonnummer: "0612344321",
-    rekeningen:
-      [{rekeninghouder: "Tonnie Test",
-        iban: "NL02ARSN0905984706"
-      }],  
-  }
-)
-  {
-    burger{id}
-  }
-}`
-
-const queryTruncateAlarm = `mutation Truncate {
-  truncateTable(databaseName: "alarmenservice", tableName: "Alarm")
-}`
-
-const queryTruncateSignal = `mutation Truncate {
-  truncateTable(databaseName: "alarmenservice", tableName: "signals")
-}`
-
-const queryTruncateBankTransactions = `mutation Truncate {
-  truncateTable(databaseName: "banktransactieservice", tableName: "bank_transactions")
-}`
-
-const queryTruncateCustomerStatements = `mutation Truncate {
-  truncateTable(databaseName: "banktransactieservice", tableName: "customer_statement_messages")
-}`
-
-const queryTruncateJournaalposten = `mutation Truncate {
-  truncateTable(databaseName: "huishoudboekjeservice", tableName: "journaalposten")
-}`
 
 const login = (name) => {
   cy.session(
@@ -126,7 +80,7 @@ BeforeAll({ order: 1 }, function () {
 BeforeAll({ order: 2 },function () {
 // This hook will be executed once at the start of a feature.
 
-  // Delete the test citizen if it exists
+  // // Delete the test citizen if it exists
   // cy.request({
   //   method: "post",
   //   url: Cypress.config().baseUrl + '/apiV2/graphql',
@@ -140,7 +94,7 @@ BeforeAll({ order: 2 },function () {
   //   cy.log(citizenName);
   //   if (citizenName.length != 0)
   //   {
-  //     api.deleteTestBurger(citizenName)
+  //     api.deleteTestBurger()
   //   }
   //   else
   //   {
@@ -155,6 +109,7 @@ BeforeAll({ order: 2 },function () {
 BeforeAll({ order: 3 },function () {
 
   api.createTestBurger()
+  api.createTestBurgerABCDEFGHIJZ()
 
 });
 
@@ -182,10 +137,12 @@ AfterAll({ order: 1 },function () {
 // This hook will be executed once at the end of a feature.
   
   api.deleteTestBurger()
+  api.deleteTestBurgerABCDEFGHIJZ()
 
   // Clean up
   api.truncateAlarms()
   api.truncateSignals()
+  api.truncatePaymentrecords()
   api.truncateBankTransactions()
 
 });
@@ -237,7 +194,7 @@ When('I click the button {string}', (buttonName) => {
 // Find text
 Then('the text {string} is displayed', (text) => {
 
-  cy.contains(text);
+  generic.containsText(text);
 
 });
 
@@ -269,8 +226,7 @@ Then('the label {string} is marked as required', (labelName) => {
 // Make sure text is not displayed on page
 Then('the text {string} is not displayed', (text) => {
 
-  cy.get('body', { timeout: 10000 })
-    .should('not.contain', text);
+  generic.notContainsText(text);
 
 });
 
@@ -278,7 +234,7 @@ Then('the text {string} is not displayed', (text) => {
 Then('a notification of success is displayed', () => {
 
   // Assertion
-  cy.get('[data-status="success"]', { timeout: 10000 })
+  cy.get('[data-status="success"]', { timeout: 30000 })
     .scrollIntoView()
     .should('be.visible');
 

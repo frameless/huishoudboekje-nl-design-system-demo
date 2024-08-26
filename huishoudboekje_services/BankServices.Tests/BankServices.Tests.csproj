@@ -1,0 +1,107 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+    <RootNamespace>BankServices.Tests</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FakeItEasy" Version="8.1.0" />
+    <PackageReference Include="FluentAssertions" Version="7.0.0-alpha.3" />
+    <PackageReference Include="JunitXml.TestLogger" Version="3.0.134" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.3.2"/>
+    <PackageReference Include="NUnit" Version="3.13.3"/>
+    <PackageReference Include="NUnit3TestAdapter" Version="4.2.1"/>
+    <PackageReference Include="NUnit.Analyzers" Version="3.3.0"/>
+    <PackageReference Include="coverlet.collector" Version="3.1.2"/>
+  </ItemGroup>
+  <ItemGroup>
+    <Using Include="NUnit.Framework"/>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BankServices.Logic\BankServices.Logic.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="CamtTestFiles\correctCamtType.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="CamtTestFiles\incorrectCamtType.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="CamtTestFiles\camt_50_transacties_28-7-2023.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="CsmServicesTests\CamtTestFiles\camt_50_transacties_28-7-2023.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="CsmServicesTests\CamtTestFiles\correctCamtType.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="CsmServicesTests\CamtTestFiles\incorrectCamtType.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="CsmServicesTests\CamtTestFiles\camt053_AccountIdentification_Iban.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="CsmServicesTests\CamtTestFiles\camt053_AccountIdentification_Id.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="CsmServicesTests\CamtTestFiles\camt053_AccountIdentification_Missing.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="CsmServicesTests\CamtTestFiles\camt053_TransactionReference.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="CsmServicesTests\CamtTestFiles\camt053_TransactionReference_Missing.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="CsmServicesTests\CamtTestFiles\camt053_Transactions_One.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="CsmServicesTests\CamtTestFiles\camt053_Transactions_One_Missing_Amount.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="CsmServicesTests\CamtTestFiles\camt053_Transactions_One_Amount_Positive.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="CsmServicesTests\CamtTestFiles\camt053_Transactions_One_Amount_Negative.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="CsmServicesTests\CamtTestFiles\camt053_Transactions_One_OnlyFirstTag_Amount.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="CsmServicesTests\CamtTestFiles\camt053_Transactions_One_OnlyTxtAmntTag_Amount.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="CsmServicesTests\CamtTestFiles\camt053_Transactions_One_Missing_AmountAndCdtDbtInd.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="CsmServicesTests\CamtTestFiles\camt053_Transactions_One_MissingCdtDbtInd.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="CsmServicesTests\CamtTestFiles\camt053_Transactions_One_CrdtAccount.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="CsmServicesTests\CamtTestFiles\camt053_Transactions_One_DbitAccount.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="CsmServicesTests\CamtTestFiles\camt053_Transactions_One_NoAccount.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="CsmServicesTests\CamtTestFiles\camt053_Transactions_One_MissingDate.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="CsmServicesTests\CamtTestFiles\camt053_Transactions_One_MissingDescriptions.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="CsmServicesTests\CamtTestFiles\camt053_Transactions_Two.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

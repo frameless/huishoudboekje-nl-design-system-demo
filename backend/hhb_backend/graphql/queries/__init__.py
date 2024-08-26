@@ -10,14 +10,12 @@ from .journaalposten import JournaalpostQuery, JournaalpostenByUuidsQuery, Journ
 from .huishoudens import HuishoudenQuery, HuishoudensQuery, HuishoudensPagedQuery
 from .grootboekrekeningen import GrootboekrekeningQuery, GrootboekrekeningenQuery
 from .exports import ExportQuery, ExportsQuery
-from .gebruikersactiviteiten import GebruikersActiviteitQuery, GebruikersActiviteitenQuery, \
-    GebruikersActiviteitenPagedQuery
 from .exports import ExportQuery, ExportsPagedQuery, ExportsQuery
 import graphene
 
 from .afdelingen import AfdelingQuery, AfdelingenByIbanQuery, AfdelingenQuery
 from .afspraken import AfspraakQuery, AfsprakenByUuidsQuery, SearchAfsprakenQuery, AfsprakenQuery
-from .bank_transactions import BankTransactionQuery, BankTransactionsQuery, BankTransactionsPagedQuery, BankTransactionsSearchQuery
+from .bank_transactions import BankTransactionQuery, BankTransactionsQuery, BankTransactionsSearchQuery
 from .burgers import BurgersByUuidsQuery, BurgersQuery, BurgerQuery, BurgersPagedQuery
 from .configuraties import ConfiguratieQuery, ConfiguratiesQuery
 from .customer_statement_messages import CustomerStatementMessageQuery, CustomerStatementMessagesQuery
@@ -41,7 +39,6 @@ class RootQuery(graphene.ObjectType):
     customer_statement_messages = CustomerStatementMessagesQuery.return_type
     bank_transaction = BankTransactionQuery.return_type
     bank_transactions = BankTransactionsQuery.return_type
-    bank_transactions_paged = BankTransactionsPagedQuery.return_type
     grootboekrekening = GrootboekrekeningQuery.return_type
     grootboekrekeningen = GrootboekrekeningenQuery.return_type
     journaalpost = JournaalpostQuery.return_type
@@ -116,9 +113,6 @@ class RootQuery(graphene.ObjectType):
 
     def resolve_bank_transactions(root, info, **kwargs):
         return BankTransactionsQuery.resolver(root, info, **kwargs)
-
-    def resolve_bank_transactions_paged(root, info, **kwargs):
-        return BankTransactionsPagedQuery.resolver(root, info, **kwargs)
 
     def resolve_grootboekrekening(root, info, **kwargs):
         return GrootboekrekeningQuery.resolver(root, info, **kwargs)

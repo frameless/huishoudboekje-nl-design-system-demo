@@ -36,7 +36,8 @@
       "deleteSuccessMessage": "De aflettering van de transactie is ongedaan gemaakt.",
       "createSuccessMessage": "De transactie is afgeletterd.",
       "errors": {
-        "unknownTransactionIban": "Transactie bevat een onbekende iban"
+        "unknownTransactionIban": "Transactie bevat een onbekende iban",
+        "noTransactionIban": "De banktransactie heeft geen tegenrekening. Letter af op een rubriek."
       }
     },
     "transactions": {
@@ -216,9 +217,8 @@
     "bankzaken": {
       "sections": {
         "customerStatementMessages": {
-          "title": "Bankafschriften",
-          "helperText": "Hier is het mogelijk om bij- en afschrijvingen uit een MT940-bestand te importeren.",
-          "filename": "Bestandsnaam"
+          "filename": "Bestandsnaam",
+          "transactionCount": "Aantal Transacties"
         },
         "transactions": {
           "title": "Transacties"
@@ -540,6 +540,8 @@
   "unknownIban": "Onbekende IBAN",
   "zoektermSuggesties": "Suggesties",
   "exports": {
+    "unknown": "Onbekend",
+    "multiple": "Verschillende",
     "period": "Periode",
     "useCustomPaymentDate": "Aangepaste verwerkingsdatum",
     "paymentDate": "Verwerkingsdatum",
@@ -581,6 +583,12 @@
     },
     "iban": {
       "generalError": "Vul een geldig IBAN in."
+    },
+    "upload": {
+      "toLarge": "Het bestand is te groot om te uploaden. Probeer een kleiner bestand te selecteren.",
+      "wrongFormat": "Het opgegeven bestand heeft niet het juiste formaat. Uploadt een geldig XML-bestand.",
+      "alreadyExists": "Dit bestand is al eerder geüpload. Kies een ander bestand.",
+      "notCamt": "Het geüploade XML-bestand is niet in CAMT.052, CAMT.053 of CAMT.054-formaat. Controleer het bestand en probeer het opnieuw."
     }
   },
   "uploadCsmModal": {
@@ -986,6 +994,10 @@
     "first": "Eerste",
     "previous": "Vorige",
     "next": "Volgende",
-    "last": "Laatste"
+    "last": "Laatste",
+    "pageText": "{{page}} van {{total}}"
+  },
+  "paymentinstruction": {
+    "openInstructions": "Uitstaande betalingen"
   }
 }

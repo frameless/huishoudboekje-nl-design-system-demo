@@ -12,9 +12,10 @@ class JournaalpostGetRequestBuilder(GetRequestBuilder):
         self._request.add_to_filter("ids", ids)
         return self
 
-    def by_transation_ids(self, transation_ids: list[int]):
-        self._request.add_to_filter("transation_ids", transation_ids)
+    def by_transation_uuids(self, transation_uuids: list[str]):
+        self._request.add_to_filter("transation_uuids", transation_uuids)
         return self
+    
     
     def by_burger_ids(self, burger_ids: list[int]):
         self._request.add_to_filter("burger_ids", burger_ids)

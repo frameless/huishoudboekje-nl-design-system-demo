@@ -14,6 +14,7 @@ from hhb_backend.processen import automatisch_boeken
 
 class BankTransaction(graphene.ObjectType):
     id = graphene.Int()
+    uuid = graphene.String()
     bedrag = graphene.Field(Bedrag)
     is_credit = graphene.Boolean()
     is_geboekt = graphene.Boolean()
@@ -39,9 +40,8 @@ class BankTransaction(graphene.ObjectType):
     def resolve_tegen_rekening(root, info):
         #This is (maybe) not necessary when batching is implemented
         #----
-        rekening = root.get('rekening')
-        if rekening:
-            return rekening
+        if "rekening" in root:
+            return root.get('rekening')
         #----
         tegen_rekening = root.get('tegen_rekening')
         if tegen_rekening:
@@ -51,7 +51,7 @@ class BankTransaction(graphene.ObjectType):
         #This is (maybe) not necessary this way when batching is implemented
         journaalpost = root.get('journaalpost')
         if not journaalpost:
-            result =  hhb_dataloader().journaalposten.by_transaction(root.get('id'))
+            result =  hhb_dataloader().journaalposten.by_transaction(root.get('uuid'))
         else:
             if journaalpost == -1:
                 result = None
@@ -69,7 +69,7 @@ class BankTransaction(graphene.ObjectType):
         if root.get('is_geboekt'):
             return []
         
-        suggesties = automatisch_boeken.transactie_suggesties(root.get("id"), exact_zoekterm_matches=False)
+        suggesties = automatisch_boeken.transactie_suggesties(root.get("uuid"), exact_zoekterm_matches=False)
         return [item for sublist in suggesties.values() for item in sublist]
 
 

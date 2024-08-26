@@ -16,7 +16,7 @@ public class Evaluation
     Signals = [];
   }
 
-  public List<ISignalModel> Signals { get; set; }
+  public IList<SignalResult> Signals { get; set; }
   public long? NewCheckOnDate { get; set; }
   public AlarmModel? Alarm { get; set; }
 }

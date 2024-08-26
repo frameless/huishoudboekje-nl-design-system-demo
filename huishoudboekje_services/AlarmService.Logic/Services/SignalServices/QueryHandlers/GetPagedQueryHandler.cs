@@ -8,7 +8,6 @@ namespace AlarmService.Logic.Services.SignalServices.QueryHandlers;
 
 internal class GetPagedQueryHandler(ISignalRepository signalRepository) : IQueryHandler<GetPaged, Paged<ISignalModel>>
 {
-
   public Task<Paged<ISignalModel>> HandleAsync(GetPaged query)
   {
     return signalRepository.GetPaged(query.Pagination, query.Filter);

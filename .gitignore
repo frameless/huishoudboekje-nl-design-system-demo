@@ -53,5 +53,7 @@ cypress/pipeline/database-mesh-ingress.yaml
 
 database-mesh/.mesh
 
+/huishoudboekje_services/*/_intermediate_
 huishoudboekje_services/*/_intermediate_
+*/_intermediate_/*
 

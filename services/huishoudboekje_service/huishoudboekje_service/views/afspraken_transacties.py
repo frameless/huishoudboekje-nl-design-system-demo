@@ -38,7 +38,7 @@ class AfsprakenTransactiesView(BasicFilterView):
 
     def __get_afspraken_with_transaction_ids(self, agreement_uuids):
 
-        subquery = (select(func.array_agg(Journaalpost.transaction_id).label('transactions'))
+        subquery = (select(func.array_agg(Journaalpost.transaction_uuid).label('transactions'))
                     .where(Journaalpost.afspraak_id == Afspraak.id).scalar_subquery())
 
         query = select(Afspraak.uuid, subquery.label('transactions'))\
@@ -48,7 +48,7 @@ class AfsprakenTransactiesView(BasicFilterView):
 
     def __get_afspraken_with_transaction_ids_and_journalentry(self, agreement_uuids):
 
-        subquery = (select(func.json_object_agg(Journaalpost.transaction_id, Journaalpost.uuid).label('transactions'))
+        subquery = (select(func.json_object_agg(Journaalpost.transaction_uuid, Journaalpost.uuid).label('transactions'))
                     .where(Journaalpost.afspraak_id == Afspraak.id).scalar_subquery())
 
         query = select(Afspraak.uuid, subquery.label('transactions'))\

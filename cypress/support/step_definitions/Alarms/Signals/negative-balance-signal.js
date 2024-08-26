@@ -81,13 +81,13 @@ When('I select a CAMT test file with zero payment amount', () => {
               </MsgPgntn>
           </GrpHdr>
           <Stmt>
-              <Id>1</Id>
+              <Id>5</Id>
               <ElctrncSeqNb>1</ElctrncSeqNb>
               <CreDtTm>2024-04-02T13:58:31.802216</CreDtTm>
               <Acct>
-                  <Id>
-                      <IBAN>NL86INGB0002445588</IBAN>
-                  </Id>
+                <Id>
+                      <IBAN>NL36ABNA5632579034</IBAN>
+                </Id>
                   <Ccy>EUR</Ccy>
                   <Svcr>
                       <FinInstnId>
@@ -214,7 +214,7 @@ When('I select a CAMT test file with zero payment amount', () => {
       .selectFile('cypress/testdata/paymentAmountZero.xml', { force: true })
 
     // Wait for file to be uploaded
-    cy.wait(3000);
+    cy.get('[data-test="uploadItem.check"]');
   
   });
 
@@ -267,12 +267,12 @@ When('I select a CAMT test file with negative payment amount {string}', (amount)
               </MsgPgntn>
           </GrpHdr>
           <Stmt>
-              <Id>1</Id>
+              <Id>6</Id>
               <ElctrncSeqNb>1</ElctrncSeqNb>
               <CreDtTm>2024-04-02T13:58:31.802216</CreDtTm>
               <Acct>
                   <Id>
-                      <IBAN>NL86INGB0002445588</IBAN>
+                      <IBAN>NL36ABNA5632579034</IBAN>
                   </Id>
                   <Ccy>EUR</Ccy>
                   <Svcr>
@@ -317,7 +317,7 @@ When('I select a CAMT test file with negative payment amount {string}', (amount)
               </TxsSummry>
               <Ntry>
                   <!-- Amount voor deze transactie -->
-                  <Amt Ccy="EUR">123.00</Amt>
+                  <Amt Ccy="EUR">` + amount + `</Amt>
                   <!-- /Amount voor deze transactie -->
                   <!-- Debit = negatief voor burger, credit = positief -->
                   <CdtDbtInd>DBIT</CdtDbtInd>
@@ -400,7 +400,7 @@ When('I select a CAMT test file with negative payment amount {string}', (amount)
       .selectFile('cypress/testdata/paymentAmountNegative.xml', { force: true })
   
     // Wait for file to upload
-    cy.wait(3000);
+    cy.get('[data-test="uploadItem.check"]');
   
 });
 
@@ -422,13 +422,13 @@ Given('a positive CAMT test file is created with the amount {string}', (amount) 
               </MsgPgntn>
           </GrpHdr>
           <Stmt>
-              <Id>1</Id>
+              <Id>4</Id>
               <ElctrncSeqNb>1</ElctrncSeqNb>
               <CreDtTm>2024-04-02T13:58:31.802216</CreDtTm>
               <Acct>
-                  <Id>
-                      <IBAN>NL86INGB0002445588</IBAN>
-                  </Id>
+                <Id>
+                      <IBAN>NL36ABNA5632579034</IBAN>
+                </Id>
                   <Ccy>EUR</Ccy>
                   <Svcr>
                       <FinInstnId>
@@ -472,7 +472,7 @@ Given('a positive CAMT test file is created with the amount {string}', (amount) 
               </TxsSummry>
               <Ntry>
                   <!-- Amount voor deze transactie -->
-                  <Amt Ccy="EUR">0.00</Amt>
+                  <Amt Ccy="EUR">` + amount + `</Amt>
                   <!-- /Amount voor deze transactie -->
                   <!-- Debit = negatief voor burger, credit = positief -->
                   <CdtDbtInd>CRDT</CdtDbtInd>
@@ -559,7 +559,238 @@ When('a positive bank transaction with amount {string} is booked to an agreement
     .selectFile('cypress/testdata/paymentAmountPositive.xml', { force: true })
   
   // Wait for file to upload
-  cy.wait(3000);
+  cy.get('[data-test="uploadItem.check"]');
+  cy.get('[aria-label="Close"]', { timeout: 10000 })
+    .should('be.visible')
+    .click();
+
+  // Reconciliate the bank transaction to the correct agreement
+  cy.visit('/bankzaken/transacties')
+  cy.url().should('eq', Cypress.config().baseUrl + '/bankzaken/transacties')
+
+  cy.get('[data-test="transactionsPage.filters.notReconciliated"]')
+    .click();
+  cy.get('[data-test="transactions.expandFilter"]')
+    .click();
+  cy.get('#zoektermen')
+    .type('HHB000001 Zorgtoeslag{enter}');
+  cy.contains(amount)
+    .click();
+
+  cy.url().should('include', '/bankzaken/transacties/')
+  cy.get('[data-test="switch.filterDescription"]') 
+    .click({ force: true });
+  cy.contains('Alle burgers')
+    .click({ force: true });
+  cy.contains('Bingus')
+    .click();
+  cy.contains('Loon')
+    .scrollIntoView()
+    .click();
+
+  Step(this, "a success notification containing 'De transactie is afgeletterd' is displayed");
+ 
+});
+
+When('the negative amount bank transaction with amount {string} is booked to the correct agreement', (amount) => {
+  
+  // Reconciliate the bank transaction to the correct agreement
+  cy.visit('/bankzaken/transacties')
+  cy.url().should('eq', Cypress.config().baseUrl + '/bankzaken/transacties')
+  
+  cy.get('[data-test="transactionsPage.filters.notReconciliated"]', { timeout: 10000 })
+    .click();
+  cy.get('[data-test="transactions.expandFilter"]', { timeout: 10000 })
+    .click();
+  cy.get('#zoektermen', { timeout: 10000 })
+    .type('HHB000001 Zorgtoeslag{enter}');
+  cy.contains(amount)
+    .click();
+  
+  cy.url().should('include', '/bankzaken/transacties/')
+  cy.get('[data-test="switch.filterDescription"]', { timeout: 10000 })
+    .click({ force: true });
+  cy.contains('Alle burgers')
+    .click({ force: true });
+  cy.contains('Bingus')
+    .click();
+  cy.wait(2000);
+  cy.contains('Loon')
+    .click();
+
+  Step(this, "a success notification containing 'De transactie is afgeletterd' is displayed");
+    
+});
+
+When('the signal has a timestamp', () => {
+
+  cy.get('[data-test="signal.timestamp"]', { timeout: 10000 })
+    .invoke('text')
+    .then((txt) => {
+      timestamp = txt
+      cy.contains(timestamp);
+    })
+
+});
+
+//#endregion
+
+Given('another positive CAMT test file is created with the amount {string}', (amount) => {
+
+  // Get current date
+  var todayDate = new Date().toISOString().slice(0, 10);
+
+  // Create file
+  cy.writeFile('cypress/testdata/paymentAmount2sitive.xml', `<?xml version='1.0' encoding='utf-8'?>
+  <Document xmlns="urn:iso:std:iso:20022:tech:xsd:camt.053.001.02" xmlns_xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <BkToCstmrStmt>
+          <GrpHdr>
+              <MsgId>588d0a9f-439d-4410-8a3e-1354c2a9c55e</MsgId>
+              <CreDtTm>2024-04-02T13:58:31.802216</CreDtTm>
+              <MsgPgntn>
+                  <PgNb>1</PgNb>
+                  <LastPgInd>true</LastPgInd>
+              </MsgPgntn>
+          </GrpHdr>
+          <Stmt>
+              <Id>4683</Id>
+              <ElctrncSeqNb>1</ElctrncSeqNb>
+              <CreDtTm>2024-04-02T13:58:31.802216</CreDtTm>
+              <Acct>
+                <Id>
+                      <IBAN>NL36ABNA5632579034</IBAN>
+                </Id>
+                  <Ccy>EUR</Ccy>
+                  <Svcr>
+                      <FinInstnId>
+                          <BIC>ABNANL2A</BIC>
+                      </FinInstnId>
+                  </Svcr>
+              </Acct>
+              <Bal>
+                  <Tp>
+                      <CdOrPrtry>
+                          <Cd>OPBD</Cd>
+                      </CdOrPrtry>
+                  </Tp>
+                  <Amt Ccy="EUR">0.00</Amt>
+                  <CdtDbtInd>CRDT</CdtDbtInd>
+              </Bal>
+              <Bal>
+                  <Tp>
+                      <CdOrPrtry>
+                          <Cd>CRDT</Cd>
+                      </CdOrPrtry>
+                  </Tp>
+                  <Amt Ccy="EUR">0.00</Amt>
+                  <CdtDbtInd>CRDT</CdtDbtInd>
+              </Bal>
+              <TxsSummry>
+                  <TtlNtries>
+                      <NbOfNtries>1</NbOfNtries>
+                      <Sum>2002.00</Sum>
+                      <TtlNetNtryAmt>2002.00</TtlNetNtryAmt>
+                      <CdtDbtInd>DBIT</CdtDbtInd>
+                  </TtlNtries>
+                  <TtlCdtNtries>
+                      <NbOfNtries>0</NbOfNtries>
+                      <Sum>0.00</Sum>
+                  </TtlCdtNtries>
+                  <TtlDbtNtries>
+                      <NbOfNtries>1</NbOfNtries>
+                      <Sum>2002.00</Sum>
+                  </TtlDbtNtries>
+              </TxsSummry>
+              <Ntry>
+                  <!-- Amount voor deze transactie -->
+                  <Amt Ccy="EUR">` + amount + `</Amt>
+                  <!-- /Amount voor deze transactie -->
+                  <!-- Debit = negatief voor burger, credit = positief -->
+                  <CdtDbtInd>CRDT</CdtDbtInd>
+                  <!-- Bij DBIT, vervang Dbtr hierna door Cdtr -->
+                  <!-- Bij CRDT, vervang Cdtr hierna door Dbtr -->
+                  <Sts>BOOK</Sts>
+                  <!-- Transactiedatum -->
+                  <BookgDt>
+                      <Dt>` + todayDate + `</Dt>
+                  </BookgDt>
+                  <ValDt>
+                      <Dt>` + todayDate + `</Dt>
+                  </ValDt>
+                  <!-- /Transactiedatum -->
+                  <AcctSvcrRef>232070C7H4CYV5</AcctSvcrRef>
+                  <BkTxCd>
+                      -<Prtry>
+                          <Cd>849</Cd>
+                          <Issr>INGBANK</Issr>
+                      </Prtry>
+                  </BkTxCd>
+                  <NtryDtls>
+                      <TxDtls>
+                          <Refs>
+                              <InstrId>INNDNL2U20260723000025610002518</InstrId>
+                              <EndToEndId>123456789</EndToEndId>
+                              <MndtId>5784272</MndtId>
+                          </Refs>
+                          <AmtDtls>
+                              <TxAmt>
+                                  <Amt Ccy="EUR">` + amount + `</Amt>
+                              </TxAmt>
+                          </AmtDtls>
+                          <BkTxCd>
+                              <Prtry>
+                                  <Cd>849</Cd>
+                                  <Issr>BNGBANK</Issr>
+                              </Prtry>
+                          </BkTxCd>
+                          <!-- Tegenpartij -->
+                          <RltdPties>
+                              <Dbtr>
+                                  <Nm>Belastingdienst Toeslagen Kantoor Utrecht</Nm>
+                              </Dbtr>
+                              <DbtrAcct>
+                                  -<Id>
+                                      <IBAN>NL86INGB0002445588</IBAN>
+                                  </Id>
+                              </DbtrAcct>
+                          </RltdPties>
+                          <!-- /Tegenpartij -->
+                          <RltdAgts>
+                              <DbtrAgt>
+                                  <FinInstnId>
+                                      <BIC>RABONL2U</BIC>
+                                  </FinInstnId>
+                              </DbtrAgt>
+                          </RltdAgts>
+                          <RmtInf>
+                              <Ustrd>HHB000001 Zorgtoeslag</Ustrd>
+                          </RmtInf>
+                      </TxDtls>
+                  </NtryDtls>
+                  <!-- Zoektermen -->
+                  <AddtlNtryInf>/TRTP/SEPA Incasso/REMI/HHB000001 Zorgtoeslag/CSID/NL12ZZZ091567230000/SVCL/CORE/testdata</AddtlNtryInf>
+              </Ntry>
+          </Stmt>
+      </BkToCstmrStmt>
+  </Document>`)
+ 
+});
+
+When('another positive bank transaction with amount {string} is booked to an agreement', (amount) => {
+
+  // Upload testdata CAMT
+  cy.visit('/bankzaken/bankafschriften')
+  cy.url().should('eq', Cypress.config().baseUrl + '/bankzaken/bankafschriften')
+
+  cy.get('input[type="file"]', { timeout: 10000 })
+    .should('exist')
+    .click({ force: true })
+
+  cy.get('input[type="file"]')
+    .selectFile('cypress/testdata/paymentAmount2sitive.xml', { force: true })
+  
+  // Wait for file to upload
+  cy.get('[data-test="uploadItem.check"]');
   cy.get('[aria-label="Close"]', { timeout: 10000 })
     .should('be.visible')
     .click();
@@ -591,47 +822,315 @@ When('a positive bank transaction with amount {string} is booked to an agreement
  
 });
 
-When('the negative amount bank transaction with amount {string} is booked to the correct agreement', (amount) => {
-  
-  // Reconciliate the bank transaction to the correct agreement
-  cy.visit('/bankzaken/transacties')
-  cy.url().should('eq', Cypress.config().baseUrl + '/bankzaken/transacties')
-  
-  cy.get('[data-test="transactionsPage.filters.notReconciliated"]', { timeout: 10000 })
-    .click();
-  cy.get('[data-test="transactions.expandFilter"]', { timeout: 10000 })
-    .click();
-  cy.get('#zoektermen', { timeout: 10000 })
-    .type('HHB000001 Zorgtoeslag{enter}');
-  cy.contains(amount)
-    .click();
-  
-  cy.url().should('include', '/bankzaken/transacties/')
-  cy.get('[data-test="switch.filterDescription"]', { timeout: 10000 })
-    .click({ force: true });
-  cy.contains('Alle burgers')
-    .click({ force: true });
-  cy.contains('Bingus')
-    .click();
-  cy.contains('Loon')
-    .click();
+When('I select another CAMT test file with negative payment amount {string}', (amount) => {
 
-  Step(this, "a success notification containing 'De transactie is afgeletterd' is displayed");
+  // Get current date
+  var todayDate = new Date().toISOString().slice(0, 10);
+  
+  // Create file
+  cy.writeFile('cypress/testdata/paymentAmount2gative.xml', `<?xml version='1.0' encoding='utf-8'?>
+  <Document xmlns="urn:iso:std:iso:20022:tech:xsd:camt.053.001.02" xmlns_xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <BkToCstmrStmt>
+          <GrpHdr>
+              <MsgId>588d0a9f-439d-4410-8a3e-1354c2a9c55e</MsgId>
+              <CreDtTm>2024-04-02T13:58:31.802216</CreDtTm>
+              <MsgPgntn>
+                  <PgNb>1</PgNb>
+                  <LastPgInd>true</LastPgInd>
+              </MsgPgntn>
+          </GrpHdr>
+          <Stmt>
+              <Id>6269034</Id>
+              <ElctrncSeqNb>1</ElctrncSeqNb>
+              <CreDtTm>2024-04-02T13:58:31.802216</CreDtTm>
+              <Acct>
+                  <Id>
+                      <IBAN>NL36ABNA5632579034</IBAN>
+                  </Id>
+                  <Ccy>EUR</Ccy>
+                  <Svcr>
+                      <FinInstnId>
+                          <BIC>ABNANL2A</BIC>
+                      </FinInstnId>
+                  </Svcr>
+              </Acct>
+              <Bal>
+                  <Tp>
+                      <CdOrPrtry>
+                          <Cd>OPBD</Cd>
+                      </CdOrPrtry>
+                  </Tp>
+                  <Amt Ccy="EUR">0.00</Amt>
+                  <CdtDbtInd>CRDT</CdtDbtInd>
+              </Bal>
+              <Bal>
+                  <Tp>
+                      <CdOrPrtry>
+                          <Cd>CRDT</Cd>
+                      </CdOrPrtry>
+                  </Tp>
+                  <Amt Ccy="EUR">0.00</Amt>
+                  <CdtDbtInd>CRDT</CdtDbtInd>
+              </Bal>
+              <TxsSummry>
+                  <TtlNtries>
+                      <NbOfNtries>1</NbOfNtries>
+                      <Sum>2002.00</Sum>
+                      <TtlNetNtryAmt>2002.00</TtlNetNtryAmt>
+                      <CdtDbtInd>DBIT</CdtDbtInd>
+                  </TtlNtries>
+                  <TtlCdtNtries>
+                      <NbOfNtries>0</NbOfNtries>
+                      <Sum>0.00</Sum>
+                  </TtlCdtNtries>
+                  <TtlDbtNtries>
+                      <NbOfNtries>1</NbOfNtries>
+                      <Sum>2002.00</Sum>
+                  </TtlDbtNtries>
+              </TxsSummry>
+              <Ntry>
+                  <!-- Amount voor deze transactie -->
+                  <Amt Ccy="EUR">` + amount + `</Amt>
+                  <!-- /Amount voor deze transactie -->
+                  <!-- Debit = negatief voor burger, credit = positief -->
+                  <CdtDbtInd>DBIT</CdtDbtInd>
+                  <!-- Bij DBIT, vervang Dbtr hierna door Cdtr -->
+                  <!-- Bij CRDT, vervang Cdtr hierna door Dbtr -->
+                  <Sts>BOOK</Sts>
+                  <!-- Transactiedatum -->
+                  <BookgDt>
+                      <Dt>` + todayDate + `</Dt>
+                  </BookgDt>
+                  <ValDt>
+                      <Dt>` + todayDate + `</Dt>
+                  </ValDt>
+                  <!-- /Transactiedatum -->
+                  <AcctSvcrRef>232070C7H4CYV5</AcctSvcrRef>
+                  <BkTxCd>
+                      -<Prtry>
+                          <Cd>849</Cd>
+                          <Issr>INGBANK</Issr>
+                      </Prtry>
+                  </BkTxCd>
+                  <NtryDtls>
+                      <TxDtls>
+                          <Refs>
+                              <InstrId>INNDNL2U20260723000025610002518</InstrId>
+                              <EndToEndId>123456789</EndToEndId>
+                              <MndtId>5784272</MndtId>
+                          </Refs>
+                          <AmtDtls>
+                              <TxAmt>
+                                  <Amt Ccy="EUR">` + amount + `</Amt>
+                              </TxAmt>
+                          </AmtDtls>
+                          <BkTxCd>
+                              <Prtry>
+                                  <Cd>849</Cd>
+                                  <Issr>BNGBANK</Issr>
+                              </Prtry>
+                          </BkTxCd>
+                          <!-- Tegenpartij -->
+                          <RltdPties>
+                              <Cdtr>
+                                  <Nm>Belastingdienst Toeslagen Kantoor Utrecht</Nm>
+                              </Cdtr>
+                              <CdtrAcct>
+                                  -<Id>
+                                      <IBAN>NL86INGB0002445588</IBAN>
+                                  </Id>
+                              </CdtrAcct>
+                          </RltdPties>
+                          <!-- /Tegenpartij -->
+                          <RltdAgts>
+                              <CdtrAgt>
+                                  <FinInstnId>
+                                      <BIC>RABONL2U</BIC>
+                                  </FinInstnId>
+                              </CdtrAgt>
+                          </RltdAgts>
+                          <RmtInf>
+                              <Ustrd>HHB000001 Zorgtoeslag</Ustrd>
+                          </RmtInf>
+                      </TxDtls>
+                  </NtryDtls>
+                  <!-- Zoektermen -->
+                  <AddtlNtryInf>/TRTP/SEPA Incasso/REMI/HHB000001 Zorgtoeslag/CSID/NL12ZZZ091567230000/SVCL/CORE/testdata</AddtlNtryInf>
+              </Ntry>
+          </Stmt>
+      </BkToCstmrStmt>
+  </Document>`)
+  
+    // Upload testdata CAMT
+    cy.visit('/bankzaken/bankafschriften')
+    cy.url().should('eq', Cypress.config().baseUrl + '/bankzaken/bankafschriften')
     
+    cy.get('input[type="file"]')
+      .should('exist')
+      .click({ force: true })
+  
+    cy.get('input[type="file"]')
+      .selectFile('cypress/testdata/paymentAmount2gative.xml', { force: true })
+  
+    // Wait for file to upload
+    cy.get('[data-test="uploadItem.check"]');
+  
 });
 
-When('the signal has a timestamp', () => {
+When('I select one more CAMT test file with negative payment amount {string}', (amount) => {
 
-  cy.get('[data-test="signal.timestamp"]', { timeout: 10000 })
-    .invoke('text')
-    .then((txt) => {
-      timestamp = txt
-      cy.contains(timestamp);
-    })
-
-});
-
-//#endregion
+    // Get current date
+    var todayDate = new Date().toISOString().slice(0, 10);
+    
+    // Create file
+    cy.writeFile('cypress/testdata/paymentAmount3gative.xml', `<?xml version='1.0' encoding='utf-8'?>
+    <Document xmlns="urn:iso:std:iso:20022:tech:xsd:camt.053.001.02" xmlns_xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <BkToCstmrStmt>
+            <GrpHdr>
+                <MsgId>588d0a9f-439d-4410-8a3e-1354c2a9c55e</MsgId>
+                <CreDtTm>2024-04-02T13:58:31.802216</CreDtTm>
+                <MsgPgntn>
+                    <PgNb>1</PgNb>
+                    <LastPgInd>true</LastPgInd>
+                </MsgPgntn>
+            </GrpHdr>
+            <Stmt>
+                <Id>6269134</Id>
+                <ElctrncSeqNb>1</ElctrncSeqNb>
+                <CreDtTm>2024-04-02T13:58:31.802216</CreDtTm>
+                <Acct>
+                    <Id>
+                        <IBAN>NL36ABNA5632579034</IBAN>
+                    </Id>
+                    <Ccy>EUR</Ccy>
+                    <Svcr>
+                        <FinInstnId>
+                            <BIC>ABNANL2A</BIC>
+                        </FinInstnId>
+                    </Svcr>
+                </Acct>
+                <Bal>
+                    <Tp>
+                        <CdOrPrtry>
+                            <Cd>OPBD</Cd>
+                        </CdOrPrtry>
+                    </Tp>
+                    <Amt Ccy="EUR">0.00</Amt>
+                    <CdtDbtInd>CRDT</CdtDbtInd>
+                </Bal>
+                <Bal>
+                    <Tp>
+                        <CdOrPrtry>
+                            <Cd>CRDT</Cd>
+                        </CdOrPrtry>
+                    </Tp>
+                    <Amt Ccy="EUR">0.00</Amt>
+                    <CdtDbtInd>CRDT</CdtDbtInd>
+                </Bal>
+                <TxsSummry>
+                    <TtlNtries>
+                        <NbOfNtries>1</NbOfNtries>
+                        <Sum>2002.00</Sum>
+                        <TtlNetNtryAmt>2002.00</TtlNetNtryAmt>
+                        <CdtDbtInd>DBIT</CdtDbtInd>
+                    </TtlNtries>
+                    <TtlCdtNtries>
+                        <NbOfNtries>0</NbOfNtries>
+                        <Sum>0.00</Sum>
+                    </TtlCdtNtries>
+                    <TtlDbtNtries>
+                        <NbOfNtries>1</NbOfNtries>
+                        <Sum>2002.00</Sum>
+                    </TtlDbtNtries>
+                </TxsSummry>
+                <Ntry>
+                    <!-- Amount voor deze transactie -->
+                    <Amt Ccy="EUR">` + amount + `</Amt>
+                    <!-- /Amount voor deze transactie -->
+                    <!-- Debit = negatief voor burger, credit = positief -->
+                    <CdtDbtInd>DBIT</CdtDbtInd>
+                    <!-- Bij DBIT, vervang Dbtr hierna door Cdtr -->
+                    <!-- Bij CRDT, vervang Cdtr hierna door Dbtr -->
+                    <Sts>BOOK</Sts>
+                    <!-- Transactiedatum -->
+                    <BookgDt>
+                        <Dt>` + todayDate + `</Dt>
+                    </BookgDt>
+                    <ValDt>
+                        <Dt>` + todayDate + `</Dt>
+                    </ValDt>
+                    <!-- /Transactiedatum -->
+                    <AcctSvcrRef>232070C7H4CYV5</AcctSvcrRef>
+                    <BkTxCd>
+                        -<Prtry>
+                            <Cd>849</Cd>
+                            <Issr>INGBANK</Issr>
+                        </Prtry>
+                    </BkTxCd>
+                    <NtryDtls>
+                        <TxDtls>
+                            <Refs>
+                                <InstrId>INNDNL2U20260723000025610002518</InstrId>
+                                <EndToEndId>123456789</EndToEndId>
+                                <MndtId>5784272</MndtId>
+                            </Refs>
+                            <AmtDtls>
+                                <TxAmt>
+                                    <Amt Ccy="EUR">` + amount + `</Amt>
+                                </TxAmt>
+                            </AmtDtls>
+                            <BkTxCd>
+                                <Prtry>
+                                    <Cd>849</Cd>
+                                    <Issr>BNGBANK</Issr>
+                                </Prtry>
+                            </BkTxCd>
+                            <!-- Tegenpartij -->
+                            <RltdPties>
+                                <Cdtr>
+                                    <Nm>Belastingdienst Toeslagen Kantoor Utrecht</Nm>
+                                </Cdtr>
+                                <CdtrAcct>
+                                    -<Id>
+                                        <IBAN>NL86INGB0002445588</IBAN>
+                                    </Id>
+                                </CdtrAcct>
+                            </RltdPties>
+                            <!-- /Tegenpartij -->
+                            <RltdAgts>
+                                <CdtrAgt>
+                                    <FinInstnId>
+                                        <BIC>RABONL2U</BIC>
+                                    </FinInstnId>
+                                </CdtrAgt>
+                            </RltdAgts>
+                            <RmtInf>
+                                <Ustrd>HHB000001 Zorgtoeslag</Ustrd>
+                            </RmtInf>
+                        </TxDtls>
+                    </NtryDtls>
+                    <!-- Zoektermen -->
+                    <AddtlNtryInf>/TRTP/SEPA Incasso/REMI/HHB000001 Zorgtoeslag/CSID/NL12ZZZ091567230000/SVCL/CORE/testdata</AddtlNtryInf>
+                </Ntry>
+            </Stmt>
+        </BkToCstmrStmt>
+    </Document>`)
+    
+      // Upload testdata CAMT
+      cy.visit('/bankzaken/bankafschriften')
+      cy.url().should('eq', Cypress.config().baseUrl + '/bankzaken/bankafschriften')
+      
+      cy.get('input[type="file"]')
+        .should('exist')
+        .click({ force: true })
+    
+      cy.get('input[type="file"]')
+        .selectFile('cypress/testdata/paymentAmount3gative.xml', { force: true })
+    
+      // Wait for file to upload
+      cy.get('[data-test="uploadItem.check"]');
+    
+  });
 
 //#region - Scenario: repeating negative citizen balance, active signal
 

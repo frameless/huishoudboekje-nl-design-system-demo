@@ -1,35 +1,66 @@
 import {Resolvers} from './.mesh'
 
 function do_resolve(root, allowedType: string) {
-	return root.entityId !== undefined && root.entityType !== undefined && allowedType == root.entityType;
+    return root.entityId !== undefined && root.entityType !== undefined && allowedType == root.entityType;
 }
 
 function argsFromKeys(keys: string[]) {
-	return {
-		ids: keys,
-		isLogRequest: true
-	};
+    return {
+        ids: keys,
+        isLogRequest: true
+    };
 }
 
 const resolvers: Resolvers = {
-	Afspraak: {
-		alarm: {
-			async resolve(root, _args, context, info) {
-				if (root.alarmId == undefined) {
-					return undefined
-				}
-				return context.AlarmService.Query.GrpcServices_Alarms_GetByIds({
-					root,
-					key: root.alarmId,
-					argsFromKeys(keys: string[]) {
-						return {
-							input: {ids: keys}
-						};
-					},
-					valuesFromResults: response => response.data,
-					selectionSet: (set) => {
-						const names = set.selections.map(selection => selection.name.value).join('\n'); //Name is correct here
-						return `
+    Journaalpost: {
+        transaction: {
+            async resolve(root, _args, context, info) {
+                if (root.transactionUuid == undefined) {
+                    return undefined
+                }
+                return context.BankService.Query.GrpcServices_Transaction_GetByIds({
+                    root,
+                    key: root.transactionUuid,
+                    argsFromKeys(keys: string[]) {
+                        return {
+                            input: {ids: keys}
+                        };
+                    },
+                    valuesFromResults: response => response.data,
+                    selectionSet: (set) => {
+                        const names = set.selections.map(selection => selection.name.value).join('\n'); //Name is correct here
+                        return `
+                        {
+                            data {
+                                ${names}
+                            }
+                        }
+                        `
+                    },
+                    context,
+                    info
+                })
+            }
+        }
+    },
+    Afspraak: {
+        alarm: {
+            async resolve(root, _args, context, info) {
+                if (root.alarmId == undefined) {
+                    return undefined
+                }
+                return context.AlarmService.Query.GrpcServices_Alarms_GetByIds({
+                    root,
+                    key: root.alarmId,
+                    argsFromKeys(keys: string[]) {
+                        return {
+                            input: {ids: keys}
+                        };
+                    },
+                    valuesFromResults: response => response.data,
+                    selectionSet: (set) => {
+                        const names = set.selections.map(selection => selection.name.value).join('\n'); //Name is correct here
+                        return `
                         {
                             data {
                                 ${names}
@@ -46,7 +77,7 @@ const resolvers: Resolvers = {
     GrpcServices__Entity: {
         huishouden: {
             async resolve(root, _args, context, info) {
-                if( !do_resolve(root, "huishouden")){
+                if (!do_resolve(root, "huishouden")) {
                     return undefined
                 }
                 // console.log("TESTING")
@@ -61,9 +92,9 @@ const resolvers: Resolvers = {
                     info
                 })
             }
-        },burger: {
+        }, burger: {
             async resolve(root, _args, context, info) {
-                if( !do_resolve(root, "burger")){
+                if (!do_resolve(root, "burger")) {
                     return undefined
                 }
                 return context.Backend.RootQuery.burgers({
@@ -74,9 +105,9 @@ const resolvers: Resolvers = {
                     info
                 })
             }
-        },organisatie: {
+        }, organisatie: {
             async resolve(root, _args, context, info) {
-                if( !do_resolve(root, "organisatie")){
+                if (!do_resolve(root, "organisatie")) {
                     return undefined
                 }
                 return context.Backend.RootQuery.organisaties({
@@ -87,9 +118,9 @@ const resolvers: Resolvers = {
                     info
                 })
             }
-        },afspraak: {
+        }, afspraak: {
             async resolve(root, _args, context, info) {
-                if( !do_resolve(root, "afspraak")){
+                if (!do_resolve(root, "afspraak")) {
                     return undefined
                 }
                 return context.Backend.RootQuery.afspraken({
@@ -100,9 +131,9 @@ const resolvers: Resolvers = {
                     info
                 })
             }
-        },rekening: {
+        }, rekening: {
             async resolve(root, _args, context, info) {
-                if( !do_resolve(root, "rekening")){
+                if (!do_resolve(root, "rekening")) {
                     return undefined
                 }
                 return context.Backend.RootQuery.rekeningen({
@@ -113,9 +144,9 @@ const resolvers: Resolvers = {
                     info
                 })
             }
-        },customerStatementMessage: {
+        }, customerStatementMessage: {
             async resolve(root, _args, context, info) {
-                if( !do_resolve(root, "customerStatementMessage")){
+                if (!do_resolve(root, "customerStatementMessage")) {
                     return undefined
                 }
                 return context.Backend.RootQuery.customerStatementMessages({
@@ -126,9 +157,9 @@ const resolvers: Resolvers = {
                     info
                 })
             }
-        },configuratie: {
+        }, configuratie: {
             async resolve(root, _args, context, info) {
-                if( !do_resolve(root, "configuratie")){
+                if (!do_resolve(root, "configuratie")) {
                     return undefined
                 }
                 return context.Backend.RootQuery.configuraties({
@@ -139,9 +170,9 @@ const resolvers: Resolvers = {
                     info
                 })
             }
-        },rubriek: {
+        }, rubriek: {
             async resolve(root, _args, context, info) {
-                if( !do_resolve(root, "rubriek")){
+                if (!do_resolve(root, "rubriek")) {
                     return undefined
                 }
                 return context.Backend.RootQuery.rubrieken({
@@ -152,9 +183,9 @@ const resolvers: Resolvers = {
                     info
                 })
             }
-        },afdeling: {
+        }, afdeling: {
             async resolve(root, _args, context, info) {
-                if( !do_resolve(root, "afdeling")){
+                if (!do_resolve(root, "afdeling")) {
                     return undefined
                 }
                 return context.Backend.RootQuery.afdelingen({
@@ -165,9 +196,9 @@ const resolvers: Resolvers = {
                     info
                 })
             }
-        },postadres: {
+        }, postadres: {
             async resolve(root, _args, context, info) {
-                if( !do_resolve(root, "postadres")){
+                if (!do_resolve(root, "postadres")) {
                     return undefined
                 }
                 return context.Backend.RootQuery.postadressen({
@@ -178,9 +209,9 @@ const resolvers: Resolvers = {
                     info
                 })
             }
-        },export: {
+        }, export: {
             async resolve(root, _args, context, info) {
-                if( !do_resolve(root, "export")){
+                if (!do_resolve(root, "export")) {
                     return undefined
                 }
                 return context.Backend.RootQuery.exports({

@@ -29,11 +29,13 @@ from huishoudboekje_service.views import (
     AfsprakenTransactiesView,
     CitizenView,
     BurgerUpdateSaldoAlarmView,
+    JournaalpostDeleteView,
     BurgerEndAfspraken
 )
 from core_service import database
 from core_service.seed import seed_database_with_test_data
 from huishoudboekje_service.views.exports_paged import ExportsFilterView
+from huishoudboekje_service.views.message_queue import MessageQueueView
 
 db = database.db
 
@@ -54,6 +56,9 @@ def create_app(config_name='huishoudboekje_service.config.Config'):
     # Werkzeug has their own logger which outputs info level URL calls.
     # This can also cause parameters that are normally hidden to be logged
     logging.getLogger('werkzeug').setLevel("WARNING")
+
+    # Pika logs very much so default only warning so the logs stay readable
+    logging.getLogger("pika").setLevel(logging.WARNING)
 
     db.init_app(app)
     Migrate(app, db)
@@ -100,6 +105,8 @@ def create_app(config_name='huishoudboekje_service.config.Config'):
             "name": "journaalpost_view"},
         {"path": "/transacties_journaalpost_rubriek",
             "view": JournaalpostRubriekView, "name": "journaalpost_rubriek_view"},
+        {"path": "/journaalposten_delete",
+            "view": JournaalpostDeleteView, "name": "journaalpost_delete_view"},
         {"path": "/journaalposten/<object_id>", "view": JournaalpostView,
             "name": "journaalpost_detail_view"},
         {"path": "/journaalposten/filter", "view": JournaalpostenFilterView,
@@ -116,7 +123,8 @@ def create_app(config_name='huishoudboekje_service.config.Config'):
         {"path": "/overschrijvingen/<object_id>", "view": OverschrijvingView,
             "name": "overschrijving_detail_view"},
         {"path": "/export", "view": ExportView, "name": "export_view"},
-        {"path": "/export/paged", "view": ExportsFilterView, "name": "export_filter_view"}, 
+        {"path": "/export/paged", "view": ExportsFilterView,
+            "name": "export_filter_view"},
         {"path": "/export/<object_id>", "view": ExportView,
             "name": "export_detail_view"},
         {"path": "/huishoudens", "view": HuishoudenView, "name": "huishouden_view"},
@@ -133,7 +141,11 @@ def create_app(config_name='huishoudboekje_service.config.Config'):
         {"path": "/afspraken/transactions", "view": AfsprakenTransactiesView,
             "name": "afspraken_transacties"},
         {"path": "/citizens", "view": CitizenView,
-            "name": "citizens"}
+            "name": "citizens"},
+        {"path": "/msq", "view": MessageQueueView,
+            "name": "message_queue"}
+
+
     ]
     for route in routes:
         app.add_url_rule(

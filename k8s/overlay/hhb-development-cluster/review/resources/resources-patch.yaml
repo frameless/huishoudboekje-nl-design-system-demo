@@ -70,10 +70,28 @@ spec:
         - name: hhb-banktransactieservice
           resources:
             limits:
-              memory: 128Mi
+              memory: 256Mi
             requests:
-              cpu: 50m
-              memory: 128Mi
+              cpu: 100m
+              memory: 256Mi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hhb-fileservice
+  labels:
+    name: hhb-fileservice
+spec:
+  template:
+    spec:
+      containers:
+        - name: hhb-fileservice
+          resources:
+            limits:
+              memory: 256Mi
+            requests:
+              cpu: 100m
+              memory: 256Mi
 ---
 apiVersion: apps/v1
 kind: Deployment

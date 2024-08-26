@@ -48,7 +48,7 @@ const TransactieItem: React.FC<TransactieItemProps> = ({transactie: bank_transac
 				alignItems={"center"}
 				justifyContent={"center"}
 				onClick={() => {
-					navigate(AppRoutes.ViewTransactie(String(bank_transaction.id)));
+					navigate(AppRoutes.ViewTransactie(String(bank_transaction.uuid)));
 				}}
 				{...props}
 			>

@@ -45,7 +45,7 @@ class AfsprakenOverviewView(BasicFilterView):
             .outerjoin(Journaalpost, Journaalpost.afspraak_id == Afspraak.id)\
             .outerjoin(Afdeling, Afdeling.id == Afspraak.afdeling_id)\
             .outerjoin(Rekening, Rekening.id == Afspraak.tegen_rekening_id)\
-            .with_entities(Afspraak.valid_from, Afspraak.valid_through, Rekening.rekeninghouder, Afspraak.id, Afspraak.burger_id, Afspraak.tegen_rekening_id, Afspraak.omschrijving, Afdeling.organisatie_id, func.array_agg(Journaalpost.transaction_id).label("transaction_ids"))\
+            .with_entities(Afspraak.valid_from, Afspraak.valid_through, Rekening.rekeninghouder, Afspraak.id, Afspraak.burger_id, Afspraak.tegen_rekening_id, Afspraak.omschrijving, Afdeling.organisatie_id, func.array_agg(Journaalpost.transaction_uuid).label("transaction_ids"))\
             .group_by(Afspraak.id, Afdeling.organisatie_id, Afspraak.tegen_rekening_id, Rekening.rekeninghouder)
 
         return afspraken_with_transaction_ids
