@@ -1,0 +1,12 @@
+[
+    {
+        "allowedMemberTypes": [
+            "Application",
+            "User"
+        ],
+        "description": "Default application app role",
+        "displayName": "Default",
+        "isEnabled": "true",
+        "value": "Default.Access"
+    }
+]

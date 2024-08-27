@@ -67,16 +67,16 @@ export POSTGRESQL_PASSWORD_FLSVC="flsvc"
 
 # OIDC Settings
 export OIDC_ISSUER_URL=${OIDC_ISSUER_URL:-"this should be a issuer url"}
-export OIDC_CLIENT_ID=${OIDC_CLIENT_ID:-"this should come from a secret envvar"}
-export OIDC_CLIENT_SECRET=${OIDC_CLIENT_SECRET:-"this should come from a secret envvar"}
+export OIDC_CLIENT_ID=${AZURE_APP_ID:-"this should come generated pipeline envvar"}
+export OIDC_CLIENT_SECRET=${AZURE_APP_SECRET:-"this should come generated pipeline envvar"}
 export OIDC_BASE_URL=${OIDC_BASE_URL:-$HHB_APP_HOST}
 export JWT_ISSUER=${JWT_ISSUER:-$HHB_APP_HOST}
-export JWT_AUDIENCE=${JWT_AUDIENCE:-$HHB_APP_HOST}
+export JWT_AUDIENCE=${AZURE_APP_ID:-"this should come generated pipeline envvar"}
 export JWT_EXPIRES_IN=${JWT_EXPIRES_IN:-"30d"}
-export JWT_SECRET=${JWT_SECRET:-"this should come from a secret envvar"}
+export JWT_SECRET=${AZURE_APP_SECRET:-"this should come generated pipeline envvar"}
 export JWT_ALGORITHMS=${JWT_ALGORITHMS:-"HS256"}
 export JWT_JWKS_URI=${JWT_JWKS_URI}
-export OIDC_SCOPES=${OIDC_SCOPES}
+export OIDC_SCOPES=${AZURE_APP_SCOPE:-"this should come generated pipeline envvar"}
 
 # redis
 export REDIS_PASSWORD=${REDIS_PASSWORD:-"averyinsecurebutstillalongpasswordbecausethedocssayithastobealongpaswordtobesecuresoihopethisislongenough"}
