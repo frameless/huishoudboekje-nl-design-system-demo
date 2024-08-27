@@ -1,0 +1,18 @@
+{
+    "acceptMappedClaims": false,
+    "knownClientApplications": [],
+    "requestedAccessTokenVersion": 2,
+    "oauth2PermissionScopes": [
+        {
+            "adminConsentDescription": "Default user access to all environments for hhb-development",
+            "adminConsentDisplayName": "Access to HHB development environments",
+            "id": "PLACEHOLDER_PERMISSON_ID",
+            "isEnabled": true,
+            "type": "User",
+            "userConsentDescription": "Default user access to all environments for hhb-development",
+            "userConsentDisplayName": "Access to HHB development environments",
+            "value": "default"
+        }
+    ],
+    "preAuthorizedApplications": []
+}

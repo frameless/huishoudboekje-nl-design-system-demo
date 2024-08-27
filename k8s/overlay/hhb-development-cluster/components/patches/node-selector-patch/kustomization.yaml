@@ -5,3 +5,11 @@ patches:
     version: v1
     kind: Deployment
   path: node-selector-patch.yaml
+- target:
+    version: v1
+    kind: StatefulSet
+  path: node-selector-patch.yaml
+- target:
+    version: v1
+    kind: CronJob
+  path: node-selector-patch-job.yaml

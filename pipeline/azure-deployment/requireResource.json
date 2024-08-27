@@ -1,0 +1,11 @@
+[
+    {
+        "resourceAppId": "PLACEHOLDER_APP_ID",
+        "resourceAccess": [
+            {
+                "id": "PLACEHOLDER_PERMISSON_ID",
+                "type": "Scope"
+            }
+        ]
+    }
+]
