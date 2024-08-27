@@ -2,6 +2,18 @@
 
 import { Before, After, When, Step } from "@badeball/cypress-cucumber-preprocessor";
 
+const queryTruncateBankTransactions = `mutation Truncate {
+  truncateTable(databaseName: "banktransactieservice", tableName: "bank_transactions")
+}`
+
+const queryTruncateCustomerStatements = `mutation Truncate {
+  truncateTable(databaseName: "banktransactieservice", tableName: "customer_statement_messages")
+}`
+
+const queryTruncateJournaalposten = `mutation Truncate {
+  truncateTable(databaseName: "huishoudboekjeservice", tableName: "journaalposten")
+}`
+
 Before({ tags: "@beforeTruncateSignals" }, function (){
 
   // Clean up
@@ -100,11 +112,9 @@ After({ tags: "@cleanupAlarmSignal" }, function (){
     .click();
   
   // Check success message
-  cy.get('[data-status="success"]')
-    .contains('afspraak')
-    .should('be.visible');
-    
-})
+  Step(this, "a success notification containing 'afspraak' is displayed");
+
+});
 
 After({ tags: "@afterCleanupRemoveOption" }, function (){
 

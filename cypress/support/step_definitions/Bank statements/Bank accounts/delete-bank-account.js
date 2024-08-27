@@ -188,19 +188,8 @@ When('I click the "Delete" button', () => {
 
   cy.get('[data-test="button.Delete"]')
     .click();
-  cy.wait(500);
 
 });
-
-Then('a notification of successful bank account deletion is displayed', () => {
-
-  // Assertion
-  cy.get('[data-status="success"]')
-    .contains('Bankrekening is verwijderd')
-    .should('be.visible');
-
-});
-
 
 //endregion
 

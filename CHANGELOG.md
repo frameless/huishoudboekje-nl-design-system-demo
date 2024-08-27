@@ -1,5 +1,44 @@
 # Huishoudboekje Changelog
 
+## 2.1.0
+
+In deze versie hebben we verschillende verbeteringen doorgevoerd en nieuwe functionaliteiten toegevoegd, gericht op het efficiënter verwerken van bestanden, banktransacties en betaalinstructies.
+
+Wat is er nieuw en veranderd? Je kunt nu signalen filteren op type, waardoor je gerichter kunt werken. Verder is het afsprakenbeheer verbeterd. Het is mogelijk om afspraken eenvoudig te kopiëren. Alle afspraken van een burger kunnen nu in één keer worden beëindigd. Afspraken met een eenmalige betaling worden voortaan bovenaan de lijst weergegeven, zodat je ze sneller kunt vinden. Toegevoegd zijn notificaties voor alle actieve gebruikers, zodat iedereen altijd op de hoogte is.
+
+Er zijn een aantal problemen opgelost. De weergave van saldo's in rapporten werkt nu correct bij een andere startdatum dan de eerste dag van de maand. We hebben een probleem opgelost waardoor signalen bij alarmen soms niet goed werden afgehandeld. Bij het ophalen van gegevens ging soms iets mis, dit is ook opgelost.
+
+### Minor Changes
+
+- Created new bankservice and fileservice
+
+### Patch Changes
+
+- 90eb4c3: Fixed bug rapportage wrong saldo when not 1st of month as start date
+- f5b5f04: Copy agreements added
+- 90eb4c3: added final signal tests
+- 7d5f571: added signal type filter and e2e tests
+- 52dca83: Added way to end burger and automatically end afspraken
+- d4f90e8: Added sort on burger afspraken list, one time payment agreements are put on top sorted by when the payment is
+- 70b1b94: Added extra check for 401 status frontend to handle refetch
+- 028e3c4: Description filter Transaction page is now remembered on page change"
+- 90eb4c3: Added notificationservice that allow global announcement to all current users
+- 52d3555: qa refactor e2e alarms
+
+# Migration Guide 
+
+⚠️ This release has two automatic database migrations for the huishoudboekje service. During test deployments these failed the first time and succeeded the second time without any real changes. The team is not sure why it failed the first time, beware this could cause errors. Please contact the development team if errors occur.⚠️ 
+
+Updates in microservices: 
+
+- The notification service should now be used. 
+- New Bank service 
+- New File service 
+- Extra cronjob for bank service (generate-payment-instructions-cron-job) 
+- [Migration script for bank service data](https://gitlab.com/commonground/huishoudboekje/huishoudboekje-migrationscripts/-/tree/master/bankservice?ref_type=heads) 
+
+These changes are similar to previous new services. Extra information can be found in the respective README.md files or the example kubernetes files. 
+
 ## 2.0.6
 
 Deze versie omvat een correctie voor het verwijderen van alarmen. Suggesties zullen nu altijd bovenaan staan bij het afboeken van transacties.
@@ -69,7 +108,6 @@ Deze versie omvat een verbetering voor teksten bij gelogde gebeurtenissen.
 
 This release introduces the notification service however it should not yet be used.
 
-
 ## 2.0.1
 
 Deze versie omvat een verbetering voor het migreren van gegevens voor alarmen en gebeurtenissen. Verder is er een probleem opgelost met het berekenen van saldo in rapportage.
@@ -112,11 +150,13 @@ Met de nieuwe User API kan een koppeling gemaakt worden vanuit een klantportaal.
 ## Migration Guide
 
 The grapql-mesh container has the following env variables required:
+
 - **HHB_ALARM_SERVICE_URL**
 - **HHB_LOG_SERVICE_URL**
 - **HHB_BACKEND_URL**
 
 To get the AlarmService up and running these env variables need to be set.
+
 - **HHB_DATABASE_URL**
 - **HHB_RABBITMQ_HOST**
 - **HHB_RABBITMQ_PORT**
@@ -130,6 +170,7 @@ To get the AlarmService up and running these env variables need to be set.
 - **HHB_JWT_JWKS_URI**
 
 To get the Log Service up and running these env variables need to be set.
+
 - **HHB_DATABASE_URL**
 - **HHB_RABBITMQ_HOST**
 - **HHB_RABBITMQ_PORT**
@@ -143,6 +184,7 @@ To get the Log Service up and running these env variables need to be set.
 - **HHB_JWT_JWKS_URI**
 
 To get the UserApi up and running these env variables need to be set.
+
 - **HHB_RABBITMQ_HOST**
 - **HHB_RABBITMQ_PORT**
 - **HHB_RABBITMQ_USER**

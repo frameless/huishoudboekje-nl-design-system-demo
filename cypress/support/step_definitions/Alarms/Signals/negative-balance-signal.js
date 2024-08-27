@@ -51,9 +51,9 @@ Given('an agreement exists for scenario "negative citizen balance"', () => {
     .click()
     .contains('Toeslagen')
     .click();
-  cy.get('[data-test="select.agreementIncomeDescription"]', { timeout: 10000 })
+  cy.get('[data-test="select.agreementIncomeDescription"]')
     .type('Loon');
-  cy.get('[data-test="select.agreementIncomeAmount"]', { timeout: 10000 })
+  cy.get('[data-test="select.agreementIncomeAmount"]')
     .type('10');
   cy.get('[data-test="button.Submit"]', { timeout: 10000 })
     .click();
@@ -234,7 +234,7 @@ When('the zero amount bank transaction is booked to the agreement "Loon"', () =>
     .click();
   
   cy.url().should('include', '/bankzaken/transacties/')
-  cy.get('[data-test="switch.filterDescription"]', { timeout: 10000 }) 
+  cy.get('[data-test="switch.filterDescription"]') 
     .click({ force: true });
   cy.contains('Alle burgers')
     .click({ force: true });
@@ -242,6 +242,7 @@ When('the zero amount bank transaction is booked to the agreement "Loon"', () =>
     .click();
   cy.get('[aria-label="Remove Belastingdienst Toeslagen Kantoor Utrecht"]')
     .click();
+  cy.wait(1000);
   cy.contains('Loon')
     .click();
 
@@ -608,7 +609,7 @@ When('the negative amount bank transaction with amount {string} is booked to the
     .click();
   
   cy.url().should('include', '/bankzaken/transacties/')
-  cy.get('[data-test="switch.filterDescription"]', { timeout: 10000 })
+  cy.get('[data-test="switch.filterDescription"]') 
     .click({ force: true });
   cy.contains('Alle burgers')
     .click({ force: true });

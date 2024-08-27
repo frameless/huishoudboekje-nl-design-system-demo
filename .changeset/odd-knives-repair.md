@@ -2,4 +2,4 @@
 "huishoudboekje": patch
 ---
 
-Copy agreements added
+QA moved cookie set
