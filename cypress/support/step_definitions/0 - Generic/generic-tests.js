@@ -206,6 +206,14 @@ Then('the text {string} is clicked', (text) => {
 
 });
 
+// Click text
+Then('the text {string} is clicked', (text) => {
+
+  cy.contains(text)
+    .click();
+
+});
+
 // Find a field label
 Then('the label {string} is displayed', (labelName) => {
 
@@ -235,6 +243,20 @@ Then('a notification of success is displayed', () => {
 
   // Assertion
   cy.get('[data-status="success"]', { timeout: 30000 })
+    .scrollIntoView()
+    .should('be.visible');
+
+  // Make sure notification has disappeared from view
+  cy.get('[data-status="success"]', { timeout: 10000 })
+    .should('not.exist');
+
+});
+
+// Find a generic success message
+Then('a notification of success is displayed', () => {
+
+  // Assertion
+  cy.get('[data-status="success"]', { timeout: 10000 })
     .scrollIntoView()
     .should('be.visible');
 
