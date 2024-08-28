@@ -16,9 +16,6 @@ deploy-deployment-test:
   stage: deploy
   needs:
     - build-images-dev
-    - authorize-azure-ad-review
-  dependencies:
-    - authorize-azure-ad-review
   environment:
     name: test
     url: https://test.hhb-development.nl/
