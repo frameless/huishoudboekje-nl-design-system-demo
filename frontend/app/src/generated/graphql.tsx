@@ -1322,7 +1322,6 @@ export type PaginationRequest = {
   take?: InputMaybe<Scalars['Int']>;
 };
 
-/** TODO See if we can move these in the Core since it is also used in LogService */
 export type PaginationResponse = {
   skip?: Maybe<Scalars['Int']>;
   take?: Maybe<Scalars['Int']>;
@@ -2589,7 +2588,7 @@ export type GetHuishoudenOverzichtQueryVariables = Exact<{
 }>;
 
 
-export type GetHuishoudenOverzichtQuery = { overzicht?: { afspraken?: Array<{ id?: number, burgerId?: number, omschrijving?: string, rekeninghouder?: string, validFrom?: string, validThrough?: string, transactions?: Array<{ id?: number, informationToAccountOwner?: string, statementLine?: string, bedrag?: any, isCredit?: boolean, tegenRekeningIban?: string, transactieDatum?: any, tegenRekening?: { rekeninghouder?: string } }> }>, saldos?: Array<{ maandnummer?: number, startSaldo?: any, eindSaldo?: any, mutatie?: any }> } };
+export type GetHuishoudenOverzichtQuery = { overzicht?: { afspraken?: Array<{ id?: number, burgerId?: number, omschrijving?: string, rekeninghouder?: string, validFrom?: string, validThrough?: string, transactions?: Array<{ uuid?: string, informationToAccountOwner?: string, statementLine?: string, bedrag?: any, isCredit?: boolean, tegenRekeningIban?: string, transactieDatum?: any, tegenRekening?: { rekeninghouder?: string } }> }>, saldos?: Array<{ maandnummer?: number, startSaldo?: any, eindSaldo?: any, mutatie?: any }> } };
 
 export type GetHuishoudensQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -6517,7 +6516,7 @@ export const GetHuishoudenOverzichtDocument = gql`
       validFrom
       validThrough
       transactions {
-        id
+        uuid
         informationToAccountOwner
         statementLine
         bedrag

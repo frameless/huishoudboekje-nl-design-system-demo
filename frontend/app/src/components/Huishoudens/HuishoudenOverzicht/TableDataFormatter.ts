@@ -45,7 +45,7 @@ export function formatTableData(input, startDate, endDate): OrganisationEntry[] 
             }
             for (const transaction of overviewEntry.transactions) {
                 const monthName = getMonthName(d(transaction.transactieDatum))
-                const payment: PaymentEntry = {Date: transaction.transactieDatum, Amount: transaction.amount, TransactionId: transaction.id, Transaction: transaction}
+                const payment: PaymentEntry = {Date: transaction.transactieDatum, Amount: transaction.bedrag, TransactionId: transaction.uuid, Transaction: transaction}
                 if (payments[monthName] != undefined) {
                     payments[monthName].push(payment)
                 }

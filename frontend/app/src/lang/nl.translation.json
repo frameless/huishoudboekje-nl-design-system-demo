@@ -738,7 +738,8 @@
   "transacties": {
     "tegenrekening": "Tegenrekening",
     "rubriek": "Rubriek",
-    "bedrag": "Bedrag"
+    "bedrag": "Bedrag",
+    "date": "Datum"
   },
   "burgers": {
     "context": {
