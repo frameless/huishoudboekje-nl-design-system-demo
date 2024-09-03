@@ -11,7 +11,7 @@ export const GetHuishoudenOverzichtQuery = gql`
 				validFrom
 				validThrough
 				transactions {
-					id
+					uuid
 					informationToAccountOwner
 					statementLine
 					bedrag

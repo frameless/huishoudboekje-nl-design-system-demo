@@ -18,6 +18,7 @@ import {useTranslation} from "react-i18next";
 import {formatIBAN} from "../../../../utils/things";
 import {BankTransaction} from "../../../../generated/graphql";
 import {useNavigate} from "react-router-dom";
+import d from "../../../../utils/dayjs";
 
 type TransactieOverzichtPopover = PopoverProps & {
 	bank_transaction: BankTransaction
@@ -31,7 +32,7 @@ const TransactieOverzichtPopover: React.FC<TransactieOverzichtPopover> = ({bank_
 
 
 	function goToTransaction() {
-		navigate(`/bankzaken/transacties/${bank_transaction.id}`)
+		navigate(`/bankzaken/transacties/${bank_transaction.uuid}`)
 	}
 
 
@@ -63,6 +64,16 @@ const TransactieOverzichtPopover: React.FC<TransactieOverzichtPopover> = ({bank_
 								</Text>
 
 							</Box>
+
+							<Box marginBottom={3}>
+								<h4>
+									<strong>{t("transacties.date")}:</strong>
+								</h4>
+								<Text wordBreak={"break-word"}>{d(bank_transaction.transactieDatum).format("L")}
+								</Text>
+
+							</Box>
+
 							<Box marginBottom={2}>
 								<h4>
 									<strong>{t("forms.rekeningen.fields.accountHolder")}:</strong>
