@@ -697,13 +697,16 @@
   "pages": {
     "transactieDetails": {
       "transactie": {
-        "title": "Transactie #{{id}}",
+        "title": "Transactie",
         "helperText": "Bekijk details van deze transactie."
       },
       "afspraak": {
         "title": "Afspraak",
         "helperText": "Deze transactie is afgeletterd op deze afspraak.",
         "next": "Volgende"
+      },
+      "rubriek": {
+        "title": "Rubriek"
       },
       "afletteren": {
         "title": "Afletteren",

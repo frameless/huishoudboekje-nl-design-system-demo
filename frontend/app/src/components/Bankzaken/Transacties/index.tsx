@@ -357,8 +357,8 @@ const Transactions = () => {
 																			value: rekening.iban,
 																			label: rekening.rekeninghouder + " (" + rekening.iban + ")",
 																		}))}
-																		styles={reactSelectStyles.default} isMulti isClearable={true} noOptionsMessage={() => t("select.noOptions")} maxMenuHeight={200}
-																		placeholder={t("transactionsPage.filters.none")} value={rekeningen_filter} />
+																			styles={reactSelectStyles.default} isMulti isClearable={true} noOptionsMessage={() => t("select.noOptions")} maxMenuHeight={200}
+																			placeholder={t("transactionsPage.filters.none")} value={rekeningen_filter} />
 																	</FormControl>
 																</HStack>
 															</Stack>
@@ -381,8 +381,8 @@ const Transactions = () => {
 																			value: organisatie.id,
 																			label: organisatie.naam,
 																		}))}
-																		styles={reactSelectStyles.default} isMulti isClearable={true} noOptionsMessage={() => t("select.noOptions")} maxMenuHeight={200}
-																		placeholder={t("transactionsPage.filters.none")} value={organisatie_filter} />
+																			styles={reactSelectStyles.default} isMulti isClearable={true} noOptionsMessage={() => t("select.noOptions")} maxMenuHeight={200}
+																			placeholder={t("transactionsPage.filters.none")} value={organisatie_filter} />
 																	</FormControl>
 																</HStack>
 															</Stack>
@@ -406,9 +406,9 @@ const Transactions = () => {
 																		value: b.id,
 																		label: formatBurgerName(b) + " " + getBurgerHhbId(b),
 																	}))}
-																	isDisabled={blockBookedFilters()}
-																	styles={reactSelectStyles.default} isMulti isClearable={true} noOptionsMessage={() => t("select.noOptions")} maxMenuHeight={200}
-																	placeholder={blockBookedFilters() ? t("transactionsPage.filters.none") : t("charts.optionAllBurgers")} value={burgers_filter} />
+																		isDisabled={blockBookedFilters()}
+																		styles={reactSelectStyles.default} isMulti isClearable={true} noOptionsMessage={() => t("select.noOptions")} maxMenuHeight={200}
+																		placeholder={blockBookedFilters() ? t("transactionsPage.filters.none") : t("charts.optionAllBurgers")} value={burgers_filter} />
 																</FormControl>
 															</HStack>
 														</Stack>
@@ -420,7 +420,7 @@ const Transactions = () => {
 														<InputGroup>
 															<InputLeftAddon>€</InputLeftAddon>
 															<NumberInput
-															 	aria-autocomplete="none"
+																aria-autocomplete="none"
 																w={"100%"}
 																precision={2}
 																value={minBedrag}
@@ -443,7 +443,7 @@ const Transactions = () => {
 														<InputGroup>
 															<InputLeftAddon>€</InputLeftAddon>
 															<NumberInput
-															 	aria-autocomplete="none"
+																aria-autocomplete="none"
 																w={"100%"}
 																precision={2}
 																value={maxBedrag}
@@ -479,7 +479,7 @@ const Transactions = () => {
 																aria-autocomplete="none"
 																id={"zoektermen"}
 																onChange={e => setZoekterm(e.target.value)}
-																value={zoekterm || ""} 
+																value={zoekterm || ""}
 															/>
 															<InputRightElement width={"auto"} pr={1}>
 																<Button data-test="transactions.submitSearch" type={"submit"} size={"sm"} colorScheme={"primary"}>Zoeken</Button>
@@ -513,7 +513,7 @@ const Transactions = () => {
 										loading={$transactions.loading}>
 									</ListInformationRow>
 								</Stack>
-								{$transactions.loading ? <Spinner/> : <Stack>
+								{$transactions.loading ? <Spinner /> : <Stack>
 									{transacties.length > 0 ? (
 										<Stack>
 											<TransactiesList transacties={transacties} />
