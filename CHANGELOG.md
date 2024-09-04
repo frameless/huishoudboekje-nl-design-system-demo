@@ -1,5 +1,14 @@
 # Huishoudboekje Changelog
 
+## 2.1.1
+
+Deze versie bevat een aantal fixes voor het overzicht en de transactie pagina in verband met de nieuwe bankservice & het wegvallen van numerieke ID's op de transactie pagina.
+
+### Patch Changes
+
+- 91fd931: fixed NaN in overview. Fixed link to transaction on clicking the amount in overview. Added transaction date to hover in overview.
+- 9d61946: Fixed empty # in transaction details. Removed helpertext from sections in transaction details. Changed section header to Rubriek when a Rubriek is shown
+
 ## 2.1.0
 
 In deze versie hebben we verschillende verbeteringen doorgevoerd en nieuwe functionaliteiten toegevoegd, gericht op het efficiënter verwerken van bestanden, banktransacties en betaalinstructies.
@@ -25,19 +34,19 @@ Er zijn een aantal problemen opgelost. De weergave van saldo's in rapporten werk
 - 90eb4c3: Added notificationservice that allow global announcement to all current users
 - 52d3555: qa refactor e2e alarms
 
-# Migration Guide 
+# Migration Guide
 
-⚠️ This release has two automatic database migrations for the huishoudboekje service. During test deployments these failed the first time and succeeded the second time without any real changes. The team is not sure why it failed the first time, beware this could cause errors. Please contact the development team if errors occur.⚠️ 
+⚠️ This release has two automatic database migrations for the huishoudboekje service. During test deployments these failed the first time and succeeded the second time without any real changes. The team is not sure why it failed the first time, beware this could cause errors. Please contact the development team if errors occur.⚠️
 
-Updates in microservices: 
+Updates in microservices:
 
-- The notification service should now be used. 
-- New Bank service 
-- New File service 
-- Extra cronjob for bank service (generate-payment-instructions-cron-job) 
-- [Migration script for bank service data](https://gitlab.com/commonground/huishoudboekje/huishoudboekje-migrationscripts/-/tree/master/bankservice?ref_type=heads) 
+- The notification service should now be used.
+- New Bank service
+- New File service
+- Extra cronjob for bank service (generate-payment-instructions-cron-job)
+- [Migration script for bank service data](https://gitlab.com/commonground/huishoudboekje/huishoudboekje-migrationscripts/-/tree/master/bankservice?ref_type=heads)
 
-These changes are similar to previous new services. Extra information can be found in the respective README.md files or the example kubernetes files. 
+These changes are similar to previous new services. Extra information can be found in the respective README.md files or the example kubernetes files.
 
 ## 2.0.6
 
