@@ -7,8 +7,8 @@ import BookingDetailsView from "./BookingDetailsView";
 import TransactieDetailsView from "./TransactieDetailsView";
 import BookingSection from "./BookingSection/BookingSection";
 import {Button} from "@chakra-ui/react";
-import { useNavigate } from "react-router-dom";
-import { AppRoutes } from "../../../config/routes";
+import {useNavigate} from "react-router-dom";
+import {AppRoutes} from "../../../config/routes";
 type TransactieItemViewProps = {
 	transactie: BankTransaction,
 	afspraken?: Afspraak[],
@@ -21,20 +21,21 @@ const TransactieItemView: React.FC<TransactieItemViewProps> = ({transactie}) => 
 
 	return (
 		<SectionContainer>
-			<Section title={t("pages.transactieDetails.transactie.title", {id: transactie.id})} helperText={t("pages.transactieDetails.transactie.helperText")}>
+			<Section title={t("pages.transactieDetails.transactie.title", {id: transactie.id})}>
 				<TransactieDetailsView transaction={transactie} />
 			</Section>
 			{transactie.journaalpost ? (
-				<Section title={t("pages.transactieDetails.afspraak.title")} helperText={t("pages.transactieDetails.afspraak.helperText")}>
+				<Section title={transactie.journaalpost?.afspraak ? t("pages.transactieDetails.afspraak.title") : t("pages.transactieDetails.rubriek.title")}>
 					<BookingDetailsView transactie={transactie} />
 					<Button float={"right"} colorScheme={"primary"} onClick={() => navigate(AppRoutes.Transacties)}>{t("pages.transactieDetails.afspraak.next")}</Button>
 				</Section>
 			) : (
 				<Section title={t("pages.transactieDetails.afletteren.title")} helperText={t("pages.transactieDetails.afletteren.helperText")}>
-					<BookingSection transaction={transactie}/>
+					<BookingSection transaction={transactie} />
 				</Section>
-			)}
-		</SectionContainer>
+			)
+			}
+		</SectionContainer >
 	);
 };
 
