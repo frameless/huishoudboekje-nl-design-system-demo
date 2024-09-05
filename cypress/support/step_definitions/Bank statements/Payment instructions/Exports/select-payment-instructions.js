@@ -20,9 +20,7 @@ Given('I have three citizens with payment instructions', () => {
 
   // Citizen One
     // Create agreement
-    afspraakNew.createAfspraakUitgaven('Aaron Caronsson', '02-05-2024')
-    generic.notificationSuccess('De afspraak is opgeslagen.')
-    afspraakDetails.redirectToAfspraak()
+    afspraakNew.createAfspraakUitgaven('Caronsson', '2024-05-02')
   
     // Create payment instruction
     betaalinstructieNew.createBetaalinstructieMaandelijks()
@@ -32,9 +30,7 @@ Given('I have three citizens with payment instructions', () => {
 
   // Citizen Two
     // Create agreement
-    afspraakNew.createAfspraakUitgaven('Babette Aobinsson', '02-05-2024')
-    generic.notificationSuccess('De afspraak is opgeslagen.')
-    afspraakDetails.redirectToAfspraak()
+    afspraakNew.createAfspraakUitgaven('Aobinsson', '2024-05-02')
   
     // Create payment instruction
     betaalinstructieNew.createBetaalinstructieMaandelijks()
@@ -44,9 +40,7 @@ Given('I have three citizens with payment instructions', () => {
 
   // Citizen Three
     // Create agreement
-    afspraakNew.createAfspraakUitgaven('Chip Bhailark', '02-05-2024')
-    generic.notificationSuccess('De afspraak is opgeslagen.')
-    afspraakDetails.redirectToAfspraak()
+    afspraakNew.createAfspraakUitgaven('Bhailark', '2024-05-02')
   
     // Create payment instruction
     betaalinstructieNew.createBetaalinstructieMaandelijks()

@@ -33,9 +33,7 @@ Given('no unprocessed payment instructions exist with an execution date on 02-05
 Given("one citizen has an agreement and a payment instruction with an execution date set to 02-05-2024", () => {
 
   // Create agreement
-  afspraakNew.createAfspraakUitgaven('Aaron Caronsson', '02-05-2024')
-  generic.notificationSuccess('De afspraak is opgeslagen.')
-  afspraakDetails.redirectToAfspraak()
+  afspraakNew.createAfspraakUitgaven('Caronsson', '2024-05-02')
 
   // Create payment instruction
   betaalinstructieNew.createBetaalinstructieMaandelijks()
@@ -48,9 +46,7 @@ Given("one citizen has an agreement and a payment instruction with an execution 
 Given("another citizen has 2 agreements and payment instructions with an execution date set to 02-05-2024", () => {
 
   // Create agreement 1
-  afspraakNew.createAfspraakUitgaven('Babette Aobinsson', '02-05-2024')
-  generic.notificationSuccess('De afspraak is opgeslagen.')
-  afspraakDetails.redirectToAfspraak()
+  afspraakNew.createAfspraakUitgaven('Aobinsson', '2024-05-02')
 
   // Create payment instruction 1
   betaalinstructieNew.createBetaalinstructieMaandelijks()
@@ -59,9 +55,7 @@ Given("another citizen has 2 agreements and payment instructions with an executi
   generic.containsText('Vanaf 02-05-2024 t/m ∞')
 
   // Create agreement 2
-  afspraakNew.createAfspraakUitgaven('Babette Aobinsson', '02-05-2024')
-  generic.notificationSuccess('De afspraak is opgeslagen.')
-  afspraakDetails.redirectToAfspraak()
+  afspraakNew.createAfspraakUitgaven('Aobinsson', '2024-05-02')
 
   // Create payment instruction 2
   betaalinstructieNew.createBetaalinstructieMaandelijks()

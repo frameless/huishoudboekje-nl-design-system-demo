@@ -1,8 +1,10 @@
 
 import { Given, When, Then, Step, DataTable } from "@badeball/cypress-cucumber-preprocessor";
 
+import Burgers from "../../../pages/Burgers";
 import AlarmModal from "../../../pages/AlarmModal";
 
+const burgers = new Burgers()
 const alarmModal = new AlarmModal()
 
 //#region - Scenario: save default alarm amount deviation
@@ -60,13 +62,7 @@ Given('the "Add key-value pair form" is displayed', () => {
 When('I open the "Citizen details" page for the "Carly Padilla" citizen', () => {
 
   // Navigate to citizen
-  cy.visit('/burgers');
-  cy.url().should('eq', Cypress.config().baseUrl + '/burgers')
-  cy.get('input[placeholder="Zoeken"]')
-    .type('Carly');
-  cy.contains('Padilla', { timeout: 10000 })
-    .click();
-  cy.url().should('include', Cypress.config().baseUrl + '/burgers/')
+  burgers.openBurger('Carly Padilla');
 
 });
 

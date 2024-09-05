@@ -19,7 +19,7 @@ Feature: create signal on unexpected payment amount
     Then the low amount bank transaction date is within the alarm timeframe
     Then the low amount bank transaction amount is smaller than the sum of the expected amount minus the allowed amount deviation
     Then a "Payment amount too low" signal is created
-
+  
   Scenario: payment amount too low, outside amount margin
     # agreement amount: 10
     Given an agreement exists for feature "create signal on unexpected payment amount, with amount margin"

@@ -66,6 +66,7 @@ class BetaalinstructieNew {
     this.inputHerhalingMaandelijks()
     this.inputDagvdMaand().type('{selectAll}2{enter}');
     this.buttonOpslaan().click();
+
     generic.notificationSuccess('De betaalinstructie is ingesteld.')
   }
 
@@ -78,6 +79,7 @@ class BetaalinstructieNew {
     this.inputHerhalingMaandelijks()
     this.inputDagvdMaand().type('{selectAll}3{enter}');
     this.buttonOpslaan().click();
+
     generic.notificationSuccess('De betaalinstructie is ingesteld.')
   }
 

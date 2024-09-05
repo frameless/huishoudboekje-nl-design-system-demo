@@ -46,6 +46,7 @@ def add_afspraak_text_zoektermen_filter(zoektermen, query):
         Afspraak.zoektermen.cast(String)).like(f"%{term.lower()}%")) for term in zoektermen]
     return query.filter(and_(*clauses))
 
+
 def add_afspraak_transaction_description_filter(transaction_description: str, query):
     subquery_unset = Afspraak.query.with_entities(
         Afspraak.id,

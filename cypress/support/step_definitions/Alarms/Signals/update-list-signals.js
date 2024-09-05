@@ -2,11 +2,6 @@
 
 import { Given, When, Then, Step } from "@badeball/cypress-cucumber-preprocessor";
 
-const header = {
-  'content-type': 'application/json',
-  'Accept-Encoding': 'gzip, deflate, br',
-};
-
 let timestamp = 0;
 let timestampLater1 = 0;
 let timestampLater2 = 0;

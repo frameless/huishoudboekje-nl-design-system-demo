@@ -102,7 +102,7 @@ Then('I click the button "Downloaden" for the most recent entry', function () {
     .click()
 
   // Wait for download to finish
-  cy.wait(3000);
+  cy.wait(2500);
 
 });
 

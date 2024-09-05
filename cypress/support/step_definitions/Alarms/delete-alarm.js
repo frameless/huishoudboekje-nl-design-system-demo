@@ -18,11 +18,11 @@ const alarmModal = new AlarmModal()
 Given('an alarm exists for this agreement', () => {
   
   // Navigate
-  burgers.viewBurger('Dingus Bingus')
+  burgers.openBurger('Dingus Bingus')
   burgerDetails.viewLatestAfspraak()
 
   // Create an alarm
-  afspraakDetails.buttonToevoegen().click()
+  afspraakDetails.buttonAlarmToevoegen().click()
   alarmModal.createMonthlyAlarm()
   
 });

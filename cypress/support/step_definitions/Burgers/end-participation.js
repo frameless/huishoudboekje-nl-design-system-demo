@@ -28,26 +28,15 @@ let citizenId = null;
 
 Given("citizen 'Party Cipator' has multiple agreements", () => {  
 
-  // Get burger id
-  api.getBurgerId('Cipator').then((res) => {
-    console.log(res);
-    
-    cy.log('Test citizen has id ' + res.data.burgers[0].id)
-    
-    citizenId = res.data.burgers[0].id;
-
     // Create agreements
-    burgerDetails.insertAfspraak(citizenId);
-    burgerDetails.insertAfspraak(citizenId);
-  });
-
-
+    burgerDetails.insertAfspraak('Cipator', "Test afspraak 1234", "100.00", 'NL86INGB0002445588', '1',  'true', '2024-01-01');
+    burgerDetails.insertAfspraak('Cipator', "Test afspraak 1234", "100.95", 'NL86INGB0002445588', '11',  'false', '2024-01-01');
 
 });
 
 When("I end the participation of 'Party Cipator' tomorrow", () => {
 
-  burgers.viewBurger('Party Cipator')
+  burgers.openBurger('Party Cipator')
   burgerDetails.getMenu().click();
   burgerDetails.menuEndCitizen().click();
 
@@ -62,19 +51,16 @@ When("I end the participation of 'Party Cipator' tomorrow", () => {
 Then("all active agreements have tomorrow as end date", () => {
 
   // Check end date of agreement 1
-  burgers.viewBurger('Party Cipator');
+  burgers.openBurger('Party Cipator');
   burgerDetails.viewAfspraakByEntry(0);
   generic.containsText('Deze afspraak eindigt op')
   generic.containsText(tomorrowDate)
 
   // Check end date of agreement 2
-  burgers.viewBurger('Party Cipator')
+  burgers.openBurger('Party Cipator')
   burgerDetails.viewAfspraakByEntry(1);
   generic.containsText('Deze afspraak eindigt op')
   generic.containsText(tomorrowDate)
-
-  // Delete test user
-  api.deleteTestBurgerEndParcip();
 
 });
 

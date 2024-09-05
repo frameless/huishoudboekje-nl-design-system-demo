@@ -2,11 +2,6 @@
 
 import { Given, When, Then, Step } from "@badeball/cypress-cucumber-preprocessor";
 
-const header = {
-  'content-type': 'application/json',
-  'Accept-Encoding': 'gzip, deflate, br',
-};
-
 // Set database query
 const queryTruncateAlarm = `mutation Truncate {
   truncateTable(databaseName: "alarmenservice", tableName: "alarms")

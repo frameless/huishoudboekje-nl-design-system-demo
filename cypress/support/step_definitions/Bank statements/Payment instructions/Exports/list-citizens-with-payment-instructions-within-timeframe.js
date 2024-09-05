@@ -19,9 +19,7 @@ const burgers = new Burgers();
 Given("two citizens have a payment instruction set to 02-05-2024", () => {
 
   // Create agreement
-  afspraakNew.createAfspraakUitgaven('Aaron Caronsson', '02-05-2024')
-  generic.notificationSuccess('De afspraak is opgeslagen.')
-  afspraakDetails.redirectToAfspraak()
+  afspraakNew.createAfspraakUitgaven('Caronsson', '2024-05-02')
 
   // Create payment instruction
   betaalinstructieNew.createBetaalinstructieMaandelijks()
@@ -30,9 +28,7 @@ Given("two citizens have a payment instruction set to 02-05-2024", () => {
   generic.containsText('Vanaf 02-05-2024 t/m ∞')
 
   // Create agreement
-  afspraakNew.createAfspraakUitgaven('Babette Aobinsson', '02-05-2024')
-  generic.notificationSuccess('De afspraak is opgeslagen.')
-  afspraakDetails.redirectToAfspraak()
+  afspraakNew.createAfspraakUitgaven('Aobinsson', '2024-05-02')
 
   // Create payment instruction
   betaalinstructieNew.createBetaalinstructieMaandelijks()
@@ -45,9 +41,7 @@ Given("two citizens have a payment instruction set to 02-05-2024", () => {
 When("one citizen has a payment instruction set to 03-05-2024", () => {
 
   // Create agreement
-  afspraakNew.createAfspraakUitgaven('Chip Bhailark', '03-05-2024')
-  generic.notificationSuccess('De afspraak is opgeslagen.')
-  afspraakDetails.redirectToAfspraak()
+  afspraakNew.createAfspraakUitgaven('Bhailark', '2024-05-03')
 
   // Create payment instruction
   betaalinstructieNew.createBetaalinstructieMaandelijksSecond()
@@ -87,7 +81,6 @@ When('I set the date range input "Periode" from 02-05-2024 up until 03-05-2024',
 
 Then('all three citizens are displayed', () => {
 
-  cy.wait(1000);
   generic.containsText('Aaron Caronsson');
   generic.containsText('Babette Aobinsson');
   generic.containsText('Chip Bhailark');

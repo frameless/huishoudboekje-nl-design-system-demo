@@ -513,7 +513,7 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 								<Text>{t("afspraakDetailView.noBetaalinstructie")}</Text>
 
 								<Box>
-									<AddButton onClick={() => navigate(AppRoutes.AfspraakBetaalinstructie(String(afspraak.id)))} />
+									<AddButton data-test="button.addPaymentInstruction" onClick={() => navigate(AppRoutes.AfspraakBetaalinstructie(String(afspraak.id)))} />
 								</Box>
 							</Stack>
 						)}
@@ -585,7 +585,7 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 						<Stack>
 							<Text>{t("afspraakDetailView.noAlarm")}</Text>
 							<Box>
-								<AddButton onClick={() => addAlarmModal.onOpen()} />
+								<AddButton data-test="button.addAlarm" onClick={() => addAlarmModal.onOpen()} />
 							</Box>
 						</Stack>
 					)}

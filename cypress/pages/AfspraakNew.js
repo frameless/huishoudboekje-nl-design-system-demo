@@ -59,74 +59,69 @@ class AfspraakNew {
   {
     return cy.get('[data-test="button.Submit"]')
   }
-  
+
+  addAfspraak(agreementName) {
+
+		// Already on correct page, so click 'Toevoegen' button
+		burgerDetails.buttonAfspraakToevoegen().click();
+		
+		// Add agreement with test department
+		cy.url().should('contains', '/afspraken/toevoegen'); 
+		cy.get('[data-test="radio.agreementOrganization"]')
+			.click();
+		cy.get('#organisatie')
+			.type('Belast');
+		cy.contains('ingdienst')
+			.click();
+		// Check auto-fill
+		cy.contains('Graadt van Roggenweg');
+		// Fill in IBAN
+		cy.get('#tegenrekening')
+			.type('NL86');
+		cy.contains('0002 4455')
+			.click();
+		
+		// Payment direction: Toeslagen
+		cy.get('[data-test="radio.agreementIncome"]')
+			.click();
+		cy.get('#rubriek')
+			.click()
+			.contains('Toeslagen')
+			.click();
+		cy.get('[data-test="select.agreementIncomeDescription"]')
+			.type(agreementName);
+		cy.get('[data-test="select.agreementIncomeAmount"]')
+			.type('10');
+		cy.get('[data-test="button.Submit"]')
+			.click();
+		
+		// Check redirect
+		cy.url({ timeout: 10000 }).should('not.include', '/toevoegen')
+		
+		// Check success message
+		generic.notificationSuccess('De afspraak is opgeslagen');
+
+	}
+
   createAfspraakInkomen(burger) {
 
-    // Navigate to test citizen's overview page
-    burgers.viewBurger(burger)
-    burgerDetails.buttonToevoegen().click();
+    burgerDetails.insertAfspraak(burger, uniqueSeed, '543.54', 'NL09INGB4826953240', '1', 'true', '2024-01-01');
 
-    // Add agreement with test department
-    cy.url().should('contains', '/afspraken/toevoegen'); 
-    this.radioOrganisatie().click();
-    this.inputOrganisatie().type('Albert');
-    generic.containsText('Heijn').click();
-
-    // Check auto-fill
-    generic.containsText('Zaandam');
-
-    // Fill in IBAN
-    this.inputTegenrekening().type('NL09');
-    generic.containsText('9532').click();
-
-    // Payment direction: Inkomsten
-    this.radioInkomen().click();
-    this.inputRubriek()
-        .click()
-        .contains('Inkomsten')
-        .click();
-    this.inputInkomenBeschrijving().type(uniqueSeed);
-    this.inputInkomenAmount().type('543.54');
-    
-    // Save
-    this.buttonOpslaan().click();
+    // View burger detail page
+    burgers.openBurger(burger)
+    burgerDetails.viewAfspraak(uniqueSeed)
 
   }
 
   createAfspraakUitgaven(burger, date) {
 
-    // Navigate to test citizen's overview page
-    burgers.viewBurger(burger)
-    burgerDetails.buttonToevoegen().click();
+    burgerDetails.insertAfspraak(burger, 'Maandelijks leefgeld HHB000003', '543.21', 'NL09INGB4826953240', '11', 'false', date)
 
-    // Add agreement with test department
-    cy.url().should('contains', '/afspraken/toevoegen'); 
-    this.radioOrganisatie().click();
-    this.inputOrganisatie().type('Gemeente');
-    generic.containsText('Utrecht').click();
-
-    // Check auto-fill
-    generic.containsText('16200');
-
-    // Fill in IBAN
-    this.inputTegenrekening().type('NL49');
-    generic.containsText('0285 1717').click();
-
-    // Payment direction: Uitgaven
-    this.radioUitgaven().click();
-    this.inputRubriek()
-        .click()
-        .contains('Privé-opname')
-        .click();
-    this.inputInkomenBeschrijving().type('Maandelijks leefgeld HHB000003');
-    this.inputInkomenAmount().type('543.21');
-    this.inputStartDate().type('{selectAll}' + date + '{enter}');
-
-    // Save
-    this.buttonOpslaan().click();
+    // View burger detail page
+    burgers.openBurger(burger)
+    burgerDetails.viewAfspraak('Maandelijks leefgeld HHB000003')
     
   }
-
 
 }
 

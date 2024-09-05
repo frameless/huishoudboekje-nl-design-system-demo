@@ -73,7 +73,9 @@ When('I enable the negative account balance alarm', () => {
 
 When('I consolidate a negative amount bank transaction to the agreement', () => {
 
-  burgerDetails.addAfspraak('Loon');
+  // Create agreement
+  burgerDetails.insertAfspraak('Bingus', 'Loon', "10.00", 'NL86INGB0002445588', '5', 'false', '2024-01-01');
+
   bankafschriften.consolidateNegativeAmount('10.00');
     
 });

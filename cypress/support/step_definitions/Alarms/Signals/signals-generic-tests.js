@@ -2,17 +2,6 @@
 
 import { Before, After, When, Step } from "@badeball/cypress-cucumber-preprocessor";
 
-const queryTruncateBankTransactions = `mutation Truncate {
-  truncateTable(databaseName: "banktransactieservice", tableName: "bank_transactions")
-}`
-
-const queryTruncateCustomerStatements = `mutation Truncate {
-  truncateTable(databaseName: "banktransactieservice", tableName: "customer_statement_messages")
-}`
-
-const queryTruncateJournaalposten = `mutation Truncate {
-  truncateTable(databaseName: "huishoudboekjeservice", tableName: "journaalposten")
-}`
 
 Before({ tags: "@beforeTruncateSignals" }, function (){
 
@@ -60,8 +49,8 @@ After({ tags: "@cleanupSignal" }, function (){
 After({ tags: "@cleanupTwoSignals" }, function (){
 
   // Clean up
-  Step(this, 'I truncate the alarms table in alarmenservice');
-  Step(this, 'I truncate the signals table in alarmenservice');
+  //Step(this, 'I truncate the alarms table in alarmenservice');
+  //Step(this, 'I truncate the signals table in alarmenservice');
   Step(this, 'I truncate the bank transaction tables');
 
   // Remove latest agreement

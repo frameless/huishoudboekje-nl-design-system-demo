@@ -43,7 +43,6 @@ Given('1 or more bank statements exist', () => {
   // Add file 1
   cy.get('input[type="file"]')
     .selectFile('voorbeeldbankafschriften/camt053-kosten-betalingsverkeer-20231130.xml', { force: true });
-  cy.wait(modalWait)
   cy.get('[data-test="uploadItem.check"]') // Assert file upload status icon is displayed
     .should('be.visible')
 
@@ -53,10 +52,13 @@ Given('1 or more bank statements exist', () => {
     .should('be.visible')
     .click()
 
+  // Navigate to bank statements page
+  cy.visit('/bankzaken/bankafschriften');
+  cy.url().should('eq', Cypress.config().baseUrl + '/bankzaken/bankafschriften')
+
   // Add file 2
   cy.get('input[type="file"]')
     .selectFile('voorbeeldbankafschriften/camt onbekende iban.xml', { force: true });
-  cy.wait(modalWait)
   cy.get('[data-test="uploadItem.check"]') // Assert file upload status icon is displayed
     .should('be.visible')
 

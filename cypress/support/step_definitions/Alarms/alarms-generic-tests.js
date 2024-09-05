@@ -120,41 +120,44 @@ Before({ order: 10, tags: "@beforeCreateAgreement" }, () => {
   api.truncateAlarms()
   api.truncateSignals()
 
-  // Navigate to test citizen's overview page
-  Step(this, 'I open the citizen overview page for "Dingus Bingus"');
-  Step(this, "I click the button 'Toevoegen'");
+  // Create agreements
+  burgerDetails.insertAfspraak('Bingus', uniqueSeed, "543.54", 'NL09INGB4826953240', '1', 'true', '2024-01-01');
 
-  // Add agreement with test department
-  cy.url().should('contains', '/afspraken/toevoegen'); 
-  cy.get('[data-test="radio.agreementOrganization"]')
-    .click();
-  cy.get('#organisatie')
-    .type('Albert');
-  cy.contains('Heijn')
-    .click();
-  // Check auto-fill
-  cy.contains('Zaandam');
-  // Fill in IBAN
-  cy.get('#tegenrekening')
-    .type('NL09');
-  cy.contains('9532')
-    .click();
+  // View burger detail page
+  burgers.openBurger('Dingus Bingus')
+  burgerDetails.viewAfspraak(uniqueSeed)
 
-  // Payment direction: Toeslagen
-  cy.get('[data-test="radio.agreementIncome"]')
-    .click();
-  cy.get('#rubriek')
-    .click()
-    .contains('Inkomsten')
-    .click();
-  cy.get('[data-test="select.agreementIncomeDescription"]')
-    .type(uniqueSeed);
-  cy.get('[data-test="select.agreementIncomeAmount"]')
-    .type('543.54');
-  cy.get('[data-test="button.Submit"]')
-    .click();
+  // // Add agreement with test department
+  // cy.url().should('contains', '/afspraken/toevoegen'); 
+  // cy.get('[data-test="radio.agreementOrganization"]')
+  //   .click();
+  // cy.get('#organisatie')
+  //   .type('Albert');
+  // cy.contains('Heijn')
+  //   .click();
+  // // Check auto-fill
+  // cy.contains('Zaandam');
+  // // Fill in IBAN
+  // cy.get('#tegenrekening')
+  //   .type('NL09');
+  // cy.contains('9532')
+  //   .click();
 
-  generic.notificationSuccess('De afspraak is opgeslagen')
+  // // Payment direction: Toeslagen
+  // cy.get('[data-test="radio.agreementIncome"]')
+  //   .click();
+  // cy.get('#rubriek')
+  //   .click()
+  //   .contains('Inkomsten')
+  //   .click();
+  // cy.get('[data-test="select.agreementIncomeDescription"]')
+  //   .type(uniqueSeed);
+  // cy.get('[data-test="select.agreementIncomeAmount"]')
+  //   .type('543.54');
+  // cy.get('[data-test="button.Submit"]')
+  //   .click();
+
+  // generic.notificationSuccess('De afspraak is opgeslagen')
 
 });
 

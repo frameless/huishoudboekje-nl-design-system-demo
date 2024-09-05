@@ -1,4 +1,8 @@
 
+import Generic from "./Generic";
+
+const generic = new Generic();
+
 class AlarmModal {
 
   isModalOpen() {
@@ -120,6 +124,8 @@ class AlarmModal {
     this.buttonOpslaan().click()
 
     this.isModalClosed()
+
+    generic.notificationSuccess('Het alarm is opgeslagen')
 
 	}
    

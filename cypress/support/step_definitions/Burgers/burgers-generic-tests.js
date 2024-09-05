@@ -16,13 +16,13 @@ const afspraakDetails = new AfspraakDetails()
 const alarmModal = new AlarmModal()
 
 
-Before({ tags: "@createCitizenEndParcip" }, function (){
+BeforeAll({ tags: "@createCitizenEndParcip" }, function (){
 
   api.createTestBurgerEndParcip();
 
 });
 
-After({ tags: "@deleteCitizenEndParcip" }, function (){
+AfterAll({ tags: "@deleteCitizenEndParcip" }, function (){
 
   api.deleteTestBurgerEndParcip();
 
