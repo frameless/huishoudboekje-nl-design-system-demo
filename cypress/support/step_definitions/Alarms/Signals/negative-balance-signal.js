@@ -3,7 +3,11 @@
 import { Given, When, Then, Step } from "@badeball/cypress-cucumber-preprocessor";
 
 import Bankafschriften from "../../../../pages/Bankafschriften";
+import Burgers from "../../../../pages/Burgers";
+import BurgersDetails from "../../../../pages/BurgerDetails";
 
+const burgers = new Burgers();
+const burgerDetails = new BurgersDetails();
 const bankafschriften = new Bankafschriften()
 
 // Constants
@@ -21,45 +25,13 @@ Then("the citizen's balance is {string}", (balance) => {
 });
 
 Given('an agreement exists for scenario "negative citizen balance"', () => {
-  
-  // Navigate to citizen
-  Step(this, 'I open the citizen overview page for "Dingus Bingus"');
-  
-  cy.get('[data-test="button.Add"]')
-    .click();
 
-  // Add agreement with test department
-  cy.url().should('contains', '/afspraken/toevoegen'); 
-  cy.get('[data-test="radio.agreementOrganization"]', { timeout: 10000 })
-    .click();
-  cy.get('#organisatie')
-    .type('Belast');
-  cy.contains('ingdienst')
-    .click();
-  // Check auto-fill
-  cy.contains('Graadt van Roggenweg');
-  // Fill in IBAN
-  cy.get('#tegenrekening')
-    .type('NL86');
-  cy.contains('0002 4455')
-    .click();
+  // Create agreements
+  burgerDetails.insertAfspraak('Bingus', 'Loon', "10.00", 'NL86INGB0002445588', '5', 'false', '2024-01-01');
 
-  // Payment direction: Toeslagen
-  cy.get('[data-test="radio.agreementIncome"]', { timeout: 10000 })
-    .click();
-  cy.get('#rubriek')
-    .click()
-    .contains('Toeslagen')
-    .click();
-  cy.get('[data-test="select.agreementIncomeDescription"]')
-    .type('Loon');
-  cy.get('[data-test="select.agreementIncomeAmount"]')
-    .type('10');
-  cy.get('[data-test="button.Submit"]', { timeout: 10000 })
-    .click();
-
-  // Check success message
-  Step(this, "a success notification containing 'afspraak' is displayed");
+  // View burger detail page
+  burgers.openBurger('Dingus Bingus')
+  burgerDetails.viewAfspraak('Loon')
 
 });
 
@@ -229,6 +201,7 @@ When('the zero amount bank transaction is booked to the agreement "Loon"', () =>
   cy.get('[data-test="transactions.expandFilter"]')
     .click();
   cy.get('#zoektermen')
+    .should('be.visible')
     .type('HHB000001 Zorgtoeslag{enter}');
   cy.contains('0,00')
     .click();
@@ -242,7 +215,6 @@ When('the zero amount bank transaction is booked to the agreement "Loon"', () =>
     .click();
   cy.get('[aria-label="Remove Belastingdienst Toeslagen Kantoor Utrecht"]')
     .click();
-  cy.wait(1000);
   cy.contains('Loon')
     .click();
 
@@ -574,6 +546,7 @@ When('a positive bank transaction with amount {string} is booked to an agreement
   cy.get('[data-test="transactions.expandFilter"]')
     .click();
   cy.get('#zoektermen')
+    .should('be.visible')
     .type('HHB000001 Zorgtoeslag{enter}');
   cy.contains(amount)
     .click();
@@ -599,11 +572,12 @@ When('the negative amount bank transaction with amount {string} is booked to the
   cy.visit('/bankzaken/transacties')
   cy.url().should('eq', Cypress.config().baseUrl + '/bankzaken/transacties')
   
-  cy.get('[data-test="transactionsPage.filters.notReconciliated"]', { timeout: 10000 })
+  cy.get('[data-test="transactionsPage.filters.notReconciliated"]')
     .click();
-  cy.get('[data-test="transactions.expandFilter"]', { timeout: 10000 })
+  cy.get('[data-test="transactions.expandFilter"]')
     .click();
-  cy.get('#zoektermen', { timeout: 10000 })
+  cy.get('#zoektermen')
+    .should('be.visible')
     .type('HHB000001 Zorgtoeslag{enter}');
   cy.contains(amount)
     .click();
@@ -615,7 +589,6 @@ When('the negative amount bank transaction with amount {string} is booked to the
     .click({ force: true });
   cy.contains('Bingus')
     .click();
-  cy.wait(2000);
   cy.contains('Loon')
     .click();
 
@@ -792,7 +765,7 @@ When('another positive bank transaction with amount {string} is booked to an agr
   
   // Wait for file to upload
   cy.get('[data-test="uploadItem.check"]');
-  cy.get('[aria-label="Close"]', { timeout: 10000 })
+  cy.get('[aria-label="Close"]')
     .should('be.visible')
     .click();
 
@@ -805,6 +778,7 @@ When('another positive bank transaction with amount {string} is booked to an agr
   cy.get('[data-test="transactions.expandFilter"]')
     .click();
   cy.get('#zoektermen')
+    .should('be.visible')
     .type('HHB000001 Zorgtoeslag{enter}');
   cy.contains(amount)
     .click();

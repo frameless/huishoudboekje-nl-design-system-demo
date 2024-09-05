@@ -3,8 +3,14 @@
 import { Given, When, Then, Step } from "@badeball/cypress-cucumber-preprocessor";
 
 import Generic from "../../../../pages/Generic";
+import Burgers from "../../../../pages/Burgers";
+import BurgersDetails from "../../../../pages/BurgerDetails";
+import AfspraakDetails from "../../../../pages/AfspraakDetails";
 
 const generic = new Generic()
+const burgers = new Burgers();
+const burgerDetails = new BurgersDetails();
+const afspraakDetails = new AfspraakDetails()
 
 // Unique names
 const uniqueSeed = Date.now().toString();
@@ -12,10 +18,6 @@ const uniqueSeed = Date.now().toString();
 // Set database query
 const queryTruncateAlarm = `mutation Truncate {
   truncateTable(databaseName: "alarmenservice", tableName: "alarms")
-}`
-
-const queryTruncateSignal = `mutation Truncate {
-  truncateTable(databaseName: "alarmenservice", tableName: "signals")
 }`
 
 const queryAddAlarm = `mutation CreateAlarm {
@@ -56,73 +58,24 @@ const evaluateAlarms = "sh cypress/pipeline/evaluate-alarms.sh"
 
 Given('an agreement exists for scenario "no transaction within timeframe"', () => {
   
-  // Truncate signals
-  cy.request({
-    method: "post",
-    url: Cypress.env().graphqlUrl + '/graphql',
-    body: { query: queryTruncateSignal },
-  }).then((res) => {
-    console.log(res.body);
-  });
+  // Create agreements
+  burgerDetails.insertAfspraak('Bingus', uniqueSeed, "10.00", 'NL86INGB0002445588', '5', 'false', '2024-01-01');
 
-  // Navigate to citizen
-  Step(this, 'I open the citizen overview page for "Dingus Bingus"');
-  
-  cy.get('[data-test="button.Add"]')
-    .click();
-
-  // Add agreement with test department
-  cy.url().should('contains', '/afspraken/toevoegen'); 
-  cy.get('[data-test="radio.agreementOrganization"]')
-    .click();
-  cy.get('#organisatie')
-    .type('Belast');
-  cy.contains('ingdienst')
-    .click();
-  // Check auto-fill
-  cy.contains('Graadt van Roggenweg');
-  // Fill in IBAN
-  cy.get('#tegenrekening')
-    .type('NL86');
-  cy.contains('0002 4455')
-    .click();
-
-  // Payment direction: Toeslagen
-  cy.get('[data-test="radio.agreementIncome"]')
-    .click();
-  cy.get('#rubriek')
-    .click()
-    .contains('Toeslagen')
-    .click();
-  cy.get('[data-test="select.agreementIncomeDescription"]')
-    .type(uniqueSeed);
-  cy.get('[data-test="select.agreementIncomeAmount"]')
-    .type('10');
-  cy.get('[data-test="button.Submit"]')
-    .click();
-
-  // Check success message
-  Step(this, "a success notification containing 'afspraak' is displayed");
+  // View burger detail page
+  burgers.openBurger('Dingus Bingus')
+  burgerDetails.viewAfspraak(uniqueSeed)
 
 });
 
 Given('an alarm exists for scenario "no transaction within timeframe"', () => {
 
-  // Truncate alarms
-  cy.request({
-    method: "post",
-    url: Cypress.env().graphqlUrl + '/graphql',
-    body: { query: queryTruncateAlarm },
-  }).then((res) => {
-    console.log(res.body);
-  });
+ // afspraakDetails.insertAlarm(uniqueSeed, "1", "1000", "0");
 
   cy.url().should('include', Cypress.config().baseUrl + '/afspraken/')
   cy.get('h2').contains('Alarm').should('be.visible')
     .scrollIntoView() // Scrolls 'Alarm' into view
-  cy.get('button')
-    .contains('Toevoegen')
-    .click();
+  
+  afspraakDetails.buttonAlarmToevoegen().click()
 
   // Check whether modal is opened and visible
   cy.get('section[aria-modal="true"]', { timeout: 10000 })

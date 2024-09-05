@@ -77,8 +77,7 @@ When('I select "Empty_customer_statement_message_CAMT.053_v2.xml"', () => {
   
   cy.get('input[type="file"]')
     .selectFile('voorbeeldbankafschriften/Empty_customer_statement_message_CAMT.053_v2.xml', { force: true });
-  cy.wait(modalWait)
-
+  
 });
 
 Then('the "Empty_customer_statement_message_CAMT.053_v2.xml" filename is displayed', () => {

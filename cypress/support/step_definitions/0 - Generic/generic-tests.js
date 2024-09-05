@@ -238,34 +238,6 @@ Then('the text {string} is not displayed', (text) => {
 
 });
 
-// Find a generic success message
-Then('a notification of success is displayed', () => {
-
-  // Assertion
-  cy.get('[data-status="success"]', { timeout: 30000 })
-    .scrollIntoView()
-    .should('be.visible');
-
-  // Make sure notification has disappeared from view
-  cy.get('[data-status="success"]', { timeout: 10000 })
-    .should('not.exist');
-
-});
-
-// Find a generic success message
-Then('a notification of success is displayed', () => {
-
-  // Assertion
-  cy.get('[data-status="success"]', { timeout: 10000 })
-    .scrollIntoView()
-    .should('be.visible');
-
-  // Make sure notification has disappeared from view
-  cy.get('[data-status="success"]', { timeout: 10000 })
-    .should('not.exist');
-
-});
-
 // Find a specific success message
 Then('a success notification containing {string} is displayed', (notificationText) => {
 
@@ -289,21 +261,7 @@ Then('I wait one minute', () => {
 // Confirm that a specific citizen exists
 Given('the {string} citizen exists', (fullName) => {
 
-  // Function that splits last name from other names
-  function lastName(fullName) {
-    var n = fullName.split(" ");
-    return n[n.length - 1];
-  }
-
-  searchTerm = lastName(fullName)
-
-  // Search for citizen
-  cy.visit('/burgers');
-  cy.url().should('eq', Cypress.config().baseUrl + '/burgers')
-  cy.get('input[placeholder="Zoeken"]')
-    .type(searchTerm);
-  cy.get('[data-test="citizen.tile"]', { timeout: 30000 })
-    .should('be.visible')
+  burgers.viewBurger(fullName);
 
 });
 
@@ -311,7 +269,7 @@ Given('the {string} citizen exists', (fullName) => {
 Then('the "Add alarm" modal is displayed', () => {
 
   // Assertion
-  cy.get('[data-test="modal.Alarm"]', { timeout: 10000 })
+  cy.get('[data-test="modal.Alarm"]')
     .should('be.visible');
 
 });
@@ -319,22 +277,6 @@ Then('the "Add alarm" modal is displayed', () => {
 // Navigate to the test citizen's page
 When('I open the citizen overview page for {string}', (fullName) => {
 
-  // Function that splits last name from other names
-  function lastName(fullName) {
-    var n = fullName.split(" ");
-    return n[n.length - 1];
-  }
-
-  searchTerm = lastName(fullName)
-
-  cy.visit('/burgers');
-  cy.url().should('eq', Cypress.config().baseUrl + '/burgers')
-  cy.get('input[placeholder="Zoeken"]')
-    .type(searchTerm);
-  cy.get('[data-test="citizen.tile"]', { timeout: 30000 })
-    .should('be.visible')
-    .first()
-    .click();
-  cy.url().should('include', Cypress.config().baseUrl + '/burgers/')
+  burgers.openBurger(fullName);
 
 });

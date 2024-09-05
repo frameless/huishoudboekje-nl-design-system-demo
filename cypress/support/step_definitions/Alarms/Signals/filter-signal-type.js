@@ -24,7 +24,7 @@ Given('a signal with the type "Negatief saldo" exists', () => {
   Step(this, 'I select a CAMT test file with negative payment amount "10.01"');
   Step(this, 'the negative amount bank transaction with amount "10,01" is booked to the correct agreement');
 
-  cy.wait(10000);
+  cy.wait(3000);
 
   Step(this, 'I navigate to the page "/signalen"');
   Step(this, 'the text "Er is een negatief saldo geconstateerd bij Dingus Bingus." is displayed');
@@ -36,8 +36,6 @@ Given('a signal with the type "Missende betaling" exists', () => {
   Step(this, 'an agreement exists for scenario "no transaction within timeframe"');
   Step(this, 'an alarm exists for scenario "no transaction within timeframe"');
   Step(this, 'the alarm timeframe expires');
-
-  cy.wait(10000);
 
   Step(this, 'a "Payment missing" signal is created');
 
@@ -52,8 +50,6 @@ Given('a signal with the type "Onverwacht bedrag" exists', () => {
   Step(this, 'the low amount bank transaction date is within the alarm timeframe');
   Step(this, 'the low amount bank transaction amount is smaller than the sum of the expected amount minus the allowed amount deviation');
 
-  cy.wait(10000);
-
   Step(this, 'a "Payment amount too low" signal is created');
 
 });
@@ -64,8 +60,6 @@ Given('a signal with the type "Meerdere transacties" exists', () => {
   Step(this, 'an alarm exists for scenario "multiple payments within timeframe"');
   Step(this, 'two CAMT test files are created with the same transaction date');
   Step(this, 'both bank transactions are reconciliated on the same agreement');
-
-  cy.wait(10000);
 
   Step(this, 'a "Multiple payments" signal is created');
 
@@ -103,27 +97,19 @@ Given('all type filters are enabled', () => {
 
   // Add 'Missende betaling'
   signalen.filterType().click('right');
-  cy.wait(500);
   cy.contains('Missende betaling').click();
-  cy.wait(500);
 
   // Add 'Onverwachte transactie'
   signalen.filterType().click('right');
-  cy.wait(500);
   cy.contains('Onverwacht bedrag').click();
-  cy.wait(500);
 
   // Add 'Meerdere transacties'
   signalen.filterType().click('right');
-  cy.wait(500);
   cy.contains('Meerdere transacties').click();
-  cy.wait(500);
 
   // Add 'Negatief saldo'
   signalen.filterType().click('right');
-  cy.wait(500);
   cy.contains('Negatief saldo').click();
-  cy.wait(500);
 
 });
 
@@ -177,9 +163,7 @@ Then('none of the signals are displayed', () => {
 When('I select the option {string}', (option) => {
 
   signalen.filterType().click('right');
-  cy.wait(500);
   cy.contains(option).click();
-  cy.wait(500);
 
 });
 

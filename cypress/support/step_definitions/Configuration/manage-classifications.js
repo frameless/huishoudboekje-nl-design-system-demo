@@ -77,8 +77,6 @@ When('I click the "Opslaan" button in the section with the header "Rubrieken"', 
 
   cy.get('[data-test="button.rubricSubmit"]')
     .click();
-  
-  cy.wait(500)
 
 });
 

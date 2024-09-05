@@ -8,10 +8,15 @@ class Generic {
   notificationSuccess(text) {
     // Assertion
     cy.get('[data-status="success"]', { timeout: 30000 })
+      .contains(text)
+      .should('be.visible')
+    cy.get('[data-status="success"]', { timeout: 30000 })
       .should('contain', text)
-      .and('be.visible')
+      .find('[aria-label="Close"]')
+      .first()
+      .click();
 
-    // Make sure notification has disappeared from view
+    //Make sure notification has disappeared from view
     cy.get('[data-status="success"]', { timeout: 20000 })
       .should('not.exist');
   }
@@ -19,8 +24,13 @@ class Generic {
   notificationError(text) {
     // Assertion
     cy.get('[data-status="error"]', { timeout: 30000 })
+      .contains(text)
+      .should('be.visible')
+    cy.get('[data-status="error"]', { timeout: 30000 })
       .should('contain', text)
-      .and('be.visible');
+      .find('[aria-label="Close"]')
+      .first()
+      .click();
 
     // Make sure notification has disappeared from view
     cy.get('[data-status="error"]', { timeout: 20000 })

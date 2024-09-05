@@ -2,10 +2,13 @@
 
 import { Given, When, Then, Step } from "@badeball/cypress-cucumber-preprocessor";
 
-const header = {
-  'content-type': 'application/json',
-  'Accept-Encoding': 'gzip, deflate, br',
-};
+import Burgers from "../../../../pages/Burgers";
+import BurgersDetails from "../../../../pages/BurgerDetails";
+import AfspraakDetails from "../../../../pages/AfspraakDetails";
+
+const burgers = new Burgers();
+const burgerDetails = new BurgersDetails();
+const afspraakDetails = new AfspraakDetails();
 
 let uniqueId = 0;
 
@@ -16,58 +19,24 @@ Given('an agreement exists for feature "create signal on unexpected payment amou
   // Set unique id names
   uniqueId = Date.now().toString();
 
-  // Navigate to citizen
-  Step(this, 'I open the citizen overview page for "Dingus Bingus"');
-  
-  cy.get('[data-test="button.Add"]')
-    .click();
+  // Create agreements
+  burgerDetails.insertAfspraak('Bingus', uniqueId, "10.00", 'NL86INGB0002445588', '5', 'false', '2024-01-01');
 
-  // Add agreement with test department
-  cy.url().should('contains', '/afspraken/toevoegen'); 
-  cy.get('[data-test="radio.agreementOrganization"]')
-    .click();
-  cy.get('#organisatie')
-    .type('Belast');
-  cy.contains('ingdienst')
-    .click();
-  // Check auto-fill
-  cy.contains('Graadt van Roggenweg');
-  // Fill in IBAN
-  cy.get('#tegenrekening')
-    .type('NL86');
-  cy.contains('0002 4455')
-    .click();
-
-  // Payment direction: Toeslagen
-  cy.get('[data-test="radio.agreementIncome"]')
-    .click();
-  cy.get('#rubriek')
-    .click()
-    .contains('Toeslagen')
-    .click();
-  cy.get('[data-test="select.agreementIncomeDescription"]')
-    .type(uniqueId);
-  cy.get('[data-test="select.agreementIncomeAmount"]')
-    .type('10');
-  cy.get('[data-test="button.Submit"]')
-    .click();
-
-  // Check redirect to new agreement
-  cy.url().should('not.include', '/toevoegen');
-  cy.url().should('include', Cypress.config().baseUrl + '/afspraken/');
-
-  Step(this, "a success notification containing 'afspraak' is displayed");
+  // View burger detail page
+  burgers.openBurger('Dingus Bingus')
+  burgerDetails.viewAfspraak(uniqueId)
 
 });
 
 Given('an alarm exists for feature "create signal on unexpected payment amount, with amount margin"', () => {
+    
+   //afspraakDetails.insertAlarm(uniqueId, "0", "1000", "99");
 
   cy.url().should('include', Cypress.config().baseUrl + '/afspraken/')
   cy.get('h2').contains('Alarm').should('be.visible')
     .scrollIntoView() // Scrolls 'Alarm' into view
-  cy.get('button')
-    .contains('Toevoegen')
-    .click();
+
+  afspraakDetails.buttonAlarmToevoegen().click()
 
   // Check whether modal is opened and visible
   cy.get('section[aria-modal="true"]', { timeout: 10000 })
@@ -271,10 +240,9 @@ When('the low amount outside amount margin bank transaction is booked to an agre
 
   cy.get('input[type="file"]')
     .selectFile('cypress/testdata/paymentAmountTooLow-OutsideAmountMargin.xml', { force: true })
-  cy.wait(3000);
-  cy.get('[aria-label="Close"]', { timeout: 10000 })
-    .should('be.visible')
-    .click();
+  
+  // Wait for file to be uploaded
+  cy.get('[data-test="uploadItem.check"]');
 
   // Reconciliate the bank transaction to the correct agreement
   cy.visit('/bankzaken/transacties')
@@ -285,6 +253,7 @@ When('the low amount outside amount margin bank transaction is booked to an agre
   cy.get('[data-test="transactions.expandFilter"]')
     .click();
   cy.get('#zoektermen')
+    .should('be.visible')
     .type('HHB000001 Zorgtoeslag{enter}');
   cy.contains('9,00')
     .click();
@@ -491,10 +460,9 @@ When('the low amount on amount margin bank transaction is booked to an agreement
 
   cy.get('input[type="file"]')
     .selectFile('cypress/testdata/paymentAmountTooLow-OnAmountMargin.xml', { force: true })
-  cy.wait(3000);
-  cy.get('[aria-label="Close"]', { timeout: 10000 })
-    .should('be.visible')
-    .click();
+  
+  // Wait for file to be uploaded
+  cy.get('[data-test="uploadItem.check"]');
 
   // Reconciliate the bank transaction to the correct agreement
   cy.visit('/bankzaken/transacties')
@@ -505,6 +473,7 @@ When('the low amount on amount margin bank transaction is booked to an agreement
   cy.get('[data-test="transactions.expandFilter"]')
     .click();
   cy.get('#zoektermen')
+    .should('be.visible')
     .type('HHB000001 Zorgtoeslag{enter}');
   cy.contains('9,01')
     .click();
@@ -696,10 +665,9 @@ When('the low amount within amount margin bank transaction is booked to an agree
 
   cy.get('input[type="file"]')
     .selectFile('cypress/testdata/paymentAmountTooLow-WithinAmountMargin.xml', { force: true })
-  cy.wait(3000);
-  cy.get('[aria-label="Close"]', { timeout: 10000 })
-    .should('be.visible')
-    .click();
+  
+  // Wait for file to be uploaded
+  cy.get('[data-test="uploadItem.check"]');
 
   // Reconciliate the bank transaction to the correct agreement
   cy.visit('/bankzaken/transacties')
@@ -710,6 +678,7 @@ When('the low amount within amount margin bank transaction is booked to an agree
   cy.get('[data-test="transactions.expandFilter"]')
     .click();
   cy.get('#zoektermen')
+    .should('be.visible')
     .type('HHB000001 Zorgtoeslag{enter}');
   cy.contains('9,02')
     .click();
@@ -903,10 +872,9 @@ When('the expected amount on amount margin bank transaction is booked to an agre
 
   cy.get('input[type="file"]')
     .selectFile('cypress/testdata/paymentAmountExpected-OnAmountMargin.xml', { force: true })
-  cy.wait(3000);
-  cy.get('[aria-label="Close"]', { timeout: 10000 })
-    .should('be.visible')
-    .click();
+  
+  // Wait for file to be uploaded
+  cy.get('[data-test="uploadItem.check"]');
 
   // Reconciliate the bank transaction to the correct agreement
   cy.visit('/bankzaken/transacties')
@@ -917,6 +885,7 @@ When('the expected amount on amount margin bank transaction is booked to an agre
   cy.get('[data-test="transactions.expandFilter"]')
     .click();
   cy.get('#zoektermen')
+    .should('be.visible')
     .type('HHB000001 Zorgtoeslag{enter}');
   cy.contains('10,00')
     .click();
@@ -1110,10 +1079,9 @@ When('the high amount within amount margin bank transaction is booked to an agre
 
   cy.get('input[type="file"]')
     .selectFile('cypress/testdata/paymentAmountTooHigh-WithinAmountMargin.xml', { force: true })
-  cy.wait(3000);
-  cy.get('[aria-label="Close"]', { timeout: 10000 })
-    .should('be.visible')
-    .click();
+  
+  // Wait for file to be uploaded
+  cy.get('[data-test="uploadItem.check"]');
 
   // Reconciliate the bank transaction to the correct agreement
   cy.visit('/bankzaken/transacties')
@@ -1124,6 +1092,7 @@ When('the high amount within amount margin bank transaction is booked to an agre
   cy.get('[data-test="transactions.expandFilter"]')
     .click();
   cy.get('#zoektermen')
+    .should('be.visible')
     .type('HHB000001 Zorgtoeslag{enter}');
   cy.contains('10,98')
     .click();
@@ -1317,10 +1286,9 @@ When('the high amount on amount margin bank transaction is booked to an agreemen
 
   cy.get('input[type="file"]')
     .selectFile('cypress/testdata/paymentAmountTooHigh-OnAmountMargin.xml', { force: true })
-  cy.wait(3000);
-  cy.get('[aria-label="Close"]', { timeout: 10000 })
-    .should('be.visible')
-    .click();
+  
+  // Wait for file to be uploaded
+  cy.get('[data-test="uploadItem.check"]');
 
   // Reconciliate the bank transaction to the correct agreement
   cy.visit('/bankzaken/transacties')
@@ -1331,6 +1299,7 @@ When('the high amount on amount margin bank transaction is booked to an agreemen
   cy.get('[data-test="transactions.expandFilter"]')
     .click();
   cy.get('#zoektermen')
+    .should('be.visible')
     .type('HHB000001 Zorgtoeslag{enter}');
   cy.contains('10,99')
     .click();
@@ -1522,10 +1491,9 @@ When('the high amount outside amount margin bank transaction is booked to an agr
 
   cy.get('input[type="file"]')
     .selectFile('cypress/testdata/paymentAmountTooHigh-OutsideAmountMargin.xml', { force: true })
-  cy.wait(3000);
-  cy.get('[aria-label="Close"]', { timeout: 10000 })
-    .should('be.visible')
-    .click();
+  
+  // Wait for file to be uploaded
+  cy.get('[data-test="uploadItem.check"]');
 
   // Reconciliate the bank transaction to the correct agreement
   cy.visit('/bankzaken/transacties')
@@ -1536,6 +1504,7 @@ When('the high amount outside amount margin bank transaction is booked to an agr
   cy.get('[data-test="transactions.expandFilter"]')
     .click();
   cy.get('#zoektermen')
+    .should('be.visible')
     .type('HHB000001 Zorgtoeslag{enter}');
   cy.contains('11,00')
     .click();

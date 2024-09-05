@@ -19,7 +19,7 @@ const alarmModal = new AlarmModal()
 Given("I view a citizen's agreement", () => {
 
   // Navigate to burger details page of test user
-  burgers.viewBurger('Dingus Bingus')
+  burgers.openBurger('Dingus Bingus')
 
   // Open afspraak
   burgerDetails.viewLatestAfspraak()
@@ -28,14 +28,13 @@ Given("I view a citizen's agreement", () => {
 
 When("I click the button 'Toevoegen' in the alarm section", () => {
 
-  afspraakDetails.buttonToevoegen().click();
+  afspraakDetails.buttonAlarmToevoegen().click();
 
 });
 
 Then("I submit valid information in the modal's fields", () => {
 
   alarmModal.createMonthlyAlarm()
-  generic.notificationSuccess('Het alarm is opgeslagen')
 
 });
 

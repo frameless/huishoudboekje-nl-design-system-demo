@@ -69,15 +69,12 @@ function loginViaAAD(username: string, password: string) {
         }
       })
 
-      cy.wait(3000);
       cy.get('#idBtn_Back').click();
     }
   )
 
-  cy.waitForReact();
-
   // Wait for redirect
-  cy.url({timeout: 10000}).should('contain', Cypress.config().baseUrl);
+  cy.url().should('contain', Cypress.config().baseUrl);
 
   // Wait for elements to load in
   cy.wait(1000);
@@ -141,7 +138,7 @@ function loginViaAAD(username: string, password: string) {
     }
 
     // Ensure Microsoft has redirected us back to the sample app with our logged in user.
-    cy.url({timeout: 10000}).should('contain', Cypress.config().baseUrl + '/huishoudens');
+    cy.url().should('contain', Cypress.config().baseUrl + '/huishoudens');
 
   })
 

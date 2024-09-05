@@ -2,10 +2,14 @@
 
 import { Given, When, Then, Step } from "@badeball/cypress-cucumber-preprocessor";
 
-const header = {
-  'content-type': 'application/json',
-  'Accept-Encoding': 'gzip, deflate, br',
-};
+import Burgers from "../../../../pages/Burgers";
+import BurgersDetails from "../../../../pages/BurgerDetails";
+import AfspraakDetails from "../../../../pages/AfspraakDetails";
+
+const afspraakDetails = new AfspraakDetails()
+const burgers = new Burgers();
+const burgerDetails = new BurgersDetails();
+
 
 let uniqueId = Date.now().toString() + 1;
 
@@ -13,55 +17,27 @@ let uniqueId = Date.now().toString() + 1;
 
 Given('an agreement exists for scenario "multiple payments within timeframe"', () => {
 
-  // Navigate to citizen
-  Step(this, 'I open the citizen overview page for "Dingus Bingus"');
-  
-  cy.get('[data-test="button.Add"]')
-    .click();
+  // Create agreements
+  burgerDetails.insertAfspraak('Bingus', uniqueId, "10.00", 'NL86INGB0002445588', '5', 'false', '2024-01-01');
 
-  // Add agreement with test department
-  cy.url().should('contains', '/afspraken/toevoegen'); 
-  cy.get('[data-test="radio.agreementOrganization"]')
-    .click();
-  cy.get('#organisatie')
-    .type('Belast');
-  cy.contains('ingdienst')
-    .click();
-  // Check auto-fill
-  cy.contains('Graadt van Roggenweg');
-  // Fill in IBAN
-  cy.get('#tegenrekening')
-    .type('NL86');
-  cy.contains('0002 4455')
-    .click();
-
-  // Payment direction: Toeslagen
-  cy.get('[data-test="radio.agreementIncome"]')
-    .click();
-  cy.get('#rubriek')
-    .click()
-    .contains('Toeslagen')
-    .click();
-  cy.get('[data-test="select.agreementIncomeDescription"]')
-    .type(uniqueId);
-  cy.get('[data-test="select.agreementIncomeAmount"]')
-    .type('10');
-  cy.get('[data-test="button.Submit"]')
-    .click();
-
-  // Check success message
-  Step(this, "a success notification containing 'afspraak' is displayed");
+  // View burger detail page
+  burgers.openBurger('Dingus Bingus')
+  burgerDetails.viewAfspraak(uniqueId)
 
 });
 
 Given('an alarm exists for scenario "multiple payments within timeframe"', () => {
 
+//   afspraakDetails.insertAlarm(uniqueId, "1", "1000", "0");
+
+//   burgers.openBurger('Dingus Bingus')
+//   burgerDetails.viewAfspraak(uniqueId)
+
   cy.url().should('include', Cypress.config().baseUrl + '/afspraken/')
   cy.get('h2').contains('Alarm').should('be.visible')
     .scrollIntoView() // Scrolls 'Alarm' into view
-  cy.get('button')
-    .contains('Toevoegen')
-    .click();
+  
+  afspraakDetails.buttonAlarmToevoegen().click()
 
   // Check whether modal is opened and visible
   cy.get('section[aria-modal="true"]', { timeout: 10000 })
@@ -419,6 +395,7 @@ When('both bank transactions are reconciliated on the same agreement', () => {
     cy.get('[data-test="transactions.expandFilter"]')
       .click();
     cy.get('#zoektermen')
+      .should('be.visible')
       .type('HHB000001 Zorgtoeslag{enter}');
     cy.contains('10,00')
       .click();
@@ -463,6 +440,7 @@ When('both bank transactions are reconciliated on the same agreement', () => {
     cy.get('[data-test="transactions.expandFilter"]')
       .click();
     cy.get('#zoektermen')
+      .should('be.visible')
       .type('HHB000001 Zorgtoeslag{enter}');
     cy.contains('10,00')
       .click();
@@ -485,7 +463,7 @@ When('both bank transactions are reconciliated on the same agreement', () => {
 Then('a "Multiple payments" signal is created', () => {
 
   // Wait for signals to be triggered in frontend
-  cy.wait(5000)
+  cy.wait(3000)
 
   // Navigate to page
   cy.visit('/signalen')

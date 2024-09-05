@@ -85,9 +85,7 @@ After({ tags: "@deleteCitizenPageMaximum" }, function (){
 Before({ tags: "@createPaymentInstruction" }, function (){
 
     // Create agreement
-    afspraakNew.createAfspraakUitgaven('Aaron Caronsson', '02-05-2024')
-    generic.notificationSuccess('De afspraak is opgeslagen.')
-    afspraakDetails.redirectToAfspraak()
+    afspraakNew.createAfspraakUitgaven('Caronsson', '2024-05-02')
   
     // Create payment instruction
     betaalinstructieNew.createBetaalinstructieMaandelijks()

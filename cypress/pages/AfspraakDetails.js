@@ -1,3 +1,8 @@
+import Generic from "./Generic";
+import Api from "./Api";
+
+const generic = new Generic()
+const api = new Api()
 
 class AfspraakDetails {
    
@@ -20,8 +25,12 @@ class AfspraakDetails {
       .should('be.visible')
   }
 
-	buttonToevoegen() {
-		return cy.get('button').contains('Toevoegen')
+	buttonBetaalinstructieToevoegen() {
+		return cy.get('[data-test="button.addPaymentInstruction"]')
+	}
+
+	buttonAlarmToevoegen() {
+		return cy.get('[data-test="button.addAlarm"]')
 	}
 
   toggleAlarmStatus() {
@@ -34,13 +43,6 @@ class AfspraakDetails {
 
   toggleGetStatusEnabled() {
     return cy.get('label[class^="chakra-switch"]', { timeout: 10000 })
-  }
-
-  buttonBetaalinstructieToevoegen()
-  {
-    return cy.get('[data-test="section.paymentInstruction"]')
-      .find('button')
-      .contains('Toevoegen')
   }
 
   buttonDeleteAlarm() {
@@ -58,6 +60,53 @@ class AfspraakDetails {
     cy.url().should('include', '/betaalinstructie', { timeout: 10000 });
   }
 
+  insertAlarm(afspraakOmschrijving, datumMarge, bedrag, bedragMarge)
+  {
+    // Get afspraak id
+		api.getAfspraakUuid(afspraakOmschrijving).then((res) => {
+			console.log(res);	
+			let afspraakUuid = res.data.searchAfspraken.afspraken[0].uuid;
+      cy.log('Afspraak ' + afspraakOmschrijving + ' has uuid ' + afspraakUuid)
+      let startDatum = Math.floor(Date.now() / 1000);
+
+      const queryAddAlarm = `mutation createalarm {
+        Alarms_Create(input:
+        {
+          alarm: {
+            isActive: true,
+            dateMargin: ` + datumMarge + `,
+            amount: ` + bedrag + `,
+            amountMargin: ` + bedragMarge + `,
+            startDate: "` + startDatum + `",
+            endDate: "` + startDatum + `",
+            AlarmType: 3
+          },
+          agreementUuid: "` + afspraakUuid + `"
+        }
+      )
+        {
+          id
+          isActive
+          startDate
+          checkOnDate
+        }
+      }`
+
+      // Create alarm
+      cy.request({
+        method: "post",
+        url: Cypress.config().baseUrl + '/apiV2/graphql',
+        body: { query: queryAddAlarm },
+      }).then((res) => {
+        console.log(res.body);
+        let alarmId = res.body.data.Alarms_Create.id;
+        console.log('Test alarm has been created with id ' + alarmId)
+      });
+
+    })
+  }
+
 }
 
 export default AfspraakDetails;
+

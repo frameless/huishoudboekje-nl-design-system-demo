@@ -117,6 +117,7 @@ Deze versie omvat een verbetering voor teksten bij gelogde gebeurtenissen.
 
 This release introduces the notification service however it should not yet be used.
 
+
 ## 2.0.1
 
 Deze versie omvat een verbetering voor het migreren van gegevens voor alarmen en gebeurtenissen. Verder is er een probleem opgelost met het berekenen van saldo in rapportage.
@@ -159,13 +160,11 @@ Met de nieuwe User API kan een koppeling gemaakt worden vanuit een klantportaal.
 ## Migration Guide
 
 The grapql-mesh container has the following env variables required:
-
 - **HHB_ALARM_SERVICE_URL**
 - **HHB_LOG_SERVICE_URL**
 - **HHB_BACKEND_URL**
 
 To get the AlarmService up and running these env variables need to be set.
-
 - **HHB_DATABASE_URL**
 - **HHB_RABBITMQ_HOST**
 - **HHB_RABBITMQ_PORT**
@@ -179,7 +178,6 @@ To get the AlarmService up and running these env variables need to be set.
 - **HHB_JWT_JWKS_URI**
 
 To get the Log Service up and running these env variables need to be set.
-
 - **HHB_DATABASE_URL**
 - **HHB_RABBITMQ_HOST**
 - **HHB_RABBITMQ_PORT**
@@ -193,7 +191,6 @@ To get the Log Service up and running these env variables need to be set.
 - **HHB_JWT_JWKS_URI**
 
 To get the UserApi up and running these env variables need to be set.
-
 - **HHB_RABBITMQ_HOST**
 - **HHB_RABBITMQ_PORT**
 - **HHB_RABBITMQ_USER**

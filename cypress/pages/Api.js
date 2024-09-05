@@ -355,6 +355,7 @@ class Api {
       console.log(res.body);
     });
     cy.log("Truncated table 'alarms'")
+    console.log("Truncated table 'alarms'")
   }
 
   truncateSignals() {
@@ -371,6 +372,7 @@ class Api {
       console.log(res.body);
     });
     cy.log("Truncated table 'signals'")
+    console.log("Truncated table 'signals'")
   }
 
   truncateBankTransactions() {
@@ -399,6 +401,7 @@ class Api {
       console.log(res.body);
     });
     cy.log("Truncated table 'transactions'")
+    console.log("Truncated table 'transactions'")
 
     cy.request({
       method: "post",
@@ -408,6 +411,7 @@ class Api {
       console.log(res.body);
     });
     cy.log("Truncated table 'customerstatementmessages'")
+    console.log("Truncated table 'customerstatementmessages'")
 
     cy.request({
       method: "post",
@@ -417,6 +421,7 @@ class Api {
       console.log(res.body);
     });
     cy.log("Truncated table 'journaalposten'")
+    console.log("Truncated table 'journaalposten'")
     
     cy.request({
       method: "post",
@@ -426,6 +431,8 @@ class Api {
       console.log(res.body);
     });
     cy.log("Truncated table 'files'")
+    console.log("Truncated table 'files'")
+
   }
 
   truncatePaymentrecords() {
@@ -442,6 +449,7 @@ class Api {
       console.log(res.body);
     });
     cy.log("Truncated table 'paymentrecords'")
+    console.log("Truncated table 'paymentrecords'")
   }
 
   createTestBurger() {
@@ -468,14 +476,13 @@ class Api {
     }).then((res) => {
       console.log(res.body);
       citizenIdEndParcip = res.body.data.createBurger.burger.id;
-      console.log('Test citizen has been created', res.body.data.createBurger.burger.id)
+      console.log('Test citizen has been created with id ' + citizenIdEndParcip)
     });
     
   }
 
   getBurgerId(name)
   {
-    
     return cy.request({
       method: "post",
       url: Cypress.config().baseUrl + '/apiV2/graphql',
@@ -484,6 +491,55 @@ class Api {
 				id
 			}
 		}` },
+    }).its('body')     
+  }
+
+  getAfspraakUuid(omschrijving)
+  {
+    return cy.request({
+      method: "post",
+      url: Cypress.config().baseUrl + '/apiV2/graphql',
+      body: { query: `  query findAfspraakByUuid {
+        searchAfspraken(zoektermen: "` + omschrijving + `") {
+          afspraken {
+            uuid
+          }
+        }
+      }` },
+    }).its('body')  
+  }
+
+  getAfdelingId(iban)
+  {
+    
+    return cy.request({
+      method: "post",
+      url: Cypress.config().baseUrl + '/apiV2/graphql',
+      body: { query: `query rekeningByIBAN {
+        rekeningenByIbans(ibans: "`+ iban +`") {
+          id
+        }
+        afdelingenByIban(iban: "`+ iban +`") {
+          id
+        }
+      }` },
+    }).its('body')
+      
+  }
+
+  getPostadresId(afdelingId)
+  {
+    
+    return cy.request({
+      method: "post",
+      url: Cypress.config().baseUrl + '/apiV2/graphql',
+      body: { query: `query afdelingByIban {
+                afdeling(id: `+ afdelingId +`) {
+          postadressen {
+            id
+          }
+        }
+      }` },
     }).its('body')
       
   }
@@ -645,311 +701,388 @@ class Api {
   createTestBurgerABC()
   {
     this.createTestBurgerA()
-    cy.wait(100)
+    cy.wait(50)
     this.createTestBurgerB()
-    cy.wait(100)
+    cy.wait(50)
     this.createTestBurgerC()
   }
 
   createTestBurgerABCDEFGHIJZ()
   {
     this.createTestBurgerABC()
-    cy.wait(100)
+    cy.wait(50)
     this.createTestBurgerD()
-    cy.wait(100)
+    cy.wait(50)
     this.createTestBurgerE()
-    cy.wait(100)
+    cy.wait(50)
     this.createTestBurgerF()
-    cy.wait(100)
+    cy.wait(50)
     this.createTestBurgerG()
-    cy.wait(100)
+    cy.wait(50)
     this.createTestBurgerH()
-    cy.wait(100)
+    cy.wait(50)
     this.createTestBurgerI()
-    cy.wait(100)
+    cy.wait(50)
     this.createTestBurgerJ()
-    cy.wait(100)
+    cy.wait(50)
     this.createTestBurgerZ()
   }
 
   deleteTestBurger()
   {
-    // Delete test citizen
-    cy.request({
-      method: "post",
-      url: Cypress.config().baseUrl + '/apiV2/graphql',
-      body: { query: `mutation deleteBurger {
-        deleteBurger(id: ` + citizenId + `)
-        {
-          ok
-        }
-      }` },
-    }).then((res) => {
-      console.log(res.body);
-      console.log('Test citizen has been deleted.')
-      cy.log('Deleted test citizen ' + citizenId)
+    this.getBurgerId("Bingus").then((res) => {
+      console.log(res);	
+      cy.log('Test citizen has id ' + res.data.burgers[0].id)
+      let burgerId = res.data.burgers[0].id;
+
+      // Delete test citizen
+      cy.request({
+        method: "post",
+        url: Cypress.config().baseUrl + '/apiV2/graphql',
+        body: { query: `mutation deleteBurger {
+          deleteBurger(id: ` + burgerId + `)
+          {
+            ok
+          }
+        }` },
+      }).then((res) => {
+        console.log(res.body);
+        console.log('Test citizen has been deleted with id ' + burgerId)
+        cy.log('Deleted test citizen ' + burgerId)
+      });
     });
   }
+  
+  deleteTestBurgerEndParcip() 
+  {
+    this.getBurgerId("Cipator").then((res) => {
+      console.log(res);	
+      cy.log('Test citizen has id ' + res.data.burgers[0].id)
+      let burgerId = res.data.burgers[0].id;
 
-
-  deleteTestBurgerEndParcip() {
-
-    // Delete test citizen
-    cy.request({
-      method: "post",
-      url: Cypress.config().baseUrl + '/apiV2/graphql',
-      body: { query: `mutation deleteBurger {
-        deleteBurger(id: ` + citizenIdEndParcip + `)
-        {
-          ok
-        }
-      }` },
-    }).then((res) => {
-      console.log(res.body);
-      console.log('Test citizen has been deleted.')
-      cy.log('Deleted test citizen')
+      // Delete test citizen
+      cy.request({
+        method: "post",
+        url: Cypress.config().baseUrl + '/apiV2/graphql',
+        body: { query: `mutation deleteBurger {
+          deleteBurger(id: ` + burgerId + `)
+          {
+            ok
+          }
+        }` },
+      }).then((res) => {
+        console.log(res.body);
+        console.log('Test citizen has been deleted with id ' + burgerId)
+        cy.log('Deleted test citizen ' + burgerId)
+      });
     });
   }
 
 
   deleteTestBurgerA()
   {
-    // Delete test citizen
-    cy.request({
-      method: "post",
-      url: Cypress.config().baseUrl + '/apiV2/graphql',
-      body: { query: `mutation deleteBurger {
-        deleteBurger(id: ` + citizenIdA + `)
-        {
-          ok
-        }
-      }` },
-    }).then((res) => {
-      console.log(res.body);
-      console.log('Test citizen has been deleted.')
-      cy.log('Deleted test citizen')
+    this.getBurgerId("Caronsson").then((res) => {
+      console.log(res);	
+      cy.log('Test citizen has id ' + res.data.burgers[0].id)
+      let burgerId = res.data.burgers[0].id;
+
+      // Delete test citizen
+      cy.request({
+        method: "post",
+        url: Cypress.config().baseUrl + '/apiV2/graphql',
+        body: { query: `mutation deleteBurger {
+          deleteBurger(id: ` + burgerId + `)
+          {
+            ok
+          }
+        }` },
+      }).then((res) => {
+        console.log(res.body);
+        console.log('Test citizen has been deleted with id ' + burgerId)
+        cy.log('Deleted test citizen ' + burgerId)
+      });
     });
   }
 
   deleteTestBurgerB()
   {
-    // Delete test citizen
-    cy.request({
-      method: "post",
-      url: Cypress.config().baseUrl + '/apiV2/graphql',
-      body: { query: `mutation deleteBurger {
-        deleteBurger(id: ` + citizenIdB + `)
-        {
-          ok
-        }
-      }` },
-    }).then((res) => {
-      console.log(res.body);
-      console.log('Test citizen has been deleted.')
-      cy.log('Deleted test citizen')
+    this.getBurgerId("Aobinsson").then((res) => {
+      console.log(res);	
+      cy.log('Test citizen has id ' + res.data.burgers[0].id)
+      let burgerId = res.data.burgers[0].id;
+
+      // Delete test citizen
+      cy.request({
+        method: "post",
+        url: Cypress.config().baseUrl + '/apiV2/graphql',
+        body: { query: `mutation deleteBurger {
+          deleteBurger(id: ` + burgerId + `)
+          {
+            ok
+          }
+        }` },
+      }).then((res) => {
+        console.log(res.body);
+        console.log('Test citizen has been deleted with id ' + burgerId)
+        cy.log('Deleted test citizen ' + burgerId)
+      });
     });
   }
 
   deleteTestBurgerC()
   {
-    // Delete test citizen
-    cy.request({
-      method: "post",
-      url: Cypress.config().baseUrl + '/apiV2/graphql',
-      body: { query: `mutation deleteBurger {
-        deleteBurger(id: ` + citizenIdC + `)
-        {
-          ok
-        }
-      }` },
-    }).then((res) => {
-      console.log(res.body);
-      console.log('Test citizen has been deleted.')
-      cy.log('Deleted test citizen')
+    this.getBurgerId("Bhailark").then((res) => {
+      console.log(res);	
+      cy.log('Test citizen has id ' + res.data.burgers[0].id)
+      let burgerId = res.data.burgers[0].id;
+
+      // Delete test citizen
+      cy.request({
+        method: "post",
+        url: Cypress.config().baseUrl + '/apiV2/graphql',
+        body: { query: `mutation deleteBurger {
+          deleteBurger(id: ` + burgerId + `)
+          {
+            ok
+          }
+        }` },
+      }).then((res) => {
+        console.log(res.body);
+        console.log('Test citizen has been deleted with id ' + burgerId)
+        cy.log('Deleted test citizen ' + burgerId)
+      });
     });
   }
 
   deleteTestBurgerD()
   {
-    // Delete test citizen
-    cy.request({
-      method: "post",
-      url: Cypress.config().baseUrl + '/apiV2/graphql',
-      body: { query: `mutation deleteBurger {
-        deleteBurger(id: ` + citizenIdD + `)
-        {
-          ok
-        }
-      }` },
-    }).then((res) => {
-      console.log(res.body);
-      console.log('Test citizen has been deleted.')
-      cy.log('Deleted test citizen')
+    this.getBurgerId("Dinkelberg").then((res) => {
+      console.log(res);	
+      cy.log('Test citizen has id ' + res.data.burgers[0].id)
+      let burgerId = res.data.burgers[0].id;
+
+      // Delete test citizen
+      cy.request({
+        method: "post",
+        url: Cypress.config().baseUrl + '/apiV2/graphql',
+        body: { query: `mutation deleteBurger {
+          deleteBurger(id: ` + burgerId + `)
+          {
+            ok
+          }
+        }` },
+      }).then((res) => {
+        console.log(res.body);
+        console.log('Test citizen has been deleted with id ' + burgerId)
+        cy.log('Deleted test citizen ' + burgerId)
+      });
     });
   }
 
   deleteTestBurgerE()
   {
-    // Delete test citizen
-    cy.request({
-      method: "post",
-      url: Cypress.config().baseUrl + '/apiV2/graphql',
-      body: { query: `mutation deleteBurger {
-        deleteBurger(id: ` + citizenIdE + `)
-        {
-          ok
-        }
-      }` },
-    }).then((res) => {
-      console.log(res.body);
-      console.log('Test citizen has been deleted.')
-      cy.log('Deleted test citizen')
+    this.getBurgerId("Bobby").then((res) => {
+      console.log(res);	
+      cy.log('Test citizen has id ' + res.data.burgers[0].id)
+      let burgerId = res.data.burgers[0].id;
+
+      // Delete test citizen
+      cy.request({
+        method: "post",
+        url: Cypress.config().baseUrl + '/apiV2/graphql',
+        body: { query: `mutation deleteBurger {
+          deleteBurger(id: ` + burgerId + `)
+          {
+            ok
+          }
+        }` },
+      }).then((res) => {
+        console.log(res.body);
+        console.log('Test citizen has been deleted with id ' + burgerId)
+        cy.log('Deleted test citizen ' + burgerId)
+      });
     });
   }
   
   deleteTestBurgerF()
   {
-    // Delete test citizen
-    cy.request({
-      method: "post",
-      url: Cypress.config().baseUrl + '/apiV2/graphql',
-      body: { query: `mutation deleteBurger {
-        deleteBurger(id: ` + citizenIdF + `)
-        {
-          ok
-        }
-      }` },
-    }).then((res) => {
-      console.log(res.body);
-      console.log('Test citizen has been deleted.')
-      cy.log('Deleted test citizen')
+    this.getBurgerId("Haan").then((res) => {
+      console.log(res);	
+      cy.log('Test citizen has id ' + res.data.burgers[0].id)
+      let burgerId = res.data.burgers[0].id;
+
+      // Delete test citizen
+      cy.request({
+        method: "post",
+        url: Cypress.config().baseUrl + '/apiV2/graphql',
+        body: { query: `mutation deleteBurger {
+          deleteBurger(id: ` + burgerId + `)
+          {
+            ok
+          }
+        }` },
+      }).then((res) => {
+        console.log(res.body);
+        console.log('Test citizen has been deleted with id ' + burgerId)
+        cy.log('Deleted test citizen ' + burgerId)
+      });
     });
   }
   
   deleteTestBurgerG()
   {
-    // Delete test citizen
-    cy.request({
-      method: "post",
-      url: Cypress.config().baseUrl + '/apiV2/graphql',
-      body: { query: `mutation deleteBurger {
-        deleteBurger(id: ` + citizenIdG + `)
-        {
-          ok
-        }
-      }` },
-    }).then((res) => {
-      console.log(res.body);
-      console.log('Test citizen has been deleted.')
-      cy.log('Deleted test citizen')
+    this.getBurgerId("Bowling").then((res) => {
+      console.log(res);	
+      cy.log('Test citizen has id ' + res.data.burgers[0].id)
+      let burgerId = res.data.burgers[0].id;
+
+      // Delete test citizen
+      cy.request({
+        method: "post",
+        url: Cypress.config().baseUrl + '/apiV2/graphql',
+        body: { query: `mutation deleteBurger {
+          deleteBurger(id: ` + burgerId + `)
+          {
+            ok
+          }
+        }` },
+      }).then((res) => {
+        console.log(res.body);
+        console.log('Test citizen has been deleted with id ' + burgerId)
+        cy.log('Deleted test citizen ' + burgerId)
+      });
     });
   }
   
   deleteTestBurgerH()
   {
-    // Delete test citizen
-    cy.request({
-      method: "post",
-      url: Cypress.config().baseUrl + '/apiV2/graphql',
-      body: { query: `mutation deleteBurger {
-        deleteBurger(id: ` + citizenIdH + `)
-        {
-          ok
-        }
-      }` },
-    }).then((res) => {
-      console.log(res.body);
-      console.log('Test citizen has been deleted.')
-      cy.log('Deleted test citizen')
+    this.getBurgerId("Botter").then((res) => {
+      console.log(res);	
+      cy.log('Test citizen has id ' + res.data.burgers[0].id)
+      let burgerId = res.data.burgers[0].id;
+
+      // Delete test citizen
+      cy.request({
+        method: "post",
+        url: Cypress.config().baseUrl + '/apiV2/graphql',
+        body: { query: `mutation deleteBurger {
+          deleteBurger(id: ` + burgerId + `)
+          {
+            ok
+          }
+        }` },
+      }).then((res) => {
+        console.log(res.body);
+        console.log('Test citizen has been deleted with id ' + burgerId)
+        cy.log('Deleted test citizen ' + burgerId)
+      });
     });
   }
   
   deleteTestBurgerI()
   {
-    // Delete test citizen
-    cy.request({
-      method: "post",
-      url: Cypress.config().baseUrl + '/apiV2/graphql',
-      body: { query: `mutation deleteBurger {
-        deleteBurger(id: ` + citizenIdI + `)
-        {
-          ok
-        }
-      }` },
-    }).then((res) => {
-      console.log(res.body);
-      console.log('Test citizen has been deleted.')
-      cy.log('Deleted test citizen')
+    this.getBurgerId("Worst").then((res) => {
+      console.log(res);	
+      cy.log('Test citizen has id ' + res.data.burgers[0].id)
+      let burgerId = res.data.burgers[0].id;
+
+      // Delete test citizen
+      cy.request({
+        method: "post",
+        url: Cypress.config().baseUrl + '/apiV2/graphql',
+        body: { query: `mutation deleteBurger {
+          deleteBurger(id: ` + burgerId + `)
+          {
+            ok
+          }
+        }` },
+      }).then((res) => {
+        console.log(res.body);
+        console.log('Test citizen has been deleted with id ' + burgerId)
+        cy.log('Deleted test citizen ' + burgerId)
+      });
     });
   }
-  
+
   deleteTestBurgerJ()
   {
-    // Delete test citizen
-    cy.request({
-      method: "post",
-      url: Cypress.config().baseUrl + '/apiV2/graphql',
-      body: { query: `mutation deleteBurger {
-        deleteBurger(id: ` + citizenIdJ + `)
-        {
-          ok
-        }
-      }` },
-    }).then((res) => {
-      console.log(res.body);
-      console.log('Test citizen has been deleted.')
-      cy.log('Deleted test citizen')
+    this.getBurgerId("Sausema").then((res) => {
+      console.log(res);	
+      cy.log('Test citizen has id ' + res.data.burgers[0].id)
+      let burgerId = res.data.burgers[0].id;
+
+      // Delete test citizen
+      cy.request({
+        method: "post",
+        url: Cypress.config().baseUrl + '/apiV2/graphql',
+        body: { query: `mutation deleteBurger {
+          deleteBurger(id: ` + burgerId + `)
+          {
+            ok
+          }
+        }` },
+      }).then((res) => {
+        console.log(res.body);
+        console.log('Test citizen has been deleted with id ' + burgerId)
+        cy.log('Deleted test citizen ' + burgerId)
+      });
     });
   }
 
   deleteTestBurgerZ()
   {
-    // Delete test citizen
-    cy.request({
-      method: "post",
-      url: Cypress.config().baseUrl + '/apiV2/graphql',
-      body: { query: `mutation deleteBurger {
-        deleteBurger(id: ` + citizenIdZ + `)
-        {
-          ok
-        }
-      }` },
-    }).then((res) => {
-      console.log(res.body);
-      console.log('Test citizen has been deleted.')
-      cy.log('Deleted test citizen')
+    this.getBurgerId("Zava").then((res) => {
+      console.log(res);	
+      cy.log('Test citizen has id ' + res.data.burgers[0].id)
+      let burgerId = res.data.burgers[0].id;
+
+      // Delete test citizen
+      cy.request({
+        method: "post",
+        url: Cypress.config().baseUrl + '/apiV2/graphql',
+        body: { query: `mutation deleteBurger {
+          deleteBurger(id: ` + burgerId + `)
+          {
+            ok
+          }
+        }` },
+      }).then((res) => {
+        console.log(res.body);
+        console.log('Test citizen has been deleted with id ' + burgerId)
+        cy.log('Deleted test citizen ' + burgerId)
+      });
     });
   }
 
   deleteTestBurgerABC()
   {
     this.deleteTestBurgerA()
-    cy.wait(100)
+    cy.wait(50)
     this.deleteTestBurgerB()
-    cy.wait(100)
+    cy.wait(50)
     this.deleteTestBurgerC()
   }
 
   deleteTestBurgerABCDEFGHIJZ()
   {
     this.deleteTestBurgerABC()
-    cy.wait(100)
+    cy.wait(50)
     this.deleteTestBurgerD()
-    cy.wait(100)
+    cy.wait(50)
     this.deleteTestBurgerE()
-    cy.wait(100)
+    cy.wait(50)
     this.deleteTestBurgerF()
-    cy.wait(100)
+    cy.wait(50)
     this.deleteTestBurgerG()
-    cy.wait(100)
+    cy.wait(50)
     this.deleteTestBurgerH()
-    cy.wait(100)
+    cy.wait(50)
     this.deleteTestBurgerI()
-    cy.wait(100)
+    cy.wait(50)
     this.deleteTestBurgerJ()
-    cy.wait(100)
+    cy.wait(50)
     this.deleteTestBurgerZ()
-    cy.wait(100)
+    cy.wait(50)
   }
   
    

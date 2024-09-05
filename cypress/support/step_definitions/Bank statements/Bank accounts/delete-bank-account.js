@@ -1,10 +1,9 @@
 
 import { Given, When, Then, Step } from "@badeball/cypress-cucumber-preprocessor";
 
-const header = {
-  'content-type': 'application/json',
-  'Accept-Encoding': 'gzip, deflate, br',
-};
+import BurgersDetails from "../../../../pages/BurgerDetails";
+
+const burgerDetails = new BurgersDetails();
 
 const dayjs = require('dayjs');
 
@@ -57,7 +56,7 @@ Given('an agreement link to the department and the bank account exists', () => {
   cy.url().should('eq', Cypress.config().baseUrl + '/burgers')
   cy.get('input[placeholder="Zoeken"]')
     .type('Fien');
-  cy.contains('Sandra de Jager', { timeout: 10000 })
+  cy.contains('Sandra de Jager')
     .click();
   cy.url().should('include', Cypress.config().baseUrl + '/burgers/')
 
@@ -65,12 +64,7 @@ Given('an agreement link to the department and the bank account exists', () => {
   cy.contains('Belastingdienst Toeslagen Kantoor Utrecht ')
 
   // Navigate to agreement detail page
-  cy.contains('Voorschot kindgebonden budget')
-    .parent()
-    .parent()
-    .find('a[aria-label="Bekijken"]:visible')
-    .click();
-  cy.url().should('include', Cypress.config().baseUrl + '/afspraken/')
+  burgerDetails.viewAfspraak('Voorschot kindgebonden budget')
 
   // Assertion 2
   cy.contains('NL86 INGB 0002 4455 88');
@@ -190,6 +184,14 @@ When('I click the "Delete" button', () => {
     .click();
 
 });
+
+Then('a notification of successful bank account deletion is displayed', () => {
+
+  // Assertion
+  Step(this, "a success notification containing 'Bankrekening is verwijderd' is displayed");
+
+});
+
 
 //endregion
 

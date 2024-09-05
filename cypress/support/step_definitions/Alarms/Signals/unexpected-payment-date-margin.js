@@ -2,10 +2,13 @@
 
 import { Given, When, Then, Step } from "@badeball/cypress-cucumber-preprocessor";
 
-const header = {
-  'content-type': 'application/json',
-  'Accept-Encoding': 'gzip, deflate, br',
-};
+import Burgers from "../../../../pages/Burgers";
+import BurgersDetails from "../../../../pages/BurgerDetails";
+import AfspraakDetails from "../../../../pages/AfspraakDetails";
+
+const burgers = new Burgers();
+const burgerDetails = new BurgersDetails();
+const afspraakDetails = new AfspraakDetails();
 
 let uniqueId = 0;
 
@@ -16,102 +19,71 @@ Given('an agreement exists for scenario "payment amount too high, no amount marg
   // Set unique id names
   uniqueId = Date.now().toString();
 
-  // Navigate to citizen
-  Step(this, 'I open the citizen overview page for "Dingus Bingus"');
+  // Create agreements
+  burgerDetails.insertAfspraak('Bingus', uniqueId, "10.00", 'NL86INGB0002445588', '5', 'false', '2024-01-01');
 
-  cy.get('[data-test="button.Add"]')
-    .click();
-
-  // Add agreement with test department
-  cy.url().should('contains', '/afspraken/toevoegen'); 
-  cy.get('[data-test="radio.agreementOrganization"]')
-    .click();
-  cy.get('#organisatie')
-    .type('Belast');
-  cy.contains('ingdienst')
-    .click();
-  // Check auto-fill
-  cy.contains('Graadt van Roggenweg');
-  // Fill in IBAN
-  cy.get('#tegenrekening')
-    .type('NL86');
-  cy.contains('0002 4455')
-    .click();
-
-  // Payment direction: Toeslagen
-  cy.get('[data-test="radio.agreementIncome"]')
-    .click();
-  cy.get('#rubriek')
-    .click()
-    .contains('Toeslagen')
-    .click();
-  cy.get('[data-test="select.agreementIncomeDescription"]')
-    .type(uniqueId);
-  cy.get('[data-test="select.agreementIncomeAmount"]')
-    .type('10');
-  cy.get('[data-test="button.Submit"]')
-    .click();
-
-  // Check success message
-  Step(this, "a success notification containing 'afspraak' is displayed");
-
+  // View burger detail page
+  burgers.openBurger('Dingus Bingus')
+  burgerDetails.viewAfspraak(uniqueId)
+  
 });
 
 Given('an alarm exists for scenario "payment amount too high, no amount margin, before timeframe"', () => {
 
-  cy.url().should('include', Cypress.config().baseUrl + '/afspraken/')
-  cy.get('h2').contains('Alarm').should('be.visible')
-    .scrollIntoView() // Scrolls 'Alarm' into view
-  cy.get('button')
-    .contains('Toevoegen')
-    .click();
+  afspraakDetails.insertAlarm(uniqueId, "0", "1000", "0");
 
-  // Check whether modal is opened and visible
-  cy.get('section[aria-modal="true"]', { timeout: 10000 })
-    .scrollIntoView()
-    .should('exist');
+  // cy.url().should('include', Cypress.config().baseUrl + '/afspraken/')
+  // cy.get('h2').contains('Alarm').should('be.visible')
+  //   .scrollIntoView() // Scrolls 'Alarm' into view
 
-  // Set alarm to 'eenmalig'
-  cy.contains('Meer opties')
-    .click();
-  cy.get('[data-test="alarmForm.once"]')
-    .click();
+  // afspraakDetails.buttonAlarmToevoegen().click()
 
-  // Fill in all required fields
-      // 'Datum verwachte betaling'
-          // Set date constants for comparison
-          const dateNow = new Date().toLocaleDateString('nl-NL', {
-              year: "numeric",
-              month: "2-digit",
-              day: "2-digit",
-          })
+  // // Check whether modal is opened and visible
+  // cy.get('section[aria-modal="true"]', { timeout: 10000 })
+  //   .scrollIntoView()
+  //   .should('exist');
 
-      cy.get('[data-test="alarmForm.expectedDate"]')
-        .type('{selectAll}' + dateNow + '{enter}')
-        .should('have.value', dateNow)
+  // // Set alarm to 'eenmalig'
+  // cy.contains('Meer opties')
+  //   .click();
+  // cy.get('[data-test="alarmForm.once"]')
+  //   .click();
 
-      // 'Toegestane afwijking (in dagen)'
-      cy.get('[data-test="alarmForm.dateMargin"]')
-        .type('0')
-        .should('have.value', '0')
+  // // Fill in all required fields
+  //     // 'Datum verwachte betaling'
+  //         // Set date constants for comparison
+  //         const dateNow = new Date().toLocaleDateString('nl-NL', {
+  //             year: "numeric",
+  //             month: "2-digit",
+  //             day: "2-digit",
+  //         })
 
-      // 'Bedrag verwachte betaling'
-      cy.get('[data-test="alarmForm.amount"]')
-        .type('{selectAll}10')
-        .should('have.value', '10') 
+  //     cy.get('[data-test="alarmForm.expectedDate"]')
+  //       .type('{selectAll}' + dateNow + '{enter}')
+  //       .should('have.value', dateNow)
 
-      // 'Toegestane afwijking bedrag'
-      cy.get('[data-test="alarmForm.amountMargin"]')
-        .type('{selectAll}0')
-        .should('have.value', '0')
+  //     // 'Toegestane afwijking (in dagen)'
+  //     cy.get('[data-test="alarmForm.dateMargin"]')
+  //       .type('0')
+  //       .should('have.value', '0')
 
-  // Click 'Opslaan' button
-  cy.get('[data-test="buttonModal.submit"]')
-      .click()
+  //     // 'Bedrag verwachte betaling'
+  //     cy.get('[data-test="alarmForm.amount"]')
+  //       .type('{selectAll}10')
+  //       .should('have.value', '10') 
 
-  // Check whether modal is closed
-  cy.get('section[aria-modal="true"]', { timeout: 10000 })
-      .should('not.exist');
+  //     // 'Toegestane afwijking bedrag'
+  //     cy.get('[data-test="alarmForm.amountMargin"]')
+  //       .type('{selectAll}0')
+  //       .should('have.value', '0')
+
+  // // Click 'Opslaan' button
+  // cy.get('[data-test="buttonModal.submit"]')
+  //     .click()
+
+  // // Check whether modal is closed
+  // cy.get('section[aria-modal="true"]', { timeout: 10000 })
+  //     .should('not.exist');
 
 });
 
@@ -270,10 +242,9 @@ When('a high amount bank transaction with transaction date before the alarm time
 
   cy.get('input[type="file"]')
     .selectFile('cypress/testdata/paymentAmountTooHigh-NoAmountMargin.xml', { force: true })
-  cy.wait(3000);
-  cy.get('[aria-label="Close"]')
-    .should('be.visible')
-    .click();
+  
+  // Wait for file to be uploaded
+  cy.get('[data-test="uploadItem.check"]');
 
   // Reconciliate the bank transaction to the correct agreement
   cy.visit('/bankzaken/transacties')
@@ -284,6 +255,7 @@ When('a high amount bank transaction with transaction date before the alarm time
   cy.get('[data-test="transactions.expandFilter"]')
     .click();
   cy.get('#zoektermen')
+    .should('be.visible')
     .type('HHB000001 Zorgtoeslag{enter}');
   cy.contains('10,01')
     .click();
@@ -309,55 +281,24 @@ Given('an agreement exists for scenario "payment amount too high, no amount marg
   // Set unique id names
   uniqueId = Date.now().toString();
 
-  // Navigate to citizen
-  Step(this, 'I open the citizen overview page for "Dingus Bingus"');
+  // Create agreements
+  burgerDetails.insertAfspraak('Bingus', uniqueId, "10.00", 'NL86INGB0002445588', '5', 'false', '2024-01-01');
 
-  cy.get('[data-test="button.Add"]')
-    .click();
-
-  // Add agreement with test department
-  cy.url().should('contains', '/afspraken/toevoegen'); 
-  cy.get('[data-test="radio.agreementOrganization"]')
-    .click();
-  cy.get('#organisatie')
-    .type('Belast');
-  cy.contains('ingdienst')
-    .click();
-  // Check auto-fill
-  cy.contains('Graadt van Roggenweg');
-  // Fill in IBAN
-  cy.get('#tegenrekening')
-    .type('NL86');
-  cy.contains('0002 4455')
-    .click();
-
-  // Payment direction: Toeslagen
-  cy.get('[data-test="radio.agreementIncome"]')
-    .click();
-  cy.get('#rubriek')
-    .click()
-    .contains('Toeslagen')
-    .click();
-  cy.get('[data-test="select.agreementIncomeDescription"]')
-    .type(uniqueId);
-  cy.get('[data-test="select.agreementIncomeAmount"]')
-    .type('10');
-  cy.get('[data-test="button.Submit"]')
-    .click();
-
-  // Check success message
-  Step(this, "a success notification containing 'afspraak' is displayed");
+  // View burger detail page
+  burgers.openBurger('Dingus Bingus')
+  burgerDetails.viewAfspraak(uniqueId)
 
 });
 
 Given('an alarm exists for scenario "payment amount too high, no amount margin, on start of timeframe"', () => {
 
+  //afspraakDetails.insertAlarm(uniqueId, "0", "1000", "0");
+
   cy.url().should('include', Cypress.config().baseUrl + '/afspraken/')
   cy.get('h2').contains('Alarm').should('be.visible')
     .scrollIntoView() // Scrolls 'Alarm' into view
-  cy.get('button')
-    .contains('Toevoegen')
-    .click();
+
+  afspraakDetails.buttonAlarmToevoegen().click()
 
   // Check whether modal is opened and visible
   cy.get('section[aria-modal="true"]', { timeout: 10000 })
@@ -561,10 +502,9 @@ When('a high amount bank transaction with transaction date on start of the alarm
 
   cy.get('input[type="file"]')
     .selectFile('cypress/testdata/paymentAmountTooHigh-NoAmountMargin.xml', { force: true })
-  cy.wait(3000);
-  cy.get('[aria-label="Close"]')
-    .should('be.visible')
-    .click();
+  
+  // Wait for file to be uploaded
+  cy.get('[data-test="uploadItem.check"]');
 
   // Reconciliate the bank transaction to the correct agreement
   cy.visit('/bankzaken/transacties')
@@ -575,6 +515,7 @@ When('a high amount bank transaction with transaction date on start of the alarm
   cy.get('[data-test="transactions.expandFilter"]')
     .click();
   cy.get('#zoektermen')
+    .should('be.visible')
     .type('HHB000001 Zorgtoeslag{enter}');
   cy.contains('10,01')
     .click();
@@ -612,102 +553,71 @@ Given('an agreement exists for scenario "payment amount too high, no amount marg
   // Set unique id names
   uniqueId = Date.now().toString();
 
-  // Navigate to citizen
-  Step(this, 'I open the citizen overview page for "Dingus Bingus"');
+  // Create agreements
+  burgerDetails.insertAfspraak('Bingus', uniqueId, "10.00", 'NL86INGB0002445588', '5', 'false', '2024-01-01');
 
-  cy.get('[data-test="button.Add"]')
-    .click();
-
-  // Add agreement with test department
-  cy.url().should('contains', '/afspraken/toevoegen'); 
-  cy.get('[data-test="radio.agreementOrganization"]')
-    .click();
-  cy.get('#organisatie')
-    .type('Belast');
-  cy.contains('ingdienst')
-    .click();
-  // Check auto-fill
-  cy.contains('Graadt van Roggenweg');
-  // Fill in IBAN
-  cy.get('#tegenrekening')
-    .type('NL86');
-  cy.contains('0002 4455')
-    .click();
-
-  // Payment direction: Toeslagen
-  cy.get('[data-test="radio.agreementIncome"]')
-    .click();
-  cy.get('#rubriek')
-    .click()
-    .contains('Toeslagen')
-    .click();
-  cy.get('[data-test="select.agreementIncomeDescription"]')
-    .type(uniqueId);
-  cy.get('[data-test="select.agreementIncomeAmount"]')
-    .type('10');
-  cy.get('[data-test="button.Submit"]')
-    .click();
-
-  // Check success message
-  Step(this, "a success notification containing 'afspraak' is displayed");
+  // View burger detail page
+  burgers.openBurger('Dingus Bingus')
+  burgerDetails.viewAfspraak(uniqueId)
 
 });
 
 Given('an alarm exists for scenario "payment amount too high, no amount margin, in timeframe"', () => {
 
-  cy.url().should('include', Cypress.config().baseUrl + '/afspraken/')
-  cy.get('h2').contains('Alarm').should('be.visible')
-    .scrollIntoView() // Scrolls 'Alarm' into view
-  cy.get('button')
-    .contains('Toevoegen')
-    .click();
+  afspraakDetails.insertAlarm(uniqueId, "5", "1000", "0");
 
-  // Check whether modal is opened and visible
-  cy.get('section[aria-modal="true"]', { timeout: 10000 })
-    .scrollIntoView()
-    .should('exist');
+  // cy.url().should('include', Cypress.config().baseUrl + '/afspraken/')
+  // cy.get('h2').contains('Alarm').should('be.visible')
+  //   .scrollIntoView() // Scrolls 'Alarm' into view
 
-  // Set alarm to 'eenmalig'
-  cy.contains('Meer opties')
-    .click();
-  cy.get('[data-test="alarmForm.once"]')
-    .click();
+  // afspraakDetails.buttonAlarmToevoegen().click()
 
-  // Fill in all required fields
-      // 'Datum verwachte betaling'
-          // Set date constants for comparison
-          const dateNow = new Date().toLocaleDateString('nl-NL', {
-              year: "numeric",
-              month: "2-digit",
-              day: "2-digit",
-          })
+  // // Check whether modal is opened and visible
+  // cy.get('section[aria-modal="true"]', { timeout: 10000 })
+  //   .scrollIntoView()
+  //   .should('exist');
 
-      cy.get('[data-test="alarmForm.expectedDate"]')
-        .type('{selectAll}' + dateNow + '{enter}')
-        .should('have.value', dateNow)
+  // // Set alarm to 'eenmalig'
+  // cy.contains('Meer opties')
+  //   .click();
+  // cy.get('[data-test="alarmForm.once"]')
+  //   .click();
 
-      // 'Toegestane afwijking (in dagen)'
-      cy.get('[data-test="alarmForm.dateMargin"]')
-        .type('5')
-        .should('have.value', '5')
+  // // Fill in all required fields
+  //     // 'Datum verwachte betaling'
+  //         // Set date constants for comparison
+  //         const dateNow = new Date().toLocaleDateString('nl-NL', {
+  //             year: "numeric",
+  //             month: "2-digit",
+  //             day: "2-digit",
+  //         })
 
-      // 'Bedrag verwachte betaling'
-      cy.get('[data-test="alarmForm.amount"]')
-        .type('{selectAll}10')
-        .should('have.value', '10') 
+  //     cy.get('[data-test="alarmForm.expectedDate"]')
+  //       .type('{selectAll}' + dateNow + '{enter}')
+  //       .should('have.value', dateNow)
 
-      // 'Toegestane afwijking bedrag'
-      cy.get('[data-test="alarmForm.amountMargin"]')
-        .type('{selectAll}0')
-        .should('have.value', '0')
+  //     // 'Toegestane afwijking (in dagen)'
+  //     cy.get('[data-test="alarmForm.dateMargin"]')
+  //       .type('5')
+  //       .should('have.value', '5')
 
-  // Click 'Opslaan' button
-  cy.get('[data-test="buttonModal.submit"]')
-      .click()
+  //     // 'Bedrag verwachte betaling'
+  //     cy.get('[data-test="alarmForm.amount"]')
+  //       .type('{selectAll}10')
+  //       .should('have.value', '10') 
 
-  // Check whether modal is closed
-  cy.get('section[aria-modal="true"]', { timeout: 10000 })
-      .should('not.exist');
+  //     // 'Toegestane afwijking bedrag'
+  //     cy.get('[data-test="alarmForm.amountMargin"]')
+  //       .type('{selectAll}0')
+  //       .should('have.value', '0')
+
+  // // Click 'Opslaan' button
+  // cy.get('[data-test="buttonModal.submit"]')
+  //     .click()
+
+  // // Check whether modal is closed
+  // cy.get('section[aria-modal="true"]', { timeout: 10000 })
+  //     .should('not.exist');
 
 });
 
@@ -869,10 +779,9 @@ When('a high amount bank transaction with transaction date within the alarm time
 
   cy.get('input[type="file"]')
     .selectFile('cypress/testdata/paymentAmountTooHigh-NoAmountMargin.xml', { force: true })
-  cy.wait(3000);
-  cy.get('[aria-label="Close"]')
-    .should('be.visible')
-    .click();
+  
+  // Wait for file to be uploaded
+  cy.get('[data-test="uploadItem.check"]');
 
   // Reconciliate the bank transaction to the correct agreement
   cy.visit('/bankzaken/transacties')
@@ -883,6 +792,7 @@ When('a high amount bank transaction with transaction date within the alarm time
   cy.get('[data-test="transactions.expandFilter"]')
     .click();
   cy.get('#zoektermen')
+    .should('be.visible')
     .type('HHB000001 Zorgtoeslag{enter}');
   cy.contains('10,01')
     .click();
@@ -924,102 +834,71 @@ Given('an agreement exists for scenario "payment amount too high, no amount marg
   // Set unique id names
   uniqueId = Date.now().toString();
 
-  // Navigate to citizen
-  Step(this, 'I open the citizen overview page for "Dingus Bingus"');
+  // Create agreements
+  burgerDetails.insertAfspraak('Bingus', uniqueId, "10.00", 'NL86INGB0002445588', '5', 'false', '2024-01-01');
 
-  cy.get('[data-test="button.Add"]')
-    .click();
-
-  // Add agreement with test department
-  cy.url().should('contains', '/afspraken/toevoegen'); 
-  cy.get('[data-test="radio.agreementOrganization"]')
-    .click();
-  cy.get('#organisatie')
-    .type('Belast');
-  cy.contains('ingdienst')
-    .click();
-  // Check auto-fill
-  cy.contains('Graadt van Roggenweg');
-  // Fill in IBAN
-  cy.get('#tegenrekening')
-    .type('NL86');
-  cy.contains('0002 4455')
-    .click();
-
-  // Payment direction: Toeslagen
-  cy.get('[data-test="radio.agreementIncome"]')
-    .click();
-  cy.get('#rubriek')
-    .click()
-    .contains('Toeslagen')
-    .click();
-  cy.get('[data-test="select.agreementIncomeDescription"]')
-    .type(uniqueId);
-  cy.get('[data-test="select.agreementIncomeAmount"]')
-    .type('10');
-  cy.get('[data-test="button.Submit"]')
-    .click();
-
-  // Check success message
-  Step(this, "a success notification containing 'afspraak' is displayed");
+  // View burger detail page
+  burgers.openBurger('Dingus Bingus')
+  burgerDetails.viewAfspraak(uniqueId)
 
 });
 
 Given('an alarm exists for scenario "payment amount too high, no amount margin, on end of timeframe"', () => {
 
-  cy.url().should('include', Cypress.config().baseUrl + '/afspraken/')
-  cy.get('h2').contains('Alarm').should('be.visible')
-    .scrollIntoView() // Scrolls 'Alarm' into view
-  cy.get('button')
-    .contains('Toevoegen')
-    .click();
+  afspraakDetails.insertAlarm(uniqueId, "5", "1000", "0");
 
-  // Check whether modal is opened and visible
-  cy.get('section[aria-modal="true"]', { timeout: 10000 })
-    .scrollIntoView()
-    .should('exist');
+  // cy.url().should('include', Cypress.config().baseUrl + '/afspraken/')
+  // cy.get('h2').contains('Alarm').should('be.visible')
+  //   .scrollIntoView() // Scrolls 'Alarm' into view
+  
+  // afspraakDetails.buttonAlarmToevoegen().click()
 
-  // Set alarm to 'eenmalig'
-  cy.contains('Meer opties')
-    .click();
-  cy.get('[data-test="alarmForm.once"]')
-    .click();
+  // // Check whether modal is opened and visible
+  // cy.get('section[aria-modal="true"]', { timeout: 10000 })
+  //   .scrollIntoView()
+  //   .should('exist');
 
-  // Fill in all required fields
-      // 'Datum verwachte betaling'
-          // Set date constants for comparison
-          const dateNow = new Date().toLocaleDateString('nl-NL', {
-              year: "numeric",
-              month: "2-digit",
-              day: "2-digit",
-          })
+  // // Set alarm to 'eenmalig'
+  // cy.contains('Meer opties')
+  //   .click();
+  // cy.get('[data-test="alarmForm.once"]')
+  //   .click();
 
-      cy.get('[data-test="alarmForm.expectedDate"]')
-        .type('{selectAll}' + dateNow + '{enter}')
-        .should('have.value', dateNow)
+  // // Fill in all required fields
+  //     // 'Datum verwachte betaling'
+  //         // Set date constants for comparison
+  //         const dateNow = new Date().toLocaleDateString('nl-NL', {
+  //             year: "numeric",
+  //             month: "2-digit",
+  //             day: "2-digit",
+  //         })
 
-      // 'Toegestane afwijking (in dagen)'
-      cy.get('[data-test="alarmForm.dateMargin"]')
-        .type('5')
-        .should('have.value', '5')
+  //     cy.get('[data-test="alarmForm.expectedDate"]')
+  //       .type('{selectAll}' + dateNow + '{enter}')
+  //       .should('have.value', dateNow)
 
-      // 'Bedrag verwachte betaling'
-      cy.get('[data-test="alarmForm.amount"]')
-        .type('{selectAll}10')
-        .should('have.value', '10') 
+  //     // 'Toegestane afwijking (in dagen)'
+  //     cy.get('[data-test="alarmForm.dateMargin"]')
+  //       .type('5')
+  //       .should('have.value', '5')
 
-      // 'Toegestane afwijking bedrag'
-      cy.get('[data-test="alarmForm.amountMargin"]')
-        .type('{selectAll}0')
-        .should('have.value', '0')
+  //     // 'Bedrag verwachte betaling'
+  //     cy.get('[data-test="alarmForm.amount"]')
+  //       .type('{selectAll}10')
+  //       .should('have.value', '10') 
 
-  // Click 'Opslaan' button
-  cy.get('[data-test="buttonModal.submit"]')
-      .click()
+  //     // 'Toegestane afwijking bedrag'
+  //     cy.get('[data-test="alarmForm.amountMargin"]')
+  //       .type('{selectAll}0')
+  //       .should('have.value', '0')
 
-  // Check whether modal is closed
-  cy.get('section[aria-modal="true"]', { timeout: 10000 })
-      .should('not.exist');
+  // // Click 'Opslaan' button
+  // cy.get('[data-test="buttonModal.submit"]')
+  //     .click()
+
+  // // Check whether modal is closed
+  // cy.get('section[aria-modal="true"]', { timeout: 10000 })
+  //     .should('not.exist');
 
 });
 
@@ -1181,10 +1060,9 @@ When('a high amount bank transaction with transaction date on end of the alarm t
 
   cy.get('input[type="file"]')
     .selectFile('cypress/testdata/paymentAmountTooHigh-NoAmountMargin.xml', { force: true })
-  cy.wait(3000);
-  cy.get('[aria-label="Close"]')
-    .should('be.visible')
-    .click();
+  
+  // Wait for file to be uploaded
+  cy.get('[data-test="uploadItem.check"]');
 
   // Reconciliate the bank transaction to the correct agreement
   cy.visit('/bankzaken/transacties')
@@ -1195,6 +1073,7 @@ When('a high amount bank transaction with transaction date on end of the alarm t
   cy.get('[data-test="transactions.expandFilter"]')
     .click();
   cy.get('#zoektermen')
+    .should('be.visible')
     .type('HHB000001 Zorgtoeslag{enter}');
   cy.contains('10,01')
     .click();
@@ -1236,102 +1115,71 @@ Given('an agreement exists for scenario "payment amount too high, no amount marg
   // Set unique id names
   uniqueId = Date.now().toString();
 
-  // Navigate to citizen
-  Step(this, 'I open the citizen overview page for "Dingus Bingus"');
-  
-  cy.get('[data-test="button.Add"]')
-    .click();
+  // Create agreements
+  burgerDetails.insertAfspraak('Bingus', uniqueId, "10.00", 'NL86INGB0002445588', '5', 'false', '2024-01-01');
 
-  // Add agreement with test department
-  cy.url().should('contains', '/afspraken/toevoegen'); 
-  cy.get('[data-test="radio.agreementOrganization"]')
-    .click();
-  cy.get('#organisatie')
-    .type('Belast');
-  cy.contains('ingdienst')
-    .click();
-  // Check auto-fill
-  cy.contains('Graadt van Roggenweg');
-  // Fill in IBAN
-  cy.get('#tegenrekening')
-    .type('NL86');
-  cy.contains('0002 4455')
-    .click();
-
-  // Payment direction: Toeslagen
-  cy.get('[data-test="radio.agreementIncome"]')
-    .click();
-  cy.get('#rubriek')
-    .click()
-    .contains('Toeslagen')
-    .click();
-  cy.get('[data-test="select.agreementIncomeDescription"]')
-    .type(uniqueId);
-  cy.get('[data-test="select.agreementIncomeAmount"]')
-    .type('10');
-  cy.get('[data-test="button.Submit"]')
-    .click();
-
-  // Check success message
-  Step(this, "a success notification containing 'afspraak' is displayed");
+  // View burger detail page
+  burgers.openBurger('Dingus Bingus')
+  burgerDetails.viewAfspraak(uniqueId)
 
 });
 
 Given('an alarm exists for scenario "payment amount too high, no amount margin, after timeframe"', () => {
 
-  cy.url().should('include', Cypress.config().baseUrl + '/afspraken/')
-  cy.get('h2').contains('Alarm').should('be.visible')
-    .scrollIntoView() // Scrolls 'Alarm' into view
-  cy.get('button')
-    .contains('Toevoegen')
-    .click();
+  afspraakDetails.insertAlarm(uniqueId, "0", "1000", "0");
 
-  // Check whether modal is opened and visible
-  cy.get('section[aria-modal="true"]', { timeout: 10000 })
-    .scrollIntoView()
-    .should('exist');
+  // cy.url().should('include', Cypress.config().baseUrl + '/afspraken/')
+  // cy.get('h2').contains('Alarm').should('be.visible')
+  //   .scrollIntoView() // Scrolls 'Alarm' into view
 
-  // Set alarm to 'eenmalig'
-  cy.contains('Meer opties')
-    .click();
-  cy.get('[data-test="alarmForm.once"]')
-    .click();
+  // afspraakDetails.buttonAlarmToevoegen().click()
 
-  // Fill in all required fields
-      // 'Datum verwachte betaling'
-          // Set date constants for comparison
-          const dateNow = new Date().toLocaleDateString('nl-NL', {
-              year: "numeric",
-              month: "2-digit",
-              day: "2-digit",
-          })
+  // // Check whether modal is opened and visible
+  // cy.get('section[aria-modal="true"]', { timeout: 10000 })
+  //   .scrollIntoView()
+  //   .should('exist');
 
-      cy.get('[data-test="alarmForm.expectedDate"]')
-        .type('{selectAll}' + dateNow + '{enter}')
-        .should('have.value', dateNow)
+  // // Set alarm to 'eenmalig'
+  // cy.contains('Meer opties')
+  //   .click();
+  // cy.get('[data-test="alarmForm.once"]')
+  //   .click();
 
-      // 'Toegestane afwijking (in dagen)'
-      cy.get('[data-test="alarmForm.dateMargin"]')
-        .type('0')
-        .should('have.value', '0')
+  // // Fill in all required fields
+  //     // 'Datum verwachte betaling'
+  //         // Set date constants for comparison
+  //         const dateNow = new Date().toLocaleDateString('nl-NL', {
+  //             year: "numeric",
+  //             month: "2-digit",
+  //             day: "2-digit",
+  //         })
 
-      // 'Bedrag verwachte betaling'
-      cy.get('[data-test="alarmForm.amount"]')
-        .type('{selectAll}10')
-        .should('have.value', '10') 
+  //     cy.get('[data-test="alarmForm.expectedDate"]')
+  //       .type('{selectAll}' + dateNow + '{enter}')
+  //       .should('have.value', dateNow)
 
-      // 'Toegestane afwijking bedrag'
-      cy.get('[data-test="alarmForm.amountMargin"]')
-        .type('{selectAll}0')
-        .should('have.value', '0')
+  //     // 'Toegestane afwijking (in dagen)'
+  //     cy.get('[data-test="alarmForm.dateMargin"]')
+  //       .type('0')
+  //       .should('have.value', '0')
 
-  // Click 'Opslaan' button
-  cy.get('[data-test="buttonModal.submit"]')
-      .click()
+  //     // 'Bedrag verwachte betaling'
+  //     cy.get('[data-test="alarmForm.amount"]')
+  //       .type('{selectAll}10')
+  //       .should('have.value', '10') 
 
-  // Check whether modal is closed
-  cy.get('section[aria-modal="true"]', { timeout: 10000 })
-      .should('not.exist');
+  //     // 'Toegestane afwijking bedrag'
+  //     cy.get('[data-test="alarmForm.amountMargin"]')
+  //       .type('{selectAll}0')
+  //       .should('have.value', '0')
+
+  // // Click 'Opslaan' button
+  // cy.get('[data-test="buttonModal.submit"]')
+  //     .click()
+
+  // // Check whether modal is closed
+  // cy.get('section[aria-modal="true"]', { timeout: 10000 })
+  //     .should('not.exist');
 
 });
 
@@ -1493,10 +1341,9 @@ When('a high amount bank transaction with transaction date after the alarm timef
 
   cy.get('input[type="file"]')
     .selectFile('cypress/testdata/paymentAmountTooHigh-NoAmountMargin.xml', { force: true })
-  cy.wait(3000);
-  cy.get('[aria-label="Close"]')
-    .should('be.visible')
-    .click();
+  
+  // Wait for file to be uploaded
+  cy.get('[data-test="uploadItem.check"]');
 
   // Reconciliate the bank transaction to the correct agreement
   cy.visit('/bankzaken/transacties')
@@ -1507,6 +1354,7 @@ When('a high amount bank transaction with transaction date after the alarm timef
   cy.get('[data-test="transactions.expandFilter"]')
     .click();
   cy.get('#zoektermen')
+    .should('be.visible')
     .type('HHB000001 Zorgtoeslag{enter}');
   cy.contains('10,01')
     .click();

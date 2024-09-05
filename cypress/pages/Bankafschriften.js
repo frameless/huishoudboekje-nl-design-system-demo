@@ -180,6 +180,7 @@ class Bankafschriften {
         cy.get('[data-test="transactions.expandFilter"]')
           .click();
         cy.get('#zoektermen')
+          .should('be.visible')
           .type('HHB000001 Zorgtoeslag{enter}');
         cy.contains(amount)
           .click();
@@ -368,6 +369,7 @@ class Bankafschriften {
       cy.get('[data-test="transactions.expandFilter"]')
         .click();
       cy.get('#zoektermen')
+        .should('be.visible')
         .type('HHB000001 Zorgtoeslag{enter}');
       cy.contains('10,00')
         .click();
