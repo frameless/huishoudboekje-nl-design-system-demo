@@ -1,7 +1,7 @@
 import {IconButton, Menu, MenuButton, MenuItem, MenuList, useDisclosure} from "@chakra-ui/react";
-import React from "react";
+import React, {useEffect} from "react";
 import {useTranslation} from "react-i18next";
-import {NavLink, useNavigate} from "react-router-dom";
+import {NavLink, useLocation, useNavigate} from "react-router-dom";
 import {AppRoutes} from "../../../config/routes";
 import {Afspraak, GetAfspraakDocument, GetBurgerDetailsDocument, GetBurgersDocument, GetBurgersSearchDocument, useDeleteAfspraakMutation, useEndAfspraakMutation} from "../../../generated/graphql";
 import useStore from "../../../store";
@@ -13,11 +13,13 @@ import AfspraakEndModal from "./AfspraakEndModal";
 
 const AfspraakDetailMenu: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 	const {t} = useTranslation();
+	const location = useLocation()
 	const navigate = useNavigate();
 	const endModal = useDisclosure();
 	const toast = useToaster();
 	const burgerSearch = useStore(store => store.burgerSearch);
 	const deleteAlert = useDisclosure();
+
 
 	const [endAfspraakMutation] = useEndAfspraakMutation({
 		refetchQueries: [
@@ -74,6 +76,12 @@ const AfspraakDetailMenu: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 			});
 		});
 	};
+
+	useEffect(() => {
+		if (location.state?.hasOwnProperty("endAt")) {
+			endModal.onOpen()
+		}
+	})
 
 	return (<>
 		{deleteAlert.isOpen && <AfspraakDeleteAlert onConfirm={onClickDelete} onClose={deleteAlert.onClose} />}

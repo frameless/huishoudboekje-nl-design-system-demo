@@ -1,0 +1,8 @@
+{
+    "inactiveModal": {
+        "title": "Afspraak beëindigd",
+        "message": "De datum van deze transactie ligt voorbij de einddatum van de afspraak. Wijzig de einddatum van de afspraak of letter op een andere afspraak af.",
+        "changeEnddate": "Einddatum wijzigen",
+        "cancel": "Annuleren"
+    }
+}

@@ -6,6 +6,7 @@ import d from "../../../utils/dayjs";
 import useToaster from "../../../utils/useToaster";
 import useDateValidator from "../../../validators/useDateValidator";
 import Modal from "../../shared/Modal";
+import {useLocation, useNavigate} from "react-router-dom";
 
 type AfspraakEndModalProps = {
 	onClose: VoidFunction,
@@ -15,9 +16,11 @@ type AfspraakEndModalProps = {
 
 const AfspraakEndModal: React.FC<AfspraakEndModalProps> = ({onClose, onSubmit, startDate}) => {
 	const validator = useDateValidator();
+	const location = useLocation();
+	const navigate = useNavigate();
 	const {t} = useTranslation();
 	const toast = useToaster();
-	const [date, setDate] = useState<Date>(d().toDate());
+	const [date, setDate] = useState<Date>(location.state?.endAt == undefined ? d().toDate() : d(location.state.endAt).toDate());
 	const [showEndDateBeforeStartDateError, setShowEndDateBeforeStartDateError] = useState<boolean>(false);
 
 	const isValid = (): boolean => {
@@ -30,6 +33,13 @@ const AfspraakEndModal: React.FC<AfspraakEndModalProps> = ({onClose, onSubmit, s
 			return false;
 		}
 	};
+
+	function onClickClose() {
+		if (location.state?.endAt != undefined) {
+			navigate(location.pathname, {replace: true})
+		}
+		onClose()
+	}
 
 	const onClickSubmit = () => {
 		if (!isValid()) {
@@ -44,12 +54,14 @@ const AfspraakEndModal: React.FC<AfspraakEndModalProps> = ({onClose, onSubmit, s
 			});
 			return;
 		}
-
+		if (location.state?.endAt != undefined) {
+			navigate(location.pathname, {replace: true})
+		}
 		onSubmit(date);
 	};
 
 	return (
-		<Modal title={t("endAfspraak.confirmModalTitle")} onClose={onClose}>
+		<Modal title={t("endAfspraak.confirmModalTitle")} onClose={onClickClose}>
 			<Stack>
 				<Text>{t("endAfspraak.confirmModalBody")}</Text>
 

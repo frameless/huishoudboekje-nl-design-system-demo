@@ -20,7 +20,7 @@ import {FollowUpAfspraakFormContextType} from "./context";
 const FollowUpAfspraak = () => {
 	const {id = ""} = useParams<{id: string}>();
 	const location = useLocation();
-	
+
 	const {t} = useTranslation();
 	const toast = useToaster();
 	const [createAfspraak] = useCreateAfspraakMutation();
@@ -42,8 +42,6 @@ const FollowUpAfspraak = () => {
 			if (!afspraak.burger?.id) {
 				return <PageNotFound />;
 			}
-
-			console.log(afspraak)
 
 			const createFollowupAfspraak = async (input: Omit<CreateAfspraakMutationVariables["input"], "burgerId">) => {
 				if (!afspraak.burger?.id) {
@@ -68,17 +66,17 @@ const FollowUpAfspraak = () => {
 
 					// This is why we use BatchHttpLink in src/services/graphql-client.ts, so that all of these will be sent in one HTTP request.
 					Promise.all(addZoektermen)
-						   .then(() => {
-							   toast({
-								   success: t("messages.createAfspraakSuccess"),
-							   });
-							   navigate(AppRoutes.ViewAfspraak(String(createdAfspraakId)), {replace: true});
-						   })
-						   .catch(err => {
-							   toast({
-								   error: err.message,
-							   });
-						   });
+						.then(() => {
+							toast({
+								success: t("messages.createAfspraakSuccess"),
+							});
+							navigate(AppRoutes.ViewAfspraak(String(createdAfspraakId)), {replace: true});
+						})
+						.catch(err => {
+							toast({
+								error: err.message,
+							});
+						});
 				}
 			};
 
@@ -101,7 +99,7 @@ const FollowUpAfspraak = () => {
 			};
 
 			return (
-				<Page title={isCopy ?  t("afspraken.copy.title"): t("afspraken.vervolgAfspraak.title")} backButton={<BackButton to={AppRoutes.ViewAfspraak(String(afspraak.id))} />}>
+				<Page title={isCopy ? t("afspraken.copy.title") : t("afspraken.vervolgAfspraak.title")} backButton={<BackButton to={AppRoutes.ViewAfspraak(String(afspraak.id))} />}>
 					{((afspraak.zoektermen || []).length > 0 || afspraak.betaalinstructie) && (
 						<SectionContainer>
 							<List spacing={2}>
