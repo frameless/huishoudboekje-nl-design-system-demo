@@ -11,7 +11,8 @@ const resources = {
 		notifications: require("../lang/nl.notifications.json"),
 		paymentrecords: require("../lang/nl.paymentrecords.json"),
 		formcomponents: require("../lang/nl.formcomponents.json"),
-		citizendetails: require("../lang/nl.citizendetails.json")
+		citizendetails: require("../lang/nl.citizendetails.json"),
+		transactiondetails: require("../lang/nl.transactiondetails.json"),
 	},
 };
 

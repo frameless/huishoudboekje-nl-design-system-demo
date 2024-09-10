@@ -31,7 +31,7 @@ import {
 import React, {useState} from "react";
 import {useTranslation} from "react-i18next";
 import {AiOutlineTag} from "react-icons/ai";
-import {NavLink, useNavigate} from "react-router-dom";
+import {NavLink, useLocation, useNavigate} from "react-router-dom";
 import {AppRoutes} from "../../../config/routes";
 import {
 	Afspraak,
@@ -64,12 +64,13 @@ import AddAlarmModal from "./AddAlarmModal";
 import AfspraakDetailMenu from "./AfspraakDetailMenu";
 import AfspraakEndModal from "./AfspraakEndModal";
 import BurgerContextContainer from "../../Burgers/BurgerContextContainer";
-import { getAlarmScheduleString } from "../../../utils/alarmSchedule";
+import {getAlarmScheduleString} from "../../../utils/alarmSchedule";
 
 const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 	const validator = useZoektermValidator();
 	const isMobile = useBreakpointValue([true, null, null, false]);
 	const {t} = useTranslation();
+	const location = useLocation();
 	const toast = useToaster();
 	const navigate = useNavigate();
 	const addAlarmModal = useDisclosure();
@@ -93,6 +94,7 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 			{query: GetAfspraakDocument, variables: {id: afspraak.id}},
 		],
 	});
+
 
 	const [deleteAfspraakZoekterm] = useDeleteAfspraakZoektermMutation({
 		refetchQueries: [
@@ -151,7 +153,7 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 				input: {
 					alarm: {
 						id: afspraak.alarm.id,
-						isActive : isActive
+						isActive: isActive
 					}
 				},
 			},
@@ -414,7 +416,7 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 												<AiOutlineTag />
 											</InputLeftElement>
 											<Input
-											 	autoComplete="no"
+												autoComplete="no"
 												aria-autocomplete="none"
 												id={"zoektermen"}
 												onChange={e => setZoekterm(e.target.value)}
@@ -525,57 +527,57 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 					{afspraak.alarm ? (
 						<Stack>
 							<Stack direction={["column", "row"]}>
-									<DataItem label={t("periodiekSelector.periodiek")}>
-										<HStack>
-											<Text>{alarmSchedule}</Text>
-											{afspraak.alarm?.dateMargin && (
-												<Text color={"gray.500"} fontSize={"sm"}>+
-													{t("afspraak.alarm.datumMargin", {count: afspraak.alarm?.dateMargin})}
-												</Text>
-											)}
-										</HStack>
-									</DataItem>
-									
+								<DataItem label={t("periodiekSelector.periodiek")}>
+									<HStack>
+										<Text>{alarmSchedule}</Text>
+										{afspraak.alarm?.dateMargin && (
+											<Text color={"gray.500"} fontSize={"sm"}>+
+												{t("afspraak.alarm.datumMargin", {count: afspraak.alarm?.dateMargin})}
+											</Text>
+										)}
+									</HStack>
+								</DataItem>
+
 							</Stack>
 							<Stack direction={["column", null, null, "row"]}>
 								<DataItem label={t("global.period")}>
 									{afspraak.alarm?.AlarmType !== 3 ? (
-											<HStack>
-												<Text>{t("schedule.from", {
-													from: d.unix(afspraak.alarm?.startDate).format("L"),
+										<HStack>
+											<Text>{t("schedule.from", {
+												from: d.unix(afspraak.alarm?.startDate).format("L"),
+											})}</Text>
+											{afspraak.alarm?.endDate && (
+												<Text>{t("schedule.through", {
+													through: d.unix(afspraak.alarm?.endDate).format("L"),
 												})}</Text>
-												{afspraak.alarm?.endDate && (
-													<Text>{t("schedule.through", {
-														through: d.unix(afspraak.alarm?.endDate).format("L"),
-													})}</Text>
-												)}
-											</HStack>
-										) :
-											<HStack>
-												<Text>{d.unix(afspraak.alarm?.startDate).format("L")}</Text>
-											</HStack>
-										}
+											)}
+										</HStack>
+									) :
+										<HStack>
+											<Text>{d.unix(afspraak.alarm?.startDate).format("L")}</Text>
+										</HStack>
+									}
 								</DataItem>
 								{(afspraak.alarm?.checkOnDate && afspraak.alarm?.isActive) && (
-										<DataItem label={t("schedule.nextExpectedCheck")}>
-											<HStack>
-												<Text>{d.unix(afspraak.alarm.checkOnDate).format("L")}</Text>
-											</HStack>
-										</DataItem>
-									)}
+									<DataItem label={t("schedule.nextExpectedCheck")}>
+										<HStack>
+											<Text>{d.unix(afspraak.alarm.checkOnDate).format("L")}</Text>
+										</HStack>
+									</DataItem>
+								)}
 							</Stack>
 							<Stack direction={["column", null, null, "row"]}>
 								<DataItem label={t("bedrag")}>
 									<HStack>
-										<Text>{ currencyFormat2().format(afspraak.alarm?.amount ? afspraak.alarm?.amount / 100 : 0)}</Text>
-										{ afspraak.alarm?.amountMargin && afspraak.alarm?.amountMargin > 0 && (
+										<Text>{currencyFormat2().format(afspraak.alarm?.amount ? afspraak.alarm?.amount / 100 : 0)}</Text>
+										{afspraak.alarm?.amountMargin && afspraak.alarm?.amountMargin > 0 && (
 											<Text color={"gray.500"} fontSize={"sm"}>+/- {currencyFormat2().format(afspraak.alarm?.amountMargin ? afspraak.alarm?.amountMargin / 100 : 0)}</Text>
 										)}
 									</HStack>
 								</DataItem>
 								<DataItem label={t("afspraak.alarm.options")}>
 									<HStack>
-										<Switch  isDisabled={afspraak.alarm?.endDate !== null && afspraak.alarm?.checkOnDate > afspraak.alarm?.endDate} size={"sm"} isChecked={!!afspraak.alarm?.isActive} onChange={() => toggleAlarmActive()} />
+										<Switch isDisabled={afspraak.alarm?.endDate !== null && afspraak.alarm?.checkOnDate > afspraak.alarm?.endDate} size={"sm"} isChecked={!!afspraak.alarm?.isActive} onChange={() => toggleAlarmActive()} />
 										<DeleteConfirmButton onConfirm={() => onDeleteAlarm()} />
 									</HStack>
 								</DataItem>
