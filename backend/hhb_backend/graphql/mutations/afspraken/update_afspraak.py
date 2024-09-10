@@ -1,6 +1,7 @@
 """ GraphQL mutation for updating an Afspraak """
 
 import logging
+from hhb_backend.update_amount_alarm import UpdateAmountAlarm
 import graphene
 from hhb_backend.update_end_date_alarm import UpdateEndDateAlarm
 import requests
@@ -43,41 +44,41 @@ class UpdateAfspraak(graphene.Mutation):
     def mutate(self, info, id: int, input: UpdateAfspraakInput):
         """ Update the Afspraak """
         logging.info(f"Updating afspraak: {id}")
-        
+
         validation_schema = {
             "type": "object",
             "oneOf": [
                 {
                     "properties": {
-                        "omschrijving": {"type": "string","minLength": 1},
+                        "omschrijving": {"type": "string", "minLength": 1},
                         "bedrag": {"type": "integer", "minimum": 0},
                         "valid_from": {"type": "string", "format": "date"},
                         "valid_through": {"type": "string", "format": "date"},
-                        "zoektermen": {  "type": "array", "items": {"type": "string", "minLength": 1 } },
-                        "postadres_id": { "type": "null" },
-                        "afdeling_id": { "type": "null" }
+                        "zoektermen": {"type": "array", "items": {"type": "string", "minLength": 1}},
+                        "postadres_id": {"type": "null"},
+                        "afdeling_id": {"type": "null"}
                     },
-                    "required": ["postadres_id","afdeling_id"]
+                    "required": ["postadres_id", "afdeling_id"]
                 },
                 {
                     "properties": {
-                        "omschrijving": {"type": "string","minLength": 1},
+                        "omschrijving": {"type": "string", "minLength": 1},
                         "bedrag": {"type": "integer", "minimum": 0},
                         "valid_from": {"type": "string", "format": "date"},
                         "valid_through": {"type": "string", "format": "date"},
-                        "zoektermen": {  "type": "array", "items": {"type": "string", "minLength": 1 } },
-                        "postadres_id": {"type": "string","format": "uuid"},
-                        "afdeling_id": { "type": "integer", "minimum": 0 }
+                        "zoektermen": {"type": "array", "items": {"type": "string", "minLength": 1}},
+                        "postadres_id": {"type": "string", "format": "uuid"},
+                        "afdeling_id": {"type": "integer", "minimum": 0}
                     },
-                    "required": ["postadres_id","afdeling_id"]
+                    "required": ["postadres_id", "afdeling_id"]
                 },
                 {
                     "properties": {
-                        "omschrijving": {"type": "string","minLength": 1},
+                        "omschrijving": {"type": "string", "minLength": 1},
                         "bedrag": {"type": "integer", "minimum": 0},
                         "valid_from": {"type": "string", "format": "date"},
                         "valid_through": {"type": "string", "format": "date"},
-                        "zoektermen": {  "type": "array", "items": {"type": "string", "minLength": 1 } }
+                        "zoektermen": {"type": "array", "items": {"type": "string", "minLength": 1}}
                     },
                     "additionalProperties": False
                 }
@@ -125,23 +126,34 @@ class UpdateAfspraak(graphene.Mutation):
                 raise GraphQLError("postadres not found")
 
         # final update call
-        response = requests.post(f"{settings.HHB_SERVICES_URL}/afspraken/{id}", json=input)
+        response = requests.post(
+            f"{settings.HHB_SERVICES_URL}/afspraken/{id}", json=input)
         if not response.ok:
             raise UpstreamError(response, "updating afspraak failed")
 
         afspraak = response.json()["data"]
 
         if afspraak["alarm_id"]:
+            if afspraak["bedrag"]:
+                new_amount = input.get("bedrag")
+                if new_amount is not None and new_amount is not "":
+                    if afspraak["credit"] != True:
+                        new_amount = new_amount * -1
+                    UpdateAmountAlarm.create(
+                        alarmUuid=afspraak["alarm_id"], amount=new_amount)
             updated_end_date = input.get("valid_through")
             if updated_end_date is not None and updated_end_date is not "":
-                UpdateEndDateAlarm.create(alarmUuid=afspraak["alarm_id"], newEndDate=updated_end_date)
+                UpdateEndDateAlarm.create(
+                    alarmUuid=afspraak["alarm_id"], newEndDate=updated_end_date)
 
         AuditLogging.create(
             action=info.field_name,
             entities=[
                 GebruikersActiviteitEntity(entityType="afspraak", entityId=id),
-                GebruikersActiviteitEntity(entityType="burger", entityId=afspraak["burger_id"]),
-                GebruikersActiviteitEntity(entityType="afdeling", entityId=afspraak["afdeling_id"])
+                GebruikersActiviteitEntity(
+                    entityType="burger", entityId=afspraak["burger_id"]),
+                GebruikersActiviteitEntity(
+                    entityType="afdeling", entityId=afspraak["afdeling_id"])
             ],
             before=dict(afspraak=previous),
             after=dict(afspraak=afspraak),

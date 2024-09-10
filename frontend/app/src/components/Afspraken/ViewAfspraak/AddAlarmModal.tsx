@@ -18,7 +18,7 @@ import MonthSelector from "../../shared/MonthSelector";
 import PeriodiekSelector, {Periodiek} from "../../shared/PeriodiekSelector";
 import WeekDaySelector from "../../shared/WeekDaySelector";
 import DataItem from "../../shared/DataItem";
-import { Exception } from "sass";
+import {Exception} from "sass";
 
 type AddAlarmModalProps = {
 	afspraak: Afspraak,
@@ -86,18 +86,18 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 	const allMonths = Array.from({length: 12}).map((x, i) => i + 1);
 
 	const getAlarmType = (data) => {
-		if(data.isPeriodiek === Periodiek.Eenmalig){
+		if (data.isPeriodiek === Periodiek.Eenmalig) {
 			return 3;
 		}
-		if(data.isPeriodiek === Periodiek.Periodiek){
-			if(data.repeatType === RepeatType.Month){
+		if (data.isPeriodiek === Periodiek.Periodiek) {
+			if (data.repeatType === RepeatType.Month) {
 				return 1;
 			}
-			if(data.repeatType === RepeatType.Week){
-				return 2;				
+			if (data.repeatType === RepeatType.Week) {
+				return 2;
 			}
-			if(data.repeatType === RepeatType.Year){
-				return 4;				
+			if (data.repeatType === RepeatType.Year) {
+				return 4;
 			}
 		}
 		return -1
@@ -109,23 +109,24 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 
 		try {
 			const data = validator.parse(form);
-			const {bedrag, bedragMargin, date, datumMargin, byDay, byMonth, byMonthDay, startDate} = data;
+			const {bedragMargin, date, datumMargin, byDay, byMonth, byMonthDay, startDate} = data;
+			const bedrag = afspraak.credit ? afspraak.bedrag : -afspraak.bedrag
 
 			const alarm: AlarmData = {}
-			alarm.isActive =  true;
+			alarm.isActive = true;
 			alarm.amount = bedrag * 100;
 			alarm.amountMargin = bedragMargin;
-			if(datumMargin === undefined){
+			if (datumMargin === undefined) {
 				alarm.dateMargin = 0;
-			}else{
+			} else {
 				alarm.dateMargin = datumMargin;
 			}
 			alarm.AlarmType = getAlarmType(data);
-			switch(alarm.AlarmType){
+			switch (alarm.AlarmType) {
 				case 1 || 4: {
-					if(byMonthDay === undefined){
+					if (byMonthDay === undefined) {
 						throw new Error('Cant be undefined');
-					}else {
+					} else {
 						alarm.recurringDayOfMonth = [byMonthDay]
 						alarm.recurringMonths = byMonth
 					}
@@ -147,12 +148,12 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 					break;
 				}
 			}
-			if(alarm.startDate == null){
+			if (alarm.startDate == null) {
 				alarm.startDate = getUnixTimestampFromDate(startDate)
 			}
-			if(alarm.endDate == null && afspraak.validThrough != null && startDate != null){
+			if (alarm.endDate == null && afspraak.validThrough != null && startDate != null) {
 				const endDate = d(afspraak.validThrough)
-				if(endDate.isSameOrBefore(startDate, "date")){
+				if (endDate.isSameOrBefore(startDate, "date")) {
 					throw new Error("Endate cant be the same or before the startdate")
 				}
 				alarm.endDate = getUnixTimestampFromDate(endDate.toDate())
@@ -164,7 +165,7 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 		}
 		catch (err) {
 			let errorMessage = t("global.formError")
-			if(err.message.includes("Endate cant be the same or before the startdate")){
+			if (err.message.includes("Endate cant be the same or before the startdate")) {
 				errorMessage = t("alarmForm.errors.invalidEnddate")
 			}
 			toast({error: errorMessage, title: t("messages.genericError.title")});
@@ -207,7 +208,7 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 								<FormControl flex={1} isInvalid={!isFieldValid("date") || !isFieldValid2("date")} isRequired>
 									<FormLabel>{t("alarmForm.date")}</FormLabel>
 									<DatePicker
-									 	autoComplete="no"
+										autoComplete="no"
 										aria-autocomplete="none"
 										data-test="alarmForm.expectedDate"
 										selected={form.date}
@@ -224,7 +225,7 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 								<FormControl flex={1} isInvalid={!isFieldValid("datumMargin") || !isFieldValid2("datumMargin")} isRequired>
 									<FormLabel>{t("alarmForm.datumMargin")}</FormLabel>
 									<Input
-									 	autoComplete="no"
+										autoComplete="no"
 										aria-autocomplete="none"
 										type={"number"}
 										value={form.datumMargin ?? ""}
@@ -234,7 +235,7 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 												...x,
 												datumMargin: parseInt(e.target.value),
 											}
-										))}
+											))}
 										min={0}
 									/>
 									<FormErrorMessage>{t("alarmForm.errors.invalidDatumMarginError")}</FormErrorMessage>
@@ -278,7 +279,7 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 									<FormControl flex={1} isInvalid={!isFieldValid("startDate")} isRequired>
 										<FormLabel>{t("alarmForm.startDate")}</FormLabel>
 										<DatePicker selected={form.startDate}
-										 	autoComplete="no"
+											autoComplete="no"
 											aria-autocomplete="none"
 											data-test="alarmForm.startDate"
 											dateFormat={"dd-MM-yyyy"}
@@ -296,13 +297,13 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 									<FormControl flex={1} isInvalid={!isFieldValid("datumMargin")} isRequired >
 										<FormLabel>{t("alarmForm.datumMargin")}</FormLabel>
 										<Input
-										 	autoComplete="no"
+											autoComplete="no"
 											aria-autocomplete="none"
 											data-test="alarmForm.dateMargin"
 											type={"number"}
 											value={form.datumMargin ?? ""}
 											onChange={
-												e => updateForm("datumMargin", parseInt(e.target.value))} 
+												e => updateForm("datumMargin", parseInt(e.target.value))}
 											min={0}
 										/>
 										<FormErrorMessage>{t("alarmForm.errors.invalidDatumMarginError")}</FormErrorMessage>
@@ -322,7 +323,7 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 									<FormControl flex={1} isInvalid={!isFieldValid("startDate")} isRequired>
 										<FormLabel>{t("alarmForm.startDate")}</FormLabel>
 										<DatePicker
-										 	autoComplete="no"
+											autoComplete="no"
 											aria-autocomplete="none"
 											data-test="alarmForm.startDate"
 											selected={form.startDate}
@@ -334,14 +335,14 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 													updateForm("startDate", date)
 												}
 											}}
-											customInput={(<Input autoComplete="no" aria-autocomplete="none" data-test="alarmForm.startDate"/>)} />
+											customInput={(<Input autoComplete="no" aria-autocomplete="none" data-test="alarmForm.startDate" />)} />
 										<FormErrorMessage>{t("afspraakDetailView.invalidValidFromError")}</FormErrorMessage>
 									</FormControl>
 
 									<FormControl flex={1} isInvalid={!isFieldValid("byMonthDay")} isRequired>
 										<FormLabel>{t("alarmForm.byMonthDay")}</FormLabel>
 										<Input
-										 	autoComplete="no"
+											autoComplete="no"
 											aria-autocomplete="none"
 											data-test="alarmForm.byMonthDay"
 											type={"number"}
@@ -356,7 +357,7 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 									<FormControl flex={1} isInvalid={!isFieldValid("datumMargin")} isRequired>
 										<FormLabel>{t("alarmForm.datumMargin")}</FormLabel>
 										<Input
-										 	autoComplete="no"
+											autoComplete="no"
 											aria-autocomplete="none"
 											data-test="alarmForm.dateMargin"
 											type={"number"}
@@ -366,7 +367,7 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 													...x,
 													datumMargin: parseInt(e.target.value),
 												})
-											)}
+												)}
 											min={0}
 										/>
 										<FormErrorMessage>{t("alarmForm.errors.invalidDatumMarginError")}</FormErrorMessage>
@@ -375,32 +376,13 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 							</>)}
 
 
-							{form.isPeriodiek !== undefined && (<>
-								<FormControl flex={1} isInvalid={!(isFieldValid("bedrag") && capInput("bedrag", 20000000))} isRequired>
-									<FormLabel>{t("alarmForm.bedrag")}</FormLabel>
-									<InputGroup>
-										<InputLeftElement zIndex={0}>&euro;</InputLeftElement>
-										<Input
-										 	autoComplete="no"
-											aria-autocomplete="none"
-											data-test="alarmForm.amount"
-											type={"number"}
-											pattern={"^\\d*(,{0,1}\\d{0,2})$"}
-											value={form.bedrag ? form.bedrag : 0}
-											min={0}
-											step={.01}
-											onChange={e => updateForm("bedrag", parseFloat(e.target.value.toString().replace(",", ".")))}
-										/>
-									</InputGroup>
-									<FormErrorMessage>{t("alarmForm.errors.invalidBedragError")}</FormErrorMessage>
-								</FormControl>
-
+							{form.isPeriodiek !== undefined && (
 								<FormControl flex={1} isInvalid={!(isFieldValid("bedragMargin") && capInput("bedragMargin", 20000000))} isRequired>
 									<FormLabel>{t("alarmForm.bedragMargin")}</FormLabel>
 									<InputGroup>
 										<InputLeftElement zIndex={0}>&euro;</InputLeftElement>
 										<Input
-										 	autoComplete="no"
+											autoComplete="no"
 											aria-autocomplete="none"
 											data-test="alarmForm.amountMargin"
 											type={"number"}
@@ -412,8 +394,7 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 										/>
 									</InputGroup>
 									<FormErrorMessage>{t("alarmForm.errors.invalidBedragMarginError")}</FormErrorMessage>
-								</FormControl>
-							</>)}
+								</FormControl>)}
 
 							<Stack align={"flex-end"}>
 								<HStack>
