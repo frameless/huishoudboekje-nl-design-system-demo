@@ -75,6 +75,7 @@ public class Startup
     massTransit.AddConsumer<CheckSaldosConsumer>();
     massTransit.AddConsumer<UpdateEndDateAlarmConsumer>();
     massTransit.AddConsumer<DeleteAlarmsConsumer>();
+    massTransit.AddConsumer<UpdateAlarmAmountConsumer>();
     return massTransit;
   }
 
