@@ -4,6 +4,9 @@ import {Trans} from "react-i18next";
 export const auditLogTexts = (values, components, action) => {
 	const texts = {
 		// Queries
+		CSMGetPaged: () => <Trans i18nKey={"auditLog.CSMGetPaged"} values={values} components={components} />,
+		PaymentRecordServiceGetRecordsNotReconciledForAgreements: () => <Trans i18nKey={"auditLog.PaymentRecordServiceGetRecordsNotReconciledForAgreements"} values={values} components={components} />,
+		PaymentExportGetPaged: () => <Trans i18nKey={"auditLog.PaymentExportGetPaged"} values={values} components={components} />,
 		SignalsSetIsActive: () => <Trans i18nKey={"auditLog.SignalsSetIsActive"} values={values} components={components} />,
 		AlarmsUpdate: () => <Trans i18nKey={"auditLog.AlarmsUpdate"} values={values} components={components} />,
 		searchAfspraken: () => <Trans i18nKey={"auditLog.searchAfspraken"} values={values} components={components} />,
