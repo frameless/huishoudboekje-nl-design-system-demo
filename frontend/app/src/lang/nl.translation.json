@@ -814,6 +814,9 @@
   "unknownRubriek": "Onbekende rubriek",
   "unknownPostadres": "Onbekend postadres",
   "auditLog": {
+    "CSMGetPaged": "{{gebruiker} bekeek een lijst met bankafschriften.",
+    "PaymentRecordServiceGetRecordsNotReconciledForAgreements": "Systeem haalde namens {{gebruiker} openstaande betaalinstructies op.",
+    "PaymentExportGetPaged": "{{gebruiker}} bekeek een lijst met betaalinstructies.",
     "SignalsSetIsActive": "{{gebruiker}} wijzigde een signaal.",
     "AlarmsUpdate": "{{gebruiker}} wijzigde een alarm bij een <linkAfspraak>afspraak</linkAfspraak> met <linkBurger>{{burger}}</linkBurger>.",
     "searchAfspraken": "{{gebruiker}} zocht in afspraken.",
