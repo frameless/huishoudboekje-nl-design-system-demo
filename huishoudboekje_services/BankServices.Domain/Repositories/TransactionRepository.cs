@@ -17,8 +17,12 @@ public class TransactionRepository(BankServiceContext dbContext, ITransactionDbM
 {
   public async Task<Paged<ITransactionModel>> GetPaged(Pagination pagination, TransactionsFilter? filters)
   {
+    OrderByCommandDecorator<Transaction> orderCommand =
+      new(new GetAllCommand<Transaction>(), transaction => transaction.Date, true);
+
+
     PagedCommandDecorator<Transaction> pagedCommand = new(
-      filters == null ? new GetAllCommand<Transaction>() : DecorateFilters(new GetAllCommand<Transaction>(), filters),
+      filters == null ? orderCommand : DecorateFilters(orderCommand, filters),
       pagination);
     return mapper.GetPagedCommunicationModels(await ExecuteCommand(pagedCommand));
   }
