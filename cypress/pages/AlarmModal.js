@@ -64,30 +64,6 @@ class AlarmModal {
       .should('have.value', day)
   }
 
-  inputExpectedAmount()
-  {
-    let agreementValue;
-    cy.get('label[class^="chakra-form__label"]').contains('Bedrag')
-      .siblings()
-      .then(($value) => {
-        agreementValue = $value.text() // Store the agreement amount in a variable
-        const newValue1 = agreementValue.slice(2) // Remove the valuta symbol from string
-        const newValue2 = newValue1.replace(",", ".") // Replace the comma with a full stop
-
-        // Check 'Bedrag verwachte betaling' field   
-        cy.get('[data-test="alarmForm.amount"]')
-          .invoke('val')
-          .then((val2) => {
-            expect(val2).to.eq(newValue2)
-
-            // Clear and refill 'Bedrag verwachte betaling' field   
-            cy.get('[data-test="alarmForm.amount"]')
-              .type('{selectAll}' + newValue2) // Done via 'selectAll', as a clear() will automatically leave a zero
-              .should('have.value', newValue2)
-          })
-      })
-  }
-
   inputDeviationPayment(amount) {
     // Check 'Toegestane afwijking bedrag (in euro's)' field  
     cy.get('[data-test="alarmForm.amountMargin"]')
@@ -117,7 +93,6 @@ class AlarmModal {
     this.inputStartDate()
     this.inputDayOfMonth('1')
     this.inputDeviationDay('1')
-    this.inputExpectedAmount()
     this.inputDeviationPayment('1')
 
     // Save alarm

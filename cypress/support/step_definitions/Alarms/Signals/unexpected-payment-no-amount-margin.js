@@ -20,7 +20,7 @@ Given('an agreement exists for scenario "payment amount too low, no amount margi
   uniqueId = Date.now().toString();
 
   // Create agreements
-  burgerDetails.insertAfspraak('Bingus', uniqueId, "10.00", 'NL86INGB0002445588', '5', 'false', '2024-01-01');
+  burgerDetails.insertAfspraak('Bingus', uniqueId, "10.00", 'NL86INGB0002445588', '1', 'true', '2024-01-01');
 
   // View burger detail page
   burgers.openBurger('Dingus Bingus')
@@ -66,11 +66,6 @@ Given('an alarm exists for scenario "payment amount too low, no amount margin"',
       cy.get('[data-test="alarmForm.dateMargin"]')
         .type('1')
         .should('have.value', '1')
-
-      // 'Bedrag verwachte betaling'
-      cy.get('[data-test="alarmForm.amount"]')
-        .type('{selectAll}10')
-        .should('have.value', '10') 
 
       // 'Toegestane afwijking bedrag'
       cy.get('[data-test="alarmForm.amountMargin"]')
@@ -313,7 +308,7 @@ Given('an agreement exists for scenario "expected payment amount, no amount marg
   uniqueId = Date.now().toString();
 
   // Create agreements
-  burgerDetails.insertAfspraak('Bingus', uniqueId, "10.00", 'NL86INGB0002445588', '5', 'false', '2024-01-01');
+  burgerDetails.insertAfspraak('Bingus', uniqueId, "10.00", 'NL86INGB0002445588', '1', 'true', '2024-01-01');
 
   // View burger detail page
   burgers.openBurger('Dingus Bingus')
@@ -359,11 +354,6 @@ Given('an alarm exists for scenario "expected payment amount, no amount margin"'
   //     cy.get('[data-test="alarmForm.dateMargin"]')
   //       .type('1')
   //       .should('have.value', '1')
-
-  //     // 'Bedrag verwachte betaling'
-  //     cy.get('[data-test="alarmForm.amount"]')
-  //       .type('{selectAll}10')
-  //       .should('have.value', '10') 
 
   //     // 'Toegestane afwijking bedrag'
   //     cy.get('[data-test="alarmForm.amountMargin"]')
@@ -602,7 +592,7 @@ Given('an agreement exists for scenario "payment amount too high, no amount marg
   uniqueId = Date.now().toString();
     
   // Create agreements
-  burgerDetails.insertAfspraak('Bingus', uniqueId, "10.00", 'NL86INGB0002445588', '5', 'false', '2024-01-01');
+  burgerDetails.insertAfspraak('Bingus', uniqueId, "10.00", 'NL86INGB0002445588', '1', 'true', '2024-01-01');
 
   // View burger detail page
   burgers.openBurger('Dingus Bingus')
@@ -648,11 +638,6 @@ Given('an alarm exists for scenario "payment amount too high, no amount margin"'
   //     cy.get('[data-test="alarmForm.dateMargin"]')
   //       .type('1')
   //       .should('have.value', '1')
-
-  //     // 'Bedrag verwachte betaling'
-  //     cy.get('[data-test="alarmForm.amount"]')
-  //       .type('{selectAll}10')
-  //       .should('have.value', '10') 
 
   //     // 'Toegestane afwijking bedrag'
   //     cy.get('[data-test="alarmForm.amountMargin"]')
