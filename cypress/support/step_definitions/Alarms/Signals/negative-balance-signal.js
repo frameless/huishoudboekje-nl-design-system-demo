@@ -215,6 +215,7 @@ When('the zero amount bank transaction is booked to the agreement "Loon"', () =>
     .click();
   cy.get('[aria-label="Remove Belastingdienst Toeslagen Kantoor Utrecht"]')
     .click();
+  cy.wait(1000);
   cy.contains('Loon')
     .click();
 

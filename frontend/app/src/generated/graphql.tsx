@@ -1322,6 +1322,7 @@ export type PaginationRequest = {
   take?: InputMaybe<Scalars['Int']>;
 };
 
+/** TODO See if we can move these in the Core since it is also used in LogService */
 export type PaginationResponse = {
   skip?: Maybe<Scalars['Int']>;
   take?: Maybe<Scalars['Int']>;

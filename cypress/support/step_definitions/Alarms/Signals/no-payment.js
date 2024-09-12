@@ -100,11 +100,6 @@ Given('an alarm exists for scenario "no transaction within timeframe"', () => {
         .type('1')
         .should('have.value', '1')
 
-      // 'Bedrag verwachte betaling'
-      cy.get('[data-test="alarmForm.amount"]')
-        .type('{selectAll}10')
-        .should('have.value', '10') 
-
       // 'Toegestane afwijking bedrag'
       cy.get('[data-test="alarmForm.amountMargin"]')
         .type('{selectAll}0')

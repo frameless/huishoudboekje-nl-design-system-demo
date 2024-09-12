@@ -1,5 +1,17 @@
 # Huishoudboekje Changelog
 
+## 2.1.2
+
+Deze versie omvat verbeteringen aan bestaande functionaliteit en oplossingen voor een aantal problemen. Een lijst met banktransacties wordt gesorteerd op datum, aflopend. Een lijst met afspraken wordt bijgewerkt na het kopiëren van een afspraak. Onbekende gebeurtenissen hebben een leesbare tekst gekregen. Het afletteren van een banktransactie op een beëindige afspraak leidt naar het wijzigen van de einddatum van de afspraak. Het bedrag van een afspraak is vanaf nu leidend voor het bedrag van een alarm en kan niet meer bij het alarm gewijzigd worden.
+
+### Patch Changes
+
+- 8ad82ef: Added order by on date for transaction list
+- 91bb057: refetch after copying agreement
+- 40934c9: added translations
+- 18eefa2: Added option to change enddate when trying to match a transaction on an inactive agreement
+- db379af: Alarm no longer requires amount input and will be based on agreement (including when updating amount on agreement)
+
 ## 2.1.1
 
 Deze versie bevat een aantal fixes voor het overzicht en de transactie pagina in verband met de nieuwe bankservice & het wegvallen van numerieke ID's op de transactie pagina.
@@ -117,7 +129,6 @@ Deze versie omvat een verbetering voor teksten bij gelogde gebeurtenissen.
 
 This release introduces the notification service however it should not yet be used.
 
-
 ## 2.0.1
 
 Deze versie omvat een verbetering voor het migreren van gegevens voor alarmen en gebeurtenissen. Verder is er een probleem opgelost met het berekenen van saldo in rapportage.
@@ -160,11 +171,13 @@ Met de nieuwe User API kan een koppeling gemaakt worden vanuit een klantportaal.
 ## Migration Guide
 
 The grapql-mesh container has the following env variables required:
+
 - **HHB_ALARM_SERVICE_URL**
 - **HHB_LOG_SERVICE_URL**
 - **HHB_BACKEND_URL**
 
 To get the AlarmService up and running these env variables need to be set.
+
 - **HHB_DATABASE_URL**
 - **HHB_RABBITMQ_HOST**
 - **HHB_RABBITMQ_PORT**
@@ -178,6 +191,7 @@ To get the AlarmService up and running these env variables need to be set.
 - **HHB_JWT_JWKS_URI**
 
 To get the Log Service up and running these env variables need to be set.
+
 - **HHB_DATABASE_URL**
 - **HHB_RABBITMQ_HOST**
 - **HHB_RABBITMQ_PORT**
@@ -191,6 +205,7 @@ To get the Log Service up and running these env variables need to be set.
 - **HHB_JWT_JWKS_URI**
 
 To get the UserApi up and running these env variables need to be set.
+
 - **HHB_RABBITMQ_HOST**
 - **HHB_RABBITMQ_PORT**
 - **HHB_RABBITMQ_USER**

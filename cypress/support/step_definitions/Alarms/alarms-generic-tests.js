@@ -92,11 +92,6 @@ When('I create a test alarm', () => {
       .type('1')
       .should('have.value', '1')
 
-    // 'Bedrag verwachte betaling'
-    cy.get('[data-test="alarmForm.amount"]')
-      .type('{selectAll}123.45')
-      .should('have.value', '123.45') 
-
     // 'Toegestane afwijking bedrag'
     cy.get('[data-test="alarmForm.amountMargin"]')
       .type('{selectAll}13.37')
