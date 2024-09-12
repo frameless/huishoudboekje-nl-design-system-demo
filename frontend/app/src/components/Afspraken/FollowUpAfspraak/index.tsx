@@ -4,7 +4,7 @@ import {useTranslation} from "react-i18next";
 import {MdCheckCircle, MdReportProblem} from "react-icons/md";
 import {useLocation, useNavigate, useParams} from "react-router-dom";
 import {AppRoutes} from "../../../config/routes";
-import {Afspraak, CreateAfspraakMutationVariables, useAddAfspraakZoektermMutation, useCreateAfspraakMutation, useGetAfspraakFormDataQuery} from "../../../generated/graphql";
+import {Afspraak, CreateAfspraakMutationVariables, GetBurgerAfsprakenDocument, GetBurgerDetailsDocument, useAddAfspraakZoektermMutation, useCreateAfspraakMutation, useGetAfspraakFormDataQuery} from "../../../generated/graphql";
 import d from "../../../utils/dayjs";
 import Queryable from "../../../utils/Queryable";
 import useToaster from "../../../utils/useToaster";
@@ -43,6 +43,8 @@ const FollowUpAfspraak = () => {
 				return <PageNotFound />;
 			}
 
+
+			// TODO: Make this one call when refactoring the new HHBService
 			const createFollowupAfspraak = async (input: Omit<CreateAfspraakMutationVariables["input"], "burgerId">) => {
 				if (!afspraak.burger?.id) {
 					return;
@@ -56,6 +58,7 @@ const FollowUpAfspraak = () => {
 							...input,
 						},
 					},
+					refetchQueries: [{query: GetBurgerDetailsDocument, variables: {id: afspraak.burger?.id}}]
 				});
 
 				// Once the afspraak is created, use the id and add every zoekterm
@@ -65,6 +68,8 @@ const FollowUpAfspraak = () => {
 					const addZoektermen = (afspraak.zoektermen || []).map(async z => addAfspraakZoekterm({variables: {afspraakId: createdAfspraakId, zoekterm: z}}));
 
 					// This is why we use BatchHttpLink in src/services/graphql-client.ts, so that all of these will be sent in one HTTP request.
+					// Reply - Batching should be used to reduce page loading times by gathering all the data as a single request instead of multiple, 
+					// 			not as a method to skip creating an endpoint that accepts a list of zoektermen and inserts them, which would be infinitely faster....
 					Promise.all(addZoektermen)
 						.then(() => {
 							toast({
