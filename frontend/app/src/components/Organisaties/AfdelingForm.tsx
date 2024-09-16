@@ -59,8 +59,8 @@ const AfdelingForm: React.FC<AfdelingFormProps> = ({values, organisatie, onChang
 
 				<Stack align={"flex-end"}>
 					<HStack justify={"flex-end"}>
-						<Button type={"reset"} onClick={() => onCancel()}>{t("global.actions.cancel")}</Button>
-						<Button type={"submit"} colorScheme={"primary"}>{t("global.actions.save")}</Button>
+						<Button data-test="buttonModal.cancel" type={"reset"} onClick={() => onCancel()}>{t("global.actions.cancel")}</Button>
+						<Button data-test="buttonModal.submit" type={"submit"} colorScheme={"primary"}>{t("global.actions.save")}</Button>
 					</HStack>
 					<Asterisk />
 				</Stack>

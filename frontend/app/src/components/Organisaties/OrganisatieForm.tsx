@@ -99,7 +99,7 @@ const OrganisatieForm: React.FC<OrganisatieFormProps> = ({organisatie, onSubmit,
 						</Stack>
 						<Stack direction={"row"} spacing={1} justifyContent={"flex-end"}>
 							<Stack>
-								<Button isLoading={isLoading} type={"submit"} colorScheme={"primary"} onClick={onSubmitForm}>{t("global.actions.save")}</Button>
+								<Button isLoading={isLoading} type={"submit"} data-test="button.submitOrganisatie" colorScheme={"primary"} onClick={onSubmitForm}>{t("global.actions.save")}</Button>
 								<Asterisk />
 							</Stack>
 						</Stack>

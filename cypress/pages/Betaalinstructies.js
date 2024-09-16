@@ -38,27 +38,31 @@ class Betaalinstructies {
   
     buttonSelectieAanpassen()
     {
-      return cy.get('[data-test="button.editSelection"]', { timeout: 10000 })
+      return cy.get('[data-test="button.editSelection"]')
     }
   
     buttonSelecteerAlles()
     {
-      return cy.get('[data-test="button.selectAll"]', { timeout: 10000 })
+      return cy.get('[data-test="button.selectAll"]')
     }
 
     buttonViewInstruction(instructionNumber)
     {
-        return cy.get('[data-test="button.viewInstruction"]').eq(instructionNumber);
+        return cy.get('[data-test="button.View"]').eq(instructionNumber);
     }
   
     toggleAll()
     {
-      return cy.get('[data-test="checkbox.toggleAll"]', { timeout: 10000 })
+      return cy.get('[data-test="checkbox.toggleAll"]')
     }
   
     buttonExport()
     {
-      return cy.get('[data-test="buttonModal.submit"]', { timeout: 10000 })
+      return cy.get('[data-test="buttonModal.submit"]')
+    }
+
+    modalExportBevestigen() {
+      return cy.get('[data-test="buttonModal.confirmSubmit"]')
     }
   
     paymentInstruction(number)
@@ -123,9 +127,14 @@ class Betaalinstructies {
         .click();
     }
 
-    redirectPaymentDetail()
+    redirectBetaalinstructies()
     {
-        cy.url().should('include', Cypress.config().baseUrl + '/bankzaken/betaalinstructies/')
+        cy.url().should('include', Cypress.config().baseUrl + '/bankzaken/betaalinstructies')
+    }
+
+    redirectBetaalinstructieDetails()
+    {
+        cy.url().should('include', Cypress.config().baseUrl + '/bankzaken/betaalinstructies/exports/')
     }
        
 }

@@ -59,6 +59,7 @@ const OrganisatieList = () => {
 						 	autoComplete="no"
 							aria-autocomplete="none"
 							type={"text"}
+							data-test="input.searchOrganisatie"
 							bg={"white"}
 							onChange={e => setSearch(e.target.value)}
 							onKeyDown={onKeyDownOnSearchField}
