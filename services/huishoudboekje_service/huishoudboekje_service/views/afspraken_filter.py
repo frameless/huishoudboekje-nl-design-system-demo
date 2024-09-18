@@ -1,7 +1,8 @@
 """ MethodView for /afspraken/filter path """
 
 from datetime import datetime
-from sqlalchemy import or_, and_
+import logging
+from sqlalchemy import func, literal, or_, and_, select
 from core_service.views.basic_view.basic_filter_view import BasicFilterView
 from huishoudboekje_service.filters.afspraak_filters import add_afspraak_payment_instruction_filter, add_offset_account_info, add_offset_accounts, add_afspraak_afspraak_ids_filter, add_afspraak_burger_ids_filter, add_afspraak_afdeling_ids_filter, add_afspraak_max_bedrag_filter, add_afspraak_min_bedrag_filter, add_afspraak_only_valid_filter, add_afspraak_tegen_rekening_ids_filter, add_afspraak_text_zoektermen_filter, add_afspraak_transaction_description_filter
 from models.afspraak import Afspraak
@@ -29,10 +30,12 @@ class AfsprakenFilterView(BasicFilterView):
             "transaction_description", None)
         payment_instructions = filter_options.get("payment_instructions", None)
         with_offset_acount = filter_options.get("offset_accounts", None)
-        with_offset_acount_info = filter_options.get("offset_account_info", None)
+        with_offset_acount_info = filter_options.get(
+            "offset_account_info", None)
 
         start_date = filter_options.get("start_date", None)
         end_date = filter_options.get("end_date", None)
+        matches_only = filter_options.get("match_only", False)
 
         new_query = query
 
@@ -64,10 +67,6 @@ class AfsprakenFilterView(BasicFilterView):
             new_query = add_afspraak_text_zoektermen_filter(
                 zoektermen, new_query)
 
-        if transaction_description is not None:
-            new_query = add_afspraak_transaction_description_filter(
-                transaction_description, new_query)
-
         if payment_instructions:
             new_query = add_afspraak_payment_instruction_filter(new_query)
 
@@ -83,13 +82,14 @@ class AfsprakenFilterView(BasicFilterView):
             new_query = new_query.filter(
                 and_(
                     or_(
-                        Afspraak.valid_through == None, 
+                        Afspraak.valid_through == None,
                         Afspraak.valid_through >= start_datetime)
-                    ),
-                    Afspraak.valid_from <= end_datetime
-                )
+                ),
+                Afspraak.valid_from <= end_datetime
+            )
 
-        # here to make sure the ordering happends last
-        new_query = new_query.join(Burger).order_by(Burger.voornamen.asc(), Burger.achternaam.asc(
-        ), Afspraak.omschrijving.asc(), Afspraak.zoektermen.asc(), Afspraak.bedrag.desc())
+        if transaction_description is not None:
+            new_query = add_afspraak_transaction_description_filter(
+                transaction_description, new_query, matches_only)
+
         return new_query

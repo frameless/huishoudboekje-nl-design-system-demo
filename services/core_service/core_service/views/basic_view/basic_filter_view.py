@@ -1,4 +1,5 @@
 """ MethodView for get all paths """
+import logging
 from flask.views import MethodView
 from flask import request
 from core_service.utils import row2dict
@@ -8,7 +9,7 @@ class BasicFilterView(MethodView):
     """ Methods for get all paths """
 
     model = "data"
-    query =  None
+    query = None
 
     def get(self, **kwargs):
         """ GET /<view_path>/filter?(offset=...&limit=...))
@@ -33,12 +34,11 @@ class BasicFilterView(MethodView):
             self.query = self.add_filter_options(filter, self.query)
         return self.build_response(self.query)
 
-
     def build_response(self, query):
         """ Generates the response to be returned
 
             when offset and limit are provided it returns a paged result set
-        
+
         """
         offset = request.args.get("offset")
         limit = request.args.get("limit")
@@ -48,13 +48,13 @@ class BasicFilterView(MethodView):
             query = query.limit(limit).offset(offset)
 
         response = {self.model: [row2dict(row) for row in query]}
-        
+
         if count is not None:
             response.update({"page_info": {
-                    "count": count,
-                    "start": int(offset),
-                    "limit": int(limit)
-                }
+                "count": count,
+                "start": int(offset),
+                "limit": int(limit)
+            }
             })
         return response, 200
 
@@ -66,7 +66,6 @@ class BasicFilterView(MethodView):
             example:
             self.query = BankTransaction.query 
         """
-
 
     def add_filter_options(self, filter_options, query):
         """ Should to be implemented in specific views
