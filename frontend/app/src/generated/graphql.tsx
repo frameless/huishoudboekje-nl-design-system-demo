@@ -1820,6 +1820,7 @@ export type QuerySearchAfsprakenArgs = {
   afspraakIds?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
   burgerIds?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
   limit?: InputMaybe<Scalars['Int']>;
+  matchOnly?: InputMaybe<Scalars['Boolean']>;
   maxBedrag?: InputMaybe<Scalars['Int']>;
   minBedrag?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
@@ -2703,6 +2704,7 @@ export type GetSearchAfsprakenQueryVariables = Exact<{
   max_bedrag?: InputMaybe<Scalars['Int']>;
   zoektermen?: InputMaybe<Array<InputMaybe<Scalars['String']>> | InputMaybe<Scalars['String']>>;
   transaction_description?: InputMaybe<Scalars['String']>;
+  match_only?: InputMaybe<Scalars['Boolean']>;
 }>;
 
 
@@ -7331,7 +7333,7 @@ export type GetSaldoQueryHookResult = ReturnType<typeof useGetSaldoQuery>;
 export type GetSaldoLazyQueryHookResult = ReturnType<typeof useGetSaldoLazyQuery>;
 export type GetSaldoQueryResult = Apollo.QueryResult<GetSaldoQuery, GetSaldoQueryVariables>;
 export const GetSearchAfsprakenDocument = gql`
-    query getSearchAfspraken($offset: Int, $limit: Int, $afspraken: [Int], $afdelingen: [Int], $tegenrekeningen: [Int], $burgers: [Int], $only_valid: Boolean, $min_bedrag: Int, $max_bedrag: Int, $zoektermen: [String], $transaction_description: String) {
+    query getSearchAfspraken($offset: Int, $limit: Int, $afspraken: [Int], $afdelingen: [Int], $tegenrekeningen: [Int], $burgers: [Int], $only_valid: Boolean, $min_bedrag: Int, $max_bedrag: Int, $zoektermen: [String], $transaction_description: String, $match_only: Boolean) {
   searchAfspraken(
     offset: $offset
     limit: $limit
@@ -7344,6 +7346,7 @@ export const GetSearchAfsprakenDocument = gql`
     maxBedrag: $max_bedrag
     zoektermen: $zoektermen
     transactionDescription: $transaction_description
+    matchOnly: $match_only
   ) {
     afspraken {
       id
@@ -7392,6 +7395,7 @@ export const GetSearchAfsprakenDocument = gql`
  *      max_bedrag: // value for 'max_bedrag'
  *      zoektermen: // value for 'zoektermen'
  *      transaction_description: // value for 'transaction_description'
+ *      match_only: // value for 'match_only'
  *   },
  * });
  */

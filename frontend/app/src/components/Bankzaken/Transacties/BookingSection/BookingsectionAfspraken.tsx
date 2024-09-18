@@ -15,6 +15,9 @@ import InactiveAgreementModal from "./InactiveAgreementModal";
 
 export function isSuggestie(suggestie: Afspraak, transaction: BankTransaction): boolean {
 	//Only check on zoektermen because the backend checks on iban (on organisation level)
+	if (suggestie.zoektermen == null || suggestie.zoektermen?.length == 0) {
+		return false
+	}
 	if (suggestie.zoektermen?.every(zoekterm => transaction.informationToAccountOwner?.includes(zoekterm))) {
 		return true
 	}

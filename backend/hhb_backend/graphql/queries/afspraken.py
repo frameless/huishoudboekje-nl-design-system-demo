@@ -12,7 +12,8 @@ from hhb_backend.graphql.utils.sort_result import sort_result
 
 
 class AfspraakQuery:
-    return_type = graphene.Field(afspraak.Afspraak, id=graphene.Int(required=True))
+    return_type = graphene.Field(
+        afspraak.Afspraak, id=graphene.Int(required=True))
 
     @classmethod
     def resolver(cls, _, info, id):
@@ -26,7 +27,6 @@ class AfspraakQuery:
         return hhb_dataloader().afspraken.load_one(id)
 
 
-
 class AfsprakenByUuidsQuery:
     return_type = graphene.List(
         afspraak.Afspraak,
@@ -36,22 +36,23 @@ class AfsprakenByUuidsQuery:
     @classmethod
     def resolver(cls, _, info, uuids=None):
         logging.info(f"Get afspraken by uuid")
-        if(uuids is None or len(uuids) == 0):
+        if (uuids is None or len(uuids) == 0):
             return None
         afspraken = hhb_dataloader().afspraken.by_uuids(uuids)
         AuditLogging.create(
             action=info.field_name,
-                entities=[
-                    GebruikersActiviteitEntity(
-                        entityType="afspraak", entityId=afspraak.id)
-                    for afspraak in afspraken
-                ]
-            )
+            entities=[
+                GebruikersActiviteitEntity(
+                    entityType="afspraak", entityId=afspraak.id)
+                for afspraak in afspraken
+            ]
+        )
         return sorted(afspraken, key=lambda i: uuids.index(i.uuid))
+
 
 class AfsprakenQuery:
     return_type = graphene.List(afspraak.Afspraak, ids=graphene.List(graphene.Int),
-        isLogRequest=graphene.Boolean(required=False))
+                                isLogRequest=graphene.Boolean(required=False))
 
     @classmethod
     def resolver(cls, _, info, ids=None, isLogRequest=False):
@@ -60,7 +61,7 @@ class AfsprakenQuery:
             result = sort_result(ids,  hhb_dataloader().afspraken.load(ids))
         else:
             result = hhb_dataloader().afspraken.load_all()
-        
+
         AuditLogging().create(
             logRequest=isLogRequest,
             action=info.field_name,
@@ -70,24 +71,26 @@ class AfsprakenQuery:
             ] if ids else []
         )
         return result if not isLogRequest or isLogRequest and len(result) > 0 else None
-    
+
 
 class SearchAfsprakenQuery:
-    return_type = graphene.Field(afspraak.AfsprakenPaged, 
-                                offset=graphene.Int(),
-                                limit=graphene.Int(),
-                                afspraak_ids=graphene.List(graphene.Int),
-                                burger_ids=graphene.List(graphene.Int),
-                                afdeling_ids=graphene.List(graphene.Int),
-                                tegen_rekening_ids=graphene.List(graphene.Int),
-                                only_valid=graphene.Boolean(), 
-                                min_bedrag=graphene.Int(),
-                                max_bedrag=graphene.Int(),
-                                zoektermen=graphene.List(graphene.String),
-                                transaction_description=graphene.String())
+    return_type = graphene.Field(afspraak.AfsprakenPaged,
+                                 offset=graphene.Int(),
+                                 limit=graphene.Int(),
+                                 afspraak_ids=graphene.List(graphene.Int),
+                                 burger_ids=graphene.List(graphene.Int),
+                                 afdeling_ids=graphene.List(graphene.Int),
+                                 tegen_rekening_ids=graphene.List(
+                                     graphene.Int),
+                                 only_valid=graphene.Boolean(),
+                                 min_bedrag=graphene.Int(),
+                                 max_bedrag=graphene.Int(),
+                                 zoektermen=graphene.List(graphene.String),
+                                 transaction_description=graphene.String(),
+                                 match_only=graphene.Boolean())
 
     @classmethod
-    def resolver(cls, _, info, offset=None, limit=None, afspraak_ids=None, burger_ids=None, afdeling_ids=None, tegen_rekening_ids=None, only_valid=None, min_bedrag=None, max_bedrag=None, zoektermen=None, transaction_description=None):
+    def resolver(cls, _, info, offset=None, limit=None, afspraak_ids=None, burger_ids=None, afdeling_ids=None, tegen_rekening_ids=None, only_valid=None, min_bedrag=None, max_bedrag=None, zoektermen=None, transaction_description=None, match_only=False):
         logging.info(f"Get afspraken paged")
 
         afspraken_filter_builder = AfsprakenGetRequestBuilder()
@@ -105,7 +108,7 @@ class SearchAfsprakenQuery:
 
         if tegen_rekening_ids is not None:
             afspraken_filter_builder.by_tegen_rekening_ids(tegen_rekening_ids)
-        
+
         if only_valid is not None:
             afspraken_filter_builder.by_valid(only_valid)
 
@@ -119,16 +122,20 @@ class SearchAfsprakenQuery:
             afspraken_filter_builder.by_zoektermen(zoektermen)
 
         if transaction_description is not None:
-            afspraken_filter_builder.order_by_transaction_description_matches(transaction_description)
+            afspraken_filter_builder.order_by_transaction_description_matches(
+                transaction_description)
 
-        result = hhb_dataloader().afspraken_concept.load_request(afspraken_filter_builder.request)
-        
+        afspraken_filter_builder.give_matches_only(match_only)
+
+        result = hhb_dataloader().afspraken_concept.load_request(
+            afspraken_filter_builder.request)
+
         AuditLogging.create(
             action=info.field_name,
             entities=[
-                GebruikersActiviteitEntity(entityType="afspraak", entityId=resultAfspraak.get("id"))
+                GebruikersActiviteitEntity(
+                    entityType="afspraak", entityId=resultAfspraak.get("id"))
                 for resultAfspraak in result["afspraken"]
             ] if result else []
         )
         return result
-

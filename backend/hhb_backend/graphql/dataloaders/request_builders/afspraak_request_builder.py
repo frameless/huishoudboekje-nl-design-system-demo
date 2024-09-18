@@ -20,19 +20,19 @@ class AfsprakenGetRequestBuilder(GetRequestBuilder):
     def by_afdeling_ids(self, afdeling_ids: list[int]):
         self._request.add_to_filter("afdeling_ids", afdeling_ids)
         return self
-    
+
     def by_tegen_rekening_ids(self, tegen_rekening_ids: list[int]):
         self._request.add_to_filter("tegen_rekening_ids", tegen_rekening_ids)
         return self
-    
+
     def by_valid(self, only_valid: bool):
         self._request.add_to_filter("only_valid", only_valid)
         return self
-    
+
     def by_min_bedrag(self, min_bedrag: int):
         self._request.add_to_filter("min_bedrag", min_bedrag)
         return self
-    
+
     def by_max_bedrag(self, max_bedrag: int):
         self._request.add_to_filter("max_bedrag", max_bedrag)
         return self
@@ -40,6 +40,12 @@ class AfsprakenGetRequestBuilder(GetRequestBuilder):
     def by_zoektermen(self, zoektermen: list[str]):
         self._request.add_to_filter("zoektermen", zoektermen)
         return self
-    
+
     def order_by_transaction_description_matches(self, transaction_description: str):
-        self._request.add_to_filter("transaction_description", transaction_description)
+        self._request.add_to_filter(
+            "transaction_description", transaction_description)
+        return self
+
+    def give_matches_only(self, match_only: bool):
+        self._request.add_to_filter("match_only", match_only)
+        return self

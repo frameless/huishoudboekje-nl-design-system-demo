@@ -69,7 +69,7 @@ type RootQuery {
   afspraak(id: Int!): Afspraak
   afsprakenUuid(uuids: [String]): [Afspraak]
   afspraken(ids: [Int], isLogRequest: Boolean): [Afspraak]
-  searchAfspraken(offset: Int, limit: Int, afspraakIds: [Int], burgerIds: [Int], afdelingIds: [Int], tegenRekeningIds: [Int], onlyValid: Boolean, minBedrag: Int, maxBedrag: Int, zoektermen: [String], transactionDescription: String): AfsprakenPaged
+  searchAfspraken(offset: Int, limit: Int, afspraakIds: [Int], burgerIds: [Int], afdelingIds: [Int], tegenRekeningIds: [Int], onlyValid: Boolean, minBedrag: Int, maxBedrag: Int, zoektermen: [String], transactionDescription: String, matchOnly: Boolean): AfsprakenPaged
   bankTransaction(uuid: String!): BankTransaction
   bankTransactions(filters: BankTransactionFilter): [BankTransaction]
   searchTransacties(offset: Int, limit: Int, filters: BankTransactionSearchFilter): BankTransactionsPaged
