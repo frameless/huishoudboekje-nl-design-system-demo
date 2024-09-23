@@ -98,6 +98,11 @@ public class TransactionRepository(BankServiceContext dbContext, ITransactionDbM
         predicate.And(transaction => transaction.InformationToAccountOwner.ToLower().Contains(word.ToLower()));
       }
     }
+
+    if (filters.Exclude != null)
+    {
+      predicate.And(transaction => !filters.Exclude.Contains(transaction.Uuid.ToString()));
+    }
     return new WhereCommandDecorator<Transaction>(command, predicate);
   }
 }
