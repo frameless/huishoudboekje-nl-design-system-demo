@@ -1,8 +1,6 @@
 from dataclasses import dataclass, field, asdict
 
 
-
-
 @dataclass
 class TransactionsFilter:
     customerStatementMessageUuids: list[str] = field(default=None)
@@ -15,10 +13,11 @@ class TransactionsFilter:
     endDate: int = field(default=None)
     isReconciled: bool = field(default=None)
     isCredit: int = field(default=None)
+    exclude: list[str] = field(default=None)
 
     def to_dict(self):
         return asdict(self)
-    
+
 
 @dataclass
 class PaginationRequest:
@@ -35,7 +34,8 @@ class GetTransactionsMessage:
 
     def to_dict(self):
         return asdict(self)
-    
+
+
 @dataclass
 class GetTransactionsPagedMessage:
     pagination: PaginationRequest = field(default=None)

@@ -63,7 +63,7 @@ class HuishoudboekjeserviceRepository:
             f"{self.HHB_SERVICES_URL}/afspraken/transactions", json=json)
 
         return response.json()
-    
+
     def get_citizen_ids_for_alarms(self, alarm_ids):
         json = {
             "alarm_ids": alarm_ids
@@ -73,6 +73,16 @@ class HuishoudboekjeserviceRepository:
             f"{self.HHB_SERVICES_URL}/citizens", json=json
         )
 
+        return response.json()
+
+    def get_journalentries_rubrics(self):
+        json = {
+            "only_rubrieken": True,
+            "burger_ids": []
+        }
+
+        response = requests.get(
+            f"{self.HHB_SERVICES_URL}/burgers/transacties", json=json)
         return response.json()
 
     def get_rekeningen(self):
