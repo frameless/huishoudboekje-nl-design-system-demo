@@ -59,13 +59,6 @@ Given('the "Add key-value pair form" is displayed', () => {
 
 });
 
-When('I open the "Citizen details" page for the "Carly Padilla" citizen', () => {
-
-  // Navigate to citizen
-  burgers.openBurger('Carly Padilla');
-
-});
-
 When('I set the "Partij" option to "Organisatie"', () => {
 
   cy.get('[data-test="radio.agreementOrganization"]')

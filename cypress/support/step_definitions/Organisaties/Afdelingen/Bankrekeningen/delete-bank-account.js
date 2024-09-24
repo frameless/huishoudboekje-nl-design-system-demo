@@ -1,8 +1,10 @@
 
 import { Given, When, Then, Step } from "@badeball/cypress-cucumber-preprocessor";
 
+import Burgers from "../../../../../pages/Burgers";
 import BurgersDetails from "../../../../../pages/BurgerDetails";
 
+const burgers = new Burgers();
 const burgerDetails = new BurgersDetails();
 
 const modalWait = 4000;
@@ -49,14 +51,11 @@ Given('the "NL86INGB0002445588" bank account exists', () => {
 
 Given('an agreement link to the department and the bank account exists', () => {
 
+  // Create agreement
+  burgerDetails.insertAfspraak('Bingus', "Voorschot kindgebonden budget", "100.00", 'NL86INGB0002445588', '1',  'true', '2024-01-01');
+
   // Navigate to civilian page
-  cy.visit('/burgers');
-  cy.url().should('eq', Cypress.config().baseUrl + '/burgers')
-  cy.get('input[placeholder="Zoeken"]')
-    .type('Fien');
-  cy.contains('Sandra de Jager')
-    .click();
-  cy.url().should('include', Cypress.config().baseUrl + '/burgers/')
+  burgers.openBurger('Dingus Bingus')
 
   // Assertion 1
   cy.contains('Belastingdienst Toeslagen Kantoor Utrecht ')
