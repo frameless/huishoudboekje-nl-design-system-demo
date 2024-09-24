@@ -452,6 +452,40 @@ class Api {
     console.log("Truncated table 'paymentrecords'")
   }
 
+  truncatePaymentexports() {
+
+    const queryTruncatePaymentexports = `mutation Truncate {
+      truncateTable(databaseName: "banktransactieservice", tableName: "paymentexports")
+    }`
+
+    cy.request({
+      method: "post",
+      url: Cypress.env().graphqlUrl + '/graphql',
+      body: { query: queryTruncatePaymentexports },
+    }).then((res) => {
+      console.log(res.body);
+    });
+    cy.log("Truncated table 'paymentexports'")
+    console.log("Truncated table 'paymentexports'")
+  }
+
+  truncateAfspraken() {
+
+    const queryTruncateAfspraken = `mutation Truncate {
+      truncateTable(databaseName: "huishoudboekjeservice", tableName: "afspraken")
+    }`
+
+    cy.request({
+      method: "post",
+      url: Cypress.env().graphqlUrl + '/graphql',
+      body: { query: queryTruncateAfspraken },
+    }).then((res) => {
+      console.log(res.body);
+    });
+    cy.log("Truncated table 'afspraken'")
+    console.log("Truncated table 'afspraken'")
+  }
+
   createTestBurger() {
     // Create a test user
     cy.request({

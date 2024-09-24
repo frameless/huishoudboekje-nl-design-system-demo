@@ -111,7 +111,16 @@ BeforeAll({ order: 3 },function () {
   api.createTestBurger()
   api.createTestBurgerABCDEFGHIJZ()
 
+  // Clean up
+  api.truncateAlarms()
+  api.truncateSignals()
+  api.truncateAfspraken()
+  api.truncatePaymentrecords()
+  api.truncatePaymentexports()
+  api.truncateBankTransactions()
+
 });
+
 
 Before({ order: 1 },function () {
 
@@ -142,7 +151,9 @@ AfterAll({ order: 1 },function () {
   // Clean up
   api.truncateAlarms()
   api.truncateSignals()
+  api.truncateAfspraken()
   api.truncatePaymentrecords()
+  api.truncatePaymentexports()
   api.truncateBankTransactions()
 
 });

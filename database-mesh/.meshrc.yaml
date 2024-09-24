@@ -10,6 +10,7 @@ sources:
 additionalTypeDefs: |
   extend type Mutation {
     truncateTable(databaseName: String!, tableName: String!): Boolean!
+    truncateAll: Boolean!
   }
 additionalResolvers:
   - './resolvers'
