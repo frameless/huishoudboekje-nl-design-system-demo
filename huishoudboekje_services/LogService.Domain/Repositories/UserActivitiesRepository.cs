@@ -1,5 +1,4 @@
 using Core.CommunicationModels;
-using Core.CommunicationModels.LogModels;
 using Core.CommunicationModels.LogModels.Interfaces;
 using Core.Database.DatabaseCommands;
 using Core.Database.Repositories;
@@ -33,35 +32,52 @@ public class UserActivitiesRepository : BaseRepository<UserActivities>, IUserAct
         new GetMultipleByIdCommand<UserActivities>(activity => ids.Contains(activity.Uuid.ToString()))));
   }
 
-  public async Task<Paged<IUserActivityLog>> GetPaged(Pagination pagination, IList<UserActivityEntityFilter>? filters)
+  public async Task<Paged<IUserActivityLog>> GetPaged(Pagination pagination, IUserActivityFilter filters)
   {
     var orderCommand = new OrderByCommandDecorator<UserActivities>(
-      filters is { Count: > 0 } ? DecorateFilters(new GetAllUserActivities(), filters) : new GetAllUserActivities(),
+      HasFilters(filters) ? DecorateFilters(new GetAllUserActivities(), filters) : new GetAllUserActivities(),
       x => x.Timestamp,
       desc: true);
     PagedCommandDecorator<UserActivities> pagedCommand = new(orderCommand, pagination);
     return _mapper.GetPagedCommunicationModels(await ExecuteCommand(pagedCommand));
   }
 
-  public async Task<IList<IUserActivityLog>> GetAll(IList<UserActivityEntityFilter>? filters)
+  public async Task<IList<IUserActivityLog>> GetAll(IUserActivityFilter filters)
   {
     return _mapper.GetCommunicationModels(
       await ExecuteCommand(
-        filters is { Count: > 0 } ? DecorateFilters(new GetAllUserActivities(), filters) : new GetAllUserActivities()));
+        HasFilters(filters) ? DecorateFilters(new GetAllUserActivities(), filters) : new GetAllUserActivities()));
   }
 
   private IDatabaseDecoratableCommand<UserActivities> DecorateFilters(
     IDatabaseDecoratableCommand<UserActivities> command,
-    IList<UserActivityEntityFilter> filters)
+    IUserActivityFilter filters)
   {
-    var predicate = PredicateBuilder.New<UserActivities>(false);
-    foreach (var filter in filters)
+    ExpressionStarter<UserActivities>? predicate = PredicateBuilder.New<UserActivities>(false);
+    if (filters.EntityFilters?.Count > 0)
     {
-        predicate = predicate.Or(userActivities =>
-            userActivities.Entities.Any(entity => entity.EntityType.Equals(filter.EntityType) &&
-                                                  filter.EntityIds.Contains(entity.EntityId)));
+      foreach (var entityFilter in filters.EntityFilters)
+      {
+        predicate = predicate.Or(
+          userActivities =>
+            userActivities.Entities.Any(
+              entity => entity.EntityType.Equals(entityFilter.EntityType) &&
+                        entityFilter.EntityIds.Contains(entity.EntityId)));
+      }
+    }
+
+    if (filters.TypeFilters?.Count > 0)
+    {
+        List<int?> types = filters.TypeFilters.Select(filter => filter.Id).ToList();
+        predicate.And(activity => types.Contains(activity.Type));
     }
 
     return new WhereCommandDecorator<UserActivities>(command, predicate);
+  }
+
+  private bool HasFilters(IUserActivityFilter filters)
+  {
+    return filters.EntityFilters?.Count > 0 ||
+           filters.TypeFilters?.Count > 0;
   }
 }

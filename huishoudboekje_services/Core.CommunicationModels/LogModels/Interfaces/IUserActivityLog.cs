@@ -7,7 +7,8 @@ public interface IUserActivityLog
     string? UserId { get; }
     string Action { get; }
     long Timestamp { get; }
-    string? SnapshotBefore { get; }
-    string? SnapshotAfter { get; }
+    string? SnapshotBefore { get; set; }
+    string? SnapshotAfter { get; set; }
     string Meta { get; }
+    int Type { get; set; }
 }

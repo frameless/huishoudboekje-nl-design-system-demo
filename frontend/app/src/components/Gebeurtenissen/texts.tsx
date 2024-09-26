@@ -57,9 +57,25 @@ export const auditLogTexts = (values, components, action) => {
 		createBurger: () => <Trans i18nKey={"auditLog.createBurger"} values={values} components={components} />,
 		updateBurger: () => <Trans i18nKey={"auditLog.updateBurger"} values={values} components={components} />,
 		deleteBurger: () => <Trans i18nKey={"auditLog.deleteBurger"} values={values} components={components} />,
-		createAfspraak: () => <Trans i18nKey={"auditLog.createAfspraak"} values={values} components={components} />,
-		updateAfspraak: () => <Trans i18nKey={"auditLog.updateAfspraak"} values={values} components={components} />,
-		deleteAfspraak: () => <Trans i18nKey={"auditLog.deleteAfspraak"} values={values} components={components} />,
+		createAfspraak: () => {
+			if (values.isAfspraakWithBurger) {
+				return <Trans i18nKey={"auditLog.createAfspraakBurger"} values={values} components={components} />
+			}
+			return <Trans i18nKey={"auditLog.createAfspraak"} values={values} components={components} />
+
+		},
+		updateAfspraak: () => {
+			if (values.isAfspraakWithBurger) {
+				return <Trans i18nKey={"auditLog.updateAfspraakBurger"} values={values} components={components} />
+			}
+			return <Trans i18nKey={"auditLog.updateAfspraak"} values={values} components={components} />
+		},
+		deleteAfspraak: () => {
+			if (values.isAfspraakWithBurger) {
+				return <Trans i18nKey={"auditLog.deleteAfspraakBurger"} values={values} components={components} />
+			}
+			return <Trans i18nKey={"auditLog.deleteAfspraak"} values={values} components={components} />
+		},
 		updateRekening: () => <Trans i18nKey={"auditLog.updateRekening"} values={values} components={components} />,
 		createOrganisatie: () => <Trans i18nKey={"auditLog.createOrganisatie"} values={values} components={components} />,
 		updateOrganisatie: () => <Trans i18nKey={"auditLog.updateOrganisatie"} values={values} components={components} />,

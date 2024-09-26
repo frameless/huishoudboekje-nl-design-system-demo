@@ -50,27 +50,27 @@ class CreateAfspraak(graphene.Mutation):
             "oneOf": [
                 {
                     "properties": {
-                        "omschrijving": {"type": "string","minLength": 1},
+                        "omschrijving": {"type": "string", "minLength": 1},
                         "bedrag": {"type": "integer", "minimum": 0},
                         "valid_from": {"type": "string", "format": "date"},
                         "valid_through": {"type": "string", "format": "date"},
-                        "zoektermen": {  "type": "array", "items": {"type": "string", "minLength": 1 } },
-                        "postadres_id": { "type": "null" },
-                        "afdeling_id": { "type": "null" }
+                        "zoektermen": {"type": "array", "items": {"type": "string", "minLength": 1}},
+                        "postadres_id": {"type": "null"},
+                        "afdeling_id": {"type": "null"}
                     },
-                    "required": ["postadres_id","afdeling_id"]
+                    "required": ["postadres_id", "afdeling_id"]
                 },
                 {
                     "properties": {
-                        "omschrijving": {"type": "string","minLength": 1},
+                        "omschrijving": {"type": "string", "minLength": 1},
                         "bedrag": {"type": "integer", "minimum": 0},
                         "valid_from": {"type": "string", "format": "date"},
                         "valid_through": {"type": "string", "format": "date"},
-                        "zoektermen": {  "type": "array", "items": {"type": "string", "minLength": 1 } },
-                        "postadres_id": {"type": "string","format": "uuid"},
-                        "afdeling_id": { "type": "integer", "minimum": 0 }
+                        "zoektermen": {"type": "array", "items": {"type": "string", "minLength": 1}},
+                        "postadres_id": {"type": "string", "format": "uuid"},
+                        "afdeling_id": {"type": "integer", "minimum": 0}
                     },
-                    "required": ["postadres_id","afdeling_id"]
+                    "required": ["postadres_id", "afdeling_id"]
                 }
             ]
         }
@@ -97,7 +97,8 @@ class CreateAfspraak(graphene.Mutation):
         # check afdeling_id - optional
         afdeling_id = input.get("afdeling_id")
         if afdeling_id is not None:
-            afdeling_result: graphene_afdeling.Afdeling = hhb_dataloader().afdelingen.load_one(afdeling_id)
+            afdeling_result: graphene_afdeling.Afdeling = hhb_dataloader(
+            ).afdelingen.load_one(afdeling_id)
             if not afdeling_result:
                 raise GraphQLError("afdeling not found")
 
@@ -112,24 +113,31 @@ class CreateAfspraak(graphene.Mutation):
         betaalinstructie = input.get("betaalinstructie")
         if betaalinstructie is not None:
             try:
-                validate_afspraak_betaalinstructie(input.get("credit"), input.betaalinstructie)
+                validate_afspraak_betaalinstructie(
+                    input.get("credit"), input.betaalinstructie)
             except Exception as e:
                 logging.exception(f"Invalid betaalinstructie {e}")
                 raise e
 
         # final create call
-        response = requests.post(f"{settings.HHB_SERVICES_URL}/afspraken/", json=input)
+        response = requests.post(
+            f"{settings.HHB_SERVICES_URL}/afspraken/", json=input)
         if response.status_code != 201:
             raise GraphQLError(f"Upstream API responded: {response.text}")
         afspraak = response.json()["data"]
 
+        entities = [GebruikersActiviteitEntity(entityType="afspraak", entityId=afspraak["id"]),
+                    GebruikersActiviteitEntity(
+            entityType="burger", entityId=afspraak["burger_id"])]
+        if afspraak["afdeling_id"] != None:
+            entities.append(GebruikersActiviteitEntity(
+                entityType="afdeling", entityId=afspraak["afdeling_id"]))
+
+        logging.warning(entities)
+
         AuditLogging.create(
             action=info.field_name,
-            entities=[
-                GebruikersActiviteitEntity(entityType="afspraak", entityId=afspraak["id"]),
-                GebruikersActiviteitEntity(entityType="burger", entityId=afspraak["burger_id"]),
-                GebruikersActiviteitEntity(entityType="afdeling", entityId=afspraak["afdeling_id"]),
-            ],
+            entities=entities,
             after=dict(afspraak=afspraak),
         )
 

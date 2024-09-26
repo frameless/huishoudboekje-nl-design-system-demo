@@ -32,6 +32,11 @@ public class UserActivities : DatabaseModel
     [Column("meta")]
     public string Meta { get; set; } = null!;
 
+    [Column("activity_type")]
+    [ForeignKey("UserActivityType")]
+    public int Type { get; set; }
+    public UserActivityType UserActivityType { get; set; }
+
     public ICollection<UserActivityEntities> Entities { get; set; } = new List<UserActivityEntities>();
 
 }

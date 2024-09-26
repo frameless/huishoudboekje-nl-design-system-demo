@@ -7,7 +7,7 @@ namespace LogService.Database.Repositories;
 
 public interface IUserActivitiesRepository
 {
-    public Task<IList<IUserActivityLog>> GetAll(IList<UserActivityEntityFilter>? filters);
+    public Task<IList<IUserActivityLog>> GetAll(IUserActivityFilter filters);
 
     // public Task<IUserActivityLog> GetById(string id);
 
@@ -15,5 +15,5 @@ public interface IUserActivitiesRepository
 
     public Task<IList<IUserActivityLog>> GetMultipleById(IList<string> ids);
 
-    public Task<Paged<IUserActivityLog>> GetPaged(Pagination pagination, IList<UserActivityEntityFilter>? filters);
+    public Task<Paged<IUserActivityLog>> GetPaged(Pagination pagination, IUserActivityFilter filters);
 }

@@ -31,24 +31,36 @@ class DeleteAfspraak(graphene.Mutation):
 
         # Check if afspraak in use by journaalposten
         if previous.journaalposten:
-            raise GraphQLError("Afspraak is linked to one or multiple journaalposten - deletion is not possible.")
+            raise GraphQLError(
+                "Afspraak is linked to one or multiple journaalposten - deletion is not possible.")
 
         try:
             deleteAlarmsProducer = DeleteAlarmsProducer.create(
-                [previous.alarm_id], [] , True)
+                [previous.alarm_id], [], True)
         except:
             raise GraphQLError(f"Failed deleting alarms for this citizen")
 
-        response = requests.delete(f"{settings.HHB_SERVICES_URL}/afspraken/{id}")
+        response = requests.delete(
+            f"{settings.HHB_SERVICES_URL}/afspraken/{id}")
         if response.status_code != 204:
             raise GraphQLError(f"Upstream API responded: {response.text}")
+
+        entities = [GebruikersActiviteitEntity(entityType="afspraak", entityId=id),
+                    GebruikersActiviteitEntity(
+            entityType="burger", entityId=previous["burger_id"])]
+        if previous["afdeling_id"] != None:
+            entities.append(GebruikersActiviteitEntity(
+                entityType="afdeling", entityId=previous["afdeling_id"]))
 
         AuditLogging.create(
             action=info.field_name,
             entities=[
-                GebruikersActiviteitEntity(entityType="afspraak", entityId=id),
-                GebruikersActiviteitEntity(entityType="burger", entityId=previous["burger_id"]),
-                GebruikersActiviteitEntity(entityType="afdeling", entityId=previous["afdeling_id"])
+                GebruikersActiviteitEntity(
+                    entityType="afspraak", entityId=previous["id"]),
+                GebruikersActiviteitEntity(
+                    entityType="burger", entityId=previous["burger_id"]),
+                GebruikersActiviteitEntity(
+                    entityType="afdeling", entityId=previous["afdeling_id"])
             ],
             before=dict(afspraak=previous),
         )

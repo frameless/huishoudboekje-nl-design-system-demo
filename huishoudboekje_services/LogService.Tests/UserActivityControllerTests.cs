@@ -12,7 +12,7 @@ public class UserActivityControllerTests
 {
   private IUserActivitiesRepository _fakeRepository;
   private UserActivitiesController _sut;
-  private readonly IList<UserActivityEntityFilter>? NOFILTERS = null;
+  private readonly IUserActivityFilter? NOFILTERS = null;
 
   // Example data
 
@@ -94,13 +94,17 @@ public class UserActivityControllerTests
   {
     // Arrange
     IList<IUserActivityLog> expected = exampleUserActivityLogs;
-    var filter = new List<UserActivityEntityFilter>
+    var filter = new UserActivityFilter()
     {
-      new()
-      {
-        EntityIds = new List<string> { "26db6f48-f137-4c25-9c5f-bf3199466162" },
-        EntityType = "Configuratie"
-      }
+      EntityFilters =
+        new List<IUserActivityEntityFilter>()
+        {
+          new UserActivityEntityFilter()
+          {
+            EntityIds = new List<string> { "26db6f48-f137-4c25-9c5f-bf3199466162" },
+            EntityType = "Configuratie"
+          }
+        }
     };
     A.CallTo(() => _fakeRepository.GetAll(filter)).Returns(Task.FromResult(expected));
 
@@ -158,13 +162,17 @@ public class UserActivityControllerTests
     Paged<IUserActivityLog> expected1 = new Paged<IUserActivityLog>(
       [exampleUserActivityLogs[0]],
       1);
-    var filter = new List<UserActivityEntityFilter>
+    var filter = new UserActivityFilter()
     {
-      new()
-      {
-        EntityIds = new List<string> { "26db6f48-f137-4c25-9c5f-bf3199466162" },
-        EntityType = "Configuratie"
-      }
+      EntityFilters =
+        new List<IUserActivityEntityFilter>()
+        {
+          new UserActivityEntityFilter()
+          {
+            EntityIds = new List<string> { "26db6f48-f137-4c25-9c5f-bf3199466162" },
+            EntityType = "Configuratie"
+          }
+        }
     };
 
     A.CallTo(() => _fakeRepository.GetPaged(A<Pagination>.That.Matches(p => p.Take == 1 && p.Skip == 0), filter))

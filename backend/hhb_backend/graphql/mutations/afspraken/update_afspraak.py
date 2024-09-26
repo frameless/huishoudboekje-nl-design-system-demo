@@ -146,15 +146,16 @@ class UpdateAfspraak(graphene.Mutation):
                 UpdateEndDateAlarm.create(
                     alarmUuid=afspraak["alarm_id"], newEndDate=updated_end_date)
 
+        entities = [GebruikersActiviteitEntity(entityType="afspraak", entityId=afspraak["id"]),
+                    GebruikersActiviteitEntity(
+                    entityType="burger", entityId=afspraak["burger_id"])]
+        if afspraak["afdeling_id"] != None:
+            entities.append(GebruikersActiviteitEntity(
+                entityType="afdeling", entityId=afspraak["afdeling_id"]))
+
         AuditLogging.create(
             action=info.field_name,
-            entities=[
-                GebruikersActiviteitEntity(entityType="afspraak", entityId=id),
-                GebruikersActiviteitEntity(
-                    entityType="burger", entityId=afspraak["burger_id"]),
-                GebruikersActiviteitEntity(
-                    entityType="afdeling", entityId=afspraak["afdeling_id"])
-            ],
+            entities=entities,
             before=dict(afspraak=previous),
             after=dict(afspraak=afspraak),
         )

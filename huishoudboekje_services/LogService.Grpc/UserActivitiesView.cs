@@ -27,7 +27,7 @@ public class UserActivitiesView : UserActivities.UserActivitiesBase
         UserActivitiesRequest request,
         ServerCallContext context)
     {
-        IList<IUserActivityLog> userActivities = await _controller.GetAllItems(_mapper.GetUserActivityEntityFilters(request.Filter));
+        IList<IUserActivityLog> userActivities = await _controller.GetAllItems(_mapper.GetUserActivityFilter(request.Filter));
 
         UserActivitiesResponse res = new();
         res.UserActivities.AddRange(_mapper.GetGrpcObjects(userActivities));
@@ -41,7 +41,7 @@ public class UserActivitiesView : UserActivities.UserActivitiesBase
     {
         Pagination page = new(request.Page.Take, request.Page.Skip);
 
-        Paged<IUserActivityLog> userActivitiesPaged = await _controller.GetItemsPaged(page, _mapper.GetUserActivityEntityFilters(request.Filter));
+        Paged<IUserActivityLog> userActivitiesPaged = await _controller.GetItemsPaged(page, _mapper.GetUserActivityFilter(request.Filter));
 
         UserActivitiesPagedResponse res = new();
 

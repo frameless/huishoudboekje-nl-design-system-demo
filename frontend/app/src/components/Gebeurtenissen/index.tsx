@@ -1,12 +1,15 @@
-import React from "react";
+import React, {useState} from "react";
+import Select from "react-select";
 import {useTranslation} from "react-i18next";
-import {UserActivityData, useGetUserActivitiesQuery} from "../../generated/graphql";
-import Queryable, { Loading } from "../../utils/Queryable";
+import {ActivityTypeFilter, UserActivitiesPagedRequest, UserActivityData, useGetUserActivitiesQuery} from "../../generated/graphql";
+import Queryable, {Loading} from "../../utils/Queryable";
 import usePagination from "../../utils/usePagination";
 import Page from "../shared/Page";
 import Section from "../shared/Section";
 import SectionContainer from "../shared/SectionContainer";
 import GebeurtenissenTableView from "./GebeurtenissenTableView";
+import {FormControl, FormErrorMessage, FormLabel, Stack} from "@chakra-ui/react";
+import {defaultProps} from "react-select/dist/declarations/src/Select";
 
 const Gebeurtenissen = () => {
 	const {t} = useTranslation();
@@ -14,18 +17,53 @@ const Gebeurtenissen = () => {
 		pageSize: 25,
 	});
 
+	const [selectedLogTypes, setSelectedLogTypes] = useState<number[]>([2])
+
+	const options = [
+		{"Name": "query", "Id": 1},
+		{"Name": "mutation", "Id": 2}
+	]
+
 	const $gebeurtenissen = useGetUserActivitiesQuery({
 		fetchPolicy: "cache-and-network",
+
 		variables: {
-			input: {
-				page: {
-					skip: offset,
-					take: pageSize
-				}
-			}
+			input: getQueryVariables()
 		},
 		onCompleted: data => setTotal(data.UserActivities_GetUserActivitiesPaged?.PageInfo?.total_count || 0),
 	});
+
+	function onSelectFilter(filters) {
+		const ids: number[] = []
+		filters.forEach(filter => {
+			ids.push(filter.value)
+		})
+		setSelectedLogTypes(ids)
+	}
+
+	function getQueryVariables(): UserActivitiesPagedRequest {
+		if (selectedLogTypes.length > 0) {
+			const filters: ActivityTypeFilter[] = [];
+			selectedLogTypes.forEach(type => {
+				filters.push({id: type})
+			})
+			return {
+				page: {
+					skip: offset == 1 ? 0 : offset,
+					take: pageSize
+				},
+				Filter: {
+					activityTypeFilter: filters
+				}
+			}
+		}
+		return {
+			page: {
+				skip: offset == 1 ? 0 : offset,
+				take: pageSize
+			}
+		}
+	}
 
 	return (
 		<Page title={t("pages.gebeurtenissen.title")}>
@@ -33,8 +71,34 @@ const Gebeurtenissen = () => {
 				const gs: UserActivityData[] = data.UserActivities_GetUserActivitiesPaged?.data || [];
 				return (
 					<SectionContainer>
-						<Section title={t("pages.gebeurtenissen.title")} helperText={t("pages.gebeurtenissen.helperText")} right={<PaginationButtons />}>
-							{$gebeurtenissen.loading ? <Loading/> : <GebeurtenissenTableView gebeurtenissen={gs} />}
+						<Section
+							title={t("pages.gebeurtenissen.title")}
+							right={<PaginationButtons />}
+							left={
+								<Stack w={200} direction={["column", "row"]}>
+									<FormControl flex={1}>
+										<FormLabel>{t("pages.gebeurtenissen.filter.title")}</FormLabel>
+										<Select
+											id={"postadres"}
+											placeholder={t("pages.gebeurtenissen.filter.placeholder")}
+											isMulti
+											isClearable
+											options={options.map(b => ({
+												key: b.Id,
+												value: b.Id,
+												label: t("pages.gebeurtenissen.filter.types." + b.Name),
+											}))}
+											onChange={(result) => {
+												onSelectFilter(result)
+											}}
+											defaultValue={{label: t("pages.gebeurtenissen.filter.types.mutation"), value: 2, key: 2}}
+
+										/>
+										<FormErrorMessage>{t("forms.afspraak.invalidPostadresError")}</FormErrorMessage>
+									</FormControl>
+								</Stack>}
+						>
+							{$gebeurtenissen.loading ? <Loading /> : <GebeurtenissenTableView gebeurtenissen={gs} />}
 						</Section>
 					</SectionContainer>
 				);

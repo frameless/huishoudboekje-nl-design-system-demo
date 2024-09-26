@@ -1,5 +1,7 @@
+using Core.Database.Seeding;
 using Core.ErrorHandling.Exceptions;
 using Grpc.Core;
+using LogService.Database.Contexts.DatabaseSeeders;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
@@ -36,5 +38,11 @@ public class LogServiceContext : DbContext
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.UseNpgsql(_conectionString);
+    }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+      base.OnModelCreating(modelBuilder);
+      modelBuilder.Seed(new UserActivityTypeSeeder());
     }
 }
