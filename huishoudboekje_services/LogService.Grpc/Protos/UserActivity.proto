@@ -61,6 +61,7 @@ message UserActivityData {
 
 message Filter {
   repeated EntityFilter entityFilter = 1;
+  repeated ActivityTypeFilter activityTypeFilter = 2;
 }
 
 message EntityFilter {
@@ -71,6 +72,10 @@ message EntityFilter {
 message Entity {
   string entityType = 1;
   string entityId = 2;
+}
+
+message ActivityTypeFilter {
+  int32 id = 1;
 }
 
 message Meta {

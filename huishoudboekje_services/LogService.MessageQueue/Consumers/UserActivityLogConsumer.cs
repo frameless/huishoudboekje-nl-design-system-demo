@@ -1,4 +1,5 @@
 using System.Text.Json;
+using Core.CommunicationModels.LogModels;
 using Core.CommunicationModels.LogModels.Interfaces;
 using LogService.Controllers.Controllers.UserActivities;
 using MassTransit;
@@ -23,6 +24,19 @@ public class UserActivityLogConsumer : IConsumer<IUserActivityLog>
     public Task Consume(ConsumeContext<IUserActivityLog> context)
     {
         _logger.LogDebug("Consuming message:" + JsonSerializer.Serialize(context.Message));
-        return _controller.AddItem(context.Message);
+        IUserActivityLog log = CorrectNoneToNull(context.Message);
+        return _controller.AddItem(log);
+    }
+
+    // This comes from python where None is translated not to NULL but "None". Didn't want to put this in the logic because
+    // it only happens here due to python
+    private IUserActivityLog CorrectNoneToNull(IUserActivityLog userActivityLog)
+    {
+      if (userActivityLog.SnapshotAfter == "None")
+        userActivityLog.SnapshotAfter = null;
+      if (userActivityLog.SnapshotBefore == "None")
+        userActivityLog.SnapshotBefore = null;
+
+      return userActivityLog;
     }
 }

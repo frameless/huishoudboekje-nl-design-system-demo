@@ -19,7 +19,7 @@ public class UserActivitiesController : IUserActivityController
     //     return await _repository.GetById(id);
     // }
 
-    public async Task<Paged<IUserActivityLog>> GetItemsPaged(Pagination pagination, IList<UserActivityEntityFilter>? filters)
+    public async Task<Paged<IUserActivityLog>> GetItemsPaged(Pagination pagination, IUserActivityFilter filters)
     {
         return await _repository.GetPaged(pagination, filters);
     }
@@ -29,13 +29,27 @@ public class UserActivitiesController : IUserActivityController
         return await _repository.GetMultipleById(ids);
     }
 
-    public async Task<IList<IUserActivityLog>> GetAllItems(IList<UserActivityEntityFilter>? filters)
+    public async Task<IList<IUserActivityLog>> GetAllItems(IUserActivityFilter filters)
     {
         return await _repository.GetAll(filters);
     }
 
     public async Task AddItem(IUserActivityLog userActivityLog)
     {
-        await _repository.Insert((userActivityLog));
+      if (userActivityLog.Type == 0)
+       userActivityLog = SetType(userActivityLog);
+
+      await _repository.Insert(userActivityLog);
+    }
+
+
+    private IUserActivityLog SetType(IUserActivityLog userActivity)
+    {
+      userActivity.Type = 1;
+
+      if (userActivity.SnapshotAfter != null || userActivity.SnapshotBefore != null)
+        userActivity.Type = 2;
+
+      return userActivity;
     }
 }

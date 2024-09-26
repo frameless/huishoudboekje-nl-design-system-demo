@@ -18,7 +18,8 @@ public class UserActivityMapper : IUserActivityMapper
             SnapshotBefore = communicationModel.SnapshotBefore,
             SnapshotAfter = communicationModel.SnapshotAfter,
             Meta = communicationModel.Meta,
-            Entities = new List<UserActivityEntities>()
+            Entities = new List<UserActivityEntities>(),
+            Type = communicationModel.Type
         };
         foreach (IUserActivityEntity entity in communicationModel.Entities)
         {
@@ -47,7 +48,8 @@ public class UserActivityMapper : IUserActivityMapper
             SnapshotBefore = databaseObject.SnapshotBefore,
             SnapshotAfter = databaseObject.SnapshotAfter,
             Meta = databaseObject.Meta,
-            UUID = databaseObject.Uuid.ToString()
+            UUID = databaseObject.Uuid.ToString(),
+            Type = databaseObject.Type
         };
 
         foreach (var entity in databaseObject.Entities)

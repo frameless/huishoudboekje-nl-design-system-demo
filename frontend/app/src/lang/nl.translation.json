@@ -720,7 +720,15 @@
       "title": "Gebeurtenissen",
       "helperTextBurger": "Dit is een lijst met gebeurtenissen voor deze burger.",
       "activity": "Activiteit",
-      "helperText": "Dit is een lijst met gebruikersactiviteiten."
+      "helperText": "Dit is een lijst met gebruikersactiviteiten.",
+      "filter": {
+        "placeholder": "Alles",
+        "title": "Filter op soort",
+        "types": {
+          "query": "Weergaven",
+          "mutation": "Wijzigingen"
+        }
+      }
     },
     "afdelingDetails": {
       "sectionPostadressen": {
@@ -839,7 +847,7 @@
     "viewAfdelingen": "{{gebruiker}} bekeek alle afdelingen.",
     "viewOrganisatie": "{{gebruiker}} bekeek <linkOrganisatie>{{organisatie}}</linkOrganisatie>.",
     "viewOrganisaties": "{{gebruiker}} bekeek alle organisaties.",
-    "viewAfspraakBurger": "{{gebruiker}} bekeek een <linkAfspraak>afspraak</linkAfspraak> van <linkAfspraakBurger>{{afspraakBurger}}</linkAfspraakBurger> met <linkBurger>{{burger}}</linkBurger>.",
+    "viewAfspraakBurger": "{{gebruiker}} bekeek een <linkAfspraak>afspraak</linkAfspraak> van <linkAfspraakBurger>{{afspraakBurger}}</linkAfspraakBurger>.",
     "viewAfspraak": "{{gebruiker}} bekeek een <linkAfspraak>afspraak</linkAfspraak> van <linkAfspraakBurger>{{afspraakBurger}}</linkAfspraakBurger> met <linkAfspraakOrganisatie>{{afspraakOrganisatie}}</linkAfspraakOrganisatie>.",
     "viewAfspraken": "{{gebruiker}} bekeek alle afspraken.",
     "viewRubrieken": "Systeem haalde namens {{gebruiker}} alle rubrieken op.",
@@ -860,9 +868,12 @@
     "createBurger": "{{gebruiker}} voegde <linkBurger>{{burger}}</linkBurger> toe.",
     "updateBurger": "{{gebruiker}} wijzigde <linkBurger>{{burger}}</linkBurger>.",
     "deleteBurger": "{{gebruiker}} verwijderde <linkBurger>{{burger}}</linkBurger}}.",
+    "createAfspraakBurger": "{{gebruiker}} voegde een <linkAfspraak>afspraak</linkAfspraak> voor <linkBurger>{{burger}}</linkBurger> toe.",
     "createAfspraak": "{{gebruiker}} voegde een <linkAfspraak>afspraak</linkAfspraak> van <linkBurger>{{burger}}</linkBurger> met <linkAfspraakOrganisatie>{{afspraakOrganisatie}}</linkAfspraakOrganisatie> toe.",
+    "updateAfspraakBurger": "{{gebruiker}} wijzigde een <linkAfspraak>afspraak</linkAfspraak> voor <linkBurger>{{burger}}</linkBurger>.",
     "updateAfspraak": "{{gebruiker}} wijzigde een <linkAfspraak>afspraak</linkAfspraak> van <linkBurger>{{burger}}</linkBurger> met <linkAfspraakOrganisatie>{{afspraakOrganisatie}}</linkAfspraakOrganisatie>.",
     "deleteAfspraak": "{{gebruiker}} verwijderde een <linkAfspraak>afspraak</linkAfspraak> van <linkBurger>{{burger}}</linkBurger> met <linkAfspraakOrganisatie>{{afspraakOrganisatie}}</linkAfspraakOrganisatie>.",
+    "deleteAfspraakBurger": "{{gebruiker}} verwijderde een <linkAfspraak>afspraak</linkAfspraak> van <linkBurger>{{burger}}</linkBurger>",
     "updateRekening": "{{gebruiker}} wijzigde <strong>{{iban}}</strong> op naam van <strong>{{rekeninghouder}}</strong>.",
     "createOrganisatie": "{{gebruiker}} voegde <linkOrganisatie>{{organisatie}}</linkOrganisatie> toe.",
     "updateOrganisatie": "{{gebruiker}} wijzigde <linkOrganisatie>{{organisatie}}</linkOrganisatie>.",

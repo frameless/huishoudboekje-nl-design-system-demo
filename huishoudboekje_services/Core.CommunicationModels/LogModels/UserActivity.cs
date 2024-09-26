@@ -12,5 +12,6 @@ public class UserActivity : IUserActivityLog
     public string? SnapshotBefore { get; set; }
     public string? SnapshotAfter { get; set; }
     public string Meta { get; set; }
-}
 
+    public int Type { get; set; }
+}

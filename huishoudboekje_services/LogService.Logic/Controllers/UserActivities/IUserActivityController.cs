@@ -10,6 +10,6 @@ public interface IUserActivityController
 
     public Task<IList<IUserActivityLog>> GetMultipleById(IList<string> ids);
     public Task AddItem(IUserActivityLog item);
-    public Task<Paged<IUserActivityLog>> GetItemsPaged(Pagination pagination, IList<UserActivityEntityFilter>? filters);
-    public Task<IList<IUserActivityLog>> GetAllItems(IList<UserActivityEntityFilter>? filters);
+    public Task<Paged<IUserActivityLog>> GetItemsPaged(Pagination pagination, IUserActivityFilter filters);
+    public Task<IList<IUserActivityLog>> GetAllItems(IUserActivityFilter filters);
 }

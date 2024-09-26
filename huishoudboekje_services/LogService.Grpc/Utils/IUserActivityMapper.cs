@@ -8,5 +8,5 @@ public interface IUserActivityMapper
 {
     public UserActivityData GetGrpcObject(IUserActivityLog communicationModel);
     public IList<UserActivityData> GetGrpcObjects(IList<IUserActivityLog> communicationModels);
-    public IList<UserActivityEntityFilter>? GetUserActivityEntityFilters(Filter filter);
+    public IUserActivityFilter GetUserActivityFilter(Filter? filter);
 }

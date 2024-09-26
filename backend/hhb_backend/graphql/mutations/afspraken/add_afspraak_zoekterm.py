@@ -63,8 +63,10 @@ class AddAfspraakZoekterm(graphene.Mutation):
         AuditLogging.create(
             action=info.field_name,
             entities=[
-                GebruikersActiviteitEntity(entityType="afspraak", entityId=afspraak_id),
-                GebruikersActiviteitEntity(entityType="burger", entityId=result["burger_id"])
+                GebruikersActiviteitEntity(
+                    entityType="afspraak", entityId=afspraak_id),
+                GebruikersActiviteitEntity(
+                    entityType="burger", entityId=result["burger_id"])
             ],
             before=dict(afspraak=previous),
             after=dict(afspraak=afspraak),
