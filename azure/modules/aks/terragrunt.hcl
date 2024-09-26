@@ -33,7 +33,7 @@ inputs = {
     {
       name                = "scalepool"
       vm_size             = "Standard_B2als_v2"
-      max_nodes           = 5
+      max_nodes           = 8
       min_nodes           = 0
       enable_auto_scaling = true
       max_pods            = 30
