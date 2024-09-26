@@ -380,8 +380,10 @@
     },
     "vervolgAfspraak": {
       "title": "Vervolgafspraak toevoegen",
-      "zoektermenHelperText": "De volgende zoektermen worden overgenomen:",
-      "betaalinstructieHelperText": "Let op: voor een vervolgafspraak moet een nieuwe betaalinstructie worden ingesteld."
+      "zoektermenHelperText": "De volgende zoektermen worden opgeslagen:",
+      "betaalinstructieHelperText": "Let op: voor een vervolgafspraak moet een nieuwe betaalinstructie worden ingesteld.",
+      "searchTermExists": "Zoekterm is al toegevoegd aan deze afspraak.",
+      "invalidSearchTerm": "Zoekterm is niet valide"
     },
     "willEndOn": "Deze afspraak eindigt op {{date}}.",
     "endedOn": "Deze afspraak is beëindigd per {{date}}.",
