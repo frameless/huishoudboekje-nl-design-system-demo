@@ -1,4 +1,4 @@
-from core_service.utils import valid_date_range
+from core_service.utils import valid_date_range_allow_equal
 from decimal import Context, ROUND_HALF_DOWN
 from decimal import Decimal
 from injector import inject
@@ -28,7 +28,7 @@ class RapportageController():
 
 
     def get_rapportage(self,burger_ids, filter_rubrieken, start, end):
-        if not valid_date_range(start,end):
+        if not valid_date_range_allow_equal(start,end):
             return "Invalid date range", 400
         
         transactions_info = self._hhb_repository.get_transactions_burgers(burger_ids, filter_rubrieken)
