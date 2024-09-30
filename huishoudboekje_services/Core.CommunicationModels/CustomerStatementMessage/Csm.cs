@@ -11,6 +11,7 @@ public class Csm : ICsm
   public string TransactionReference { get; set; }
 
   public string AccountIdentification { get;set; }
+  public long UploadedAt { get; set; }
 
   public IHhbFile File { get; set; }
 
