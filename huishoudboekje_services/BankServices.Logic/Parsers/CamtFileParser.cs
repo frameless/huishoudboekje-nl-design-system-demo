@@ -28,6 +28,7 @@ public class CamtFileParser(IDateTimeProvider dateTimeProvider, ICsmService csmS
       File = file,
       AccountIdentification = await ParseAccountIdentification(root, namespaceManager),
       TransactionReference = await ParseTransactionReference(root, namespaceManager),
+      UploadedAt = file.UploadedAt,
       Transactions = ParseTransactions(root, namespaceManager),
     };
   }

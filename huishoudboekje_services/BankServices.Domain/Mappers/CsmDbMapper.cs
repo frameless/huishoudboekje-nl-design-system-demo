@@ -15,6 +15,7 @@ public class CsmDbMapper(ITransactionDbMapper transactionMapper) : ICsmDbMapper
       Transactions = transactionMapper.GetDatabaseObjects(communicationModel.Transactions),
       AccountIdentification = communicationModel.AccountIdentification,
       TransactionReference = communicationModel.TransactionReference,
+      UploadedAt = communicationModel.UploadedAt,
       FileUuid = Guid.Parse(communicationModel.File.UUID)
     };
     if (communicationModel.UUID != null)
@@ -31,6 +32,7 @@ public class CsmDbMapper(ITransactionDbMapper transactionMapper) : ICsmDbMapper
       Transactions = transactionMapper.GetCommunicationModels(databaseObject.Transactions),
       AccountIdentification = databaseObject.AccountIdentification,
       TransactionReference = databaseObject.TransactionReference,
+      UploadedAt = databaseObject.UploadedAt,
       File = new HhbFile()
       {
         UUID = databaseObject.FileUuid.ToString()

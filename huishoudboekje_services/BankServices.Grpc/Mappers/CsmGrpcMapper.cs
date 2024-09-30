@@ -32,6 +32,7 @@ public class CsmGrpcMapper : ICsmGrpcMapper
     return new CsmData()
     {
       Id = csm.UUID,
+
       File = csm.File != null ? new FileData
       {
         Id = csm.File.UUID,

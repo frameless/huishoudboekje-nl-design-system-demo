@@ -33,7 +33,10 @@ public class CsmRepository(BankServiceContext dbContext, ICsmDbMapper mapper) : 
   {
     PagedCommandDecorator<CustomerStatementMessage> pagedCommand = new(
       new IncludeCommandDecorator<CustomerStatementMessage>(
-         new GetAllCommand<CustomerStatementMessage>(),
+        new OrderByCommandDecorator<CustomerStatementMessage>(
+          new GetAllCommand<CustomerStatementMessage>(),
+          message => message.UploadedAt,
+          desc: true),
          csm => csm.Transactions),
          page);
     return mapper.GetPagedCommunicationModels(await ExecuteCommand(pagedCommand));
