@@ -321,7 +321,7 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 						{isAfspraakActive(afspraak) ? t("afspraken.willEndOn", {date: validThrough.format("L")}) : t("afspraken.endedOn", {date: validThrough.format("L")})}
 					</AlertTitle>
 					<AlertDescription>
-						<AddButton onClick={() => navigate(AppRoutes.FollowUpAfspraak(String(afspraak.id)))}>
+						<AddButton data-test="button.followupAgreement" onClick={() => navigate(AppRoutes.FollowUpAfspraak(String(afspraak.id)))}>
 							{t("afspraken.planFollowup")}
 						</AddButton>
 					</AlertDescription>
@@ -419,13 +419,14 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 												autoComplete="no"
 												aria-autocomplete="none"
 												id={"zoektermen"}
+												data-test="input.Zoektermen"
 												onChange={e => setZoekterm(e.target.value)}
 												value={zoekterm || ""}
 												onFocus={() => setZoektermTouched(true)}
 												onBlur={() => setZoektermTouched(true)}
 											/>
 											<InputRightElement width={"auto"} pr={1}>
-												<Button type={"submit"} size={"sm"} colorScheme={"primary"}>{t("global.actions.save")}</Button>
+												<Button type={"submit"} data-test="button.OpslaanZoektermen" size={"sm"} colorScheme={"primary"}>{t("global.actions.save")}</Button>
 											</InputRightElement>
 										</InputGroup>
 									</Stack>

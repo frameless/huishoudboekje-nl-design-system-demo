@@ -88,7 +88,7 @@ const AfspraakEndModal: React.FC<AfspraakEndModalProps> = ({onClose, onSubmit, s
 				</FormControl>
 
 				<Flex justify={"flex-end"}>
-					<Button disabled={showEndDateBeforeStartDateError} colorScheme={"primary"} onClick={onClickSubmit}>{t("global.actions.end")}</Button>
+					<Button disabled={showEndDateBeforeStartDateError} colorScheme={"primary"} data-test="button.endAgreement" onClick={onClickSubmit}>{t("global.actions.end")}</Button>
 				</Flex>
 			</Stack>
 		</Modal>
