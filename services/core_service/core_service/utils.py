@@ -70,6 +70,13 @@ def valid_date_range(startDate, endDate):
     except:
         return False
 
+def valid_date_range_allow_equal(startDate, endDate):
+    '''Checks if both dates in the range are valid and that the end date is after or equal start date'''
+    try:
+        return string_to_date(endDate) >= string_to_date(startDate)
+    except:
+        return False
+
 
 def valid_date(date):
     try:

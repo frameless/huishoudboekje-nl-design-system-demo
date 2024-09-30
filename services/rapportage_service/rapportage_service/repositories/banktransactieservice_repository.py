@@ -13,7 +13,7 @@ class BanktransactieServiceRepository:
     def get_transacties_in_range(self, startDate, endDate, transactions=[]):
         filter = TransactionsFilter(
             ids=transactions if transactions else None,
-            startDate=int(self.__get_end_of_date_timestamp(
+            startDate=int(self.__get_begin_of_date_timestamp(
                 startDate)) if startDate is not None else None,
             endDate=int(self.__get_end_of_date_timestamp(
                 endDate)) if endDate is not None else None
