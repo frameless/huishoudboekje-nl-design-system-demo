@@ -10,7 +10,7 @@ type ZoektermenListProps = {
 
 const ZoektermenList: React.FC<ZoektermenListProps> = ({zoektermen, onClick, onClickDelete}) => {
 	return zoektermen.length > 0 ? (
-		<Wrap spacing={1}>
+		<Wrap data-test="button.zoektermSuggestie" spacing={1}>
 			{zoektermen.map((zoekterm, i) => (
 				<WrapItem key={i}>
 					<ZoektermTag

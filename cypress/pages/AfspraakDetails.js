@@ -6,6 +6,30 @@ const api = new Api()
 
 class AfspraakDetails {
    
+  getMenu() {
+		return cy.get('[data-test="agreement.menuKebab"]')
+	}
+
+	menuCopy() {
+		return cy.get('[data-test="agreement.menuCopy"]')
+	}
+
+  buttonOpslaanCopy() {
+		return cy.get('[data-test="button.Submit"]')
+	}
+
+	menuEnd() {
+		return cy.get('[data-test="agreement.menuEnd"]')
+	}
+
+  buttonAfspraakBeeindigen() {
+		return cy.get('[data-test="button.endAgreement"]')
+	}
+
+  buttonAfspraakFollowup() {
+		return cy.get('[data-test="button.followupAgreement"]')
+	}
+
   getAlarm() {
     cy.contains('Elke maand op de 1e');
 
@@ -24,6 +48,18 @@ class AfspraakDetails {
     cy.get('label[class^="chakra-switch"]')
       .should('be.visible')
   }
+
+	buttonZoektermenSuggestie(name) {
+		return cy.get('[data-test="button.zoektermSuggestie"]').contains(name)
+	}
+
+  inputZoektermen() {
+    return cy.get('[data-test="input.Zoektermen"]')
+  }
+
+	buttonZoektermenOpslaan() {
+		return cy.get('[data-test="button.OpslaanZoektermen"]')
+	}
 
 	buttonBetaalinstructieToevoegen() {
 		return cy.get('[data-test="button.addPaymentInstruction"]')
