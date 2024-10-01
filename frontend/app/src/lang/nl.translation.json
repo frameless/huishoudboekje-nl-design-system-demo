@@ -154,6 +154,7 @@
       "save": "Opslaan",
       "view": "Bekijken",
       "cancel": "Annuleren",
+      "confirm": "Bevestigen",
       "delete": "Verwijderen",
       "edit": "Wijzigen",
       "end": "Beëindigen",
@@ -633,7 +634,10 @@
     "ended": "Beëindigd",
     "all": "Alle",
     "searchOmschrijvingAndTerms": "Zoek in omschrijving en zoektermen",
-    "filterDescription": "Match zoektermen op omschrijving"
+    "filterDescription": "Match zoektermen op omschrijving",
+    "confirmReconciliationTitle": "Afletteren?",
+    "confirmReconciliationMessage": "Afletteren op afspraak {{description}} van {{civilian}}",
+    "confirmReconciliationConfirm": "Afletteren"
   },
   "charts": {
     "filterBurgers": "Filter op burgers",

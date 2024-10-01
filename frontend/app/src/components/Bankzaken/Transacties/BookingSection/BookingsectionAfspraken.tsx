@@ -1,7 +1,7 @@
 import {useTranslation} from "react-i18next";
 import {Afdeling, Afspraak, BankTransaction, Burger, GetTransactieDocument, Organisatie, Rekening, useCreateJournaalpostAfspraakMutation, useGetBurgersAndOrganisatiesAndRekeningenQuery} from "../../../../generated/graphql";
 import Queryable, {Loading} from "../../../../utils/Queryable";
-import {Stack, Table, Thead, Tr, Th, Tbody, HStack, Text, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalFooter, Button, useDisclosure} from "@chakra-ui/react";
+import {Stack, Table, Thead, Tr, Th, Tbody, HStack, Text, useDisclosure} from "@chakra-ui/react";
 import SelectAfspraakOption from "../../../shared/SelectAfspraakOption";
 import useToaster from "../../../../utils/useToaster";
 import usePagination from "../../../../utils/usePagination";
@@ -11,6 +11,8 @@ import d from "../../../../utils/dayjs";
 import {useNavigate} from "react-router-dom";
 import {AppRoutes} from "../../../../config/routes";
 import InactiveAgreementModal from "./InactiveAgreementModal";
+import Modal from "../../../shared/Modal";
+import ConfirmReconciliationModal from "./ConfirmReconciliationModal";
 
 
 export function isSuggestie(suggestie: Afspraak, transaction: BankTransaction): boolean {
@@ -39,6 +41,7 @@ const BookingSectionAfspraak = ({transaction}) => {
 	}
 
 	const {isOpen, onOpen, onClose} = useDisclosure()
+	const confirmDisclosure = useDisclosure()
 
 	const [afspraken, setAfspraken] = useState<Afspraak[]>([]);
 	const updateAfspraken = (newAfspraken: Afspraak[], total) => {
@@ -85,18 +88,27 @@ const BookingSectionAfspraak = ({transaction}) => {
 		onClose()
 	}
 
+	function onCloseConfirmModal() {
+		setSelectedAfspraak(null);
+		confirmDisclosure.onClose()
+	}
+
 	const [selectedAfspraak, setSelectedAfspraak] = useState<Afspraak | null>(null)
 	const onSelectAfspraak = (afspraak: Afspraak) => {
-		const transactionId = transaction?.uuid;
-		const afspraakId = afspraak.id;
+		setSelectedAfspraak(afspraak)
 
 		if (!isAgreementActive(afspraak)) {
-			setSelectedAfspraak(afspraak)
 			onOpen()
 			return;
 		}
+		
+		confirmDisclosure.onOpen()
+	};
 
-		if (transactionId && afspraakId) {
+	function reconiliateTransaction() {
+		if (transaction?.uuid && selectedAfspraak?.id) {
+			const transactionId = transaction?.uuid;
+			const afspraakId = selectedAfspraak.id;
 			createJournaalpostAfspraak({
 				variables: {transactionId, afspraakId},
 			}).then(() => {
@@ -111,7 +123,7 @@ const BookingSectionAfspraak = ({transaction}) => {
 				}
 			});
 		}
-	};
+	}
 
 	const $filter_data = useGetBurgersAndOrganisatiesAndRekeningenQuery({
 		variables: {iban: transaction.tegenRekeningIban},
@@ -119,7 +131,6 @@ const BookingSectionAfspraak = ({transaction}) => {
 			setIsLoading(false)
 		},
 	})
-
 
 	return (
 		<Queryable query={$filter_data} options={{hidePreviousResults: true}} children={(data) => {
@@ -163,6 +174,7 @@ const BookingSectionAfspraak = ({transaction}) => {
 						</HStack>
 					</Stack>
 					<InactiveAgreementModal transactionDate={transaction.transactieDatum} afspraak={selectedAfspraak} isOpen={isOpen} onClose={onCloseModal} onOpen={onOpen}></InactiveAgreementModal>
+					<ConfirmReconciliationModal onOpen={confirmDisclosure.onOpen} selectedAfspraak={selectedAfspraak} isOpen={confirmDisclosure.isOpen} onConfirm={reconiliateTransaction} onClose={onCloseConfirmModal}/>
 				</>
 			);
 		}} />
