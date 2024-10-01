@@ -21,12 +21,6 @@ const PostadresListItem: React.FC<PostadresListItemProps> = ({postadres, afdelin
 
 	const onConfirmDelete = () => {
 		if (onDelete) {
-			const tableRow = document.getElementById("postal_address_" + postadres.id);
-
-			if (tableRow) {
-				tableRow.style.display = "none";
-			}
-
 			onDelete();
 			deleteAlert.onClose()
 		}
