@@ -2762,7 +2762,7 @@ export type SearchTransactiesQueryVariables = Exact<{
 }>;
 
 
-export type SearchTransactiesQuery = { searchTransacties?: { banktransactions?: Array<{ id?: number, uuid?: string, informationToAccountOwner?: string, statementLine?: string, bedrag?: any, isCredit?: boolean, isGeboekt?: boolean, transactieDatum?: any, journaalpost?: { id?: number, rubriek?: { naam?: string } }, tegenRekening?: { iban?: string, rekeninghouder?: string } }>, pageInfo?: { count?: number, limit?: number, start?: number } } };
+export type SearchTransactiesQuery = { searchTransacties?: { banktransactions?: Array<{ id?: number, uuid?: string, informationToAccountOwner?: string, statementLine?: string, bedrag?: any, isCredit?: boolean, isGeboekt?: boolean, transactieDatum?: any, tegenRekeningIban?: string, journaalpost?: { id?: number, rubriek?: { naam?: string } }, tegenRekening?: { iban?: string, rekeninghouder?: string } }>, pageInfo?: { count?: number, limit?: number, start?: number } } };
 
 export type GetUserActivitiesQueryVariables = Exact<{
   input?: InputMaybe<UserActivitiesPagedRequest>;
@@ -7869,6 +7869,7 @@ export const SearchTransactiesDocument = gql`
           naam
         }
       }
+      tegenRekeningIban
       tegenRekening {
         iban
         rekeninghouder
