@@ -1,6 +1,0 @@
-[
-  {"id": "02c49b0b-def0-46b2-ae03-9b90430adb94", "alarmId": "d9c00acb-8d04-4cf0-9be4-061f33b3357d", "banktransactieIds": [], "isActive": true, "type": "default", "actions": [], "context": {"is": true, "something": "else"}, "bedragDifference": "100", "timeUpdated": "2022-05-16T13:00:00.000Z"},
-  {"id": "bef7c096-40b6-4158-b0a5-5b6b813080be", "alarmId": "5d65d8e9-1f4a-4cb9-a89c-0f952ac5f2ff", "banktransactieIds": [], "isActive": true, "type": "default", "actions": [], "context": {"is": false, "something": "else"}, "bedragDifference": null, "timeUpdated": "2022-05-16T13:00:00.000Z"},
-  {"id": "09c1af54-1054-4a6c-aecd-875fab4ce889", "alarmId": "1a8ac60f-081f-4bbb-baca-6b6d399ce8db", "banktransactieIds": [], "isActive": true, "type": "default", "actions": [], "context": {"user": {"name": "Koen Brouwer"}, "isAdmin": true}, "bedragDifference": null, "timeUpdated": "2022-05-16T13:00:00.000Z"},
-  {"id": "cd605096-7336-4eb6-b1a7-bc6e1d57e492", "alarmId": "738247bc-e6b8-41ee-a09e-a6778822598d", "banktransactieIds": [], "isActive": true, "type": "default", "actions": [], "context": {"is": true, "something": "else"}, "bedragDifference": null, "timeUpdated": "2022-05-16T13:00:00.000Z"}
-]

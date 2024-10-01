@@ -1,6 +1,0 @@
-[
-  {"id": "d9c00acb-8d04-4cf0-9be4-061f33b3357d", "afspraakId": 1, "afspraakUuid": "", "isActive": false, "startDate": "2021-12-18", "datumMargin": 7, "bedrag": 955, "bedragMargin": 75, "byDay": [], "byMonth": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], "byMonthDay": [3]},
-  {"id": "5d65d8e9-1f4a-4cb9-a89c-0f952ac5f2ff", "afspraakId": 2, "afspraakUuid": "", "isActive": true, "startDate": "2021-12-18", "datumMargin": 14, "bedrag": 299.99, "bedragMargin": 15.90, "byDay": [], "byMonth": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], "byMonthDay": [25]},
-  {"id": "1a8ac60f-081f-4bbb-baca-6b6d399ce8db", "afspraakId": 44, "afspraakUuid": "", "isActive": false, "startDate": "2021-12-18", "datumMargin": 1, "bedrag": 32.05, "bedragMargin": 12.00, "byDay": ["Monday"], "byMonth": [], "byMonthDay": []},
-  {"id": "738247bc-e6b8-41ee-a09e-a6778822598d", "afspraakId": 3, "afspraakUuid": "", "isActive": true, "startDate": "2021-12-18", "datumMargin": 3, "bedrag": 1200.12, "bedragMargin": 75.00, "byDay": [], "byMonth": [1, 4, 7, 10], "byMonthDay": [10]}
-]
