@@ -18,6 +18,7 @@ export const GetSearchTransactiesQuery = gql`
                         naam
                     }
                 }
+                tegenRekeningIban
                 tegenRekening{
                     iban
                     rekeninghouder
