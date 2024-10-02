@@ -642,6 +642,7 @@
   "charts": {
     "filterBurgers": "Filter op burgers",
     "optionAllBurgers": "Alle burgers",
+    "pickCivilian": "Selecteer burger(s)",
     "inkomstenUitgaven": {
       "income": "Inkomsten",
       "expenses": "Uitgaven",
