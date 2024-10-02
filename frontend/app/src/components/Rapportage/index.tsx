@@ -1,4 +1,4 @@
-import {FormControl, HStack, Heading, Text, Input, Stack, Button, Box} from "@chakra-ui/react";
+import {FormControl, HStack, Heading, Text, Input, Stack, Button, Box, Checkbox} from "@chakra-ui/react";
 import {useState} from "react";
 import DatePicker from "react-datepicker";
 import {useTranslation} from "react-i18next";
@@ -20,6 +20,7 @@ const Rapportage = () => {
 
 	const [startDate, setStartDate] = useState<Date>(d().subtract(1, "month").startOf("month").toDate());
 	const [endDate, setEndDate] = useState<Date>(d().subtract(1, "month").endOf("month").toDate());
+	const [allBurgers, setAllBurgers] = useState<boolean>(false);
 
 	const [filterBurgerIds, setFilterBurgerIds] = useState<number[]>(new URLSearchParams(queryParams).get("burgerId")?.split(",").map(p => parseInt(p)) || []);
 	const [filterRubriekIds, setFilterRubriekIds] = useState<number[]>([]);
@@ -40,6 +41,13 @@ const Rapportage = () => {
 	const onSelectRubriek = (value) => setFilterRubriekIds(value ? value.map(v => v.value) : []);
 	const $burgers = useGetBurgersQuery();
 	const $rubrieken = useGetRubriekenQuery();
+
+	function onClickAllBurgers(value){
+		setAllBurgers(value)
+		if(value){
+			setFilterBurgerIds([])
+		}
+	}
 
 	return (
 		<Queryable query={$burgers} children={data => {
@@ -124,18 +132,35 @@ const Rapportage = () => {
 										</FormControl>
 									</HStack>
 								</HStack>
-								<FormControl className={"do-not-print"} minWidth={300}>
-									<Select onChange={onSelectBurger} options={burgers.map(b => ({
-										key: b.id,
-										value: b.id,
-										label: formatBurgerName(b) + " " + getBurgerHhbId(b),
-									}))} styles={reactSelectStyles.default} isMulti isClearable={true} noOptionsMessage={() => t("select.noOptions")} maxMenuHeight={200} placeholder={t("charts.optionAllBurgers")} value={burgers_filter} />
-								</FormControl>
+								<HStack width={"100%"}>
+									<Stack width={"80%"}>
+										<FormControl className={"do-not-print"} minWidth={300}>
+											<Select onChange={onSelectBurger} options={burgers.map(b => ({
+												key: b.id,
+												value: b.id,
+												label: formatBurgerName(b) + " " + getBurgerHhbId(b),
+											}))} styles={reactSelectStyles.default} isMulti isClearable={true} noOptionsMessage={() => t("select.noOptions")} maxMenuHeight={200} value={burgers_filter} />
+										</FormControl>
+									</Stack>
+									<Stack width={"20%"}>
+										<FormControl className={"do-not-print"} minWidth={300}>
+											<HStack>
+												<Text>{t("charts.optionAllBurgers")}</Text>
+												<Checkbox isChecked={allBurgers} onChange={(e) => onClickAllBurgers(e.target.checked)}></Checkbox>
+											</HStack>
+										</FormControl>
+									</Stack>
+								</HStack>
 							</Stack>
 
 						</SectionContainer>
 						{/* pagina */}
-						<RapportageComponent burgerIds={filterBurgerIds} startDate={startDate} selectedBurgers={selectedBurgers} endDate={endDate} rubrieken={filterRubriekIds} />
+						{ !allBurgers && filterBurgerIds.length === 0 ?
+							<SectionContainer>
+								<Text>{t("charts.pickCivilian")}</Text>
+							</SectionContainer>
+							: 
+							<RapportageComponent burgerIds={filterBurgerIds} startDate={startDate} selectedBurgers={selectedBurgers} endDate={endDate} rubrieken={filterRubriekIds} />}
 					</Page>
 				</RapportageContext.Provider>
 			)
