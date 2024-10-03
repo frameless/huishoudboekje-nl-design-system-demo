@@ -173,7 +173,7 @@ const BookingSectionAfspraak = ({transaction}) => {
 							<PaginationButtons />
 						</HStack>
 					</Stack>
-					<InactiveAgreementModal transactionDate={transaction.transactieDatum} afspraak={selectedAfspraak} isOpen={isOpen} onClose={onCloseModal} onOpen={onOpen}></InactiveAgreementModal>
+					<InactiveAgreementModal transactionId={transaction.uuid} transactionDate={transaction.transactieDatum} afspraak={selectedAfspraak} isOpen={isOpen} onClose={onCloseModal} onOpen={onOpen}></InactiveAgreementModal>
 					<ConfirmReconciliationModal onOpen={confirmDisclosure.onOpen} selectedAfspraak={selectedAfspraak} isOpen={confirmDisclosure.isOpen} onConfirm={reconiliateTransaction} onClose={onCloseConfirmModal}/>
 				</>
 			);

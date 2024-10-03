@@ -3,6 +3,19 @@
         "title": "Afspraak beëindigd",
         "message": "De datum van deze transactie ligt voorbij de einddatum van de afspraak. Wijzig de einddatum van de afspraak of letter op een andere afspraak af.",
         "changeEnddate": "Einddatum wijzigen",
-        "cancel": "Annuleren"
+        "dateInfo": "Let op: einddatum moet op of na {{transactionDate}} zijn.",
+        "endAgreementTitle": "Einddatum wijzigen en afletteren?",
+        "cancel": "Annuleren",
+        "confirmReconciliationMessage": "Afletteren op afspraak {{description}} van {{civilian}}"
+    },
+    "messages": {
+        "journals": {
+            "deleteSuccessMessage": "De aflettering van de transactie is ongedaan gemaakt.",
+            "createSuccessMessage": "De transactie is afgeletterd.",
+            "errors": {
+                "unknownTransactionIban": "Transactie bevat een onbekende iban",
+                "noTransactionIban": "De banktransactie heeft geen tegenrekening. Letter af op een rubriek."
+            }
+        }
     }
 }

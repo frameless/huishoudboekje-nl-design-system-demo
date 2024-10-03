@@ -21,11 +21,7 @@ const AfspraakDetailMenu: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 	const deleteAlert = useDisclosure();
 
 
-	const [endAfspraakMutation] = useEndAfspraakMutation({
-		refetchQueries: [
-			{query: GetAfspraakDocument, variables: {id: afspraak.id}},
-		],
-	});
+
 	const [deleteAfspraak] = useDeleteAfspraakMutation({
 		refetchQueries: [
 			{query: GetBurgersDocument},
@@ -59,33 +55,11 @@ const AfspraakDetailMenu: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 		}
 	};
 
-	const onSubmitEndAfspraak = (validThrough: Date) => {
-		endAfspraakMutation({
-			variables: {
-				id: afspraak.id!,
-				validThrough: d(validThrough).format("YYYY-MM-DD"),
-			},
-		}).then(() => {
-			toast({
-				success: t("endAfspraak.successMessage", {date: d(validThrough).format("L")}),
-			});
-			endModal.onClose();
-		}).catch(err => {
-			toast({
-				error: err.message,
-			});
-		});
-	};
 
-	useEffect(() => {
-		if (location.state?.hasOwnProperty("endAt")) {
-			endModal.onOpen()
-		}
-	})
 
 	return (<>
 		{deleteAlert.isOpen && <AfspraakDeleteAlert onConfirm={onClickDelete} onClose={deleteAlert.onClose} />}
-		{endModal.isOpen && <AfspraakEndModal startDate={afspraak.validFrom} onSubmit={onSubmitEndAfspraak} onClose={endModal.onClose} />}
+		{endModal.isOpen && <AfspraakEndModal startDate={afspraak.validFrom} agreementId={afspraak.id} onClose={endModal.onClose} />}
 
 		<Menu>
 			<IconButton data-test="agreement.menuKebab" as={MenuButton} icon={<MenuIcon />} variant={"solid"} aria-label={"Open menu"} />

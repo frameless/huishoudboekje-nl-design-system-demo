@@ -123,23 +123,6 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 		],
 	});
 
-	const onSubmitEndAfspraak = (validThrough: Date) => {
-		endAfspraakMutation({
-			variables: {
-				id: afspraak.id!,
-				validThrough: d(validThrough).format("YYYY-MM-DD"),
-			},
-		}).then(() => {
-			toast({
-				success: t("endAfspraak.successMessage", {date: d(validThrough).format("L")}),
-			});
-			endModal.onClose();
-		}).catch(err => {
-			toast({
-				error: err.message,
-			});
-		});
-	};
 
 	const toggleAlarmActive = () => {
 		if (!afspraak || !afspraak.alarm?.id) {
@@ -385,7 +368,7 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 								<Text>{d(afspraak.validThrough).format("DD-MM-YYYY")}</Text>
 							) : (
 								<>
-									{endModal.isOpen && <AfspraakEndModal startDate={afspraak.validFrom} onSubmit={onSubmitEndAfspraak} onClose={endModal.onClose} />}
+									{endModal.isOpen && <AfspraakEndModal startDate={afspraak.validFrom} agreementId={afspraak.id} onClose={endModal.onClose} />}
 									<Box>
 										<Button width={"auto"} type={"submit"} size={"sm"} colorScheme={"primary"} onClick={endModal.onOpen}>{t("afspraakDetailView.setEndDate")}</Button>
 									</Box>
