@@ -5,7 +5,7 @@ import Queryable from "../../utils/Queryable";
 import { Checkbox, CheckboxGroup, FormControl, FormLabel, Stack } from "@chakra-ui/react";
 import Select from "react-select";
 
-type AfspraakFormProps = {
+type SignalFormProps = {
     goFirst: () => void,
     filterByCitizens,
 	setFilterByCitizens: (value) => void,
@@ -15,7 +15,7 @@ type AfspraakFormProps = {
 };
 
 
-const SignalsFilters: React.FC<AfspraakFormProps>  = ({goFirst, filterByCitizens, setFilterByCitizens, filterByTypes, setFilterByTypes, setFilterByActive}) => {
+const SignalsFilters: React.FC<SignalFormProps>  = ({goFirst, filterByCitizens, setFilterByCitizens, filterByTypes, setFilterByTypes, setFilterByActive}) => {
 	const {t} = useTranslation();
 	const $citizens = useGetCitizensSignalsFilterQuery();
 	const types = [{

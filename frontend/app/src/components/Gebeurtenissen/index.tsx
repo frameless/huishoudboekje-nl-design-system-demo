@@ -9,15 +9,23 @@ import Section from "../shared/Section";
 import SectionContainer from "../shared/SectionContainer";
 import GebeurtenissenTableView from "./GebeurtenissenTableView";
 import {FormControl, FormErrorMessage, FormLabel, Stack} from "@chakra-ui/react";
-import {defaultProps} from "react-select/dist/declarations/src/Select";
+import useGebeurtenissenPageStore from "./gebeurtenissenStore";
 
 const Gebeurtenissen = () => {
 	const {t} = useTranslation();
-	const {setTotal, pageSize, offset, PaginationButtons} = usePagination({
-		pageSize: 25,
-	});
 
-	const [selectedLogTypes, setSelectedLogTypes] = useState<number[]>([2])
+
+	const {setTotal, goFirst, pageSize, offset, PaginationButtons} = usePagination({
+			pageSize: 25, 
+			startPage: useGebeurtenissenPageStore((state) => state.page)
+		},
+		undefined,
+		useGebeurtenissenPageStore((state) => state.updatePage)
+	);
+
+	const selectedLogTypes = useGebeurtenissenPageStore((state) => state.selectedLogTypes)
+	const setSelectedLogTypes = useGebeurtenissenPageStore((state) => state.setSelectedLogTypes)
+
 
 	const options = [
 		{"Name": "query", "Id": 1},
@@ -39,6 +47,7 @@ const Gebeurtenissen = () => {
 			ids.push(filter.value)
 		})
 		setSelectedLogTypes(ids)
+		goFirst()
 	}
 
 	function getQueryVariables(): UserActivitiesPagedRequest {
@@ -91,7 +100,13 @@ const Gebeurtenissen = () => {
 											onChange={(result) => {
 												onSelectFilter(result)
 											}}
-											defaultValue={{label: t("pages.gebeurtenissen.filter.types.mutation"), value: 2, key: 2}}
+											defaultValue={selectedLogTypes ? 
+												options.map(b => ({
+													key: b.Id,
+													value: b.Id,
+													label: t("pages.gebeurtenissen.filter.types." + b.Name),
+												})).filter(option => selectedLogTypes.includes(option.value))
+												: {label: t("pages.gebeurtenissen.filter.types.mutation"), value: 2, key: 2}}
 
 										/>
 										<FormErrorMessage>{t("forms.afspraak.invalidPostadresError")}</FormErrorMessage>
