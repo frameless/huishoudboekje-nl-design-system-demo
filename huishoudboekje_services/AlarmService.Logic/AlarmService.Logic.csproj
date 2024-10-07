@@ -11,6 +11,7 @@
         <ProjectReference Include="..\AlarmService.Domain\AlarmService.Domain.csproj" />
         <ProjectReference Include="..\Core.CommunicationModels\Core.CommunicationModels.csproj" />
         <ProjectReference Include="..\Core.ErrorHandling\Core.ErrorHandling.csproj" />
+        <ProjectReference Include="..\Core.MessageQueue\Core.MessageQueue.csproj" />
         <ProjectReference Include="..\Core.Utils\Core.Utils.csproj" />
     </ItemGroup>
 

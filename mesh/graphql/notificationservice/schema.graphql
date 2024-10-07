@@ -4,6 +4,12 @@
 
 type Subscription {
   notification: Notification!
+  refetch: Refetch!
+}
+
+type Refetch {
+  type: String!
+  variables: [KeyValuePairOfStringAndObject!]
 }
 
 type Notification {
@@ -17,3 +23,6 @@ type KeyValuePairOfStringAndString {
   value: String!
 }
 
+type KeyValuePairOfStringAndObject {
+  key: String!
+}

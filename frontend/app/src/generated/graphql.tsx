@@ -874,6 +874,10 @@ export type JournaalpostTransactieRubriek = {
   transactionId?: Maybe<Scalars['Int']>;
 };
 
+export type KeyValuePairOfStringAndObject = {
+  key: Scalars['String'];
+};
+
 export type KeyValuePairOfStringAndString = {
   key: Scalars['String'];
   value: Scalars['String'];
@@ -1852,6 +1856,11 @@ export type RapportageTransactie = {
   transactieDatum?: Maybe<Scalars['String']>;
 };
 
+export type Refetch = {
+  type: Scalars['String'];
+  variables?: Maybe<Array<KeyValuePairOfStringAndObject>>;
+};
+
 export type Rekening = {
   afdelingen?: Maybe<Array<Maybe<Afdeling>>>;
   afspraken?: Maybe<Array<Maybe<Afspraak>>>;
@@ -1927,6 +1936,7 @@ export type StartAutomatischBoeken = {
 
 export type Subscription = {
   notification: Notification;
+  refetch: Refetch;
 };
 
 export type TransactionData = {

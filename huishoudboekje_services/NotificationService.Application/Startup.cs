@@ -1,8 +1,6 @@
-using Core.ErrorHandling.ExceptionInterceptors;
 using Core.MessageQueue;
 using Core.utils.DateTimeProvider;
 using MassTransit;
-using Microsoft.EntityFrameworkCore;
 using NotificationService.GraphQL;
 using NotificationService.MessageQueue.Consumers;
 using Prometheus;
@@ -23,8 +21,6 @@ public class Startup
     services.AddMetricServer(options => { options.Port = (ushort)Configuration.GetValue("HHB_METRICS_PORT", 9000); });
     services.AddMassTransitService(Configuration, AddConsumers);
     services.AddGraphQLServer()
-      // .AddHttpRequestInterceptor<GraphqlHttpExceptionInterceptor>()
-      // .AddHttpRequestInterceptor<AuthInterceptor>()
       .AddQueryType<Query>()
       .AddSubscriptionType<Subscription>()
       .AddInMemorySubscriptions();
@@ -41,6 +37,7 @@ public class Startup
   private IBusRegistrationConfigurator AddConsumers(IBusRegistrationConfigurator massTransit)
   {
     massTransit.AddConsumer<NotificationConsumer>();
+    massTransit.AddConsumer<RefetchConsumer>();
     return massTransit;
   }
 

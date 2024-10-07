@@ -11,4 +11,11 @@ public class Subscription
   {
     return ValueTask.FromResult(notification);
   }
+
+  [Subscribe]
+  [Topic("Refetch")]
+  public ValueTask<Refetch> Refetch([EventMessage] Refetch refetch)
+  {
+    return ValueTask.FromResult(refetch);
+  }
 }

@@ -3,12 +3,14 @@ using AlarmService.Logic.Evaluators;
 using AlarmService.Logic.Services.EvaluationServices.Queries;
 using AlarmService.Logic.Services.Interfaces;
 using Core.CommunicationModels.AlarmModels.Interfaces;
+using Core.CommunicationModels.Notifications;
 using Core.CommunicationModels.SignalModel;
 using Core.CommunicationModels.SignalModel.Interfaces;
+using Core.MessageQueue.CommonProducers;
 
 namespace AlarmService.Logic.Services.EvaluationServices.QueryHandlers;
 
-internal class HandleEvaluationResultQueryHandler(IAlarmRepository alarmRepository, ISignalRepository signalRepository)
+internal class HandleEvaluationResultQueryHandler(IAlarmRepository alarmRepository, ISignalRepository signalRepository, IRefetchProducer refetchProducer)
   : IQueryHandler<HandleEvaluationResult, bool>
 {
   public async Task<bool> HandleAsync(HandleEvaluationResult query)
@@ -33,6 +35,7 @@ internal class HandleEvaluationResultQueryHandler(IAlarmRepository alarmReposito
       createdSignal = await signalRepository.InsertMany(signalsToCreate);
     }
 
+    await refetchProducer.PublishRefetchRequest(new Refetch() { Type = RefetchType.signalcount });
     return createdSignal && updatedAlarms;
   }
 

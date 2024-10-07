@@ -16,6 +16,7 @@ using AlarmService.MessageQueue.Producers;
 using Core.Database;
 using Core.Grpc;
 using Core.MessageQueue;
+using Core.MessageQueue.CommonProducers;
 using Core.utils.DateTimeProvider;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
@@ -89,6 +90,7 @@ public class Startup
     services.AddScoped<ISignalService, SignalService>();
     services.AddScoped<IAlarmRepository, AlarmRepository>();
     services.AddScoped<ICheckAlarmProducer, CheckAlarmHttpProducer>();
+    services.AddScoped<IRefetchProducer, RefetchProducer>();
     services.AddScoped<IEvaluatorService, EvaluatorService>();
     services.AddScoped<ISignalRepository, SignalRepository>();
     services.AddScoped<IEvaluationResultService, EvaluationResultService>();
