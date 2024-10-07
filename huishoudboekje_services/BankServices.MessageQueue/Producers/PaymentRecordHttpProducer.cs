@@ -16,8 +16,8 @@ public class PaymentRecordHttpProducer(IConfiguration config, IDateTimeProvider 
 {
   private Dictionary<string, int> dayToNumer = new()
   {
-    { "Monday", 1 }, { "Tuesday", 2 }, { "Wednesdag", 3 }, { "Thursday", 4 }, { "Friday", 5 }, { "Saturday", 6 },
-    { "Sunday", 0 }
+    { "monday", 1 }, { "tuesday", 2 }, { "wednesday", 3 }, { "thursday", 4 }, { "friday", 5 }, { "saturday", 6 },
+    { "sunday", 0 }
   };
 
   public async Task<IDictionary<IAgreement, IPaymentInstruction>> GetAgreementsWithPaymentInstruction(DateRange dateRange)
@@ -102,13 +102,13 @@ public class PaymentRecordHttpProducer(IConfiguration config, IDateTimeProvider 
         {
           foreach (var day in afspraak.betaalinstructie.by_day)
           {
-            byDay.Add(dayToNumer[day]);
+            byDay.Add(dayToNumer[day.ToLower()]);
           }
         }
         paymentInstruction.ByDay = byDay;
         if (byDay.Count > 0 && paymentInstruction.Type != 1)
         {
-          paymentInstruction.Type = 2;
+          paymentInstruction.Type = 3;
         }
       }
 
