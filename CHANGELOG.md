@@ -1,5 +1,11 @@
 # Huishoudboekje Changelog
 
+## 2.1.3
+
+### Patch Changes
+
+Deze versie bevat een oplossing voor een probleem met weekelijkse betalingen op woensdag.
+
 ## 2.1.2
 
 Deze versie omvat verbeteringen aan bestaande functionaliteit en oplossingen voor een aantal problemen. Een lijst met banktransacties wordt gesorteerd op datum, aflopend. Een lijst met afspraken wordt bijgewerkt na het kopiëren van een afspraak. Onbekende gebeurtenissen hebben een leesbare tekst gekregen. Het afletteren van een banktransactie op een beëindige afspraak leidt naar het wijzigen van de einddatum van de afspraak. Het bedrag van een afspraak is vanaf nu leidend voor het bedrag van een alarm en kan niet meer bij het alarm gewijzigd worden.
