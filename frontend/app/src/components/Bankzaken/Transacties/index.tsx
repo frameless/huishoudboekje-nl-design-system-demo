@@ -18,18 +18,26 @@ import d from "../../../utils/dayjs";
 import ZoektermenList from "../../shared/ZoektermenList";
 import {TriangleUpIcon, TriangleDownIcon, WarningTwoIcon, RepeatIcon} from "@chakra-ui/icons";
 import ListInformationRow from "../../shared/ListInformationRow";
+import useTransactionsPageStore from "./transactionsStore";
 
 
 const Transactions = () => {
 	const {t} = useTranslation();
 	const reactSelectStyles = useReactSelectStyles();
-	const {offset, total, pageSize, setTotal, setPageSize, goFirst, PaginationButtons} = usePagination({pageSize: 50});
+
+	const {offset, total, pageSize, setTotal, setPageSize, goFirst, PaginationButtons} = usePagination({
+			pageSize: 50, 
+			startPage: useTransactionsPageStore((state) => state.page)
+		},
+		undefined,
+		useTransactionsPageStore((state) => state.updatePage)
+	);
 	const handleMutation = useHandleMutation();
 
 	const [timeLastUpdate, setTimeLAstUpdate] = useState<Date | undefined>(undefined);
 
-	const banktransactieFilters = useStore(store => store.banktransactieFilters || defaultBanktransactieFilters);
-	const setBanktransactieFilters = useStore(store => store.setBanktransactieFilters);
+	const banktransactieFilters = useTransactionsPageStore(store => store.banktransactieFilters || defaultBanktransactieFilters);
+	const setBanktransactieFilters = useTransactionsPageStore(store => store.setBanktransactieFilters);
 
 	const setBanktransactieQueryVariables = useStore(store => store.setBanktransactieQueryVariables);
 
@@ -199,7 +207,6 @@ const Transactions = () => {
 		onCompleted: data => {
 			if (data && total !== data.searchTransacties?.pageInfo?.count) {
 				setTotal(data.searchTransacties?.pageInfo?.count);
-				goFirst();
 			}
 			setBanktransactieQueryVariables(queryVariables);
 			setTimeLAstUpdate(new Date())

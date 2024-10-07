@@ -3,28 +3,36 @@ import Page from "../shared/Page";
 import Section from "../shared/Section";
 import SectionContainer from "../shared/SectionContainer";
 import SignalsFilters from "./SignalsFilters";
-import {GetSignalsPagedQuery, SignalData, SignalFilter, SignalsPagedResponse, useGetSignalsPagedQuery} from "../../generated/graphql";
+import {GetSignalsPagedQuery, SignalData, SignalFilter, useGetSignalsPagedQuery} from "../../generated/graphql";
 import {useState} from "react";
 import SignalsList from "./SignalsList";
-import {Box, Divider, HStack, IconButton, Spinner, Stack, Text} from "@chakra-ui/react";
+import { Divider, HStack} from "@chakra-ui/react";
 import usePagination from "../../utils/usePagination";
 import Queryable, {Loading} from "../../utils/Queryable";
-import {ActiveSwitch} from "../Burgers/BurgerDetail/BurgerSignalenView";
-import {RepeatIcon} from "@chakra-ui/icons";
-import d from "../../utils/dayjs";
 import ListInformationRow from "../shared/ListInformationRow";
+import useSignalPageStore from "./signalsStore";
 
 const SignalsView = () => {
 	const {t} = useTranslation();
 	const pageSize = 25;
-	const {offset, total, setTotal, goFirst, PaginationButtons} = usePagination({pageSize: pageSize});
+
+	const {offset, total, setTotal, goFirst, PaginationButtons} = usePagination({
+			pageSize: pageSize, 
+			startPage: useSignalPageStore((state) => state.page)
+		},
+		undefined,
+		useSignalPageStore((state) => state.updatePage)
+	);
 	const [loading, setLoading] = useState<boolean>(false);
 	const [timeLastUpdate, setTimeLAstUpdate] = useState<Date | undefined>(undefined);
 
 	//Filter states are here to prevent infinite re-render loop
-	const [filterByActive, setFilterByActive] = useState<ActiveSwitch>({active: true, inactive: false});
-	const [filterByCitizens, setFilterByCitizens] = useState<string[]>([]);
-	const [filterByTypes, setFilterByTypes] = useState<number[]>([]);
+	const filterByActive = useSignalPageStore((state) => state.filterByActive)
+	const setFilterByActive = useSignalPageStore((state) => state.setFilterByActive)
+	const filterByCitizens = useSignalPageStore((state) => state.filterByCitizens)
+	const setFilterByCitizens = useSignalPageStore((state) => state.setFilterByCitizens)
+	const filterByTypes = useSignalPageStore((state) => state.filterByTypes)
+	const setFilterByTypes = useSignalPageStore((state) => state.setFilterByTypes)
 
 
 	const buildFilter = () => {
