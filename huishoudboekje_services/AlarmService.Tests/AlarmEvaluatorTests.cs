@@ -11,8 +11,10 @@ using Core.CommunicationModels.AlarmModels;
 using Core.CommunicationModels.AlarmModels.Interfaces;
 using Core.CommunicationModels.JournalEntryModel;
 using Core.CommunicationModels.JournalEntryModel.Interfaces;
+using Core.CommunicationModels.Notifications;
 using Core.CommunicationModels.SignalModel;
 using Core.CommunicationModels.SignalModel.Interfaces;
+using Core.MessageQueue.CommonProducers;
 using Core.utils.DataTypes;
 using Core.utils.DateTimeProvider;
 using FakeItEasy;
@@ -28,6 +30,7 @@ public class AlarmEvaluatorTests
   private IAlarmRepository _fakeAlarmRepository;
   private ISignalRepository _fakeSignalRepository;
   private ICheckAlarmProducer _fakeProducer;
+  private IRefetchProducer _fakeRefetchProducer;
   private ILogger<EvaluatorService> _fakeLogger;
   private readonly DateTimeProvider _realDateTimeProvider = new();
 
@@ -38,13 +41,16 @@ public class AlarmEvaluatorTests
     _fakeAlarmRepository = A.Fake<IAlarmRepository>();
     _fakeSignalRepository = A.Fake<ISignalRepository>();
     _fakeLogger = A.Fake<ILogger<EvaluatorService>>();
-    _evaluationResultService = new EvaluationResultService(_fakeAlarmRepository, _fakeSignalRepository);
+    _fakeRefetchProducer = A.Fake<IRefetchProducer>();
+    _evaluationResultService = new EvaluationResultService(_fakeAlarmRepository, _fakeSignalRepository, _fakeRefetchProducer);
     _fakeProducer = A.Fake<ICheckAlarmProducer>();
 
     // This call is made when there is a new check on date
     A.CallTo(() => _fakeAlarmRepository.Update(A<UpdateModel>._)).ReturnsLazily(
       alarm
         => Task.FromResult(alarm.Arguments.Get<IAlarmModel>("alarm"))!);
+
+    A.CallTo(() => _fakeRefetchProducer.PublishRefetchRequest(A<Refetch>._)).DoesNothing();
 
     A.CallTo(() => _fakeSignalRepository.Update(A<ISignalModel>._)).ReturnsLazily(
       signal
@@ -188,6 +194,7 @@ public class AlarmEvaluatorTests
 
     // Assert
     AssertOneSignal(expectedOffByAmount, alarm, expectedSignalType, journalEntry);
+    AssertSignalRefetchCalled();
     AssertUpdateOneAlarm(expectedCheckOnDate);
   }
 
@@ -261,6 +268,7 @@ public class AlarmEvaluatorTests
 
     // Assert
     AssertOneSignal(expectedOffByAmount, alarm, expectedSignalType, journalEntry);
+    AssertSignalRefetchCalled();
   }
 
   [Test]
@@ -377,6 +385,7 @@ public class AlarmEvaluatorTests
     A.CallTo(
       () =>
         _fakeSignalRepository.InsertMany(A<IList<ISignalModel>>._)).MustHaveHappenedOnceExactly();
+    AssertSignalRefetchCalled();
   }
 
   [Test]
@@ -430,6 +439,8 @@ public class AlarmEvaluatorTests
     A.CallTo(
       () =>
         _fakeSignalRepository.InsertMany(A<IList<ISignalModel>>._)).MustHaveHappenedOnceExactly();
+
+    AssertSignalRefetchCalled();
   }
 
   [Test]
@@ -511,6 +522,8 @@ public class AlarmEvaluatorTests
                          signals[0].Type == 4 &&
                          signals[0].CitizenUuid == "test-1")))
       .MustHaveHappenedOnceExactly();
+
+    AssertSignalRefetchCalled();
   }
 
   [Test]
@@ -613,6 +626,8 @@ public class AlarmEvaluatorTests
                          signals[0].Type == 4 &&
                          signals[0].CitizenUuid == "test-1")))
       .MustHaveHappenedOnceExactly();
+
+    AssertSignalRefetchCalled();
   }
 
   [Test]
@@ -811,6 +826,10 @@ public class AlarmEvaluatorTests
     A.CallTo(() => _fakeAlarmRepository.UpdateMany(A<IList<IAlarmModel>>._)).MustNotHaveHappened();
   }
 
+  private void AssertSignalRefetchCalled()
+  {
+      A.CallTo(() => _fakeRefetchProducer.PublishRefetchRequest(A<Refetch>._)).MustHaveHappened();
+  }
   private void SetUpFakeProducerRequestCitizenSaldos(int saldo)
   {
     A.CallTo(() => _fakeProducer.RequestCitizenSaldos(A<IList<string>>._)).ReturnsLazily(

@@ -1,4 +1,5 @@
 ﻿using AlarmService.Domain.Repositories.Interfaces;
+using AlarmService.Logic.Producers;
 using AlarmService.Logic.Services.SignalServices.Interfaces;
 using AlarmService.Logic.Services.SignalServices.Queries;
 using AlarmService.Logic.Services.SignalServices.QueryHandlers;

@@ -9,4 +9,9 @@ public class SubscriptionPublisher([Service] ITopicEventSender sender)
   {
     await sender.SendAsync("Notification", message);
   }
+
+  public async Task RequestRefetch(Refetch message)
+  {
+    await sender.SendAsync("Refetch", message);
+  }
 }

@@ -41,6 +41,7 @@ import SignalsView from "./components/Signals/SignalsView";
 import {useNotifications} from "./components/Notificaties";
 import CreateBetaalinstructies from "./components/Bankzaken/Betaalinstructies/CreatePaymentExport";
 import ViewPaymentExport from "./components/Bankzaken/Betaalinstructies/ViewPaymentExport";
+import {useRefetcher} from "./services/RefetchService/Refetch";
 
 
 
@@ -50,6 +51,7 @@ const App = () => {
 	const theme = useTheme();
 	const location = useLocation();
 	const subscriptions = useNotifications()
+	const refetcher = useRefetcher()
 
 
 
