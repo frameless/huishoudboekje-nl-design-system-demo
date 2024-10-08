@@ -264,6 +264,9 @@ When('a high amount bank transaction with transaction date before the alarm time
     .click();
   cy.contains(uniqueId)
     .click();
+
+  // Confirm afletteren
+  cy.get('[data-test="button.confirmAfletter"]').click();
  
 });
 
@@ -519,6 +522,9 @@ When('a high amount bank transaction with transaction date on start of the alarm
     .click();
   cy.contains(uniqueId)
     .click();
+
+  // Confirm afletteren
+  cy.get('[data-test="button.confirmAfletter"]').click();
  
 });
 
@@ -791,6 +797,9 @@ When('a high amount bank transaction with transaction date within the alarm time
     .click();
   cy.contains(uniqueId)
     .click();
+
+  // Confirm afletteren
+  cy.get('[data-test="button.confirmAfletter"]').click();
  
 });
 
@@ -1067,6 +1076,9 @@ When('a high amount bank transaction with transaction date on end of the alarm t
     .click();
   cy.contains(uniqueId)
     .click();
+
+  // Confirm afletteren
+  cy.get('[data-test="button.confirmAfletter"]').click();
  
 });
 
@@ -1343,6 +1355,9 @@ When('a high amount bank transaction with transaction date after the alarm timef
     .click();
   cy.contains(uniqueId)
     .click();
+
+  // Confirm afletteren
+  cy.get('[data-test="button.confirmAfletter"]').click();
  
 });
 

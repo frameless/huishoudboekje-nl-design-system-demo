@@ -262,6 +262,9 @@ When('the low amount outside amount margin bank transaction is booked to an agre
     .click();
   cy.contains(uniqueId)
     .click();
+
+  // Confirm afletteren
+  cy.get('[data-test="button.confirmAfletter"]').click();
  
 });
 
@@ -482,6 +485,9 @@ When('the low amount on amount margin bank transaction is booked to an agreement
     .click({ force: true });
   cy.contains(uniqueId)
     .click();
+
+  // Confirm afletteren
+  cy.get('[data-test="button.confirmAfletter"]').click();
  
 });
 
@@ -687,6 +693,9 @@ When('the low amount within amount margin bank transaction is booked to an agree
     .click();
   cy.contains(uniqueId)
     .click();
+
+  // Confirm afletteren
+  cy.get('[data-test="button.confirmAfletter"]').click();
  
 });
 
@@ -894,6 +903,9 @@ When('the expected amount on amount margin bank transaction is booked to an agre
     .click();
   cy.contains(uniqueId)
     .click();
+
+  // Confirm afletteren
+  cy.get('[data-test="button.confirmAfletter"]').click();
  
 });
 
@@ -1101,6 +1113,9 @@ When('the high amount within amount margin bank transaction is booked to an agre
     .click();
   cy.contains(uniqueId)
     .click();
+
+  // Confirm afletteren
+  cy.get('[data-test="button.confirmAfletter"]').click();
  
 });
 
@@ -1308,6 +1323,9 @@ When('the high amount on amount margin bank transaction is booked to an agreemen
     .click({ force: true });
   cy.contains(uniqueId)
     .click();
+
+  // Confirm afletteren
+  cy.get('[data-test="button.confirmAfletter"]').click();
  
 });
 
@@ -1513,6 +1531,9 @@ When('the high amount outside amount margin bank transaction is booked to an agr
     .click();
   cy.contains(uniqueId)
     .click();
+
+  // Confirm afletteren
+  cy.get('[data-test="button.confirmAfletter"]').click();
  
 });
 

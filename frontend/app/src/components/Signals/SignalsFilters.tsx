@@ -10,12 +10,13 @@ type SignalFormProps = {
     filterByCitizens,
 	setFilterByCitizens: (value) => void,
     filterByTypes,
-    setFilterByTypes: (value) => void ,
-	setFilterByActive: (value) => void
+    setFilterByTypes: (value) => void,
+	setFilterByActive: (value) => void,
+	setFilterByInactive: (value) => void
 };
 
 
-const SignalsFilters: React.FC<SignalFormProps>  = ({goFirst, filterByCitizens, setFilterByCitizens, filterByTypes, setFilterByTypes, setFilterByActive}) => {
+const SignalsFilters: React.FC<SignalFormProps>  = ({goFirst, filterByCitizens, setFilterByCitizens, filterByTypes, setFilterByTypes, setFilterByActive, setFilterByInactive}) => {
 	const {t} = useTranslation();
 	const $citizens = useGetCitizensSignalsFilterQuery();
 	const types = [{
@@ -52,10 +53,8 @@ const SignalsFilters: React.FC<SignalFormProps>  = ({goFirst, filterByCitizens, 
     }));
 
     const onSetActive = (value) => {           
-        setFilterByActive(() => ({
-            active: value.includes("active"),
-            inactive: value.includes("inactive"),
-        }));
+        setFilterByActive(value.includes("active"))
+        setFilterByInactive(value.includes("inactive"))
         goFirst()
 	};
 

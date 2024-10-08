@@ -29,11 +29,12 @@ const SignalsView = () => {
 	//Filter states are here to prevent infinite re-render loop
 	const filterByActive = useSignalPageStore((state) => state.filterByActive)
 	const setFilterByActive = useSignalPageStore((state) => state.setFilterByActive)
+	const filterByInactive = useSignalPageStore((state) => state.filterByInactive)
+	const setFilterByInactive = useSignalPageStore((state) => state.setFilterByInactive)
 	const filterByCitizens = useSignalPageStore((state) => state.filterByCitizens)
 	const setFilterByCitizens = useSignalPageStore((state) => state.setFilterByCitizens)
 	const filterByTypes = useSignalPageStore((state) => state.filterByTypes)
 	const setFilterByTypes = useSignalPageStore((state) => state.setFilterByTypes)
-
 
 	const buildFilter = () => {
 		const filter: SignalFilter = {}
@@ -43,11 +44,11 @@ const SignalsView = () => {
 		if (filterByTypes.length > 0) {
 			filter.signalTypes = filterByTypes
 		}
-		if (!filterByActive.active || !filterByActive.inactive) {
-			if (filterByActive.active) {
+		if (!filterByActive || !filterByInactive) {
+			if (filterByActive) {
 				filter.isActive = true
 			}
-			else if (filterByActive.inactive) {
+			else if (filterByInactive) {
 				filter.isActive = false
 			}
 		}
@@ -98,7 +99,8 @@ const SignalsView = () => {
 						setFilterByCitizens={setFilterByCitizens}
 						filterByTypes={filterByTypes}
 						setFilterByTypes={setFilterByTypes}
-						setFilterByActive={setFilterByActive}>
+						setFilterByActive={setFilterByActive}
+						setFilterByInactive={setFilterByInactive}>
 					</SignalsFilters>
 				}>
 					<ListInformationRow

@@ -262,6 +262,9 @@ When('a low amount bank transaction is booked to an agreement', () => {
     .click();
   cy.contains(uniqueId)
     .click();
+
+  // Confirm afletteren
+  cy.get('[data-test="button.confirmAfletter"]').click();
  
 });
 
@@ -550,6 +553,9 @@ When('an expected amount bank transaction is booked to an agreement', () => {
     .click({ force: true });
   cy.contains(uniqueId)
     .click();
+
+  // Confirm afletteren
+  cy.get('[data-test="button.confirmAfletter"]').click();
  
 });
 
@@ -834,6 +840,9 @@ When('a high amount bank transaction is booked to an agreement', () => {
     .click();
   cy.contains(uniqueId)
     .click();
+
+  // Confirm afletteren
+  cy.get('[data-test="button.confirmAfletter"]').click();
  
 });
 

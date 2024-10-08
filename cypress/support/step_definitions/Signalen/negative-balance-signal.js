@@ -219,6 +219,9 @@ When('the zero amount bank transaction is booked to the agreement "Loon"', () =>
   cy.contains('Loon')
     .click();
 
+  // Confirm afletteren
+  cy.get('[data-test="button.confirmAfletter"]').click();
+
   Step(this, "a success notification containing 'De transactie is afgeletterd' is displayed");
     
 });
@@ -563,6 +566,9 @@ When('a positive bank transaction with amount {string} is booked to an agreement
     .scrollIntoView()
     .click();
 
+  // Confirm afletteren
+  cy.get('[data-test="button.confirmAfletter"]').click();
+
   Step(this, "a success notification containing 'De transactie is afgeletterd' is displayed");
  
 });
@@ -592,6 +598,9 @@ When('the negative amount bank transaction with amount {string} is booked to the
     .click();
   cy.contains('Loon')
     .click();
+
+  // Confirm afletteren
+  cy.get('[data-test="button.confirmAfletter"]').click();
 
   Step(this, "a success notification containing 'De transactie is afgeletterd' is displayed");
     
@@ -793,6 +802,9 @@ When('another positive bank transaction with amount {string} is booked to an agr
     .click();
   cy.contains('Loon')
     .click();
+
+  // Confirm afletteren
+  cy.get('[data-test="button.confirmAfletter"]').click();
 
   Step(this, "a success notification containing 'De transactie is afgeletterd' is displayed");
  
