@@ -405,6 +405,9 @@ When('both bank transactions are reconciliated on the same agreement', () => {
     cy.contains(uniqueId)
       .click();
 
+    // Confirm afletteren
+    cy.get('[data-test="button.confirmAfletter"]').click();
+ 
     // Check success message
     Step(this, "a success notification containing 'transactie' is displayed");
 
@@ -449,6 +452,9 @@ When('both bank transactions are reconciliated on the same agreement', () => {
       .click();
     cy.contains(uniqueId)
       .click();
+
+    // Confirm afletteren
+    cy.get('[data-test="button.confirmAfletter"]').click();
     
     // Check success message
     Step(this, "a success notification containing 'transactie' is displayed");

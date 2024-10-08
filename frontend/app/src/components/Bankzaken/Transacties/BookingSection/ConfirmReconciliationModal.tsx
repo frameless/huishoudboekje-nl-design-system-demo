@@ -24,8 +24,8 @@ const ConfirmReconciliationModal: React.FC<ConfirmModalProps> = ({selectedAfspra
                 </ModalBody>
                 <ModalCloseButton />
                 <ModalFooter>
-                    <Button variant='ghost' onClick={onClose}>{t("global.actions.cancel")}</Button>
-                    <Button colorScheme='primary' mr={3} onClick={onConfirm}>{t("global.actions.confirm")}</Button>
+                    <Button data-test="button.cancelAfletter" variant='ghost' onClick={onClose}>{t("global.actions.cancel")}</Button>
+                    <Button data-test="button.confirmAfletter" colorScheme='primary' mr={3} onClick={onConfirm}>{t("global.actions.confirm")}</Button>
                 </ModalFooter>
             </ModalContent>
         </Modal>

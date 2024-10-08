@@ -196,6 +196,9 @@ class Bankafschriften {
           .click();
         cy.contains('Loon')
           .click();
+
+        // Confirm afletteren
+        cy.get('[data-test="button.confirmAfletter"]').click();
   
         Step(this, "a success notification containing 'De transactie is afgeletterd' is displayed");
   
@@ -385,6 +388,9 @@ class Bankafschriften {
         .click();
       cy.contains('Loon')
         .click();
+
+    // Confirm afletteren
+    cy.get('[data-test="button.confirmAfletter"]').click();
 
       // Check success message
 	generic.notificationSuccess('De transactie is afgeletterd');

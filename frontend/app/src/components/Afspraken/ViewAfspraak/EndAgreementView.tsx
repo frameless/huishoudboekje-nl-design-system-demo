@@ -103,7 +103,7 @@ const EndAgreementView: React.FC<EndAgreementViewProps> = ({onSubmit, startDate,
             </FormControl>
 
             <Flex justify={"flex-end"}>
-                <Button disabled={showEndDateBeforeStartDateError} colorScheme={"primary"} onClick={onClickSubmit}>{t("global.actions.confirm")}</Button>
+                <Button data-test="button.endAgreement" disabled={showEndDateBeforeStartDateError} colorScheme={"primary"} onClick={onClickSubmit}>{t("global.actions.confirm")}</Button>
             </Flex>
         </Stack>
     );
