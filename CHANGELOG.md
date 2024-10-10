@@ -1,5 +1,47 @@
 # Huishoudboekje Changelog
 
+## 2.1.4
+
+Deze versie omvat een reeks aan kleinere aanpassingen. Er zijn verbeteringen voor de rapportage om niet direct alle burgers in te laden en rapportage van 1 dag is nu mogelijk. 
+Ook wordt er nu direct afgeletterd na het aanpassen van een afspraak einddatum via de transactie pagina. Verder zijn er verbeteringen aan de sortering van afspraken bij het afletteren
+en een confirmatie scherm bij het afletteren. Op de signalen, gebeurtenissen en transactie pagina wordt onthouden op welke pagina de gebruiker was en welke filters hier aan stonden.
+
+### Patch Changes
+
+- 6e1a7b3: Rapportage doesnt load all burgers by default anymore
+- b850e58: reconciliate transaction after changing enddate for selected agreement
+- 70282ce: Fixed bug start and end date rapportage where some transactions werent showing
+- b096c11: Fixed rapportage saldo counting rubrieken when not filtered to citizen(s)
+- 44033e9: Sjablonen gebeurtenissen verbeteren
+- b778b73: Removed code old signal and alarm service
+- 32c0f64: Added functionality to add/remove search terms from copied/follow up agreement
+- 65e82e6: added copy agreement tests
+- 51d4611: Added a method to refetch queries that are indirectly affected by a mutation and therefore unable to be refetched normally. Added this for signalcount for now
+- e02d2b8: Added confirm modal manual reconciliation
+- 79364c2: Fixed postadressen seems deleted on error
+- 275617b: Search term filtering in manual reconciliation now properly shows agreements with one or more matching search terms. Agreement list is now always ordered by amount of matching search terms in common with the transaction description
+- 4c06d60: overview now starts on current month instead of previous
+- b158642: qa fix for afletter bevestiging popup
+- 51b90b1: SignalsPage, TransactionPAge and GebeurtenissenPage now remember pagination and filters
+- caa87ea: removed old citizens in testdata
+- 2024507: audit & fix vulnerabilities
+- 7bb4280: Added order by on newly added UploadedAt for customer statement messages
+- e32f16d: Transaction list now shows iban again instead of onbekende iban if iban is unknown in the system
+- 98ed11c: Added filter option for query or mutation in the audit log
+- c5606ea: Fixed issue back button that was width of the page
+- 5ae8f48: added organisatieservice tests
+
+
+# Migration Guide
+
+⚠️  This requires a migration script to transfer the uploaded at from files to CSM's. 
+    Depending on your current version take the appropriate action:
+    **upgrading from 2.0.x or lower**
+      Use the bankservice script to both migrate transactions and CSM as well as the uploaded at time.
+    **upgrading from 2.1.x**
+      use the upload_at_csm script to import uploaded at times for CSM
+
+
 ## 2.1.3
 
 ### Patch Changes
