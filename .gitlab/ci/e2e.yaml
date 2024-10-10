@@ -16,10 +16,9 @@ e2e-tests:
     - sh cypress/pipeline/pipeline-execution.sh
   rules:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event' && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == 'main'
-      # when: delayed
-      # start_in: 2 minutes
-      when: manual
-      allow_failure: true
+      when: delayed
+      start_in: 5 minutes
+      allow_failure: false
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event' && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == 'develop'
       when: manual
-      allow_failure: true
+      allow_failure: false

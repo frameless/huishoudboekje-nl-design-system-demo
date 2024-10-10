@@ -12,6 +12,16 @@ class Betaalinstructies {
     {
       cy.visit('/bankzaken/betaalinstructies/toevoegen')
     }
+
+    redirectBetaalinstructies()
+    {
+        cy.url().should('eq', Cypress.config().baseUrl + '/bankzaken/betaalinstructies')
+    }
+
+    redirectBetaalinstructieDetails()
+    {
+        cy.url().should('include', Cypress.config().baseUrl + '/bankzaken/betaalinstructies/exports/')
+    }
   
     inputDateRangeStart(date)
     {
@@ -125,16 +135,6 @@ class Betaalinstructies {
     {
       cy.contains('Volgende')
         .click();
-    }
-
-    redirectBetaalinstructies()
-    {
-        cy.url().should('include', Cypress.config().baseUrl + '/bankzaken/betaalinstructies')
-    }
-
-    redirectBetaalinstructieDetails()
-    {
-        cy.url().should('include', Cypress.config().baseUrl + '/bankzaken/betaalinstructies/exports/')
     }
        
 }
