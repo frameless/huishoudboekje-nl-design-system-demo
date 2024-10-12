@@ -21,8 +21,9 @@ These are:
 - [Medewerker Backend](backend/)
 - [Huishoudboekje Services](services/)
 
-The architecture is currently undergoing improvements. 
+The architecture is currently undergoing improvements.
 New components:
+
 - [Huishoudboekje Services](huishoudboekje_services/)
 
 ### Database
@@ -37,6 +38,7 @@ The data models are managed using Alembic and Prisma migration scripts and that 
 ## Development
 
 > ### ⚠️ Note to Windows users
+>
 > Huishoudboekje uses symbolic links. If you're working on Windows, you need to explicitly enable symbolic links in Git,
 > otherwise these links will just appear as text files and things will not work as expected.
 >
@@ -56,9 +58,8 @@ environment:
 
 - Please make sure you have `docker-compose` installed. It comes
   with [Docker Desktop](https://docs.docker.com/compose/install/).
-
-- Run `docker-compose up -d` to launch all the services and the backend. This might take a few moments as the services
-  execute some migrations on the database.
+- Run `docker-compose up -d` to launch all the services and the backend. This might take a few moments as the services execute some migrations on the database.
+  - If you run into an error `Could not copy ./protos`, make sure you have files in `/proto` by running `(cd mesh; bash copy-protos.sh)`.
 - Run `docker-compose -f docker-compose.dev.yaml up -d` to launch all the services except the csharp services. For local development its easier to debug when these are run locally.
 - Add the --build tag when you want all the containers to rebuild
 - It's best to run the frontend application natively on your system using [NodeJS](https://nodejs.org/nl/).
